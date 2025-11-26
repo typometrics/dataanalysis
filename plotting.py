@@ -354,9 +354,9 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
     elif prefix == 'DIAG':
         # right pos 1 tot 1 vs pos 2 tot 2 diag
         if tot1 and tot2:
-            filename = f"{side1} pos {pos1_num} tot {tot1} vs pos {pos2_num} tot {tot2} diag"
+            filename = f"{side1} pos {pos1_num} tot {tot1} vs pos {pos2_num} tot {tot2} DIAG"
         else:
-            filename = f"{side1} {pos1} vs {pos2} diag"
+            filename = f"{side1} {pos1} vs {pos2} DIAG"
     else:
         # Fallback to old format
         filename = f"{prefix}_{pos1}_vs_{pos2}"
@@ -414,8 +414,8 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
     # Add diagonal line
     plot.plot([0, max_y], [0, max_y], color='grey', linestyle='--')
     
-    # Add title and subtitle
-    plt.title(f'{prefix} - {pos1} vs {pos2} dependency sizes', fontsize=16)
+    # Add title and subtitle using filename
+    plt.title(filename, fontsize=16)
     plt.suptitle('\n'.join([corr, special]), fontsize=12, y=0)
     
     # Add language list at bottom
@@ -427,7 +427,7 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
                           fontsize=7, transform=plt.gca().transAxes)
     
     # Save plot
-    plot_path = f'{folderprefix}plots/{filename}.png'
+    plot_path = f'plots/{folderprefix}scatters/{filename}.png'
     plot.figure.savefig(plot_path, bbox_inches='tight')
     print(f"✓ Saved plot: {plot_path}")
     
@@ -460,11 +460,18 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
     x = df[pos1]
     y = df[pos2]
     
+    # Compute average factor (y/x ratio)
+    avg_factor = (y / x).mean()
+    
     # Compute Theil-Sen regression
     res = stats.theilslopes(y, x)
     regr = f" The trendline has slope {round(res[0],2)} and intercept {round(res[1],2)}."
     
-    plt.title(f'with trendline: {prefix} - {pos1} vs {pos2} dependency sizes', fontsize=16)
+    # Add average factor line from origin
+    plot.plot([0, max_x], [0, max_x * avg_factor], color='blue', linestyle='--', 
+             alpha=0.7, linewidth=2, label=f'Average factor = {avg_factor:.3f}')
+    
+    plt.title(f'{filename} regplot', fontsize=16)
     plt.suptitle('\n'.join([corr+regr, special]), fontsize=12, y=0)
     
     # Add language list at bottom
@@ -476,7 +483,7 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
                           fontsize=7, transform=plt.gca().transAxes)
     
     # Save regression plot
-    regplot_path = f'{folderprefix}regplots/{filename} regplot.png'
+    regplot_path = f'plots/{folderprefix}regscatters/{filename} regplot.png'
     plt.savefig(regplot_path, bbox_inches='tight')
     print(f"✓ Saved regression plot: {regplot_path}")
     
@@ -485,3 +492,289 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
         plt.show()
     else:
         plt.close()
+
+
+def plot_hcs_factor(pos1_key, pos2_key, prefix, all_langs_average_sizes_filtered, 
+                     langNames, langnameGroup, group_to_color, output_folder='plots/factorhistograms',
+                     filter_lang=None):
+    """
+    Compute and plot HCS factor for two positions.
+    
+    Parameters
+    ----------
+    pos1_key : str
+        Key for position 1 (denominator)
+    pos2_key : str
+        Key for position 2 (numerator)
+    prefix : str
+        Prefix for the plot filename (MAL, HCS, DIAG)
+    all_langs_average_sizes_filtered : dict
+        Dictionary of language data
+    langNames : dict
+        Language code to name mapping
+    langnameGroup : dict
+        Language name to group mapping
+    group_to_color : dict
+        Group to color mapping
+    output_folder : str
+        Output folder for plots (default: 'plots/factorhistograms')
+    filter_lang : function, optional
+        Function to filter languages (returns True/False)
+    
+    Returns
+    -------
+    str
+        Summary string with filename and average factor
+    """
+    import os
+    os.makedirs(output_folder, exist_ok=True)
+    
+    # Compute HCS factor
+    hcs_data = []
+    for lang in all_langs_average_sizes_filtered:
+        # Apply filter if provided
+        if filter_lang is not None and not filter_lang(lang):
+            continue
+        lang_name = langNames.get(lang, lang)
+        group = langnameGroup.get(lang_name, 'Unknown')
+        
+        if pos1_key in all_langs_average_sizes_filtered[lang] and pos2_key in all_langs_average_sizes_filtered[lang]:
+            pos1_val = all_langs_average_sizes_filtered[lang][pos1_key]
+            pos2_val = all_langs_average_sizes_filtered[lang][pos2_key]
+            
+            if pos1_val > 0:
+                hcs_factor = pos2_val / pos1_val
+                hcs_data.append({
+                    'language_code': lang,
+                    'language_name': lang_name,
+                    'group': group,
+                    pos1_key: pos1_val,
+                    pos2_key: pos2_val,
+                    'hcs_factor': hcs_factor
+                })
+    
+    if len(hcs_data) == 0:
+        print(f"No data for {prefix}: {pos1_key} vs {pos2_key}")
+        return None
+    
+    # Create DataFrame
+    hcs_df = pd.DataFrame(hcs_data)
+    hcs_df = hcs_df.sort_values('hcs_factor')
+    
+    # Generate filename based on naming convention (same as plot_dependency_sizes)
+    def create_filename(pos_str):
+        """Extract components from position string like 'right_1_totright_2'"""
+        parts = pos_str.split('_')
+        side = parts[0]  # 'right' or 'left'
+        pos = parts[1]   # position number
+        if len(parts) >= 3 and 'tot' in parts[2]:
+            # Extract tot number from 'totright2' or 'totleft2'
+            tot_part = parts[2]
+            if len(parts) == 4:
+                tot = parts[3]  # 'totright_2' format
+            else:
+                # Extract number from 'totright2' format
+                tot = tot_part.replace('tot' + side, '')
+            return side, pos, tot
+        else:
+            return side, pos, None
+    
+    side1, pos1_num, tot1 = create_filename(pos1_key)
+    side2, pos2_num, tot2 = create_filename(pos2_key)
+    
+    # Create filename based on pattern type
+    if prefix == 'MAL':
+        # right pos1 tot 1 vs tot 2 MAL
+        if tot1 and tot2:
+            filename = f"{side1} pos {pos1_num} tot {tot1} vs tot {tot2} MAL"
+        else:
+            filename = f"{side1} {pos1_key} vs {pos2_key} MAL"
+    elif prefix == 'HCS':
+        # right tot2 pos1 vs pos2 HCS
+        if tot1 and tot2:
+            filename = f"{side1} tot {tot1} pos {pos1_num} vs pos {pos2_num} HCS"
+        else:
+            filename = f"{side1} {pos1_key} vs {pos2_key} HCS"
+    elif prefix == 'DIAG':
+        # right pos 1 tot 1 vs pos 2 tot 2 diag
+        if tot1 and tot2:
+            filename = f"{side1} pos {pos1_num} tot {tot1} vs pos {pos2_num} tot {tot2} DIAG"
+        else:
+            filename = f"{side1} {pos1_key} vs {pos2_key} DIAG"
+    else:
+        filename = f"{prefix} {pos1_key} vs {pos2_key}"
+    
+    # Create plot
+    fig, ax = plt.subplots(1, 1, figsize=(20, 10))
+    
+    colors = [group_to_color.get(group, '#888888') for group in hcs_df['group']]
+    bars = ax.bar(range(len(hcs_df)), hcs_df['hcs_factor'], color=colors)
+    
+    # Compute and display average HCS factor and standard deviation
+    avg_hcs_factor = hcs_df['hcs_factor'].mean()
+    std_hcs_factor = hcs_df['hcs_factor'].std()
+    ax.axhline(y=1.0, color='red', linestyle='--', alpha=0.5, label='HCS factor = 1.0')
+    ax.axhline(y=avg_hcs_factor, color='blue', linestyle='--', alpha=0.7, linewidth=2, 
+               label=f'Average = {avg_hcs_factor:.3f}, StdDev = {std_hcs_factor:.3f}')
+    
+    ax.set_xlabel('Languages (sorted by HCS factor)', fontsize=14)
+    ax.set_ylabel(f'HCS Factor ({pos2_key} / {pos1_key})', fontsize=14)
+    ax.set_title(f'{filename}', fontsize=16)
+    ax.legend(fontsize=12)
+    ax.grid(axis='y', alpha=0.3)
+    
+    # Add language names below bars
+    ax.set_xticks(range(len(hcs_df)))
+    ax.set_xticklabels(hcs_df['language_name'], rotation=90, fontsize=8, ha='center')
+    
+    plt.tight_layout()
+    filepath = f'{output_folder}/{filename}.png'
+    plt.savefig(filepath, dpi=300, bbox_inches='tight')
+    plt.close()
+    
+    return f"{filename}, avg={avg_hcs_factor:.4f}"
+
+
+def _plot_head_init_factor_task(args):
+    """Helper function for parallel plotting of head-initiality vs factor."""
+    factor_col, df_valid, subset_name, subset_filter, group_to_color, output_folder = args
+    
+    # Apply subset filter
+    if subset_name == 'all':
+        df_plot = df_valid
+    else:
+        df_plot = df_valid[df_valid['head_initiality'].apply(subset_filter)]
+    
+    if len(df_plot) < 3:
+        return None
+    
+    # Create figure
+    fig, ax = plt.subplots(1, 1, figsize=(12, 10))
+    
+    # Plot points colored by group
+    for group in sorted(df_plot['group'].unique()):
+        group_data = df_plot[df_plot['group'] == group]
+        color = group_to_color.get(group, '#888888')
+        ax.scatter(group_data['head_initiality'], group_data[factor_col],
+                  c=[color], label=group, alpha=0.6, s=60)
+    
+    # Compute correlation
+    from scipy.stats import pearsonr, spearmanr
+    r_pearson, p_pearson = pearsonr(df_plot['head_initiality'], df_plot[factor_col])
+    r_spearman, p_spearman = spearmanr(df_plot['head_initiality'], df_plot[factor_col])
+    
+    # Add regression line
+    from sklearn.linear_model import TheilSenRegressor
+    X = df_plot['head_initiality'].values.reshape(-1, 1)
+    y = df_plot[factor_col].values
+    regressor = TheilSenRegressor(random_state=42)
+    regressor.fit(X, y)
+    x_trend = np.linspace(df_plot['head_initiality'].min(), df_plot['head_initiality'].max(), 100).reshape(-1, 1)
+    y_trend = regressor.predict(x_trend)
+    ax.plot(x_trend, y_trend, 'r-', alpha=0.7, linewidth=2.5, 
+           label=f'Trendline: y={regressor.coef_[0]:.4f}x+{regressor.intercept_:.4f}')
+    
+    # Labels and title
+    ax.set_xlabel('Head-Initiality (%)', fontsize=14)
+    ax.set_ylabel(f'{factor_col}', fontsize=14)
+    
+    title_prefix = {'all': 'All Languages', 'headInit': 'Head-Initial Languages', 
+                   'headFinal': 'Head-Final Languages'}[subset_name]
+    ax.set_title(f'{title_prefix}: Head-Initiality vs {factor_col}', fontsize=16)
+    
+    # Add correlation info
+    ax.text(0.02, 0.98, f'Pearson r={r_pearson:.3f} (p={p_pearson:.4f})\nSpearman ρ={r_spearman:.3f} (p={p_spearman:.4f})\nN={len(df_plot)}',
+           transform=ax.transAxes, fontsize=11, verticalalignment='top',
+           bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
+    
+    ax.grid(alpha=0.3)
+    ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=9)
+    
+    plt.tight_layout()
+    
+    # Save plot
+    safe_filename = factor_col.replace('/', '_').replace(' ', '_')
+    filepath = f'{output_folder}/{subset_name}/{safe_filename}.png'
+    plt.savefig(filepath, dpi=300, bbox_inches='tight')
+    plt.close()
+    
+    return f"{subset_name}/{safe_filename}.png"
+
+
+def plot_head_initiality_vs_factors(all_factors_df, group_to_color, 
+                                      output_folder='plots/head_init_vs_factors',
+                                      parallel=True):
+    """
+    Create scatter plots showing relationship between head-initiality and each factor.
+    
+    Creates three versions: all languages, head-initial only, head-final only.
+    
+    Parameters
+    ----------
+    all_factors_df : pandas.DataFrame
+        DataFrame with head_initiality and all linguistic factors
+    group_to_color : dict
+        Mapping of language groups to colors
+    output_folder : str
+        Base output folder for plots
+    parallel : bool
+        Whether to use parallel processing (default True)
+    """
+    import os
+    from multiprocessing import Pool, cpu_count
+    
+    os.makedirs(output_folder, exist_ok=True)
+    os.makedirs(f"{output_folder}/all", exist_ok=True)
+    os.makedirs(f"{output_folder}/headInit", exist_ok=True)
+    os.makedirs(f"{output_folder}/headFinal", exist_ok=True)
+    
+    # Get all factor columns (exclude metadata columns)
+    factor_columns = [col for col in all_factors_df.columns 
+                      if col not in ['language_code', 'language_name', 'group', 'head_initiality']]
+    
+    print(f"Generating {len(factor_columns) * 3} scatter plots (3 versions per factor)...")
+    
+    # Build list of all plot tasks
+    tasks = []
+    for factor_col in factor_columns:
+        # Filter out NaN values
+        df_valid = all_factors_df.dropna(subset=['head_initiality', factor_col])
+        
+        if len(df_valid) < 3:  # Need at least 3 points for meaningful plot
+            continue
+        
+        # Create three plots: all, head-initial, head-final
+        for subset_name, subset_filter in [
+            ('all', lambda x: True),
+            ('headInit', lambda x: x > 50),
+            ('headFinal', lambda x: x <= 50)
+        ]:
+            tasks.append((factor_col, df_valid, subset_name, subset_filter, 
+                         group_to_color, output_folder))
+    
+    print(f"Total tasks: {len(tasks)}")
+    
+    if parallel:
+        # Use multiprocessing for parallel execution
+        num_cores = cpu_count()
+        print(f"Using {num_cores} CPU cores for parallel processing")
+        
+        with Pool(processes=num_cores) as pool:
+            results = pool.map(_plot_head_init_factor_task, tasks)
+        
+        # Filter out None results (plots that were skipped)
+        successful_results = [r for r in results if r is not None]
+        print(f"\n✅ Completed {len(successful_results)} scatter plots in {output_folder}/")
+    else:
+        # Sequential execution
+        successful_results = []
+        for i, task in enumerate(tasks):
+            if (i + 1) % 10 == 0:
+                print(f"  Progress: {i + 1}/{len(tasks)}")
+            result = _plot_head_init_factor_task(task)
+            if result is not None:
+                successful_results.append(result)
+        
+        print(f"\n✅ Completed {len(successful_results)} scatter plots in {output_folder}/")
+    
+    return successful_results

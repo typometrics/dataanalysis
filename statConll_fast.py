@@ -32,53 +32,105 @@ import numpy as np
 
 import conll
 
-from Menzerath import newmenzerath,dataAnalysis
+# from Menzerath import newmenzerath,dataAnalysis  # Moved to old/ - only needed for legacy functions
 
 
 def readInLanguageNames():
-
-	langNames={}
-	langcodef=open("languageCodes.tsv")
-	langcodef.readline()
-	for li in langcodef:
-		lis = li.strip().split('\t')
-		langNames[lis[0]]=lis[-1]
-		
-	mylangNames = {li.split('\t')[0]: li.split('\t')[1] for li in open(
-	'myLanguageCodes.tsv').read().strip().split('\n')}
-			
-	langNames = dict(langNames, **mylangNames)
-
-	langnameGroup={li.split('\t')[0]:li.split('\t')[1] for li in open('languageGroups.tsv').read().strip().split('\n')  }
+	"""
+	Read language names and groups from TSV files.
+	Returns empty dicts if files don't exist (notebooks will use Google Sheets data instead).
+	"""
+	langNames = {}
+	langnameGroup = {}
+	
+	# Read languageCodes.tsv (main ISO language codes)
+	try:
+		with open("languageCodes.tsv") as langcodef:
+			langcodef.readline()  # skip header
+			for li in langcodef:
+				lis = li.strip().split('\t')
+				if len(lis) >= 2:
+					langNames[lis[0]] = lis[-1]
+	except FileNotFoundError:
+		print("Warning: languageCodes.tsv not found")
+	
+	# Read myLanguageCodes.tsv (custom overrides for languages with spaces)
+	try:
+		with open('myLanguageCodes.tsv') as f:
+			mylangNames = {li.split('\t')[0]: li.split('\t')[1] for li in f.read().strip().split('\n') if '\t' in li}
+			langNames = dict(langNames, **mylangNames)  # merge, with custom names overriding
+	except FileNotFoundError:
+		pass  # optional file
+	
+	# Read languageGroups.tsv (language family/group assignments)
+	try:
+		with open('languageGroups.tsv') as f:
+			langnameGroup = {li.split('\t')[0]: li.split('\t')[1] for li in f.read().strip().split('\n') if '\t' in li}
+	except FileNotFoundError:
+		pass  # optional file
 	
 	return langNames, langnameGroup
 
+# Load language data at module import time (can be overridden by notebooks using Google Sheets)
 langNames, langnameGroup = readInLanguageNames()
 
 
 def getAllConllFilesGroup(basefolder):
-    """
+	"""
 	for a given basefolder, 
 	gives back a dictionary code -> list of files under the code
 	{"en":["/dqsdf/en.partut.conllu", ...] }
 	"""
-    langConllFiles = {}
-    doc_list = [d for d in sorted(os.listdir(basefolder))]
-    for doc_name in doc_list:
-        conll_ls = [os.path.join( basefolder, doc_name,f) for f in os.listdir(os.path.join(basefolder, doc_name)) if f.endswith(".conllu") and "not-to-release" not in doc_name]
-        if conll_ls:
-            la = os.path.basename(conll_ls[0]).split('_', 1)[0].lower()
-            la = 'fr' if la =='ParisStories'.lower() else la
-            la = 'pcm' if doc_name == 'SUD_Naija-NSC' else la
-            la = 'zh' if doc_name == 'SUD_Chinese-PatentChar' else la
-            langConllFiles[la] = langConllFiles.get(la, []) + conll_ls
-    return langConllFiles
+	langConllFiles = {}
+	doc_list = [d for d in sorted(os.listdir(basefolder))]
+	for doc_name in doc_list:
+		conll_ls = [os.path.join(basefolder, doc_name,f) for f in os.listdir(os.path.join(basefolder, doc_name)) if f.endswith(".conllu") and "not-to-release" not in doc_name]
+		doc_name_to_la = {
+			'parisstories': 'fr',
+			'SUD_French-Sequoia': 'fr',
+			'SUD_Naija-NSC': 'pcm',
+			'SUD_Chinese-PatentChar': 'zh',
+			'chinese-beginner.a2.msud.conllu': 'zh',
+			'chinese-beginner.b1.sud.conllu': 'zh',
+			'corpushaitien-24.conllu': 'ht'
+		}
+		
+		if conll_ls:
+			la = os.path.basename(conll_ls[0]).split('_', 1)[0].lower()
+			la = doc_name_to_la.get(la, la)
+			la = doc_name_to_la.get(doc_name, la)
+			langConllFiles[la] = langConllFiles.get(la, []) + conll_ls
+	return langConllFiles
 
 
-def checkLangCode(langConllFiles):
-	to_add = [la for la in langConllFiles if la not in langNames ]
+def checkLangCode(langConllFiles, langNames=None, verbose=False):
+	if verbose:
+		for lang, files in sorted(langConllFiles.items()):
+			print(lang, files)
+	my_lang_names = langNames or readInLanguageNames()[0]
+	
+	to_add = [la for la in langConllFiles if la not in my_lang_names ]
+	names_with_space = [f"{la}: {my_lang_names.get(la, la)}" for la in langConllFiles if ' ' in my_lang_names.get(la, la)]
+	
+	print('Language with space:\n', '\n'.join(names_with_space))
 	print('Language to add:', to_add)
-	assert(len(to_add) == 0)
+	if langNames: # function called from the notebook, where langNames is taken from the gg sheet
+		return names_with_space, to_add
+	else:
+		assert(len(to_add) == 0)
+
+def checkLangGroups(langConllFiles, langNames=None, langnameGroup=None):
+	my_lang_names = langNames or readInLanguageNames()[0]
+	my_langname_groups = langnameGroup or readInLanguageNames()[1]
+	# langNames, langnameGroup = readInLanguageNames()
+	to_add = [(la, my_lang_names.get(la, la)) for la in langConllFiles if my_lang_names[la] not in my_langname_groups ]
+	# print(333, to_add)
+	# print(langConllFiles)
+	print(len(to_add),'language groups to add:\n', '\n'.join([f"{la[0]}: {langNames.get(la[0], la[0])}" for la in to_add]))
+	if langnameGroup:
+		return to_add
+	else:
+		assert(len(to_add) == 0)
 
 def getAllConllFiles(basefolder, groupByLanguage=True):
 	"""
@@ -99,7 +151,7 @@ def getAllConllFiles(basefolder, groupByLanguage=True):
 	#print langConllFiles
 	return langConllFiles
 
-relationsplit = re.compile(r'[:|@|$]')
+relationsplit = re.compile(r'[:|@|$|/]')
 # relationsplit = re.compile(r'[:|$]')
 
 
@@ -208,9 +260,12 @@ def makeStatsOneThread(info):
 				if simpfunc in skipFuncs:
 					break
 				if simpfunc not in thesefuncs: #udfuncs+sudfuncs:
+					print(type(ni))
+					if '.' in str(ni) and simpfunc == '_':
+						break
 					print("\nweird simple function",simpfunc,"    id == ", ni)
-					# print("\ntoken id == ", ni, "\nin this sentences: \n ", tree.conllu())
 					errorfile.write('\t'.join([simpfunc,conllfile])+'\n')
+					# print("\ntoken id == ", ni, "\nin this sentences: \n ", tree.conllu())
 					#skip=True
 					break
 				for f in funcs:
@@ -259,8 +314,9 @@ def makeStatsOneThread(info):
 					typesDics["posdircf"]["all"][cf]=None
 
 				
-	if verbose: print("current speed:",int((time.time()-titi)/len(trees)*1000000),"seconds per mtrees of",langNames[langcode])
-	
+	if verbose: 
+		print("current speed:",int((time.time()-titi)/len(trees)*1000000),"seconds per mtrees of",langNames[langcode])
+		print('\t\t',lcode, "done",multiprocessing.current_process())
 	#for ty in sdtypes: # compute sd (before computing averages)
 		#for simpfunc in sorted(typesDics[ty]["all"]):
 			#typesDics[ty]["lang"][lcode][simpfunc]=round(numpy.std(typesDics[sdtypes[ty]]["lang"][lcode].get(simpfunc,[])),rounding)
@@ -330,6 +386,7 @@ def makeStatsThreaded(langConllFiles, skipFuncs=['root','compound','fixed','flat
 	# count file numbers for each language
 	langFcount = {}
 	
+	# infotodo contains all the information to be computed: (lcode, fpath, skipFuncs, rounding), fpath is the path of a single conll file
 	infotodo = [
         (lcode, fpath, skipFuncs, rounding) \
             for lcode in langConllFiles.keys() for fpath in langConllFiles[lcode] if lcode not in skipLangs
@@ -353,7 +410,10 @@ def makeStatsThreaded(langConllFiles, skipFuncs=['root','compound','fixed','flat
 	print("it took",time.time()-ti,"seconds")
 	print("\n\n\n====================== finished reading in. \n combining...")
 
-
+	# combining special type dictionaries:
+	specdic=distancetypes.copy()
+	specdic.update(sdtypes)
+	specdic.update(multypes)
 	# for tdi in results:
 	# 	_append_res(typesDics, tdi)
 	# 	print(typesDics['f']['lang'].keys())
@@ -361,10 +421,7 @@ def makeStatsThreaded(langConllFiles, skipFuncs=['root','compound','fixed','flat
 	print("it took",time.time()-ti,"seconds")
 	print("writing...")
 	
-	# combining special type dictionaries:
-	specdic=distancetypes.copy()
-	specdic.update(sdtypes)
-	specdic.update(multypes)
+	
 
 	# for lcode in sorted(langConllFiles):
 	# 	getStatLang(typesDics, lcode, rounding)
@@ -442,7 +499,9 @@ def addfilePrefix(foldername, prefix):
 			os.rename(dirpath + f, dirpath + prefix + "_"+f)
 
 def maincomputation(analysisfolder, langConllFiles):
-	""" langCode2compute must be part of langConllFiles.keys() """
+	""" 
+	langCode2compute must be part of langConllFiles.keys() 
+	"""
 	# analysisfolder = conlldatafolder + '-analysis'
 	if len(langConllFiles) == 0:
 		print("empty folder error ", langConllFiles, "\n")
@@ -472,21 +531,18 @@ def computeMenzerath(langConllFiles, analysisfolder, version):
 if __name__ == "__main__":
 	#check if thesefuncs = udfuncs or sudfuncs to adapte with input folder
 	#dict in which key = abbr of langue name, val=relevant files' names 
-	conlldatafolder = 'test'#"sud-treebanks-v2.11"
+	conlldatafolder = "ud-treebanks-v2.14"
 	langConllFiles = getAllConllFiles(conlldatafolder, groupByLanguage=True) 
 	checkLangCode(langConllFiles)
 	langList = sorted(langConllFiles.keys())
 	langITEM = {la: len(langConllFiles[la]) for la in langList }
-	analysisfolder = conlldatafolder + '-analysis_1'
-
-	# gamount = len(langConllFiles)//nbGroup # compute by n group then combine results after
-	# langCode2compute = langList[ gid*gamount:] if gid == nbGroup-1 else langList[gid*gamount : (gid+1)*gamount]
+	analysisfolder = conlldatafolder + '-analysis'
 	
 	thesefuncs = sudfuncs
-	assert(len(set(thesefuncs)) == len(thesefuncs))
+	assert(len(set(thesefuncs)) == len(thesefuncs)) # no duplicates
 	# maincomputation("SUD_Beja-NSC", version = "2.8_sud")
 	maincomputation( analysisfolder, langConllFiles)
-	# computeMenzerath(langConllFiles, analysisfolder, version = "2.11_sud" )
+	computeMenzerath(langConllFiles, analysisfolder, version = "2.13_sud" )
 
 	# thesefuncs = udfuncs
 	#maincomputation("weirdfct",version = "2.8_ud_test")
