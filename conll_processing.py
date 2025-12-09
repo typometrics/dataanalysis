@@ -8,7 +8,8 @@ import psutil
 import multiprocessing
 from tqdm.notebook import tqdm
 from conll import conllFile2trees
-
+from tqdm import tqdm
+import functools
 
 # Compile regex pattern for relation splitting
 relation_split = re.compile(r'\W')
@@ -94,7 +95,7 @@ def read_shorter_conll_files(langConllFiles, version):
     return lang2shortconll, allshortconll
 
 
-def process_kids(tree, kids, direction, other_kids, position2num, position2sizes, sizes2freq):
+def process_kids(tree, kids, direction, other_kids, position2num, position2sizes, sizes2freq, use_direct_span=False):
     """
     Process the dependents of a head in a given direction (left or right).
     
@@ -116,6 +117,8 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
         Dictionary tracking total sizes for each position type
     sizes2freq : dict
         Dictionary tracking size distributions for each position type
+    use_direct_span : bool, optional
+        If True, use 'direct_span' for size calculation. Else use 'span'.
     """
     kids_sizes = []
     
@@ -129,15 +132,21 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
         # Update position2num: count occurrences
         position2num[key_base] = position2num.get(key_base, 0) + 1
         
+        # Determine size based on flag
+        if use_direct_span:
+            size = len(tree[ki].get('direct_span', tree[ki]['span']))
+        else:
+            size = len(tree[ki]['span'])
+        
         # Update position2sizes: accumulate sizes
-        position2sizes[key_base] = position2sizes.get(key_base, 0) + len(tree[ki]['span'])
+        position2sizes[key_base] = position2sizes.get(key_base, 0) + size
         
         # Context-aware key including total number of kids in this direction
         key_tot = f'{key_base}_tot{direction}_{len(kids)}'
         position2num[key_tot] = position2num.get(key_tot, 0) + 1
-        position2sizes[key_tot] = position2sizes.get(key_tot, 0) + len(tree[ki]['span'])
+        position2sizes[key_tot] = position2sizes.get(key_tot, 0) + size
         
-        kids_sizes.append(len(tree[ki]['span']))
+        kids_sizes.append(size)
     
     # Average key for this configuration
     avg_key = f'average_tot{direction}_{len(kids)}'
@@ -151,7 +160,7 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
     sizes2freq[avg_key][str(kids_sizes)] = sizes2freq[avg_key].get(str(kids_sizes), 0) + 1
 
 
-def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None):
+def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None, include_bastards=False):
     """
     Get the sizes of dependents in a dependency tree.
     
@@ -194,28 +203,78 @@ def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None)
     heads = [i for i in tree if len(tree[i]["span"]) > 1 and tree[i]["tag"] in head_pos]
     
     for head in heads:
+        relevant_kids = []
+        
+        # Identify valid direct kids (those with allowed relations)
+        valid_direct_kids = {
+            ki for (ki, krel) in tree[head]['kids'].items()
+            if relation_split.split(krel)[0] in deps
+        }
+        
+        if include_bastards:
+            # Iterate over all_kids (includes bastards)
+            # tree[head]['all_kids'] should exist if include_bastards was used in addspan
+            all_kids = tree[head].get('all_kids', list(tree[head]['kids'].keys()))
+            
+            for k in all_kids:
+                if k in valid_direct_kids:
+                    relevant_kids.append(k)
+                elif k not in tree[head]['kids']:
+                    # It's a bastard. Find its ancestor that is a direct kid of head.
+                    # Climb up parents until we hit a node whose parent is head
+                    curr = k
+                    ancestor = None
+                    # Safety counter to prevent infinite loops in cyclic graphs (though trees shouldn't have them)
+                    steps = 0
+                    while steps < 100:
+                        govs = tree[curr].get('gov', {})
+                        # gov is {head_id: rel}
+                        # We assume single head for tree structure
+                        # But conll.py allows multiple heads? 
+                        # Standard dependency tree has one head.
+                        # Let's pick the first one that is not 0 (root) or -1
+                        p = None
+                        for g in govs:
+                            if g > 0: 
+                                p = g
+                                break
+                        
+                        if p == head:
+                            ancestor = curr
+                            break
+                        elif p is None:
+                            break # Reached root or detached
+                        else:
+                            curr = p
+                        steps += 1
+                    
+                    if ancestor and ancestor in valid_direct_kids:
+                        relevant_kids.append(k)
+        else:
+            relevant_kids = list(valid_direct_kids)
+
         # Get left dependents (sorted right to left, i.e., closest to verb first)
         left_kids = sorted([
-            ki for (ki, krel) in tree[head]['kids'].items() 
-            if ki < head and relation_split.split(krel)[0] in deps
+            ki for ki in relevant_kids 
+            if ki < head
         ], reverse=True)
         
         # Get right dependents (sorted left to right, i.e., closest to verb first)
         right_kids = sorted([
-            ki for (ki, krel) in tree[head]['kids'].items() 
-            if ki > head and relation_split.split(krel)[0] in deps
+            ki for ki in relevant_kids 
+            if ki > head
         ])
         
         if left_kids:
-            process_kids(tree, left_kids, 'left', right_kids, position2num, position2sizes, sizes2freq)
+            process_kids(tree, left_kids, 'left', right_kids, position2num, position2sizes, sizes2freq, use_direct_span=include_bastards)
         
         if right_kids:
-            process_kids(tree, right_kids, 'right', left_kids, position2num, position2sizes, sizes2freq)
+            process_kids(tree, right_kids, 'right', left_kids, position2num, position2sizes, sizes2freq, use_direct_span=include_bastards)
     
     return position2num, position2sizes, sizes2freq
 
 
-def get_dep_sizes_file(conll_filename):
+def get_dep_sizes_file(conll_filename, include_bastards=False):
     """
     Get the sizes of dependents in a CoNLL file.
     
@@ -235,13 +294,13 @@ def get_dep_sizes_file(conll_filename):
     position2num, position2sizes, sizes2freq = {}, {}, {}
     
     for tree in conllFile2trees(conll_filename):
-        tree.addspan(exclude=['punct'])
-        get_dep_sizes(tree, position2num, position2sizes, sizes2freq)
+        tree.addspan(exclude=['punct'], compute_bastards=include_bastards)
+        get_dep_sizes(tree, position2num, position2sizes, sizes2freq, include_bastards=include_bastards)
     
     return (lang, position2num, position2sizes, sizes2freq)
 
 
-def get_type_freq_all_files_parallel(allshortconll):
+def get_type_freq_all_files_parallel(allshortconll, include_bastards=False):
     """
     Process all short CoNLL files in parallel to compute dependency statistics.
     
@@ -255,7 +314,7 @@ def get_type_freq_all_files_parallel(allshortconll):
     tuple
         (all_langs_position2num, all_langs_position2sizes, all_langs_average_sizes)
     """
-    from tqdm import tqdm
+    
     
     print(f"Starting processing all files, running on {psutil.cpu_count()} cores")
     
@@ -265,8 +324,10 @@ def get_type_freq_all_files_parallel(allshortconll):
     
     with multiprocessing.Pool(psutil.cpu_count()) as pool:
         # Use imap for better progress tracking
+        # Use partial to pass include_bastards argument
+        process_func = functools.partial(get_dep_sizes_file, include_bastards=include_bastards)
         results = list(tqdm(
-            pool.imap(get_dep_sizes_file, allshortconll),
+            pool.imap(process_func, allshortconll),
             total=len(allshortconll),
             desc="Processing files"
         ))
@@ -290,6 +351,146 @@ def get_type_freq_all_files_parallel(allshortconll):
     
     print('Done!')
     return all_langs_position2num, all_langs_position2sizes, all_langs_average_sizes
+
+
+def get_bastard_stats(tree):
+    """
+    Count verbs and bastards in a tree.
+    
+    Parameters
+    ----------
+    tree : dict
+        Dependency tree structure
+        
+    Returns
+    -------
+    tuple
+        (verb_count, bastard_count, relation_counts, examples)
+        examples: dict {rel: [tree_str, ...]}
+    """
+    verb_count = 0
+    bastard_count = 0
+    relation_counts = {}
+    examples = {}
+    
+    # Only consider VERB governors (as per get_dep_sizes)
+    head_pos = ["VERB"]
+    
+    for i in tree:
+        if tree[i].get("tag") in head_pos:
+            verb_count += 1
+            bastards = tree[i].get("bastards", [])
+            bastard_count += len(bastards)
+            for b in bastards:
+                # Get the relation of the bastard to its original governor
+                # We need to find the governor of b in the original tree
+                # tree[b]['gov'] is {govid: rel}
+                for govid, rel in tree[b].get("gov", {}).items():
+                    # Use the main relation part
+                    rel_type = relation_split.split(rel)[0]
+                    relation_counts[rel_type] = relation_counts.get(rel_type, 0) + 1
+                    
+                    # Collect example (one per relation per tree to avoid duplicates/bloat)
+                    if rel_type not in examples:
+                        examples[rel_type] = []
+                    # We only need one example per tree for now to keep it light
+                    if not examples[rel_type]: 
+                         examples[rel_type].append(tree.conllu())
+
+    return verb_count, bastard_count, relation_counts, examples
+
+
+def get_bastard_stats_file(conll_filename):
+    """
+    Get bastard statistics for a CoNLL file.
+    
+    Parameters
+    ----------
+    conll_filename : str
+        Path to CoNLL file
+        
+    Returns
+    -------
+    tuple
+        (lang, verb_count, bastard_count, relation_counts, examples)
+    """
+    lang = os.path.basename(conll_filename).split('_')[0]
+    total_verbs = 0
+    total_bastards = 0
+    total_relations = {}
+    total_examples = {}
+    
+    for tree in conllFile2trees(conll_filename):
+        tree.addspan(exclude=['punct'], compute_bastards=True)
+        v, b, r, ex = get_bastard_stats(tree)
+        total_verbs += v
+        total_bastards += b
+        for rel, count in r.items():
+            total_relations[rel] = total_relations.get(rel, 0) + count
+        
+        # Collect examples, cap at 10 per relation per file
+        for rel, treestrs in ex.items():
+            if rel not in total_examples:
+                total_examples[rel] = []
+            if len(total_examples[rel]) < 10:
+                total_examples[rel].extend(treestrs)
+            
+    return (lang, total_verbs, total_bastards, total_relations, total_examples)
+
+
+def get_bastard_stats_all_files_parallel(allshortconll):
+    """
+    Process all short CoNLL files in parallel to compute bastard statistics.
+    
+    Parameters
+    ----------
+    allshortconll : list
+        List of paths to short CoNLL files
+        
+    Returns
+    -------
+    tuple
+        (lang_stats, all_relations)
+        lang_stats: dict {lang: {'verbs': v, 'bastards': b, 'relations': r, 'examples': {rel: [trees]}}}
+        all_relations: dict {rel: count} (global counts)
+    """
+    print(f"Starting bastard analysis, running on {psutil.cpu_count()} cores")
+    
+    lang_stats = {}
+    all_relations = {}
+    
+    with multiprocessing.Pool(psutil.cpu_count()) as pool:
+        results = list(tqdm(
+            pool.imap(get_bastard_stats_file, allshortconll),
+            total=len(allshortconll),
+            desc="Analyzing bastards"
+        ))
+        
+        print(f'Finished processing. Combining results...')
+        
+        for (lang, v, b, r, ex) in results:
+            if lang not in lang_stats:
+                lang_stats[lang] = {'verbs': 0, 'bastards': 0, 'relations': {}, 'examples': {}}
+            
+            lang_stats[lang]['verbs'] += v
+            lang_stats[lang]['bastards'] += b
+            
+            for rel, count in r.items():
+                lang_stats[lang]['relations'][rel] = lang_stats[lang]['relations'].get(rel, 0) + count
+                all_relations[rel] = all_relations.get(rel, 0) + count
+            
+            # Aggregate examples, cap at 10 per relation per language
+            for rel, treestrs in ex.items():
+                if rel not in lang_stats[lang]['examples']:
+                    lang_stats[lang]['examples'][rel] = []
+                
+                current_len = len(lang_stats[lang]['examples'][rel])
+                if current_len < 10:
+                    needed = 10 - current_len
+                    lang_stats[lang]['examples'][rel].extend(treestrs[:needed])
+                
+    print('Done!')
+    return lang_stats, all_relations
 
 
 def save_conll_data(lang2shortconll, allshortconll, output_dir='data'):

@@ -67,7 +67,7 @@ class Tree(dict):
 	
 	def conllu(self):
 		morphoSynt= ['Abbr', 'AbsErgDatNumber', 'AbsErgDatPerson', 'AbsErgDatPolite', 'AdpType', 'AdvType', 'Animacy', 'Aspect', 'Case', 'Clusivity', 'ConjType', 'Definite', 'Degree', 'Echo', 'ErgDatGender', 'Evident', 'Foreign', 'Gender', 'Hyph', 'Mood', 'NameType', 'NounClass', 'NounType', 'NumForm', 'NumType', 'NumValue', 'Number', 'PartType', 'Person', 'Polarity', 'Polite', 'Poss', 'PossGender', 'PossNumber', 'PossPerson', 'PossedNumber', 'Prefix', 'PrepCase', 'PronType', 'PunctSide', 'PunctType', 'Reflex', 'Style', 'Subcat', 'Tense', 'Typo', 'VerbForm', 'VerbType', 'Voice']
-		specialFeatures=["t", "lemma", "tag", "tag2", "xpos", "egov", "id", "index", "gov", "kids", "govrel", "span"]
+		specialFeatures=["t", "lemma", "tag", "tag2", "xpos", "egov", "id", "index", "gov", "kids", "govrel", "span", "bastards", "direct_span", "all_kids"]
 		treestring = ""
 		for stftkey in sorted(self.sentencefeatures):
 			if stftkey=="_comments":
@@ -112,14 +112,150 @@ class Tree(dict):
 				else: self.rootnode=i
 					
 				
-	def addspan(self, exclude=[]):
+	def addspan(self, exclude=[], compute_bastards=False):
 		"""
 		adds the list of direct and indirect dependents to each node
 		needs that kids have been added first
+		if compute_bastards is True:
+			adds 'bastards', 'direct_span', 'all_kids' to each node
 		"""
 		self.addkids(exclude)
 		for i in self:
 			self[i]['span'] = sorted(self.span(i)) #all direct & indirect dependents of node i
+			
+		if compute_bastards:
+			# Initialize new fields
+			for i in self:
+				self[i]['bastards'] = []
+				self[i]['direct_span'] = list(self[i]['span'])
+				self[i]['all_kids'] = list(self[i]['kids'].keys())
+
+			# Process bottom-up (post-order)
+			# We can use tree height or just sort by ID if we assume projectivity? 
+			# No, dependency trees are not necessarily projective or ordered by ID.
+			# We need a proper post-order traversal.
+			# Or we can just iterate by depth?
+			# Let's compute depth first.
+			
+			# Simple post-order: children before parents.
+			# Since we have 'kids', we can do a recursive visit.
+			visited = set()
+			post_order = []
+			
+			def visit(n):
+				if n in visited: return
+				visited.add(n)
+				for k in self[n]['kids']:
+					visit(k)
+				post_order.append(n)
+				
+			if self.rooti:
+				visit(self.rooti)
+			else:
+				# Fallback if no root identified or multiple roots (fragments)
+				for i in self: visit(i)
+				
+			for n in post_order:
+				# We check children of n
+				# Note: we iterate over a copy because we might modify all_kids of n? 
+				# No, we modify all_kids of n by adding, but we check children c.
+				# We modify all_kids of c by removing.
+				
+				current_kids = list(self[n]['all_kids'])
+				for c in current_kids:
+					# Check if c's direct_span is discontinuous
+					dspan = self[c]['direct_span']
+					if not dspan: continue
+					
+					# Check for gaps in dspan relative to the full range
+					dspan_set = set(dspan)
+					min_s, max_s = dspan[0], dspan[-1]
+					full_range = set(range(min_s, max_s + 1))
+					gaps = full_range - dspan_set
+					
+					if not gaps: continue
+					
+					# Check if gaps are real (contain non-excluded nodes)
+					real_gaps = False
+					for g in gaps:
+						# Check if g is excluded
+						# If g has ANY relation not in exclude, it is real.
+						is_excluded = True
+						for gov_id, rel in self[g].get('gov', {}).items():
+							if rel not in exclude:
+								is_excluded = False
+								break
+						if not is_excluded:
+							real_gaps = True
+							break
+					
+					if not real_gaps: continue
+					
+					# If gaps exist, check if they are "foreign" (not belonging to c)
+					# Actually, direct_span only contains c's stuff.
+					# So any gap in range is foreign.
+					# So c is discontinuous.
+					
+					# Identify fragments
+					fragments = []
+					if dspan:
+						current_frag = [dspan[0]]
+						for i in range(1, len(dspan)):
+							if dspan[i] != dspan[i-1] + 1:
+								fragments.append(current_frag)
+								current_frag = []
+							current_frag.append(dspan[i])
+						fragments.append(current_frag)
+					
+					# Find main fragment (containing c)
+					main_frag = None
+					bastard_frags = []
+					for frag in fragments:
+						if c in frag:
+							main_frag = frag
+						else:
+							bastard_frags.append(frag)
+							
+					if not main_frag:
+						# Should not happen if c is in its own span
+						continue
+						
+					# For each bastard fragment, find the head (child of c)
+					for frag in bastard_frags:
+						frag_set = set(frag)
+						# Find k in all_kids[c] that is in this fragment
+						# We assume the fragment is a subtree of some k
+						found_bastard = None
+						for k in self[c]['all_kids']:
+							if k in frag_set:
+								# Check if k's span is fully in this fragment?
+								# Or just if k is in it.
+								# If k is in it, k is the head of that part (relative to c)
+								found_bastard = k
+								break
+						
+						if found_bastard:
+							b = found_bastard
+							# Lift b to n
+							self[n]['bastards'].append(b)
+							self[n]['all_kids'].append(b)
+							
+							# Remove b from c
+							if b in self[c]['all_kids']:
+								self[c]['all_kids'].remove(b)
+							
+							# Remove b's original span from direct_span of c and n
+							# We use b's current direct_span? 
+							# Or b's original span?
+							# If b has its own bastards, they are already gone from b's direct_span.
+							# We want to remove b and its remaining subtree.
+							# So we remove b's direct_span.
+							
+							b_span_set = set(self[b]['direct_span'])
+							
+							self[c]['direct_span'] = sorted(list(set(self[c]['direct_span']) - b_span_set))
+							self[n]['direct_span'] = sorted(list(set(self[n]['direct_span']) - b_span_set))
+
 			
 	def span(self, i):
 		"""

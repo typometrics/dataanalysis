@@ -4,12 +4,22 @@ Plotting and visualization functions for dependency analysis results.
 
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 import pandas as pd
 import seaborn as sns
 import textwrap
 from matplotlib.lines import Line2D
 from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.lines import Line2D
+from mpl_toolkits.mplot3d import Axes3D
+from multiprocessing import Pool, cpu_count
 from scipy import stats
+from tqdm.notebook import tqdm
+
+
+def _always_true(x):
+    """Helper function for default filtering (always returns True)."""
+    return True
 
 
 def plot_mal_curves_with_groups(mal_data, langNames, langnameGroup, appearance_dict, 
@@ -109,7 +119,8 @@ def plot_mal_heatmap(mal_data, figsize=(12, 10), cmap="coolwarm"):
 
 
 def plot_scatter_2d(df, x_col, y_col, group_col, appearance_dict, 
-                   title="", xlabel="", ylabel="", figsize=(10, 8)):
+                   title="", xlabel="", ylabel="", figsize=(10, 8), label_col=None, with_labels=True,
+                   add_diagonal=False, add_regression=False):
     """
     Create a 2D scatter plot colored by language group.
     
@@ -133,22 +144,37 @@ def plot_scatter_2d(df, x_col, y_col, group_col, appearance_dict,
         Y-axis label
     figsize : tuple
         Figure size (width, height)
+    add_diagonal : bool
+        Whether to add a dashed diagonal line (y=x)
+    add_regression : bool
+        Whether to add a linear regression trend line and average ratio
     """
     plt.figure(figsize=figsize)
     
-    groups_plotted = set()
-    for group in df[group_col].unique():
-        group_data = df[df[group_col] == group]
-        color = appearance_dict.get(group, 'gray')
-        plt.scatter(group_data[x_col], group_data[y_col], 
-                   alpha=0.6, color=color, s=50, label=group)
-        groups_plotted.add(group)
+    # Use seaborn scatterplot for consistency
+    sns.scatterplot(data=df, x=x_col, y=y_col, hue=group_col, palette=appearance_dict, s=60, alpha=0.7)
+    
+    # Add diagonal line
+    if add_diagonal:
+        min_val = min(df[x_col].min(), df[y_col].min())
+        max_val = max(df[x_col].max(), df[y_col].max())
+        plt.plot([min_val, max_val], [min_val, max_val], color='grey', linestyle='--', label='Diagonal (y=x)')
+
+    # Add regression line
+    if add_regression:
+        sns.regplot(data=df, x=x_col, y=y_col, scatter=False, color='black', robust=True, ax=plt.gca(), label='Regression')
+        
     
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.title(title)
     plt.grid(True, alpha=0.3)
-    plt.legend(title="Language groups", bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+    
+    # Add labels if label_col is provided and enabled
+    if label_col and with_labels:
+        adjust_text_labels(df, x_col, y_col, label_col, ax=plt.gca())
+        
     plt.tight_layout()
     plt.show()
 
@@ -281,7 +307,7 @@ def create_ie_palette(IElangnameGenus, appearance_dict):
 
 def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered, 
         filter_lang, langNames, langnameGroup, langname_group_or_genus=None, 
-        folderprefix='', palette=None, group_to_color=None, show_inline=True):
+        folderprefix='', palette=None, group_to_color=None, with_labels=True, show_inline=True):
     """
     Plot the dependency sizes of two positions of dependents in a scatter plot.
     
@@ -309,6 +335,8 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
         Color palette for groups/genera
     group_to_color : dict, optional
         Alternative color palette (for backward compatibility)
+    with_labels : bool
+        Whether to show labels on the plot (default True)
     show_inline : bool
         Whether to display plots inline (default True for interactive use, False for batch)
     """
@@ -362,13 +390,18 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
         filename = f"{prefix}_{pos1}_vs_{pos2}"
     
     # Filter languages that have both positions and pass the filter
-    pos1_pos2 = {
-        lang: all_langs_average_sizes_filtered[lang] 
-        for lang in all_langs_average_sizes_filtered 
-        if pos1 in all_langs_average_sizes_filtered[lang] 
-        and pos2 in all_langs_average_sizes_filtered[lang]
-        and filter_lang(lang)
-    }
+    pos1_pos2 = {}
+    for lang, data in all_langs_average_sizes_filtered.items():
+        # Determine if language should be included
+        if callable(filter_lang):
+            include_lang = filter_lang(lang)
+        elif isinstance(filter_lang, (list, set, tuple)):
+            include_lang = lang in filter_lang
+        else:
+            include_lang = True
+
+        if include_lang and pos1 in data and pos2 in data:
+            pos1_pos2[lang] = data
     
     if len(pos1_pos2) == 0:
         print(f"No languages have both {pos1} and {pos2}")
@@ -406,10 +439,11 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
     plt.legend(loc='lower right')
     
     # Add language labels
-    for line in df.itertuples():
-        color = palette.get(line.group, 'gray')
-        plot.text(getattr(line, pos1), getattr(line, pos2), line.language, 
-                 horizontalalignment='left', size='large', color=color, alpha=1)
+    plt.legend(loc='lower right')
+    
+    # Add language labels using adjustText
+    if with_labels:
+        adjust_text_labels(df, pos1, pos2, 'language', ax=plt.gca())
     
     # Add diagonal line
     plot.plot([0, max_y], [0, max_y], color='grey', linestyle='--')
@@ -428,8 +462,9 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
     
     # Save plot
     plot_path = f'plots/{folderprefix}scatters/{filename}.png'
+    os.makedirs(os.path.dirname(plot_path), exist_ok=True)
     plot.figure.savefig(plot_path, bbox_inches='tight')
-    print(f"✓ Saved plot: {plot_path}")
+    print(f"✓ Saved plot: {plot_path} (labels={with_labels})")
     
     # Display the plot inline only if requested
     if show_inline:
@@ -444,19 +479,21 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
     plt.ylim(0, max_y)
     plt.xticks(range(max_x+1))
     plt.yticks(range(max_y+1))
-    plt.legend(loc='lower right')
+    plt.ylim(0, max_y)
+    plt.xticks(range(max_x+1))
+    plt.yticks(range(max_y+1))
+    # Legend moved to end to include lines
     
     # Add language labels
-    for line in df.itertuples():
-        color = palette.get(line.group, 'gray')
-        plot.text(getattr(line, pos1), getattr(line, pos2), line.language, 
-                 horizontalalignment='left', size='large', color=color, alpha=1)
+    # Add language labels using adjustText
+    if with_labels:
+        adjust_text_labels(df, pos1, pos2, 'language', ax=plt.gca())
     
     # Add diagonal line
-    plot.plot([0, max_y], [0, max_y], color='grey', linestyle='--')
+    plot.plot([0, max_y], [0, max_y], color='grey', linestyle='--', label='Diagonal (y=x)')
     
     # Add regression line
-    sns.regplot(data=df, x=pos1, y=pos2, scatter=False, color='black', robust=True, ax=plt.gca())
+    sns.regplot(data=df, x=pos1, y=pos2, scatter=False, color='black', robust=True, ax=plt.gca(), label='Regression')
     x = df[pos1]
     y = df[pos2]
     
@@ -469,7 +506,24 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
     
     # Add average factor line from origin
     plot.plot([0, max_x], [0, max_x * avg_factor], color='blue', linestyle='--', 
-             alpha=0.7, linewidth=2, label=f'Average factor = {avg_factor:.3f}')
+             alpha=0.7, linewidth=2, label=f'Avg Ratio (y/x = {avg_factor:.2f})')
+    
+    # Update legend to include all lines
+    # Get handles and labels from current axes
+    handles, labels = plt.gca().get_legend_handles_labels()
+    # Create proxy artist for regression if needed (regplot doesn't always label well)
+    # But specifically ensure blue line is present
+    
+    # Organize legend: Groups first, then lines
+    # Filter out duplicates if any
+    by_label = dict(zip(labels, handles))
+    
+    # Add explicit black line for regression if missing
+    if 'Regression' not in by_label:
+        from matplotlib.lines import Line2D
+        by_label['Regression'] = Line2D([0], [0], color='black', linewidth=2)
+        
+    plt.legend(by_label.values(), by_label.keys(), loc='lower right', fontsize=8)
     
     plt.title(f'{filename} regplot', fontsize=16)
     plt.suptitle('\n'.join([corr+regr, special]), fontsize=12, y=0)
@@ -484,6 +538,7 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
     
     # Save regression plot
     regplot_path = f'plots/{folderprefix}regscatters/{filename} regplot.png'
+    os.makedirs(os.path.dirname(regplot_path), exist_ok=True)
     plt.savefig(regplot_path, bbox_inches='tight')
     print(f"✓ Saved regression plot: {regplot_path}")
     
@@ -629,6 +684,7 @@ def plot_hcs_factor(pos1_key, pos2_key, prefix, all_langs_average_sizes_filtered
     
     plt.tight_layout()
     filepath = f'{output_folder}/{filename}.png'
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
     plt.savefig(filepath, dpi=300, bbox_inches='tight')
     plt.close()
     
@@ -637,13 +693,17 @@ def plot_hcs_factor(pos1_key, pos2_key, prefix, all_langs_average_sizes_filtered
 
 def _plot_head_init_factor_task(args):
     """Helper function for parallel plotting of head-initiality vs factor."""
-    factor_col, df_valid, subset_name, subset_filter, group_to_color, output_folder = args
+    factor_col, df_valid, subset_name, group_to_color, output_folder = args
     
     # Apply subset filter
     if subset_name == 'all':
         df_plot = df_valid
+    elif subset_name == 'headInit':
+        df_plot = df_valid[df_valid['head_initiality'] > 50]
+    elif subset_name == 'headFinal':
+        df_plot = df_valid[df_valid['head_initiality'] <= 50]
     else:
-        df_plot = df_valid[df_valid['head_initiality'].apply(subset_filter)]
+        df_plot = df_valid
     
     if len(df_plot) < 3:
         return None
@@ -651,12 +711,16 @@ def _plot_head_init_factor_task(args):
     # Create figure
     fig, ax = plt.subplots(1, 1, figsize=(12, 10))
     
-    # Plot points colored by group
-    for group in sorted(df_plot['group'].unique()):
-        group_data = df_plot[df_plot['group'] == group]
-        color = group_to_color.get(group, '#888888')
-        ax.scatter(group_data['head_initiality'], group_data[factor_col],
-                  c=[color], label=group, alpha=0.6, s=60)
+    # Create scatter plot using seaborn for consistency
+    sns.scatterplot(
+        data=df_plot, 
+        x='head_initiality', 
+        y=factor_col, 
+        hue='group', 
+        palette=group_to_color,
+        ax=ax,
+        legend=True 
+    )
     
     # Compute correlation
     from scipy.stats import pearsonr, spearmanr
@@ -688,13 +752,22 @@ def _plot_head_init_factor_task(args):
            bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
     
     ax.grid(alpha=0.3)
+    ax.grid(alpha=0.3)
     ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=9)
+    
+    # Add labels
+    # Check if we have language name column
+    label_col = 'language_name' if 'language_name' in df_plot.columns else 'language_code'
+    if label_col in df_plot.columns:
+        adjust_text_labels(df_plot, 'head_initiality', factor_col, label_col, ax=ax)
+    
     
     plt.tight_layout()
     
     # Save plot
     safe_filename = factor_col.replace('/', '_').replace(' ', '_')
     filepath = f'{output_folder}/{subset_name}/{safe_filename}.png'
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
     plt.savefig(filepath, dpi=300, bbox_inches='tight')
     plt.close()
     
@@ -744,12 +817,8 @@ def plot_head_initiality_vs_factors(all_factors_df, group_to_color,
             continue
         
         # Create three plots: all, head-initial, head-final
-        for subset_name, subset_filter in [
-            ('all', lambda x: True),
-            ('headInit', lambda x: x > 50),
-            ('headFinal', lambda x: x <= 50)
-        ]:
-            tasks.append((factor_col, df_valid, subset_name, subset_filter, 
+        for subset_name in ['all', 'headInit', 'headFinal']:
+            tasks.append((factor_col, df_valid, subset_name, 
                          group_to_color, output_folder))
     
     print(f"Total tasks: {len(tasks)}")
@@ -778,3 +847,171 @@ def plot_head_initiality_vs_factors(all_factors_df, group_to_color,
         print(f"\n✅ Completed {len(successful_results)} scatter plots in {output_folder}/")
     
     return successful_results
+
+
+def adjust_text_labels(df, x_col, y_col, label_col, ax=None):
+    """
+    Adjust text labels to avoid overlap using adjustText.
+    
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        DataFrame containing coordinates and labels
+    x_col : str
+        Column name for x coordinates
+    y_col : str
+        Column name for y coordinates
+    label_col : str
+        Column name for text labels
+    ax : matplotlib.axes.Axes, optional
+        Axes object to draw on
+    """
+    try:
+        from adjustText import adjust_text
+    except ImportError:
+        # Fallback to local import if installed as module fails
+        try:
+            import adjustText
+            from adjustText import adjust_text
+        except ImportError:
+            print("Warning: adjustText not found. Labels may overlap.")
+            return
+
+    if ax is None:
+        ax = plt.gca()
+        
+    texts = []
+    for _, row in df.iterrows():
+        # Only label points that are valid
+        if pd.notna(row[x_col]) and pd.notna(row[y_col]):
+            texts.append(ax.text(row[x_col], row[y_col], str(row[label_col]), 
+                                fontsize=9, alpha=0.8))
+    
+    if texts:
+        # print(f"  Adjusting {len(texts)} labels with arrows...", flush=True)
+        adjust_text(texts, ax=ax, arrowprops=dict(arrowstyle='-', color='gray', alpha=0.5, lw=0.5))
+
+def _plot_task(args):
+    """Helper function for parallel plotting."""
+    (pos1_str, pos2_str, prefix, all_langs_average_sizes_filtered, 
+     filter_lang, langNames, langnameGroup, langname_group_or_genus, 
+     folderprefix, palette) = args
+    
+    # Check if data exists for these positions
+    has_data = False
+    for lang in all_langs_average_sizes_filtered:
+        # Determine if language should be included
+        if callable(filter_lang):
+            include_lang = filter_lang(lang)
+        elif isinstance(filter_lang, (list, set, tuple)):
+            include_lang = lang in filter_lang
+        else:
+            include_lang = True # Default to True if None or unknown type (though should handle None at call site)
+
+        if include_lang:
+            if pos1_str in all_langs_average_sizes_filtered[lang] and pos2_str in all_langs_average_sizes_filtered[lang]:
+                has_data = True
+                break
+    
+    if not has_data:
+        return f"Skipped (no data): {prefix} {pos1_str} vs {pos2_str}"
+
+    plot_dependency_sizes(
+        pos1_str, 
+        pos2_str, 
+        prefix,
+        all_langs_average_sizes_filtered,  
+        filter_lang=filter_lang,
+        langNames=langNames,
+        langnameGroup=langnameGroup,
+        langname_group_or_genus=langname_group_or_genus,               
+        folderprefix=folderprefix, 
+        palette=palette,
+        group_to_color=palette,
+        with_labels=True,
+        show_inline=False  # Don't show inline for batch processing
+    )
+    return f"{prefix}: {pos1_str} vs {pos2_str}"
+
+
+
+def plot_all(all_langs_average_sizes_filtered, langNames, langnameGroup, 
+             filter_lang=None, langname_group_or_genus=None, folderprefix='', palette=None, parallel=True):
+    """
+    Plot all dependency size comparisons.
+    
+    Parameters
+    ----------
+    all_langs_average_sizes_filtered : dict
+        Data dictionary
+    langNames : dict
+        Language names mapping
+    langnameGroup : dict
+        Language group mapping
+    filter_lang : function or iterable, optional
+        Function to filter languages OR a set/list of allowed language codes. 
+        If None, includes all languages.
+    langname_group_or_genus : dict
+        Mapping of language names to groups or genera
+    folderprefix : str
+        Prefix for output folders
+    palette : dict
+        Color palette
+    parallel : bool
+        Whether to use parallel processing (default True)
+    """
+    if filter_lang is None:
+        filter_lang = _always_true
+
+    if langname_group_or_genus is None:
+        langname_group_or_genus = langnameGroup
+    
+    print(f'_________________________ plotting all ___________________________ {folderprefix}')
+    
+    measures = [
+        ('MAL', 'right_{k}_totright_{m}', 'right_{k}_totright_{n}', [1,5], [1,5]), # MAL comparison
+        ('MAL', 'left_{k}_totleft_{m}', 'left_{k}_totleft_{n}', [1,5], [1,5]), # MAL left side
+        ('HCS', 'right_{j}_totright_{n}', 'right_{k}_totright_{n}', [2,6], [2,6]), # HCS comparison
+        ('HCS', 'left_{j}_totleft_{n}', 'left_{k}_totleft_{n}', [2,6], [2,6]), # HCS left side - j < k, so j on x-axis
+        ('DIAG', 'right_{k}_totright_{n}', 'right_{l}_totright_{m}', [1,5], [1,5]), # Diagonal comparison
+        ('DIAG', 'left_{k}_totleft_{n}', 'left_{l}_totleft_{m}', [1,5], [1,5]), # Diagonal left side
+    ]
+    
+    # Build list of all plot tasks
+    tasks = []
+    for (prefix, pos1, pos2, n_range, k_range) in measures:
+        for n in range(*n_range):
+            for k in range(*k_range):
+                if k <= n:
+                    m = n + 1
+                    j = k - 1
+                    l = k + 1
+                    pos1_str = pos1.format(n=n, k=k, m=m, j=j, l=l)
+                    pos2_str = pos2.format(n=n, k=k, m=m, j=j, l=l)
+                    
+                    tasks.append((
+                        pos1_str, pos2_str, prefix, all_langs_average_sizes_filtered,
+                        filter_lang, langNames, langnameGroup, langname_group_or_genus,
+                        folderprefix, palette
+                    ))
+    
+    print(f"Total plots to generate: {len(tasks)}")
+    
+    if parallel:
+        # Use multiprocessing for parallel execution
+        # Use fewer cores than max to avoid overloading if running on shared machine, or just use cpu_count
+        num_cores = max(1, cpu_count() - 1) 
+        print(f"Using {num_cores} CPU cores for parallel processing")
+        
+        results = []
+        with Pool(processes=num_cores) as pool:
+            # Use imap to get results as they complete for tqdm
+            for result in tqdm(pool.imap(_plot_task, tasks), total=len(tasks), desc="Generating plots"):
+                results.append(result)
+        
+        print(f"\\n✅ Completed {len(results)} plots")
+    else:
+        # Sequential execution
+        results = []
+        for task in tqdm(tasks, desc="Generating plots"):
+            results.append(_plot_task(task))
