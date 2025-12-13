@@ -27,6 +27,264 @@ def compute_average_sizes_table(all_langs_average_sizes_filtered):
 
 import os
 
+class GridCell:
+    def __init__(self, text="", value=None, cell_type='normal', rich_text=None, is_astonishing=False):
+        self.text = text
+        self.value = value
+        self.cell_type = cell_type 
+        self.rich_text = rich_text 
+        self.is_astonishing = is_astonishing
+
+def extract_verb_centered_grid(position_averages, 
+                               show_horizontal_factors=False, 
+                               show_diagonal_factors=False,
+                               arrow_direction='diverging',
+                               ordering_stats=None,
+                               show_ordering_triples=False,
+                               show_row_averages=False):
+    """
+    Constructs a grid of GridCell objects representing the table.
+    """
+    rows = []
+    
+    # Constants
+    # E_VAL = GridCell(" " * 11) 
+    
+    # Colors
+    COLOR_RED = "FF0000"
+    COLOR_GREY = "555555"
+    COLOR_DARK = "000000"
+    
+    # ---------------------------------------------------------
+    # 1. Right Dependents
+    # ---------------------------------------------------------
+    for tot in [4, 3, 2, 1]:
+        row_cells = []
+        row_cells.append(GridCell(f"R tot={tot}", cell_type='label'))
+        
+        # Padding
+        for _ in range(7): row_cells.append(GridCell(""))
+        
+        # Center "V"
+        row_cells.append(GridCell("V", cell_type='label'))
+        
+        prev_val = None
+        
+        for pos in range(1, tot + 1):
+             key = f'right_{pos}_totright_{tot}'
+             val = position_averages.get(key, float('nan'))
+             
+             # Horizontal Factor logic
+             if pos > 1 and show_horizontal_factors:
+                 fac_cell = GridCell("", cell_type='factor')
+                 rich_segments = []
+                 text_parts = []
+                 
+                 # 1. Factor
+                 factor_val = None
+                 if prev_val is not None and val is not None and val != 0 and val == val:
+                     factor_val = val / prev_val
+                     f_str = f"×{factor_val:.2f}→" # Arrow right basically always for Right side
+                     
+                     # Color Rule: Red if factor < 1
+                     f_color = COLOR_RED if factor_val < 1.0 else COLOR_GREY
+                     rich_segments.append((f_str, f_color, True)) # Bold factor? User image shows bold red.
+                     text_parts.append(f_str)
+
+                 # 2. Triple
+                 if show_ordering_triples and ordering_stats:
+                     pair_idx = pos - 2
+                     o_key = ('right', tot, pair_idx)
+                     o_data = ordering_stats.get(o_key)
+                     if o_data:
+                        tot_count = o_data['lt'] + o_data['eq'] + o_data['gt']
+                        if tot_count > 0:
+                            lt = o_data['lt'] / tot_count * 100
+                            eq = o_data['eq'] / tot_count * 100
+                            gt = o_data['gt'] / tot_count * 100
+                            
+                            # Build text for TSV
+                            t_str_full = f"(<{lt:.0f}={eq:.0f}>{gt:.0f})"
+                            text_parts.append(t_str_full)
+                            
+                            # Build Rich Text Segments
+                            # Prefix: " (<" + lt + "=" + eq + ">"
+                            # User wants: (<31=35>34) where 34 is Red if gt > lt
+                            
+                            # Add space separator if factor exists
+                            if rich_segments:
+                                rich_segments.append((" ", COLOR_GREY, False))
+                                
+                            prefix = f"(<{lt:.0f}={eq:.0f}>"
+                            rich_segments.append((prefix, COLOR_GREY, False))
+                            
+                            # GT part
+                            gt_str = f"{gt:.0f}"
+                            gt_color = COLOR_RED if gt > lt else COLOR_GREY
+                            gt_bold = True if gt > lt else False
+                            rich_segments.append((gt_str, gt_color, gt_bold))
+                            
+                            # Suffix
+                            rich_segments.append((")", COLOR_GREY, False))
+
+                 if text_parts:
+                     fac_cell.text = " ".join(text_parts)
+                     fac_cell.rich_text = rich_segments
+                     
+                 row_cells.append(fac_cell)
+             
+             # Value Cell (Numeric)
+             val_cell = GridCell("", value=val, cell_type='value')
+             if isinstance(val, float) and val == val: # not nan
+                 val_cell.text = f"{val:.3f}"
+                 # Ensure value is stored for Excel
+                 val_cell.value = float(val) 
+             else:
+                 val_cell.text = "N/A"
+                 val_cell.value = None
+             row_cells.append(val_cell)
+             
+             prev_val = val
+             
+        # Row Average
+        if show_row_averages:
+             avg_key = f'average_totright_{tot}'
+             row_avg = position_averages.get(avg_key)
+             if row_avg is not None:
+                 row_cells.append(GridCell(f"[Avg: {row_avg:.3f}]", cell_type='comment'))
+
+        rows.append(row_cells)
+        
+        # Diagonals (Right)
+        if tot > 1 and show_diagonal_factors:
+            diag_row = [GridCell(f"Diag R{tot}-{tot-1}", cell_type='label')]
+            for _ in range(7): diag_row.append(GridCell("")) 
+            diag_row.append(GridCell("")) 
+            
+            for pos in range(1, tot):
+                diag_row.append(GridCell("")) 
+                if show_horizontal_factors:
+                    src_key = f'right_{pos}_totright_{tot-1}'
+                    tgt_key = f'right_{pos+1}_totright_{tot}'
+                    src_val = position_averages.get(src_key)
+                    tgt_val = position_averages.get(tgt_key)
+                    
+                    diag_cell = GridCell("", cell_type='factor')
+                    if src_val and tgt_val:
+                        factor = tgt_val / src_val
+                        diag_str = f"×{factor:.2f} ↗"
+                        diag_cell.text = diag_str
+                        # Rich text for diagonal
+                        d_color = COLOR_RED if factor < 1.0 else COLOR_GREY
+                        diag_cell.rich_text = [(diag_str, d_color, True)]
+                        
+                    diag_row.append(diag_cell)
+            rows.append(diag_row)
+
+    rows.append([GridCell("separator", cell_type='separator')])
+    
+    # ---------------------------------------------------------
+    # 2. Left Dependents
+    # ---------------------------------------------------------
+    for tot in [1, 2, 3, 4]:
+        row_cells = []
+        row_cells.append(GridCell(f"L tot={tot}", cell_type='label'))
+        
+        left_grid = [GridCell("") for _ in range(7)]
+        prev_val_inner = None
+        
+        for pos in range(1, tot + 1):
+             key = f'left_{pos}_totleft_{tot}'
+             val = position_averages.get(key, None)
+             
+             if show_horizontal_factors:
+                 val_idx = 6 - (pos - 1) * 2
+             else:
+                 val_idx = 3 - (pos - 1)
+             
+             # Value
+             val_cell = GridCell("", value=val, cell_type='value')
+             if val is not None: 
+                 val_cell.text = f"{val:.3f}"
+                 val_cell.value = float(val)
+             else:
+                 val_cell.text = "N/A"
+             if val_idx >= 0 and val_idx < 7:
+                 left_grid[val_idx] = val_cell
+             
+             # Factor (to the right of value)
+             fac_idx = val_idx + 1
+             if pos > 1 and show_horizontal_factors and fac_idx < 7:
+                 fac_cell = GridCell("", cell_type='factor')
+                 rich_segments = []
+                 text_parts = []
+                 
+                 # 1. Factor
+                 factor_val = None
+                 if arrow_direction == 'rightwards':
+                     if prev_val_inner is not None and val is not None and val != 0:
+                         factor_val = prev_val_inner / val
+                         f_str = f"×{factor_val:.2f}→"
+                 else:
+                     if prev_val_inner is not None and val is not None and prev_val_inner != 0:
+                         factor_val = val / prev_val_inner
+                         f_str = f"×{factor_val:.2f}←"
+                         
+                 if factor_val is not None:
+                     f_color = COLOR_RED if factor_val < 1.0 else COLOR_GREY
+                     rich_segments.append((f_str, f_color, True))
+                     text_parts.append(f_str)
+
+                 # 2. Triple
+                 if show_ordering_triples and ordering_stats:
+                     pair_idx = pos - 2
+                     o_key = ('left', tot, pair_idx)
+                     o_data = ordering_stats.get(o_key)
+                     if o_data:
+                        tot_count = o_data['lt'] + o_data['eq'] + o_data['gt']
+                        if tot_count > 0:
+                            lt = o_data['lt'] / tot_count * 100
+                            eq = o_data['eq'] / tot_count * 100
+                            gt = o_data['gt'] / tot_count * 100
+                            
+                            t_str_full = f"(<{lt:.0f}={eq:.0f}>{gt:.0f})"
+                            text_parts.append(t_str_full)
+
+                            if rich_segments:
+                                rich_segments.append((" ", COLOR_GREY, False))
+                                
+                            prefix = f"(<{lt:.0f}={eq:.0f}>"
+                            rich_segments.append((prefix, COLOR_GREY, False))
+                            
+                            gt_str = f"{gt:.0f}"
+                            gt_color = COLOR_RED if gt > lt else COLOR_GREY
+                            gt_bold = True if gt > lt else False
+                            rich_segments.append((gt_str, gt_color, gt_bold))
+                            
+                            rich_segments.append((")", COLOR_GREY, False))
+
+                 if text_parts:
+                     fac_cell.text = " ".join(text_parts)
+                     fac_cell.rich_text = rich_segments
+                     
+                 left_grid[fac_idx] = fac_cell
+             
+             prev_val_inner = val
+             
+        row_cells.extend(left_grid)
+        row_cells.append(GridCell("V", cell_type='label'))
+        
+        # Row Average
+        if show_row_averages:
+             avg_key = f'average_totleft_{tot}'
+             row_avg = position_averages.get(avg_key)
+             if row_avg is not None:
+                 row_cells.append(GridCell(f"[Avg: {row_avg:.3f}]", cell_type='comment'))
+        
+        rows.append(row_cells)
+
+    return rows
+
 def format_verb_centered_table(position_averages, 
                                show_horizontal_factors=False, 
                                show_diagonal_factors=False,
@@ -139,13 +397,13 @@ def format_verb_centered_table(position_averages,
                      # Left to Right -->
                      if prev_val is not None and val is not None and val != 0:
                          factor_val = val / prev_val
-                         factor_str = f"×{factor_val:.2f} →"
+                         factor_str = f"×{factor_val:.2f}→"
                 else: 
                      # diverging (Right Side: L->R -> same as rightwards basically for R side)
                      # For Right side, diverging means V -> R1 -> R2. So Left-to-Right.
                      if prev_val is not None and val is not None and val != 0:
                          factor_val = val / prev_val
-                         factor_str = f"×{factor_val:.2f} →"
+                         factor_str = f"×{factor_val:.2f}→"
                          
                 if factor_str:
                      fac_parts.append(factor_str)
@@ -163,10 +421,10 @@ def format_verb_centered_table(position_averages,
                             lt = o_data['lt'] / total * 100
                             eq = o_data['eq'] / total * 100
                             gt = o_data['gt'] / total * 100
-                            # Format: 12< 5= 83>
-                            trip_str = f"{lt:.0f}<{eq:.0f}={gt:.0f}>"
+                            # Format: (<66=14>21)
+                            trip_str = f"(<{lt:.0f}={eq:.0f}>{gt:.0f})"
                             fac_parts.append(trip_str)
-                            tsv_fac_parts.append(f"{lt:.1f}< {eq:.1f}= {gt:.1f}>")
+                            tsv_fac_parts.append(f"(<{lt:.1f}={eq:.1f}>{gt:.1f})")
                 
                 # Combine
                 if fac_parts:
@@ -321,12 +579,12 @@ def format_verb_centered_table(position_averages,
                      # Left to Right -->
                      if prev_val_inner is not None and val is not None and val != 0:
                          factor_val = prev_val_inner / val
-                         factor_str = f"×{factor_val:.2f} →"
+                         factor_str = f"×{factor_val:.2f}→"
                  else: 
                      # diverging (Right to Left <--)
                      if prev_val_inner is not None and val is not None and prev_val_inner != 0:
                          factor_val = val / prev_val_inner
-                         factor_str = f"×{factor_val:.2f} ←"
+                         factor_str = f"×{factor_val:.2f}←"
                          
                  if factor_str:
                      fac_parts.append(factor_str)
@@ -442,33 +700,108 @@ def format_verb_centered_table(position_averages,
     return "\n".join(lines)
 
 
+def save_excel_verb_centered_table(grid_rows, output_path):
+    """
+    Saves the grid to an Excel file with conditional formatting.
+    """
+    try:
+        from openpyxl import Workbook
+        from openpyxl.styles import Font, PatternFill, Alignment, Color
+        from openpyxl.utils import get_column_letter
+        from openpyxl.cell.rich_text import CellRichText, TextBlock, InlineFont
+    except ImportError:
+        print("Error: openpyxl not installed. Cannot save Excel.")
+        return
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Verb Centered Analysis"
+
+    # Styles
+    bold_font = Font(bold=True)
+    grey_font = Font(color="555555") 
+    red_font = Font(color="FF0000", bold=True)
+    
+    # alignments
+    center_align = Alignment(horizontal='center', vertical='center')
+    left_align = Alignment(horizontal='left', vertical='center')
+
+    for r_idx, row in enumerate(grid_rows, 1):
+        for c_idx, cell in enumerate(row, 1):
+            c = ws.cell(row=r_idx, column=c_idx)
+            
+            # 1. Content
+            if cell.rich_text:
+                # Construct CellRichText
+                rt = CellRichText()
+                for (text, color_hex, is_bold) in cell.rich_text:
+                    # Convert to InlineFont
+                    if_font = InlineFont(color=color_hex, b=is_bold)
+                    rt.append(TextBlock(font=if_font, text=text))
+                c.value = rt
+            elif cell.value is not None:
+                c.value = cell.value
+                if isinstance(cell.value, (int, float)):
+                    c.number_format = '0.000'
+            else:
+                c.value = cell.text
+            
+            # 2. Alignment
+            if c_idx == 1:
+                c.alignment = left_align
+            else:
+                c.alignment = center_align
+
+            # 3. Base Font (if not RichText)
+            # RichText overrides cell font for the parts, but base font might matter?
+            # Actually RichText completely controls the content styling.
+            if not cell.rich_text:
+                if cell.cell_type == 'value':
+                    c.font = bold_font
+                elif cell.cell_type == 'factor':
+                    # Fallback if logic failed or simple mode
+                    if cell.is_astonishing: # Deprecated by RichText but keep for safety
+                        c.font = red_font
+                    else:
+                        c.font = grey_font
+                elif cell.cell_type == 'comment':
+                    c.font = Font(italic=True, color="333333")
+                elif cell.text == "V":
+                    c.font = Font(bold=True, size=14)
+            
+    # Adjust column widths
+    for col in ws.columns:
+        max_length = 0
+        column = col[0].column_letter 
+        for cell in col:
+            try:
+                # Length of value str
+                val_str = str(cell.value)
+                if len(val_str) > max_length:
+                    max_length = len(val_str)
+            except:
+                pass
+        adjusted_width = (max_length + 2)
+        # Cap width? Averages are small, factors are long.
+        ws.column_dimensions[column].width = adjusted_width
+
+    wb.save(output_path)
+    # print(f"Saved Excel table to {output_path}")
+
+
 def aggregate_ordering_stats(ordering_stats_dict):
     """
     Aggregates ordering statistics across multiple languages.
-    
-    Parameters
-    ----------
-    ordering_stats_dict : dict
-        Dict mapping lang_code -> {(side, tot, idx) -> {lt, eq, gt}}
-        
-    Returns
-    -------
-    dict
-        Aggregated stats: {(side, tot, idx) -> {lt, eq, gt}}
     """
     aggregated = {}
-    
     for lang_stats in ordering_stats_dict.values():
         if not lang_stats: continue
-        
         for key, counts in lang_stats.items():
             if key not in aggregated:
                 aggregated[key] = {'lt': 0, 'eq': 0, 'gt': 0}
-            
             aggregated[key]['lt'] += counts.get('lt', 0)
             aggregated[key]['eq'] += counts.get('eq', 0)
             aggregated[key]['gt'] += counts.get('gt', 0)
-            
     return aggregated
 
 
@@ -478,42 +811,29 @@ def generate_mass_tables(all_langs_average_sizes,
                          vo_data=None, 
                          output_dir='data/tables'):
     """
-    Generates verb-centered tables for:
-    1. Each language individually.
-    2. VO, OV, NDO languages combined.
-    3. IE and Non-IE languages combined.
-    4. Average over all languages.
-    
-    Saves results as TSV files in output_dir.
+    Generates text/TSV tables and Excel files.
     """
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
         
     lang_names = metadata.get('langNames', {})
-    lang_groups = metadata.get('langnameGroup', {})
     
     # helper to process a subset of languages
     def process_subset(subset_langs, label, filename_label):
-        if not subset_langs:
-            # print(f"Skipping {label}: No languages found.")
-            return
+        if not subset_langs: return
 
         # Filter Data
         subset_avgs = {l: all_langs_average_sizes[l] for l in subset_langs if l in all_langs_average_sizes}
         subset_stats = {l: ordering_stats[l] for l in subset_langs if l in ordering_stats} if ordering_stats else None
         
-        if not subset_avgs:
-            return
+        if not subset_avgs: return
 
         # Aggregate
         combined_avgs = compute_average_sizes_table(subset_avgs)
-        
-        combined_stats = None
-        if subset_stats:
-            combined_stats = aggregate_ordering_stats(subset_stats)
+        combined_stats = aggregate_ordering_stats(subset_stats) if subset_stats else None
             
-        # Format and Save
-        filename = f"{filename_label}.tsv"
+        # 1. Generate Standard TSV/Text
+        filename_tsv = f"{filename_label}.tsv"
         format_verb_centered_table(
             combined_avgs,
             show_horizontal_factors=True,
@@ -524,41 +844,53 @@ def generate_mass_tables(all_langs_average_sizes,
             arrow_direction='rightwards',
             save_tsv=True,
             output_dir=output_dir,
-            filename=filename
+            filename=filename_tsv
         )
+        
+        # 2. Generate Excel with extracted grid
+        grid = extract_verb_centered_grid(
+            combined_avgs,
+            show_horizontal_factors=True,
+            show_diagonal_factors=True,
+            arrow_direction='rightwards',
+            ordering_stats=combined_stats,
+            show_ordering_triples=True,
+            show_row_averages=True
+        )
+        filename_xlsx = f"{filename_label}.xlsx"
+        save_excel_verb_centered_table(grid, os.path.join(output_dir, filename_xlsx))
 
     print(f"Generating tables in {output_dir}...")
     
     all_langs = list(all_langs_average_sizes.keys())
     
-    # 1. Global Average
+    # Global
     process_subset(all_langs, "All Languages", "Table_All_Languages")
     
-    # 2. Individual Languages
+    # Individual
     for lang in all_langs:
         name = lang_names.get(lang, lang).replace(" ", "_").replace("/", "-")
         process_subset([lang], f"Language {name}", f"Table_Language_{name}_{lang}")
         
-    # 3. IE vs Non-IE
+    # Families (IE / Non-IE)
+    # Re-using previous logic but simpler iteration
     ie_langs = []
     non_ie_langs = []
+    langnameGroup = metadata.get('langnameGroup', {})
     for lang in all_langs:
         name = lang_names.get(lang, lang)
-        group = lang_groups.get(name, 'Unknown')
-        if group == 'Indo-European':
-            ie_langs.append(lang)
-        else:
-            non_ie_langs.append(lang)
+        group = langnameGroup.get(name, 'Unknown')
+        if group == 'Indo-European': ie_langs.append(lang)
+        else: non_ie_langs.append(lang)
             
     process_subset(ie_langs, "Indo-European", "Table_Family_IndoEuropean")
     process_subset(non_ie_langs, "Non-Indo-European", "Table_Family_NonIndoEuropean")
     
-    # 4. VO vs OV vs NDO
+    # Order
     if vo_data:
         vo_langs = []
         ov_langs = []
         ndo_langs = []
-        
         for lang in all_langs:
             info = vo_data.get(lang)
             if info:
@@ -569,7 +901,6 @@ def generate_mass_tables(all_langs_average_sizes,
                          if score > 0.666: vtype = 'VO'
                          elif score < 0.333: vtype = 'OV'
                          else: vtype = 'NDO'
-                
                 if vtype == 'VO': vo_langs.append(lang)
                 elif vtype == 'OV': ov_langs.append(lang)
                 elif vtype == 'NDO': ndo_langs.append(lang)

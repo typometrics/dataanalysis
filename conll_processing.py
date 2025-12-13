@@ -760,7 +760,7 @@ def load_conll_data(output_dir='data'):
 
 def get_vo_hi_stats(tree):
     """
-    Compute VO and Head-Initiality statistics for a single tree.
+    Compute VO, SV, and Head-Initiality statistics for a single tree.
     
     Parameters
     ----------
@@ -773,6 +773,8 @@ def get_vo_hi_stats(tree):
         {
             'vo_right': count,
             'vo_total': count,
+            'sv_right': count,
+            'sv_total': count,
             'all_right': count,
             'all_total': count
         }
@@ -780,6 +782,8 @@ def get_vo_hi_stats(tree):
     stats = {
         'vo_right': 0,
         'vo_total': 0,
+        'sv_right': 0,
+        'sv_total': 0,
         'all_right': 0,
         'all_total': 0
     }
@@ -818,6 +822,12 @@ def get_vo_hi_stats(tree):
                     stats['vo_total'] += 1
                     if is_right:
                         stats['vo_right'] += 1
+                
+                # Specific SV Filter (nsubj relation)
+                if base_rel == 'nsubj':
+                    stats['sv_total'] += 1
+                    if is_right:
+                        stats['sv_right'] += 1
                         
     return stats
 
@@ -855,6 +865,7 @@ def process_file_complete(conll_filename, include_bastards=True, compute_sentenc
     # 3. VO/HI stats containers
     vo_hi_total = {
         'vo_right': 0, 'vo_total': 0,
+        'sv_right': 0, 'sv_total': 0,
         'all_right': 0, 'all_total': 0
     }
     
@@ -978,7 +989,7 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
                     
             # --- 3. VO/HI Stats Aggregation ---
             if lang not in lang_vo_hi_stats:
-                lang_vo_hi_stats[lang] = {'vo_right': 0, 'vo_total': 0, 'all_right': 0, 'all_total': 0}
+                lang_vo_hi_stats[lang] = {'vo_right': 0, 'vo_total': 0, 'sv_right': 0, 'sv_total': 0, 'all_right': 0, 'all_total': 0}
             
             for k, v in vo_hi_file_stats.items():
                 lang_vo_hi_stats[lang][k] += v
@@ -1004,16 +1015,18 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
             for ty in all_langs_position2sizes[lang]
         }
 
-    # 3. VO/HI Scores Calculation
+    # 3. VO/HI/SV Scores Calculation
     lang_vo_hi_scores = {}
     for lang, stats in lang_vo_hi_stats.items():
         vo_total = stats['vo_total']
+        sv_total = stats['sv_total']
         all_total = stats['all_total']
         
         vo_score = stats['vo_right'] / vo_total if vo_total > 0 else None
+        sv_score = stats['sv_right'] / sv_total if sv_total > 0 else None
         hi_score = stats['all_right'] / all_total if all_total > 0 else None
         
-        # Classify word order type (tripartite classification)
+        # Classify word order type (tripartite classification for VO)
         if vo_score is not None:
             if vo_score > 0.666:
                 vo_type = 'VO'
@@ -1024,13 +1037,28 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
         else:
             vo_type = None
         
+        # Classify SV order (tripartite classification)
+        if sv_score is not None:
+            if sv_score > 0.666:
+                sv_type = 'SV'
+            elif sv_score < 0.333:
+                sv_type = 'VS'
+            else:
+                sv_type = 'NDO_SV'
+        else:
+            sv_type = None
+        
         lang_vo_hi_scores[lang] = {
             'vo_score': vo_score,
             'vo_type': vo_type,
+            'sv_score': sv_score,
+            'sv_type': sv_type,
             'head_initiality_score': hi_score,
             'vo_count': vo_total,
+            'sv_count': sv_total,
             'total_deps': all_total,
             'vo_right': stats['vo_right'],
+            'sv_right': stats['sv_right'],
             'all_right': stats['all_right']
         }
         

@@ -438,10 +438,14 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
     plt.yticks(range(max_y+1))
     plt.legend(loc='lower right')
     
-    # Add language labels
-    plt.legend(loc='lower right')
+    # Add diagonal line
+    plot.plot([0, max_y], [0, max_y], color='grey', linestyle='--')
     
-    # Save no_labels plot
+    # Add title and subtitle using filename
+    plt.title(filename, fontsize=16)
+    plt.suptitle('\n'.join([corr, special]), fontsize=12, y=0)
+    
+    # Save no_labels plot (with diagonal line but no language labels)
     plot_path_no = f'plots/{folderprefix}scatters/{filename}_no_labels.png'
     os.makedirs(os.path.dirname(plot_path_no), exist_ok=True)
     plot.figure.savefig(plot_path_no, bbox_inches='tight')
@@ -449,13 +453,6 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
     # Add language labels using adjustText
     if with_labels:
         adjust_text_labels(df, pos1, pos2, 'language', ax=plt.gca())
-    
-    # Add diagonal line
-    plot.plot([0, max_y], [0, max_y], color='grey', linestyle='--')
-    
-    # Add title and subtitle using filename
-    plt.title(filename, fontsize=16)
-    plt.suptitle('\n'.join([corr, special]), fontsize=12, y=0)
     
     # Add language list at bottom
     if len(special_langs) > 0:
@@ -484,20 +481,6 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
     plt.ylim(0, max_y)
     plt.xticks(range(max_x+1))
     plt.yticks(range(max_y+1))
-    plt.ylim(0, max_y)
-    plt.xticks(range(max_x+1))
-    plt.yticks(range(max_y+1))
-    # Legend moved to end to include lines
-    
-    # Add language labels
-    # Save no_labels regression plot
-    regplot_path_no = f'plots/{folderprefix}regscatters/{filename} regplot_no_labels.png'
-    os.makedirs(os.path.dirname(regplot_path_no), exist_ok=True)
-    plt.savefig(regplot_path_no, bbox_inches='tight')
-
-    # Add language labels using adjustText
-    if with_labels:
-        adjust_text_labels(df, pos1, pos2, 'language', ax=plt.gca())
     
     # Add diagonal line
     plot.plot([0, max_y], [0, max_y], color='grey', linestyle='--', label='Diagonal (y=x)')
@@ -537,6 +520,15 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
     
     plt.title(f'{filename} regplot', fontsize=16)
     plt.suptitle('\n'.join([corr+regr, special]), fontsize=12, y=0)
+    
+    # Save no_labels regression plot (with all lines but no language labels)
+    regplot_path_no = f'plots/{folderprefix}regscatters/{filename} regplot_no_labels.png'
+    os.makedirs(os.path.dirname(regplot_path_no), exist_ok=True)
+    plt.savefig(regplot_path_no, bbox_inches='tight')
+
+    # Add language labels using adjustText
+    if with_labels:
+        adjust_text_labels(df, pos1, pos2, 'language', ax=plt.gca())
     
     # Add language list at bottom
     if len(special_langs) > 0:
