@@ -441,6 +441,11 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
     # Add language labels
     plt.legend(loc='lower right')
     
+    # Save no_labels plot
+    plot_path_no = f'plots/{folderprefix}scatters/{filename}_no_labels.png'
+    os.makedirs(os.path.dirname(plot_path_no), exist_ok=True)
+    plot.figure.savefig(plot_path_no, bbox_inches='tight')
+
     # Add language labels using adjustText
     if with_labels:
         adjust_text_labels(df, pos1, pos2, 'language', ax=plt.gca())
@@ -464,7 +469,7 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
     plot_path = f'plots/{folderprefix}scatters/{filename}.png'
     os.makedirs(os.path.dirname(plot_path), exist_ok=True)
     plot.figure.savefig(plot_path, bbox_inches='tight')
-    print(f"✓ Saved plot: {plot_path} (labels={with_labels})")
+    # print(f"✓ Saved plot: {plot_path} (labels={with_labels})")
     
     # Display the plot inline only if requested
     if show_inline:
@@ -485,6 +490,11 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
     # Legend moved to end to include lines
     
     # Add language labels
+    # Save no_labels regression plot
+    regplot_path_no = f'plots/{folderprefix}regscatters/{filename} regplot_no_labels.png'
+    os.makedirs(os.path.dirname(regplot_path_no), exist_ok=True)
+    plt.savefig(regplot_path_no, bbox_inches='tight')
+
     # Add language labels using adjustText
     if with_labels:
         adjust_text_labels(df, pos1, pos2, 'language', ax=plt.gca())
@@ -540,7 +550,7 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
     regplot_path = f'plots/{folderprefix}regscatters/{filename} regplot.png'
     os.makedirs(os.path.dirname(regplot_path), exist_ok=True)
     plt.savefig(regplot_path, bbox_inches='tight')
-    print(f"✓ Saved regression plot: {regplot_path}")
+    # print(f"✓ Saved regression plot: {regplot_path}")
     
     # Display the regression plot inline only if requested
     if show_inline:
@@ -755,20 +765,23 @@ def _plot_head_init_factor_task(args):
     ax.grid(alpha=0.3)
     ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=9)
     
+    
+    # Save plot
+    safe_filename = factor_col.replace('/', '_').replace(' ', '_')
+    output_base = f'{output_folder}/{subset_name}/{safe_filename}'
+    
+    # 1. Save no_labels version
+    os.makedirs(os.path.dirname(output_base), exist_ok=True)
+    plt.savefig(f'{output_base}_no_labels.png', dpi=300, bbox_inches='tight')
+    
     # Add labels
     # Check if we have language name column
     label_col = 'language_name' if 'language_name' in df_plot.columns else 'language_code'
     if label_col in df_plot.columns:
         adjust_text_labels(df_plot, 'head_initiality', factor_col, label_col, ax=ax)
     
-    
     plt.tight_layout()
-    
-    # Save plot
-    safe_filename = factor_col.replace('/', '_').replace(' ', '_')
-    filepath = f'{output_folder}/{subset_name}/{safe_filename}.png'
-    os.makedirs(os.path.dirname(filepath), exist_ok=True)
-    plt.savefig(filepath, dpi=300, bbox_inches='tight')
+    plt.savefig(f'{output_base}.png', dpi=300, bbox_inches='tight')
     plt.close()
     
     return f"{subset_name}/{safe_filename}.png"
@@ -828,8 +841,10 @@ def plot_head_initiality_vs_factors(all_factors_df, group_to_color,
         num_cores = cpu_count()
         print(f"Using {num_cores} CPU cores for parallel processing")
         
+        results = []
         with Pool(processes=num_cores) as pool:
-            results = pool.map(_plot_head_init_factor_task, tasks)
+            for result in tqdm(pool.imap(_plot_head_init_factor_task, tasks), total=len(tasks), desc="Generating Head-Init Plots"):
+                results.append(result)
         
         # Filter out None results (plots that were skipped)
         successful_results = [r for r in results if r is not None]
