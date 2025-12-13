@@ -760,7 +760,9 @@ def load_conll_data(output_dir='data'):
 
 def get_vo_hi_stats(tree):
     """
-    Compute VO, SV, and Head-Initiality statistics for a single tree.
+    Compute VO, VS, and Head-Initiality statistics for a single tree.
+    
+    Note: sv_right/sv_total measure subjects AFTER verb (VS order)
     
     Parameters
     ----------
@@ -773,7 +775,7 @@ def get_vo_hi_stats(tree):
         {
             'vo_right': count,
             'vo_total': count,
-            'sv_right': count,
+            'sv_right': count (subjects after verb, i.e., VS),
             'sv_total': count,
             'all_right': count,
             'all_total': count
@@ -823,7 +825,8 @@ def get_vo_hi_stats(tree):
                     if is_right:
                         stats['vo_right'] += 1
                 
-                # Specific SV Filter (nsubj relation)
+                # Specific VS Filter (nsubj relation)
+                # Note: sv_right counts subjects AFTER verb (VS order)
                 if base_rel == 'nsubj':
                     stats['sv_total'] += 1
                     if is_right:
@@ -1037,14 +1040,15 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
         else:
             vo_type = None
         
-        # Classify SV order (tripartite classification)
+        # Classify VS order (tripartite classification)
+        # Note: sv_score measures proportion of subjects AFTER verb (VS order)
         if sv_score is not None:
             if sv_score > 0.666:
-                sv_type = 'SV'
+                sv_type = 'VS'  # Most subjects after verb
             elif sv_score < 0.333:
-                sv_type = 'VS'
+                sv_type = 'SV'  # Most subjects before verb
             else:
-                sv_type = 'NDO_SV'
+                sv_type = 'NDO_SV'  # No dominant order
         else:
             sv_type = None
         

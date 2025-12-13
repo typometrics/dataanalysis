@@ -6,11 +6,45 @@ The disorder analysis now supports two approaches:
 
 1. **Average-level disorder** (original): Checks if the average constituent sizes are ordered
    - Result: Binary flag per language (ordered or disordered)
-   - Fast computation (already computed from averaged data)
+   - Disadvantage: Produces discrete values in analysis (0 or 1), masking nuance.
 
-2. **Sentence-level disorder** (new): Checks what percentage of individual sentences have disordered constituents
-   - Result: Percentage per language (0-100%)
-   - Slower computation (requires parsing all individual sentences)
+2. **Sentence-level disorder** (new): Checks comparison statistics for every pair of adjacent constituents across all sentences.
+   - Result: Continuous percentage per language (0.0 - 100.0%)
+   - Advantage: Provides a granular view of how often a language deviates from the "Short-before-Long" (or equivalent) preference.
+
+## Computation Logic
+
+### 1. Granular Comparisons
+For every sentence and every suitable configuration (e.g., Verb with 2 Right Dependents), we identify adjacent pairs of dependents. For each pair $(D_1, D_2)$, we compare their sizes (number of words):
+
+- **Less Than (<)**: Size($D_1$) < Size($D_2$)
+- **Equal (=)**: Size($D_1$) = Size($D_2$)
+- **Greater Than (>)**: Size($D_1$) > Size($D_2$)
+
+These counts are aggregated for each language and configuration.
+
+### 2. Continuous Disorder Score
+We define a "Disorder Score" as the percentage of pairs that violate the expected length-minimization ordering preference.
+
+#### Right Dependents (Visual Order: $V \rightarrow R_1 \rightarrow R_2$)
+*Expected Order*: Short before Long ($Size(R_1) < Size(R_2)$).
+- **Ordered**: Less Than (<)
+- **Disordered**: Equal (=) OR Greater Than (>)
+- **Score Calculation**:
+  $$ \text{Disorder \%} = \frac{\text{Count}(=) + \text{Count}(>)}{\text{Total Pairs}} \times 100 $$
+
+#### Left Dependents (Visual Order: $L_2 \leftarrow L_1 \leftarrow V$)
+*Note: Left dependents are indexed by distance from verb. $L_1$ is closest, $L_2$ is further.*
+*Visual Sequence*: $L_2, L_1, V$.
+*Expected Order*: Long before Short visual sequence ($Size(L_2) > Size(L_1)$)? 
+*Wait, standard dependency length minimization prefers the short elements to be closer to the head.*
+- If Head is on Right ($L \dots V$), short element should be close to V ($L_1$). Long element far ($L_2$).
+- So we expect $Size(L_2) > Size(L_1)$.
+- Therefore:
+    - **Ordered**: Greater Than (>) ($L_{far} > L_{close}$)
+    - **Disordered**: Equal (=) OR Less Than (<)
+- **Score Calculation**:
+  $$ \text{Disorder \%} = \frac{\text{Count}(=) + \text{Count}(<)}{\text{Total Pairs}} \times 100 $$
 
 ## Architecture
 
@@ -28,27 +62,26 @@ The sentence-level disorder computation is now integrated into the main parallel
 
 ### Code Structure
 
-**`conll_processing.py`** contains three new/modified functions:
+**`conll_processing.py`** contains the logic for extracting granular stats:
 
-1. `get_sentence_disorder(tree, include_bastards=False)`: 
+1. `get_ordering_stats(tree, include_bastards=False)`: 
    - Analyzes a single sentence tree
-   - Returns disorder flags for each verb's configuration
-   - Uses the same verb/dependency filtering as existing code
+   - Identifying constituent spans (optionally including "bastard" dependents)
+   - Comparing sizes of adjacent constituents
+   - Returns counts of `<, =, >` for each configuration
 
-2. `get_dep_sizes_file(..., compute_sentence_disorder=False)`:
-   - Modified to optionally compute sentence disorder
-   - Returns additional sentence_disorder_stats when enabled
+**`compute_disorder.py`** aggregates these stats:
 
-3. `get_type_freq_all_files_parallel(..., compute_sentence_disorder=False)`:
-   - Modified to optionally compute sentence disorder in parallel
-   - Returns additional sentence_disorder_percentages when enabled
-   - Aggregates results across all files per language
+1. `compute_disorder_per_language(..., ordering_stats=None)`:
+   - Takes the raw granular counts (lt, eq, gt)
+   - Applies the Right/Left logic described above
+   - Returns a continuous float score (0.0-1.0) for each language configuration
 
 ## Usage
 
 ### Step 1: Generate sentence-level disorder data
 
-Open `02_dependency_analysis.ipynb` and find section 2b:
+Open `02_dependency_analysis.ipynb` and run section 2b:
 
 ```python
 # Set to True to enable sentence-level disorder computation
@@ -58,89 +91,34 @@ compute_sentence_disorder = True
 Run the notebook. This will:
 - Take 10-30 minutes (processes all sentences in all CoNLL files)
 - Generate `data/sentence_disorder_percentages.csv`
-- Generate `data/sentence_disorder_percentages.pkl`
+- Generate `data/sentence_disorder_percentages.pkl` (containing the granular stats tree)
 
 ### Step 2: Analyze results
 
-Open `04_data_processing.ipynb` and run section 7c.
-
-This will:
-- Load the pre-computed sentence disorder data
-- Compare sentence-level vs average-level disorder
-- Show which languages have the largest differences between the two approaches
+Open `04_data_processing.ipynb`. The notebook automatically detects `sentence_disorder_percentages.pkl` and uses the granular stats to produce continuous scatter plots.
 
 ## Data Format
 
-### sentence_disorder_percentages.csv
-
-Columns:
-- `language_code`: ISO language code (e.g., 'en')
-- `language_name`: Full language name (e.g., 'English')
-- `group`: Language family/group
-- `right_tot_2_pct`: % of "V X X" sentences that are disordered
-- `right_tot_2_total`: Total number of "V X X" sentences analyzed
-- `right_tot_2_disordered`: Number of disordered "V X X" sentences
-- Similar columns for `right_tot_3`, `right_tot_4`, `left_tot_2`, `left_tot_3`, `left_tot_4`
-
-## Key Differences Between Approaches
-
-### Example: Right tot=2 (V X X)
-
-**Average-level approach:**
-- Compute avg(pos1) and avg(pos2) across all sentences
-- Check if avg(pos1) < avg(pos2)
-- Result: Binary (6.5% of languages have disordered averages)
-
-**Sentence-level approach:**
-- For each sentence, check if actual pos1 < actual pos2
-- Count how many sentences are disordered
-- Result: Percentage (e.g., 15% of sentences are disordered on average across languages)
-
-### Why do they differ?
-
-A language can have **ordered averages** but still have **many disordered sentences** if:
-- Most sentences follow the pattern, but outliers exist
-- Variability is high: some sentences have very small pos1, others have very large pos1
-- The average "smooths out" the disorder present in individual sentences
-
-Conversely, a language can have **disordered averages** but **few disordered sentences** if:
-- The averages are close (e.g., avg(pos1) = 2.01, avg(pos2) = 1.99)
-- Most sentences are actually ordered, but the averages swap due to aggregation
-
-## Performance Notes
-
-- **Without sentence disorder**: ~1-2 minutes on typical hardware
-- **With sentence disorder**: ~10-30 minutes on typical hardware
-- Uses all available CPU cores via multiprocessing
-- Memory usage is modest (processes files in chunks)
+### sentence_disorder_percentages.pkl
+A nested dictionary structure:
+```python
+{
+    'lang_code': {
+        ('side', total_dependents, pair_index): {
+            'lt': count,
+            'eq': count,
+            'gt': count
+        },
+        ...
+    },
+    ...
+}
+```
+Example key: `('right', 3, 0)` refers to the pair (Pos 1, Pos 2) in a group of 3 right dependents.
 
 ## Troubleshooting
 
-### "Sentence disorder data not found"
-
-**Solution**: Run notebook 02 with `compute_sentence_disorder=True`
-
-### "AttributeError: 'int' object has no attribute 'get'"
-
-**Solution**: This was a bug in the old `compute_sentence_disorder.py` module. The new implementation is integrated into `conll_processing.py` and uses the correct tree structure.
-
-### Computation is too slow
-
-**Options**:
-1. Disable sentence disorder computation (set to `False`)
-2. Use a smaller dataset (test on a subset of languages)
-3. The computation is already parallelized - you're getting maximum speed
-
-## File Changes
-
-### Modified files:
-- `conll_processing.py`: Added sentence disorder functions
-- `02_dependency_analysis.ipynb`: Added section 2b for optional sentence disorder computation
-- `04_data_processing.ipynb`: Section 7c now loads pre-computed data
-
-### Deprecated files:
-- `compute_sentence_disorder.py`: No longer used (integrated into conll_processing.py)
-
-### New output files:
-- `data/sentence_disorder_percentages.csv`
-- `data/sentence_disorder_percentages.pkl`
+### "Scatter plots show discrete horizontal lines"
+**Solution**: This indicates the old binary calculation method is being used. Ensure:
+1. You have re-run Notebook 02 to generate the granular stats in `.pkl` format.
+2. Notebook 04 successfully loads `sentence_disorder_percentages.pkl`.

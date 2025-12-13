@@ -898,6 +898,181 @@ def adjust_text_labels(df, x_col, y_col, label_col, ax=None):
         # print(f"  Adjusting {len(texts)} labels with arrows...", flush=True)
         adjust_text(texts, ax=ax, arrowprops=dict(arrowstyle='-', color='gray', alpha=0.5, lw=0.5))
 
+
+def _plot_sv_vs_vo_task(args):
+    """
+    Worker function for parallel SV vs VO plot generation.
+    
+    Parameters
+    ----------
+    args : tuple
+        (df, lang_filter, title, filename_prefix, group_to_color, plots_dir)
+    
+    Returns
+    -------
+    str
+        Path to generated plot file
+    """
+    df, lang_filter, title, filename_prefix, group_to_color, plots_dir = args
+    
+    # Filter data
+    plot_df = df.copy()
+    
+    if lang_filter is not None:
+        plot_df = plot_df[plot_df['language_code'].isin(lang_filter)]
+    
+    # Remove rows with missing scores
+    plot_df = plot_df.dropna(subset=['sv_score', 'vo_score'])
+    
+    if len(plot_df) == 0:
+        return None
+    
+    # Create figure
+    plt.figure(figsize=(12, 10))
+    
+    # Create scatter plot
+    scatter = sns.scatterplot(
+        data=plot_df,
+        x='sv_score',
+        y='vo_score',
+        hue='group',
+        palette=group_to_color,
+        s=80,
+        alpha=0.7
+    )
+    
+    # Add reference lines
+    plt.axhline(y=0.666, color='red', linestyle='--', alpha=0.3, label='VO threshold (66.6%)')
+    plt.axhline(y=0.333, color='blue', linestyle='--', alpha=0.3, label='OV threshold (33.3%)')
+    plt.axvline(x=0.666, color='red', linestyle='--', alpha=0.3, label='VS threshold (66.6%)')
+    plt.axvline(x=0.333, color='blue', linestyle='--', alpha=0.3, label='SV threshold (33.3%)')
+    
+    # Add diagonal for reference
+    plt.plot([0, 1], [0, 1], 'k--', alpha=0.2, label='Diagonal')
+    
+    # Labels and title
+    plt.xlabel('VS Score (proportion of subjects after verb)', fontsize=12)
+    plt.ylabel('VO Score (proportion of objects after verb)', fontsize=12)
+    plt.title(title, fontsize=14, fontweight='bold')
+    plt.xlim(-0.05, 1.05)
+    plt.ylim(-0.05, 1.05)
+    
+    # Update legend
+    handles, labels = plt.gca().get_legend_handles_labels()
+    plt.legend(handles=handles, labels=labels, loc='best', fontsize=9)
+    
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+    
+    # Save plot without labels
+    output_dir = os.path.join(plots_dir, 'sv_vs_vo')
+    os.makedirs(output_dir, exist_ok=True)
+    output_path_no_labels = os.path.join(output_dir, f'{filename_prefix}vs_vs_vo_scatter_no_labels.png')
+    plt.savefig(output_path_no_labels, dpi=150, bbox_inches='tight')
+    
+    # Add language labels using adjustText (same as other plots)
+    adjust_text_labels(plot_df, 'sv_score', 'vo_score', 'language_name', ax=plt.gca())
+    
+    # Save plot with labels
+    output_path = os.path.join(output_dir, f'{filename_prefix}vs_vs_vo_scatter.png')
+    plt.savefig(output_path, dpi=150, bbox_inches='tight')
+    
+    plt.close()
+    
+    # Compute statistics
+    corr = plot_df['sv_score'].corr(plot_df['vo_score'])
+    
+    # Count by quadrants
+    vo_high = plot_df['vo_score'] > 0.666
+    vo_low = plot_df['vo_score'] < 0.333
+    vs_high = plot_df['sv_score'] > 0.666  # Subjects after verb
+    vs_low = plot_df['sv_score'] < 0.333   # Subjects before verb (SV)
+    
+    stats = {
+        'title': title,
+        'n_langs': len(plot_df),
+        'mean_vs': plot_df['sv_score'].mean(),
+        'mean_vo': plot_df['vo_score'].mean(),
+        'correlation': corr,
+        'vo_vs': (vo_high & vs_high).sum(),
+        'vo_sv': (vo_high & vs_low).sum(),
+        'ov_vs': (vo_low & vs_high).sum(),
+        'ov_sv': (vo_low & vs_low).sum(),
+    }
+    
+    return output_path, stats
+
+
+def plot_sv_vs_vo_scatter_batch(df, language_filters, group_to_color, plots_dir='plots', parallel=True):
+    """
+    Create VS vs VO scatterplots for multiple language groups in parallel.
+    
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        DataFrame with sv_score, vo_score, language_code, language_name, and group columns
+    language_filters : list of tuples
+        List of (title, filename_prefix, lang_filter_set) tuples
+    group_to_color : dict
+        Mapping of language groups to colors
+    plots_dir : str
+        Base directory for plots
+    parallel : bool
+        Whether to use parallel processing (default True)
+    
+    Returns
+    -------
+    list
+        List of (output_path, stats_dict) tuples for successful plots
+    """
+    from multiprocessing import Pool, cpu_count
+    
+    # Build list of tasks
+    tasks = []
+    for title, filename_prefix, lang_filter in language_filters:
+        tasks.append((df, lang_filter, title, filename_prefix, group_to_color, plots_dir))
+    
+    print(f"Generating {len(tasks)} VS vs VO scatterplots...")
+    
+    if parallel:
+        # Use multiprocessing for parallel execution
+        num_cores = max(1, cpu_count() - 1)
+        print(f"Using {num_cores} CPU cores for parallel processing")
+        
+        results = []
+        with Pool(processes=num_cores) as pool:
+            for result in tqdm(pool.imap(_plot_sv_vs_vo_task, tasks), total=len(tasks), desc="Generating VS vs VO plots"):
+                results.append(result)
+        
+        # Filter out None results (plots that were skipped)
+        successful_results = [r for r in results if r is not None]
+        print(f"\n✅ Completed {len(successful_results)} VS vs VO plots")
+    else:
+        # Sequential execution
+        successful_results = []
+        for task in tqdm(tasks, desc="Generating VS vs VO plots"):
+            result = _plot_sv_vs_vo_task(task)
+            if result is not None:
+                successful_results.append(result)
+        print(f"\n✅ Completed {len(successful_results)} VS vs VO plots")
+    
+    # Print statistics for all plots
+    print("\n" + "="*80)
+    print("VS vs VO Analysis Statistics")
+    print("="*80)
+    for output_path, stats in successful_results:
+        print(f"\n{stats['title']}:")
+        print(f"  Total languages: {stats['n_langs']}")
+        print(f"  Mean VS score: {stats['mean_vs']:.3f}")
+        print(f"  Mean VO score: {stats['mean_vo']:.3f}")
+        print(f"  Correlation: {stats['correlation']:.3f}")
+        print(f"  VO & VS (both >66.6%): {stats['vo_vs']}")
+        print(f"  VO & SV (VO>66.6%, VS<33.3%): {stats['vo_sv']}")
+        print(f"  OV & VS (VO<33.3%, VS>66.6%): {stats['ov_vs']}")
+        print(f"  OV & SV (both <33.3%): {stats['ov_sv']}")
+    
+    return successful_results
+
 def _plot_task(args):
     """Helper function for parallel plotting."""
     (pos1_str, pos2_str, prefix, all_langs_average_sizes_filtered, 
