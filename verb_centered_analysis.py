@@ -4,28 +4,120 @@ import numpy as np
 def compute_average_sizes_table(all_langs_average_sizes_filtered):
     """
     Compute average constituent sizes at each position for different totals.
+    Also computes GEOMETRIC MEANS of ratios between positions (Growth Factors).
+    
     Returns a dictionary of averages keyed by position string (e.g. 'right_1_totright_2').
+    Growth factors are keyed as 'factor_{key_B}_vs_{key_A}'.
     """
-    # Dictionary to store sums and counts for averaging
+    # Dictionary to store sums and counts for averaging sizes (Arithmetic Mean)
     position_sums = {}
     position_counts = {}
     
+    # Dictionary to store sums of logs and counts for averaging ratios (Geometric Mean)
+    # key: (key_B, key_A) -> {'sum_log_ratio': 0.0, 'count': 0}
+    ratio_stats = {}
+    
+    # Define pairs of positions to compare for Growth Factors
+    # 1. Horizontal Right (Pos N vs Pos N-1)
+    # 2. Horizontal Left (Pos N vs Pos N-1) -> Note: Logic is usually Outer/Inner comparisons
+    # 3. XVX
+    # 4. Diagonals (Right Tot vs Tot-1)
+    # 5. Diagonals (Left Tot vs Tot+1)
+    
+    pairs_to_track = []
+    
+    # Horizontal Right: right_{pos}_totright_{tot} vs right_{pos-1}_totright_{tot}
+    for tot in range(1, 5):
+        for pos in range(2, tot + 1):
+            key_b = f'right_{pos}_totright_{tot}'
+            key_a = f'right_{pos-1}_totright_{tot}'
+            pairs_to_track.append((key_b, key_a, 'diverging')) # val / prev_val
+
+    # Horizontal Left: left_{pos}_totleft_{tot} vs left_{pos-1}_totleft_{tot}
+    # In extract_grid/format logic:
+    # If arrow rightwards: prev_val / val (Size(pos-1)/Size(pos))
+    # If diverging: val / prev_val (Size(pos)/Size(pos-1))
+    # Let's track BOTH simply as B/A for now and apply direction logic later?
+    # No, we need to know WHICH ratio to average.
+    # Standard usually is "Growth" = Outer/Inner or Distal/Proximal.
+    # Diverging: V -> R1 -> R2. Ratio R2/R1.
+    # Diverging: L2 <- L1 <- V. Ratio L2/L1 (Outer/Inner).
+    # key_b=Left_Pos(outer), key_a=Left_Pos-1(inner).
+    # Matches 'val/prev_val' logic where 'val' is current loop pos (outer).
+    for tot in range(1, 5):
+        for pos in range(2, tot + 1):
+            key_b = f'left_{pos}_totleft_{tot}'
+            key_a = f'left_{pos-1}_totleft_{tot}'
+            pairs_to_track.append((key_b, key_a, 'diverging'))
+
+    # XVX: right_1 vs left_1
+    pairs_to_track.append(('xvx_right_1', 'xvx_left_1', 'diverging'))
+
+    # Diagonals Right: right_{pos+1}_totright_{tot} vs right_{pos}_totright_{tot-1}
+    for tot in range(2, 5):
+        for pos in range(1, tot): # pos in source tot-1 (1..tot-1)
+            key_a = f'right_{pos}_totright_{tot-1}' # source
+            key_b = f'right_{pos+1}_totright_{tot}' # target
+            pairs_to_track.append((key_b, key_a, 'diverging'))
+
+    # Diagonals Left: left_{pos}_totleft_{tot} vs left_{pos+1}_totleft_{tot+1}
+    # Wait, extraction logic: tgt / src.
+    # tgt = left_{pos}_totleft_{tot}
+    # src = left_{pos+1}_totleft_{tot+1}
+    # Ratio = tgt / src.
+    for tot in range(1, 4):
+         for pos in range(1, tot + 1):
+            key_b = f'left_{pos}_totleft_{tot}' # target
+            key_a = f'left_{pos+1}_totleft_{tot+1}' # source
+            pairs_to_track.append((key_b, key_a, 'diverging'))
+    
+    
     # Collect all values across languages
     for lang, positions in all_langs_average_sizes_filtered.items():
+        # 1. Accumulate sizes
         for position_key, value in positions.items():
             if position_key not in position_sums:
                 position_sums[position_key] = 0
                 position_counts[position_key] = 0
             position_sums[position_key] += value
             position_counts[position_key] += 1
-    
+            
+        # 2. Accumulate ratios
+        for key_b, key_a, direction in pairs_to_track:
+            val_b = positions.get(key_b)
+            val_a = positions.get(key_a)
+            
+            if val_b is not None and val_a is not None and val_a > 0 and val_b > 0:
+                # Compute ratio
+                ratio = val_b / val_a
+                
+                pair_key = (key_b, key_a)
+                if pair_key not in ratio_stats:
+                    ratio_stats[pair_key] = {'sum_log_ratio': 0.0, 'count': 0}
+                
+                ratio_stats[pair_key]['sum_log_ratio'] += np.log(ratio)
+                ratio_stats[pair_key]['count'] += 1
+
     # Calculate averages
-    position_averages = {}
+    results = {}
+    
+    # Arithmetic Means for Sizes
     for position_key in position_sums:
         if position_counts[position_key] > 0:
-            position_averages[position_key] = position_sums[position_key] / position_counts[position_key]
-    
-    return position_averages
+            results[position_key] = position_sums[position_key] / position_counts[position_key]
+            
+    # Geometric Means for Ratios
+    for pair_key, stats in ratio_stats.items():
+        if stats['count'] > 0:
+            avg_log = stats['sum_log_ratio'] / stats['count']
+            geo_mean_ratio = np.exp(avg_log)
+            
+            # Store with a clean key
+            key_b, key_a = pair_key
+            factor_key = f'factor_{key_b}_vs_{key_a}'
+            results[factor_key] = geo_mean_ratio
+            
+    return results
 
 import os
 
@@ -118,8 +210,17 @@ def extract_verb_centered_grid(position_averages,
                  
                  # 1. Factor
                  factor_val = None
-                 if prev_val is not None and val is not None and val != 0 and val == val:
+                 key_b = f'right_{pos}_totright_{tot}'
+                 key_a = f'right_{pos-1}_totright_{tot}'
+                 fac_key = f'factor_{key_b}_vs_{key_a}'
+                 geo_factor = position_averages.get(fac_key)
+
+                 if geo_factor is not None:
+                     factor_val = geo_factor
+                 elif prev_val is not None and val is not None and val != 0 and val == val:
                      factor_val = val / prev_val
+                 
+                 if factor_val is not None:
                      f_str = f"×{factor_val:.2f}→" # Arrow right basically always for Right side
                      
                      # Color Rule: Red if factor < 1
@@ -270,8 +371,17 @@ def extract_verb_centered_grid(position_averages,
                     tgt_val = position_averages.get(tgt_key)
                     
                     diag_cell = GridCell("", cell_type='factor')
-                    if src_val and tgt_val:
+                    
+                    factor = None
+                    fac_key = f'factor_{tgt_key}_vs_{src_key}'
+                    geo_factor = position_averages.get(fac_key)
+                    
+                    if geo_factor is not None:
+                        factor = geo_factor
+                    elif src_val and tgt_val:
                         factor = tgt_val / src_val
+                        
+                    if factor is not None:
                         diag_str = f"×{factor:.2f} ↗"
                         diag_cell.text = diag_str
                         # Rich text for diagonal
@@ -318,14 +428,23 @@ def extract_verb_centered_grid(position_averages,
             text_parts = []
             
             # Factor
-            factor_val = r_xvx / l_xvx
-            # Arrow: L -> R (across verb) is V-crossing. 
-            # If diverging: L->L is <--, R->R is -->.
-            # L->R is -->.
-            f_str = f"×{factor_val:.2f}→"
-            f_color = COLOR_RED if factor_val < 1.0 else COLOR_GREY
-            rich_segments.append((f_str, f_color, True))
-            text_parts.append(f_str)
+            factor_val = None
+            fac_key = 'factor_xvx_right_1_vs_xvx_left_1'
+            geo_factor = position_averages.get(fac_key)
+            
+            if geo_factor is not None:
+                factor_val = geo_factor
+            elif lx is not None and lx != 0:
+                 factor_val = r_xvx / l_xvx
+                 
+            if factor_val is not None:
+                # Arrow: L -> R (across verb) is V-crossing. 
+                # If diverging: L->L is <--, R->R is -->.
+                # L->R is -->.
+                f_str = f"×{factor_val:.2f}→"
+                f_color = COLOR_RED if factor_val < 1.0 else COLOR_GREY
+                rich_segments.append((f_str, f_color, True))
+                text_parts.append(f_str)
             
             # Ordering Stats
             if show_ordering_triples and ordering_stats:
@@ -442,12 +561,24 @@ def extract_verb_centered_grid(position_averages,
                  
                  # 1. Factor
                  factor_val = None
+                 key_b = f'left_{pos}_totleft_{tot}'
+                 key_a = f'left_{pos-1}_totleft_{tot}'
+                 fac_key = f'factor_{key_b}_vs_{key_a}'
+                 geo_factor = position_averages.get(fac_key)
+                 
                  if arrow_direction == 'rightwards':
-                     if prev_val_inner is not None and val is not None and val != 0:
+                     if geo_factor is not None:
+                         # stored is b/a (outer/inner). We want a/b (inner/outer)
+                         factor_val = 1.0 / geo_factor
+                         f_str = f"×{factor_val:.2f}→"
+                     elif prev_val_inner is not None and val is not None and val != 0:
                          factor_val = prev_val_inner / val
                          f_str = f"×{factor_val:.2f}→"
                  else:
-                     if prev_val_inner is not None and val is not None and prev_val_inner != 0:
+                     if geo_factor is not None:
+                         factor_val = geo_factor
+                         f_str = f"×{factor_val:.2f}←"
+                     elif prev_val_inner is not None and val is not None and prev_val_inner != 0:
                          factor_val = val / prev_val_inner
                          f_str = f"×{factor_val:.2f}←"
                          
@@ -576,8 +707,16 @@ def extract_verb_centered_grid(position_averages,
                 # Formula: (6 - (pos - 1) * 2) - 1
                 fac_idx = (6 - (pos - 1) * 2) - 1
                 
-                if src_val and tgt_val:
+                factor = None
+                fac_key = f'factor_{tgt_key}_vs_{src_key}'
+                geo_factor = position_averages.get(fac_key)
+
+                if geo_factor is not None:
+                     factor = geo_factor
+                elif src_val and tgt_val:
                     factor = tgt_val / src_val
+                
+                if factor is not None:
                     diag_str = f"×{factor:.2f} ↗"
                     
                     diag_cell = GridCell(diag_str, cell_type='factor')
@@ -733,17 +872,30 @@ def format_verb_centered_table(position_averages,
                 factor_str = ""
                 
                 # Check arrow direction logic first to get factor
+                # Check arrow direction logic first to get factor
+                key_b = f'right_{pos}_totright_{tot}'
+                key_a = f'right_{pos-1}_totright_{tot}'
+                fac_key = f'factor_{key_b}_vs_{key_a}'
+                geo_factor = position_averages.get(fac_key)
+                
                 if arrow_direction == 'rightwards':
                      # Left to Right -->
-                     if prev_val is not None and val is not None and val != 0:
+                     if geo_factor is not None:
+                         factor_val = geo_factor
+                     elif prev_val is not None and val is not None and val != 0:
                          factor_val = val / prev_val
                          factor_str = f"×{factor_val:.2f}→"
                 else: 
                      # diverging (Right Side: L->R -> same as rightwards basically for R side)
                      # For Right side, diverging means V -> R1 -> R2. So Left-to-Right.
-                     if prev_val is not None and val is not None and val != 0:
+                     if geo_factor is not None:
+                         factor_val = geo_factor
+                     elif prev_val is not None and val is not None and val != 0:
                          factor_val = val / prev_val
                          factor_str = f"×{factor_val:.2f}→"
+                         
+                if factor_val is not None:
+                     factor_str = f"×{factor_val:.2f}→"
                          
                 if factor_str:
                      fac_parts.append(factor_str)
@@ -898,7 +1050,15 @@ def format_verb_centered_table(position_averages,
                     tgt_val = position_averages.get(tgt_key, None)
                     
                     if src_val is not None and tgt_val is not None and src_val != 0:
-                        factor = tgt_val / src_val
+                        factor = None
+                        fac_key = f'factor_{tgt_key}_vs_{src_key}'
+                        geo_factor = position_averages.get(fac_key)
+                        
+                        if geo_factor is not None:
+                            factor = geo_factor
+                        else:
+                            factor = tgt_val / src_val
+                        
                         # Arrow Top-Right ↗
                         diag_str = f"×{factor:.2f} ↗".center(FAC_WIDTH)
                         tsv_fac = f"{factor:.2f} (diag)"
@@ -970,8 +1130,18 @@ def format_verb_centered_table(position_averages,
          
          # Factor L1 -> R1
          fac_str_x = ""
-         if show_horizontal_factors and lx and rx and lx!=0:
-             fv = rx / lx
+         
+         factor_val = None
+         fac_key = 'factor_xvx_right_1_vs_xvx_left_1'
+         geo_factor = position_averages.get(fac_key)
+         
+         if geo_factor is not None:
+             factor_val = geo_factor
+         elif lx is not None and rx is not None and lx != 0:
+             factor_val = rx / lx
+         
+         if show_horizontal_factors and factor_val is not None:
+             fv = factor_val
              arrow = "→"
              f_txt = f"×{fv:.2f}{arrow}"
              
@@ -1075,19 +1245,29 @@ def format_verb_centered_table(position_averages,
                  
                  fac_parts = []
                  tsv_fac_parts = []
-                 
                  # 1. Calculate Factor (Arrow)
                  factor_val = None
                  factor_str = ""
                  
+                 key_b = f'left_{pos}_totleft_{tot}'
+                 key_a = f'left_{pos-1}_totleft_{tot}'
+                 fac_key = f'factor_{key_b}_vs_{key_a}'
+                 geo_factor = position_averages.get(fac_key)
+                 
                  if arrow_direction == 'rightwards':
                      # Left to Right -->
-                     if prev_val_inner is not None and val is not None and val != 0:
+                     if geo_factor is not None:
+                         factor_val = 1.0 / geo_factor
+                         factor_str = f"×{factor_val:.2f}→"
+                     elif prev_val_inner is not None and val is not None and val != 0:
                          factor_val = prev_val_inner / val
                          factor_str = f"×{factor_val:.2f}→"
                  else: 
                      # diverging (Right to Left <--)
-                     if prev_val_inner is not None and val is not None and prev_val_inner != 0:
+                     if geo_factor is not None:
+                         factor_val = geo_factor
+                         factor_str = f"×{factor_val:.2f}←"
+                     elif prev_val_inner is not None and val is not None and prev_val_inner != 0:
                          factor_val = val / prev_val_inner
                          factor_str = f"×{factor_val:.2f}←"
                          
@@ -1222,7 +1402,15 @@ def format_verb_centered_table(position_averages,
                 fac_idx = (6 - (pos - 1) * 2) - 1 # Slot left of pos
                 
                 if src_val is not None and tgt_val is not None and src_val != 0:
-                     factor = tgt_val / src_val
+                     factor = None
+                     fac_key = f'factor_{tgt_key}_vs_{src_key}'
+                     geo_factor = position_averages.get(fac_key)
+                     
+                     if geo_factor is not None:
+                         factor = geo_factor
+                     else:
+                         factor = tgt_val / src_val
+                         
                      # Arrow Top-Right ↗
                      diag_cells[fac_idx] = f"×{factor:.2f} ↗".center(FAC_WIDTH)
                      tsv_diag_left[fac_idx] = f"{factor:.2f} (diag)"

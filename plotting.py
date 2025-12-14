@@ -1418,3 +1418,315 @@ def plot_bastard_vs_vo_score(df, group_to_color, plots_dir='plots', title='Basta
     
     print(f"Saved plot to {output_path}")
     return output_path
+
+def plot_top_bastard_distribution(df, plots_dir='plots', title='Top Bastard Relations across Languages', filename='top_bastard_distribution.png'):
+    """
+    Plot the distribution of the most frequent bastard relation across languages.
+    
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        DataFrame with 'Top_Bastard_Rel' column
+    plots_dir : str
+        Base directory for plots
+    title : str
+        Plot title
+    filename : str
+        Output filename
+    
+    Returns
+    -------
+    str
+        Path to generated plot file
+    """
+    import os
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import pandas as pd
+    
+    # Check if column exists
+    if 'Top_Bastard_Rel' not in df.columns:
+        print("Error: 'Top_Bastard_Rel' column not found in DataFrame")
+        return None
+        
+    # Extract relation name from format "rel (count)"
+    def clean_rel(val):
+        if not isinstance(val, str) or val == 'None':
+            return None
+        return val.split(' (')[0]
+        
+    cleaned_rels = df['Top_Bastard_Rel'].apply(clean_rel).dropna()
+    
+    if len(cleaned_rels) == 0:
+        print("No valid bastard relations found to plot.")
+        return None
+        
+    # Count frequencies
+    rel_counts = cleaned_rels.value_counts().reset_index()
+    rel_counts.columns = ['Relation', 'Count']
+    
+    # Create figure
+    plt.figure(figsize=(10, 6))
+    
+    # Bar plot
+    sns.barplot(
+        data=rel_counts,
+        x='Count',
+        y='Relation',
+        palette='viridis',
+        edgecolor='black'
+    )
+    
+    # Labels and title
+    plt.xlabel('Number of Languages where this is the Top Bastard', fontsize=12)
+    plt.ylabel('Bastard Relation', fontsize=12)
+    plt.title(title, fontsize=14, fontweight='bold')
+    
+    # Add counts at end of bars
+    for i, p in enumerate(plt.gca().patches):
+        width = p.get_width()
+        plt.gca().text(width + 0.5, p.get_y() + p.get_height()/2, 
+                       f'{int(width)}', va='center', fontsize=10)
+    
+    plt.grid(axis='x', alpha=0.3)
+    plt.tight_layout()
+    
+    # Save plot
+    output_dir = os.path.join(plots_dir, 'bastard_analysis')
+    os.makedirs(output_dir, exist_ok=True)
+    output_path = os.path.join(output_dir, filename)
+    plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    
+    # Show plot
+    plt.show()
+    plt.close()
+    
+    print(f"Saved plot to {output_path}")
+    return output_path
+
+def plot_bastard_relation_by_family(df, plots_dir='plots', title='Top Bastard Relations by Language Family', filename='bastard_relation_by_family.png'):
+    """
+    Plot a heatmap showing the distribution of top bastard relations across language families.
+    
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        DataFrame with 'Top_Bastard_Rel' and 'group' columns
+    plots_dir : str
+        Base directory for plots
+    title : str
+        Plot title
+    filename : str
+        Output filename
+    
+    Returns
+    -------
+    str
+        Path to generated plot file
+    """
+    import os
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import pandas as pd
+    
+    # Check if columns exist
+    if 'Top_Bastard_Rel' not in df.columns or 'group' not in df.columns:
+        print("Error: 'Top_Bastard_Rel' or 'group' column not found in DataFrame")
+        return None
+        
+    # Extract relation name from format "rel (count)"
+    def clean_rel(val):
+        if not isinstance(val, str) or val == 'None':
+            return None
+        return val.split(' (')[0]
+    
+    # Prepare data
+    plot_df = df.copy()
+    plot_df['Relation'] = plot_df['Top_Bastard_Rel'].apply(clean_rel)
+    plot_df = plot_df.dropna(subset=['Relation', 'group'])
+    
+    if len(plot_df) == 0:
+        print("No valid data to plot.")
+        return None
+        
+    # Filter for top families and relations to keep plot readable
+    top_families = plot_df['group'].value_counts().nlargest(15).index
+    top_relations = plot_df['Relation'].value_counts().nlargest(10).index
+    
+    filtered_df = plot_df[plot_df['group'].isin(top_families) & plot_df['Relation'].isin(top_relations)]
+    
+    # Create crosstab
+    crosstab = pd.crosstab(filtered_df['group'], filtered_df['Relation'])
+    
+    # Normalize by row (family) to show percentages within each family
+    crosstab_pct = crosstab.div(crosstab.sum(axis=1), axis=0) * 100
+    
+    # Create figure
+    plt.figure(figsize=(12, 10))
+    
+    # Heatmap
+    sns.heatmap(
+        crosstab_pct, 
+        annot=True, 
+        fmt='.0f', 
+        cmap='YlGnBu', 
+        cbar_kws={'label': 'Percentage of Languages in Family (%)'}
+    )
+    
+    # Labels and title
+    plt.xlabel('Top Bastard Relation', fontsize=12)
+    plt.ylabel('Language Family', fontsize=12)
+    plt.title(title, fontsize=16, fontweight='bold')
+    plt.xticks(rotation=45)
+    
+    plt.tight_layout()
+    
+    # Save plot
+    output_dir = os.path.join(plots_dir, 'bastard_analysis')
+    os.makedirs(output_dir, exist_ok=True)
+    output_path = os.path.join(output_dir, filename)
+    plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    
+    # Show plot
+    plt.show()
+    plt.close()
+    
+    print(f"Saved plot to {output_path}")
+    return output_path
+
+def plot_additive_bastard_histogram(relations_json_path, lang_names=None, plots_dir='plots', title='Distribution of Bastard Relations per Language', filename='bastard_relations_stacked.png'):
+    """
+    Create a stacked bar chart (additive histogram) of bastard relation distributions.
+    
+    Languages are ordered by the percentage of: acl, conj, nmod, advmod (in that priority).
+    
+    Parameters
+    ----------
+    relations_json_path : str
+        Path to the JSON file containing relation counts per language
+    lang_names : dict, optional
+        Dictionary mapping language codes to full names. If provided, full names are used on x-axis.
+    plots_dir : str
+        Base directory for plots
+    title : str
+        Plot title
+    filename : str
+        Output filename
+        
+    Returns
+    -------
+    str
+        Path to generated plot file
+    """
+    import os
+    import json
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    
+    if not os.path.exists(relations_json_path):
+        print(f"Error: JSON file not found at {relations_json_path}")
+        return None
+        
+    with open(relations_json_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+        
+    if not data:
+        print("No data in relation counts JSON.")
+        return None
+        
+    # Convert to DataFrame
+    # Rows: Languages, Columns: Relations
+    df = pd.DataFrame.from_dict(data, orient='index')
+    df = df.fillna(0)
+    
+    # Filter languages with 0 bastards
+    df = df[df.sum(axis=1) > 0]
+    
+    if len(df) == 0:
+        print("No languages with bastard dependencies found.")
+        return None
+    
+    # Normalize to percentages (0-100)
+    df_pct = df.div(df.sum(axis=1), axis=0) * 100
+    
+    # Ensure specific columns exist for sorting
+    sort_cols = ['acl', 'conj', 'nmod', 'advmod']
+    for col in sort_cols:
+        if col not in df_pct.columns:
+            df_pct[col] = 0.0
+            
+    # Sort languages
+    # "order the languages by percentage of acl conj nmod advmod in that order"
+    # Assuming descending order (highest acl first)
+    df_pct = df_pct.sort_values(by=sort_cols, ascending=False)
+    
+    # Limit number of relations shown in legend/stack (optional, but good for readability)
+    # Extract top N relations overall to assign colors, group others as 'Other'
+    top_n_rels = df.sum().sort_values(ascending=False).index[:15].tolist()
+    # Ensure our sort keys are in the top list to keep them distinct
+    for col in sort_cols:
+        if col not in top_n_rels:
+            top_n_rels.append(col)
+            
+    # Group minor relations into "Other" for plotting clarity, OR just plot all if not too many.
+    # Let's keep top 20 and 'Other'.
+    
+    cols_to_keep = set(top_n_rels)
+    other_cols = [c for c in df_pct.columns if c not in cols_to_keep]
+    
+    plot_df = df_pct[top_n_rels].copy()
+    if other_cols:
+        plot_df['Other'] = df_pct[other_cols].sum(axis=1)
+        
+    # Rename Index to Full Names if provided
+    if lang_names:
+        # Create a mapping that defaults to the code if name not found
+        # Note: lang_names keys might be 'eng', df index is 'eng'
+        new_index = [lang_names.get(code, code) for code in plot_df.index]
+        plot_df.index = new_index
+        
+    # Colors: distinct palette
+    num_colors = len(plot_df.columns)
+    colors = sns.color_palette("tab20", num_colors)
+    
+    # Plot
+    # Figure size needs to be wide/tall enough. 
+    # If standard 100 langs, maybe width 20?
+    plt.figure(figsize=(24, 12))
+    
+    # Use DataFrame plot logic directly on the axes
+    ax = plot_df.plot(kind='bar', stacked=True, width=0.9, color=colors, figsize=(24, 12))
+    
+    plt.title(title, fontsize=18)
+    plt.xlabel("Languages (Ordered by % acl, conj, nmod, advmod)", fontsize=14)
+    plt.ylabel("Percentage of Bastard Relations", fontsize=14)
+    plt.legend(bbox_to_anchor=(1.0, 1), loc='upper left', title="Relation", fontsize=10, ncol=2)
+    
+    # X-axis labels (Languages)
+    # Reduce font size based on number of languages
+    n_langs = len(plot_df)
+    if n_langs > 100:
+        fontsize = 6
+    elif n_langs > 50:
+        fontsize = 8
+    else:
+        fontsize = 10
+        
+    plt.xticks(rotation=90, fontsize=fontsize)
+    
+    plt.ylim(0, 100)
+    plt.grid(axis='y', alpha=0.3)
+    plt.tight_layout()
+    
+    output_dir = os.path.join(plots_dir, 'bastard_analysis')
+    os.makedirs(output_dir, exist_ok=True)
+    output_path = os.path.join(output_dir, filename)
+    plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    
+    # Show plot inline
+    plt.show()
+    plt.close() 
+    
+    print(f"Saved stacked histogram to {output_path}")
+    return output_path
