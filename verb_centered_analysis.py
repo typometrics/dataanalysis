@@ -592,7 +592,14 @@ def format_verb_centered_table(position_averages,
 
                  # 2. Ordering Triples logic
                  if show_ordering_triples and ordering_stats:
-                     pair_idx = pos - 2
+                     # Fix: For Left side, neighbors in "L(pos) -> L(pos-1)" visual order
+                     # correspond to list indices (tot-pos) and (tot-pos+1).
+                     # pair_idx in ordering_stats matches the first element's index in the sorted list.
+                     # List is [L_k ... L_1] (visual left-to-right).
+                     # At pos (displaying L_pos, factor between L_pos and L_{pos-1}), 
+                     # we want the pair (L_pos, L_{pos-1}).
+                     # L_pos corresponds to index (tot - pos).
+                     pair_idx = tot - pos
                      o_key = ('left', tot, pair_idx)
                      o_data = ordering_stats.get(o_key)
                      
