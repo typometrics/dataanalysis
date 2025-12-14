@@ -1,4 +1,6 @@
 
+import numpy as np
+
 def compute_average_sizes_table(all_langs_average_sizes_filtered):
     """
     Compute average constituent sizes at each position for different totals.
@@ -46,6 +48,40 @@ def extract_verb_centered_grid(position_averages,
     Constructs a grid of GridCell objects representing the table.
     """
     rows = []
+    
+    # Generate Header Row
+    header_row = [GridCell("Row", cell_type='label')]
+    
+    # Left Headers (Fixed 7 slots in data logic)
+    l_headers = [GridCell("") for _ in range(7)]
+    if show_horizontal_factors:
+         # Logic matches loop: 6 - (pos-1)*2.
+         # Pos 4 (L4): 0. Pos 3 (L3): 2. Pos 2 (L2): 4. Pos 1 (L1): 6.
+         for pos in [4, 3, 2, 1]:
+             idx = 6 - (pos - 1) * 2
+             if 0 <= idx < 7:
+                 l_headers[idx] = GridCell(f"L{pos}", cell_type='label')
+    else:
+         # Logic matches loop: 3 - (pos - 1).
+         # Pos 4: 0. Pos 1: 3.
+         for pos in [4, 3, 2, 1]:
+             idx = 3 - (pos - 1)
+             if 0 <= idx < 7:
+                 l_headers[idx] = GridCell(f"L{pos}", cell_type='label')
+                 
+    header_row.extend(l_headers)
+    header_row.append(GridCell("V", cell_type='label'))
+    
+    # Right Headers (Max Tot 4)
+    for pos in range(1, 5):
+        header_row.append(GridCell(f"R{pos}", cell_type='label'))
+        if pos < 4 and show_horizontal_factors:
+            header_row.append(GridCell("", cell_type='factor'))
+            
+    if show_row_averages:
+        header_row.append(GridCell("[Avg | N | Slope]", cell_type='comment'))
+    
+    rows.append(header_row)
     
     # Constants
     # E_VAL = GridCell(" " * 11) 
@@ -146,13 +182,77 @@ def extract_verb_centered_grid(position_averages,
              
              prev_val = val
              
-        # Row Average
         if show_row_averages:
              avg_key = f'average_totright_{tot}'
              row_avg = position_averages.get(avg_key)
+             comment_str = ""
              if row_avg is not None:
-                 row_cells.append(GridCell(f"[Avg: {row_avg:.3f}]", cell_type='comment'))
+                 comment_str = f"[Avg: {row_avg:.3f}]"
+             
+             # Add N if available
+             if ordering_stats:
+                 # Try new explicit total
+                 t_key = ('right', tot, 'total')
+                 n_count = ordering_stats.get(t_key)
+                 
+                 # Fallback to pair sum if total not found (legacy data)
+                 if n_count is None and tot >= 2:
+                     o_key = ('right', tot, 0)
+                     o_data = ordering_stats.get(o_key)
+                     if o_data:
+                         n_count = o_data['lt'] + o_data['eq'] + o_data['gt']
+                 
+                 if n_count is not None:
+                     comment_str += f" [N={n_count}]"
 
+             # Add Slope (Tot >= 2)
+             if tot >= 2:
+                 y_vals = []
+                 valid_slope = True
+                 for pos in range(1, tot + 1):
+                     k = f'right_{pos}_totright_{tot}'
+                     v = position_averages.get(k)
+                     if v is None: 
+                         valid_slope = False
+                         break
+                     y_vals.append(v)
+                 
+                 if valid_slope and len(y_vals) == tot:
+                     # Regress y against x=0..tot-1
+                     try:
+                         slope, _ = np.polyfit(np.arange(tot), y_vals, 1)
+                         comment_str += f" [Slope: {slope:+.2f}]"
+                     except:
+                         pass
+
+             if comment_str:
+                 # Pad the row to ensure comment is in the last column
+                 # Expected Right Side width is 7 cells (Val, Fac, Val, Fac, Val, Fac, Val).
+                 # Current cells added in loop approx: (tot vals + (tot-1) factors) if factors on.
+                 # Actually, let's just count.
+                 # row_cells has: Label(1) + Empty(7) + V(1) + [Data].
+                 # We want [Data] to be length 7.
+                 # Then append comment.
+                 current_len = len(row_cells)
+                 # Target length before comment: 1 + 7 + 1 + 7 = 16.
+                 needed = 16 - current_len
+                 if needed > 0:
+                     for _ in range(needed):
+                         row_cells.append(GridCell(""))
+                         
+                 row_cells.append(GridCell(comment_str, cell_type='comment'))
+                 
+                 # Ensure we didn't overshoot (unlikely with loop logic but safe to check)
+                 # Actually if show_horizontal_factors=False, width is less.
+                 # But Header assumes max width?
+                 # Header generation uses check.
+                 # If show_horizontal_factors=False, Max R cols is 4.
+                 # My Header Generation makes 4 cols + 3 empty factors if False? No.
+                 # Header generation: `if pos < 4 and show_horizontal_factors: append factor`.
+                 # So if False, Header R-block is 4 cells.
+                 # Target length: 1 + 7 + 1 + 4 = 13.
+                 # If True, Target: 1 + 7 + 1 + 7 = 16.
+                 
         rows.append(row_cells)
         
         # Diagonals (Right)
@@ -182,6 +282,127 @@ def extract_verb_centered_grid(position_averages,
             rows.append(diag_row)
 
     rows.append([GridCell("separator", cell_type='separator')])
+
+    # ---------------------------------------------------------
+    # 1.5. XVX Configuration (L1 V R1)
+    # ---------------------------------------------------------
+    l_xvx = position_averages.get('xvx_left_1')
+    r_xvx = position_averages.get('xvx_right_1')
+    
+    if l_xvx is not None or r_xvx is not None:
+        row_cells = []
+        row_cells.append(GridCell("X V X", cell_type='label'))
+        
+        # Left Grid: L1 is at index 6 (last slot)
+        left_grid = [GridCell("") for _ in range(7)]
+        if l_xvx is not None:
+            left_grid[6] = GridCell(f"{l_xvx:.3f}", value=float(l_xvx), cell_type='value')
+        else:
+            left_grid[6] = GridCell("N/A", value=None)
+            
+        row_cells.extend(left_grid)
+        row_cells.append(GridCell("V", cell_type='label'))
+        
+        # Right Grid: R1 is at first slot?
+        # My header for Right is R1, F, R2...
+        # So R1 is appended immediately.
+        if r_xvx is not None:
+             row_cells.append(GridCell(f"{r_xvx:.3f}", value=float(r_xvx), cell_type='value'))
+        else:
+             row_cells.append(GridCell("N/A", value=None))
+        
+        # Factor L1 -> R1 (Cross-verb)
+        if show_horizontal_factors and l_xvx and r_xvx and l_xvx != 0:
+            fac_cell = GridCell("", cell_type='factor')
+            rich_segments = []
+            text_parts = []
+            
+            # Factor
+            factor_val = r_xvx / l_xvx
+            # Arrow: L -> R (across verb) is V-crossing. 
+            # If diverging: L->L is <--, R->R is -->.
+            # L->R is -->.
+            f_str = f"×{factor_val:.2f}→"
+            f_color = COLOR_RED if factor_val < 1.0 else COLOR_GREY
+            rich_segments.append((f_str, f_color, True))
+            text_parts.append(f_str)
+            
+            # Ordering Stats
+            if show_ordering_triples and ordering_stats:
+                o_key = ('xvx', 2, 0) # L1 vs R1 pair
+                o_data = ordering_stats.get(o_key)
+                if o_data:
+                    tot_count = o_data['lt'] + o_data['eq'] + o_data['gt']
+                    if tot_count > 0:
+                        lt = o_data['lt'] / tot_count * 100
+                        eq = o_data['eq'] / tot_count * 100
+                        gt = o_data['gt'] / tot_count * 100
+                        trip_str = f"(<{lt:.0f}={eq:.0f}>{gt:.0f})"
+                        text_parts.append(trip_str)
+                        
+                        if rich_segments: rich_segments.append((" ", COLOR_GREY, False))
+                        rich_segments.append((f"(<{lt:.0f}={eq:.0f}>", COLOR_GREY, False))
+                        gt_color = COLOR_RED if gt > lt else COLOR_GREY
+                        gt_bold = True if gt > lt else False
+                        rich_segments.append((f"{gt:.0f}", gt_color, gt_bold))
+                        rich_segments.append((")", COLOR_GREY, False))
+                        
+            if text_parts:
+                fac_cell.text = " ".join(text_parts)
+                fac_cell.rich_text = rich_segments
+                row_cells.append(fac_cell)
+            else:
+                row_cells.append(GridCell(""))
+        else:
+            if show_horizontal_factors:
+                row_cells.append(GridCell(""))
+        
+        # Padding for rest of Right Side
+        # Total Right side cells target: 7.
+        # We added R1 (1) + Fac (1). Total 2.
+        # Need 5 more.
+        # If fac didn't add (False), we added 1. Need 3? (4 total if no fac).
+        current_data_len = len(row_cells) - (1 + 7 + 1) # Label, LeftGrid, V
+        target = 7 if show_horizontal_factors else 4
+        while current_data_len < target:
+            row_cells.append(GridCell(""))
+            current_data_len += 1
+            
+        # Comment: N / Slope
+        comment_str = ""
+        # N
+        if ordering_stats:
+             n_key = ('xvx', 2, 'total')
+             n_val = ordering_stats.get(n_key)
+             # Fallback sum
+             if n_val is None:
+                  o_key = ('xvx', 2, 0)
+                  d = ordering_stats.get(o_key)
+                  if d: n_val = d['lt'] + d['eq'] + d['gt']
+             
+             if n_val is not None:
+                  comment_str += f" [N={n_val}]"
+        
+        # Slope? L1 and R1.
+        # x coordinates: L1 at -1? R1 at +1?
+        # Or visual 1, 2? L1->1, R1->2?
+        # "Slope" usually implies dependent vs position.
+        # Here we have L1 and R1. 
+        # Maybe slope L1->R1? (y2-y1)/(x2-x1).
+        # Diff = R1 - L1.
+        # If displayed as slope, sure.
+        if l_xvx is not None and r_xvx is not None:
+             slope = r_xvx - l_xvx # Change over 1 unit? Or 2? 
+             # L1 is pos 1 Left. R1 is pos 1 Right.
+             # Distance? 
+             # Let's maybe skip Slope for XVX unless requested.
+             pass
+
+        if comment_str:
+             row_cells.append(GridCell(comment_str, cell_type='comment'))
+        
+        rows.append(row_cells)
+        rows.append([GridCell("separator", cell_type='separator')])
     
     # ---------------------------------------------------------
     # 2. Left Dependents
@@ -237,7 +458,7 @@ def extract_verb_centered_grid(position_averages,
 
                  # 2. Triple
                  if show_ordering_triples and ordering_stats:
-                     pair_idx = pos - 2
+                     pair_idx = tot - pos
                      o_key = ('left', tot, pair_idx)
                      o_data = ordering_stats.get(o_key)
                      if o_data:
@@ -278,10 +499,97 @@ def extract_verb_centered_grid(position_averages,
         if show_row_averages:
              avg_key = f'average_totleft_{tot}'
              row_avg = position_averages.get(avg_key)
+             comment_str = ""
              if row_avg is not None:
-                 row_cells.append(GridCell(f"[Avg: {row_avg:.3f}]", cell_type='comment'))
+                 comment_str = f"[Avg: {row_avg:.3f}]"
+             
+             # Add N if available
+             if ordering_stats:
+                 t_key = ('left', tot, 'total')
+                 n_count = ordering_stats.get(t_key)
+                 
+                 if n_count is None and tot >= 2:
+                     o_key = ('left', tot, 0)
+                     o_data = ordering_stats.get(o_key)
+                     if o_data:
+                         n_count = o_data['lt'] + o_data['eq'] + o_data['gt']
+                 
+                 if n_count is not None:
+                     comment_str += f" [N={n_count}]"
+                     
+             # Add Slope (Tot >= 2)
+             if tot >= 2:
+                 y_vals = []
+                 valid_slope = True
+                 # Visual Order: Outer (L_tot) -> Inner (L1)
+                 # Keys are left_{pos}_... where pos 1 is L1.
+                 # So iterate pos from tot down to 1.
+                 for pos in range(tot, 0, -1):
+                     k = f'left_{pos}_totleft_{tot}'
+                     v = position_averages.get(k)
+                     if v is None: 
+                         valid_slope = False
+                         break
+                     y_vals.append(v)
+                     
+                 if valid_slope and len(y_vals) == tot:
+                     try:
+                         slope, _ = np.polyfit(np.arange(tot), y_vals, 1)
+                         comment_str += f" [Slope: {slope:+.2f}]"
+                     except:
+                         pass
+                     
+        # Left Rows need padding for the Right side gap
+        # 1. Label (1) - already added
+        # 2. LeftGrid (7) - already added/extended
+        # 3. V (1) - already added
+        
+        # 4. Right Side Padding. 
+        #    If factors: 7 cells. If no factors: 4 cells.
+        r_pad_len = 7 if show_horizontal_factors else 4
+        for _ in range(r_pad_len):
+            row_cells.append(GridCell(""))
+             
+        # 5. Comment (Avg | N | Slope)
+        if comment_str:
+             row_cells.append(GridCell(comment_str, cell_type='comment'))
         
         rows.append(row_cells)
+        
+        # Diagonals (Left)
+        # Logic matches print function: diagonals between Tot and Tot+1
+        if tot < 4 and show_diagonal_factors and show_horizontal_factors:
+            diag_row = [GridCell(f"Diag L{tot}-{tot+1}", cell_type='label')]
+            diag_grid = [GridCell("") for _ in range(7)]
+            
+            for pos in range(1, tot + 1):
+                tgt_key = f'left_{pos}_totleft_{tot}'
+                src_key = f'left_{pos+1}_totleft_{tot+1}'
+                tgt_val = position_averages.get(tgt_key)
+                src_val = position_averages.get(src_key)
+                
+                if pos + 1 > 4: continue
+                
+                # Slot left of pos. 
+                # pos 1 (L1) is at index 6. Slot left is 5.
+                # pos 2 (L2) is at index 4. Slot left is 3.
+                # Formula: (6 - (pos - 1) * 2) - 1
+                fac_idx = (6 - (pos - 1) * 2) - 1
+                
+                if src_val and tgt_val:
+                    factor = tgt_val / src_val
+                    diag_str = f"×{factor:.2f} ↗"
+                    
+                    diag_cell = GridCell(diag_str, cell_type='factor')
+                    d_color = COLOR_RED if factor < 1.0 else COLOR_GREY
+                    diag_cell.rich_text = [(diag_str, d_color, True)]
+                    
+                    if 0 <= fac_idx < 7:
+                        diag_grid[fac_idx] = diag_cell
+                        
+            diag_row.extend(diag_grid)
+            diag_row.append(GridCell("")) # V column
+            rows.append(diag_row)
 
     return rows
 
@@ -341,20 +649,52 @@ def format_verb_centered_table(position_averages,
     # Layout constants
     VAL_WIDTH = 8   
     FAC_WIDTH = 22 if show_ordering_triples else (12 if show_horizontal_factors else 0)
+    E_VAL = " " * VAL_WIDTH
+    E_FAC = " " * FAC_WIDTH
+    HALF_WIDTH = 4 * VAL_WIDTH + 3 * FAC_WIDTH
+    LEFT_PAD = " " * HALF_WIDTH
     
     # Header V
     HALF_WIDTH = 4 * VAL_WIDTH + 3 * FAC_WIDTH
-    V_MARKER = f"{' ':>{HALF_WIDTH}}   V   {' ':>{HALF_WIDTH}}"
-    lines.append(f"     {V_MARKER}") 
+    
+    # Text Header Row
+    # Ident matching "R tot=X: " (9 chars)
+    header_parts = [" " * 9]
+    
+    # Left Headers (L4 .. L1)
+    l_headers = []
+    for i in range(4, 0, -1):
+        l_headers.append(f"L{i}".center(VAL_WIDTH))
+        if i > 1 and (show_horizontal_factors or show_diagonal_factors):
+            # Use FAC_WIDTH spaces or a label if desired
+            l_headers.append(E_FAC)
+    header_parts.append("".join(l_headers))
+    
+    # Center V
+    header_parts.append(" V ") # Matches ' V ' (3 chars) approx logic
+     # Actually data rows use ' V' (2 chars) near R side or ' V' near L side.
+     # L-rows: left_str + ' V'.
+     # R-rows: LEFT_PAD + ' V' + right_str_content.
+    
+    # Right Headers (R1 .. R4)
+    r_headers = []
+    for i in range(1, 5):
+        r_headers.append(f"R{i}".center(VAL_WIDTH))
+        if i < 4 and (show_horizontal_factors or show_diagonal_factors):
+            r_headers.append(E_FAC)
+    header_parts.append("".join(r_headers))
+    
+    if show_row_averages:
+        header_parts.append("  [Avg | N | Slope]")
+        
+    lines.append("".join(header_parts)) 
 
-    E_VAL = " " * VAL_WIDTH
-    E_FAC = " " * FAC_WIDTH
-    LEFT_PAD = " " * HALF_WIDTH
+
 
     tsv_rows = []
     header_cols = ["Row", "L4", "F43", "L3", "F32", "L2", "F21", "L1", "V", "R1", "F12", "R2", "F23", "R3", "F34", "R4"]
     if show_row_averages:
-        header_cols.append("RowAvg")
+        header_cols.append("Stats") # Avg | N | Slope
     tsv_rows.append(header_cols)
 
     # ---------------------------------------------------------
@@ -463,20 +803,55 @@ def format_verb_centered_table(position_averages,
                 suffix_str += f"  [unordered {disorder_pct:.1f}%]"
                 
         # Add Row Average
+        row_avg = None # Initialize for scope
         if show_row_averages:
             avg_key = f'average_totright_{tot}'
             row_avg = position_averages.get(avg_key)
             if row_avg is not None:
                 suffix_str += f"  [Avg: {row_avg:.3f}]"
         
+        # Add N if available
+        n_count = None # Initialize for scope
+        # Add N if available
+        n_count = None # Initialize for scope
+        if ordering_stats:
+             t_key = ('right', tot, 'total')
+             n_count = ordering_stats.get(t_key)
+             
+             if n_count is None and tot >= 2:
+                 o_key = ('right', tot, 0)
+                 o_data = ordering_stats.get(o_key)
+                 if o_data:
+                     n_count = o_data['lt'] + o_data['eq'] + o_data['gt']
+        
+        if n_count is not None:
+             suffix_str += f" [N={n_count}]"
+        
+        # Add Slope
+        slope_val = None # Initialize for scope
+        if tot >= 2:
+             y_vals = []
+             valid = True
+             for pos in range(1, tot + 1):
+                 v = position_averages.get(f'right_{pos}_totright_{tot}')
+                 if v is None: valid=False; break
+                 y_vals.append(v)
+             if valid:
+                 try:
+                     slope_val, _ = np.polyfit(np.arange(tot), y_vals, 1)
+                     suffix_str += f" [Slope: {slope_val:+.2f}]"
+                 except: pass
+
+        # Pad right_str to fixed width
+        # Width: ' V' (2) + HALF_WIDTH (content)
+        target_width = 2 + HALF_WIDTH
+        right_str = right_str.ljust(target_width)
+        
         lines.append(f"R tot={tot}: {LEFT_PAD}{right_str}{suffix_str}")
         
         # Build TSV Row
         # Left side empty for R rows
         row_label = f"R tot={tot}"
-        # Values: RowLabel + [Empty Left Cells] + [V + Right Cells]
-        # Left Cells count: 7 (L4..L1). 
-        # But we need padding?
         # Fixed 7 slots for Left: L4, F, L3, F, L2, F, L1.
         left_empty = [""] * 7
         
@@ -488,10 +863,20 @@ def format_verb_centered_table(position_averages,
         # Order: V, R1, F12, R2, F23, R3, F34, R4.
         # tsv_right content: "V", "R1", "F12", "R2"...
         # We need to pad tsv_right to max length 8 (V + 7).
-        while len(tsv_right) < 8:
+        while len(tsv_right) < 8: # Pad R columns 
             tsv_right.append("")
             
         full_tsv_row = [row_label] + left_empty + tsv_right
+        if show_row_averages:
+            stats_parts = []
+            if row_avg is not None:
+                stats_parts.append(f"[Avg: {row_avg:.3f}]")
+            if n_count is not None:
+                stats_parts.append(f"[N={n_count}]")
+            if slope_val is not None:
+                stats_parts.append(f"[Slope: {slope_val:+.2f}]")
+            full_tsv_row.append(" ".join(stats_parts))
+        
         tsv_rows.append(full_tsv_row)
         
         # 1b. Print Diagonal Factors (Connection to Next Row: tot-1)
@@ -534,6 +919,126 @@ def format_verb_centered_table(position_averages,
     tsv_rows.append(["separator"])
 
     # ---------------------------------------------------------
+    # 1.5. XVX Configuration
+    # ---------------------------------------------------------
+    lx = position_averages.get('xvx_left_1')
+    rx = position_averages.get('xvx_right_1')
+    
+    if lx is not None or rx is not None:
+         # Text output
+         # Layout: "X V X :   ...  L1  V  R1  ..."
+         # Left Grid: L1 is at inner most slot (fac=6 if factors, 3 if not)
+         # Wait, L1 index logic: 
+         # Factors=True: L1->6.
+         # Factors=False: L1->3.
+         
+         l_cells_x = [" " * VAL_WIDTH] * (7 if show_horizontal_factors else 4)
+         # Fill L1
+         idx_l1 = 6 if show_horizontal_factors else 3
+         l_str_val = f"{lx:>{VAL_WIDTH}.3f}" if lx is not None else "N/A".center(VAL_WIDTH)
+         l_cells_x[idx_l1] = l_str_val
+         
+         # Left String
+         left_str_x = ""
+         # We need to intersperse factors if needed (empty)
+         # Actually l_cells_x slots encompass factors?
+         # "Left Grid" logic (Lines 803) uses [""] * 7.
+         # Factor slots are 1, 3, 5. Values 0, 2, 4, 6.
+         # So L1 is at 6.
+         # Factors are empty.
+         # BUT `l_headers` construction uses explicit spacing.
+         # Let's reconstruct consistent string.
+         
+         # If factors: [Val, Fac, Val, Fac, Val, Fac, Val]
+         # L1 is last Val (Idx 6).
+         # Previous are empty.
+         full_l_cells = []
+         for i in range(7):
+             if i == 6 and lx is not None:
+                 full_l_cells.append(l_str_val)
+             else:
+                 full_l_cells.append(E_VAL if i%2==0 else E_FAC)
+         
+         left_str_x = "".join(full_l_cells)
+         
+         # Right Part
+         # V + R1 + Factor
+         right_parts_x = [" V"]
+         
+         r_str_val = f"{rx:>{VAL_WIDTH}.3f}" if rx is not None else "N/A".center(VAL_WIDTH)
+         right_parts_x.append(r_str_val)
+         
+         # Factor L1 -> R1
+         fac_str_x = ""
+         if show_horizontal_factors and lx and rx and lx!=0:
+             fv = rx / lx
+             arrow = "→"
+             f_txt = f"×{fv:.2f}{arrow}"
+             
+             # Ordering
+             trip_txt = ""
+             if show_ordering_triples and ordering_stats:
+                 d = ordering_stats.get(('xvx', 2, 0))
+                 if d:
+                    tot = d['lt']+d['eq']+d['gt']
+                    if tot>0:
+                        trip_txt = f"(<{d['lt']/tot*100:.0f}={d['eq']/tot*100:.0f}>{d['gt']/tot*100:.0f})"
+             
+             comb = f"{f_txt} {trip_txt}".strip() if trip_txt else f_txt
+             fac_str_x = comb.center(max(FAC_WIDTH, len(comb)))
+             right_parts_x.append(fac_str_x)
+         else:
+             if show_horizontal_factors:
+                 right_parts_x.append(E_FAC)
+         
+         # Stats
+         suffix_x = ""
+         if ordering_stats:
+             nx = ordering_stats.get(('xvx', 2, 'total'))
+             if nx is None:
+                 ox = ordering_stats.get(('xvx', 2, 0))
+                 if ox: nx = ox['lt']+ox['eq']+ox['gt']
+             if nx is not None:
+                 suffix_x = f" [N={nx}]"
+                 
+         final_right_x = "".join(right_parts_x)
+         # Pad
+         t_w = 2 + HALF_WIDTH
+         final_right_x = final_right_x.ljust(t_w)
+         
+         lines.append(f"X V X : {left_str_x}{final_right_x}{suffix_x}")
+         lines.append("-" * 120)
+
+         # TSV
+         # L cols: 7. L1 at end.
+         tsv_l_x = [""]*6 + [f"{lx:.3f}" if lx else ""]
+         tsv_r_x = [f"{rx:.3f}" if rx else ""]
+         # Right needs 7 cols (R1...R4). We gave R1.
+         # Fac L1->R1?
+         # Where does it go? Standard R cols: R1, F12, R2...
+         # This factor L->R is strictly "F_L1_R1" or similar.
+         # Does not fit F12 slot.
+         # Maybe put in F12 slot? (Slot 1 in right list).
+         # R1 is slot 0.
+         if fac_str_x:
+              # Clean format?
+              # Use simplified logic.
+              tsv_r_x.append(fac_str_x.strip()) 
+         else:
+              tsv_r_x.append("")
+         
+         while len(tsv_r_x) < 8: tsv_r_x.append("")
+         
+         tsv_row_x = ["X V X"] + tsv_l_x + ["V"] + tsv_r_x
+         if show_row_averages and suffix_x:
+             tsv_row_x.append(suffix_x.strip())
+         else:
+             if show_row_averages: tsv_row_x.append("")
+             
+         tsv_rows.append(tsv_row_x)
+         tsv_rows.append(["separator"])
+
+    # ---------------------------------------------------------
     # 2. Left Dependents
     # ---------------------------------------------------------
     for tot in [1, 2, 3, 4]:
@@ -541,7 +1046,7 @@ def format_verb_centered_table(position_averages,
         # TSV Left Row
         tsv_left = [""] * 7
         
-        row_cells = []
+        row_cells_text = [] # For text output
         cells = [""] * (4 + 3) if show_horizontal_factors else [""] * 4
         # Fill with spaces
         for i in range(len(cells)):
@@ -635,20 +1140,70 @@ def format_verb_centered_table(position_averages,
                 suffix_str += f"  [unordered {disorder_pct:.1f}%]"
                 
         # Add Row Average
-        row_avg_str = ""
+        row_avg = None # Initialize for scope
         if show_row_averages:
             avg_key = f'average_totleft_{tot}'
             row_avg = position_averages.get(avg_key)
             if row_avg is not None:
                 suffix_str += f"  [Avg: {row_avg:.3f}]"
-                row_avg_str = f"{row_avg:.3f}"
         
-        # Add V
-        lines.append(f"L tot={tot}: {left_str} V{suffix_str}")
+        # Add N
+        n_count = None # Initialize for scope
+        # Add N
+        n_count = None # Initialize for scope
+        if ordering_stats:
+             t_key = ('left', tot, 'total')
+             n_count = ordering_stats.get(t_key)
+             
+             if n_count is None and tot >= 2:
+                 o_key = ('left', tot, 0)
+                 o_data = ordering_stats.get(o_key)
+                 if o_data:
+                     n_count = o_data['lt'] + o_data['eq'] + o_data['gt']
+                     
+        if n_count is not None:
+             suffix_str += f" [N={n_count}]"
+                
+        # Add Slope
+        slope_val = None # Initialize for scope
+        if tot >= 2:
+             y_vals = []
+             valid = True
+             # Visual order: tot down to 1
+             for pos in range(tot, 0, -1):
+                 v = position_averages.get(f'left_{pos}_totleft_{tot}')
+                 if v is None: valid=False; break
+                 y_vals.append(v)
+             if valid:
+                 try:
+                     slope_val, _ = np.polyfit(np.arange(tot), y_vals, 1)
+                     suffix_str += f" [Slope: {slope_val:+.2f}]"
+                 except: pass
+
+        # Add V and Pad Right side
+        # To align Avg column with R-rows (which end at 2*HALF_WIDTH + 2 + suffix)
+        # L-row currently: left_str (HALF) + ' V' (2). Total HALF+2.
+        # Need padding eq to HALF.
+        right_pad = " " * HALF_WIDTH
+        lines.append(f"L tot={tot}: {left_str} V{right_pad}{suffix_str}")
         
         tsv_row = [f"L tot={tot}"] + tsv_left + ["V"] + [""]*7
+        
+        # Append Stats to TSV
         if show_row_averages:
-            tsv_row.append(row_avg_str)
+            stats_parts = []
+            if row_avg is not None:
+                stats_parts.append(f"[Avg: {row_avg:.3f}]")
+            if n_count is not None:
+                stats_parts.append(f"[N={n_count}]")
+            if slope_val is not None:
+                stats_parts.append(f"[Slope: {slope_val:+.2f}]")
+            
+            if stats_parts:
+                tsv_row.append(" ".join(stats_parts))
+            else:
+                tsv_row.append("") # Empty stats if shown but none found
+        
         tsv_rows.append(tsv_row)
         
         # 2b. Print Diagonal Factors
@@ -804,11 +1359,17 @@ def aggregate_ordering_stats(ordering_stats_dict):
     for lang_stats in ordering_stats_dict.values():
         if not lang_stats: continue
         for key, counts in lang_stats.items():
-            if key not in aggregated:
-                aggregated[key] = {'lt': 0, 'eq': 0, 'gt': 0}
-            aggregated[key]['lt'] += counts.get('lt', 0)
-            aggregated[key]['eq'] += counts.get('eq', 0)
-            aggregated[key]['gt'] += counts.get('gt', 0)
+            if isinstance(counts, int):
+                # Aggregate totals
+                if key not in aggregated:
+                    aggregated[key] = 0
+                aggregated[key] += counts
+            else:
+                if key not in aggregated:
+                    aggregated[key] = {'lt': 0, 'eq': 0, 'gt': 0}
+                aggregated[key]['lt'] += counts.get('lt', 0)
+                aggregated[key]['eq'] += counts.get('eq', 0)
+                aggregated[key]['gt'] += counts.get('gt', 0)
     return aggregated
 
 

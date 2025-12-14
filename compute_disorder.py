@@ -36,6 +36,10 @@ def compute_disorder_per_language(all_langs_average_sizes, ordering_stats=None):
             config_counts = {} # (side, tot) -> {'disordered': 0, 'total': 0}
             
             for key, counts in stats.items():
+                # Skip raw total counts (integers)
+                if isinstance(counts, int):
+                    continue
+
                 # key is (side, tot, pair_idx)
                 if len(key) != 3: continue
                 side, tot, idx = key

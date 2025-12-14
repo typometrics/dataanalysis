@@ -255,6 +255,14 @@ def get_ordering_stats(tree, include_bastards=False):
         
         # Check ordering for right side (Right-to-Left visual order: V -> R1 -> R2)
         # right_kids are [R1, R2, ...] (Left-to-Right)
+        
+        # Track total count for this Right configuration
+        if len(right_kids) >= 1:
+            key_count = ('right', len(right_kids), 'total')
+            if key_count not in ordering_stats:
+                ordering_stats[key_count] = 0
+            ordering_stats[key_count] += 1
+            
         if len(right_kids) >= 2:
             if include_bastards:
                 sizes = [len(tree[ki].get('direct_span', tree[ki]['span'])) for ki in right_kids]
@@ -279,6 +287,14 @@ def get_ordering_stats(tree, include_bastards=False):
         
         # Check ordering for left side (Left-to-Right visual order: Lk...L2 -> L1 -> V)
         # left_kids are [Lk, ..., L2, L1] (Left-to-Right, IDs increasing towards head)
+        
+        # Track total count for this Left configuration
+        if len(left_kids) >= 1:
+            key_count = ('left', len(left_kids), 'total')
+            if key_count not in ordering_stats:
+                ordering_stats[key_count] = 0
+            ordering_stats[key_count] += 1
+            
         if len(left_kids) >= 2:
             if include_bastards:
                 sizes = [len(tree[ki].get('direct_span', tree[ki]['span'])) for ki in left_kids]
@@ -303,6 +319,36 @@ def get_ordering_stats(tree, include_bastards=False):
                     ordering_stats[key]['eq'] += 1
                 else:
                     ordering_stats[key]['gt'] += 1
+                    
+        # Check ordering for XVX configuration (L1 V R1)
+        if len(left_kids) == 1 and len(right_kids) == 1:
+            l_kid = left_kids[0]
+            r_kid = right_kids[0]
+            
+            if include_bastards:
+                s1 = len(tree[l_kid].get('direct_span', tree[l_kid]['span']))
+                s2 = len(tree[r_kid].get('direct_span', tree[r_kid]['span']))
+            else:
+                s1 = len(tree[l_kid]['span'])
+                s2 = len(tree[r_kid]['span'])
+                
+            # Key for XVX pair
+            key = ('xvx', 2, 0)
+            if key not in ordering_stats:
+                ordering_stats[key] = {'lt': 0, 'eq': 0, 'gt': 0}
+            
+            if s1 < s2:
+                ordering_stats[key]['lt'] += 1
+            elif s1 == s2:
+                ordering_stats[key]['eq'] += 1
+            else:
+                ordering_stats[key]['gt'] += 1
+                
+            # Track Total N for XVX
+            key_count = ('xvx', 2, 'total')
+            if key_count not in ordering_stats:
+                ordering_stats[key_count] = 0
+            ordering_stats[key_count] += 1
     
     return ordering_stats
 
@@ -419,6 +465,41 @@ def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None,
         
         if right_kids:
             process_kids(tree, right_kids, 'right', left_kids, position2num, position2sizes, sizes2freq, use_direct_span=include_bastards)
+
+        # XVX Logic (L=1, R=1)
+        if len(left_kids) == 1 and len(right_kids) == 1:
+            l_kid = left_kids[0]
+            r_kid = right_kids[0]
+            
+            if include_bastards:
+                l_size = len(tree[l_kid].get('direct_span', tree[l_kid]['span']))
+                r_size = len(tree[r_kid].get('direct_span', tree[r_kid]['span']))
+            else:
+                l_size = len(tree[l_kid]['span'])
+                r_size = len(tree[r_kid]['span'])
+            
+            # Record sizes for XVX frame specifically
+            # keys: 'xvx_left_1', 'xvx_right_1'
+            
+            # Left
+            kl = 'xvx_left_1'
+            position2num[kl] = position2num.get(kl, 0) + 1
+            position2sizes[kl] = position2sizes.get(kl, 0) + l_size
+            
+            # Right
+            kr = 'xvx_right_1'
+            position2num[kr] = position2num.get(kr, 0) + 1
+            position2sizes[kr] = position2sizes.get(kr, 0) + r_size
+
+            # Average key for XVX totals? (Maybe needed for consistency)
+            # 'average_xvx_left_1', 'average_xvx_right_1'
+            # The 'process_kids' logic aggregates 'average_tot...'
+            # Here, we do it manually.
+            
+            # Actually, position2sizes stores sum. 
+            # compute_average_sizes_table (in verb_centered_analysis) computes the division.
+            # So I just need to store sums here.
+            pass
     
     return position2num, position2sizes, sizes2freq
 
@@ -760,9 +841,10 @@ def load_conll_data(output_dir='data'):
 
 def get_vo_hi_stats(tree):
     """
-    Compute VO, VS, and Head-Initiality statistics for a single tree.
+    Compute VO, VS, VOnominal, and Head-Initiality statistics for a single tree.
     
     Note: sv_right/sv_total measure subjects AFTER verb (VS order)
+    Note: vo_nominal_right/vo_nominal_total measure only NOUN objects
     
     Parameters
     ----------
@@ -775,6 +857,8 @@ def get_vo_hi_stats(tree):
         {
             'vo_right': count,
             'vo_total': count,
+            'vo_nominal_right': count (only NOUN objects),
+            'vo_nominal_total': count (only NOUN objects),
             'sv_right': count (subjects after verb, i.e., VS),
             'sv_total': count,
             'all_right': count,
@@ -784,6 +868,8 @@ def get_vo_hi_stats(tree):
     stats = {
         'vo_right': 0,
         'vo_total': 0,
+        'vo_nominal_right': 0,
+        'vo_nominal_total': 0,
         'sv_right': 0,
         'sv_total': 0,
         'all_right': 0,
@@ -824,6 +910,13 @@ def get_vo_hi_stats(tree):
                     stats['vo_total'] += 1
                     if is_right:
                         stats['vo_right'] += 1
+                    
+                    # VOnominal: track only NOUN objects
+                    kid_node = tree.get(kid_id, {})
+                    if kid_node.get('tag') == 'NOUN':
+                        stats['vo_nominal_total'] += 1
+                        if is_right:
+                            stats['vo_nominal_right'] += 1
                 
                 # Specific VS Filter (nsubj relation)
                 # Note: sv_right counts subjects AFTER verb (VS order)
@@ -868,6 +961,7 @@ def process_file_complete(conll_filename, include_bastards=True, compute_sentenc
     # 3. VO/HI stats containers
     vo_hi_total = {
         'vo_right': 0, 'vo_total': 0,
+        'vo_nominal_right': 0, 'vo_nominal_total': 0,
         'sv_right': 0, 'sv_total': 0,
         'all_right': 0, 'all_total': 0
     }
@@ -907,11 +1001,16 @@ def process_file_complete(conll_filename, include_bastards=True, compute_sentenc
         if compute_sentence_disorder:
             order_stats = get_ordering_stats(tree, include_bastards=include_bastards)
             for key, counts in order_stats.items():
-                if key not in ordering_stats:
-                    ordering_stats[key] = {'lt': 0, 'eq': 0, 'gt': 0}
-                ordering_stats[key]['lt'] += counts['lt']
-                ordering_stats[key]['eq'] += counts['eq']
-                ordering_stats[key]['gt'] += counts['gt']
+                if isinstance(counts, int):
+                    if key not in ordering_stats:
+                        ordering_stats[key] = 0
+                    ordering_stats[key] += counts
+                else:
+                    if key not in ordering_stats:
+                        ordering_stats[key] = {'lt': 0, 'eq': 0, 'gt': 0}
+                    ordering_stats[key]['lt'] += counts['lt']
+                    ordering_stats[key]['eq'] += counts['eq']
+                    ordering_stats[key]['gt'] += counts['gt']
                 
     return (lang, 
             position2num, position2sizes, sizes2freq, 
@@ -992,7 +1091,7 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
                     
             # --- 3. VO/HI Stats Aggregation ---
             if lang not in lang_vo_hi_stats:
-                lang_vo_hi_stats[lang] = {'vo_right': 0, 'vo_total': 0, 'sv_right': 0, 'sv_total': 0, 'all_right': 0, 'all_total': 0}
+                lang_vo_hi_stats[lang] = {'vo_right': 0, 'vo_total': 0, 'vo_nominal_right': 0, 'vo_nominal_total': 0, 'sv_right': 0, 'sv_total': 0, 'all_right': 0, 'all_total': 0}
             
             for k, v in vo_hi_file_stats.items():
                 lang_vo_hi_stats[lang][k] += v
@@ -1003,11 +1102,16 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
                     all_langs_ordering_stats[lang] = {}
                 
                 for key, counts in file_ordering_stats.items():
-                    if key not in all_langs_ordering_stats[lang]:
-                        all_langs_ordering_stats[lang][key] = {'lt': 0, 'eq': 0, 'gt': 0}
-                    all_langs_ordering_stats[lang][key]['lt'] += counts['lt']
-                    all_langs_ordering_stats[lang][key]['eq'] += counts['eq']
-                    all_langs_ordering_stats[lang][key]['gt'] += counts['gt']
+                    if isinstance(counts, int):
+                        if key not in all_langs_ordering_stats[lang]:
+                            all_langs_ordering_stats[lang][key] = 0
+                        all_langs_ordering_stats[lang][key] += counts
+                    else:
+                        if key not in all_langs_ordering_stats[lang]:
+                            all_langs_ordering_stats[lang][key] = {'lt': 0, 'eq': 0, 'gt': 0}
+                        all_langs_ordering_stats[lang][key]['lt'] += counts['lt']
+                        all_langs_ordering_stats[lang][key]['eq'] += counts['eq']
+                        all_langs_ordering_stats[lang][key]['gt'] += counts['gt']
 
     # Post-processing
     
@@ -1022,10 +1126,12 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
     lang_vo_hi_scores = {}
     for lang, stats in lang_vo_hi_stats.items():
         vo_total = stats['vo_total']
+        vo_nominal_total = stats['vo_nominal_total']
         sv_total = stats['sv_total']
         all_total = stats['all_total']
         
         vo_score = stats['vo_right'] / vo_total if vo_total > 0 else None
+        vo_nominal_score = stats['vo_nominal_right'] / vo_nominal_total if vo_nominal_total > 0 else None
         sv_score = stats['sv_right'] / sv_total if sv_total > 0 else None
         hi_score = stats['all_right'] / all_total if all_total > 0 else None
         
@@ -1039,6 +1145,17 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
                 vo_type = 'NDO'
         else:
             vo_type = None
+        
+        # Classify VOnominal order type
+        if vo_nominal_score is not None:
+            if vo_nominal_score > 0.666:
+                vo_nominal_type = 'VO'
+            elif vo_nominal_score < 0.333:
+                vo_nominal_type = 'OV'
+            else:
+                vo_nominal_type = 'NDO'
+        else:
+            vo_nominal_type = None
         
         # Classify VS order (tripartite classification)
         # Note: sv_score measures proportion of subjects AFTER verb (VS order)
@@ -1055,13 +1172,17 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
         lang_vo_hi_scores[lang] = {
             'vo_score': vo_score,
             'vo_type': vo_type,
+            'vo_nominal_score': vo_nominal_score,
+            'vo_nominal_type': vo_nominal_type,
             'sv_score': sv_score,
             'sv_type': sv_type,
             'head_initiality_score': hi_score,
             'vo_count': vo_total,
+            'vo_nominal_count': vo_nominal_total,
             'sv_count': sv_total,
             'total_deps': all_total,
             'vo_right': stats['vo_right'],
+            'vo_nominal_right': stats['vo_nominal_right'],
             'sv_right': stats['sv_right'],
             'all_right': stats['all_right']
         }

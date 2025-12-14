@@ -1073,6 +1073,132 @@ def plot_sv_vs_vo_scatter_batch(df, language_filters, group_to_color, plots_dir=
     
     return successful_results
 
+
+def plot_vo_vs_vo_nominal_scatter(df, lang_filter=None, title="VO vs VOnominal Scores", 
+                                   filename="vo_vs_vo_nominal.png", group_to_color=None, 
+                                   plots_dir='plots'):
+    """
+    Create a scatterplot comparing VO score (all objects) vs VOnominal score (NOUN objects only).
+    
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        DataFrame with vo_score, vo_nominal_score, language_code, language_name, and group columns
+    lang_filter : set, optional
+        Set of language codes to include (if None, use all)
+    title : str
+        Plot title
+    filename : str
+        Output filename
+    group_to_color : dict
+        Mapping of language groups to colors
+    plots_dir : str
+        Base directory for plots
+    
+    Returns
+    -------
+    tuple
+        (output_path, stats_dict) or None if no data
+    """
+    # Filter data
+    plot_df = df.copy()
+    
+    if lang_filter is not None:
+        plot_df = plot_df[plot_df['language_code'].isin(lang_filter)]
+    
+    # Remove rows with missing scores
+    plot_df = plot_df.dropna(subset=['vo_score', 'vo_nominal_score'])
+    
+    if len(plot_df) == 0:
+        print(f"No data to plot for {title}")
+        return None
+    
+    # Create figure
+    plt.figure(figsize=(12, 10))
+    
+    # Create scatter plot
+    scatter = sns.scatterplot(
+        data=plot_df,
+        x='vo_score',
+        y='vo_nominal_score',
+        hue='group',
+        palette=group_to_color,
+        s=80,
+        alpha=0.7
+    )
+    
+    # Add reference lines for classification thresholds
+    plt.axhline(y=0.666, color='red', linestyle='--', alpha=0.3, label='VO threshold (66.6%)')
+    plt.axhline(y=0.333, color='blue', linestyle='--', alpha=0.3, label='OV threshold (33.3%)')
+    plt.axvline(x=0.666, color='red', linestyle='--', alpha=0.3)
+    plt.axvline(x=0.333, color='blue', linestyle='--', alpha=0.3)
+    
+    # Add diagonal for reference
+    plt.plot([0, 1], [0, 1], 'k--', alpha=0.3, linewidth=2, label='Diagonal (y=x)')
+    
+    # Labels and title
+    plt.xlabel('VO Score (all objects)', fontsize=12)
+    plt.ylabel('VOnominal Score (NOUN objects only)', fontsize=12)
+    plt.title(title, fontsize=14, fontweight='bold')
+    plt.xlim(-0.05, 1.05)
+    plt.ylim(-0.05, 1.05)
+    
+    # Update legend
+    handles, labels = plt.gca().get_legend_handles_labels()
+    plt.legend(handles=handles, labels=labels, loc='best', fontsize=9)
+    
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+    
+    # Save plot without labels
+    output_dir = os.path.join(plots_dir, 'vo_vs_vo_nominal')
+    os.makedirs(output_dir, exist_ok=True)
+    output_path_no_labels = os.path.join(output_dir, filename.replace('.png', '_no_labels.png'))
+    plt.savefig(output_path_no_labels, dpi=150, bbox_inches='tight')
+    print(f"Saved (no labels): {output_path_no_labels}")
+    
+    # Add language labels using adjustText
+    adjust_text_labels(plot_df, 'vo_score', 'vo_nominal_score', 'language_name', ax=plt.gca())
+    
+    # Save plot with labels
+    output_path = os.path.join(output_dir, filename)
+    plt.savefig(output_path, dpi=150, bbox_inches='tight')
+    print(f"Saved (with labels): {output_path}")
+    
+    plt.show()
+    
+    # Compute statistics
+    corr = plot_df['vo_score'].corr(plot_df['vo_nominal_score'])
+    
+    # Count differences (languages where scores differ significantly)
+    plot_df['diff'] = abs(plot_df['vo_score'] - plot_df['vo_nominal_score'])
+    significant_diff = plot_df[plot_df['diff'] > 0.1]
+    
+    print(f"\nStatistics for {title}:")
+    print(f"  Total languages: {len(plot_df)}")
+    print(f"  Mean VO score: {plot_df['vo_score'].mean():.3f}")
+    print(f"  Mean VOnominal score: {plot_df['vo_nominal_score'].mean():.3f}")
+    print(f"  Correlation: {corr:.3f}")
+    print(f"  Languages with >10% difference: {len(significant_diff)}")
+    
+    if len(significant_diff) > 0:
+        print(f"\n  Top differences (VO - VOnominal):")
+        top_diffs = plot_df.nlargest(5, 'diff')[['language_name', 'vo_score', 'vo_nominal_score', 'diff']]
+        for _, row in top_diffs.iterrows():
+            print(f"    {row['language_name']}: VO={row['vo_score']:.3f}, VOnominal={row['vo_nominal_score']:.3f}, diff={row['diff']:.3f}")
+    
+    stats = {
+        'title': title,
+        'n_langs': len(plot_df),
+        'mean_vo': plot_df['vo_score'].mean(),
+        'mean_vo_nominal': plot_df['vo_nominal_score'].mean(),
+        'correlation': corr,
+        'n_significant_diff': len(significant_diff)
+    }
+    
+    return output_path, stats
+
+
 def _plot_task(args):
     """Helper function for parallel plotting."""
     (pos1_str, pos2_str, prefix, all_langs_average_sizes_filtered, 
@@ -1197,3 +1323,98 @@ def plot_all(all_langs_average_sizes_filtered, langNames, langnameGroup,
         results = []
         for task in tqdm(tasks, desc="Generating plots"):
             results.append(_plot_task(task))
+
+def plot_bastard_vs_vo_score(df, group_to_color, plots_dir='plots', title='Bastard Percentage vs. VO Score', filename='bastard_vs_vo_score.png'):
+    """
+    Create a scatterplot comparing Bastard Percentage vs VO Score with standard styling.
+    
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        DataFrame with 'vo_score', 'Bastards_per_Verb_Pct', 'Language', 'group' columns
+    group_to_color : dict
+        Mapping of language groups to colors
+    plots_dir : str
+        Base directory for plots
+    title : str
+        Plot title
+    filename : str
+        Output filename
+    
+    Returns
+    -------
+    str
+        Path to generated plot file
+    """
+    import os
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    
+    # Filter data
+    plot_df = df.copy()
+    plot_df = plot_df.dropna(subset=['vo_score', 'Bastards_per_Verb_Pct'])
+    
+    if len(plot_df) == 0:
+        print(f"No data to plot for {title}")
+        return None
+        
+    # Create figure
+    plt.figure(figsize=(12, 10))
+    
+    # Create scatter plot
+    sns.scatterplot(
+        data=plot_df,
+        x='vo_score',
+        y='Bastards_per_Verb_Pct',
+        hue='group',
+        palette=group_to_color,
+        s=80,
+        alpha=0.8,
+        edgecolor='w', 
+        linewidth=0.5
+    )
+    
+    # Add reference lines for VO/OV
+    plt.axvline(x=0.666, color='red', linestyle='--', alpha=0.3, label='VO threshold (66.6%)')
+    plt.axvline(x=0.333, color='blue', linestyle='--', alpha=0.3, label='OV threshold (33.3%)')
+    plt.axvline(x=0.5, color='gray', linestyle=':', alpha=0.5)
+    
+    # Labels and title
+    plt.xlabel('VO Score (Higher = more Verb-Object order)', fontsize=12)
+    plt.ylabel('Bastard Dependencies (%)', fontsize=12)
+    plt.title(title, fontsize=16, fontweight='bold')
+    plt.xlim(-0.05, 1.05)
+    # Y-axis auto-scaled but start at 0
+    plt.ylim(bottom=0)
+    
+    # Legend
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', title='Language Family')
+    
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+    
+    # Save plot without labels
+    output_dir = os.path.join(plots_dir, 'bastard_analysis')
+    os.makedirs(output_dir, exist_ok=True)
+    output_path_no_labels = os.path.join(output_dir, f'{os.path.splitext(filename)[0]}_no_labels.png')
+    plt.savefig(output_path_no_labels, dpi=300, bbox_inches='tight')
+    
+    # Add language labels using adjustText
+    # Use 'Language' column for labels if present, else 'Code' or 'language'
+    label_col = 'Language' if 'Language' in plot_df.columns else 'language'
+    if label_col not in plot_df.columns and 'Code' in plot_df.columns:
+        label_col = 'Code'
+        
+    if label_col in plot_df.columns:
+        adjust_text_labels(plot_df, 'vo_score', 'Bastards_per_Verb_Pct', label_col, ax=plt.gca())
+    
+    # Save plot with labels
+    output_path = os.path.join(output_dir, filename)
+    plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    
+    # Show plot
+    plt.show()
+    plt.close()
+    
+    print(f"Saved plot to {output_path}")
+    return output_path
