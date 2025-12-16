@@ -2,10 +2,19 @@
 Data utilities for loading and managing Google Sheets metadata and language mappings.
 """
 
-import gspread
 import pandas as pd
-from oauth2client.service_account import ServiceAccountCredentials
-from gspread_formatting import CellFormat, Color, TextFormat, format_cell_range
+
+try:
+    import gspread
+    from oauth2client.service_account import ServiceAccountCredentials
+    from gspread_formatting import CellFormat, Color, TextFormat, format_cell_range
+except ImportError:
+    gspread = None
+    ServiceAccountCredentials = None
+    CellFormat = None
+    Color = None
+    TextFormat = None
+    format_cell_range = None
 
 
 def load_google_sheets(credentials_file='typometrics-c4750cac2e21.json', 

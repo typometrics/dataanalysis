@@ -10,6 +10,7 @@ from tqdm.notebook import tqdm
 from conll import conllFile2trees
 from tqdm import tqdm
 import functools
+import numpy as np
 
 # Compile regex pattern for relation splitting
 relation_split = re.compile(r'\W')
@@ -95,7 +96,7 @@ def read_shorter_conll_files(langConllFiles, version):
     return lang2shortconll, allshortconll
 
 
-def process_kids(tree, kids, direction, other_kids, position2num, position2sizes, sizes2freq, use_direct_span=False):
+def process_kids(tree, kids, direction, other_kids, position2num, position2sizes, sizes2freq, use_direct_span=False, position2charsizes=None):
     """
     Process the dependents of a head in a given direction (left or right).
     
@@ -134,26 +135,75 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
         
         # Determine size based on flag
         if use_direct_span:
-            size = len(tree[ki].get('direct_span', tree[ki]['span']))
+            span_nodes = tree[ki].get('direct_span', tree[ki]['span'])
         else:
-            size = len(tree[ki]['span'])
+            span_nodes = tree[ki]['span']
+            
+        size = len(span_nodes) # Word count
+        char_size = sum(len(tree[node_id].get('t', '')) for node_id in span_nodes) # Character count
         
-        # Update position2sizes: accumulate sizes
-        position2sizes[key_base] = position2sizes.get(key_base, 0) + size
+        # Update position2sizes: accumulate sizes (GEOMETRIC MEAN CHANGE: accumulate logs)
+        if size > 0:
+            position2sizes[key_base] = position2sizes.get(key_base, 0) + np.log(size)
+        
+        if position2charsizes is not None and char_size > 0:
+            position2charsizes[key_base] = position2charsizes.get(key_base, 0) + np.log(char_size)
         
         # Context-aware key including total number of kids in this direction
         key_tot = f'{key_base}_tot{direction}_{len(kids)}'
         position2num[key_tot] = position2num.get(key_tot, 0) + 1
-        position2sizes[key_tot] = position2sizes.get(key_tot, 0) + size
+        if size > 0:
+            position2sizes[key_tot] = position2sizes.get(key_tot, 0) + np.log(size)
+        
+        if position2charsizes is not None and char_size > 0:
+            position2charsizes[key_tot] = position2charsizes.get(key_tot, 0) + np.log(char_size)
         
         kids_sizes.append(size)
     
     # Average key for this configuration
     avg_key = f'average_tot{direction}_{len(kids)}'
     position2num[avg_key] = position2num.get(avg_key, 0) + 1
-    position2sizes[avg_key] = position2sizes.get(avg_key, 0) + (
-        sum(kids_sizes) / len(kids_sizes) if kids_sizes else 0
-    )
+    position2num[avg_key] = position2num.get(avg_key, 0) + 1
+    # For the per-sentence average, we can stick to arithmetic or geometric.
+    # Usually "Average Constituent Size" per sentence is just arithmetic for that sentence?
+    # But for consistency, let's just log the arithmetic average of the kids? 
+    # OR, do we want the geometric mean of the kids of THIS verb?
+    # The 'position2sizes' keys above are accumulating ALL kids individually.
+    # The 'avg_key' here is accumulating the average of the kids for ONE verb instance.
+    # If we want consistent geometric mean everywhere:
+    # We should probably store the log of the (geometric?) mean of the kids?
+    # Or just log(arithmetic mean)?
+    # Let's check how this is used. It aggregates `sum(kids_sizes) / len(kids_sizes)`.
+    # This is "Average Size of Dependents of Verb V".
+    # If we change to GM, this should be GM(kids_sizes).
+    
+    if kids_sizes:
+        # calculates geometric mean of this specific verb's kids
+        # product(kids)^(1/n) -> log -> 1/n * sum(log(kids))
+        # But wait, this value is then ADDED to a global sum across all verbs, then divided by verbs count.
+        # So we want global GM = exp( 1/N * sum( log( per_verb_value ) ) )
+        # So here we should store log( per_verb_value ).
+        # per_verb_value can be the GM of its kids.
+        # So store: log( GM(kids) ) = 1/n * sum(log(kids)).
+        # Or per_verb_value can be AM of its kids.
+        # Given "Average Constituent Size", usually we want the typical size.
+        # Let's stick to Geometric Mean of the kids for this verb.
+        
+        log_avg_size = np.mean(np.log(kids_sizes))
+        position2sizes[avg_key] = position2sizes.get(avg_key, 0) + log_avg_size
+    else:
+         pass # add 0? But log(0) is issue. If no kids, we don't add to count? 
+              # Code adds to count 1. 
+              # But loop `if kids_sizes` implies logic. 
+              # If kids is empty, `sum/len` is 0. 
+              # If kids is empty, process_kids is called with empty list? 
+              # Code: `kids_sizes = [] ... for i, ki in enumerate(kids)`.
+              # If kids empty, loop doesn't run. `avg_key` is updated.
+              # If kids empty, sizes=0. 
+              # We probably shouldn't be counting empty sets of kids for "Average Size" anyway?
+              # But `process_kids` is only called if `left_kids` or `right_kids` is NOT empty (checked in `get_dep_sizes`).
+              # So `kids_sizes` will not be empty.
+
     
     # Track size distributions
     sizes2freq[avg_key] = sizes2freq.get(avg_key, {})
@@ -353,7 +403,7 @@ def get_ordering_stats(tree, include_bastards=False):
     return ordering_stats
 
 
-def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None, include_bastards=False):
+def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None, include_bastards=False, position2charsizes=None):
     """
     Get the sizes of dependents in a dependency tree.
     
@@ -371,6 +421,8 @@ def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None,
         Dictionary to accumulate size distributions
     include_bastards : bool, optional
         Whether to include bastard dependencies
+    position2charsizes : dict, optional
+        Dictionary to accumulate total character sizes
         
     Returns
     -------
@@ -383,6 +435,11 @@ def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None,
         position2sizes = {}
     if sizes2freq is None:
         sizes2freq = {}
+    if position2charsizes is None and position2charsizes is not None: 
+        # Wait, if None passed, we might ignore? 
+        # But if we want to support it, we should verify caller intent.
+        # Calling with None means "don't compute".
+        pass
     
     # Only consider VERB governors
     head_pos = ["VERB"]
@@ -461,10 +518,10 @@ def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None,
         ])
         
         if left_kids:
-            process_kids(tree, left_kids, 'left', right_kids, position2num, position2sizes, sizes2freq, use_direct_span=include_bastards)
+            process_kids(tree, left_kids, 'left', right_kids, position2num, position2sizes, sizes2freq, use_direct_span=include_bastards, position2charsizes=position2charsizes)
         
         if right_kids:
-            process_kids(tree, right_kids, 'right', left_kids, position2num, position2sizes, sizes2freq, use_direct_span=include_bastards)
+            process_kids(tree, right_kids, 'right', left_kids, position2num, position2sizes, sizes2freq, use_direct_span=include_bastards, position2charsizes=position2charsizes)
 
         # XVX Logic (L=1, R=1)
         if len(left_kids) == 1 and len(right_kids) == 1:
@@ -472,24 +529,40 @@ def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None,
             r_kid = right_kids[0]
             
             if include_bastards:
-                l_size = len(tree[l_kid].get('direct_span', tree[l_kid]['span']))
-                r_size = len(tree[r_kid].get('direct_span', tree[r_kid]['span']))
+                l_span = tree[l_kid].get('direct_span', tree[l_kid]['span'])
+                r_span = tree[r_kid].get('direct_span', tree[r_kid]['span'])
             else:
-                l_size = len(tree[l_kid]['span'])
-                r_size = len(tree[r_kid]['span'])
+                l_span = tree[l_kid]['span']
+                r_span = tree[r_kid]['span']
+                
+            l_size = len(l_span)
+            r_size = len(r_span)
+            
+            l_char_size = sum(len(tree[n].get('t', '')) for n in l_span)
+            r_char_size = sum(len(tree[n].get('t', '')) for n in r_span)
             
             # Record sizes for XVX frame specifically
             # keys: 'xvx_left_1', 'xvx_right_1'
             
             # Left
             kl = 'xvx_left_1'
+            # Left
+            kl = 'xvx_left_1'
             position2num[kl] = position2num.get(kl, 0) + 1
-            position2sizes[kl] = position2sizes.get(kl, 0) + l_size
+            if l_size > 0:
+                position2sizes[kl] = position2sizes.get(kl, 0) + np.log(l_size)
+            if position2charsizes is not None and l_char_size > 0:
+                position2charsizes[kl] = position2charsizes.get(kl, 0) + np.log(l_char_size)
             
             # Right
             kr = 'xvx_right_1'
+            # Right
+            kr = 'xvx_right_1'
             position2num[kr] = position2num.get(kr, 0) + 1
-            position2sizes[kr] = position2sizes.get(kr, 0) + r_size
+            if r_size > 0:
+                position2sizes[kr] = position2sizes.get(kr, 0) + np.log(r_size)
+            if position2charsizes is not None and r_char_size > 0:
+                position2charsizes[kr] = position2charsizes.get(kr, 0) + np.log(r_char_size)
 
             # Average key for XVX totals? (Maybe needed for consistency)
             # 'average_xvx_left_1', 'average_xvx_right_1'
@@ -526,12 +599,12 @@ def get_dep_sizes_file(conll_filename, include_bastards=False, compute_sentence_
         If compute_sentence_disorder=True: (lang, position2num, position2sizes, sizes2freq, sentence_disorder_stats)
     """
     lang = os.path.basename(conll_filename).split('_')[0]
-    position2num, position2sizes, sizes2freq = {}, {}, {}
+    position2num, position2sizes, sizes2freq, position2charsizes = {}, {}, {}, {}
     sentence_disorder_stats = {} if compute_sentence_disorder else None
     
     for tree in conllFile2trees(conll_filename):
         tree.addspan(exclude=['punct'], compute_bastards=include_bastards)
-        get_dep_sizes(tree, position2num, position2sizes, sizes2freq, include_bastards=include_bastards)
+        get_dep_sizes(tree, position2num, position2sizes, sizes2freq, include_bastards=include_bastards, position2charsizes=position2charsizes)
         
         if compute_sentence_disorder:
             # Get disorder stats for this sentence
@@ -544,9 +617,9 @@ def get_dep_sizes_file(conll_filename, include_bastards=False, compute_sentence_
                 sentence_disorder_stats[key].extend(disorder_flags)
     
     if compute_sentence_disorder:
-        return (lang, position2num, position2sizes, sizes2freq, sentence_disorder_stats)
+        return (lang, position2num, position2sizes, sizes2freq, position2charsizes, sentence_disorder_stats)
     else:
-        return (lang, position2num, position2sizes, sizes2freq)
+        return (lang, position2num, position2sizes, sizes2freq, position2charsizes)
 
 
 def get_type_freq_all_files_parallel(allshortconll, include_bastards=False, compute_sentence_disorder=False):
@@ -577,6 +650,7 @@ def get_type_freq_all_files_parallel(allshortconll, include_bastards=False, comp
     all_langs_average_sizes = {}
     all_langs_position2num = {}
     all_langs_position2sizes = {}
+    all_langs_position2charsizes = {} # AGENT ADDED
     all_langs_sentence_disorder = {} if compute_sentence_disorder else None
     
     with multiprocessing.Pool(psutil.cpu_count()) as pool:
@@ -597,9 +671,9 @@ def get_type_freq_all_files_parallel(allshortconll, include_bastards=False, comp
         
         for result in results:
             if compute_sentence_disorder:
-                lang, position2num, position2sizes, sizes2freq, sentence_disorder_stats = result
+                lang, position2num, position2sizes, sizes2freq, position2charsizes, sentence_disorder_stats = result
             else:
-                lang, position2num, position2sizes, sizes2freq = result
+                lang, position2num, position2sizes, sizes2freq, position2charsizes = result
                 sentence_disorder_stats = None
             
             all_langs_position2sizes[lang] = all_langs_position2sizes.get(lang, {})
@@ -617,13 +691,26 @@ def get_type_freq_all_files_parallel(allshortconll, include_bastards=False, comp
                     if key not in all_langs_sentence_disorder[lang]:
                         all_langs_sentence_disorder[lang][key] = []
                     all_langs_sentence_disorder[lang][key].extend(disorder_flags)
+
+            # Aggregate char sizes
+            all_langs_position2charsizes[lang] = all_langs_position2charsizes.get(lang, {})
+            for ty, size in position2charsizes.items():
+                 all_langs_position2charsizes[lang][ty] = all_langs_position2charsizes[lang].get(ty, 0) + size
     
-    # Compute averages
+    # Compute averages (Geometric Mean)
+    all_langs_average_charsizes = {} 
     for lang in all_langs_position2sizes:
         all_langs_average_sizes[lang] = {
-            ty: all_langs_position2sizes[lang][ty] / all_langs_position2num[lang][ty] 
+            ty: np.exp(all_langs_position2sizes[lang][ty] / all_langs_position2num[lang][ty])
             for ty in all_langs_position2sizes[lang]
         }
+        # Compute char averages
+        if lang in all_langs_position2charsizes:
+            all_langs_average_charsizes[lang] = {
+                 ty: np.exp(all_langs_position2charsizes[lang][ty] / all_langs_position2num[lang][ty])
+                 for ty in all_langs_position2charsizes[lang]
+                 if all_langs_position2num[lang][ty] > 0
+            }
     
     print('Done!')
     
@@ -642,9 +729,9 @@ def get_type_freq_all_files_parallel(allshortconll, include_bastards=False, comp
                     'percentage': pct
                 }
         
-        return all_langs_position2num, all_langs_position2sizes, all_langs_average_sizes, sentence_disorder_percentages
+        return all_langs_position2num, all_langs_position2sizes, all_langs_average_sizes, all_langs_average_charsizes, sentence_disorder_percentages
     else:
-        return all_langs_position2num, all_langs_position2sizes, all_langs_average_sizes
+        return all_langs_position2num, all_langs_position2sizes, all_langs_average_sizes, all_langs_average_charsizes
 
 
 def get_bastard_stats(tree):
@@ -868,8 +955,6 @@ def get_vo_hi_stats(tree):
     stats = {
         'vo_right': 0,
         'vo_total': 0,
-        'vo_nominal_right': 0,
-        'vo_nominal_total': 0,
         'sv_right': 0,
         'sv_total': 0,
         'all_right': 0,
@@ -905,22 +990,18 @@ def get_vo_hi_stats(tree):
                 if is_right:
                     stats['all_right'] += 1
                 
-                # Specific VO Filter
-                if base_rel == 'obj':
+                kid_node = tree.get(kid_id, {})
+                is_noun = kid_node.get('tag') == 'NOUN'
+
+                # Specific VO Filter - NOW NOMINAL ONLY
+                if base_rel == 'obj' and is_noun:
                     stats['vo_total'] += 1
                     if is_right:
                         stats['vo_right'] += 1
-                    
-                    # VOnominal: track only NOUN objects
-                    kid_node = tree.get(kid_id, {})
-                    if kid_node.get('tag') == 'NOUN':
-                        stats['vo_nominal_total'] += 1
-                        if is_right:
-                            stats['vo_nominal_right'] += 1
                 
-                # Specific VS Filter (nsubj relation)
+                # Specific VS Filter (nsubj relation) - NOW NOMINAL ONLY
                 # Note: sv_right counts subjects AFTER verb (VS order)
-                if base_rel == 'nsubj':
+                if base_rel == 'nsubj' and is_noun:
                     stats['sv_total'] += 1
                     if is_right:
                         stats['sv_right'] += 1
@@ -942,7 +1023,7 @@ def process_file_complete(conll_filename, include_bastards=True, compute_sentenc
     -------
     tuple
         (lang, 
-         position2num, position2sizes, sizes2freq, 
+         position2num, position2sizes, sizes2freq, position2charsizes,
          verb_count, bastard_count, bastard_relations, bastard_examples,
          vo_hi_stats,
          sentence_disorder_stats)
@@ -950,7 +1031,7 @@ def process_file_complete(conll_filename, include_bastards=True, compute_sentenc
     lang = os.path.basename(conll_filename).split('_')[0]
     
     # 1. Dep sizes containers
-    position2num, position2sizes, sizes2freq = {}, {}, {}
+    position2num, position2sizes, sizes2freq, position2charsizes = {}, {}, {}, {}
     
     # 2. Bastard stats containers
     total_verbs = 0
@@ -961,7 +1042,6 @@ def process_file_complete(conll_filename, include_bastards=True, compute_sentenc
     # 3. VO/HI stats containers
     vo_hi_total = {
         'vo_right': 0, 'vo_total': 0,
-        'vo_nominal_right': 0, 'vo_nominal_total': 0,
         'sv_right': 0, 'sv_total': 0,
         'all_right': 0, 'all_total': 0
     }
@@ -974,7 +1054,7 @@ def process_file_complete(conll_filename, include_bastards=True, compute_sentenc
         tree.addspan(exclude=['punct'], compute_bastards=include_bastards)
         
         # 1. Dep Sizes
-        get_dep_sizes(tree, position2num, position2sizes, sizes2freq, include_bastards=include_bastards)
+        get_dep_sizes(tree, position2num, position2sizes, sizes2freq, include_bastards=include_bastards, position2charsizes=position2charsizes)
         
         # 2. Bastard Stats
         v, b, r, ex = get_bastard_stats(tree)
@@ -1013,7 +1093,7 @@ def process_file_complete(conll_filename, include_bastards=True, compute_sentenc
                     ordering_stats[key]['gt'] += counts['gt']
                 
     return (lang, 
-            position2num, position2sizes, sizes2freq, 
+            position2num, position2sizes, sizes2freq, position2charsizes,
             total_verbs, total_bastards, total_bastard_relations, total_bastard_examples,
             vo_hi_total,
             ordering_stats)
@@ -1031,6 +1111,8 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
     all_langs_average_sizes = {}
     all_langs_position2num = {}
     all_langs_position2sizes = {}
+    all_langs_position2charsizes = {} # AGENT ADDED
+    all_langs_average_charsizes = {} # AGENT ADDED
     
     lang_bastard_stats = {}
     all_bastard_relations = {}
@@ -1056,7 +1138,7 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
         
         for result in results:
             (lang, 
-             position2num, position2sizes, sizes2freq, 
+             position2num, position2sizes, sizes2freq, position2charsizes,
              verbs, bastards, bastard_relations, bastard_examples,
              vo_hi_file_stats,
              file_ordering_stats) = result
@@ -1068,6 +1150,11 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
             for ty, size in position2sizes.items():
                 all_langs_position2sizes[lang][ty] = all_langs_position2sizes[lang].get(ty, 0) + size
                 all_langs_position2num[lang][ty] = all_langs_position2num[lang].get(ty, 0) + position2num[ty]
+
+            # Aggregate char sizes
+            all_langs_position2charsizes[lang] = all_langs_position2charsizes.get(lang, {})
+            for ty, size in position2charsizes.items():
+                 all_langs_position2charsizes[lang][ty] = all_langs_position2charsizes[lang].get(ty, 0) + size
                 
             # --- 2. Bastard Stats Aggregation ---
             if lang not in lang_bastard_stats:
@@ -1091,7 +1178,7 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
                     
             # --- 3. VO/HI Stats Aggregation ---
             if lang not in lang_vo_hi_stats:
-                lang_vo_hi_stats[lang] = {'vo_right': 0, 'vo_total': 0, 'vo_nominal_right': 0, 'vo_nominal_total': 0, 'sv_right': 0, 'sv_total': 0, 'all_right': 0, 'all_total': 0}
+                lang_vo_hi_stats[lang] = {'vo_right': 0, 'vo_total': 0, 'sv_right': 0, 'sv_total': 0, 'all_right': 0, 'all_total': 0}
             
             for k, v in vo_hi_file_stats.items():
                 lang_vo_hi_stats[lang][k] += v
@@ -1121,17 +1208,23 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
             ty: all_langs_position2sizes[lang][ty] / all_langs_position2num[lang][ty] 
             for ty in all_langs_position2sizes[lang]
         }
+        
+        # Compute char averages
+        if lang in all_langs_position2charsizes:
+            all_langs_average_charsizes[lang] = {
+                 ty: all_langs_position2charsizes[lang][ty] / all_langs_position2num[lang][ty]
+                 for ty in all_langs_position2charsizes[lang]
+                 if all_langs_position2num[lang][ty] > 0
+            }
 
     # 3. VO/HI/SV Scores Calculation
     lang_vo_hi_scores = {}
     for lang, stats in lang_vo_hi_stats.items():
         vo_total = stats['vo_total']
-        vo_nominal_total = stats['vo_nominal_total']
         sv_total = stats['sv_total']
         all_total = stats['all_total']
         
         vo_score = stats['vo_right'] / vo_total if vo_total > 0 else None
-        vo_nominal_score = stats['vo_nominal_right'] / vo_nominal_total if vo_nominal_total > 0 else None
         sv_score = stats['sv_right'] / sv_total if sv_total > 0 else None
         hi_score = stats['all_right'] / all_total if all_total > 0 else None
         
@@ -1145,17 +1238,6 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
                 vo_type = 'NDO'
         else:
             vo_type = None
-        
-        # Classify VOnominal order type
-        if vo_nominal_score is not None:
-            if vo_nominal_score > 0.666:
-                vo_nominal_type = 'VO'
-            elif vo_nominal_score < 0.333:
-                vo_nominal_type = 'OV'
-            else:
-                vo_nominal_type = 'NDO'
-        else:
-            vo_nominal_type = None
         
         # Classify VS order (tripartite classification)
         # Note: sv_score measures proportion of subjects AFTER verb (VS order)
@@ -1172,24 +1254,20 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
         lang_vo_hi_scores[lang] = {
             'vo_score': vo_score,
             'vo_type': vo_type,
-            'vo_nominal_score': vo_nominal_score,
-            'vo_nominal_type': vo_nominal_type,
             'sv_score': sv_score,
             'sv_type': sv_type,
             'head_initiality_score': hi_score,
             'vo_count': vo_total,
-            'vo_nominal_count': vo_nominal_total,
             'sv_count': sv_total,
             'total_deps': all_total,
             'vo_right': stats['vo_right'],
-            'vo_nominal_right': stats['vo_nominal_right'],
             'sv_right': stats['sv_right'],
             'all_right': stats['all_right']
         }
         
     print('Done!')
     
-    return (all_langs_position2num, all_langs_position2sizes, all_langs_average_sizes, 
+    return (all_langs_position2num, all_langs_position2sizes, all_langs_average_sizes, all_langs_average_charsizes,
             lang_bastard_stats, all_bastard_relations, 
             lang_vo_hi_scores, 
             all_langs_ordering_stats)

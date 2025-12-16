@@ -79,7 +79,10 @@ def compute_average_sizes_table(all_langs_average_sizes_filtered):
             if position_key not in position_sums:
                 position_sums[position_key] = 0
                 position_counts[position_key] = 0
-            position_sums[position_key] += value
+            if value > 0:
+                position_sums[position_key] += np.log(value)
+            else:
+                pass # handle 0 size? Should not happen with GM.
             position_counts[position_key] += 1
             
         # 2. Accumulate ratios
@@ -101,10 +104,10 @@ def compute_average_sizes_table(all_langs_average_sizes_filtered):
     # Calculate averages
     results = {}
     
-    # Arithmetic Means for Sizes
+    # Geometric Means for Sizes (Cross-Language)
     for position_key in position_sums:
         if position_counts[position_key] > 0:
-            results[position_key] = position_sums[position_key] / position_counts[position_key]
+            results[position_key] = np.exp(position_sums[position_key] / position_counts[position_key])
             
     # Geometric Means for Ratios
     for pair_key, stats in ratio_stats.items():
@@ -171,7 +174,7 @@ def extract_verb_centered_grid(position_averages,
             header_row.append(GridCell("", cell_type='factor'))
             
     if show_row_averages:
-        header_row.append(GridCell("[Avg | N | Slope]", cell_type='comment'))
+        header_row.append(GridCell("[GM | N | Slope]", cell_type='comment'))
     
     rows.append(header_row)
     
@@ -434,7 +437,7 @@ def extract_verb_centered_grid(position_averages,
             
             if geo_factor is not None:
                 factor_val = geo_factor
-            elif lx is not None and lx != 0:
+            elif l_xvx is not None and l_xvx != 0:
                  factor_val = r_xvx / l_xvx
                  
             if factor_val is not None:
@@ -1325,7 +1328,7 @@ def format_verb_centered_table(position_averages,
             avg_key = f'average_totleft_{tot}'
             row_avg = position_averages.get(avg_key)
             if row_avg is not None:
-                suffix_str += f"  [Avg: {row_avg:.3f}]"
+                suffix_str += f"  [GM: {row_avg:.3f}]"
         
         # Add N
         n_count = None # Initialize for scope
@@ -1373,7 +1376,7 @@ def format_verb_centered_table(position_averages,
         if show_row_averages:
             stats_parts = []
             if row_avg is not None:
-                stats_parts.append(f"[Avg: {row_avg:.3f}]")
+                stats_parts.append(f"[GM: {row_avg:.3f}]")
             if n_count is not None:
                 stats_parts.append(f"[N={n_count}]")
             if slope_val is not None:
