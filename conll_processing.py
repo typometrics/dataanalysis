@@ -163,7 +163,7 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
     # Average key for this configuration
     avg_key = f'average_tot{direction}_{len(kids)}'
     position2num[avg_key] = position2num.get(avg_key, 0) + 1
-    position2num[avg_key] = position2num.get(avg_key, 0) + 1
+
     # For the per-sentence average, we can stick to arithmetic or geometric.
     # Usually "Average Constituent Size" per sentence is just arithmetic for that sentence?
     # But for consistency, let's just log the arithmetic average of the kids? 
@@ -931,7 +931,7 @@ def get_vo_hi_stats(tree):
     Compute VO, VS, VOnominal, and Head-Initiality statistics for a single tree.
     
     Note: sv_right/sv_total measure subjects AFTER verb (VS order)
-    Note: vo_nominal_right/vo_nominal_total measure only NOUN objects
+    Note: vo_nominal_right/vo_nominal_total measure only NOUN/PROPN objects
     
     Parameters
     ----------
@@ -944,8 +944,8 @@ def get_vo_hi_stats(tree):
         {
             'vo_right': count,
             'vo_total': count,
-            'vo_nominal_right': count (only NOUN objects),
-            'vo_nominal_total': count (only NOUN objects),
+            'vo_nominal_right': count (only NOUN/PROPN objects),
+            'vo_nominal_total': count (only NOUN/PROPN objects),
             'sv_right': count (subjects after verb, i.e., VS),
             'sv_total': count,
             'all_right': count,
@@ -991,17 +991,17 @@ def get_vo_hi_stats(tree):
                     stats['all_right'] += 1
                 
                 kid_node = tree.get(kid_id, {})
-                is_noun = kid_node.get('tag') == 'NOUN'
+                is_nominal = kid_node.get('tag') in ['NOUN', 'PROPN']
 
                 # Specific VO Filter - NOW NOMINAL ONLY
-                if base_rel == 'obj' and is_noun:
+                if base_rel == 'obj' and is_nominal:
                     stats['vo_total'] += 1
                     if is_right:
                         stats['vo_right'] += 1
                 
                 # Specific VS Filter (nsubj relation) - NOW NOMINAL ONLY
                 # Note: sv_right counts subjects AFTER verb (VS order)
-                if base_rel == 'nsubj' and is_noun:
+                if base_rel == 'nsubj' and is_nominal:
                     stats['sv_total'] += 1
                     if is_right:
                         stats['sv_right'] += 1
@@ -1009,7 +1009,99 @@ def get_vo_hi_stats(tree):
     return stats
 
 
-def process_file_complete(conll_filename, include_bastards=True, compute_sentence_disorder=False):
+def extract_verb_config_examples(tree, include_bastards=False):
+    """
+    Extract verb configuration examples from a tree.
+    
+    Returns verb configurations with their tokens for HTML visualization.
+    Uses the same constraints as get_dep_sizes for determining dependencies.
+    
+    Parameters
+    ----------
+    tree : dict
+        Dependency tree structure  
+    include_bastards : bool
+        Whether to include bastard dependencies
+        
+    Returns
+    -------
+    list
+        List of (config_string, verb_id, dependent_ids) tuples
+    """
+    examples = []
+    
+    # Same constraints as get_dep_sizes
+    head_pos = ["VERB"]
+    deps = [
+        "nsubj", "obj", "iobj", "csubj", "ccomp", "xcomp", 
+        "obl", "expl", "dislocated", "advcl", "advmod", 
+        "nmod", "appos", "nummod", "acl", "amod"
+    ]
+    
+    # Find all verb heads with spans
+    heads = [i for i in tree if len(tree[i]["span"]) > 1 and tree[i]["tag"] in head_pos]
+    
+    for head in heads:
+        relevant_kids = []
+        
+        # Identify valid direct kids
+        valid_direct_kids = {
+            ki for (ki, krel) in tree[head]['kids'].items()
+            if relation_split.split(krel)[0] in deps
+        }
+        
+        if include_bastards:
+            all_kids = tree[head].get('all_kids', list(tree[head]['kids'].keys()))
+            
+            for k in all_kids:
+                if k in valid_direct_kids:
+                    relevant_kids.append(k)
+                elif k not in tree[head]['kids']:
+                    # Find bastard's ancestor that is a direct kid
+                    curr = k
+                    ancestor = None
+                    steps = 0
+                    while steps < 100:
+                        govs = tree[curr].get('gov', {})
+                        p = None
+                        for g in govs:
+                            if g > 0:
+                                p = g
+                                break
+                        
+                        if p == head:
+                            ancestor = curr
+                            break
+                        elif p is None:
+                            break
+                        else:
+                            curr = p
+                        steps += 1
+                    
+                    if ancestor and ancestor in valid_direct_kids:
+                        relevant_kids.append(k)
+        else:
+            relevant_kids = list(valid_direct_kids)
+        
+        if not relevant_kids:
+            continue
+            
+        # Sort into left and right
+        left_kids = sorted([ki for ki in relevant_kids if ki < head])
+        right_kids = sorted([ki for ki in relevant_kids if ki > head])
+        
+        # Create configuration string
+        left_str = 'X' * len(left_kids)
+        right_str = 'X' * len(right_kids)
+        config = left_str + 'V' + right_str
+        
+        # Store config, verb ID, and all relevant dependent IDs
+        examples.append((config, head, relevant_kids))
+    
+    return examples
+
+
+def process_file_complete(conll_filename, include_bastards=True, compute_sentence_disorder=False, collect_config_examples=True, max_examples_per_config=10):
     """
     Process a single CoNLL file to compute ALL metrics in one pass.
     
@@ -1018,6 +1110,7 @@ def process_file_complete(conll_filename, include_bastards=True, compute_sentenc
     2. Bastard statistics
     3. VO / Head-Initiality statistics
     4. Sentence disorder statistics (optional)
+    5. Configuration examples (optional)
     
     Returns
     -------
@@ -1026,7 +1119,8 @@ def process_file_complete(conll_filename, include_bastards=True, compute_sentenc
          position2num, position2sizes, sizes2freq, position2charsizes,
          verb_count, bastard_count, bastard_relations, bastard_examples,
          vo_hi_stats,
-         sentence_disorder_stats)
+         sentence_disorder_stats,
+         config_examples)
     """
     lang = os.path.basename(conll_filename).split('_')[0]
     
@@ -1048,6 +1142,9 @@ def process_file_complete(conll_filename, include_bastards=True, compute_sentenc
     
     # 4. Disorder / Ordering stats
     ordering_stats = {} if compute_sentence_disorder else None
+    
+    # 5. Configuration examples (for HTML visualization)
+    config_examples = {} if collect_config_examples else None
     
     for tree in conllFile2trees(conll_filename):
         # Add spans (critical for dep sizes and bastards)
@@ -1091,19 +1188,66 @@ def process_file_complete(conll_filename, include_bastards=True, compute_sentenc
                     ordering_stats[key]['lt'] += counts['lt']
                     ordering_stats[key]['eq'] += counts['eq']
                     ordering_stats[key]['gt'] += counts['gt']
+        
+        # 5. Configuration Examples
+        if collect_config_examples:
+            verb_configs = extract_verb_config_examples(tree, include_bastards=include_bastards)
+            for config, verb_id, dep_ids in verb_configs:
+                if config not in config_examples:
+                    config_examples[config] = []
+                
+                # Only collect if we haven't reached max for this config
+                if len(config_examples[config]) < max_examples_per_config:
+                    # Store minimal tree dict with just the fields needed for HTML generation
+                    # Extract in order (sorted by node ID)
+                    sorted_ids = sorted([i for i in tree if isinstance(i, int)])
+                    tree_dict = {
+                        'forms': [tree[i].get('t', '_') for i in sorted_ids],
+                        'upos': [tree[i].get('tag', '_') for i in sorted_ids],
+                        'heads': [list(tree[i].get('gov', {}).keys())[0] if tree[i].get('gov') else 0 for i in sorted_ids],
+                        'deprels': [list(tree[i].get('gov', {}).values())[0] if tree[i].get('gov') else 'root' for i in sorted_ids]
+                    }
+                    config_examples[config].append({
+                        'tree': tree_dict,
+                        'verb_id': verb_id,
+                        'dep_ids': dep_ids
+                    })
                 
     return (lang, 
             position2num, position2sizes, sizes2freq, position2charsizes,
             total_verbs, total_bastards, total_bastard_relations, total_bastard_examples,
             vo_hi_total,
-            ordering_stats)
+            ordering_stats,
+            config_examples)
 
 
-def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentence_disorder=False):
+def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentence_disorder=False, collect_config_examples=False, max_examples_per_config=10):
     """
     Process all short CoNLL files in parallel to compute ALL metrics.
     
     Unified function replacing separate passes.
+    
+    Parameters
+    ----------
+    allshortconll : list
+        List of CoNLL file paths to process
+    include_bastards : bool
+        Whether to include bastard dependencies
+    compute_sentence_disorder : bool
+        Whether to compute sentence disorder statistics
+    collect_config_examples : bool
+        Whether to collect configuration examples for HTML visualization
+    max_examples_per_config : int
+        Maximum number of examples to collect per configuration
+        
+    Returns
+    -------
+    tuple
+        Returns different tuples based on flags:
+        - Always: (all_langs_position2num, all_langs_position2sizes, all_langs_average_sizes,
+                   all_langs_average_charsizes, lang_bastard_stats, global_bastard_relations,
+                   lang_vo_hi_scores, sentence_disorder_pct)
+        - If collect_config_examples=True: also includes config_examples dict
     """
     print(f"Starting unified processing on {psutil.cpu_count()} cores")
     
@@ -1121,11 +1265,15 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
     
     all_langs_ordering_stats = {} if compute_sentence_disorder else None
     
+    all_config_examples = {} if collect_config_examples else None
+    
     with multiprocessing.Pool(psutil.cpu_count()) as pool:
         process_func = functools.partial(
             process_file_complete, 
             include_bastards=include_bastards,
-            compute_sentence_disorder=compute_sentence_disorder
+            compute_sentence_disorder=compute_sentence_disorder,
+            collect_config_examples=collect_config_examples,
+            max_examples_per_config=max_examples_per_config
         )
         
         results = list(tqdm(
@@ -1137,11 +1285,20 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
         print('Finished processing. Combining results...')
         
         for result in results:
-            (lang, 
-             position2num, position2sizes, sizes2freq, position2charsizes,
-             verbs, bastards, bastard_relations, bastard_examples,
-             vo_hi_file_stats,
-             file_ordering_stats) = result
+            if collect_config_examples:
+                (lang, 
+                 position2num, position2sizes, sizes2freq, position2charsizes,
+                 verbs, bastards, bastard_relations, bastard_examples,
+                 vo_hi_file_stats,
+                 file_ordering_stats,
+                 config_examples) = result
+            else:
+                (lang, 
+                 position2num, position2sizes, sizes2freq, position2charsizes,
+                 verbs, bastards, bastard_relations, bastard_examples,
+                 vo_hi_file_stats,
+                 file_ordering_stats) = result
+                config_examples = None
             
             # --- 1. Dep Sizes Aggregation ---
             all_langs_position2sizes[lang] = all_langs_position2sizes.get(lang, {})
@@ -1199,20 +1356,35 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
                         all_langs_ordering_stats[lang][key]['lt'] += counts['lt']
                         all_langs_ordering_stats[lang][key]['eq'] += counts['eq']
                         all_langs_ordering_stats[lang][key]['gt'] += counts['gt']
+                        
+            # --- 5. Config Examples Aggregation ---
+            if collect_config_examples and config_examples:
+                if lang not in all_config_examples:
+                    all_config_examples[lang] = {}
+                
+                for config, examples in config_examples.items():
+                    if config not in all_config_examples[lang]:
+                        all_config_examples[lang][config] = []
+                    
+                    # Keep up to max_examples_per_config per language per config
+                    curr_len = len(all_config_examples[lang][config])
+                    if curr_len < max_examples_per_config:
+                        needed = max_examples_per_config - curr_len
+                        all_config_examples[lang][config].extend(examples[:needed])
 
     # Post-processing
     
     # 1. Average sizes
     for lang in all_langs_position2sizes:
         all_langs_average_sizes[lang] = {
-            ty: all_langs_position2sizes[lang][ty] / all_langs_position2num[lang][ty] 
+            ty: np.exp(all_langs_position2sizes[lang][ty] / all_langs_position2num[lang][ty]) 
             for ty in all_langs_position2sizes[lang]
         }
         
         # Compute char averages
         if lang in all_langs_position2charsizes:
             all_langs_average_charsizes[lang] = {
-                 ty: all_langs_position2charsizes[lang][ty] / all_langs_position2num[lang][ty]
+                 ty: np.exp(all_langs_position2charsizes[lang][ty] / all_langs_position2num[lang][ty])
                  for ty in all_langs_position2charsizes[lang]
                  if all_langs_position2num[lang][ty] > 0
             }
@@ -1267,7 +1439,14 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
         
     print('Done!')
     
-    return (all_langs_position2num, all_langs_position2sizes, all_langs_average_sizes, all_langs_average_charsizes,
-            lang_bastard_stats, all_bastard_relations, 
-            lang_vo_hi_scores, 
-            all_langs_ordering_stats)
+    if collect_config_examples:
+        return (all_langs_position2num, all_langs_position2sizes, all_langs_average_sizes, all_langs_average_charsizes,
+                lang_bastard_stats, all_bastard_relations, 
+                lang_vo_hi_scores, 
+                all_langs_ordering_stats,
+                all_config_examples)
+    else:
+        return (all_langs_position2num, all_langs_position2sizes, all_langs_average_sizes, all_langs_average_charsizes,
+                lang_bastard_stats, all_bastard_relations, 
+                lang_vo_hi_scores, 
+                all_langs_ordering_stats)
