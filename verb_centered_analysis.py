@@ -334,3 +334,179 @@ def save_excel_verb_centered_table(grid_rows, output_path):
          print("Warning: Saving from raw GridCells is deprecated. Please use TableStructure.")
          # We can't easily save without the logic.
          pass
+
+# ============================================================================
+# MASS GENERATION UTILITIES
+# ============================================================================
+
+def generate_mass_tables(
+    all_langs_average_sizes,
+    ordering_stats,
+    metadata,
+    vo_data=None,
+    output_dir='data/tables',
+    arrow_direction='diverging',
+    extract_disorder_metrics=False
+):
+    """
+    Generate Verb-Centered Tables for:
+    1. Global Average (All Languages)
+    2. Per-Family Average
+    3. Per-Order Average (VO vs OV check)
+    4. Individual Languages
+
+    Args:
+        all_langs_average_sizes: Dict of average sizes per language
+        ordering_stats: Dict of ordering stats (triples) per language
+        metadata: Metadata dict containing groupings
+        vo_data: VO/HI scores DataFrame (optional)
+        output_dir: Output directory
+        arrow_direction: 'diverging', 'left_to_right', etc.
+        extract_disorder_metrics: Boolean, if True returns disorder DataFrame
+
+    Returns:
+        pd.DataFrame or None: Disorder metrics if requested
+    """
+    import os
+    import pandas as pd
+    import numpy as np
+    from tqdm import tqdm
+    import compute_disorder
+    
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+        
+    langnames = metadata.get('langNames', {})
+    lang_groups = metadata.get('langnameGroup', {})
+    
+    # 1. GLOBAL AVERAGE
+    print("Generating Global Table...")
+    global_avgs = compute_average_sizes_table(all_langs_average_sizes)
+    format_verb_centered_table(
+        global_avgs,
+        show_horizontal_factors=True,
+        show_diagonal_factors=True,
+        arrow_direction=arrow_direction,
+        save_tsv=True,
+        output_dir=output_dir,
+        filename="GLOBAL_average_table.tsv"
+    )
+    
+    # 2. PER-FAMILY AVERAGE
+    # Group languages by family
+    family_langs = {}
+    for lang in all_langs_average_sizes:
+        lname = langnames.get(lang, lang)
+        group = lang_groups.get(lname, 'Unknown')
+        if group not in family_langs:
+            family_langs[group] = {}
+        family_langs[group][lang] = all_langs_average_sizes[lang]
+        
+    print(f"Generating Family Tables ({len(family_langs)} families)...")
+    for family, langs_data in family_langs.items():
+        if not langs_data: continue
+        family_avgs = compute_average_sizes_table(langs_data)
+        safe_fam = "".join(x for x in family if x.isalnum() or x in " _-").strip().replace(" ", "_")
+        format_verb_centered_table(
+            family_avgs,
+            show_horizontal_factors=True,
+            show_diagonal_factors=True,
+            arrow_direction=arrow_direction,
+            save_tsv=True,
+            output_dir=output_dir,
+            filename=f"FAMILY_{safe_fam}_table.tsv"
+        )
+
+    # 3. INDIVIDUAL LANGUAGES & DISORDER METRICS
+    print("Generating Individual Language Tables...")
+    
+    # Pre-calculate disorder dataframe if requested
+    disorder_df = None
+    if extract_disorder_metrics:
+        print("Calculating disorder metrics...")
+        disorder_df, _ = compute_disorder.compute_disorder_statistics(
+            all_langs_average_sizes,
+            langnames,
+            lang_groups,
+            ordering_stats
+        )
+        
+        # Map specific columns to "extreme" (Tot=4)
+        if 'right_tot_4_disordered' in disorder_df.columns:
+            disorder_df['right_extreme_disorder'] = disorder_df['right_tot_4_disordered']
+        else:
+             # Fallback if tot=4 missing? Use max available
+            disorder_df['right_extreme_disorder'] = None
+
+        if 'left_tot_4_disordered' in disorder_df.columns:
+            disorder_df['left_extreme_disorder'] = disorder_df['left_tot_4_disordered']
+        else:
+            disorder_df['left_extreme_disorder'] = None
+            
+        # Lists to store factors
+        right_factors = []
+        left_factors = []
+        
+        # We need to match the order of disorder_df
+        lang_order = disorder_df['language_code'].tolist()
+        
+    # Process languages
+    lang_to_factors = {} # Cache for disorder step
+    
+    for lang in tqdm(all_langs_average_sizes):
+        # Compute table for this language
+        single_lang_data = {lang: all_langs_average_sizes[lang]}
+        lang_avgs = compute_average_sizes_table(single_lang_data)
+        
+        # Determine specific ordering stats if available
+        lang_order_stats = ordering_stats.get(lang) if ordering_stats else None
+        
+        # Save table
+        format_verb_centered_table(
+            lang_avgs,
+            show_horizontal_factors=True,
+            show_diagonal_factors=True,
+            arrow_direction=arrow_direction,
+            ordering_stats={lang: lang_order_stats} if lang_order_stats else None,
+            save_tsv=True,
+            output_dir=output_dir,
+            filename=f"LANG_{lang}_table.tsv"
+        )
+        
+        if extract_disorder_metrics:
+            # Calculate Diagonal Factors for R4 and L4
+            # Right R4: factors landing in R4 (from R3)
+            # Keys: factor_right_{pos+1}_totright_4_vs_right_{pos}_totright_3
+            r_vals = []
+            for pos in range(1, 4): # 1,2,3
+                key = f'factor_right_{pos+1}_totright_4_vs_right_{pos}_totright_3'
+                if key in lang_avgs:
+                    r_vals.append(lang_avgs[key])
+            
+            # Left L4: factors where target is L4 (from L5)
+            # Keys: factor_left_{pos}_totleft_4_vs_left_{pos+1}_totleft_5
+            l_vals = []
+            for pos in range(1, 5): # 1,2,3,4
+                 key = f'factor_left_{pos}_totleft_4_vs_left_{pos+1}_totleft_5'
+                 if key in lang_avgs:
+                     l_vals.append(lang_avgs[key])
+            
+            # Compute Geometric Means
+            r_gm = np.exp(np.mean(np.log(r_vals))) if r_vals else None
+            l_gm = np.exp(np.mean(np.log(l_vals))) if l_vals else None
+            
+            lang_to_factors[lang] = (r_gm, l_gm)
+
+    # Attach factors to disorder_df
+    if extract_disorder_metrics and disorder_df is not None:
+        right_col = []
+        left_col = []
+        for lang in disorder_df['language_code']:
+            r, l = lang_to_factors.get(lang, (None, None))
+            right_col.append(r)
+            left_col.append(l)
+        
+        disorder_df['right_extreme_diag_factor'] = right_col
+        disorder_df['left_extreme_diag_factor'] = left_col
+
+    return disorder_df if extract_disorder_metrics else None
