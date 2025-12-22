@@ -1624,12 +1624,66 @@ def plot_additive_bastard_histogram(relations_json_path, lang_names=None, plots_
     return output_path
 
 
+def _generate_single_plot(args):
+    """
+    Worker function to generate a single disorder/diagonal factor plot.
+    
+    Parameters
+    ----------
+    args : tuple
+        (plot_num, plot_df, x_col, y_col, title, xlabel, ylabel, output_path, appearance_dict)
+    
+    Returns
+    -------
+    tuple
+        (success, output_path, message)
+    """
+    import matplotlib
+    matplotlib.use('Agg')  # Non-interactive backend for parallel processing
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    
+    (plot_num, plot_df, x_col, y_col, title, xlabel, ylabel, output_path, appearance_dict) = args
+    
+    try:
+        # Drop NaN values for this specific plot
+        plot_df_clean = plot_df.dropna(subset=[x_col, y_col])
+        
+        if len(plot_df_clean) == 0:
+            return (False, output_path, f"Plot {plot_num}: No valid data")
+        
+        # Generate the plot using plot_scatter_2d
+        plot_scatter_2d(
+            plot_df_clean,
+            x_col=x_col,
+            y_col=y_col,
+            group_col='group',
+            appearance_dict=appearance_dict,
+            title=title,
+            xlabel=xlabel,
+            ylabel=ylabel,
+            label_col='language_name',
+            with_labels=True,
+            figsize=(12, 10),
+            add_regression=True
+        )
+        
+        # Save plot
+        plt.savefig(output_path, dpi=300, bbox_inches='tight')
+        plt.close('all')
+        
+        return (True, output_path, f"Plot {plot_num}: {len(plot_df_clean)} languages")
+        
+    except Exception as e:
+        return (False, output_path, f"Plot {plot_num} error: {str(e)}")
+
+
 def plot_disorder_metrics_vs_vo(disorder_df, langnameGroup, appearance_dict, 
                                   data_dir='data', plots_dir='plots'):
     """
     Create scatter plots comparing disorder metrics and diagonal factors against VO scores.
     
-    Generates 6 plots:
+    Generates 6 plots in parallel:
     1. Right extreme disorder vs VO score
     2. Left extreme disorder vs VO score
     3. Right extreme diagonal factor vs VO score
@@ -1658,9 +1712,9 @@ def plot_disorder_metrics_vs_vo(disorder_df, langnameGroup, appearance_dict,
     """
     import os
     import pandas as pd
+    from multiprocessing import Pool, cpu_count
     
     os.makedirs(plots_dir, exist_ok=True)
-    saved_plots = []
     
     # Load VO data
     vo_path = os.path.join(data_dir, 'vo_vs_hi_scores.csv')
@@ -1679,153 +1733,89 @@ def plot_disorder_metrics_vs_vo(disorder_df, langnameGroup, appearance_dict,
     plot_df['group'] = plot_df['group'].fillna('Other')
     
     print(f"Merged data: {len(plot_df)} languages with disorder and VO data")
+    print(f"Generating 6 plots in parallel using {min(6, cpu_count())} workers...")
+    
+    # Prepare plot specifications
+    plot_specs = []
+    # Prepare plot specifications
+    plot_specs = []
     
     # Plot 1: Right extreme disorder vs VO score
-    plot_df_right = plot_df.dropna(subset=['right_extreme_disorder', 'vo_score'])
-    if len(plot_df_right) > 0:
-        print(f"\n1. Plotting Right Extreme Disorder vs VO (N={len(plot_df_right)})...")
-        plot_scatter_2d(
-            plot_df_right,
-            x_col='vo_score',
-            y_col='right_extreme_disorder',
-            group_col='group',
-            appearance_dict=appearance_dict,
-            title='Right-Side Extreme Disorder vs VO Score',
-            xlabel='VO Score (NOUN+PROPN)',
-            ylabel='Right Extreme Disorder % (R last pair)',
-            label_col='language_name',
-            with_labels=True,
-            figsize=(12, 10),
-            add_regression=True
-        )
-        path = os.path.join(plots_dir, 'right_extreme_disorder_vs_vo.png')
-        plt.savefig(path, dpi=300, bbox_inches='tight')
-        plt.close()
-        saved_plots.append(path)
-        print(f"   Saved to {path}")
+    plot_specs.append((
+        1, plot_df.copy(), 'vo_score', 'right_extreme_disorder',
+        'Right-Side Extreme Disorder vs VO Score',
+        'VO Score (NOUN+PROPN)',
+        'Right Extreme Disorder % (R last pair)',
+        os.path.join(plots_dir, 'right_extreme_disorder_vs_vo.png'),
+        appearance_dict
+    ))
     
     # Plot 2: Left extreme disorder vs VO score
-    plot_df_left = plot_df.dropna(subset=['left_extreme_disorder', 'vo_score'])
-    if len(plot_df_left) > 0:
-        print(f"\n2. Plotting Left Extreme Disorder vs VO (N={len(plot_df_left)})...")
-        plot_scatter_2d(
-            plot_df_left,
-            x_col='vo_score',
-            y_col='left_extreme_disorder',
-            group_col='group',
-            appearance_dict=appearance_dict,
-            title='Left-Side Extreme Disorder vs VO Score',
-            xlabel='VO Score (NOUN+PROPN)',
-            ylabel='Left Extreme Disorder % (L first pair)',
-            label_col='language_name',
-            with_labels=True,
-            figsize=(12, 10),
-            add_regression=True
-        )
-        path = os.path.join(plots_dir, 'left_extreme_disorder_vs_vo.png')
-        plt.savefig(path, dpi=300, bbox_inches='tight')
-        plt.close()
-        saved_plots.append(path)
-        print(f"   Saved to {path}")
+    plot_specs.append((
+        2, plot_df.copy(), 'vo_score', 'left_extreme_disorder',
+        'Left-Side Extreme Disorder vs VO Score',
+        'VO Score (NOUN+PROPN)',
+        'Left Extreme Disorder % (L first pair)',
+        os.path.join(plots_dir, 'left_extreme_disorder_vs_vo.png'),
+        appearance_dict
+    ))
     
     # Plot 3: Right extreme diagonal factor vs VO score
     if 'right_extreme_diag_factor' in plot_df.columns:
-        plot_df_right_diag = plot_df.dropna(subset=['right_extreme_diag_factor', 'vo_score'])
-        if len(plot_df_right_diag) > 0:
-            print(f"\n3. Plotting Right Extreme Diagonal Factor vs VO (N={len(plot_df_right_diag)})...")
-            plot_scatter_2d(
-                plot_df_right_diag,
-                x_col='vo_score',
-                y_col='right_extreme_diag_factor',
-                group_col='group',
-                appearance_dict=appearance_dict,
-                title='Right-Side Extreme Diagonal Growth Factor vs VO Score',
-                xlabel='VO Score (NOUN+PROPN)',
-                ylabel='Right Extreme Diagonal Factor (M Diag Right, R4)',
-                label_col='language_name',
-                with_labels=True,
-                figsize=(12, 10),
-                add_regression=True
-            )
-            path = os.path.join(plots_dir, 'right_extreme_diag_factor_vs_vo.png')
-            plt.savefig(path, dpi=300, bbox_inches='tight')
-            plt.close()
-            saved_plots.append(path)
-            print(f"   Saved to {path}")
+        plot_specs.append((
+            3, plot_df.copy(), 'vo_score', 'right_extreme_diag_factor',
+            'Right-Side Extreme Diagonal Growth Factor vs VO Score',
+            'VO Score (NOUN+PROPN)',
+            'Right Extreme Diagonal Factor (M Diag Right, R4)',
+            os.path.join(plots_dir, 'right_extreme_diag_factor_vs_vo.png'),
+            appearance_dict
+        ))
     
     # Plot 4: Left extreme diagonal factor vs VO score
     if 'left_extreme_diag_factor' in plot_df.columns:
-        plot_df_left_diag = plot_df.dropna(subset=['left_extreme_diag_factor', 'vo_score'])
-        if len(plot_df_left_diag) > 0:
-            print(f"\n4. Plotting Left Extreme Diagonal Factor vs VO (N={len(plot_df_left_diag)})...")
-            plot_scatter_2d(
-                plot_df_left_diag,
-                x_col='vo_score',
-                y_col='left_extreme_diag_factor',
-                group_col='group',
-                appearance_dict=appearance_dict,
-                title='Left-Side Extreme Diagonal Growth Factor vs VO Score',
-                xlabel='VO Score (NOUN+PROPN)',
-                ylabel='Left Extreme Diagonal Factor (M Diag Left, L4)',
-                label_col='language_name',
-                with_labels=True,
-                figsize=(12, 10),
-                add_regression=True
-            )
-            path = os.path.join(plots_dir, 'left_extreme_diag_factor_vs_vo.png')
-            plt.savefig(path, dpi=300, bbox_inches='tight')
-            plt.close()
-            saved_plots.append(path)
-            print(f"   Saved to {path}")
+        plot_specs.append((
+            4, plot_df.copy(), 'vo_score', 'left_extreme_diag_factor',
+            'Left-Side Extreme Diagonal Growth Factor vs VO Score',
+            'VO Score (NOUN+PROPN)',
+            'Left Extreme Diagonal Factor (M Diag Left, L4)',
+            os.path.join(plots_dir, 'left_extreme_diag_factor_vs_vo.png'),
+            appearance_dict
+        ))
     
     # Plot 5: Right diagonal factor vs right disorder
     if 'right_extreme_diag_factor' in plot_df.columns:
-        plot_df_right_both = plot_df.dropna(subset=['right_extreme_diag_factor', 'right_extreme_disorder'])
-        if len(plot_df_right_both) > 0:
-            print(f"\n5. Plotting Right Diagonal Factor vs Right Disorder (N={len(plot_df_right_both)})...")
-            plot_scatter_2d(
-                plot_df_right_both,
-                x_col='right_extreme_disorder',
-                y_col='right_extreme_diag_factor',
-                group_col='group',
-                appearance_dict=appearance_dict,
-                title='Right-Side: Diagonal Growth Factor vs Disorder',
-                xlabel='Right Extreme Disorder % (R last pair)',
-                ylabel='Right Extreme Diagonal Factor (M Diag Right, R4)',
-                label_col='language_name',
-                with_labels=True,
-                figsize=(12, 10),
-                add_regression=True
-            )
-            path = os.path.join(plots_dir, 'right_diag_factor_vs_disorder.png')
-            plt.savefig(path, dpi=300, bbox_inches='tight')
-            plt.close()
-            saved_plots.append(path)
-            print(f"   Saved to {path}")
+        plot_specs.append((
+            5, plot_df.copy(), 'right_extreme_disorder', 'right_extreme_diag_factor',
+            'Right-Side: Diagonal Growth Factor vs Disorder',
+            'Right Extreme Disorder % (R last pair)',
+            'Right Extreme Diagonal Factor (M Diag Right, R4)',
+            os.path.join(plots_dir, 'right_diag_factor_vs_disorder.png'),
+            appearance_dict
+        ))
     
     # Plot 6: Left diagonal factor vs left disorder
     if 'left_extreme_diag_factor' in plot_df.columns:
-        plot_df_left_both = plot_df.dropna(subset=['left_extreme_diag_factor', 'left_extreme_disorder'])
-        if len(plot_df_left_both) > 0:
-            print(f"\n6. Plotting Left Diagonal Factor vs Left Disorder (N={len(plot_df_left_both)})...")
-            plot_scatter_2d(
-                plot_df_left_both,
-                x_col='left_extreme_disorder',
-                y_col='left_extreme_diag_factor',
-                group_col='group',
-                appearance_dict=appearance_dict,
-                title='Left-Side: Diagonal Growth Factor vs Disorder',
-                xlabel='Left Extreme Disorder % (L first pair)',
-                ylabel='Left Extreme Diagonal Factor (M Diag Left, L4)',
-                label_col='language_name',
-                with_labels=True,
-                figsize=(12, 10),
-                add_regression=True
-            )
-            path = os.path.join(plots_dir, 'left_diag_factor_vs_disorder.png')
-            plt.savefig(path, dpi=300, bbox_inches='tight')
-            plt.close()
-            saved_plots.append(path)
-            print(f"   Saved to {path}")
+        plot_specs.append((
+            6, plot_df.copy(), 'left_extreme_disorder', 'left_extreme_diag_factor',
+            'Left-Side: Diagonal Growth Factor vs Disorder',
+            'Left Extreme Disorder % (L first pair)',
+            'Left Extreme Diagonal Factor (M Diag Left, L4)',
+            os.path.join(plots_dir, 'left_diag_factor_vs_disorder.png'),
+            appearance_dict
+        ))
+    
+    # Generate plots in parallel
+    num_workers = min(len(plot_specs), cpu_count())
+    with Pool(num_workers) as pool:
+        results = pool.map(_generate_single_plot, plot_specs)
+    
+    # Process results
+    saved_plots = []
+    for success, output_path, message in results:
+        if success:
+            saved_plots.append(output_path)
+            print(f"  ✓ {message} -> {os.path.basename(output_path)}")
+        else:
+            print(f"  ✗ {message}")
     
     return saved_plots

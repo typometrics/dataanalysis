@@ -78,6 +78,23 @@ Growth Factors (displayed as arrows like `×1.23→`) represent the ratio of con
 
 ---
 
+## 4. Discussion: Weighted vs. Unweighted Marginal Means
+
+The current implementation uses **Unweighted** Marginal Means (treating each `Total` configuration as equal). The user may consider **Weighting by Frequency** (where `Tot=2` counts more than `Tot=4` if it is more frequent).
+
+### Pros of Weighting by Frequency
+1.  **Phenomenological Accuracy**: The resulting mean would better represent the "average constituent" encountered in actual text. If 80% of verbs are transitive (Tot=2) and only 1% are ditransitive-complex (Tot=4), the weighted mean reflects the typical structure.
+2.  **Noise Reduction**: Higher-complexity configurations (like Tot=4) are rarer and thus have smaller sample sizes and higher variance/noise. Weighting them down (or effectively ignoring them) would produce a more stable statistic.
+
+### Cons of Weighting by Frequency (Why we stick to Unweighted)
+1.  **Hiding Complexity Effects**: The primary purpose of the Helix Table is often to analyze how constituent sizes change **as a function of complexity** (valency).
+    -   Syntactic constraints and length preferences (like Behaghel's Law of Increasing Terms) typically manifest most clearly in complex, heavy sentences (`Tot=3` or `Tot=4`).
+    -   Since low-complexity sentences (`Tot=1`, `Tot=2`) vastly outnumber high-complexity ones, a weighted mean would be almost identical to the `Tot=2` value, effectively **masking** the distinct behavior of complex structures.
+2.  **The "Slot" as Unit**: We interpret the columns ($R_1, R_2, ...$) as abstract syntactic "slots". We want to characterize the nature of the $R_2$ slot across the language's grammar, regardless of how often that slot is utilized.
+3.  **Independence from Genre**: "Frequency" is highly genre-dependent (e.g., technical manuals might have more complex arguments than dialogue). Unweighted means are more robust to genre shifts because they describe the *competence* (the grammar's allowance for sizes) rather than the *performance* (frequency of use).
+
+---
+
 ## Summary Table
 
 | Metric | Context | Data Points | Weighting |

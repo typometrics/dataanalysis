@@ -179,7 +179,71 @@ def classify_configuration(config):
         return 'both'
 
 
-def generate_index_html(all_config_examples, lang_names, output_dir='html_examples'):
+def config_to_position_key(config):
+    """
+    Convert configuration string to position2num key.
+    
+    Parameters
+    ----------
+    config : str
+        Configuration string like "VXX", "XXV", "XVX"
+    
+    Returns
+    -------
+    str or None
+        Position key like 'right_2', 'left_2', or None for mixed configs
+    """
+    if 'V' not in config:
+        return None
+    
+    v_index = config.index('V')
+    left_count = v_index
+    right_count = len(config) - v_index - 1
+    
+    # Only return key for pure left or pure right configs
+    if left_count > 0 and right_count == 0:
+        return f'left_{left_count}'
+    elif right_count > 0 and left_count == 0:
+        return f'right_{right_count}'
+    else:
+        return None
+
+
+def get_total_verb_instances(position2num_data):
+    """
+    Calculate total verb instances for a language.
+    
+    Parameters
+    ----------
+    position2num_data : dict
+        Position2num dictionary for a single language
+    
+    Returns
+    -------
+    int
+        Total number of verb instances
+    """
+    total = 0
+    
+    # Add pure left configs (XV, XXV, etc.)
+    for key, value in position2num_data.items():
+        if key.startswith('left_') and '_tot' not in key and 'average' not in key and 'xvx' not in key:
+            total += value
+    
+    # Add pure right configs (VX, VXX, etc.)
+    for key, value in position2num_data.items():
+        if key.startswith('right_') and '_tot' not in key and 'average' not in key:
+            total += value
+    
+    # Add mixed configs (XVX, XXVX, etc.) - use left side count (same as right)
+    for key, value in position2num_data.items():
+        if key.startswith('xvx_left_'):
+            total += value
+    
+    return total
+
+
+def generate_index_html(all_config_examples, lang_names, position2num_all, output_dir='html_examples'):
     """
     Generate index.html with organized navigation.
     
@@ -189,6 +253,8 @@ def generate_index_html(all_config_examples, lang_names, output_dir='html_exampl
         Dictionary mapping language codes to config examples
     lang_names : dict
         Dictionary mapping language codes to language names
+    position2num_all : dict
+        Dictionary mapping language codes to position2num data (contains counts)
     output_dir : str
         Output directory for HTML files
     """
@@ -247,6 +313,11 @@ def generate_index_html(all_config_examples, lang_names, output_dir='html_exampl
         lang_name = info['name']
         configs = info['configs']
         
+        # Calculate total verb instances for percentage calculation
+        total_verbs = 0
+        if lang_code in position2num_all:
+            total_verbs = get_total_verb_instances(position2num_all[lang_code])
+        
         # Categorize configurations by type
         left_configs = []  # X...V
         mixed_configs = []  # X...VX...
@@ -273,7 +344,17 @@ def generate_index_html(all_config_examples, lang_names, output_dir='html_exampl
         if left_configs:
             for config in sorted(left_configs):
                 safe_config = config.replace(' ', '_')
-                html_parts.append(f'            <a class="config-link" href="{lang_name}_{lang_code}/{safe_config}.html">{config}</a>')
+                # Get count and percentage from position2num
+                count_str = ''
+                pos_key = config_to_position_key(config)
+                if pos_key and lang_code in position2num_all:
+                    count = position2num_all[lang_code].get(pos_key, 0)
+                    if total_verbs > 0:
+                        percentage = (count / total_verbs) * 100
+                        count_str = f' ({count:,}, {percentage:.1f}%)'
+                    else:
+                        count_str = f' ({count:,})'
+                html_parts.append(f'            <a class="config-link" href="{lang_name}_{lang_code}/{safe_config}.html">{config}{count_str}</a>')
         else:
             html_parts.append(f'            <span style="color: #999;">—</span>')
         html_parts.append(f'          </div>')
@@ -299,7 +380,17 @@ def generate_index_html(all_config_examples, lang_names, output_dir='html_exampl
         if right_configs:
             for config in sorted(right_configs):
                 safe_config = config.replace(' ', '_')
-                html_parts.append(f'            <a class="config-link" href="{lang_name}_{lang_code}/{safe_config}.html">{config}</a>')
+                # Get count and percentage from position2num
+                count_str = ''
+                pos_key = config_to_position_key(config)
+                if pos_key and lang_code in position2num_all:
+                    count = position2num_all[lang_code].get(pos_key, 0)
+                    if total_verbs > 0:
+                        percentage = (count / total_verbs) * 100
+                        count_str = f' ({count:,}, {percentage:.1f}%)'
+                    else:
+                        count_str = f' ({count:,})'
+                html_parts.append(f'            <a class="config-link" href="{lang_name}_{lang_code}/{safe_config}.html">{config}{count_str}</a>')
         else:
             html_parts.append(f'            <span style="color: #999;">—</span>')
         html_parts.append(f'          </div>')
@@ -338,6 +429,16 @@ def generate_all_html(data_dir='data', output_dir='html_examples'):
     metadata = load_metadata(data_dir)
     lang_names = metadata.get('langNames', {})
     
+    print("Loading position counts...")
+    position2num_path = os.path.join(data_dir, 'all_langs_position2num.pkl')
+    if os.path.exists(position2num_path):
+        with open(position2num_path, 'rb') as f:
+            position2num_all = pickle.load(f)
+        print(f"Loaded position counts for {len(position2num_all)} languages")
+    else:
+        print(f"Warning: {position2num_path} not found. Counts will not be shown.")
+        position2num_all = {}
+    
     print(f"Generating HTML for {len(all_config_examples)} languages...")
     
     # Create output directory
@@ -359,7 +460,7 @@ def generate_all_html(data_dir='data', output_dir='html_examples'):
         ))
     
     print("Generating index...")
-    generate_index_html(all_config_examples, lang_names, output_dir)
+    generate_index_html(all_config_examples, lang_names, position2num_all, output_dir)
     
     print(f"Done! HTML files saved to {output_dir}/")
 

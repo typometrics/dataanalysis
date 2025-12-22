@@ -34,6 +34,13 @@ def make_shorter_conll_files(langConllFiles, version):
         - lang2shortconll: dict mapping language codes to lists of short file paths
         - allshortconll: flat list of all short file paths
     """
+    # Load excluded treebanks
+    excluded_treebanks = set()
+    excluded_file = "excluded_treebanks.txt"
+    if os.path.exists(excluded_file):
+        with open(excluded_file, "r") as f:
+            excluded_treebanks = set(line.strip() for line in f if line.strip())
+    
     directory = version + "_short"
     if not os.path.exists(directory):
         os.makedirs(directory)
@@ -45,6 +52,10 @@ def make_shorter_conll_files(langConllFiles, version):
         lang2shortconll[lang] = []
         
         for conllfile in langConllFiles[lang]:
+            # Check if this file is from an excluded treebank
+            file_path_parts = conllfile.split(os.sep)
+            if any(excluded in file_path_parts for excluded in excluded_treebanks):
+                continue
             starter = '' if os.path.basename(conllfile).startswith(lang + '_') else lang + '_'
             with open(conllfile) as f:
                 conll = f.read()
@@ -81,6 +92,30 @@ def read_shorter_conll_files(langConllFiles, version):
     tuple
         (lang2shortconll, allshortconll)
     """
+    # Load excluded treebanks and build exclusion patterns
+    excluded_keywords = set()
+    excluded_file = "excluded_treebanks.txt"
+    if os.path.exists(excluded_file):
+        with open(excluded_file, "r") as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    # Extract meaningful keywords from UD treebank names
+                    # e.g., UD_French-ALTS -> fr_alts
+                    # e.g., UD_French-PoitevinDIVITAL -> fr_poitevindivital
+                    if line.startswith("UD_"):
+                        parts = line[3:].split("-")
+                        if len(parts) >= 2:
+                            lang = parts[0].lower()
+                            variant = parts[1].lower()
+                            # Create keyword: language_variant (e.g., french_alts -> fr_alts)
+                            if lang.startswith("french"):
+                                excluded_keywords.add(f"fr_{variant}")
+                            elif lang.startswith("german"):
+                                excluded_keywords.add(f"de_{variant}")
+                            # Also add the full variant
+                            excluded_keywords.add(variant.lower())
+    
     directory = version + "_short"
     lang2shortconll = {}
     allshortconll = []
@@ -89,6 +124,10 @@ def read_shorter_conll_files(langConllFiles, version):
         lang2shortconll[lang] = []
         for shortconllfile in os.listdir(directory):
             if shortconllfile.startswith(lang + '_'):
+                # Check if this file matches any excluded pattern
+                file_lower = shortconllfile.lower()
+                if any(keyword in file_lower for keyword in excluded_keywords):
+                    continue
                 lang2shortconll[lang].append(os.path.join(directory, shortconllfile))
         allshortconll.extend(lang2shortconll[lang])
     
