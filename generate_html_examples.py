@@ -8,6 +8,107 @@ import pickle
 from concurrent.futures import ProcessPoolExecutor
 import multiprocessing
 from tqdm import tqdm
+import numpy as np
+
+
+def calculate_position_stats(examples, global_stats=None):
+    """
+    Calculate geometric mean of span sizes for each position (Left/Right) across all examples.
+    Optionally compare with global stats.
+    """
+    left_sizes = {}  # index -> list of sizes
+    right_sizes = {} # index -> list of sizes
+    
+    for ex in examples:
+        # Skip if dep_sizes not available
+        if 'dep_sizes' not in ex:
+            return ""
+            
+        vid = ex['verb_id']
+        dids = ex['dep_ids']
+        dsizes = ex['dep_sizes']
+        
+        # Sort dependents by ID
+        # Left: d < vid
+        # Right: d > vid
+        left_deps = sorted([d for d in dids if d < vid])
+        right_deps = sorted([d for d in dids if d > vid])
+        
+        for i, d in enumerate(left_deps):
+            if i not in left_sizes: left_sizes[i] = []
+            if d in dsizes and dsizes[d] > 0:
+                left_sizes[i].append(dsizes[d])
+            
+        for i, d in enumerate(right_deps):
+            if i not in right_sizes: right_sizes[i] = []
+            if d in dsizes and dsizes[d] > 0:
+                right_sizes[i].append(dsizes[d])
+                
+    stats_html = "<div style='margin-bottom: 20px; padding: 15px; background: #f0f8ff; border-radius: 5px; border: 1px solid #d0e0f0;'>"
+    stats_html += "<h3 style='margin-top: 0; color: #0055aa;'>Geometric Mean Spans</h3>"
+    
+    # Legend
+    if global_stats:
+        stats_html += "<div style='font-size: 0.9em; color: #666; margin-bottom: 10px;'>Values: <b>Sample Mean</b> (Global Language Mean)</div>"
+    else:
+        stats_html += "<div style='font-size: 0.9em; color: #666; margin-bottom: 10px;'>Values: <b>Sample Mean</b></div>"
+    
+    has_content = False
+    
+    # Left
+    if left_sizes:
+        # Sort indices
+        indices = sorted(left_sizes.keys())
+        items = []
+        for i in indices:
+            vals = left_sizes[i]
+            if vals:
+                # GM = exp(mean(log(vals)))
+                gm = np.exp(np.mean(np.log(vals)))
+                
+                # Get global stat if available
+                global_val_str = ""
+                if global_stats:
+                    # Key is left_{i+1}
+                    key = f"left_{i+1}"
+                    if key in global_stats:
+                        global_gm = global_stats[key]
+                        global_val_str = f" <span style='color: #666; font-weight: normal;'>({global_gm:.2f})</span>"
+                
+                items.append(f"Left {i+1}: <b>{gm:.2f}</b>{global_val_str}")
+        
+        if items:
+            stats_html += f"<p><strong>Pre-verbal (X...V):</strong> {', '.join(items)}</p>"
+            has_content = True
+
+    # Right
+    if right_sizes:
+        indices = sorted(right_sizes.keys())
+        items = []
+        for i in indices:
+            vals = right_sizes[i]
+            if vals:
+                gm = np.exp(np.mean(np.log(vals)))
+                
+                # Get global stat
+                global_val_str = ""
+                if global_stats:
+                    # Key is right_{i+1}
+                    key = f"right_{i+1}"
+                    if key in global_stats:
+                        global_gm = global_stats[key]
+                        global_val_str = f" <span style='color: #666; font-weight: normal;'>({global_gm:.2f})</span>"
+                
+                items.append(f"Right {i+1}: <b>{gm:.2f}</b>{global_val_str}")
+                
+        if items:
+            stats_html += f"<p><strong>Post-verbal (V...X):</strong> {', '.join(items)}</p>"
+            has_content = True
+            
+    stats_html += "</div>"
+    
+    return stats_html if has_content else ""
+
 
 
 def load_config_examples(data_dir='data'):
@@ -24,7 +125,7 @@ def load_metadata(data_dir='data'):
         return pickle.load(f)
 
 
-def tree_dict_to_reactive_dep_tree_html(tree_dict, verb_id, dep_ids):
+def tree_dict_to_reactive_dep_tree_html(tree_dict, verb_id, dep_ids, dep_sizes=None):
     """
     Convert a tree dictionary to reactive-dep-tree HTML format.
     
@@ -36,6 +137,8 @@ def tree_dict_to_reactive_dep_tree_html(tree_dict, verb_id, dep_ids):
         1-based ID of the verb token
     dep_ids : list of int
         1-based IDs of dependent tokens
+    dep_sizes : dict, optional
+        Dictionary mapping token ID to span size
     
     Returns
     -------
@@ -53,16 +156,20 @@ def tree_dict_to_reactive_dep_tree_html(tree_dict, verb_id, dep_ids):
     lines = [f'# text = {sentence_text}']
     for i, (form, pos, head, rel) in enumerate(zip(forms, upos, heads, deprels), 1):
         # Determine highlight color: red for verb, green for dependents
+        misc_feats = []
         if i == verb_id:
-            highlight = 'highlight=red'
+            misc_feats.append('highlight=red')
         elif i in dep_ids:
-            highlight = 'highlight=green'
-        else:
-            highlight = '_'
+            misc_feats.append('highlight=green')
+            # Add span size if available
+            if dep_sizes and i in dep_sizes:
+                misc_feats.append(f'span={dep_sizes[i]}')
+        
+        misc_str = '|'.join(misc_feats) if misc_feats else '_'
         
         # Format: ID FORM LEMMA UPOS XPOS FEATS HEAD DEPREL DEPS MISC
         # Use FORM for LEMMA, UPOS for both UPOS and XPOS, highlight in MISC
-        line = f"{i}\t{form}\t{form}\t{pos}\t{pos}\t_\t{head}\t{rel}\t_\t{highlight}"
+        line = f"{i}\t{form}\t{form}\t{pos}\t{pos}\t_\t{head}\t{rel}\t_\t{misc_str}"
         lines.append(line)
     
     # Build CoNLL string without extra indentation
@@ -70,12 +177,12 @@ def tree_dict_to_reactive_dep_tree_html(tree_dict, verb_id, dep_ids):
     
     return f'''<reactive-dep-tree
   interactive="true"
-  shown-features="UPOS,LEMMA,FORM"
+  shown-features="UPOS,LEMMA,FORM,MISC.span"
   conll="{conll_str}"
 ></reactive-dep-tree>'''
 
 
-def generate_language_html(lang_code, lang_name, config_examples, output_dir='html_examples'):
+def generate_language_html(lang_code, lang_name, config_examples, lang_stats=None, output_dir='html_examples'):
     """
     Generate HTML file for one language with all its configuration examples.
     
@@ -87,6 +194,8 @@ def generate_language_html(lang_code, lang_name, config_examples, output_dir='ht
         Language name (e.g., 'Abkhaz')
     config_examples : dict
         Dictionary mapping config strings to list of example dicts
+    lang_stats : dict, optional
+        Dictionary of global average span sizes for this language
     output_dir : str
         Output directory for HTML files
     """
@@ -98,6 +207,9 @@ def generate_language_html(lang_code, lang_name, config_examples, output_dir='ht
     for config, examples in config_examples.items():
         if not examples:
             continue
+            
+        # Calculate stats for these examples, comparing with global stats
+        stats_block = calculate_position_stats(examples, global_stats=lang_stats)
         
         html_parts = []
         html_parts.append('<!DOCTYPE html>')
@@ -115,6 +227,7 @@ def generate_language_html(lang_code, lang_name, config_examples, output_dir='ht
         html_parts.append('</head>')
         html_parts.append('<body>')
         html_parts.append(f'  <h1>{lang_name} ({lang_code}): {config}</h1>')
+        html_parts.append(stats_block)
         html_parts.append(f'  <p>{len(examples)} examples</p>')
         
         for i, example in enumerate(examples, 1):
@@ -123,7 +236,8 @@ def generate_language_html(lang_code, lang_name, config_examples, output_dir='ht
             tree_html = tree_dict_to_reactive_dep_tree_html(
                 example['tree'], 
                 example['verb_id'], 
-                example['dep_ids']
+                example['dep_ids'],
+                example.get('dep_sizes')
             )
             html_parts.append(f'    {tree_html}')
             html_parts.append('  </div>')
@@ -142,9 +256,10 @@ def generate_language_html(lang_code, lang_name, config_examples, output_dir='ht
 
 def process_language(args):
     """Process a single language (for parallel execution)."""
-    lang_code, config_examples, lang_names, output_dir = args
+    lang_code, config_examples, lang_names, average_sizes_all, output_dir = args
     lang_name = lang_names.get(lang_code, lang_code)
-    generate_language_html(lang_code, lang_name, config_examples, output_dir)
+    lang_stats = average_sizes_all.get(lang_code, {})
+    generate_language_html(lang_code, lang_name, config_examples, lang_stats, output_dir)
     return lang_code
 
 
@@ -438,6 +553,16 @@ def generate_all_html(data_dir='data', output_dir='html_examples'):
     else:
         print(f"Warning: {position2num_path} not found. Counts will not be shown.")
         position2num_all = {}
+
+    print("Loading average sizes (helix stats)...")
+    avg_sizes_path = os.path.join(data_dir, 'all_langs_average_sizes.pkl')
+    if os.path.exists(avg_sizes_path):
+        with open(avg_sizes_path, 'rb') as f:
+            average_sizes_all = pickle.load(f)
+        print(f"Loaded average sizes for {len(average_sizes_all)} languages")
+    else:
+        print(f"Warning: {avg_sizes_path} not found. Global stats will not be shown.")
+        average_sizes_all = {}
     
     print(f"Generating HTML for {len(all_config_examples)} languages...")
     
@@ -446,7 +571,7 @@ def generate_all_html(data_dir='data', output_dir='html_examples'):
     
     # Prepare arguments for parallel processing
     args_list = [
-        (lang_code, config_examples, lang_names, output_dir)
+        (lang_code, config_examples, lang_names, average_sizes_all, output_dir)
         for lang_code, config_examples in all_config_examples.items()
     ]
     

@@ -8,7 +8,7 @@ This document details the complete process for generating the "Helix Table" (Ver
 - The analysis is currently performed on **Universal Dependencies (UD)** treebanks (e.g., v2.17).
 - **Language Code Identification**: Languages are identified using their ISO code (e.g., `en`, `fr`, `zh`) extracted from the CoNLL-U filename prefix.
 - **Unification**: All treebanks belonging to the same language code are combined into a single logical dataset for that language. For example, `UD_English-EWT`, `UD_English-GUM`, and `UD_English-LinES` are all unified under the `en` code.
-- **Exclusion**: Specific treebanks can be excluded via `data/excluded_treebanks.txt` (e.g., Akkadian or experimental sets).
+- **Exclusion**: Specific treebanks can be excluded via `excluded_treebanks.txt` (e.g., Akkadian or experimental sets).
 
 ### Pre-processing for Parallelism
 - Large CoNLL-U files are split into shorter segments (default: 10,000 sentences each) stored in a `_short` directory. This allows processing to be parallelized across multiple CPU cores.

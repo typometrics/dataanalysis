@@ -6,11 +6,15 @@ Functions for handling CoNLL file splitting and organization.
 
 import os
 import re
+import shutil
 from tqdm import tqdm
 
 def make_shorter_conll_files(langConllFiles, version):
     """
     Split large CoNLL files into chunks of 10,000 sentences each.
+    
+    Removes and recreates the short files directory to ensure excluded treebanks
+    are not present. Only non-excluded treebanks are processed.
     
     Parameters
     ----------
@@ -32,10 +36,19 @@ def make_shorter_conll_files(langConllFiles, version):
     if os.path.exists(excluded_file):
         with open(excluded_file, "r") as f:
             excluded_treebanks = set(line.strip() for line in f if line.strip())
+        if excluded_treebanks:
+            print(f"Excluding {len(excluded_treebanks)} treebanks: {', '.join(sorted(excluded_treebanks))}")
     
     directory = version + "_short"
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    
+    # Remove directory if it exists to ensure clean state
+    if os.path.exists(directory):
+        print(f"Removing existing directory: {directory}")
+        shutil.rmtree(directory)
+    
+    # Create fresh directory
+    os.makedirs(directory)
+    print(f"Created fresh directory: {directory}")
     
     lang2shortconll = {}
     allshortconll = []
@@ -75,6 +88,9 @@ def read_shorter_conll_files(langConllFiles, version):
     """
     Read existing shorter CoNLL files from directory.
     
+    Assumes the directory was created by make_shorter_conll_files() which
+    already excludes treebanks listed in excluded_treebanks.txt.
+    
     Parameters
     ----------
     langConllFiles : dict
@@ -87,30 +103,6 @@ def read_shorter_conll_files(langConllFiles, version):
     tuple
         (lang2shortconll, allshortconll)
     """
-    # Load excluded treebanks and build exclusion patterns
-    excluded_keywords = set()
-    excluded_file = "excluded_treebanks.txt"
-    if os.path.exists(excluded_file):
-        with open(excluded_file, "r") as f:
-            for line in f:
-                line = line.strip()
-                if line:
-                    # Extract meaningful keywords from UD treebank names
-                    # e.g., UD_French-ALTS -> fr_alts
-                    # e.g., UD_French-PoitevinDIVITAL -> fr_poitevindivital
-                    if line.startswith("UD_"):
-                        parts = line[3:].split("-")
-                        if len(parts) >= 2:
-                            lang = parts[0].lower()
-                            variant = parts[1].lower()
-                            # Create keyword: language_variant (e.g., french_alts -> fr_alts)
-                            if lang.startswith("french"):
-                                excluded_keywords.add(f"fr_{variant}")
-                            elif lang.startswith("german"):
-                                excluded_keywords.add(f"de_{variant}")
-                            # Also add the full variant
-                            excluded_keywords.add(variant.lower())
-    
     directory = version + "_short"
     if not os.path.exists(directory):
         print(f"Directory {directory} does not exist. Please run make_shorter_conll_files first.")
@@ -121,14 +113,9 @@ def read_shorter_conll_files(langConllFiles, version):
     
     for lang in langConllFiles:
         lang2shortconll[lang] = []
-        # Check if directory exists before listing (handled above but good to be safe inside loop if something weird happens)
         try:
             for shortconllfile in os.listdir(directory):
                 if shortconllfile.startswith(lang + '_'):
-                    # Check if this file matches any excluded pattern
-                    file_lower = shortconllfile.lower()
-                    if any(keyword in file_lower for keyword in excluded_keywords):
-                        continue
                     lang2shortconll[lang].append(os.path.join(directory, shortconllfile))
             allshortconll.extend(lang2shortconll[lang])
         except OSError:

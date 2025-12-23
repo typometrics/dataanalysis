@@ -1131,10 +1131,21 @@ def process_file_complete(conll_filename, include_bastards=True, compute_sentenc
                         'heads': [list(tree[i].get('gov', {}).keys())[0] if tree[i].get('gov') else 0 for i in sorted_ids],
                         'deprels': [list(tree[i].get('gov', {}).values())[0] if tree[i].get('gov') else 'root' for i in sorted_ids]
                     }
+                    
+                    # Calculate span sizes for dependents (for HTML visualization)
+                    dep_sizes = {}
+                    for kid in dep_ids:
+                        if include_bastards:
+                            span = tree[kid].get('direct_span', tree[kid]['span'])
+                        else:
+                            span = tree[kid]['span']
+                        dep_sizes[kid] = len(span)
+                        
                     config_examples[config].append({
                         'tree': tree_dict,
                         'verb_id': verb_id,
-                        'dep_ids': dep_ids
+                        'dep_ids': dep_ids,
+                        'dep_sizes': dep_sizes
                     })
                 
     return (lang, 
