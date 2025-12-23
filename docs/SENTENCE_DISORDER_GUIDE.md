@@ -79,21 +79,21 @@ The sentence-level disorder computation is now integrated into the main parallel
 
 ## Usage
 
-### Step 1: Generate sentence-level disorder data
+### Generating Sentence-Level Disorder Data
 
-Open `02_dependency_analysis.ipynb` and run section 2b:
+Open `02_dependency_analysis.ipynb` and enable disorder computation:
 
 ```python
 # Set to True to enable sentence-level disorder computation
 compute_sentence_disorder = True
 ```
 
-Run the notebook. This will:
-- Take 10-30 minutes (processes all sentences in all CoNLL files)
+Run the notebook to:
+- Process all sentences in all CoNLL files (10-30 minutes)
 - Generate `data/sentence_disorder_percentages.csv`
 - Generate `data/sentence_disorder_percentages.pkl` (containing the granular stats tree)
 
-### Step 2: Analyze results
+### Analyzing Results
 
 Open `04_data_processing.ipynb`. The notebook automatically detects `sentence_disorder_percentages.pkl` and uses the granular stats to produce continuous scatter plots.
 

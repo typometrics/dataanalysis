@@ -1,7 +1,6 @@
-# Module & File Usage Analysis
+# Pipeline Architecture & Module Dependencies
 
-**Analysis Date**: December 13, 2025  
-**Workspace**: `/bigstorage/kim/typometrics/dataanalysis`
+This document describes the current analysis pipeline architecture, module dependencies, and data flow.
 
 ## Summary
 

@@ -70,7 +70,7 @@ def tree_dict_to_reactive_dep_tree_html(tree_dict, verb_id, dep_ids):
     
     return f'''<reactive-dep-tree
   interactive="true"
-  shown-features="UPOS,LEMMA,FORM,DEPREL,MISC.highlight"
+  shown-features="UPOS,LEMMA,FORM"
   conll="{conll_str}"
 ></reactive-dep-tree>'''
 

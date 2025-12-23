@@ -227,6 +227,102 @@ config_examples[config].sort(key=lambda x: len(x['tree']['forms']))
 config_examples[config] = config_examples[config][:max_examples_per_config]
 ```
 
+## Technical Implementation
+
+### Core Processing (`conll_processing.py`)
+
+#### `extract_verb_config_examples(tree, include_bastards=False)`
+Extracts configuration string from a verb tree using the same constraints as `get_dep_sizes()`:
+- Only processes VERB governors
+- Uses same dependency relation filters (nsubj, obj, iobj, csubj, ccomp, xcomp, obl, expl, dislocated, advcl, advmod, nmod, appos, nummod, acl, amod)
+- Respects bastard inclusion flag consistently
+- Returns configuration string (e.g., "V X X" or "X X X V")
+
+#### `process_file_complete()`
+Modified to collect examples during normal processing:
+- **New parameters**: `collect_config_examples=True`, `max_examples_per_config=10`
+- Calls `extract_verb_config_examples()` after `tree.addspan()` and `get_dep_sizes()`
+- Stores simplified tree dict (forms, upos, heads, deprels, verb_id, dep_ids)
+- Limits collection to `max_examples_per_config` per configuration
+- Returns examples in expanded tuple
+
+#### `get_all_stats_parallel()`
+Aggregates examples across all files:
+- **New parameters**: `collect_config_examples=False`, `max_examples_per_config=10`
+- Merges examples from multiple files per language
+- Maintains limit of `max_examples_per_config` per configuration per language
+- Returns `all_config_examples` dict (language → config → examples)
+
+### HTML Generation (`generate_html_examples.py`)
+
+Standalone module that generates HTML from saved examples (no CoNLL parsing):
+
+**Main functions**:
+- `load_config_examples()`: Load from `data/all_config_examples.pkl`
+- `tree_dict_to_reactive_dep_tree_html()`: Convert tree dict to reactive-dep-tree format
+- `generate_language_html()`: Create HTML files for each language
+- `generate_index_html()`: Create organized index with 3-column layout
+- `generate_all_html()`: Main entry point (can use parallel processing)
+
+**Output structure**:
+```
+html_examples/
+  index.html                     # Navigation page
+  LanguageName_code/
+    V_X.html                     # Individual configurations
+    V_X_X.html
+    X_V.html
+    ...
+```
+
+### Data Extraction (`run_data_extraction.py`)
+
+The main script enables example collection:
+```python
+collect_config_examples = True
+max_examples_per_config = 10
+```
+
+Saves results to `data/all_config_examples.pkl` with structure:
+```python
+{
+  'ab': {
+    'V X X': [
+      {'tree': {...}, 'verb_id': 1, 'dep_ids': [2, 3]},
+      # ... up to 10 examples
+    ]
+  }
+}
+```
+
+## Design Principles
+
+### Guaranteed Consistency
+Examples are collected **during** constituent size computation, not separately:
+- Same loop iteration (after `tree.addspan()`, `get_dep_sizes()`)
+- Identical dependency relation filters
+- Same bastard inclusion logic
+- No risk of constraint mismatch
+
+### Minimal Storage
+Only essential fields stored per example:
+- `forms`: Word strings
+- `upos`: POS tags
+- `heads`: Head indices (1-based)
+- `deprels`: Dependency relations
+- `verb_id`, `dep_ids`: For highlighting
+
+Full Sentence objects and unnecessary metadata excluded.
+
+### Two-Phase Architecture
+1. **Collection phase** (slow, run once): Integrated into main data extraction
+2. **Generation phase** (fast, repeatable): Create HTML from saved examples
+
+Benefits:
+- HTML can be regenerated with different styling instantly
+- No duplicate CoNLL file parsing required
+- Examples always match current computation constraints
+
 ## Files Modified/Created
 
 ### Modified
@@ -243,20 +339,15 @@ config_examples[config] = config_examples[config][:max_examples_per_config]
 1. **generate_html_examples.py** - Generate HTML from saved examples
 2. **test_config_integration.py** - Test example collection
 3. **test_html_generation.py** - Test HTML generation
-4. **CONFIG_EXAMPLES_INTEGRATION.md** - Technical documentation
-5. **CONFIG_EXAMPLES_QUICKSTART.md** - This file
 
 ## Next Steps
 
 1. **Run full extraction**: `python3 run_data_extraction.py`
 2. **Generate HTML**: `python3 generate_html_examples.py`
 3. **Browse examples**: Open `html_examples/index.html`
-4. **Optional**: Update notebook to use collected examples
-5. **Optional**: Regenerate HTML with custom styling
+4. **Optional**: Regenerate HTML with custom styling (fast, no re-processing needed)
 
-## Questions?
+## Related Documentation
 
-See detailed documentation in:
-- **CONFIG_EXAMPLES_INTEGRATION.md** - Full technical details
-- **conll_processing.py** - Source code with comments
-- **generate_html_examples.py** - HTML generation code
+- [PIPELINE_ARCHITECTURE.md](PIPELINE_ARCHITECTURE.md) - Overall module dependencies
+- [HELIX_TABLE_METHODOLOGY.md](HELIX_TABLE_METHODOLOGY.md) - Dependency relation filters
