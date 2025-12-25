@@ -28,7 +28,7 @@ results = conll_processing.get_all_stats_parallel(
     include_bastards=True,
     compute_sentence_disorder=compute_sentence_disorder,
     collect_config_examples=collect_config_examples,
-    max_examples_per_config=10
+    max_examples_per_config=25
 )
 
 print("Processing complete. Unpacking results...")
@@ -55,6 +55,10 @@ with open(output_path, 'wb') as f:
 # Also save position2sizes if needed (Notebook 02 does this)
 with open(os.path.join(DATA_DIR, 'all_langs_position2sizes.pkl'), 'wb') as f:
     pickle.dump(all_langs_position2sizes, f)
+
+with open(os.path.join(DATA_DIR, 'all_langs_average_sizes.pkl'), 'wb') as f:
+    pickle.dump(all_langs_average_sizes, f)
+    print(f"Saved average sizes to {os.path.join(DATA_DIR, 'all_langs_average_sizes.pkl')}")
 
 with open(os.path.join(DATA_DIR, 'all_langs_position2num.pkl'), 'wb') as f:
     pickle.dump(all_langs_position2num, f)

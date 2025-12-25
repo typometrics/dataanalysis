@@ -222,7 +222,7 @@ class ExcelFormatter:
             os.makedirs(output_dir)
         
         wb.save(output_path)
-        print(f"Saved Excel table to {output_path}")
+
 
 
 def convert_table_to_grid_cells(table: TableStructure) -> List[List]:

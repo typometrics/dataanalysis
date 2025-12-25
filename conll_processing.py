@@ -2,6 +2,8 @@
 CoNLL file processing and dependency analysis functions.
 """
 
+import random
+import sys
 import os
 import re
 import psutil
@@ -49,10 +51,8 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
     
     for i, ki in enumerate(kids):
         # Create key for the position of the kid: from the verb to the outside nodes
-        if direction == "right":
-            key_base = f'{direction}_{i+1}'
-        else:  # left
-            key_base = f'{direction}_{len(kids)-i}'
+        # kids are always sorted closest-to-verb first (see get_dep_sizes sorting)
+        key_base = f'{direction}_{i+1}'
         
         # Update position2num: count occurrences
         position2num[key_base] = position2num.get(key_base, 0) + 1
@@ -81,6 +81,24 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
         
         if position2charsizes is not None and char_size > 0:
             position2charsizes[key_tot] = position2charsizes.get(key_tot, 0) + np.log(char_size)
+        
+        # Any-other-side key (ignoring opposite direction count)
+        key_anyother = f'{key_base}_anyother'
+        position2num[key_anyother] = position2num.get(key_anyother, 0) + 1
+        if size > 0:
+            position2sizes[key_anyother] = position2sizes.get(key_anyother, 0) + np.log(size)
+        
+        if position2charsizes is not None and char_size > 0:
+            position2charsizes[key_anyother] = position2charsizes.get(key_anyother, 0) + np.log(char_size)
+        
+        # Any-other-side key WITH tot (for diagonal factors)
+        key_anyother_tot = f'{key_base}_anyother_tot{direction}_{len(kids)}'
+        position2num[key_anyother_tot] = position2num.get(key_anyother_tot, 0) + 1
+        if size > 0:
+            position2sizes[key_anyother_tot] = position2sizes.get(key_anyother_tot, 0) + np.log(size)
+        
+        if position2charsizes is not None and char_size > 0:
+            position2charsizes[key_anyother_tot] = position2charsizes.get(key_anyother_tot, 0) + np.log(char_size)
         
         kids_sizes.append(size)
     
@@ -478,8 +496,14 @@ def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None,
             if position2charsizes is not None and l_char_size > 0:
                 position2charsizes[kl] = position2charsizes.get(kl, 0) + np.log(l_char_size)
             
-            # Right
-            kr = 'xvx_right_1'
+            # XVX any-other-side (for bilateral configurations)
+            kl_anyother = 'xvx_left_1_anyother'
+            position2num[kl_anyother] = position2num.get(kl_anyother, 0) + 1
+            if l_size > 0:
+                position2sizes[kl_anyother] = position2sizes.get(kl_anyother, 0) + np.log(l_size)
+            if position2charsizes is not None and l_char_size > 0:
+                position2charsizes[kl_anyother] = position2charsizes.get(kl_anyother, 0) + np.log(l_char_size)
+            
             # Right
             kr = 'xvx_right_1'
             position2num[kr] = position2num.get(kr, 0) + 1
@@ -487,6 +511,14 @@ def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None,
                 position2sizes[kr] = position2sizes.get(kr, 0) + np.log(r_size)
             if position2charsizes is not None and r_char_size > 0:
                 position2charsizes[kr] = position2charsizes.get(kr, 0) + np.log(r_char_size)
+            
+            # XVX any-other-side right
+            kr_anyother = 'xvx_right_1_anyother'
+            position2num[kr_anyother] = position2num.get(kr_anyother, 0) + 1
+            if r_size > 0:
+                position2sizes[kr_anyother] = position2sizes.get(kr_anyother, 0) + np.log(r_size)
+            if position2charsizes is not None and r_char_size > 0:
+                position2charsizes[kr_anyother] = position2charsizes.get(kr_anyother, 0) + np.log(r_char_size)
 
             # Average key for XVX totals? (Maybe needed for consistency)
             # 'average_xvx_left_1', 'average_xvx_right_1'
@@ -1017,10 +1049,34 @@ def extract_verb_config_examples(tree, include_bastards=False):
         # Create configuration string
         left_str = 'X' * len(left_kids)
         right_str = 'X' * len(right_kids)
-        config = left_str + 'V' + right_str
+        config_exact = left_str + 'V' + right_str
         
-        # Store config, verb ID, and all relevant dependent IDs
-        examples.append((config, head, relevant_kids))
+        # Store exact config, verb ID, and all relevant dependent IDs
+        examples.append((config_exact, head, relevant_kids))
+        
+        # Also store partial configs (any-other-side patterns)
+        if right_kids and not left_kids:
+            # VXX -> VXX_anyleft (no left now, but matches any left)
+            config_partial = 'V' + right_str + '_anyleft'
+            examples.append((config_partial, head, relevant_kids))
+        
+        if left_kids and not right_kids:
+            # XXV -> XXV_anyright (no right now, but matches any right)
+            config_partial = left_str + 'V' + '_anyright'
+            examples.append((config_partial, head, relevant_kids))
+        
+        if left_kids and right_kids:
+            # XXVXX -> both VXX_anyleft and XXV_anyright
+            config_right_partial = 'V' + right_str + '_anyleft'
+            examples.append((config_right_partial, head, relevant_kids))
+            
+            config_left_partial = left_str + 'V' + '_anyright'
+            examples.append((config_left_partial, head, relevant_kids))
+            
+            # Also add anyboth pattern for bilateral
+            if len(left_kids) == 1 and len(right_kids) == 1:
+                config_both = 'XVX_anyboth'
+                examples.append((config_both, head, relevant_kids))
     
     return examples
 
@@ -1145,7 +1201,8 @@ def process_file_complete(conll_filename, include_bastards=True, compute_sentenc
                         'tree': tree_dict,
                         'verb_id': verb_id,
                         'dep_ids': dep_ids,
-                        'dep_sizes': dep_sizes
+                        'dep_sizes': dep_sizes,
+                        'source_file': os.path.basename(conll_filename)
                     })
                 
     return (lang, 
@@ -1301,13 +1358,20 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
                     if config not in all_config_examples[lang]:
                         all_config_examples[lang][config] = []
                     
-                    # Keep up to max_examples_per_config per language per config
-                    curr_len = len(all_config_examples[lang][config])
-                    if curr_len < max_examples_per_config:
-                        needed = max_examples_per_config - curr_len
-                        all_config_examples[lang][config].extend(examples[:needed])
+                    # Collect ALL examples first to ensure distribution across files
+                    all_config_examples[lang][config].extend(examples)
 
     # Post-processing
+    
+    # 0. Shuffle and truncate config examples
+    if collect_config_examples and all_config_examples:
+        for lang, configs in all_config_examples.items():
+            for config, examples in configs.items():
+                if len(examples) > max_examples_per_config:
+                    # Deterministic shuffle for reproducibility
+                    random.Random(42).shuffle(examples)
+                    # Truncate
+                    all_config_examples[lang][config] = examples[:max_examples_per_config]
     
     # 1. Average sizes
     for lang in all_langs_position2sizes:

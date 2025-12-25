@@ -10,7 +10,9 @@ The output is a table where:
 - Columns represent positions away from the verb (e.g., L1 is adjacent to V, L2 is second from V).
 - Rows represent the complexity of the construction (Total Dependents).
 
-Example Layout:
+### Standard Helix Tables
+
+Example Layout for exact configurations:
 ```
       L2  L1   V   R1  R2
 --------------------------
@@ -20,19 +22,54 @@ R tot=1:           V   X
 R tot=2:           V   X   X
 ```
 
+### AnyOtherSide Helix Tables
+
+In addition to exact configurations, the analysis generates **AnyOtherSide** tables showing patterns where one direction is ignored:
+
+Example Layout for partial configurations:
+```
+... V X X X X    4.05  →1.33  5.40  →1.18  6.35  →1.08  6.85
+                       ↘1.11        ↘1.14        ↘0.99
+... V X X X      4.05  →1.33  5.40  →1.18  6.35
+                       ↘1.11        ↘1.14
+... V X X        4.05  →1.33  5.40
+                       ↘1.11
+... V X          4.05
+... X V X ...    1.63  V      →3.63  5.93
+X V ...          1.59
+                 ↘1.31
+X X V ...        2.22  ←1.40  1.59
+                 ↘1.13        ↘1.31
+X X X V ...      2.66  ←1.20  2.22  ←1.40  1.59
+```
+
+These tables capture patterns where one side's complexity varies independently of the other, while preserving the tot dimension for diagonal factor computation.
+
+**Key Features**:
+- **Horizontal Factors** (→/←): Growth between adjacent positions (e.g., R1→R2)
+- **Diagonal Factors** (↘): Growth across tot levels (e.g., R2 at tot=2 vs R1 at tot=1)
+- **Tot Preservation**: Each row represents a specific tot value on the measured side, with any value on the opposite side
+
 ## Modules
 
-The implementation relies on two main files:
+The implementation relies on several main files:
 
 1.  **`verb_centered_analysis.py`**:
-    -   **`compute_average_sizes_table(all_langs_average_sizes_filtered)`**: Aggregates data and calculates simple averages for each position/total configuration.
-    -   **`format_verb_centered_table(...)`**: Formats the averages into a readable text table and optionally a TSV file. Handles various display options (factors, arrows).
+    -   **`compute_average_sizes_table(all_langs_average_sizes_filtered)`**: Aggregates data and calculates averages for each exact position/total configuration.
+    -   **`compute_anyotherside_sizes_table(all_langs_average_sizes)`**: Aggregates data for partial configurations (anyother statistics).
+    -   **`generate_mass_tables(...)`**: Generates all table variants (global, individual, family, order, anyotherside).
+    -   **`generate_anyotherside_helix_tables(...)`**: Generates AnyOtherSide tables with proper formatting.
+    -   **`format_verb_centered_table(...)`**: Formats tables into readable text/TSV/XLSX. Handles various display options (factors, arrows).
 
-2.  **`04_data_processing.ipynb`** (Cell "Verb-Centered Constituent Size Analysis"):
+2.  **`conll_processing.py`**:
+    -   Collects both exact and anyother statistics during tree traversal
+    -   Keys with `_anyother` suffix for aggregated partial configurations
+    -   Keys with `_anyother_totright_N` and `_anyother_totleft_N` for tot-specific statistics (enables diagonal factors)
+
+3.  **`04_data_processing.ipynb`** (Cell "Generate Helix Tables"):
     -   Loads the dataset.
-    -   Calls `compute_average_sizes_table`.
-    -   Calls `format_verb_centered_table` with desired options (factors, diagonals, disorder percentages).
-    -   Saves the output to `data/verb_centered_table.txt`.
+    -   Calls `generate_mass_tables` to create all table variants.
+    -   Saves outputs to `data/tables/` directory.
 
 ## Visualization Options
 

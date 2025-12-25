@@ -120,7 +120,7 @@ def plot_mal_heatmap(mal_data, figsize=(12, 10), cmap="coolwarm"):
 
 def plot_scatter_2d(df, x_col, y_col, group_col, appearance_dict, 
                    title="", xlabel="", ylabel="", figsize=(10, 8), label_col=None, with_labels=True,
-                   add_diagonal=False, add_regression=False):
+                   add_diagonal=False, add_regression=False, show_inline=True):
     """
     Create a 2D scatter plot colored by language group.
     
@@ -148,6 +148,8 @@ def plot_scatter_2d(df, x_col, y_col, group_col, appearance_dict,
         Whether to add a dashed diagonal line (y=x)
     add_regression : bool
         Whether to add a linear regression trend line and average ratio
+    show_inline : bool
+        Whether to show the plot inline. If False, returns the current axes.
     """
     plt.figure(figsize=figsize)
     
@@ -176,7 +178,11 @@ def plot_scatter_2d(df, x_col, y_col, group_col, appearance_dict,
         adjust_text_labels(df, x_col, y_col, label_col, ax=plt.gca())
         
     plt.tight_layout()
-    plt.show()
+    
+    if show_inline:
+        plt.show()
+    else:
+        return plt.gca()
 
 
 def plot_scatter_3d(df, x_col, y_col, z_col, group_col, appearance_dict,
@@ -1819,3 +1825,62 @@ def plot_disorder_metrics_vs_vo(disorder_df, langnameGroup, appearance_dict,
             print(f"  ✗ {message}")
     
     return saved_plots
+
+
+def plot_word_vs_letter_size(df_size, group_to_color, figsize=(12, 10)):
+    """
+    Plot Average Constituent Size: Words vs Letters with standard configuration.
+    
+    Parameters
+    ----------
+    df_size : pandas.DataFrame
+        DataFrame with columns 'Avg Word Size', 'Avg Letter Size', 'Group', 'Language'
+    group_to_color : dict
+        Mapping from group names to colors
+    figsize : tuple
+        Figure size
+    """
+    import matplotlib.pyplot as plt
+    from scipy import stats
+    
+    # 1. Standard Scatter Plot with regression using plotting.py configuration
+    # We call with show_inline=False to add more elements before showing
+    ax = plot_scatter_2d(
+        df_size, 
+        x_col='Avg Word Size', 
+        y_col='Avg Letter Size', 
+        group_col='Group',
+        appearance_dict=group_to_color,
+        title='Average Constituent Size: Words vs Letters',
+        xlabel='Average Constituent Size (Word Count)',
+        ylabel='Average Constituent Size (Letter Count)',
+        label_col='Language',
+        with_labels=True,
+        figsize=figsize,
+        add_diagonal=False, # Disable diagonal y=x as scales are different (words vs letters)
+        add_regression=True,
+        show_inline=False
+    )
+    
+    # 2. Add Average Ratio Lines (Specific to this plot)
+    avg_ratio = (df_size['Avg Letter Size'] / df_size['Avg Word Size']).mean()
+    # Calculate limits based on X-axis data only to avoid extending the plot unnecessarily
+    limit_x = df_size['Avg Word Size'].max() * 1.1
+    
+    # Use plt directly as plot_scatter_2d sets current figure active
+    plt.plot([0, limit_x], [0, limit_x * avg_ratio], linestyle='--', color='blue', linewidth=2, alpha=0.7, label=f'Avg Ratio (y={avg_ratio:.2f}x)')
+    
+    # 3. Add Diagonal (y=x) - Clipped to data range to avoid distorting the plot
+    plt.plot([0, limit_x], [0, limit_x], linestyle=':', color='gray', linewidth=2, alpha=0.7, label='Diagonal (y=x)')
+    
+    # Re-adding legend to include new line
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+
+    plt.tight_layout()
+    plt.show()
+    
+    # Print detailed stats for the notebook output
+    slope, intercept, r_value, p_value, std_err = stats.linregress(df_size['Avg Word Size'], df_size['Avg Letter Size'])
+    print(f"Regression: y = {slope:.4f}x + {intercept:.4f}")
+    print(f"R-squared: {r_value**2:.4f}")
+    print(f"Average Letter/Word Ratio: {avg_ratio:.4f}")

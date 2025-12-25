@@ -499,8 +499,12 @@ class Tree(dict):
 	
 
 def update(d, u):
+	try:
+		from collections.abc import Mapping
+	except ImportError:
+		from collections import Mapping
 	for k, v in u.items():
-		if isinstance(v, collections.abc.Mapping):
+		if isinstance(v, Mapping):
 			r = update(d.get(k, {}), v)
 			d[k] = r
 		else:

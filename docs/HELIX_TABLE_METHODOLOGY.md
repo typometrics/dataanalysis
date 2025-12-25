@@ -35,6 +35,28 @@ The Helix Table organizes data by **Side** and **Total Dependents**:
 - **Total (Tot)**: The number of dependents on that side of the verb ($tot \in \{1, 2, 3, 4\}$).
 - **Position (Pos)**: The index of the dependent relative to the verb (1 = adjacent, 2 = one word away, etc.).
 
+#### Exact vs. Partial Configurations
+
+**Exact Configurations** (Standard Helix Tables):
+- Match specific counts on both sides (e.g., VXX = 0 left, 2 right)
+- Keys like `right_2_totright_2`, `left_3_totleft_3`
+
+**Partial Configurations** (AnyOtherSide Tables):
+- Match one side exactly while **ignoring** the opposite side (not requiring it to be zero)
+- Preserve tot dimension on the measured side for diagonal factor computation
+- Three types:
+  - **Any-Left** (`... V X X`): Any number of left dependents, N right dependents
+    - Example: `VXX_anyleft` includes all verbs with exactly 2 right dependents, regardless of whether they have 0, 1, 2, or more left dependents
+    - Keys: `right_2_anyother` (aggregated), `right_2_anyother_totright_2` (with tot for diagonals)
+  - **Any-Right** (`X X V ...`): N left dependents, any number of right dependents
+    - Example: `XXV_anyright` includes all verbs with exactly 2 left dependents, regardless of right side
+    - Keys: `left_2_anyother` (aggregated), `left_2_anyother_totleft_2` (with tot for diagonals)
+  - **Any-Both** (`... X V X ...`): Bilateral with any total counts
+    - Example: `XVX_anyboth` includes all verbs with 1 dependent on each side, any totals
+    - Keys like `xvx_left_1_anyother`, `xvx_right_1_anyother`
+
+These partial configurations capture patterns where one direction's complexity matters independently of the other, providing a more nuanced view of language structure. The tot dimension is preserved for the measured side, enabling diagonal growth factor computation just as in standard Helix tables.
+
 ### Geometric Mean (GM)
 To account for the non-linear distribution of constituent sizes, **Geometric Means** are used instead of arithmetic averages for all aggregations:
 - **Size GM**: $\exp(\text{mean}(\ln(\text{sizes})))$
@@ -74,3 +96,73 @@ When `show_marginal_means=True` (default), two summary rows are generated for ea
 ### Output Formats
 - **Text/TSV**: Fixed-width text for reports and tab-separated values for further analysis.
 - **Excel (.xlsx)**: A high-fidelity, styled grid with color-coded highlighting for factors and marginal means.
+
+## 4. AnyOtherSide Helix Tables
+
+In addition to standard Helix tables, the pipeline generates **AnyOtherSide** tables that show constituent sizes for partial configurations.
+
+### Table Structure
+AnyOtherSide tables use the same format as standard Helix tables but with special row labels using the "..." notation:
+
+**Upper Section** (Any-Left patterns):
+```
+... V X X X X    [sizes for position 1-4 with any left]
+                 [diagonal factors: ↘1.XX  ↘1.XX  ↘1.XX]
+... V X X X      [sizes for position 1-3 with any left]
+                 [diagonal factors: ↘1.XX  ↘1.XX]
+... V X X        [sizes for position 1-2 with any left]
+                 [diagonal factors: ↘1.XX]
+... V X          [sizes for position 1 with any left]
+```
+
+**Middle Row** (Any-Both pattern):
+```
+... X V X ...    [bilateral sizes with any totals]
+```
+
+**Lower Section** (Any-Right patterns):
+```
+X V ...          [sizes for position 1 with any right]
+                 [diagonal factors: ↘1.XX]
+X X V ...        [sizes for position 1-2 with any right]
+                 [diagonal factors: ↘1.XX  ↘1.XX]
+X X X V ...      [sizes for position 1-3 with any right]
+                 [diagonal factors: ↘1.XX  ↘1.XX  ↘1.XX]
+X X X X V ...    [sizes for position 1-4 with any right]
+```
+
+### Tot Dimension Preservation
+Unlike the aggregated `_anyother` keys (e.g., `right_2_anyother`), which combine all tot levels, AnyOtherSide tables **preserve the tot dimension for the measured side**:
+- Each row represents verbs with exactly N dependents on the measured side (tot=N)
+- The opposite side can have any count (hence "any other side")
+- Keys like `right_2_anyother_totright_2` track position 2 when tot=2 on the right side
+- This enables **diagonal growth factors** comparing R2 at tot=2 vs R1 at tot=1
+
+### Growth Factors
+AnyOtherSide tables include both types of growth factors:
+
+**Horizontal Factors** (→ or ←):
+- Compare adjacent positions at the same tot level
+- Right side: R1 → R2 → R3 (moving outward from verb)
+- Left side: L3 ← L2 ← L1 (moving outward from verb)
+- Computed from aggregated `_anyother` keys
+
+**Diagonal Factors** (↘):
+- Compare same position across different tot levels
+- Right side: R2 at tot=2 vs R1 at tot=1, R3 at tot=3 vs R2 at tot=2
+- Left side: L2 at tot=2 vs L1 at tot=1, L3 at tot=3 vs L2 at tot=2
+- Computed from `_anyother_totright_N` and `_anyother_totleft_N` keys
+- Show growth as constructions increase in complexity
+
+### Generation
+- Function: `generate_anyotherside_helix_tables()` in `verb_centered_analysis.py`
+- Computation: `compute_anyotherside_sizes_table()` computes both aggregated and tot-specific statistics
+- Generated for all languages during mass table generation
+- Saved as `Helix_{LanguageName}_{code}_AnyOtherSide.tsv` and `.xlsx` (note: "AnyOtherSide" suffix for better sorting)
+- Includes both horizontal and diagonal growth factors
+
+### Use Cases
+- Analyzing asymmetric dependencies where one side's complexity varies independently
+- Comparing languages where one direction shows consistent patterns regardless of the other
+- Identifying universal trends that hold across different construction complexities
+- Studying how constituent size grows with construction complexity (diagonal factors) independent of the opposite side

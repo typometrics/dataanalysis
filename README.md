@@ -11,6 +11,7 @@ This pipeline processes Universal Dependencies treebanks to compute linguistic m
 - **Hierarchical Complexity Score (HCS)** - Growth factors between adjacent positions
 - **Constituent disorder** - Violations of monotonic ordering patterns
 - **Bastard dependencies** - Discontinuous dependency structures
+- **AnyOtherSide patterns** - Partial configurations ignoring one direction
 
 ## Analysis Pipeline
 
@@ -42,9 +43,10 @@ This pipeline processes Universal Dependencies treebanks to compute linguistic m
 **4. `04_data_processing.ipynb`** - Factor Computation
    - Computes HCS (Hierarchical Complexity Score) factors
    - Generates diagonal growth factors (cross-position comparisons)
-   - Creates verb-centered constituent size tables
+   - Creates verb-centered constituent size tables (standard and AnyOtherSide)
    - Analyzes constituent disorder patterns (ordered vs. disordered)
    - Merges with head-initiality data
+   - Generates configuration example HTML visualizations
 
 **5. `05_comparative_visualization.ipynb`** - Comprehensive Plotting
    - Generates ~200+ scatter plots (MAL, HCS, DIAG types)
@@ -79,8 +81,10 @@ This pipeline processes Universal Dependencies treebanks to compute linguistic m
 - `read_shorter_conll_files()` - Reads processed chunks
 
 **`conll_processing.py`** - CoNLL-U File Processing (Main Workhorse)
-- `get_dep_sizes()` - Extracts dependency sizes from tree structures
+- `get_dep_sizes()` - Extracts dependency sizes from tree structures (exact and anyother configurations)
+- `process_kids()` - Records position statistics including `_anyother` and `_anyother_totright_N`/`_anyother_totleft_N` keys
 - `get_all_stats_parallel()` - Unified parallel processing (dependencies, VO/HI, bastards, disorder)
+- `extract_verb_config_examples()` - Collects example sentences for configurations (exact and partial)
 - `get_bastard_stats()` - Identifies discontinuous dependencies
 - `get_vo_hi_stats()` - Computes verb-object and head-initiality metrics
 - `get_sentence_disorder()` - Checks for disordered constituent patterns
@@ -115,9 +119,19 @@ This pipeline processes Universal Dependencies treebanks to compute linguistic m
 
 **`verb_centered_analysis.py`** - Verb-Centered Tables (Wrapper)
 - `create_verb_centered_table()` - Unified entry point for table creation
+- `compute_average_sizes_table()` - Aggregates exact configuration statistics
+- `compute_anyotherside_sizes_table()` - Aggregates partial configuration statistics (with tot dimension for diagonal factors)
+- `generate_mass_tables()` - Generates all table variants (global, individual, family, order, anyotherside)
+- `generate_anyotherside_helix_tables()` - Generates AnyOtherSide tables with horizontal and diagonal growth factors (TSV/XLSX)
+- `build_anyotherside_table_structure()` - Creates table structure with factor rows for partial configurations
 - `format_verb_centered_table()` - Formats tables as text/TSV
 - `extract_verb_centered_grid()` - Extracts grid structure
 - *Note: Uses `verb_centered_model`, `verb_centered_builder`, and `verb_centered_formatters` internally.*
+
+**`generate_html_examples.py`** - Configuration Example Visualizations
+- `generate_all_html()` - Creates HTML files from collected examples
+- `classify_configuration()` - Determines config type (exact, partial_left, partial_right, partial_both)
+- `calculate_position_stats()` - Computes statistics with conditional display for partial configs
 
 ### Visualization
 
@@ -179,16 +193,21 @@ Based on recent cleanup:
   - `metadata.pkl` - Language mappings and configuration
   - `all_langs_position2num.pkl` - Occurrence counts per position
   - `all_langs_position2sizes.pkl` - Raw size distributions
-  - `all_langs_average_sizes.pkl` - Average sizes per position (filtered)
+  - `all_langs_average_sizes.pkl` - Average sizes per position (exact and anyother)
+  - `all_config_examples.pkl` - Configuration examples (exact and partial)
   - `lang2MAL.pkl` - Mean Aggregate Length per language
   - `vo_vs_hi_scores.csv` - VO and head-initiality scores
   - `hcs_factors.csv` - Hierarchical Complexity Scores
   - `sentence_disorder_percentages.csv` / `.pkl` - Sentence-level disorder data
   - `verb_centered_table.txt` / `.csv` - Verb-centered constituent tables
+  - `tables/` - Generated Helix tables (standard and AnyOtherSide, TSV/XLSX)
 
 
 ### Output Data
 - **`plots/`** - Main visualization output (scatter plots, MAL, HCS, DIAG)
+- **`html_examples/`** - Interactive configuration example visualizations
+  - Organized by language with index page
+  - Exact configs (VXX, XXV) and partial configs (VXX_anyleft, XXV_anyright, XVX_anyboth)
 - **`regplots/`** - Regression plot variants
 - **`IE-plots/`, `IE-regplots/`** - Indo-European language subset
 - **`noIE-plots/`, `noIE-regplots/`** - Non-Indo-European subset

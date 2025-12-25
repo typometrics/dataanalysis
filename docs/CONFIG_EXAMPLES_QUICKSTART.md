@@ -71,6 +71,26 @@ Click on any configuration to see interactive dependency trees with:
 - **Green highlighting**: Dependent nodes (using MISC.highlight=green)
 - **Interactive visualization**: Using reactive-dep-tree with proper CoNLL-U format
 
+### Configuration Types
+
+The generated HTML includes both **exact** and **partial** configurations:
+
+**Exact Configurations** (e.g., `V_X_X.html`):
+- Match specific left and right dependent counts
+- Example: VXX = 0 left, 2 right dependents
+
+**Partial Configurations** (e.g., `V_X_X_anyleft.html`):
+- Match one side exactly while ignoring the other
+- Three types:
+  - **anyleft** (e.g., `VXX_anyleft`): 2 right dependents, any left dependents
+    - HTML shows **only right side** constituents
+  - **anyright** (e.g., `XXV_anyright`): 2 left dependents, any right dependents
+    - HTML shows **only left side** constituents
+  - **anyboth** (e.g., `XVX_anyboth`): 1 dependent each side, any totals
+    - HTML shows **both sides**
+
+This provides a more complete view of language patterns where one direction's structure matters independently of the other.
+
 ## Testing
 
 Test the integration with a small subset:

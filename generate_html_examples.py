@@ -11,10 +11,42 @@ from tqdm import tqdm
 import numpy as np
 
 
-def calculate_position_stats(examples, global_stats=None):
+
+def parse_config_structure(config):
+    """
+    Parse configuration string to get left and right dependent counts.
+    Handles both exact configs (VXX, XXV) and partial configs (VXX_anyleft, XXV_anyright).
+    """
+    if 'V' not in config:
+        return 0, 0
+    
+    # Strip partial suffixes if present
+    base_config = config.split('_')[0]
+    
+    v_index = base_config.index('V')
+    # Count X's (assuming X represents a dependent)
+    left_count = base_config[:v_index].count('X')
+    right_count = base_config[v_index+1:].count('X')
+    return left_count, right_count
+
+
+def calculate_position_stats(examples, global_stats=None, l_count=0, r_count=0, config_type='exact'):
     """
     Calculate geometric mean of span sizes for each position (Left/Right) across all examples.
     Optionally compare with global stats.
+    
+    Parameters
+    ----------
+    examples : list
+        List of example dictionaries
+    global_stats : dict
+        Global statistics from Helix table
+    l_count : int
+        Number of left dependents in base configuration
+    r_count : int
+        Number of right dependents in base configuration
+    config_type : str
+        One of: 'exact', 'partial_left', 'partial_right', 'partial_both'
     """
     left_sizes = {}  # index -> list of sizes
     right_sizes = {} # index -> list of sizes
@@ -47,62 +79,151 @@ def calculate_position_stats(examples, global_stats=None):
     stats_html = "<div style='margin-bottom: 20px; padding: 15px; background: #f0f8ff; border-radius: 5px; border: 1px solid #d0e0f0;'>"
     stats_html += "<h3 style='margin-top: 0; color: #0055aa;'>Geometric Mean Spans</h3>"
     
-    # Legend
+    # Legend with config type explanation
+    context_str = ""
+    config_desc = ""
+    
+    if config_type == 'partial_left':
+        config_desc = f"<div style='color: #d87000; margin-bottom: 10px; font-style: italic;'>⚠ Partial Configuration: {l_count} left dependents, any right side</div>"
+        context_str = f"L={l_count}, any R"
+    elif config_type == 'partial_right':
+        config_desc = f"<div style='color: #d87000; margin-bottom: 10px; font-style: italic;'>⚠ Partial Configuration: {r_count} right dependents, any left side</div>"
+        context_str = f"any L, R={r_count}"
+    elif config_type == 'partial_both':
+        config_desc = f"<div style='color: #d87000; margin-bottom: 10px; font-style: italic;'>⚠ Partial Configuration: At least 1 left AND 1 right, any totals</div>"
+        context_str = "bilateral, any totals"
+    else:
+        # Exact config
+        if l_count == 1 and r_count == 1:
+            context_str = "XVX Context"
+        elif l_count > 0 or r_count > 0:
+            parts = []
+            if l_count: parts.append(f"L={l_count}")
+            if r_count: parts.append(f"R={r_count}")
+            context_str = "Totals: " + ", ".join(parts)
+    
+    if config_desc:
+        stats_html += config_desc
+
+    global_label = f"Global Helix Mean [{context_str}]" if context_str else "Global Language Mean"
+
     if global_stats:
-        stats_html += "<div style='font-size: 0.9em; color: #666; margin-bottom: 10px;'>Values: <b>Sample Mean</b> (Global Language Mean)</div>"
+        stats_html += f"<div style='font-size: 0.9em; color: #666; margin-bottom: 10px;'>Values: <b>Sample Mean</b> ({global_label})</div>"
     else:
         stats_html += "<div style='font-size: 0.9em; color: #666; margin-bottom: 10px;'>Values: <b>Sample Mean</b></div>"
     
     has_content = False
     
+    # For partial configs, only show the relevant side
+    show_left = (config_type in ['exact', 'both', 'partial_left', 'partial_both'])
+    show_right = (config_type in ['exact', 'both', 'partial_right', 'partial_both'])
+    
     # Left
-    if left_sizes:
-        # Sort indices
+    if left_sizes and show_left:
+        # Sort indices (0 is furthest from V)
         indices = sorted(left_sizes.keys())
         items = []
+        
+        # Build structure string e.g. (X_2 X_1 V)
+        struct_parts = []
+        for i in indices:
+            dist = l_count - i
+            struct_parts.append(f"X<sub>{dist}</sub>")
+        struct_parts.append("V")
+        struct_str = " ".join(struct_parts)
+        
         for i in indices:
             vals = left_sizes[i]
             if vals:
                 # GM = exp(mean(log(vals)))
                 gm = np.exp(np.mean(np.log(vals)))
                 
+                # Distance from V (1-based)
+                dist = l_count - i
+                
                 # Get global stat if available
                 global_val_str = ""
                 if global_stats:
-                    # Key is left_{i+1}
-                    key = f"left_{i+1}"
+                    # For partial configs, use anyother key
+                    if config_type == 'partial_left':
+                        key = f"left_{dist}_anyother"
+                    elif config_type == 'partial_both' and l_count == 1 and r_count == 1:
+                        key = "xvx_left_1_anyother"
+                    else:
+                        # Default: Aggregate for this distance
+                        key = f"left_{dist}"
+                        
+                        # Specific: XVX
+                        if l_count == 1 and r_count == 1 and dist == 1:
+                            xvx_key = "xvx_left_1"
+                            if xvx_key in global_stats:
+                                key = xvx_key
+                        # Specific: Total Length
+                        elif l_count > 0:
+                             tot_key = f"left_{dist}_totleft_{l_count}"
+                             if tot_key in global_stats:
+                                 key = tot_key
+                    
                     if key in global_stats:
                         global_gm = global_stats[key]
                         global_val_str = f" <span style='color: #666; font-weight: normal;'>({global_gm:.2f})</span>"
                 
-                items.append(f"Left {i+1}: <b>{gm:.2f}</b>{global_val_str}")
+                items.append(f"X<sub>{dist}</sub>: <b>{gm:.2f}</b>{global_val_str}")
         
         if items:
-            stats_html += f"<p><strong>Pre-verbal (X...V):</strong> {', '.join(items)}</p>"
+            stats_html += f"<p><strong>Pre-verbal ({struct_str}):</strong> {', '.join(items)}</p>"
             has_content = True
 
     # Right
-    if right_sizes:
+    if right_sizes and show_right:
         indices = sorted(right_sizes.keys())
         items = []
+        
+        # Build structure string e.g. (V X_1 X_2)
+        struct_parts = ["V"]
+        for i in indices:
+            dist = i + 1
+            struct_parts.append(f"X<sub>{dist}</sub>")
+        struct_str = " ".join(struct_parts)
+        
         for i in indices:
             vals = right_sizes[i]
             if vals:
                 gm = np.exp(np.mean(np.log(vals)))
                 
+                dist = i + 1
+                
                 # Get global stat
                 global_val_str = ""
                 if global_stats:
-                    # Key is right_{i+1}
-                    key = f"right_{i+1}"
+                    # For partial configs, use anyother key
+                    if config_type == 'partial_right':
+                        key = f"right_{dist}_anyother"
+                    elif config_type == 'partial_both' and l_count == 1 and r_count == 1:
+                        key = "xvx_right_1_anyother"
+                    else:
+                        # Default: Aggregate
+                        key = f"right_{dist}"
+                        
+                        # Specific: XVX
+                        if l_count == 1 and r_count == 1 and dist == 1:
+                            xvx_key = "xvx_right_1"
+                            if xvx_key in global_stats:
+                                key = xvx_key
+                        # Specific: Total Length
+                        elif r_count > 0:
+                             tot_key = f"right_{dist}_totright_{r_count}"
+                             if tot_key in global_stats:
+                                 key = tot_key
+
                     if key in global_stats:
                         global_gm = global_stats[key]
                         global_val_str = f" <span style='color: #666; font-weight: normal;'>({global_gm:.2f})</span>"
                 
-                items.append(f"Right {i+1}: <b>{gm:.2f}</b>{global_val_str}")
+                items.append(f"X<sub>{dist}</sub>: <b>{gm:.2f}</b>{global_val_str}")
                 
         if items:
-            stats_html += f"<p><strong>Post-verbal (V...X):</strong> {', '.join(items)}</p>"
+            stats_html += f"<p><strong>Post-verbal ({struct_str}):</strong> {', '.join(items)}</p>"
             has_content = True
             
     stats_html += "</div>"
@@ -174,11 +295,12 @@ def tree_dict_to_reactive_dep_tree_html(tree_dict, verb_id, dep_ids, dep_sizes=N
     
     # Build CoNLL string without extra indentation
     conll_str = '\n'.join(lines)
+    conll_str_escaped = conll_str.replace('"', '&quot;')
     
     return f'''<reactive-dep-tree
   interactive="true"
   shown-features="UPOS,LEMMA,FORM,MISC.span"
-  conll="{conll_str}"
+  conll="{conll_str_escaped}"
 ></reactive-dep-tree>'''
 
 
@@ -209,7 +331,15 @@ def generate_language_html(lang_code, lang_name, config_examples, lang_stats=Non
             continue
             
         # Calculate stats for these examples, comparing with global stats
-        stats_block = calculate_position_stats(examples, global_stats=lang_stats)
+        l_count, r_count = parse_config_structure(config)
+        config_class = classify_configuration(config)
+        stats_block = calculate_position_stats(
+            examples, 
+            global_stats=lang_stats, 
+            l_count=l_count, 
+            r_count=r_count,
+            config_type=config_class
+        )
         
         html_parts = []
         html_parts.append('<!DOCTYPE html>')
@@ -232,7 +362,9 @@ def generate_language_html(lang_code, lang_name, config_examples, lang_stats=Non
         
         for i, example in enumerate(examples, 1):
             html_parts.append(f'  <div class="example">')
-            html_parts.append(f'    <div class="example-number">Example {i}</div>')
+            source_file = example.get('source_file', '')
+            source_html = f' <span style="font-weight:normal; font-size:0.9em; color:#888;">({source_file})</span>' if source_file else ''
+            html_parts.append(f'    <div class="example-number">Example {i}{source_html}</div>')
             tree_html = tree_dict_to_reactive_dep_tree_html(
                 example['tree'], 
                 example['verb_id'], 
@@ -265,24 +397,34 @@ def process_language(args):
 
 def classify_configuration(config):
     """
-    Classify configuration as left-only, right-only, or both.
+    Classify configuration as left-only, right-only, both, or partial.
     
     Parameters
     ----------
     config : str
-        Configuration string like "VXX" or "XXV"
+        Configuration string like "VXX", "XXV", "VXX_anyleft", "XXV_anyright"
     
     Returns
     -------
     str
-        'left' if all X's before V, 'right' if all X's after V, 'both' otherwise
+        'left', 'right', 'both', 'partial_left', 'partial_right', or 'partial_both'
     """
     if 'V' not in config:
         return 'both'
     
-    v_index = config.index('V')
-    has_left = any(c == 'X' for c in config[:v_index])
-    has_right = any(c == 'X' for c in config[v_index + 1:])
+    # Check for partial suffixes
+    if '_anyleft' in config:
+        return 'partial_right'  # Right deps, any left
+    elif '_anyright' in config:
+        return 'partial_left'  # Left deps, any right
+    elif '_anyboth' in config:
+        return 'partial_both'  # Both sides, any totals
+    
+    # Standard exact configs
+    base_config = config.split('_')[0]
+    v_index = base_config.index('V')
+    has_left = any(c == 'X' for c in base_config[:v_index])
+    has_right = any(c == 'X' for c in base_config[v_index + 1:])
     
     if has_left and has_right:
         return 'both'
@@ -434,9 +576,12 @@ def generate_index_html(all_config_examples, lang_names, position2num_all, outpu
             total_verbs = get_total_verb_instances(position2num_all[lang_code])
         
         # Categorize configurations by type
-        left_configs = []  # X...V
-        mixed_configs = []  # X...VX...
-        right_configs = []  # VX...
+        left_configs = []  # X...V (exact)
+        right_configs = []  # VX... (exact)
+        mixed_configs = []  # X...VX... (exact)
+        partial_left_configs = []  # X...V_anyright
+        partial_right_configs = []  # VX..._anyleft
+        partial_both_configs = []  # XVX_anyboth
         
         for config in configs:
             config_type = classify_configuration(config)
@@ -444,11 +589,19 @@ def generate_index_html(all_config_examples, lang_names, position2num_all, outpu
                 left_configs.append(config)
             elif config_type == 'right':
                 right_configs.append(config)
-            else:
+            elif config_type == 'partial_left':
+                partial_left_configs.append(config)
+            elif config_type == 'partial_right':
+                partial_right_configs.append(config)
+            elif config_type == 'partial_both':
+                partial_both_configs.append(config)
+            else:  # 'both'
                 mixed_configs.append(config)
         
         html_parts.append(f'  <div class="language" id="{lang_code}">')
         html_parts.append(f'    <h3>{lang_name} ({lang_code})</h3>')
+        
+        # First table: Exact configurations
         html_parts.append(f'    <div class="config-table">')
         html_parts.append(f'      <div class="config-row">')
         
@@ -513,6 +666,55 @@ def generate_index_html(all_config_examples, lang_names, position2num_all, outpu
         
         html_parts.append(f'      </div>')
         html_parts.append(f'    </div>')
+        
+        # Second table: Partial configurations (any-other-side)
+        if partial_left_configs or partial_right_configs or partial_both_configs:
+            html_parts.append(f'    <div class="config-table" style="margin-top: 15px; border-top: 2px solid #ccc; padding-top: 10px;">')
+            html_parts.append(f'      <div style="margin-bottom: 10px; color: #d87000; font-weight: bold;">⚠ Partial Configurations (Any Other Side)</div>')
+            html_parts.append(f'      <div class="config-row">')
+            
+            # Column 1: Left deps, any right
+            html_parts.append(f'        <div class="config-column">')
+            html_parts.append(f'          <h4>Left + Any Right (X...V_anyright)</h4>')
+            html_parts.append(f'          <div class="config-links">')
+            if partial_left_configs:
+                for config in sorted(partial_left_configs):
+                    safe_config = config.replace(' ', '_')
+                    html_parts.append(f'            <a class="config-link" href="{lang_name}_{lang_code}/{safe_config}.html" style="background: #fff3cd;">{config}</a>')
+            else:
+                html_parts.append(f'            <span style="color: #999;">—</span>')
+            html_parts.append(f'          </div>')
+            html_parts.append(f'        </div>')
+            
+            # Column 2: Both sides, any totals
+            html_parts.append(f'        <div class="config-column">')
+            html_parts.append(f'          <h4>Bilateral, Any Totals (XVX_anyboth)</h4>')
+            html_parts.append(f'          <div class="config-links">')
+            if partial_both_configs:
+                for config in sorted(partial_both_configs):
+                    safe_config = config.replace(' ', '_')
+                    html_parts.append(f'            <a class="config-link" href="{lang_name}_{lang_code}/{safe_config}.html" style="background: #fff3cd;">{config}</a>')
+            else:
+                html_parts.append(f'            <span style="color: #999;">—</span>')
+            html_parts.append(f'          </div>')
+            html_parts.append(f'        </div>')
+            
+            # Column 3: Right deps, any left
+            html_parts.append(f'        <div class="config-column">')
+            html_parts.append(f'          <h4>Any Left + Right (VX..._anyleft)</h4>')
+            html_parts.append(f'          <div class="config-links">')
+            if partial_right_configs:
+                for config in sorted(partial_right_configs):
+                    safe_config = config.replace(' ', '_')
+                    html_parts.append(f'            <a class="config-link" href="{lang_name}_{lang_code}/{safe_config}.html" style="background: #fff3cd;">{config}</a>')
+            else:
+                html_parts.append(f'            <span style="color: #999;">—</span>')
+            html_parts.append(f'          </div>')
+            html_parts.append(f'        </div>')
+            
+            html_parts.append(f'      </div>')
+            html_parts.append(f'    </div>')
+        
         html_parts.append(f'  </div>')
     
     html_parts.append('</body>')

@@ -10,6 +10,7 @@ computation, layout, and formatting.
 
 import numpy as np
 import os
+import warnings
 from typing import Dict, Optional, Union
 
 # Import refactored components
@@ -18,6 +19,9 @@ from verb_centered_builder import VerbCenteredTableBuilder
 from verb_centered_formatters import (
     TextTableFormatter, TSVFormatter, ExcelFormatter, convert_table_to_grid_cells
 )
+
+# Statistical validation constants
+MIN_SAMPLE_THRESHOLD = 5  # Warn if geometric means computed from fewer samples
 
 
 # ============================================================================
@@ -66,86 +70,78 @@ def create_verb_centered_table(
 
 
 # ============================================================================
-# LEGACY PUBLIC API (Backward Compatible)
+# UNIFIED COMPUTATION CORE
 # ============================================================================
 
-def compute_average_sizes_table(all_langs_average_sizes_filtered):
+def _compute_sizes_and_factors_generic(
+    all_langs_average_sizes_filtered,
+    key_generator_fn,
+    filter_fn=None,
+    key_transformer=None,
+    warn_low_samples=True
+):
     """
-    Compute average constituent sizes at each position for different totals.
-    Also computes GEOMETRIC MEANS of ratios between positions (Growth Factors).
+    Generic computation of sizes and growth factors.
     
-    Returns a dictionary of averages keyed by position string (e.g. 'right_1_totright_2').
-    Growth factors are keyed as 'factor_{key_B}_vs_{key_A}'.
+    This is the unified core used by both standard and anyotherside helix tables.
+    
+    Parameters
+    ----------
+    all_langs_average_sizes_filtered : dict
+        Dictionary mapping language codes to position averages
+    key_generator_fn : callable
+        Function that returns (position_keys, pairs_to_track)
+        where position_keys are all keys to aggregate,
+        and pairs_to_track is list of (key_b, key_a) tuples for factors
+    filter_fn : callable, optional
+        Function to filter position keys (e.g., only process '_anyother' keys)
+    key_transformer : callable, optional
+        Function to transform input keys to output keys
+        Signature: (key: str) -> str
+    warn_low_samples : bool, default=True
+        Whether to issue warnings for computations with low sample counts
+        
+    Returns
+    -------
+    dict
+        Dictionary with position averages and 'factor_{key_B}_vs_{key_A}' entries
     """
-    # Dictionary to store sums and counts for averaging sizes (Arithmetic Mean)
     position_sums = {}
     position_counts = {}
-    
-    # Dictionary to store sums of logs and counts for averaging ratios (Geometric Mean)
-    # key: (key_B, key_A) -> {'sum_log_ratio': 0.0, 'count': 0}
     ratio_stats = {}
     
-    # Define pairs of positions to compare for Growth Factors
-    # 1. Horizontal Right (Pos N vs Pos N-1)
-    # 2. Horizontal Left (Pos N vs Pos N-1) -> Note: Logic is usually Outer/Inner comparisons
-    # 3. XVX
-    # 4. Diagonals (Right Tot vs Tot-1)
-    # 5. Diagonals (Left Tot vs Tot+1)
+    # Get key patterns from generator
+    position_keys, pairs_to_track = key_generator_fn()
     
-    pairs_to_track = []
+    # Default transformer is identity
+    if key_transformer is None:
+        key_transformer = lambda k: k
     
-    # Horizontal Right: right_{pos}_totright_{tot} vs right_{pos-1}_totright_{tot}
-    for tot in range(1, 5):
-        for pos in range(2, tot + 1):
-            key_b = f'right_{pos}_totright_{tot}'
-            key_a = f'right_{pos-1}_totright_{tot}'
-            pairs_to_track.append((key_b, key_a, 'diverging')) # val / prev_val
-
-    # Horizontal Left: left_{pos}_totleft_{tot} vs left_{pos-1}_totleft_{tot}
-    for tot in range(1, 5):
-        for pos in range(2, tot + 1):
-            key_b = f'left_{pos}_totleft_{tot}'
-            key_a = f'left_{pos-1}_totleft_{tot}'
-            pairs_to_track.append((key_b, key_a, 'diverging'))
-
-    # XVX: right_1 vs left_1
-    pairs_to_track.append(('xvx_right_1', 'xvx_left_1', 'diverging'))
-
-    # Diagonals Right: right_{pos+1}_totright_{tot} vs right_{pos}_totright_{tot-1}
-    for tot in range(2, 5):
-        for pos in range(1, tot): # pos in source tot-1 (1..tot-1)
-            key_a = f'right_{pos}_totright_{tot-1}' # source
-            key_b = f'right_{pos+1}_totright_{tot}' # target
-            pairs_to_track.append((key_b, key_a, 'diverging'))
-
-    # Diagonals Left: left_{pos}_totleft_{tot} vs left_{pos+1}_totleft_{tot+1}
-    for tot in range(1, 4):
-         for pos in range(1, tot + 1):
-            key_b = f'left_{pos}_totleft_{tot}' # target
-            key_a = f'left_{pos+1}_totleft_{tot+1}' # source
-            pairs_to_track.append((key_b, key_a, 'diverging'))
-    
+    # Track total number of languages for validation
+    num_languages = len(all_langs_average_sizes_filtered)
     
     # Collect all values across languages
     for lang, positions in all_langs_average_sizes_filtered.items():
         # 1. Accumulate sizes
         for position_key, value in positions.items():
+            # Apply filter if provided
+            if filter_fn and not filter_fn(position_key):
+                continue
+                
             if position_key not in position_sums:
                 position_sums[position_key] = 0
                 position_counts[position_key] = 0
+            
             if value > 0:
                 position_sums[position_key] += np.log(value)
-            else:
-                pass # handle 0 size? Should not happen with GM.
             position_counts[position_key] += 1
-            
-        # 2. Accumulate ratios
-        for key_b, key_a, direction in pairs_to_track:
+        
+        # 2. Accumulate ratios for factors
+        for key_b, key_a in pairs_to_track:
             val_b = positions.get(key_b)
             val_a = positions.get(key_a)
             
             if val_b is not None and val_a is not None and val_a > 0 and val_b > 0:
-                # Compute ratio
                 ratio = val_b / val_a
                 
                 pair_key = (key_b, key_a)
@@ -154,27 +150,213 @@ def compute_average_sizes_table(all_langs_average_sizes_filtered):
                 
                 ratio_stats[pair_key]['sum_log_ratio'] += np.log(ratio)
                 ratio_stats[pair_key]['count'] += 1
-
-    # Calculate averages
-    results = {}
     
-    # Geometric Means for Sizes (Cross-Language)
+    # Statistical validation
+    if warn_low_samples and num_languages < MIN_SAMPLE_THRESHOLD:
+        warnings.warn(
+            f"Computing geometric means from only {num_languages} language(s). "
+            f"Results may have low statistical confidence. "
+            f"Recommended minimum: {MIN_SAMPLE_THRESHOLD} languages.",
+            UserWarning,
+            stacklevel=3
+        )
+    
+    # Calculate geometric means with key transformation and validation
+    results = {}
+    low_sample_positions = []
+    low_sample_factors = []
+    
+    # Geometric Means for Sizes
     for position_key in position_sums:
-        if position_counts[position_key] > 0:
-            results[position_key] = np.exp(position_sums[position_key] / position_counts[position_key])
+        count = position_counts[position_key]
+        if count > 0:
+            output_key = key_transformer(position_key)
+            results[output_key] = np.exp(position_sums[position_key] / count)
             
-    # Geometric Means for Ratios
+            # Track low-sample positions
+            if warn_low_samples and count < MIN_SAMPLE_THRESHOLD:
+                low_sample_positions.append((output_key, count))
+    
+    # Geometric Means for Ratios (Growth Factors)
     for pair_key, stats in ratio_stats.items():
-        if stats['count'] > 0:
-            avg_log = stats['sum_log_ratio'] / stats['count']
+        count = stats['count']
+        if count > 0:
+            avg_log = stats['sum_log_ratio'] / count
             geo_mean_ratio = np.exp(avg_log)
             
-            # Store with a clean key
             key_b, key_a = pair_key
-            factor_key = f'factor_{key_b}_vs_{key_a}'
+            # Transform both keys in the factor name
+            output_key_b = key_transformer(key_b)
+            output_key_a = key_transformer(key_a)
+            factor_key = f'factor_{output_key_b}_vs_{output_key_a}'
             results[factor_key] = geo_mean_ratio
             
+            # Track low-sample factors
+            if warn_low_samples and count < MIN_SAMPLE_THRESHOLD:
+                low_sample_factors.append((factor_key, count))
+    
+    # Issue specific warnings for low-sample computations
+    if warn_low_samples:
+        if low_sample_positions:
+            examples = ', '.join(f'{k}(n={n})' for k, n in low_sample_positions[:3])
+            warnings.warn(
+                f"{len(low_sample_positions)} position(s) computed from < {MIN_SAMPLE_THRESHOLD} samples. "
+                f"Examples: {examples}",
+                UserWarning,
+                stacklevel=3
+            )
+        
+        if low_sample_factors:
+            examples = ', '.join(f"{k.replace('factor_', '')}(n={n})" for k, n in low_sample_factors[:3])
+            warnings.warn(
+                f"{len(low_sample_factors)} growth factor(s) computed from < {MIN_SAMPLE_THRESHOLD} samples. "
+                f"Examples: {examples}",
+                UserWarning,
+                stacklevel=3
+            )
+    
     return results
+
+
+# ============================================================================
+# PUBLIC API - UNIFIED COMPUTATION
+# ============================================================================
+
+def compute_sizes_table(all_langs_average_sizes_filtered, table_type='standard'):
+    """
+    Compute average constituent sizes at each position for different totals.
+    Also computes GEOMETRIC MEANS of ratios between positions (Growth Factors).
+    
+    Parameters
+    ----------
+    all_langs_average_sizes_filtered : dict
+        Dictionary mapping language codes to position averages
+    table_type : str, default='standard'
+        Type of table to compute:
+        - 'standard': Zero-other-side helix (e.g., 'V X X' on left, 'X X X X' on right)
+        - 'anyotherside': Any-other-side helix (ignores opposite side count)
+    
+    Returns
+    -------
+    dict
+        Dictionary with position averages (e.g., 'right_1_totright_2') and
+        growth factors (e.g., 'factor_{key_B}_vs_{key_A}')
+    """
+    if table_type == 'standard':
+        def generate_keys():
+            """Generate key patterns for standard (zero-other-side) helix tables."""
+            pairs_to_track = []
+            
+            # Horizontal Right: right_{pos}_totright_{tot} vs right_{pos-1}_totright_{tot}
+            for tot in range(1, 5):
+                for pos in range(2, tot + 1):
+                    key_b = f'right_{pos}_totright_{tot}'
+                    key_a = f'right_{pos-1}_totright_{tot}'
+                    pairs_to_track.append((key_b, key_a))
+
+            # Horizontal Left: left_{pos}_totleft_{tot} vs left_{pos-1}_totleft_{tot}
+            for tot in range(1, 5):
+                for pos in range(2, tot + 1):
+                    key_b = f'left_{pos}_totleft_{tot}'
+                    key_a = f'left_{pos-1}_totleft_{tot}'
+                    pairs_to_track.append((key_b, key_a))
+
+            # XVX: right_1 vs left_1
+            pairs_to_track.append(('xvx_right_1', 'xvx_left_1'))
+
+            # Diagonals Right: right_{pos+1}_totright_{tot} vs right_{pos}_totright_{tot-1}
+            for tot in range(2, 5):
+                for pos in range(1, tot):
+                    key_a = f'right_{pos}_totright_{tot-1}'
+                    key_b = f'right_{pos+1}_totright_{tot}'
+                    pairs_to_track.append((key_b, key_a))
+
+            # Diagonals Left: left_{pos}_totleft_{tot} vs left_{pos+1}_totleft_{tot+1}
+            for tot in range(1, 5):
+                for pos in range(1, tot + 1):
+                    key_b = f'left_{pos}_totleft_{tot}'
+                    key_a = f'left_{pos+1}_totleft_{tot+1}'
+                    pairs_to_track.append((key_b, key_a))
+            
+            return [], pairs_to_track
+        
+        return _compute_sizes_and_factors_generic(
+            all_langs_average_sizes_filtered,
+            generate_keys,
+            filter_fn=None,
+            key_transformer=None
+        )
+    
+    elif table_type == 'anyotherside':
+        def generate_keys():
+            """Generate key patterns for any-other-side helix tables."""
+            pairs_to_track = []
+            
+            # Horizontal Right: right_{pos}_anyother vs right_{pos-1}_anyother
+            for pos in range(2, 20):
+                key_b = f'right_{pos}_anyother'
+                key_a = f'right_{pos-1}_anyother'
+                pairs_to_track.append((key_b, key_a))
+            
+            # Horizontal Left: left_{pos}_anyother vs left_{pos-1}_anyother
+            for pos in range(2, 20):
+                key_b = f'left_{pos}_anyother'
+                key_a = f'left_{pos-1}_anyother'
+                pairs_to_track.append((key_b, key_a))
+            
+            # Diagonal Right: right_{pos}_anyother_totright_{pos} vs right_{pos-1}_anyother_totright_{pos-1}
+            for pos in range(2, 20):
+                key_b = f'right_{pos}_anyother_totright_{pos}'
+                key_a = f'right_{pos-1}_anyother_totright_{pos-1}'
+                pairs_to_track.append((key_b, key_a))
+            
+            # Diagonal Left: left_{pos}_anyother_totleft_{pos} vs left_{pos-1}_anyother_totleft_{pos-1}
+            for pos in range(2, 20):
+                key_b = f'left_{pos}_anyother_totleft_{pos}'
+                key_a = f'left_{pos-1}_anyother_totleft_{pos-1}'
+                pairs_to_track.append((key_b, key_a))
+            
+            # XVX bilateral
+            pairs_to_track.append(('xvx_right_1_anyother', 'xvx_left_1_anyother'))
+            
+            return [], pairs_to_track
+        
+        def transform_anyother_key(key):
+            """Transform anyother keys to standard patterns for the builder."""
+            # Strip '_anyother' to get standard key format
+            return key.replace('_anyother', '')
+        
+        return _compute_sizes_and_factors_generic(
+            all_langs_average_sizes_filtered,
+            generate_keys,
+            filter_fn=lambda k: '_anyother' in k,
+            key_transformer=transform_anyother_key
+        )
+    
+    else:
+        raise ValueError(f"Unknown table_type: {table_type}. Must be 'standard' or 'anyotherside'.")
+
+
+# ============================================================================
+# LEGACY PUBLIC API (Backward Compatible)
+# ============================================================================
+
+def compute_average_sizes_table(all_langs_average_sizes_filtered):
+    """
+    Compute average constituent sizes for standard (zero-other-side) helix tables.
+    
+    DEPRECATED: Use compute_sizes_table(data, table_type='standard') instead.
+    """
+    return compute_sizes_table(all_langs_average_sizes_filtered, table_type='standard')
+
+
+def compute_anyotherside_sizes_table(all_langs_average_sizes_filtered):
+    """
+    Compute average constituent sizes for any-other-side helix tables.
+    
+    DEPRECATED: Use compute_sizes_table(data, table_type='anyotherside') instead.
+    """
+    return compute_sizes_table(all_langs_average_sizes_filtered, table_type='anyotherside')
 
 
 # ============================================================================
@@ -461,17 +643,31 @@ def generate_mass_tables(
         # Determine specific ordering stats if available
         lang_order_stats = ordering_stats.get(lang) if ordering_stats else None
         
-        # Save table
-        format_verb_centered_table(
-            lang_avgs,
+        # Get language name for filename
+        lang_name = langnames.get(lang, lang)
+        
+        # Create table structure
+        config = TableConfig(
             show_horizontal_factors=True,
             show_diagonal_factors=True,
-            arrow_direction=arrow_direction,
-            ordering_stats={lang: lang_order_stats} if lang_order_stats else None,
-            save_tsv=True,
-            output_dir=output_dir,
-            filename=f"LANG_{lang}_table.tsv"
+            show_ordering_triples=True,
+            show_row_averages=True,
+            show_marginal_means=True,
+            arrow_direction=arrow_direction
         )
+        table = create_verb_centered_table(
+            lang_avgs,
+            config,
+            {lang: lang_order_stats} if lang_order_stats else None
+        )
+        
+        # Save TSV (Helix format with statistics)
+        tsv_path = os.path.join(output_dir, f"Helix_{lang_name}_{lang}.tsv")
+        TSVFormatter().save(table, tsv_path)
+        
+        # Save Excel (Helix format with statistics)
+        xlsx_path = os.path.join(output_dir, f"Helix_{lang_name}_{lang}.xlsx")
+        ExcelFormatter().save(table, xlsx_path)
         
         if extract_disorder_metrics:
             # Calculate Diagonal Factors for R4 and L4
@@ -508,5 +704,81 @@ def generate_mass_tables(
         
         disorder_df['right_extreme_diag_factor'] = right_col
         disorder_df['left_extreme_diag_factor'] = left_col
+    
+    # 4. GENERATE ANY-OTHER-SIDE TABLES
+    print("Generating Any-Other-Side Tables...")
+    generate_anyotherside_helix_tables(
+        all_langs_average_sizes,
+        langnames,
+        output_dir=output_dir,
+        arrow_direction=arrow_direction
+    )
 
     return disorder_df if extract_disorder_metrics else None
+
+
+def generate_anyotherside_helix_tables(
+    all_langs_average_sizes,
+    langnames,
+    output_dir='data/tables',
+    arrow_direction='diverging'
+):
+    """
+    Generate Any-Other-Side Helix tables for all languages.
+    
+    These tables show constituent sizes ignoring the opposite direction,
+    using the SAME format and builder as standard Helix tables.
+    
+    The key innovation: map anyother keys to standard key patterns, then use
+    the unified VerbCenteredTableBuilder infrastructure.
+    
+    Parameters
+    ----------
+    all_langs_average_sizes : dict
+        Dictionary mapping language codes to position averages
+    langnames : dict
+        Dictionary mapping language codes to language names
+    output_dir : str
+        Output directory for tables
+    arrow_direction : str
+        Arrow direction for factors ('diverging', 'left_to_right', etc.)
+    """
+    from tqdm import tqdm
+    import os
+    
+    print(f"  Processing {len(all_langs_average_sizes)} languages...")
+    
+    for lang in tqdm(all_langs_average_sizes):
+        lang_name = langnames.get(lang, lang)
+        
+        # Get anyother statistics for this language (returns standard keys directly!)
+        single_lang_data = {lang: all_langs_average_sizes[lang]}
+        position_data = compute_sizes_table(single_lang_data, table_type='anyotherside')
+        
+        if not position_data:
+            continue  # No anyother stats for this language
+        
+        # Create table configuration (with marginal means for consistency)
+        config = TableConfig(
+            show_horizontal_factors=True,
+            show_diagonal_factors=True,
+            show_ordering_triples=False,  # No ordering stats for anyother
+            show_row_averages=False,
+            show_marginal_means=True,  # Now enabled!
+            arrow_direction=arrow_direction
+        )
+        
+        # Use the STANDARD table builder (unified!)
+        table = create_verb_centered_table(position_data, config, ordering_stats=None)
+        
+        if table is None:
+            continue
+        
+        # Save using standard formatters (no title argument)
+        tsv_path = os.path.join(output_dir, f"Helix_{lang_name}_{lang}_AnyOtherSide.tsv")
+        TSVFormatter().save(table, tsv_path)
+        
+        xlsx_path = os.path.join(output_dir, f"Helix_{lang_name}_{lang}_AnyOtherSide.xlsx")
+        ExcelFormatter().save(table, xlsx_path)
+    
+    print(f"  Generated Any-Other-Side tables for {len(all_langs_average_sizes)} languages")

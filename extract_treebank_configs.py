@@ -108,11 +108,12 @@ def tree_dict_to_reactive_dep_tree_html(tree_dict, verb_id, dep_ids, dep_sizes):
     
     # Build CoNLL string without extra indentation
     conll_str = '\n'.join(lines)
+    conll_str_escaped = conll_str.replace('"', '&quot;')
     
     return f'''<reactive-dep-tree
   interactive="true"
   shown-features="UPOS,LEMMA,FORM,MISC.span"
-  conll="{conll_str}"
+  conll="{conll_str_escaped}"
 ></reactive-dep-tree>'''
 
 
