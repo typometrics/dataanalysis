@@ -29,7 +29,8 @@ class VerbCenteredTableBuilder:
     def __init__(self,
                  position_averages: Dict[str, float],
                  config: TableConfig,
-                 ordering_stats: Optional[Dict] = None):
+                 ordering_stats: Optional[Dict] = None,
+                 validation_info: Optional[Dict] = None):
         """
         Initialize the table builder.
         
@@ -37,6 +38,7 @@ class VerbCenteredTableBuilder:
             position_averages: Dictionary of average sizes and factors
             config: Table configuration
             ordering_stats: Optional ordering statistics for triples
+            validation_info: Optional statistical validation info (sample counts, warnings)
         """
         self.position_averages = position_averages
         self.config = config
@@ -44,6 +46,7 @@ class VerbCenteredTableBuilder:
         self.marginals = MarginalMeansCalculator(position_averages)
         self.factors = FactorCalculator(position_averages, config)
         self.ordering = OrderingStatsFormatter(ordering_stats) if ordering_stats else None
+        self.validation_info = validation_info
     
     def build(self) -> TableStructure:
         """
@@ -79,6 +82,11 @@ class VerbCenteredTableBuilder:
                 agg_row = self._build_left_aggregate_ordering_row()
                 if agg_row:
                     table.rows.append(agg_row)
+        
+        # Add statistical validation footer if available
+        if self.validation_info:
+            table.add_separator()
+            table.rows.extend(self._build_validation_footer())
         
         return table
     
@@ -668,3 +676,137 @@ class VerbCenteredTableBuilder:
             )
         
         return row
+    
+    def _build_validation_footer(self) -> List[List[CellData]]:
+        """Build statistical validation footer rows."""
+        rows = []
+        
+        if not self.validation_info:
+            return rows
+        
+        num_samples = self.validation_info.get('num_samples', 0)
+        min_threshold = self.validation_info.get('min_threshold', 5)
+        low_confidence = self.validation_info.get('low_confidence', False)
+        low_sample_positions = self.validation_info.get('low_sample_positions', [])
+        low_sample_factors = self.validation_info.get('low_sample_factors', [])
+        
+        # Row 1: Sample count
+        row1 = self._create_empty_row()
+        confidence_indicator = "⚠️ " if low_confidence else "✓ "
+        row1[self.layout.label_col_idx] = CellData(
+            text=f"{confidence_indicator}Data Quality",
+            cell_type='comment',
+            rich_segments=[(f"{confidence_indicator}Data Quality", COLOR_ORANGE if low_confidence else COLOR_DARK, True)]
+        )
+        sample_text = f"Computed from {num_samples} sample(s)"
+        if low_confidence:
+            sample_text += f" (recommended: ≥{min_threshold})"
+        row1[self.layout.v_col_idx] = CellData(
+            text=sample_text,
+            cell_type='comment',
+            rich_segments=[(sample_text, COLOR_ORANGE if low_confidence else COLOR_GREY, False)]
+        )
+        rows.append(row1)
+        
+        # Row 2: Low-sample positions warning (if any)
+        if low_sample_positions:
+            row2 = self._create_empty_row()
+            row2[self.layout.label_col_idx] = CellData(
+                text="⚠️ Low n positions",
+                cell_type='comment',
+                rich_segments=[("⚠️ Low n positions", COLOR_ORANGE, False)]
+            )
+            examples = ', '.join(f'{k}(n={n})' for k, n in low_sample_positions[:5])
+            warning_text = f"{len(low_sample_positions)} position(s) with <{min_threshold} samples. Examples: {examples}"
+            row2[self.layout.v_col_idx] = CellData(
+                text=warning_text,
+                cell_type='comment',
+                rich_segments=[(warning_text, COLOR_ORANGE, False)]
+            )
+            rows.append(row2)
+        
+        # Row 3: Low-sample factors warning (if any)
+        if low_sample_factors:
+            row3 = self._create_empty_row()
+            row3[self.layout.label_col_idx] = CellData(
+                text="⚠️ Low n factors",
+                cell_type='comment',
+                rich_segments=[("⚠️ Low n factors", COLOR_ORANGE, False)]
+            )
+            examples = ', '.join(f"{k.replace('factor_', '')}(n={n})" for k, n in low_sample_factors[:5])
+            warning_text = f"{len(low_sample_factors)} factor(s) with <{min_threshold} samples. Examples: {examples}"
+            row3[self.layout.v_col_idx] = CellData(
+                text=warning_text,
+                cell_type='comment',
+                rich_segments=[(warning_text, COLOR_ORANGE, False)]
+            )
+            rows.append(row3)
+        
+        return rows
+    
+    def _build_validation_footer(self) -> List[List[CellData]]:
+        """Build statistical validation footer rows."""
+        rows = []
+        
+        if not self.validation_info:
+            return rows
+        
+        num_samples = self.validation_info.get('num_samples', 0)
+        min_threshold = self.validation_info.get('min_threshold', 5)
+        low_confidence = self.validation_info.get('low_confidence', False)
+        low_sample_positions = self.validation_info.get('low_sample_positions', [])
+        low_sample_factors = self.validation_info.get('low_sample_factors', [])
+        
+        # Row 1: Sample count
+        row1 = self._create_empty_row()
+        confidence_indicator = "⚠️ " if low_confidence else "✓ "
+        row1[self.layout.label_col_idx] = CellData(
+            text=f"{confidence_indicator}Data Quality",
+            cell_type='comment',
+            rich_segments=[(f"{confidence_indicator}Data Quality", COLOR_ORANGE if low_confidence else COLOR_DARK, True)]
+        )
+        sample_text = f"Computed from {num_samples} sample(s)"
+        if low_confidence:
+            sample_text += f" (recommended: ≥{min_threshold})"
+        row1[self.layout.v_col_idx] = CellData(
+            text=sample_text,
+            cell_type='comment',
+            rich_segments=[(sample_text, COLOR_ORANGE if low_confidence else COLOR_GREY, False)]
+        )
+        rows.append(row1)
+        
+        # Row 2: Low-sample positions warning (if any)
+        if low_sample_positions:
+            row2 = self._create_empty_row()
+            row2[self.layout.label_col_idx] = CellData(
+                text="⚠️ Low n positions",
+                cell_type='comment',
+                rich_segments=[("⚠️ Low n positions", COLOR_ORANGE, False)]
+            )
+            examples = ', '.join(f'{k}(n={n})' for k, n in low_sample_positions[:5])
+            warning_text = f"{len(low_sample_positions)} position(s) with <{min_threshold} samples. Examples: {examples}"
+            row2[self.layout.v_col_idx] = CellData(
+                text=warning_text,
+                cell_type='comment',
+                rich_segments=[(warning_text, COLOR_ORANGE, False)]
+            )
+            rows.append(row2)
+        
+        # Row 3: Low-sample factors warning (if any)
+        if low_sample_factors:
+            row3 = self._create_empty_row()
+            row3[self.layout.label_col_idx] = CellData(
+                text="⚠️ Low n factors",
+                cell_type='comment',
+                rich_segments=[("⚠️ Low n factors", COLOR_ORANGE, False)]
+            )
+            examples = ', '.join(f"{k.replace('factor_', '')}(n={n})" for k, n in low_sample_factors[:5])
+            warning_text = f"{len(low_sample_factors)} factor(s) with <{min_threshold} samples. Examples: {examples}"
+            row3[self.layout.v_col_idx] = CellData(
+                text=warning_text,
+                cell_type='comment',
+                rich_segments=[(warning_text, COLOR_ORANGE, False)]
+            )
+            rows.append(row3)
+        
+        return rows

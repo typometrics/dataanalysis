@@ -32,6 +32,7 @@ def create_verb_centered_table(
     position_averages: Dict[str, float],
     config: Optional[TableConfig] = None,
     ordering_stats: Optional[Dict] = None,
+    validation_info: Optional[Dict] = None,
     **kwargs
 ) -> Optional[TableStructure]:
     """
@@ -43,6 +44,7 @@ def create_verb_centered_table(
         position_averages: Dictionary of average sizes and factors
         config: Table configuration (uses defaults if None)
         ordering_stats: Optional ordering statistics
+        validation_info: Optional statistical validation info (sample counts, warnings)
         **kwargs: Backward compatibility - can pass individual config params
         
     Returns:
@@ -50,7 +52,7 @@ def create_verb_centered_table(
         
     Example:
         >>> config = TableConfig(show_horizontal_factors=True, arrow_direction='left_to_right')
-        >>> table = create_verb_centered_table(position_averages, config, ordering_stats)
+        >>> table = create_verb_centered_table(position_averages, config, ordering_stats, validation_info)
         >>> text_output = TextTableFormatter(table).format()
         >>> ExcelFormatter().save(table, 'output.xlsx')
     """
@@ -65,7 +67,7 @@ def create_verb_centered_table(
             arrow_direction=kwargs.get('arrow_direction', 'diverging')
         )
     
-    builder = VerbCenteredTableBuilder(position_averages, config, ordering_stats)
+    builder = VerbCenteredTableBuilder(position_averages, config, ordering_stats, validation_info)
     return builder.build()
 
 
@@ -103,8 +105,10 @@ def _compute_sizes_and_factors_generic(
         
     Returns
     -------
-    dict
-        Dictionary with position averages and 'factor_{key_B}_vs_{key_A}' entries
+    tuple
+        (results_dict, validation_info)
+        - results_dict: Dictionary with position averages and factors
+        - validation_info: Dictionary with sample count statistics
     """
     position_sums = {}
     position_counts = {}
@@ -151,16 +155,6 @@ def _compute_sizes_and_factors_generic(
                 ratio_stats[pair_key]['sum_log_ratio'] += np.log(ratio)
                 ratio_stats[pair_key]['count'] += 1
     
-    # Statistical validation
-    if warn_low_samples and num_languages < MIN_SAMPLE_THRESHOLD:
-        warnings.warn(
-            f"Computing geometric means from only {num_languages} language(s). "
-            f"Results may have low statistical confidence. "
-            f"Recommended minimum: {MIN_SAMPLE_THRESHOLD} languages.",
-            UserWarning,
-            stacklevel=3
-        )
-    
     # Calculate geometric means with key transformation and validation
     results = {}
     low_sample_positions = []
@@ -174,7 +168,7 @@ def _compute_sizes_and_factors_generic(
             results[output_key] = np.exp(position_sums[position_key] / count)
             
             # Track low-sample positions
-            if warn_low_samples and count < MIN_SAMPLE_THRESHOLD:
+            if count < MIN_SAMPLE_THRESHOLD:
                 low_sample_positions.append((output_key, count))
     
     # Geometric Means for Ratios (Growth Factors)
@@ -192,11 +186,30 @@ def _compute_sizes_and_factors_generic(
             results[factor_key] = geo_mean_ratio
             
             # Track low-sample factors
-            if warn_low_samples and count < MIN_SAMPLE_THRESHOLD:
+            if count < MIN_SAMPLE_THRESHOLD:
                 low_sample_factors.append((factor_key, count))
     
-    # Issue specific warnings for low-sample computations
-    if warn_low_samples:
+    # Build validation info
+    validation_info = {
+        'num_samples': num_languages,
+        'min_threshold': MIN_SAMPLE_THRESHOLD,
+        'low_confidence': num_languages < MIN_SAMPLE_THRESHOLD,
+        'low_sample_positions': low_sample_positions,
+        'low_sample_factors': low_sample_factors,
+        'total_positions': len([k for k in results if not k.startswith('factor_')]),
+        'total_factors': len([k for k in results if k.startswith('factor_')])
+    }
+    
+    # Issue warnings to stderr if enabled
+    if warn_low_samples and num_languages < MIN_SAMPLE_THRESHOLD:
+        warnings.warn(
+            f"Computing geometric means from only {num_languages} sample(s). "
+            f"Results may have low statistical confidence. "
+            f"Recommended minimum: {MIN_SAMPLE_THRESHOLD} samples.",
+            UserWarning,
+            stacklevel=3
+        )
+        
         if low_sample_positions:
             examples = ', '.join(f'{k}(n={n})' for k, n in low_sample_positions[:3])
             warnings.warn(
@@ -215,7 +228,7 @@ def _compute_sizes_and_factors_generic(
                 stacklevel=3
             )
     
-    return results
+    return results, validation_info
 
 
 # ============================================================================
@@ -238,9 +251,10 @@ def compute_sizes_table(all_langs_average_sizes_filtered, table_type='standard')
     
     Returns
     -------
-    dict
-        Dictionary with position averages (e.g., 'right_1_totright_2') and
-        growth factors (e.g., 'factor_{key_B}_vs_{key_A}')
+    tuple
+        (results_dict, validation_info)
+        - results_dict: Dictionary with position averages and factors
+        - validation_info: Dictionary with sample count statistics
     """
     if table_type == 'standard':
         def generate_keys():
@@ -347,7 +361,8 @@ def compute_average_sizes_table(all_langs_average_sizes_filtered):
     
     DEPRECATED: Use compute_sizes_table(data, table_type='standard') instead.
     """
-    return compute_sizes_table(all_langs_average_sizes_filtered, table_type='standard')
+    results, _ = compute_sizes_table(all_langs_average_sizes_filtered, table_type='standard')
+    return results
 
 
 def compute_anyotherside_sizes_table(all_langs_average_sizes_filtered):
@@ -356,7 +371,8 @@ def compute_anyotherside_sizes_table(all_langs_average_sizes_filtered):
     
     DEPRECATED: Use compute_sizes_table(data, table_type='anyotherside') instead.
     """
-    return compute_sizes_table(all_langs_average_sizes_filtered, table_type='anyotherside')
+    results, _ = compute_sizes_table(all_langs_average_sizes_filtered, table_type='anyotherside')
+    return results
 
 
 # ============================================================================
@@ -753,7 +769,7 @@ def generate_anyotherside_helix_tables(
         
         # Get anyother statistics for this language (returns standard keys directly!)
         single_lang_data = {lang: all_langs_average_sizes[lang]}
-        position_data = compute_sizes_table(single_lang_data, table_type='anyotherside')
+        position_data, validation_info = compute_sizes_table(single_lang_data, table_type='anyotherside')
         
         if not position_data:
             continue  # No anyother stats for this language
@@ -768,8 +784,8 @@ def generate_anyotherside_helix_tables(
             arrow_direction=arrow_direction
         )
         
-        # Use the STANDARD table builder (unified!)
-        table = create_verb_centered_table(position_data, config, ordering_stats=None)
+        # Use the STANDARD table builder (unified!) with validation info
+        table = create_verb_centered_table(position_data, config, ordering_stats=None, validation_info=validation_info)
         
         if table is None:
             continue

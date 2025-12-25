@@ -446,8 +446,10 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
     max_x = max_limit
     max_y = max_limit
     
-    # Create plot
-    plt.figure(figsize=(max_x, max_y))
+    # Create plot with a minimum physical size to ensure readability
+    # Even if max_x is small (e.g. 3), we want a large image (e.g. 15 inches)
+    figsize_val = max(max_x, 15)
+    plt.figure(figsize=(figsize_val, figsize_val))
     plot = sns.scatterplot(data=df, x=pos1, y=pos2, hue='group', palette=palette)
     plt.xlim(0, max_x)
     plt.ylim(0, max_y)
