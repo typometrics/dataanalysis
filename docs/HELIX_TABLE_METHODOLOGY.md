@@ -61,7 +61,17 @@ These partial configurations capture patterns where one direction's complexity m
 To account for the non-linear distribution of constituent sizes, **Geometric Means** are used instead of arithmetic averages for all aggregations:
 - **Size GM**: $\exp(\text{mean}(\ln(\text{sizes})))$
 - **Factor GM**: $\exp(\text{mean}(\ln(\text{size}_A / \text{size}_B)))$
-- **Thinning**: Data points with fewer than 10 occurrences (`MIN_COUNT = 10`) are discarded to ensure statistical reliability.
+
+### Row Statistics
+Each row in the table includes summary statistics in the comments column:
+- **GM (Local)**: The Geometric Mean of constituent sizes for the *specific configuration* (empty other side for Standard tables, specific side for AnyOtherSide tables).
+- **Global (Sentence Context)**: The Geometric Mean of *all* constituents (Left + Right) for sentences matching the row configuration.
+    - For Standard tables (Zero-Other-Side), **GM** and **Global** are identical.
+    - For AnyOtherSide tables, **Global** provides the broader sentence context.
+
+### Statistical Validation
+- **Rare Configurations**: Rows with fewer than 10 samples (sentences) are flagged in the table footer (`⚠️ Rare Configurations`).
+- **Thinning**: While data is calculated for all, configurations with extremely low counts are flagged to ensure statistical reliability.
 
 ## 3. Helix Table Layout
 
@@ -93,9 +103,21 @@ When `show_marginal_means=True` (default), two summary rows are generated for ea
         - The Geometric Mean of growth factors between adjacent positions on that diagonal
     - **Arrow Direction**: Diagonal arrows use the diagonal arrow symbol (↗ or ↙) to indicate growth along the diagonal trajectory.
 
+### Note on Calculation Method: Mean of Ratios vs. Ratio of Means
+
+For all Marginal Means involving factors (both Vertical and Diagonal), the values are calculated as the **Mean of the Ratios** (average of the individual factors), *not* as the Ratio of the Means (ratio of the average sizes).
+
+- **Method Used (Mean of Ratios)**: First, the growth factor is calculated for every configuration/sentence (e.g., $Size_B / Size_A$), and then these factors are averaged.
+- **Method Rejected (Ratio of Means)**: Calculating the average size of B and the average size of A, then taking their ratio ($\bar{B} / \bar{A}$).
+
+**Why?**
+1.  **Consistency**: The individual table rows display the Average Growth Factor (Mean of Ratios). To ensure the Marginal Mean accurately summarizes the rows below/beside it, it must use the same mathematical operation.
+2.  **Linguistic Validity**: In typometrics, the *tendency* of growth ($Scale \times 2.0$) is significant regardless of the absolute size of the constituents. The "Ratio of Means" method implicitly weights larger sentences more heavily (as they dominate the average size), whereas "Mean of Ratios" treats the *growth pattern* of every sentence/configuration as equally important.
+
 ### Output Formats
 - **Text/TSV**: Fixed-width text for reports and tab-separated values for further analysis.
 - **Excel (.xlsx)**: A high-fidelity, styled grid with color-coded highlighting for factors and marginal means.
+- **HTML**: A styled grid, accessible through the index.html file.
 
 ## 4. AnyOtherSide Helix Tables
 
@@ -137,6 +159,9 @@ Unlike the aggregated `_anyother` keys (e.g., `right_2_anyother`), which combine
 - The opposite side can have any count (hence "any other side")
 - Keys like `right_2_anyother_totright_2` track position 2 when tot=2 on the right side
 - This enables **diagonal growth factors** comparing R2 at tot=2 vs R1 at tot=1
+
+### Row Statistics
+AnyOtherSide tables display both **Local GM** (specific side average) and **Global GM** (entire sentence average) in the row comments. This allows comparison between the specific side's weight and the overall sentence complexity.
 
 ### Growth Factors
 AnyOtherSide tables include both types of growth factors:

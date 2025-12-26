@@ -105,8 +105,10 @@ Shows percentage distribution of size relations between adjacent constituents:
 - **Left Side** ($L2 \rightarrow L1 \rightarrow V$): Comparing $L_{pos+1}$ vs $L_{pos}$
 - **Usage**: Set `show_ordering_triples=True` (requires granular stats from data pipeline)
 
-### 6. Row Average Constituent Size
-Displays the average size of all constituents in each configuration row.
+### 6. Row Statistics
+Displays summary statistics for each configuration row in a comment column:
+- **GM (Local)**: Average constituent size for the specific row configuration.
+- **Global**: Average constituent size for the entire sentence matching the configuration.
 - **Usage**: Set `show_row_averages=True`
 
 ### 7. Per-Language Analysis

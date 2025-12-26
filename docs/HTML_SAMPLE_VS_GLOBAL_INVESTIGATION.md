@@ -7,7 +7,7 @@
 
 ## 1. Initial Problem
 
-When examining the HTML configuration example files (e.g., `html_examples/French_fr/XXV.html`), we observed that the **sample geometric mean** (computed from 20 displayed examples) often differed significantly from the **global Helix mean** (shown in parentheses):
+When examining the HTML configuration example files (e.g., `html_examples/French_fr/XXV.html`), we observed that the **sample geometric mean** (computed from the displayed examples, typically 25) often differed significantly from the **global Helix mean** (shown in parentheses):
 
 ### Example: French XXV Configuration
 
@@ -101,8 +101,8 @@ Position X₁: Helix = 1.536, Sample = 1.536 (difference: 0.000)
 ### 4.1 What the Values Represent
 
 **Sample Mean (in bold):**
-- Geometric mean computed from **exactly 20 example trees** shown in the HTML file
-- These 20 examples are selected for **visualization purposes**
+- Geometric mean computed from **exactly 25 example trees** shown in the HTML file (limit set in `run_data_extraction.py`)
+- These 25 examples are selected for **visualization purposes**
 - Limited statistical representativeness
 
 **Global Mean (in parentheses):**
@@ -112,14 +112,14 @@ Position X₁: Helix = 1.536, Sample = 1.536 (difference: 0.000)
 
 ### 4.2 Why They Differ
 
-The 20-sample subset is **not randomly selected** from the full distribution:
-
-1. **Sample Size Limitation**: 20 examples cannot capture the full range of constituent size variation in a language
-
-2. **Selection Bias**: The HTML generation code (`max_examples_per_config=10` per file) may:
-   - Favor simpler, shorter constructions that are easier to display
-   - Over-represent certain treebanks or text types
-   - Miss rare but valid longer constructions
+115: The sample subset is **not randomly selected** from the full distribution:
+116: 
+117: 1. **Sample Size Limitation**: 25 examples cannot capture the full range of constituent size variation in a language
+118: 
+119: 2. **Selection Bias (First-N Bias)**: The selection logic (`conll_processing.py`) collects the **first 25 examples** from each file. 
+120:    - It truncates collection per file once the limit is reached.
+121:    - Any examples appearing later in a file (after the 25th occurrence) are strictly ignored.
+122:    - While the aggregated pool is shuffled, the pool itself excludes correct examples from the "tail" of large files.
 
 3. **Natural Variation**: Even random samples of 20 would show variance from the true population mean
 
@@ -131,7 +131,7 @@ The 20-sample subset is **not randomly selected** from the full distribution:
 ### 4.3 Why Global > Sample in 64% of Cases
 
 The **downward bias** of the sample mean suggests:
-- The 20 examples tend to include more simple, short constituents
+- The 25 examples tend to include more simple, short constituents
 - Complex, long-distance dependencies are under-represented in the display sample
 - This is more pronounced for the **outer position (X₂)** which has more variation in constituent size
 
@@ -213,7 +213,7 @@ A large `Sample > Global` difference (rare) suggests:
 The observed discrepancy between sample and global geometric means in HTML configuration files is:
 
 1. **Real and systematic** - not a random artifact
-2. **Expected and explainable** - due to limited sample size (20 examples)
+2. **Expected and explainable** - due to limited sample size (25 examples) and first-N-per-file selection bias
 3. **Not a bug** - both computation methods are identical and correct
 4. **Informative** - reveals variation in constituent size distributions
 

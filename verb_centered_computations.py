@@ -31,14 +31,16 @@ class MarginalMeansCalculator:
     Calculates marginal means (vertical and diagonal) for the helix table.
     """
     
-    def __init__(self, position_averages: Dict[str, float]):
+    def __init__(self, position_averages: Dict[str, float], config: Optional[TableConfig] = None):
         """
         Initialize calculator.
         
         Args:
             position_averages: Dictionary of position keys to average sizes/factors
+            config: Table configuration (optional)
         """
         self.position_averages = position_averages
+        self.config = config
     
     def calc_vertical_size_means_right(self) -> Dict[int, Optional[float]]:
         """
@@ -107,16 +109,16 @@ class MarginalMeansCalculator:
         values_sz = [self.position_averages.get(k) for k in keys_sz]
         sz_gm = calc_geometric_mean(values_sz)
         
-        # Calculate factor from individual diagonal values
-        if sz_gm is not None and len([v for v in values_sz if v is not None]) >= 2:
-            # Get the consecutive ratios
-            ratios = []
-            for i in range(len(values_sz) - 1):
-                if values_sz[i] is not None and values_sz[i+1] is not None:
-                    ratios.append(values_sz[i+1] / values_sz[i])
-            fac_gm = calc_geometric_mean(ratios) if ratios else None
-        else:
-            fac_gm = None
+        # Calculate mean of FACTORS directly (Mean of Ratios)
+        # Factors: R1T1->R2T2, R2T2->R3T3, R3T3->R4T4
+        keys_fac = []
+        for u in range(1, 4): # 1, 2, 3
+            k_a = f'right_{u}_totright_{u}'     # source
+            k_b = f'right_{u+1}_totright_{u+1}' # target
+            keys_fac.append(f'factor_{k_b}_vs_{k_a}')
+            
+        values_fac = [self.position_averages.get(k) for k in keys_fac]
+        fac_gm = calc_geometric_mean(values_fac)
             
         diagonals[0] = (sz_gm, fac_gm)
         
@@ -125,14 +127,15 @@ class MarginalMeansCalculator:
         values_sz = [self.position_averages.get(k) for k in keys_sz]
         sz_gm = calc_geometric_mean(values_sz)
         
-        if sz_gm is not None and len([v for v in values_sz if v is not None]) >= 2:
-            ratios = []
-            for i in range(len(values_sz) - 1):
-                if values_sz[i] is not None and values_sz[i+1] is not None:
-                    ratios.append(values_sz[i+1] / values_sz[i])
-            fac_gm = calc_geometric_mean(ratios) if ratios else None
-        else:
-            fac_gm = None
+        # Factors: R1T2->R2T3, R2T3->R3T4
+        keys_fac = []
+        for u in range(1, 3): # 1, 2
+            k_a = f'right_{u}_totright_{u+1}'
+            k_b = f'right_{u+1}_totright_{u+2}'
+            keys_fac.append(f'factor_{k_b}_vs_{k_a}')
+            
+        values_fac = [self.position_averages.get(k) for k in keys_fac]
+        fac_gm = calc_geometric_mean(values_fac)
             
         diagonals[1] = (sz_gm, fac_gm)
         
@@ -141,14 +144,15 @@ class MarginalMeansCalculator:
         values_sz = [self.position_averages.get(k) for k in keys_sz]
         sz_gm = calc_geometric_mean(values_sz)
         
-        if sz_gm is not None and len([v for v in values_sz if v is not None]) >= 2:
-            ratios = []
-            for i in range(len(values_sz) - 1):
-                if values_sz[i] is not None and values_sz[i+1] is not None:
-                    ratios.append(values_sz[i+1] / values_sz[i])
-            fac_gm = calc_geometric_mean(ratios) if ratios else None
-        else:
-            fac_gm = None
+        # Factor: R1T3->R2T4
+        keys_fac = []
+        for u in range(1, 2): # 1
+            k_a = f'right_{u}_totright_{u+2}'
+            k_b = f'right_{u+1}_totright_{u+3}'
+            keys_fac.append(f'factor_{k_b}_vs_{k_a}')
+            
+        values_fac = [self.position_averages.get(k) for k in keys_fac]
+        fac_gm = calc_geometric_mean(values_fac)
             
         diagonals[2] = (sz_gm, fac_gm)
         
@@ -190,23 +194,29 @@ class MarginalMeansCalculator:
         """Calculate diagonal means for left side."""
         diagonals = {}
         
+        is_outward = False
+        if self.config:
+            is_outward = self.config.get_growth_direction('left') == 'outward'
+            
         # Diagonal 0 (Longest): L1T1..L4T4
         keys_sz = [f'left_{u}_totleft_{u}' for u in range(1, 5)]
         values_sz = [self.position_averages.get(k) for k in keys_sz]
         sz_gm = calc_geometric_mean(values_sz)
         
-        # Calculate factor from individual diagonal values
-        # For left side, invert ratios since visual direction is L4→L3→L2→L1 (reversed)
-        if sz_gm is not None and len([v for v in values_sz if v is not None]) >= 2:
-            # Get the consecutive ratios in REVERSE direction for left side
-            ratios = []
-            for i in range(len(values_sz) - 1):
-                if values_sz[i] is not None and values_sz[i+1] is not None:
-                    # Invert ratio: val[i] / val[i+1] instead of val[i+1] / val[i]
-                    ratios.append(values_sz[i] / values_sz[i+1])
-            fac_gm = calc_geometric_mean(ratios) if ratios else None
-        else:
-            fac_gm = None
+        # Factors: L1T1->L2T2 etc. Inward keys: factor_L1T1_vs_L2T2.
+        # Wait, compute_sizes_table: key_b=L(p)T(p), key_a=L(p+1)T(p+1). (Inward)
+        keys_fac = []
+        for u in range(1, 4): # 1, 2, 3
+            k_b = f'left_{u}_totleft_{u}'     # target (Near)
+            k_a = f'left_{u+1}_totleft_{u+1}' # source (Far)
+            keys_fac.append(f'factor_{k_b}_vs_{k_a}')
+            
+        values_fac = [self.position_averages.get(k) for k in keys_fac]
+        fac_gm = calc_geometric_mean(values_fac)
+        
+        # Invert if outward
+        if is_outward and fac_gm is not None and fac_gm != 0:
+            fac_gm = 1.0 / fac_gm
             
         diagonals[0] = (sz_gm, fac_gm)
         
@@ -215,15 +225,19 @@ class MarginalMeansCalculator:
         values_sz = [self.position_averages.get(k) for k in keys_sz]
         sz_gm = calc_geometric_mean(values_sz)
         
-        if sz_gm is not None and len([v for v in values_sz if v is not None]) >= 2:
-            ratios = []
-            for i in range(len(values_sz) - 1):
-                if values_sz[i] is not None and values_sz[i+1] is not None:
-                    # Invert ratio for left side
-                    ratios.append(values_sz[i] / values_sz[i+1])
-            fac_gm = calc_geometric_mean(ratios) if ratios else None
-        else:
-            fac_gm = None
+        # Factors
+        keys_fac = []
+        for u in range(1, 3): # 1, 2
+            # Pair: L(u)T(u+1) vs L(u+1)T(u+2)
+            k_b = f'left_{u}_totleft_{u+1}'
+            k_a = f'left_{u+1}_totleft_{u+2}'
+            keys_fac.append(f'factor_{k_b}_vs_{k_a}')
+            
+        values_fac = [self.position_averages.get(k) for k in keys_fac]
+        fac_gm = calc_geometric_mean(values_fac)
+        
+        if is_outward and fac_gm is not None and fac_gm != 0:
+            fac_gm = 1.0 / fac_gm
             
         diagonals[1] = (sz_gm, fac_gm)
         
@@ -232,15 +246,18 @@ class MarginalMeansCalculator:
         values_sz = [self.position_averages.get(k) for k in keys_sz]
         sz_gm = calc_geometric_mean(values_sz)
         
-        if sz_gm is not None and len([v for v in values_sz if v is not None]) >= 2:
-            ratios = []
-            for i in range(len(values_sz) - 1):
-                if values_sz[i] is not None and values_sz[i+1] is not None:
-                    # Invert ratio for left side
-                    ratios.append(values_sz[i] / values_sz[i+1])
-            fac_gm = calc_geometric_mean(ratios) if ratios else None
-        else:
-            fac_gm = None
+        # Factors
+        keys_fac = []
+        for u in range(1, 2): # 1
+            k_b = f'left_{u}_totleft_{u+2}'
+            k_a = f'left_{u+1}_totleft_{u+3}'
+            keys_fac.append(f'factor_{k_b}_vs_{k_a}')
+            
+        values_fac = [self.position_averages.get(k) for k in keys_fac]
+        fac_gm = calc_geometric_mean(values_fac)
+        
+        if is_outward and fac_gm is not None and fac_gm != 0:
+            fac_gm = 1.0 / fac_gm
             
         diagonals[2] = (sz_gm, fac_gm)
         
@@ -355,9 +372,22 @@ class FactorCalculator:
             # Diagonal always goes upward, so we compute growth factor as target/source
             geo_factor = val_b / val_a
         
-        # For diagonal factors, we DON'T apply direction adjustment
-        # Diagonal always shows the growth going up-right regardless of arrow_direction setting
-        factor_val = geo_factor
+        # For diagonal factors, we apply direction adjustment if specified
+        # User request: "diagonal growth rates also have to be reversed" for outward
+        is_outward = self.config.get_growth_direction(side) == 'outward'
+        
+        # Current geo_factor is (Target/Source) = Outward (Upper/Lower)? 
+        # Wait, get_diagonal_factor logic:
+        # Left: key_a=Lower(Far), key_b=Upper(Near). geo = Near/Far (Inward).
+        # We want Outward (Far/Near).
+        
+        # If is_outward is True, we want to invert it 
+        # (Assuming the default computation above produces Inward 0.25 for L)
+        
+        if is_outward and side == 'left' and geo_factor != 0:
+            factor_val = 1.0 / geo_factor
+        else:
+            factor_val = geo_factor
         
         return FactorData(
             value=factor_val,

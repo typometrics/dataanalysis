@@ -23,7 +23,7 @@ def _always_true(x):
 
 
 def plot_mal_curves_with_groups(mal_data, langNames, langnameGroup, appearance_dict, 
-                                  n_required=5, figsize=(12, 7)):
+                                  n_required=5, figsize=(12, 7), plots_dir='plots'):
     """
     Plot MALₙ curves for languages with data from 1 to n_required dependents.
     
@@ -43,6 +43,8 @@ def plot_mal_curves_with_groups(mal_data, langNames, langnameGroup, appearance_d
         Required number of dependents (languages must have data for 1 to n_required)
     figsize : tuple
         Figure size (width, height)
+    plots_dir : str
+        Directory to save plots (default: 'plots')
     """
     ns = list(range(1, n_required + 1))
     
@@ -89,10 +91,18 @@ def plot_mal_curves_with_groups(mal_data, langNames, langnameGroup, appearance_d
               bbox_to_anchor=(1.05, 1), loc='upper left')
     
     plt.tight_layout()
+    
+    # Save plot
+    if plots_dir:
+        os.makedirs(plots_dir, exist_ok=True)
+        plot_path = os.path.join(plots_dir, f'mal_curves_n{n_required}.png')
+        plt.savefig(plot_path, bbox_inches='tight', dpi=150)
+        print(f"✓ Saved: {plot_path}")
+    
     plt.show()
 
 
-def plot_mal_heatmap(mal_data, figsize=(12, 10), cmap="coolwarm"):
+def plot_mal_heatmap(mal_data, figsize=(12, 10), cmap="coolwarm", plots_dir='plots'):
     """
     Plot a heatmap of MALₙ values across languages.
     
@@ -104,6 +114,8 @@ def plot_mal_heatmap(mal_data, figsize=(12, 10), cmap="coolwarm"):
         Figure size (width, height)
     cmap : str
         Colormap name
+    plots_dir : str
+        Directory to save plots (default: 'plots')
     """
     # Convert mal_data to a DataFrame
     df_mal = pd.DataFrame.from_dict(mal_data, orient='index')
@@ -115,12 +127,20 @@ def plot_mal_heatmap(mal_data, figsize=(12, 10), cmap="coolwarm"):
     plt.xlabel("n (number of right dependents)")
     plt.ylabel("Language")
     plt.tight_layout()
+    
+    # Save plot
+    if plots_dir:
+        os.makedirs(plots_dir, exist_ok=True)
+        plot_path = os.path.join(plots_dir, 'mal_heatmap.png')
+        plt.savefig(plot_path, bbox_inches='tight', dpi=150)
+        print(f"✓ Saved: {plot_path}")
+    
     plt.show()
 
 
 def plot_scatter_2d(df, x_col, y_col, group_col, appearance_dict, 
                    title="", xlabel="", ylabel="", figsize=(10, 8), label_col=None, with_labels=True,
-                   add_diagonal=False, add_regression=False, show_inline=True):
+                   add_diagonal=False, add_regression=False, show_inline=True, plots_dir='plots', filename=None):
     """
     Create a 2D scatter plot colored by language group.
     
@@ -150,6 +170,10 @@ def plot_scatter_2d(df, x_col, y_col, group_col, appearance_dict,
         Whether to add a linear regression trend line and average ratio
     show_inline : bool
         Whether to show the plot inline. If False, returns the current axes.
+    plots_dir : str
+        Directory to save plots (default: 'plots'). Set to None to disable saving.
+    filename : str, optional
+        Filename to save the plot. If None, generated from columns.
     """
     plt.figure(figsize=figsize)
     
@@ -179,6 +203,21 @@ def plot_scatter_2d(df, x_col, y_col, group_col, appearance_dict,
         
     plt.tight_layout()
     
+    # Save plot
+    if plots_dir:
+        os.makedirs(plots_dir, exist_ok=True)
+        # Generate filename from columns if not provided
+        if not filename:
+            # Clean column names for filename
+            clean_x = x_col.replace(' ', '_').replace('/', '_')
+            clean_y = y_col.replace(' ', '_').replace('/', '_')
+            clean_group = group_col.replace(' ', '_').replace('/', '_')
+            filename = f'scatter_2d_{clean_x}_vs_{clean_y}_by_{clean_group}.png'
+            
+        plot_path = os.path.join(plots_dir, filename)
+        plt.savefig(plot_path, bbox_inches='tight', dpi=150)
+        print(f"✓ Saved: {plot_path}")
+    
     if show_inline:
         plt.show()
     else:
@@ -186,7 +225,7 @@ def plot_scatter_2d(df, x_col, y_col, group_col, appearance_dict,
 
 
 def plot_scatter_3d(df, x_col, y_col, z_col, group_col, appearance_dict,
-                   title="", xlabel="", ylabel="", zlabel="", figsize=(12, 10)):
+                   title="", xlabel="", ylabel="", zlabel="", figsize=(12, 10), plots_dir='plots'):
     """
     Create a 3D scatter plot colored by language group.
     
@@ -214,6 +253,8 @@ def plot_scatter_3d(df, x_col, y_col, z_col, group_col, appearance_dict,
         Z-axis label
     figsize : tuple
         Figure size (width, height)
+    plots_dir : str
+        Directory to save plots (default: 'plots'). Set to None to disable saving.
     """
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(111, projection='3d')
@@ -230,11 +271,20 @@ def plot_scatter_3d(df, x_col, y_col, z_col, group_col, appearance_dict,
     ax.set_title(title)
     ax.legend(title="Language groups", bbox_to_anchor=(1.05, 1), loc='upper left')
     plt.tight_layout()
+    
+    # Save plot
+    if plots_dir:
+        os.makedirs(plots_dir, exist_ok=True)
+        filename = f'scatter_3d_{x_col}_{y_col}_{z_col}.png'
+        plot_path = os.path.join(plots_dir, filename)
+        plt.savefig(plot_path, bbox_inches='tight', dpi=150)
+        print(f"✓ Saved: {plot_path}")
+    
     plt.show()
 
 
 def plot_position_distribution(data, position_key, langNames, langnameGroup, 
-                               appearance_dict, top_n=30):
+                               appearance_dict, top_n=30, plots_dir='plots'):
     """
     Plot the distribution of a specific position type across languages.
     
@@ -252,6 +302,8 @@ def plot_position_distribution(data, position_key, langNames, langnameGroup,
         Dictionary mapping groups to colors
     top_n : int
         Number of top languages to display
+    plots_dir : str
+        Directory to save plots (default: 'plots'). Set to None to disable saving.
     """
     # Extract data for this position
     lang_values = []
@@ -285,6 +337,17 @@ def plot_position_distribution(data, position_key, langNames, langnameGroup,
     ax.grid(axis='x', alpha=0.3)
     
     plt.tight_layout()
+    
+    # Save plot
+    if plots_dir:
+        os.makedirs(plots_dir, exist_ok=True)
+        # Sanitize position_key for filename
+        safe_key = position_key.replace('_', '-')
+        filename = f'position_distribution_{safe_key}_top{top_n}.png'
+        plot_path = os.path.join(plots_dir, filename)
+        plt.savefig(plot_path, bbox_inches='tight', dpi=150)
+        print(f"✓ Saved: {plot_path}")
+    
     plt.show()
 
 
@@ -495,7 +558,9 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
         plt.close()
     
     # Create new figure for regression plot with scatter points
-    plt.figure(figsize=(max_x, max_y))
+    # Increase figure size to have more room for legend outside
+    figsize_regplot = max(max_x, 12)
+    plt.figure(figsize=(figsize_regplot, figsize_regplot * 0.85))  # Slightly wider to accommodate legend
     plot = sns.scatterplot(data=df, x=pos1, y=pos2, hue='group', palette=palette)
     plt.xlim(0, max_x)
     plt.ylim(0, max_y)
@@ -536,7 +601,9 @@ def plot_dependency_sizes(pos1, pos2, prefix, all_langs_average_sizes_filtered,
         from matplotlib.lines import Line2D
         by_label['Regression'] = Line2D([0], [0], color='black', linewidth=2)
         
-    plt.legend(by_label.values(), by_label.keys(), loc='lower right', fontsize=8)
+    # Place legend outside plot area to avoid covering data points
+    plt.legend(by_label.values(), by_label.keys(), 
+              bbox_to_anchor=(1.02, 1), loc='upper left', fontsize=8, framealpha=0.9)
     
     plt.title(f'{filename} regplot', fontsize=16)
     plt.suptitle('\n'.join([corr+regr, special]), fontsize=12, y=0)

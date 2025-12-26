@@ -65,5 +65,17 @@ Summarizes the "diagonals" of the table. A diagonal tracks a structural position
     *   **Use case**: "How big is the last element of the chain as the chain gets longer?"
 *   **Other Diagonals**: Track the "Second from last", "Third from last", etc.
 
+### 6. Row Statistics (Comment Column)
+At the end of each row, you will see a comment block with summary statistics: `[GM: X.XX | Global: Y.YY | N=... ]`
+*   **GM (Local)**: The Average Constituent Size for this specific configuration row.
+*   **Global**: The Average Constituent Size (Geometric Mean) of the *entire sentence* (all dependents) for sentences matching this row.
+    *   For Standard Tables (Zero-Other-Side), GM and Global are identical.
+    *   For AnyOtherSide Tables, they differentiate between the local side weight and global sentence complexity.
+*   **N**: Samples (sentences) observed for this row.
+*   **Slope**: Linear regression slope of sizes along the row (if available).
+
+### 7. Validation Warnings
+*   **Rare Configurations**: A footer `⚠️ Rare Configurations (<10 samples)` will appear if any row has fewer than 10 observed sentences. These rows should be interpreted with caution.
+
 ## The "Helix" Concept
 The name "Helix" comes from the visualized pattern of growth. By tracking both the **Vertical** trends (fixed position, increasing total valency) and **Horizontal** trends (fixed valency, moving outwards), we can observe 2D vector fields of syntactic weight. In many languages, these factors form consistent spiraling or "helical" patterns when plotted.

@@ -43,7 +43,7 @@ class VerbCenteredTableBuilder:
         self.position_averages = position_averages
         self.config = config
         self.layout = TableLayout(config)
-        self.marginals = MarginalMeansCalculator(position_averages)
+        self.marginals = MarginalMeansCalculator(position_averages, config)
         self.factors = FactorCalculator(position_averages, config)
         self.ordering = OrderingStatsFormatter(ordering_stats) if ordering_stats else None
         self.validation_info = validation_info
@@ -83,10 +83,13 @@ class VerbCenteredTableBuilder:
                 if agg_row:
                     table.rows.append(agg_row)
         
-        # Add statistical validation footer if available
-        if self.validation_info:
+
+        
+        # Add Validation Footer
+        validation_footer = self._build_validation_footer()
+        if validation_footer:
             table.add_separator()
-            table.rows.extend(self._build_validation_footer())
+            table.rows.extend(validation_footer)
         
         return table
     
@@ -514,8 +517,10 @@ class VerbCenteredTableBuilder:
                     # Determine if we're moving inward or outward
                     if self.config.arrow_direction == 'left_to_right':
                         arrow = '→'  # L1 → V, moving right
-                    else:  # diverging/outward
-                        arrow = '→'  # Moving outward from V perspective means → for left side
+                    elif self.config.arrow_direction == 'outward':
+                        arrow = '→'  # XVX is always Left-to-Right (Request: "XVX line should always remain left to right")
+                    else:  # diverging
+                        arrow = '→'  # Legacy diverging? Or should this also be ←? Kept for safety.
                 else:  # right_to_left or inward/converging
                     # Factor goes between V and R1
                     fac_idx = self.layout.get_right_column_index(1, is_factor=True)
@@ -566,11 +571,6 @@ class VerbCenteredTableBuilder:
             triple = self.ordering.get_triple(side, tot, pair_idx)
             if triple:
                 lt, eq, gt = triple
-                # For left side, ordering stats compare closer vs farther (L1 vs L2)
-                # But display shows factor from farther to closer (L2 → L1)
-                # So we need to swap lt and gt for left side
-                if side == 'left':
-                    lt, gt = gt, lt  # Swap for left side
                 segments.append((f" (<{lt:.0f}={eq:.0f}>", COLOR_GREY, False))
                 gt_color = COLOR_RED if gt > lt else COLOR_GREY
                 segments.append((f"{gt:.0f})", gt_color, gt > lt))
@@ -590,6 +590,18 @@ class VerbCenteredTableBuilder:
         row_avg = self.position_averages.get(avg_key)
         if row_avg is not None:
             parts.append(f"GM: {row_avg:.3f}")
+            
+        # Global GM (Sentence Average)
+        avg_global_key = f'average_global_tot{side}_{tot}'
+        row_avg_global = self.position_averages.get(avg_global_key)
+        if row_avg_global is not None:
+            # Only show if different from GM (or maybe always show for consistency? User said "these... would be the same")
+            # If standard table, they are same. If anyotherside, different.
+            # Showing both verifies consistency for standard tables.
+            # But let's check floating point equality just in case to avoid visual clutter?
+            # User request: "these two numbers would then be the same... is it possible to have both information"
+            # Implies they want to see it.
+            parts.append(f"Global: {row_avg_global:.3f}")
         
         # N count
         if self.ordering:
@@ -656,9 +668,6 @@ class VerbCenteredTableBuilder:
         
         lt_pct, eq_pct, gt_pct, total_n = result
         
-        # For left side, swap lt and gt (same logic as individual factors)
-        lt_pct, gt_pct = gt_pct, lt_pct
-        
         row = self._create_empty_row()
         row[self.layout.label_col_idx] = CellData(
             text="Agg L First→",
@@ -684,40 +693,37 @@ class VerbCenteredTableBuilder:
         if not self.validation_info:
             return rows
         
-        num_samples = self.validation_info.get('num_samples', 0)
         min_threshold = self.validation_info.get('min_threshold', 5)
-        low_confidence = self.validation_info.get('low_confidence', False)
         low_sample_positions = self.validation_info.get('low_sample_positions', [])
         low_sample_factors = self.validation_info.get('low_sample_factors', [])
         
-        # Row 1: Sample count
-        row1 = self._create_empty_row()
-        confidence_indicator = "⚠️ " if low_confidence else "✓ "
-        row1[self.layout.label_col_idx] = CellData(
-            text=f"{confidence_indicator}Data Quality",
-            cell_type='comment',
-            rich_segments=[(f"{confidence_indicator}Data Quality", COLOR_ORANGE if low_confidence else COLOR_DARK, True)]
-        )
-        sample_text = f"Computed from {num_samples} sample(s)"
-        if low_confidence:
-            sample_text += f" (recommended: ≥{min_threshold})"
-        row1[self.layout.v_col_idx] = CellData(
-            text=sample_text,
-            cell_type='comment',
-            rich_segments=[(sample_text, COLOR_ORANGE if low_confidence else COLOR_GREY, False)]
-        )
-        rows.append(row1)
-        
-        # Row 2: Low-sample positions warning (if any)
+        # Row 1: Low-sample positions warning (if any)
         if low_sample_positions:
-            row2 = self._create_empty_row()
-            row2[self.layout.label_col_idx] = CellData(
+            row1 = self._create_empty_row()
+            row1[self.layout.label_col_idx] = CellData(
                 text="⚠️ Low n positions",
                 cell_type='comment',
                 rich_segments=[("⚠️ Low n positions", COLOR_ORANGE, False)]
             )
             examples = ', '.join(f'{k}(n={n})' for k, n in low_sample_positions[:5])
             warning_text = f"{len(low_sample_positions)} position(s) with <{min_threshold} samples. Examples: {examples}"
+            row1[self.layout.v_col_idx] = CellData(
+                text=warning_text,
+                cell_type='comment',
+                rich_segments=[(warning_text, COLOR_ORANGE, False)]
+            )
+            rows.append(row1)
+        
+        # Row 2: Low-sample factors warning (if any)
+        if low_sample_factors:
+            row2 = self._create_empty_row()
+            row2[self.layout.label_col_idx] = CellData(
+                text="⚠️ Low n factors",
+                cell_type='comment',
+                rich_segments=[("⚠️ Low n factors", COLOR_ORANGE, False)]
+            )
+            examples = ', '.join(f"{k.replace('factor_', '')}(n={n})" for k, n in low_sample_factors[:5])
+            warning_text = f"{len(low_sample_factors)} factor(s) with <{min_threshold} samples. Examples: {examples}"
             row2[self.layout.v_col_idx] = CellData(
                 text=warning_text,
                 cell_type='comment',
@@ -725,88 +731,5 @@ class VerbCenteredTableBuilder:
             )
             rows.append(row2)
         
-        # Row 3: Low-sample factors warning (if any)
-        if low_sample_factors:
-            row3 = self._create_empty_row()
-            row3[self.layout.label_col_idx] = CellData(
-                text="⚠️ Low n factors",
-                cell_type='comment',
-                rich_segments=[("⚠️ Low n factors", COLOR_ORANGE, False)]
-            )
-            examples = ', '.join(f"{k.replace('factor_', '')}(n={n})" for k, n in low_sample_factors[:5])
-            warning_text = f"{len(low_sample_factors)} factor(s) with <{min_threshold} samples. Examples: {examples}"
-            row3[self.layout.v_col_idx] = CellData(
-                text=warning_text,
-                cell_type='comment',
-                rich_segments=[(warning_text, COLOR_ORANGE, False)]
-            )
-            rows.append(row3)
-        
         return rows
-    
-    def _build_validation_footer(self) -> List[List[CellData]]:
-        """Build statistical validation footer rows."""
-        rows = []
-        
-        if not self.validation_info:
-            return rows
-        
-        num_samples = self.validation_info.get('num_samples', 0)
-        min_threshold = self.validation_info.get('min_threshold', 5)
-        low_confidence = self.validation_info.get('low_confidence', False)
-        low_sample_positions = self.validation_info.get('low_sample_positions', [])
-        low_sample_factors = self.validation_info.get('low_sample_factors', [])
-        
-        # Row 1: Sample count
-        row1 = self._create_empty_row()
-        confidence_indicator = "⚠️ " if low_confidence else "✓ "
-        row1[self.layout.label_col_idx] = CellData(
-            text=f"{confidence_indicator}Data Quality",
-            cell_type='comment',
-            rich_segments=[(f"{confidence_indicator}Data Quality", COLOR_ORANGE if low_confidence else COLOR_DARK, True)]
-        )
-        sample_text = f"Computed from {num_samples} sample(s)"
-        if low_confidence:
-            sample_text += f" (recommended: ≥{min_threshold})"
-        row1[self.layout.v_col_idx] = CellData(
-            text=sample_text,
-            cell_type='comment',
-            rich_segments=[(sample_text, COLOR_ORANGE if low_confidence else COLOR_GREY, False)]
-        )
-        rows.append(row1)
-        
-        # Row 2: Low-sample positions warning (if any)
-        if low_sample_positions:
-            row2 = self._create_empty_row()
-            row2[self.layout.label_col_idx] = CellData(
-                text="⚠️ Low n positions",
-                cell_type='comment',
-                rich_segments=[("⚠️ Low n positions", COLOR_ORANGE, False)]
-            )
-            examples = ', '.join(f'{k}(n={n})' for k, n in low_sample_positions[:5])
-            warning_text = f"{len(low_sample_positions)} position(s) with <{min_threshold} samples. Examples: {examples}"
-            row2[self.layout.v_col_idx] = CellData(
-                text=warning_text,
-                cell_type='comment',
-                rich_segments=[(warning_text, COLOR_ORANGE, False)]
-            )
-            rows.append(row2)
-        
-        # Row 3: Low-sample factors warning (if any)
-        if low_sample_factors:
-            row3 = self._create_empty_row()
-            row3[self.layout.label_col_idx] = CellData(
-                text="⚠️ Low n factors",
-                cell_type='comment',
-                rich_segments=[("⚠️ Low n factors", COLOR_ORANGE, False)]
-            )
-            examples = ', '.join(f"{k.replace('factor_', '')}(n={n})" for k, n in low_sample_factors[:5])
-            warning_text = f"{len(low_sample_factors)} factor(s) with <{min_threshold} samples. Examples: {examples}"
-            row3[self.layout.v_col_idx] = CellData(
-                text=warning_text,
-                cell_type='comment',
-                rich_segments=[(warning_text, COLOR_ORANGE, False)]
-            )
-            rows.append(row3)
-        
-        return rows
+

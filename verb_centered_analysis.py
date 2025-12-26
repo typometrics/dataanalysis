@@ -64,11 +64,129 @@ def create_verb_centered_table(
             show_ordering_triples=kwargs.get('show_ordering_triples', False),
             show_row_averages=kwargs.get('show_row_averages', False),
             show_marginal_means=kwargs.get('show_marginal_means', True),
-            arrow_direction=kwargs.get('arrow_direction', 'diverging')
+            arrow_direction=kwargs.get('arrow_direction', 'outward')
         )
     
     builder = VerbCenteredTableBuilder(position_averages, config, ordering_stats, validation_info)
     return builder.build()
+
+
+def compute_aggregate_ordering_stats(all_langs_average_sizes_filtered):
+    """
+    Compute aggregate ordering statistics across multiple languages.
+    
+    For each position pair, counts how many languages have:
+    - left position < right position (lt)
+    - left position = right position (eq) 
+    - left position > right position (gt)
+    
+    Parameters
+    ----------
+    all_langs_average_sizes_filtered : dict
+        Dictionary mapping language codes to position averages
+        
+    Returns
+    -------
+    dict
+        Ordering statistics in format: {(side, tot, pair_idx): {'lt': count, 'eq': count, 'gt': count}}
+    """
+    ordering_stats = {}
+    
+    # Right side: compare adjacent positions
+    for tot in [2, 3, 4]:
+        for pair_idx in range(tot - 1):
+            pos_a = pair_idx + 1  # e.g., R1, R2, R3
+            pos_b = pair_idx + 2  # e.g., R2, R3, R4
+            
+            lt_count = 0
+            eq_count = 0
+            gt_count = 0
+            
+            for lang, positions in all_langs_average_sizes_filtered.items():
+                key_a = f'right_{pos_a}_totright_{tot}'
+                key_b = f'right_{pos_b}_totright_{tot}'
+                
+                val_a = positions.get(key_a)
+                val_b = positions.get(key_b)
+                
+                if val_a is not None and val_b is not None:
+                    if val_a < val_b:
+                        lt_count += 1
+                    elif abs(val_a - val_b) < 1e-6:  # Equal within tolerance
+                        eq_count += 1
+                    else:
+                        gt_count += 1
+            
+            if lt_count + eq_count + gt_count > 0:
+                ordering_stats[('right', tot, pair_idx)] = {
+                    'lt': lt_count,
+                    'eq': eq_count,
+                    'gt': gt_count
+                }
+    
+    # Left side: compare adjacent positions  
+    # Note: Factors are displayed as L4→L3→L2→L1 (towards verb)
+    # So for pair_idx=2 (used with pos=4), we compare L4 vs L3 (not L3 vs L4)
+    for tot in [2, 3, 4]:
+        for pair_idx in range(tot - 1):
+            # For left side, we need to compare in reverse: farther position vs closer position
+            # pair_idx=0 (pos=2): compare L2 vs L1
+            # pair_idx=1 (pos=3): compare L3 vs L2
+            # pair_idx=2 (pos=4): compare L4 vs L3
+            pos_a = pair_idx + 2  # e.g., L2, L3, L4 (farther from V)
+            pos_b = pair_idx + 1  # e.g., L1, L2, L3 (closer to V)
+            
+            lt_count = 0
+            eq_count = 0
+            gt_count = 0
+            
+            for lang, positions in all_langs_average_sizes_filtered.items():
+                key_a = f'left_{pos_a}_totleft_{tot}'
+                key_b = f'left_{pos_b}_totleft_{tot}'
+                
+                val_a = positions.get(key_a)
+                val_b = positions.get(key_b)
+                
+                if val_a is not None and val_b is not None:
+                    if val_a < val_b:
+                        lt_count += 1
+                    elif abs(val_a - val_b) < 1e-6:  # Equal within tolerance
+                        eq_count += 1
+                    else:
+                        gt_count += 1
+            
+            if lt_count + eq_count + gt_count > 0:
+                ordering_stats[('left', tot, pair_idx)] = {
+                    'lt': lt_count,
+                    'eq': eq_count,
+                    'gt': gt_count
+                }
+    
+    # XVX: compare L1 vs R1
+    lt_count = 0
+    eq_count = 0
+    gt_count = 0
+    
+    for lang, positions in all_langs_average_sizes_filtered.items():
+        val_l = positions.get('xvx_left_1')
+        val_r = positions.get('xvx_right_1')
+        
+        if val_l is not None and val_r is not None:
+            if val_l < val_r:
+                lt_count += 1
+            elif abs(val_l - val_r) < 1e-6:
+                eq_count += 1
+            else:
+                gt_count += 1
+    
+    if lt_count + eq_count + gt_count > 0:
+        ordering_stats[('xvx', 2, 0)] = {
+            'lt': lt_count,
+            'eq': eq_count,
+            'gt': gt_count
+        }
+    
+    return ordering_stats
 
 
 # ============================================================================
@@ -80,7 +198,8 @@ def _compute_sizes_and_factors_generic(
     key_generator_fn,
     filter_fn=None,
     key_transformer=None,
-    warn_low_samples=True
+    warn_low_samples=True,
+    all_langs_position2num=None
 ):
     """
     Generic computation of sizes and growth factors.
@@ -102,6 +221,8 @@ def _compute_sizes_and_factors_generic(
         Signature: (key: str) -> str
     warn_low_samples : bool, default=True
         Whether to issue warnings for computations with low sample counts
+    all_langs_position2num : dict, optional
+        Dictionary mapping language codes to position counts (for accurate validation)
         
     Returns
     -------
@@ -167,9 +288,61 @@ def _compute_sizes_and_factors_generic(
             output_key = key_transformer(position_key)
             results[output_key] = np.exp(position_sums[position_key] / count)
             
-            # Track low-sample positions
-            if count < MIN_SAMPLE_THRESHOLD:
-                low_sample_positions.append((output_key, count))
+            # Track low-sample positions using actual sample counts if available
+            if all_langs_position2num:
+                # Use actual sample counts from position2num
+                actual_count = 0
+                for lang in all_langs_average_sizes_filtered:
+                    if lang in all_langs_position2num:
+                        actual_count += all_langs_position2num[lang].get(position_key, 0)
+                if actual_count > 0 and actual_count < MIN_SAMPLE_THRESHOLD:
+                    # Filter out positions with tot > 4 (not shown in table)
+                    if '_tot' in output_key:
+                        try:
+                            # Extract tot value (e.g. left_1_totleft_6 -> 6)
+                            parts = output_key.split('_')
+                            tot_val = int(parts[-1])
+                            if tot_val <= 4:
+                                low_sample_positions.append((output_key, actual_count))
+                        except (ValueError, IndexError):
+                            low_sample_positions.append((output_key, actual_count))
+                    else:
+                        # Check for simple position keys (left_7, right_5) used in AnyOtherSide
+                        try:
+                            # Standard format: left_N or right_N
+                            parts = output_key.split('_')
+                            if len(parts) == 2 and parts[0] in ['left', 'right']:
+                                pos_val = int(parts[1])
+                                if pos_val <= 4:
+                                    low_sample_positions.append((output_key, actual_count))
+                            else:
+                                low_sample_positions.append((output_key, actual_count))
+                        except (ValueError, IndexError):
+                            low_sample_positions.append((output_key, actual_count))
+            else:
+                # Fallback: count languages (treebanks) that contributed
+                if count < MIN_SAMPLE_THRESHOLD:
+                    # Filter out positions with tot > 4
+                    if '_tot' in output_key:
+                        try:
+                            parts = output_key.split('_')
+                            tot_val = int(parts[-1])
+                            if tot_val <= 4:
+                                low_sample_positions.append((output_key, count))
+                        except (ValueError, IndexError):
+                            low_sample_positions.append((output_key, count))
+                    else:
+                        # Check for simple position keys here too
+                        try:
+                            parts = output_key.split('_')
+                            if len(parts) == 2 and parts[0] in ['left', 'right']:
+                                pos_val = int(parts[1])
+                                if pos_val <= 4:
+                                    low_sample_positions.append((output_key, count))
+                            else:
+                                low_sample_positions.append((output_key, count))
+                        except (ValueError, IndexError):
+                            low_sample_positions.append((output_key, count))
     
     # Geometric Means for Ratios (Growth Factors)
     for pair_key, stats in ratio_stats.items():
@@ -185,48 +358,75 @@ def _compute_sizes_and_factors_generic(
             factor_key = f'factor_{output_key_b}_vs_{output_key_a}'
             results[factor_key] = geo_mean_ratio
             
-            # Track low-sample factors
-            if count < MIN_SAMPLE_THRESHOLD:
-                low_sample_factors.append((factor_key, count))
+            # Track low-sample factors using actual sample counts if available
+            if all_langs_position2num:
+                # Factors are computed from pairs, so check if both positions have enough samples
+                actual_count = 0
+                for lang in all_langs_average_sizes_filtered:
+                    if lang in all_langs_position2num:
+                        # A factor sample exists if both positions have data
+                        count_b = all_langs_position2num[lang].get(key_b, 0)
+                        count_a = all_langs_position2num[lang].get(key_a, 0)
+                        if count_b > 0 and count_a > 0:
+                            actual_count += min(count_b, count_a)
+                if actual_count > 0 and actual_count < MIN_SAMPLE_THRESHOLD:
+                    # Filter out factors with tot > 4
+                    if '_tot' in factor_key:
+                        try:
+                            # factor_left_1_totleft_2_vs_left_1_totleft_1
+                            # check if ANY tot in key is > 4 (conservative)
+                            is_relevant = True
+                            parts = factor_key.split('_')
+                            for i, part in enumerate(parts):
+                                if part.startswith('tot') and i+1 < len(parts):
+                                    try:
+                                        tot_val = int(parts[i+1])
+                                        if tot_val > 4:
+                                            is_relevant = False
+                                            break
+                                    except ValueError:
+                                        pass
+                            if is_relevant:
+                                low_sample_factors.append((factor_key, actual_count))
+                        except Exception:
+                            low_sample_factors.append((factor_key, actual_count))
+                    else:
+                        low_sample_factors.append((factor_key, actual_count))
+            else:
+                # Fallback: count languages (treebanks) that contributed
+                if count < MIN_SAMPLE_THRESHOLD:
+                    # Filter out factors with tot > 4
+                    if '_tot' in factor_key:
+                        try:
+                            is_relevant = True
+                            parts = factor_key.split('_')
+                            for i, part in enumerate(parts):
+                                if part.startswith('tot') and i+1 < len(parts):
+                                    try:
+                                        tot_val = int(parts[i+1])
+                                        if tot_val > 4:
+                                            is_relevant = False
+                                            break
+                                    except ValueError:
+                                        pass
+                            if is_relevant:
+                                low_sample_factors.append((factor_key, count))
+                        except Exception:
+                            low_sample_factors.append((factor_key, count))
+                    else:
+                        low_sample_factors.append((factor_key, count))
     
-    # Build validation info
+    # Build validation info (removed num_samples and low_confidence as they're no longer used)
     validation_info = {
-        'num_samples': num_languages,
         'min_threshold': MIN_SAMPLE_THRESHOLD,
-        'low_confidence': num_languages < MIN_SAMPLE_THRESHOLD,
         'low_sample_positions': low_sample_positions,
         'low_sample_factors': low_sample_factors,
         'total_positions': len([k for k in results if not k.startswith('factor_')]),
         'total_factors': len([k for k in results if k.startswith('factor_')])
     }
     
-    # Issue warnings to stderr if enabled
-    if warn_low_samples and num_languages < MIN_SAMPLE_THRESHOLD:
-        warnings.warn(
-            f"Computing geometric means from only {num_languages} sample(s). "
-            f"Results may have low statistical confidence. "
-            f"Recommended minimum: {MIN_SAMPLE_THRESHOLD} samples.",
-            UserWarning,
-            stacklevel=3
-        )
-        
-        if low_sample_positions:
-            examples = ', '.join(f'{k}(n={n})' for k, n in low_sample_positions[:3])
-            warnings.warn(
-                f"{len(low_sample_positions)} position(s) computed from < {MIN_SAMPLE_THRESHOLD} samples. "
-                f"Examples: {examples}",
-                UserWarning,
-                stacklevel=3
-            )
-        
-        if low_sample_factors:
-            examples = ', '.join(f"{k.replace('factor_', '')}(n={n})" for k, n in low_sample_factors[:3])
-            warnings.warn(
-                f"{len(low_sample_factors)} growth factor(s) computed from < {MIN_SAMPLE_THRESHOLD} samples. "
-                f"Examples: {examples}",
-                UserWarning,
-                stacklevel=3
-            )
+    # Validation info is stored in validation_info dict and displayed in table footer
+    # No inline warnings to avoid disrupting progress bars
     
     return results, validation_info
 
@@ -235,7 +435,7 @@ def _compute_sizes_and_factors_generic(
 # PUBLIC API - UNIFIED COMPUTATION
 # ============================================================================
 
-def compute_sizes_table(all_langs_average_sizes_filtered, table_type='standard'):
+def compute_sizes_table(all_langs_average_sizes_filtered, table_type='standard', all_langs_position2num=None):
     """
     Compute average constituent sizes at each position for different totals.
     Also computes GEOMETRIC MEANS of ratios between positions (Growth Factors).
@@ -248,6 +448,8 @@ def compute_sizes_table(all_langs_average_sizes_filtered, table_type='standard')
         Type of table to compute:
         - 'standard': Zero-other-side helix (e.g., 'V X X' on left, 'X X X X' on right)
         - 'anyotherside': Any-other-side helix (ignores opposite side count)
+    all_langs_position2num : dict, optional
+        Dictionary mapping language codes to position counts (for accurate validation)
     
     Returns
     -------
@@ -259,6 +461,11 @@ def compute_sizes_table(all_langs_average_sizes_filtered, table_type='standard')
     if table_type == 'standard':
         def generate_keys():
             """Generate key patterns for standard (zero-other-side) helix tables."""
+            # Include Average Keys (transformed later)
+            # This generator isn't strictly necessary for generic builder if we use filter_fn, 
+            # but it documents intent. The generic builder iterates keys passing filter_fn.
+            pass
+
             pairs_to_track = []
             
             # Horizontal Right: right_{pos}_totright_{tot} vs right_{pos-1}_totright_{tot}
@@ -294,11 +501,23 @@ def compute_sizes_table(all_langs_average_sizes_filtered, table_type='standard')
             
             return [], pairs_to_track
         
+        def transform_standard_key(key):
+            """Transform zero-otherside keys to standard format."""
+            if key.endswith('_zerootherside'):
+                return key.replace('_zerootherside', '')
+            return key
+
         return _compute_sizes_and_factors_generic(
             all_langs_average_sizes_filtered,
             generate_keys,
-            filter_fn=None,
-            key_transformer=None
+            # Filter: Include standard keys AND zerootherside averages (local and global). 
+            # Exclude standard 'average_' and 'average_global_' keys (which are Global/AnyOtherSide).
+            filter_fn=lambda k: ('_anyother' not in k) and (
+                (not k.startswith('average_') and not k.startswith('average_global_')) or 
+                k.endswith('_zerootherside')
+            ),
+            key_transformer=transform_standard_key,
+            all_langs_position2num=all_langs_position2num
         )
     
     elif table_type == 'anyotherside':
@@ -343,8 +562,14 @@ def compute_sizes_table(all_langs_average_sizes_filtered, table_type='standard')
         return _compute_sizes_and_factors_generic(
             all_langs_average_sizes_filtered,
             generate_keys,
-            filter_fn=lambda k: '_anyother' in k,
-            key_transformer=transform_anyother_key
+            # Filter: Include anyother keys AND global/anyotherside average keys.
+            # Exclude '_zerootherside' keys.
+            filter_fn=lambda k: ('_anyother' in k or (
+                (k.startswith('average_') or k.startswith('average_global_')) and 
+                not k.endswith('_zerootherside')
+            )),
+            key_transformer=transform_anyother_key,
+            all_langs_position2num=all_langs_position2num
         )
     
     else:
@@ -386,9 +611,10 @@ def format_verb_centered_table(
     show_ordering_triples: bool = False,
     show_row_averages: bool = False,
     show_marginal_means: bool = True,
-    arrow_direction: str = 'diverging',
+    arrow_direction: str = 'outward',
     ordering_stats: Optional[Dict] = None,
     disorder_percentages: Optional[Dict] = None,
+    validation_info: Optional[Dict] = None,
     save_tsv: bool = False,
     output_dir: str = 'data',
     filename: Optional[str] = None
@@ -408,7 +634,7 @@ def format_verb_centered_table(
         arrow_direction=arrow_direction
     )
     
-    table = create_verb_centered_table(position_averages, config, ordering_stats)
+    table = create_verb_centered_table(position_averages, config, ordering_stats, validation_info)
     if table is None:
         return "Error: Could not create table"
     
@@ -543,8 +769,9 @@ def generate_mass_tables(
     metadata,
     vo_data=None,
     output_dir='data/tables',
-    arrow_direction='diverging',
-    extract_disorder_metrics=False
+    arrow_direction='outward',
+    extract_disorder_metrics=False,
+    all_langs_position2num=None
 ):
     """
     Generate Verb-Centered Tables for:
@@ -561,6 +788,7 @@ def generate_mass_tables(
         output_dir: Output directory
         arrow_direction: 'diverging', 'left_to_right', etc.
         extract_disorder_metrics: Boolean, if True returns disorder DataFrame
+        all_langs_position2num: Dict of position counts per language (optional, for accurate validation)
 
     Returns:
         pd.DataFrame or None: Disorder metrics if requested
@@ -580,11 +808,14 @@ def generate_mass_tables(
     # 1. GLOBAL AVERAGE
     print("Generating Global Table...")
     global_avgs = compute_average_sizes_table(all_langs_average_sizes)
+    global_ordering = compute_aggregate_ordering_stats(all_langs_average_sizes)
     format_verb_centered_table(
         global_avgs,
         show_horizontal_factors=True,
         show_diagonal_factors=True,
         arrow_direction=arrow_direction,
+        ordering_stats=global_ordering,
+        show_ordering_triples=True,
         save_tsv=True,
         output_dir=output_dir,
         filename="GLOBAL_average_table.tsv"
@@ -604,12 +835,15 @@ def generate_mass_tables(
     for family, langs_data in family_langs.items():
         if not langs_data: continue
         family_avgs = compute_average_sizes_table(langs_data)
+        family_ordering = compute_aggregate_ordering_stats(langs_data)
         safe_fam = "".join(x for x in family if x.isalnum() or x in " _-").strip().replace(" ", "_")
         format_verb_centered_table(
             family_avgs,
             show_horizontal_factors=True,
             show_diagonal_factors=True,
             arrow_direction=arrow_direction,
+            ordering_stats=family_ordering,
+            show_ordering_triples=True,
             save_tsv=True,
             output_dir=output_dir,
             filename=f"FAMILY_{safe_fam}_table.tsv"
@@ -652,15 +886,29 @@ def generate_mass_tables(
     lang_to_factors = {} # Cache for disorder step
     
     for lang in tqdm(all_langs_average_sizes):
-        # Compute table for this language
+        # Compute table for this language with proper validation info
         single_lang_data = {lang: all_langs_average_sizes[lang]}
-        lang_avgs = compute_average_sizes_table(single_lang_data)
+        single_lang_counts = {lang: all_langs_position2num[lang]} if all_langs_position2num and lang in all_langs_position2num else None
+        
+        # Use compute_sizes_table instead of compute_average_sizes_table to get validation_info
+        lang_avgs, validation_info = compute_sizes_table(
+            single_lang_data, 
+            table_type='standard', 
+            all_langs_position2num=single_lang_counts
+        )
         
         # Determine specific ordering stats if available
         lang_order_stats = ordering_stats.get(lang) if ordering_stats else None
         
         # Get language name for filename
         lang_name = langnames.get(lang, lang)
+        
+        # Extract language code from treebank code (e.g., 'fr' from 'fr_gsd')
+        lang_code = lang.split('_')[0]
+        
+        # Create language-specific subfolder (by language, not treebank)
+        lang_folder = os.path.join(output_dir, f"{lang_name}_{lang_code}")
+        os.makedirs(lang_folder, exist_ok=True)
         
         # Create table structure
         config = TableConfig(
@@ -674,15 +922,16 @@ def generate_mass_tables(
         table = create_verb_centered_table(
             lang_avgs,
             config,
-            {lang: lang_order_stats} if lang_order_stats else None
+            lang_order_stats,  # Pass ordering stats directly, not wrapped in dict
+            validation_info=validation_info  # Pass the calculated validation info
         )
         
         # Save TSV (Helix format with statistics)
-        tsv_path = os.path.join(output_dir, f"Helix_{lang_name}_{lang}.tsv")
+        tsv_path = os.path.join(lang_folder, f"Helix_{lang_name}_{lang}.tsv")
         TSVFormatter().save(table, tsv_path)
         
         # Save Excel (Helix format with statistics)
-        xlsx_path = os.path.join(output_dir, f"Helix_{lang_name}_{lang}.xlsx")
+        xlsx_path = os.path.join(lang_folder, f"Helix_{lang_name}_{lang}.xlsx")
         ExcelFormatter().save(table, xlsx_path)
         
         if extract_disorder_metrics:
@@ -726,6 +975,7 @@ def generate_mass_tables(
     generate_anyotherside_helix_tables(
         all_langs_average_sizes,
         langnames,
+        ordering_stats=ordering_stats,
         output_dir=output_dir,
         arrow_direction=arrow_direction
     )
@@ -736,8 +986,10 @@ def generate_mass_tables(
 def generate_anyotherside_helix_tables(
     all_langs_average_sizes,
     langnames,
+    ordering_stats=None,  # Added argument
     output_dir='data/tables',
-    arrow_direction='diverging'
+    arrow_direction='outward',
+    all_langs_position2num=None  # Added argument for validation
 ):
     """
     Generate Any-Other-Side Helix tables for all languages.
@@ -754,6 +1006,8 @@ def generate_anyotherside_helix_tables(
         Dictionary mapping language codes to position averages
     langnames : dict
         Dictionary mapping language codes to language names
+    ordering_stats : dict, optional
+        Dictionary mapping language codes to ordering statistics
     output_dir : str
         Output directory for tables
     arrow_direction : str
@@ -769,32 +1023,44 @@ def generate_anyotherside_helix_tables(
         
         # Get anyother statistics for this language (returns standard keys directly!)
         single_lang_data = {lang: all_langs_average_sizes[lang]}
-        position_data, validation_info = compute_sizes_table(single_lang_data, table_type='anyotherside')
+        single_lang_counts = {lang: all_langs_position2num[lang]} if all_langs_position2num and lang in all_langs_position2num else None
+        position_data, validation_info = compute_sizes_table(single_lang_data, table_type='anyotherside', all_langs_position2num=single_lang_counts)
         
         if not position_data:
             continue  # No anyother stats for this language
         
         # Create table configuration (with marginal means for consistency)
+        # Create table configuration (with marginal means for consistency)
         config = TableConfig(
             show_horizontal_factors=True,
             show_diagonal_factors=True,
-            show_ordering_triples=False,  # No ordering stats for anyother
-            show_row_averages=False,
-            show_marginal_means=True,  # Now enabled!
+            show_ordering_triples=True,  # Enabled
+            show_row_averages=True,      # Enabled
+            show_marginal_means=True,
             arrow_direction=arrow_direction
         )
         
+        # Get language ordering stats
+        lang_ordering = ordering_stats.get(lang) if ordering_stats else None
+        
         # Use the STANDARD table builder (unified!) with validation info
-        table = create_verb_centered_table(position_data, config, ordering_stats=None, validation_info=validation_info)
+        table = create_verb_centered_table(position_data, config, ordering_stats=lang_ordering, validation_info=validation_info)
         
         if table is None:
             continue
         
+        # Extract language code from treebank code (e.g., 'fr' from 'fr_gsd')
+        lang_code = lang.split('_')[0]
+        
+        # Create language-specific subfolder (by language, not treebank)
+        lang_folder = os.path.join(output_dir, f"{lang_name}_{lang_code}")
+        os.makedirs(lang_folder, exist_ok=True)
+        
         # Save using standard formatters (no title argument)
-        tsv_path = os.path.join(output_dir, f"Helix_{lang_name}_{lang}_AnyOtherSide.tsv")
+        tsv_path = os.path.join(lang_folder, f"Helix_{lang_name}_{lang}_AnyOtherSide.tsv")
         TSVFormatter().save(table, tsv_path)
         
-        xlsx_path = os.path.join(output_dir, f"Helix_{lang_name}_{lang}_AnyOtherSide.xlsx")
+        xlsx_path = os.path.join(lang_folder, f"Helix_{lang_name}_{lang}_AnyOtherSide.xlsx")
         ExcelFormatter().save(table, xlsx_path)
     
     print(f"  Generated Any-Other-Side tables for {len(all_langs_average_sizes)} languages")

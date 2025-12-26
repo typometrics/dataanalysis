@@ -74,13 +74,15 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
             position2charsizes[key_base] = position2charsizes.get(key_base, 0) + np.log(char_size)
         
         # Context-aware key including total number of kids in this direction
-        key_tot = f'{key_base}_tot{direction}_{len(kids)}'
-        position2num[key_tot] = position2num.get(key_tot, 0) + 1
-        if size > 0:
-            position2sizes[key_tot] = position2sizes.get(key_tot, 0) + np.log(size)
-        
-        if position2charsizes is not None and char_size > 0:
-            position2charsizes[key_tot] = position2charsizes.get(key_tot, 0) + np.log(char_size)
+        # ONLY increment this when opposite side has 0 kids (exact configuration)
+        if len(other_kids) == 0:
+            key_tot = f'{key_base}_tot{direction}_{len(kids)}'
+            position2num[key_tot] = position2num.get(key_tot, 0) + 1
+            if size > 0:
+                position2sizes[key_tot] = position2sizes.get(key_tot, 0) + np.log(size)
+            
+            if position2charsizes is not None and char_size > 0:
+                position2charsizes[key_tot] = position2charsizes.get(key_tot, 0) + np.log(char_size)
         
         # Any-other-side key (ignoring opposite direction count)
         key_anyother = f'{key_base}_anyother'
@@ -102,54 +104,66 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
         
         kids_sizes.append(size)
     
-    # Average key for this configuration
+    # Pre-calculated log average size for this verb
+    log_avg_size = None
+    if kids_sizes:
+        log_avg_size = np.mean(np.log(kids_sizes))
+        
+    # Calculate GLOBAL average size (kids + other_kids)
+    log_global_avg_size = None
+    other_sizes = []
+    
+    # We need to compute sizes for other_kids
+    # NOTE: This duplicates logic from the caller/process_kids loop 
+    # but since we only have IDs produced by get_dep_sizes, we have to look them up.
+    # To avoid this, we could refactor get_dep_sizes to pass sizes, but that touches more code.
+    # Looking up sizes here is safe.
+    for okid in other_kids:
+        if use_direct_span:
+            sp = tree[okid].get('direct_span', tree[okid]['span'])
+        else:
+            sp = tree[okid]['span']
+        other_sizes.append(len(sp))
+        
+    all_sizes = kids_sizes + other_sizes
+    if all_sizes:
+        log_global_avg_size = np.mean(np.log(all_sizes))
+
+    # Average key for this configuration (GLOBAL/AnyOtherSide)
     avg_key = f'average_tot{direction}_{len(kids)}'
     position2num[avg_key] = position2num.get(avg_key, 0) + 1
-
-    # For the per-sentence average, we can stick to arithmetic or geometric.
-    # Usually "Average Constituent Size" per sentence is just arithmetic for that sentence?
-    # But for consistency, let's just log the arithmetic average of the kids? 
-    # OR, do we want the geometric mean of the kids of THIS verb?
-    # The 'position2sizes' keys above are accumulating ALL kids individually.
-    # The 'avg_key' here is accumulating the average of the kids for ONE verb instance.
-    # If we want consistent geometric mean everywhere:
-    # We should probably store the log of the (geometric?) mean of the kids?
-    # Or just log(arithmetic mean)?
-    # Let's check how this is used. It aggregates `sum(kids_sizes) / len(kids_sizes)`.
-    # This is "Average Size of Dependents of Verb V".
-    # If we change to GM, this should be GM(kids_sizes).
     
-    if kids_sizes:
-        # calculates geometric mean of this specific verb's kids
-        # product(kids)^(1/n) -> log -> 1/n * sum(log(kids))
-        # But wait, this value is then ADDED to a global sum across all verbs, then divided by verbs count.
-        # So we want global GM = exp( 1/N * sum( log( per_verb_value ) ) )
-        # So here we should store log( per_verb_value ).
-        # per_verb_value can be the GM of its kids.
-        # So store: log( GM(kids) ) = 1/n * sum(log(kids)).
-        # Or per_verb_value can be AM of its kids.
-        # Given "Average Constituent Size", usually we want the typical size.
-        # Let's stick to Geometric Mean of the kids for this verb.
-        
-        log_avg_size = np.mean(np.log(kids_sizes))
+    # Global Average Key
+    avg_global_key = f'average_global_tot{direction}_{len(kids)}'
+    position2num[avg_global_key] = position2num.get(avg_global_key, 0) + 1
+    
+    if log_avg_size is not None:
         position2sizes[avg_key] = position2sizes.get(avg_key, 0) + log_avg_size
-    else:
-         pass # add 0? But log(0) is issue. If no kids, we don't add to count? 
-              # Code adds to count 1. 
-              # But loop `if kids_sizes` implies logic. 
-              # If kids is empty, `sum/len` is 0. 
-              # If kids is empty, process_kids is called with empty list? 
-              # Code: `kids_sizes = [] ... for i, ki in enumerate(kids)`.
-              # If kids empty, loop doesn't run. `avg_key` is updated.
-              # If kids empty, sizes=0. 
-              # We probably shouldn't be counting empty sets of kids for "Average Size" anyway?
-              # But `process_kids` is only called if `left_kids` or `right_kids` is NOT empty (checked in `get_dep_sizes`).
-              # So `kids_sizes` will not be empty.
-
-    
-    # Track size distributions
-    sizes2freq[avg_key] = sizes2freq.get(avg_key, {})
-    sizes2freq[avg_key][str(kids_sizes)] = sizes2freq[avg_key].get(str(kids_sizes), 0) + 1
+        
+        # Track size distributions for AnyOtherSide
+        sizes2freq[avg_key] = sizes2freq.get(avg_key, {})
+        sizes2freq[avg_key][str(kids_sizes)] = sizes2freq[avg_key].get(str(kids_sizes), 0) + 1
+        
+    if log_global_avg_size is not None:
+        position2sizes[avg_global_key] = position2sizes.get(avg_global_key, 0) + log_global_avg_size
+        
+    # Zero-Other-Side Average Key
+    if len(other_kids) == 0:
+        avg_key_zero = f'average_tot{direction}_{len(kids)}_zerootherside'
+        position2num[avg_key_zero] = position2num.get(avg_key_zero, 0) + 1
+        
+        avg_global_key_zero = f'average_global_tot{direction}_{len(kids)}_zerootherside'
+        position2num[avg_global_key_zero] = position2num.get(avg_global_key_zero, 0) + 1
+        
+        if log_avg_size is not None:
+            position2sizes[avg_key_zero] = position2sizes.get(avg_key_zero, 0) + log_avg_size
+            
+            # Track size distributions for ZeroOtherSide
+            sizes2freq[avg_key_zero] = sizes2freq.get(avg_key_zero, {})
+            sizes2freq[avg_key_zero][str(kids_sizes)] = sizes2freq[avg_key_zero].get(str(kids_sizes), 0) + 1
+            
+        if log_global_avg_size is not None:
+            position2sizes[avg_global_key_zero] = position2sizes.get(avg_global_key_zero, 0) + log_global_avg_size
 
 
 def get_ordering_stats(tree, include_bastards=False):

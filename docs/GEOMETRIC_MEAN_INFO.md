@@ -63,6 +63,18 @@ The "Marginal Mean" rows/columns (`M Vert` and `M Diag`) in the final table summ
     -   It does **NOT** account for the fact that `Tot=2` might be much more frequent than `Tot=4`.
     -   This provides a "Type-level" summary of the position's behavior across different valencies, rather than a "Token-level" average.
 
+### Level 4: Row Statistics (GM and Global)
+*Calculated in `conll_processing.py` (during traversal) and displayed in Row Comments*
+
+Each row displays two summary statistics:
+- **GM (Local)**: The Geometric Mean of constituent sizes for *that side only* (e.g., just Right dependents).
+    - Input: All constituents on that side for sentences matching the configuration.
+    - Weighting: **Frequency-weighted** (by sentence).
+- **Global**: The Geometric Mean of *all* constituents (Left + Right) for sentences matching the configuration.
+    - Input: All constituents in the entire sentence.
+    - Weighting: **Frequency-weighted**.
+    - **Purpose**: Provides context on the overall sentence complexity vs local side weight. For Zero-Other-Side tables (Standard), these are identical.
+
 ---
 
 ## 3. Growth Factors
@@ -102,3 +114,4 @@ The current implementation uses **Unweighted** Marginal Means (treating each `To
 | **Cell Value (One Lang)** | Single Cell (e.g., R1, Tot=2) | All corpus occurrences | **Frequency-weighted** |
 | **Cell Value (Group)** | Single Cell | One mean per language | **Unweighted** (1 Lang = 1 Vote) |
 | **M Vert / M Diag** | Marginal Summary | Table cells (Tot=1..4) | **Unweighted** (1 Tot = 1 Vote) |
+| **Row GM / Global** | Row Comment | All matching sentences | **Frequency-weighted** |

@@ -4,7 +4,11 @@ Uses examples collected during data extraction to avoid re-parsing.
 """
 
 import os
+import glob
 import pickle
+import csv
+import re
+import math
 from concurrent.futures import ProcessPoolExecutor
 import multiprocessing
 from tqdm import tqdm
@@ -115,8 +119,9 @@ def calculate_position_stats(examples, global_stats=None, l_count=0, r_count=0, 
     has_content = False
     
     # For partial configs, only show the relevant side
-    show_left = (config_type in ['exact', 'both', 'partial_left', 'partial_both'])
-    show_right = (config_type in ['exact', 'both', 'partial_right', 'partial_both'])
+    # For exact configs, show the appropriate side(s)
+    show_left = (config_type in ['exact', 'both', 'left', 'partial_left', 'partial_both'])
+    show_right = (config_type in ['exact', 'both', 'right', 'partial_right', 'partial_both'])
     
     # Left
     if left_sizes and show_left:
@@ -321,9 +326,16 @@ def generate_language_html(lang_code, lang_name, config_examples, lang_stats=Non
     output_dir : str
         Output directory for HTML files
     """
-    # Create language folder with matching naming convention
-    lang_folder = os.path.join(output_dir, f"{lang_name}_{lang_code}")
+    # Extract language code from treebank code (e.g., 'fr' from 'fr_gsd')
+    base_lang_code = lang_code.split('_')[0]
+    
+    # Create language folder with base language code
+    lang_folder = os.path.join(output_dir, f"{lang_name}_{base_lang_code}")
     os.makedirs(lang_folder, exist_ok=True)
+    
+    # Create samples subfolder inside language folder
+    samples_folder = os.path.join(lang_folder, "samples")
+    os.makedirs(samples_folder, exist_ok=True)
     
     # Generate HTML file for each configuration
     for config, examples in config_examples.items():
@@ -379,19 +391,402 @@ def generate_language_html(lang_code, lang_name, config_examples, lang_stats=Non
         
         html_content = '\n'.join(html_parts)
         
-        # Save to file (sanitize config name for filename)
+        # Save to file in samples subfolder (sanitize config name for filename)
         safe_config = config.replace(' ', '_')
-        output_file = os.path.join(lang_folder, f'{safe_config}.html')
+        output_file = os.path.join(samples_folder, f'{safe_config}.html')
         with open(output_file, 'w', encoding='utf-8') as f:
             f.write(html_content)
 
 
+def parse_tsv_to_html(tsv_path, link_map=None):
+    """
+    Read TSV and Convert to HTML Table.
+    
+    Parameters
+    ----------
+    tsv_path : str
+        Path to TSV file
+    link_map : dict, optional
+        Dictionary mapping cell text (e.g., "R tot=2") to URL (e.g., "samples/VXX_anyleft.html")
+    """
+    if not os.path.exists(tsv_path):
+        return "<p><em>Table file not found.</em></p>"
+    
+    html = ['<div class="table-container">']
+    html.append('<table class="helix-table">')
+    
+    with open(tsv_path, 'r', encoding='utf-8') as f:
+        # Read all lines
+        lines = [line.rstrip('\n') for line in f]
+    
+    # Simple TSV parsing
+    for i, line in enumerate(lines):
+        if not line.strip():
+            continue
+            
+        cells = line.split('\t')
+        
+        # Determine row type (Header vs Data vs Comment)
+        is_header = (i == 0) # Assumption
+        
+        html.append('<tr>')
+        for cell in cells:
+            tag = 'th' if is_header else 'td'
+            # Simple content cleaning
+            content = cell.strip()
+            if not content:
+                content = "&nbsp;"
+            
+            # Add Link if map provided and content matches
+            if link_map and content in link_map:
+                url = link_map[content]
+                content = f'<a href="{url}" title="show samples" style="text-decoration:none; color:inherit; border-bottom:1px dotted #999;">{content}</a>'
+            
+            # Highlight special content
+            style = ""
+            # Strip tags for style check
+            clean_content = re.sub(r'<[^>]+>', '', content).lower()
+            
+            if "→" in content or "←" in content or "↘" in content or "factor" in clean_content:
+                style = ' style="color: #0066cc; font-size: 0.9em;"'
+            elif "gm:" in content or "global:" in content: # Comment cell
+                 style = ' style="color: #666; font-style: italic; font-size: 0.85em;"'
+            
+            html.append(f'<{tag}{style}>{content}</{tag}>')
+        html.append('</tr>')
+        
+    html.append('</table>')
+    html.append('</div>')
+    return '\n'.join(html)
+
+
+def get_helix_factors(tsv_path):
+    """
+    Extract specific factors from Helix Table.
+    Returns (diag_right_last, diag_left_first) as floats (or None).
+    """
+    if not os.path.exists(tsv_path):
+        return None, None
+        
+    diag_right = None
+    diag_left = None
+    
+    try:
+        with open(tsv_path, 'r', encoding='utf-8') as f:
+            lines = [line.strip() for line in f]
+            
+        for line in lines:
+            if not line: continue
+            cells = [c.strip() for c in line.split('\t')]
+            if not cells: continue
+            
+            row_label = cells[0].lower()
+            
+            # M Diag Right: Last non-empty number
+            if 'm diag right' in row_label:
+                # Find last numeric-ish cell
+                for cell in reversed(cells[1:]):
+                    if not cell: continue
+                    # Clean cell: remove ×, ↗, →, etc
+                    val_str = re.sub(r'[×↗→←↘]', '', cell).strip()
+                    try:
+                        diag_right = float(val_str)
+                        break
+                    except ValueError:
+                        continue
+            
+            # M Diag Left: First non-empty number
+            if 'm diag left' in row_label:
+                # Find first numeric-ish cell
+                for cell in cells[1:]:
+                    if not cell: continue
+                    val_str = re.sub(r'[×↗→←↘]', '', cell).strip()
+                    try:
+                        diag_left = float(val_str)
+                        break
+                    except ValueError:
+                        continue
+                        
+    except Exception as e:
+        print(f"Error reading factors from {tsv_path}: {e}")
+        
+    return diag_right, diag_left
+
+
+def get_corpus_stats(file_list):
+    """
+    Compute basic stats from CoNLL files.
+    Returns (n_sentences, n_tokens).
+    """
+    n_sent = 0
+    n_tok = 0
+    
+    for filepath in file_list:
+        if not os.path.exists(filepath):
+            continue
+            
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                content = f.read()
+                sent_count = content.count('\n\n')
+                # Approximate token count (lines that are not empty string, not comments)
+                # But fast way: total lines - sent_count usually works for simple conll
+                # Better: count lines that start with digit
+                # Even faster match for standard notebook logic:
+                # langDict['nSentences'] = all_conll.count('\n\n')
+                # langDict['nTokens'] = all_conll.count('\n') - langDict['nSentences']
+                
+                n_sent += sent_count
+                # Note: this simple token count includes comments if they are on own lines
+                # But let's stick to the user's cited notebook logic if possible
+                n_tok += content.count('\n') - sent_count
+        except Exception:
+            pass
+            
+    return n_sent, n_tok
+
+
+
+def generate_language_index(lang_folder, lang_code, lang_name, position2num_data):
+    """Generate index.html for a specific language folder."""
+    
+    # 1. Find Tables
+    # Try different naming conventions
+    base_table_path = os.path.join(lang_folder, f"Helix_{lang_name}_{lang_code}.tsv")
+    any_table_path = os.path.join(lang_folder, f"Helix_{lang_name}_{lang_code}_AnyOtherSide.tsv")
+    
+    if not os.path.exists(base_table_path):
+        tsvs = glob.glob(os.path.join(lang_folder, "*.tsv"))
+        base_candidates = [t for t in tsvs if "AnyOtherSide" not in t]
+        if base_candidates:
+            base_table_path = base_candidates[0]
+            
+    if not os.path.exists(any_table_path):
+        tsvs = glob.glob(os.path.join(lang_folder, "*AnyOtherSide.tsv"))
+        if tsvs:
+            any_table_path = tsvs[0]
+
+    # 2. Find Samples
+    samples_dir = os.path.join(lang_folder, "samples")
+    sample_files = []
+    if os.path.exists(samples_dir):
+        sample_files = glob.glob(os.path.join(samples_dir, "*.html"))
+    
+    # 3. Categorize Samples
+    configs_by_type = {
+        'left': [], 'right': [], 'mixed': [], 
+        'partial_left': [], 'partial_right': [], 'partial_both': []
+    }
+    
+    total_verbs = get_total_verb_instances(position2num_data) if position2num_data else 0
+    
+    for s_path in sample_files:
+        filename = os.path.basename(s_path)
+        config_name = os.path.splitext(filename)[0].replace('_', ' ') # Undo safe name
+        
+        ctype = classify_configuration(config_name)
+        
+        # Get Stats
+        count_str = ""
+        if position2num_data:
+            pos_key = config_to_position_key(config_name)
+            if pos_key:
+                count = position2num_data.get(pos_key, 0)
+                if total_verbs > 0:
+                    pct = (count / total_verbs) * 100
+                    count_str = f" ({count:,}, {pct:.1f}%)"
+                else:
+                    count_str = f" ({count:,})"
+        
+        link_html = f'<a href="samples/{filename}" class="config-link">{config_name}{count_str}</a>'
+        
+        # Classify logic in generate_html_examples returns 'both' for mixed
+        # Map to our display categories
+        target_cat = ctype
+        if target_cat == 'both': target_cat = 'mixed'
+            
+        if target_cat in configs_by_type:
+            configs_by_type[target_cat].append((config_name, link_html))
+        else:
+            configs_by_type['mixed'].append((config_name, link_html))
+            
+    # Sort
+    for k in configs_by_type:
+        configs_by_type[k].sort(key=lambda x: x[0])
+
+    # 3b. Build Link Maps for Tables
+    # We want to link row labels (e.g. "R tot=2") to sample files (e.g. "samples/VXX_anyleft.html")
+    standard_link_map = {}
+    anyother_link_map = {}
+    
+    for s_path in sample_files:
+        filename = os.path.basename(s_path)
+        config = os.path.splitext(filename)[0].replace('_', ' ') # e.g. "VXX anyleft"
+        
+        # Determine specific totals from config structure
+        if 'V' not in config: continue
+        
+        base_config = config.split(' ')[0].split('_')[0] # "VXX" or "VXX_anyleft" -> "VXX"
+        try:
+            v_idx = base_config.index('V')
+            left_part = base_config[:v_idx]
+            right_part = base_config[v_idx+1:]
+            l_count = left_part.count('X')
+            r_count = right_part.count('X')
+            
+            # Map for Standard Table (Exact matches mostly, but if we have VXX we can link R tot=2)
+            # Standard table usually implies exact contexts or "tot" contexts. 
+            # If we have "VXX.html" (exact), it matches R tot=2 in a standard table better than nothing.
+            # But the user specifically asked for "AnyOtherSide" table improvements.
+            # We can try to populate both if sensible.
+            
+            ref_url = f"samples/{filename}"
+            
+            # 1. AnyOtherSide Logic
+            # R tot=N -> V + X*N + _anyleft
+            if 'anyleft' in config and l_count == 0 and r_count > 0:
+                anyother_link_map[f'R tot={r_count}'] = ref_url
+            
+            # L tot=N -> X*N + V + _anyright
+            if 'anyright' in config and r_count == 0 and l_count > 0:
+                anyother_link_map[f'L tot={l_count}'] = ref_url
+                
+            # 2. Standard Table Logic (Zero-Other-Side)
+            # Standard table usually implies exact contexts or "tot" contexts (where other side is ignored but for standard visualization it often aligns with zero-other-side).
+            # The row "R tot=2" in a standard helix table specifically means VXX (with 0 left dependents).
+            # So we check for exact configurations (no 'any' suffix).
+            is_partial = 'any' in config
+            if not is_partial:
+                # R tot=N -> VXX (l=0, r=N)
+                if l_count == 0 and r_count > 0:
+                     standard_link_map[f'R tot={r_count}'] = ref_url
+                # L tot=N -> XXV (l=N, r=0)
+                if r_count == 0 and l_count > 0:
+                     standard_link_map[f'L tot={l_count}'] = ref_url
+
+            # Mixed / XVX
+            if 'anyboth' in config:
+                 # heuristic for XVX row?
+                 pass
+
+        except ValueError:
+            pass
+
+    # 4. Generate HTML
+    html_parts = []
+    html_parts.append('<!DOCTYPE html>')
+    html_parts.append('<html><head><meta charset="utf-8">')
+    html_parts.append(f'<title>{lang_name} ({lang_code}) - Typometrics Dashboard</title>')
+    html_parts.append('''
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 20px; background: #f9f9f9; color: #333; }
+        .container { max-width: 1400px; margin: 0 auto; background: #fff; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-radius: 8px; }
+        h1 { border-bottom: 2px solid #eee; padding-bottom: 15px; margin-top: 0; color: #2c3e50; }
+        h2 { color: #34495e; margin-top: 30px; border-left: 5px solid #3498db; padding-left: 10px; }
+        
+        /* Table Styles */
+        .table-container { overflow-x: auto; margin-bottom: 20px; border: 1px solid #eee; border-radius: 4px; }
+        .helix-table { border-collapse: collapse; width: 100%; font-family: 'Consolas', monospace; font-size: 0.95em; }
+        .helix-table th, .helix-table td { padding: 8px 12px; border-bottom: 1px solid #eee; text-align: left; white-space: nowrap; }
+        .helix-table th { background: #f8f9fa; font-weight: 600; color: #555; border-bottom: 2px solid #ddd; }
+        .helix-table tr:hover { background: #f1f7ff; }
+        
+        /* Config Grid */
+        .config-grid { display: flex; gap: 20px; margin-bottom: 30px; }
+        .config-col { flex: 1; background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px solid #e9ecef; }
+        .config-col h3 { margin-top: 0; font-size: 1.1em; color: #555; border-bottom: 1px solid #ddd; padding-bottom: 8px; }
+        .config-list { display: flex; flex-direction: column; gap: 6px; }
+        .config-link { text-decoration: none; color: #2c3e50; padding: 4px 8px; background: #fff; border: 1px solid #dee2e6; border-radius: 4px; font-size: 0.9em; transition: all 0.2s; }
+        .config-link:hover { border-color: #3498db; color: #3498db; transform: translateX(2px); }
+        
+        .partial-section { background: #fff8f0; border-color: #ffe8cc; }
+        .partial-section h3 { color: #d35400; border-color: #ffe8cc; }
+        .partial-section .config-link { border-color: #ffe8cc; }
+        .partial-section .config-link:hover { border-color: #e67e22; color: #e67e22; }
+    </style>
+    ''')
+    html_parts.append('</head><body>')
+    html_parts.append('<div class="container">')
+    
+    html_parts.append(f'<h1>{lang_name} <span style="font-weight: normal; color: #777; font-size: 0.7em;">({lang_code})</span></h1>')
+    
+    html_parts.append('<h2>Helix Table (Standard)</h2>')
+    html_parts.append(parse_tsv_to_html(base_table_path, link_map=standard_link_map))
+    
+    html_parts.append('<h2>Partial Configurations (AnyOtherSide)</h2>')
+    html_parts.append(parse_tsv_to_html(any_table_path, link_map=anyother_link_map))
+    
+    html_parts.append('<h2>Configuration Examples</h2>')
+    
+    # Exact Configs Row
+    html_parts.append('<div class="config-grid">')
+    
+    # Left
+    html_parts.append('<div class="config-col"><h3>Left Branching (X...V)</h3><div class="config-list">')
+    if configs_by_type['left']:
+        for _, link in configs_by_type['left']: html_parts.append(link)
+    else: html_parts.append('<span style="color:#999">—</span>')
+    html_parts.append('</div></div>')
+    
+    # Mixed
+    html_parts.append('<div class="config-col"><h3>Mixed (X...VX...)</h3><div class="config-list">')
+    if configs_by_type['mixed']:
+        for _, link in configs_by_type['mixed']: html_parts.append(link)
+    else: html_parts.append('<span style="color:#999">—</span>')
+    html_parts.append('</div></div>')
+    
+    # Right
+    html_parts.append('<div class="config-col"><h3>Right Branching (VX...)</h3><div class="config-list">')
+    if configs_by_type['right']:
+        for _, link in configs_by_type['right']: html_parts.append(link)
+    else: html_parts.append('<span style="color:#999">—</span>')
+    html_parts.append('</div></div>')
+    
+    html_parts.append('</div>') # End Grid
+    
+    # Partial Configs Row
+    if configs_by_type['partial_left'] or configs_by_type['partial_right'] or configs_by_type['partial_both']:
+        html_parts.append('<div class="config-grid">')
+        
+        # Partial Left
+        html_parts.append('<div class="config-col partial-section"><h3>Left + Any Right</h3><div class="config-list">')
+        for _, link in configs_by_type['partial_left']: html_parts.append(link)
+        html_parts.append('</div></div>')
+        
+        # Partial Mixed
+        html_parts.append('<div class="config-col partial-section"><h3>Bilateral Any</h3><div class="config-list">')
+        for _, link in configs_by_type['partial_both']: html_parts.append(link)
+        html_parts.append('</div></div>')
+        
+        # Partial Right
+        html_parts.append('<div class="config-col partial-section"><h3>Right + Any Left</h3><div class="config-list">')
+        for _, link in configs_by_type['partial_right']: html_parts.append(link)
+        html_parts.append('</div></div>')
+        
+        html_parts.append('</div>')
+    
+    html_parts.append('</div></body></html>')
+    
+    with open(os.path.join(lang_folder, 'index.html'), 'w', encoding='utf-8') as f:
+        f.write('\n'.join(html_parts))
+
+
 def process_language(args):
     """Process a single language (for parallel execution)."""
-    lang_code, config_examples, lang_names, average_sizes_all, output_dir = args
+    lang_code, config_examples, lang_names, average_sizes_all, output_dir, position2num_data = args
     lang_name = lang_names.get(lang_code, lang_code)
     lang_stats = average_sizes_all.get(lang_code, {})
+    
+    # 1. Generate normal HTML examples
     generate_language_html(lang_code, lang_name, config_examples, lang_stats, output_dir)
+    
+    # NEW: 2. Generate Index automatically
+    # Need to know the folder where it generated things
+    base_lang_code = lang_code.split('_')[0]
+    lang_folder = os.path.join(output_dir, f"{lang_name}_{base_lang_code}")
+    
+    generate_language_index(lang_folder, lang_code, lang_name, position2num_data)
+    
     return lang_code
 
 
@@ -443,27 +838,67 @@ def config_to_position_key(config):
     Parameters
     ----------
     config : str
-        Configuration string like "VXX", "XXV", "XVX"
+        Configuration string like "VXX", "XXV", "XVX", "VXX_anyleft"
     
     Returns
     -------
     str or None
-        Position key like 'right_2', 'left_2', or None for mixed configs
+        Position key like 'right_2', 'left_2', 'right_3_anyother', or None
     """
+    original_config = config
+    
+    # Handle suffixes for AnyOtherSide configs
+    is_any = False
+    
+    # Check for suffixes (added by classify_configuration logic or file naming)
+    # Note: filenames might use underscores, display names spaces.
+    # The input here comes from the index generation loop:
+    # config_name = os.path.splitext(filename)[0].replace('_', ' ')
+    
+    if 'anyleft' in config:
+        config = config.replace(' anyleft', '').replace('_anyleft', '')
+        is_any = True
+    elif 'anyright' in config:
+        config = config.replace(' anyright', '').replace('_anyright', '')
+        is_any = True
+    elif 'anyboth' in config:
+        config = config.replace(' anyboth', '').replace('_anyboth', '')
+        is_any = True
+        
     if 'V' not in config:
         return None
     
-    v_index = config.index('V')
+    config = config.strip()
+    try:
+        v_index = config.index('V')
+    except ValueError:
+        return None
+        
     left_count = v_index
     right_count = len(config) - v_index - 1
     
-    # Only return key for pure left or pure right configs
+    key = None
+    
+    # Only return key for pure left or pure right configs (OR bilateral if keys exist?)
     if left_count > 0 and right_count == 0:
-        return f'left_{left_count}'
+        key = f'left_{left_count}'
     elif right_count > 0 and left_count == 0:
-        return f'right_{right_count}'
-    else:
-        return None
+        key = f'right_{right_count}'
+    elif left_count > 0 and right_count > 0:
+         # Bilateral. 
+         # Keys like xvx_left_1, xvx_right_1 exist but correspond to SIDES of the config
+         # The config itself is a whole.
+         # For now, we might not have a direct exact key for "XVX" as a whole unit in position2num
+         # position2num stores "left_1", "right_1", "xvx_left_1"...
+         # But the HTML file is for the *configuration*.
+         # If we can't map it uniquely to a single count, return None or a best guess?
+         # Most users care about branching side stats.
+         pass
+         
+    if key and is_any:
+        key += '_anyother'
+        
+    return key
 
 
 def get_total_verb_instances(position2num_data):
@@ -500,232 +935,314 @@ def get_total_verb_instances(position2num_data):
     return total
 
 
-def generate_index_html(all_config_examples, lang_names, position2num_all, output_dir='html_examples'):
+def generate_root_index(output_dir, lang_names):
     """
-    Generate index.html with organized navigation.
+    Generate root index.html with links to language indices and aggregate tables.
+    """
+    # 1. Find Language Indices
+    lang_links = []
+    # Scan for directories
+    for item in os.listdir(output_dir):
+        item_path = os.path.join(output_dir, item)
+        if os.path.isdir(item_path):
+            # Check for index.html inside
+            if os.path.exists(os.path.join(item_path, 'index.html')):
+                # Parse Name_code
+                parts = item.rsplit('_', 1)
+                if len(parts) == 2:
+                    name, code = parts
+                else:
+                    name, code = item, '??'
+                
+                # Use metadata name if available, else dir name
+                display_name = lang_names.get(code, name.replace('_', ' '))
+                
+                lang_links.append({
+                    'name': display_name,
+                    'code': code,
+                    'dir': item
+                })
     
-    Parameters
-    ----------
-    all_config_examples : dict
-        Dictionary mapping language codes to config examples
-    lang_names : dict
-        Dictionary mapping language codes to language names
-    position2num_all : dict
-        Dictionary mapping language codes to position2num data (contains counts)
-    output_dir : str
-        Output directory for HTML files
-    """
-    # Organize languages and their configurations
-    lang_configs = {}
-    for lang_code, configs in all_config_examples.items():
-        lang_name = lang_names.get(lang_code, lang_code)
-        lang_configs[lang_code] = {
-            'name': lang_name,
-            'configs': list(configs.keys())
+    lang_links.sort(key=lambda x: x['name'])
+    
+    # 2. Find Aggregate Tables
+    global_table_path = os.path.join(output_dir, "GLOBAL_average_table.tsv")
+    
+    family_tables = []
+    for f in sorted(glob.glob(os.path.join(output_dir, "FAMILY_*_table.tsv"))):
+        fname = os.path.basename(f)
+        family_name = fname.replace("FAMILY_", "").replace("_table.tsv", "")
+        family_tables.append((family_name, f))
+        
+    # 3. Generate HTML
+    html = []
+    html.append('<!DOCTYPE html>')
+    html.append('<html><head><meta charset="utf-8">')
+    html.append('<title>Helix Tables & Typometrics Dashboard</title>')
+    html.append('''
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 20px; background: #f9f9f9; color: #333; }
+        .container { max-width: 1400px; margin: 0 auto; background: #fff; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-radius: 8px; }
+        h1 { border-bottom: 2px solid #eee; padding-bottom: 15px; margin-top: 0; color: #2c3e50; text-align: center; }
+        h2 { color: #34495e; margin-top: 40px; border-left: 5px solid #3498db; padding-left: 10px; }
+        .intro { text-align: center; color: #666; margin-bottom: 30px; }
+        
+        /* Language Grid */
+        .lang-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 40px; justify-content: center; }
+        .lang-chip { 
+            display: inline-block; padding: 4px 10px; background: #f8f9fa; 
+            border: 1px solid #dee2e6; border-radius: 15px; 
+            text-decoration: none; color: #333; font-size: 0.9em;
+            transition: all 0.2s;
         }
+        .lang-chip:hover { 
+            background: #3498db; color: #fff; border-color: #3498db; 
+            transform: translateY(-1px); box-shadow: 0 2px 5px rgba(52, 152, 219, 0.3);
+        }
+        .lang-chip strong { font-family: 'Consolas', monospace; font-weight: bold; margin-right: 4px; }
+        
+        /* Table Styles */
+        .table-container { overflow-x: auto; margin-bottom: 20px; border: 1px solid #eee; border-radius: 4px; }
+        .helix-table { border-collapse: collapse; width: 100%; font-family: 'Consolas', monospace; font-size: 0.9em; }
+        .helix-table th, .helix-table td { padding: 6px 10px; border-bottom: 1px solid #eee; text-align: left; white-space: nowrap; }
+        .helix-table th { background: #f8f9fa; font-weight: 600; color: #555; border-bottom: 2px solid #ddd; }
+        .helix-table tr:hover { background: #f1f7ff; }
+        
+        .family-section { margin-bottom: 30px; }
+    </style>
+    ''')
+    html.append('</head><body>')
+    html.append('<div class="container">')
     
-    html_parts = []
-    html_parts.append('<!DOCTYPE html>')
-    html_parts.append('<html>')
-    html_parts.append('<head>')
-    html_parts.append('  <meta charset="utf-8">')
-    html_parts.append('  <title>Verb Configuration Examples</title>')
-    html_parts.append('  <style>')
-    html_parts.append('    body { font-family: Arial, sans-serif; margin: 20px; max-width: 1200px; }')
-    html_parts.append('    h1 { color: #333; text-align: center; }')
-    html_parts.append('    .stats { text-align: center; margin: 20px 0; color: #666; }')
-    html_parts.append('    .quick-nav { background: #f5f5f5; padding: 15px; margin: 20px 0; border-radius: 5px; }')
-    html_parts.append('    .quick-nav a { margin-right: 15px; color: #0066cc; text-decoration: none; }')
-    html_parts.append('    .quick-nav a:hover { text-decoration: underline; }')
-    html_parts.append('    .language { margin-bottom: 30px; padding: 15px; background: #fafafa; border-radius: 5px; }')
-    html_parts.append('    .language h3 { margin: 0 0 15px 0; color: #333; border-bottom: 2px solid #ddd; padding-bottom: 5px; }')
-    html_parts.append('    .config-table { display: table; width: 100%; border-collapse: collapse; }')
-    html_parts.append('    .config-row { display: table-row; }')
-    html_parts.append('    .config-column { display: table-cell; padding: 10px; vertical-align: top; width: 33.33%; border: 1px solid #ddd; }')
-    html_parts.append('    .config-column h4 { margin: 0 0 10px 0; color: #555; font-size: 0.9em; }')
-    html_parts.append('    .config-links { display: flex; flex-direction: column; gap: 5px; }')
-    html_parts.append('    .config-link { display: inline-block; padding: 4px 8px; background: #e0e0e0; ')
-    html_parts.append('                   border-radius: 3px; text-decoration: none; color: #333; font-size: 0.9em; }')
-    html_parts.append('    .config-link:hover { background: #d0d0d0; }')
-    html_parts.append('  </style>')
-    html_parts.append('</head>')
-    html_parts.append('<body>')
-    html_parts.append('  <h1>Verb Configuration Examples by Language</h1>')
+    html.append('<h1>Helix Tables & Typometrics Dashboard</h1>')
+    html.append(f'<p class="intro">Analysis of {len(lang_links)} languages processed.</p>')
     
-    total_langs = len(all_config_examples)
-    html_parts.append(f'  <div class="stats">')
-    html_parts.append(f'    <p><strong>{total_langs}</strong> languages</p>')
-    html_parts.append(f'  </div>')
+    # ---------------------------------------------------------
+    # GATHER DATA FOR TABLE
+    # ---------------------------------------------------------
+    print("Gathering statistics for Root Index Table...")
     
-    # Quick access by language code
-    html_parts.append('  <div class="quick-nav">')
-    html_parts.append('    <strong>Quick Access by Language:</strong><br>')
-    all_langs_sorted = sorted(lang_configs.items(), key=lambda x: x[0])
-    for lang_code, info in all_langs_sorted:
-        html_parts.append(f'    <a href="#{lang_code}">{lang_code}</a>')
-    html_parts.append('  </div>')
+    # Load Metadata
+    meta = {}
+    try:
+        with open(os.path.join(output_dir, '..', 'metadata.pkl'), 'rb') as f:
+            meta = pickle.load(f)
+    except Exception:
+        pass # fallback
+        
+    lang_files_map = meta.get('langConllFiles', {})
+    lang_groups = meta.get('langnameGroup', {})
     
-    # List all languages with their configurations in a table
-    for lang_code, info in sorted(lang_configs.items(), key=lambda x: x[1]['name']):
-        lang_name = info['name']
-        configs = info['configs']
+    # Load Bastard Stats
+    bastard_pct_map = {}
+    try:
+        csv_path = os.path.join(output_dir, '..', 'bastard_stats.csv')
+        if os.path.exists(csv_path):
+            with open(csv_path, 'r', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    # CSV cols: Code, Language, Verbs, Bastards, Bastards_per_Verb_Pct, etc.
+                    if 'Code' in row and 'Bastard_Pct' in row: # Check exact headers
+                        pass
+                    # Based on user request sample: Code, Language, Verbs, Bastards, Bastards_per_Verb_Pct
+                    if 'Code' in row and 'Bastards_per_Verb_Pct' in row:
+                        try:
+                            bastard_pct_map[row['Code']] = float(row['Bastards_per_Verb_Pct'])
+                        except:
+                            pass
+    except Exception as e:
+        print(f"Warning: Could not load bastard stats: {e}")
+
+    # Build rows
+    table_rows = []
+    
+    # Parallelize this? iterating 100 langs reading files might trigger timeout if files are huge
+    # But usually fast enough.
+    
+    for link in lang_links:
+        code = link['code']
+        name = link['name']
+        folder_item = link['dir']
         
-        # Calculate total verb instances for percentage calculation
-        total_verbs = 0
-        if lang_code in position2num_all:
-            total_verbs = get_total_verb_instances(position2num_all[lang_code])
+        # 1. Configs Link already exists in 'link' dict
+        # We need data for columns
         
-        # Categorize configurations by type
-        left_configs = []  # X...V (exact)
-        right_configs = []  # VX... (exact)
-        mixed_configs = []  # X...VX... (exact)
-        partial_left_configs = []  # X...V_anyright
-        partial_right_configs = []  # VX..._anyleft
-        partial_both_configs = []  # XVX_anyboth
+        # Metadata
+        # Group lookup by name
+        group = lang_groups.get(name, "Unknown")
         
-        for config in configs:
-            config_type = classify_configuration(config)
-            if config_type == 'left':
-                left_configs.append(config)
-            elif config_type == 'right':
-                right_configs.append(config)
-            elif config_type == 'partial_left':
-                partial_left_configs.append(config)
-            elif config_type == 'partial_right':
-                partial_right_configs.append(config)
-            elif config_type == 'partial_both':
-                partial_both_configs.append(config)
-            else:  # 'both'
-                mixed_configs.append(config)
+        conll_files = lang_files_map.get(code, [])
+        n_files = len(conll_files)
         
-        html_parts.append(f'  <div class="language" id="{lang_code}">')
-        html_parts.append(f'    <h3>{lang_name} ({lang_code})</h3>')
+        # Corpus Stats
+        # Resolve paths relative to data root
+        # output_dir is 'data/helix_tables' typically?
+        # data root is 'data'
+        # conll files are relative to notebook root? Usually relative to 'data' or '.' 
+        # In notebook 01: open(conllFile) works. 
+        # Metadata paths like 'ud-treebanks-v2.17/...'
+        # We need to prepend current working dir or similar.
+        # generate_html_examples.py is in '.../dataanalysis'.
         
-        # First table: Exact configurations
-        html_parts.append(f'    <div class="config-table">')
-        html_parts.append(f'      <div class="config-row">')
+        abs_conll_files = []
+        for cf in conll_files:
+            # Try plain
+            if os.path.exists(cf): abs_conll_files.append(cf)
+            # Try data/
+            elif os.path.exists(os.path.join('data', cf)): abs_conll_files.append(os.path.join('data', cf))
+            # Try ../
+            elif os.path.exists(os.path.join('..', cf)): abs_conll_files.append(os.path.join('..', cf))
         
-        # Column 1: Left branching (X...V)
-        html_parts.append(f'        <div class="config-column">')
-        html_parts.append(f'          <h4>Left Branching (X...V)</h4>')
-        html_parts.append(f'          <div class="config-links">')
-        if left_configs:
-            for config in sorted(left_configs):
-                safe_config = config.replace(' ', '_')
-                # Get count and percentage from position2num
-                count_str = ''
-                pos_key = config_to_position_key(config)
-                if pos_key and lang_code in position2num_all:
-                    count = position2num_all[lang_code].get(pos_key, 0)
-                    if total_verbs > 0:
-                        percentage = (count / total_verbs) * 100
-                        count_str = f' ({count:,}, {percentage:.1f}%)'
-                    else:
-                        count_str = f' ({count:,})'
-                html_parts.append(f'            <a class="config-link" href="{lang_name}_{lang_code}/{safe_config}.html">{config}{count_str}</a>')
-        else:
-            html_parts.append(f'            <span style="color: #999;">—</span>')
-        html_parts.append(f'          </div>')
-        html_parts.append(f'        </div>')
+        n_sent, n_tok = get_corpus_stats(abs_conll_files)
+        avg_len = (n_tok / n_sent) if n_sent > 0 else 0
         
-        # Column 2: Mixed (X...VX...)
-        html_parts.append(f'        <div class="config-column">')
-        html_parts.append(f'          <h4>Mixed (X...VX...)</h4>')
-        html_parts.append(f'          <div class="config-links">')
-        if mixed_configs:
-            for config in sorted(mixed_configs):
-                safe_config = config.replace(' ', '_')
-                html_parts.append(f'            <a class="config-link" href="{lang_name}_{lang_code}/{safe_config}.html">{config}</a>')
-        else:
-            html_parts.append(f'            <span style="color: #999;">—</span>')
-        html_parts.append(f'          </div>')
-        html_parts.append(f'        </div>')
+        # Bastard Stats
+        bastard_pct = bastard_pct_map.get(code, -1)
         
-        # Column 3: Right branching (VX...)
-        html_parts.append(f'        <div class="config-column">')
-        html_parts.append(f'          <h4>Right Branching (VX...)</h4>')
-        html_parts.append(f'          <div class="config-links">')
-        if right_configs:
-            for config in sorted(right_configs):
-                safe_config = config.replace(' ', '_')
-                # Get count and percentage from position2num
-                count_str = ''
-                pos_key = config_to_position_key(config)
-                if pos_key and lang_code in position2num_all:
-                    count = position2num_all[lang_code].get(pos_key, 0)
-                    if total_verbs > 0:
-                        percentage = (count / total_verbs) * 100
-                        count_str = f' ({count:,}, {percentage:.1f}%)'
-                    else:
-                        count_str = f' ({count:,})'
-                html_parts.append(f'            <a class="config-link" href="{lang_name}_{lang_code}/{safe_config}.html">{config}{count_str}</a>')
-        else:
-            html_parts.append(f'            <span style="color: #999;">—</span>')
-        html_parts.append(f'          </div>')
-        html_parts.append(f'        </div>')
+        # Helix Factors
+        tsv_path = os.path.join(output_dir, folder_item, f"Helix_{name}_{code}.tsv")
+        if not os.path.exists(tsv_path):
+             # Try glob
+             tsvs = glob.glob(os.path.join(output_dir, folder_item, "*.tsv"))
+             base = [t for t in tsvs if "AnyOtherSide" not in t]
+             if base: tsv_path = base[0]
+             
+        m_diag_right, m_diag_left = get_helix_factors(tsv_path)
         
-        html_parts.append(f'      </div>')
-        html_parts.append(f'    </div>')
+        table_rows.append({
+            'code': code,
+            'name': name,
+            'link': f"{folder_item}/index.html",
+            'group': group,
+            'n_files': n_files,
+            'n_sent': n_sent,
+            'n_tok': n_tok,
+            'avg_len': avg_len,
+            'bastard': bastard_pct,
+            'diag_right': m_diag_right,
+            'diag_left': m_diag_left
+        })
+
+    # ---------------------------------------------------------
+    # RENDER TABLE
+    # ---------------------------------------------------------
+    
+    html.append('''
+    <style>
+        /* Detailed Table */
+        .sortable-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; font-size: 0.9em; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .sortable-table th, .sortable-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #eee; }
+        .sortable-table th { background-color: #f1f2f6; color: #2c3e50; font-weight: 600; cursor: pointer; user-select: none; position: sticky; top: 0; }
+        .sortable-table th:hover { background-color: #e4e7eb; }
+        .sortable-table tr:hover { background-color: #f8f9fa; }
+        .sortable-table td.num { text-align: right; font-family: 'Consolas', monospace; }
+        .sortable-table th.num { text-align: right; }
         
-        # Second table: Partial configurations (any-other-side)
-        if partial_left_configs or partial_right_configs or partial_both_configs:
-            html_parts.append(f'    <div class="config-table" style="margin-top: 15px; border-top: 2px solid #ccc; padding-top: 10px;">')
-            html_parts.append(f'      <div style="margin-bottom: 10px; color: #d87000; font-weight: bold;">⚠ Partial Configurations (Any Other Side)</div>')
-            html_parts.append(f'      <div class="config-row">')
+        .chip { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.85em; background: #eef2f7; color: #2c3e50; text-decoration: none; }
+        .chip:hover { background: #3498db; color: white; }
+        
+        /* Sort indicators */
+        .th-sort-asc::after { content: " ▲"; opacity: 0.7; font-size: 0.8em; }
+        .th-sort-desc::after { content: " ▼"; opacity: 0.7; font-size: 0.8em; }
+    </style>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const table = document.getElementById('langTable');
+        const headers = table.querySelectorAll('th');
+        
+        headers.forEach((header, index) => {
+            header.addEventListener('click', () => {
+                const tbody = table.querySelector('tbody');
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                const type = header.dataset.type || 'text';
+                const isAsc = !header.classList.contains('th-sort-asc');
+                
+                // Reset headers
+                headers.forEach(h => h.classList.remove('th-sort-asc', 'th-sort-desc'));
+                header.classList.add(isAsc ? 'th-sort-asc' : 'th-sort-desc');
+                
+                rows.sort((a, b) => {
+                    let aVal = a.children[index].textContent.trim();
+                    let bVal = b.children[index].textContent.trim();
+                    
+                    if (type === 'number') {
+                        // Remove commas, %, etc
+                        aVal = parseFloat(aVal.replace(/[,%]/g, '')) || 0;
+                        bVal = parseFloat(bVal.replace(/[,%]/g, '')) || 0;
+                        return isAsc ? aVal - bVal : bVal - aVal;
+                    } else {
+                        return isAsc ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+                    }
+                });
+                
+                rows.forEach(row => tbody.appendChild(row));
+            });
+        });
+    });
+    </script>
+    ''')
+
+    html.append('<h2>Language Statistics & Indices</h2>')
+    html.append('<div class="table-container">')
+    html.append('<table id="langTable" class="sortable-table">')
+    html.append('<thead><tr>')
+    html.append('<th data-type="text">Code</th>')
+    html.append('<th data-type="text">Language</th>')
+    html.append('<th data-type="text">Group</th>')
+    html.append('<th data-type="number" class="num">Files</th>')
+    html.append('<th data-type="number" class="num">Sentences</th>')
+    html.append('<th data-type="number" class="num">Tokens</th>')
+    html.append('<th data-type="number" class="num">Avg Len</th>')
+    html.append('<th data-type="number" class="num">Bastard%</th>')
+    html.append('<th data-type="number" class="num">Diag Right</th>')
+    html.append('<th data-type="number" class="num">Diag Left</th>')
+    html.append('</tr></thead>')
+    html.append('tbody')
+    
+    for r in table_rows:
+        html.append('<tr>')
+        html.append(f'<td><a href="{r["link"]}" class="chip">{r["code"]}</a></td>')
+        html.append(f'<td><a href="{r["link"]}" style="text-decoration:none; color:inherit;">{r["name"]}</a></td>')
+        html.append(f'<td>{r["group"]}</td>')
+        html.append(f'<td class="num">{r["n_files"]}</td>')
+        html.append(f'<td class="num">{r["n_sent"]:,}</td>')
+        html.append(f'<td class="num">{r["n_tok"]:,}</td>')
+        html.append(f'<td class="num">{r["avg_len"]:.1f}</td>')
+        
+        bval = f'{r["bastard"]:.1f}%' if r["bastard"] >= 0 else '-'
+        html.append(f'<td class="num">{bval}</td>')
+        
+        dr = f'{r["diag_right"]:.2f}' if r["diag_right"] is not None else '-'
+        html.append(f'<td class="num">{dr}</td>')
+        
+        dl = f'{r["diag_left"]:.2f}' if r["diag_left"] is not None else '-'
+        html.append(f'<td class="num">{dl}</td>')
+        
+        html.append('</tr>')
+        
+    html.append('</tbody>')
+    html.append('</table>')
+    html.append('</div>')
+
+    
+    if os.path.exists(global_table_path):
+        html.append('<h2>Global Analysis</h2>')
+        html.append(parse_tsv_to_html(global_table_path))
+        
+    if family_tables:
+        html.append('<h2>Family Analysis</h2>')
+        for name, path in family_tables:
+            html.append(f'<div class="family-section"><h3>{name}</h3>')
+            html.append(parse_tsv_to_html(path))
+            html.append('</div>')
             
-            # Column 1: Left deps, any right
-            html_parts.append(f'        <div class="config-column">')
-            html_parts.append(f'          <h4>Left + Any Right (X...V_anyright)</h4>')
-            html_parts.append(f'          <div class="config-links">')
-            if partial_left_configs:
-                for config in sorted(partial_left_configs):
-                    safe_config = config.replace(' ', '_')
-                    html_parts.append(f'            <a class="config-link" href="{lang_name}_{lang_code}/{safe_config}.html" style="background: #fff3cd;">{config}</a>')
-            else:
-                html_parts.append(f'            <span style="color: #999;">—</span>')
-            html_parts.append(f'          </div>')
-            html_parts.append(f'        </div>')
-            
-            # Column 2: Both sides, any totals
-            html_parts.append(f'        <div class="config-column">')
-            html_parts.append(f'          <h4>Bilateral, Any Totals (XVX_anyboth)</h4>')
-            html_parts.append(f'          <div class="config-links">')
-            if partial_both_configs:
-                for config in sorted(partial_both_configs):
-                    safe_config = config.replace(' ', '_')
-                    html_parts.append(f'            <a class="config-link" href="{lang_name}_{lang_code}/{safe_config}.html" style="background: #fff3cd;">{config}</a>')
-            else:
-                html_parts.append(f'            <span style="color: #999;">—</span>')
-            html_parts.append(f'          </div>')
-            html_parts.append(f'        </div>')
-            
-            # Column 3: Right deps, any left
-            html_parts.append(f'        <div class="config-column">')
-            html_parts.append(f'          <h4>Any Left + Right (VX..._anyleft)</h4>')
-            html_parts.append(f'          <div class="config-links">')
-            if partial_right_configs:
-                for config in sorted(partial_right_configs):
-                    safe_config = config.replace(' ', '_')
-                    html_parts.append(f'            <a class="config-link" href="{lang_name}_{lang_code}/{safe_config}.html" style="background: #fff3cd;">{config}</a>')
-            else:
-                html_parts.append(f'            <span style="color: #999;">—</span>')
-            html_parts.append(f'          </div>')
-            html_parts.append(f'        </div>')
-            
-            html_parts.append(f'      </div>')
-            html_parts.append(f'    </div>')
-        
-        html_parts.append(f'  </div>')
+    html.append('</div></body></html>')
     
-    html_parts.append('</body>')
-    html_parts.append('</html>')
+    with open(os.path.join(output_dir, 'index.html'), 'w', encoding='utf-8') as f:
+        f.write('\n'.join(html))
     
-    html_content = '\n'.join(html_parts)
-    index_path = os.path.join(output_dir, 'index.html')
-    with open(index_path, 'w', encoding='utf-8') as f:
-        f.write(html_content)
-    
-    print(f"Generated index at {index_path}")
+    print(f"Generated root index at {os.path.join(output_dir, 'index.html')}")
 
 
 def generate_all_html(data_dir='data', output_dir='html_examples'):
@@ -773,7 +1290,7 @@ def generate_all_html(data_dir='data', output_dir='html_examples'):
     
     # Prepare arguments for parallel processing
     args_list = [
-        (lang_code, config_examples, lang_names, average_sizes_all, output_dir)
+        (lang_code, config_examples, lang_names, average_sizes_all, output_dir, position2num_all.get(lang_code, {}))
         for lang_code, config_examples in all_config_examples.items()
     ]
     
@@ -787,7 +1304,7 @@ def generate_all_html(data_dir='data', output_dir='html_examples'):
         ))
     
     print("Generating index...")
-    generate_index_html(all_config_examples, lang_names, position2num_all, output_dir)
+    generate_root_index(output_dir, lang_names)
     
     print(f"Done! HTML files saved to {output_dir}/")
 
