@@ -30,7 +30,8 @@ class VerbCenteredTableBuilder:
                  position_averages: Dict[str, float],
                  config: TableConfig,
                  ordering_stats: Optional[Dict] = None,
-                 validation_info: Optional[Dict] = None):
+                 validation_info: Optional[Dict] = None,
+                 extra_legend_items: Optional[List[str]] = None):
         """
         Initialize the table builder.
         
@@ -39,6 +40,7 @@ class VerbCenteredTableBuilder:
             config: Table configuration
             ordering_stats: Optional ordering statistics for triples
             validation_info: Optional statistical validation info (sample counts, warnings)
+            extra_legend_items: Optional list of additional legend strings (e.g., caveats)
         """
         self.position_averages = position_averages
         self.config = config
@@ -47,6 +49,7 @@ class VerbCenteredTableBuilder:
         self.factors = FactorCalculator(position_averages, config)
         self.ordering = OrderingStatsFormatter(ordering_stats) if ordering_stats else None
         self.validation_info = validation_info
+        self.extra_legend_items = extra_legend_items or []
     
     def build(self) -> TableStructure:
         """
@@ -88,8 +91,13 @@ class VerbCenteredTableBuilder:
         # Add Validation Footer
         validation_footer = self._build_validation_footer()
         if validation_footer:
-            table.add_separator()
             table.rows.extend(validation_footer)
+            
+        # Add Legend Footer
+        legend_footer = self._build_legend_footer()
+        if legend_footer:
+            table.add_separator()
+            table.rows.extend(legend_footer)
         
         return table
     
@@ -480,32 +488,38 @@ class VerbCenteredTableBuilder:
                         cell_type='factor',
                         rich_segments=[(txt, color, True)]
                     )
-        
-        return row
-    
     def _build_xvx_row(self) -> List[CellData]:
-        """Build XVX (cross-verb) row comparing L1 to R1."""
+        """
+        Build the central Mean(X*) V Mean(X*) row (formerly X V X).
+        """
         row = self._create_empty_row()
         
         # Label
-        row[self.layout.label_col_idx] = CellData(text="X V X", cell_type='label')
+        row[self.layout.label_col_idx] = CellData(text="Mean(X*) V Mean(X*)", cell_type='label')
         
-        # V column
-        row[self.layout.v_col_idx] = CellData(text="V", cell_type='label')
+        v_col_idx = self.layout.v_col_idx
+        row[v_col_idx] = CellData(text="V", cell_type='verb')
         
-        # L1 value
-        l_xvx = self.position_averages.get('xvx_left_1')
-        l_idx = self.layout.get_left_column_index(1)
-        row[l_idx] = self._create_value_cell(l_xvx)
+        # Use Global All Means
+        # keys: 'all_right', 'all_left'
+        val_r = self.position_averages.get('all_right')
+        val_l = self.position_averages.get('all_left')
         
-        # R1 value
-        r_xvx = self.position_averages.get('xvx_right_1')
-        r_idx = self.layout.get_right_column_index(1)
-        row[r_idx] = self._create_value_cell(r_xvx)
-        
+        # Right Mean (at R1 position visually)
+        # Note: Previous logic used R1 column.
+        r1_col_idx = self.layout.get_right_column_index(1)
+        if r1_col_idx is not None and val_r is not None:
+             row[r1_col_idx] = self._create_value_cell(val_r)
+             
+        # Left Mean (at L1 position visually)
+        l1_col_idx = self.layout.get_left_column_index(1)
+        if l1_col_idx is not None and val_l is not None:
+             row[l1_col_idx] = self._create_value_cell(val_l)
+             
         # Factor (if enabled) - direction depends on arrow_direction setting
-        if self.config.show_horizontal_factors and l_xvx and r_xvx:
-            factor = self.factors.get_xvx_factor()
+        if self.config.show_horizontal_factors and val_l is not None and val_r is not None:
+            # Retrieve the factor for 'all_right' vs 'all_left'
+            factor = self.factors.get_factor('all_right', 'all_left')
             if factor:
                 # Determine direction based on arrow_direction
                 # For left_to_right or diverging: L1 → R1 (factor between L1 and V)
@@ -687,49 +701,48 @@ class VerbCenteredTableBuilder:
         return row
     
     def _build_validation_footer(self) -> List[List[CellData]]:
-        """Build statistical validation footer rows."""
+        """
+        Build statistical validation footer rows.
+        
+        Note: Warnings are suppressed as per user request (considered 'garbage').
+        """
+        return []
+
+    def _build_legend_footer(self) -> List[List[CellData]]:
+        """
+        Build legend footer explaining terms.
+        """
         rows = []
         
-        if not self.validation_info:
-            return rows
+        # Standard Legend Items
+        legend_items = [
+            "Legend:",
+            "  GM = Geometric Mean",
+        ]
         
-        min_threshold = self.validation_info.get('min_threshold', 5)
-        low_sample_positions = self.validation_info.get('low_sample_positions', [])
-        low_sample_factors = self.validation_info.get('low_sample_factors', [])
-        
-        # Row 1: Low-sample positions warning (if any)
-        if low_sample_positions:
-            row1 = self._create_empty_row()
-            row1[self.layout.label_col_idx] = CellData(
-                text="⚠️ Low n positions",
-                cell_type='comment',
-                rich_segments=[("⚠️ Low n positions", COLOR_ORANGE, False)]
-            )
-            examples = ', '.join(f'{k}(n={n})' for k, n in low_sample_positions[:5])
-            warning_text = f"{len(low_sample_positions)} position(s) with <{min_threshold} samples. Examples: {examples}"
-            row1[self.layout.v_col_idx] = CellData(
-                text=warning_text,
-                cell_type='comment',
-                rich_segments=[(warning_text, COLOR_ORANGE, False)]
-            )
-            rows.append(row1)
-        
-        # Row 2: Low-sample factors warning (if any)
-        if low_sample_factors:
-            row2 = self._create_empty_row()
-            row2[self.layout.label_col_idx] = CellData(
-                text="⚠️ Low n factors",
-                cell_type='comment',
-                rich_segments=[("⚠️ Low n factors", COLOR_ORANGE, False)]
-            )
-            examples = ', '.join(f"{k.replace('factor_', '')}(n={n})" for k, n in low_sample_factors[:5])
-            warning_text = f"{len(low_sample_factors)} factor(s) with <{min_threshold} samples. Examples: {examples}"
-            row2[self.layout.v_col_idx] = CellData(
-                text=warning_text,
-                cell_type='comment',
-                rich_segments=[(warning_text, COLOR_ORANGE, False)]
-            )
-            rows.append(row2)
-        
+        if self.config.show_row_averages:
+            legend_items.append("  Global = Contextual size (average of all sentences)")
+            legend_items.append("  Slope = Linear regression slope of the row values")
+            
+        if self.config.show_ordering_triples:
+            legend_items.append("  Triples (<A=B>C) = Percentage of languages/sentences where size Grows (A), stays Equal (B), or Shrinks (C)")
+            
+        # Add extra items (caveats etc)
+        if self.extra_legend_items:
+            for item in self.extra_legend_items:
+                legend_items.append(f"  {item}")
+                
+        # Create a single column spanning comment row for each line
+        for item in legend_items:
+            # We use the first cell as a 'comment' type spanning everything?
+            # Creating a row where the first cell contains the text and others are empty is typical for header/footer
+            # But specific formatters handle 'comment' type differently.
+            # Let's create a row with one 'comment' cell.
+            
+            row = self._create_empty_row()
+            # Set first cell to comment
+            row[0] = CellData(text=item, cell_type='comment')
+            rows.append(row)
+            
         return rows
 

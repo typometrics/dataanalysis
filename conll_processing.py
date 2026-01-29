@@ -101,6 +101,30 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
         
         if position2charsizes is not None and char_size > 0:
             position2charsizes[key_anyother_tot] = position2charsizes.get(key_anyother_tot, 0) + np.log(char_size)
+            
+        # Global All In Direction (Mean of X*)
+        # Accumulate for ALL dependents in this direction regardless of position or valency
+        key_all = f'all_{direction}'
+        position2num[key_all] = position2num.get(key_all, 0) + 1
+        if size > 0:
+            position2sizes[key_all] = position2sizes.get(key_all, 0) + np.log(size)
+        if position2charsizes is not None and char_size > 0:
+            position2charsizes[key_all] = position2charsizes.get(key_all, 0) + np.log(char_size)
+        
+        # =================================================================
+        # BILATERAL KEY: Track EXACT counts on BOTH sides for MAL_n computation
+        # Format: bilateral_L{left_count}_R{right_count}_pos_{position}_{side}
+        # Example: bilateral_L1_R3_pos_2_right = position 2 among 3 right deps, with exactly 1 left dep
+        # This enables computing MAL_n for ALL configurations with total n = left + right dependents
+        # =================================================================
+        n_left = len(other_kids) if direction == 'right' else len(kids)
+        n_right = len(kids) if direction == 'right' else len(other_kids)
+        key_bilateral = f'bilateral_L{n_left}_R{n_right}_pos_{i+1}_{direction}'
+        position2num[key_bilateral] = position2num.get(key_bilateral, 0) + 1
+        if size > 0:
+            position2sizes[key_bilateral] = position2sizes.get(key_bilateral, 0) + np.log(size)
+        if position2charsizes is not None and char_size > 0:
+            position2charsizes[key_bilateral] = position2charsizes.get(key_bilateral, 0) + np.log(char_size)
         
         kids_sizes.append(size)
     
@@ -166,7 +190,7 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
             position2sizes[avg_global_key_zero] = position2sizes.get(avg_global_key_zero, 0) + log_global_avg_size
 
 
-def get_ordering_stats(tree, include_bastards=False):
+def get_ordering_stats(tree, include_bastards=False, head_type='verb'):
     """
     Compute ordering statistics for each configuration (side, tot).
     
@@ -178,6 +202,8 @@ def get_ordering_stats(tree, include_bastards=False):
         Dependency tree structure
     include_bastards : bool
         Whether to include bastard dependencies
+    head_type : str, optional
+        Type of heads to consider: 'verb', 'noun', or 'all' (default: 'verb')
         
     Returns
     -------
@@ -193,8 +219,15 @@ def get_ordering_stats(tree, include_bastards=False):
     """
     ordering_stats = {}
     
-    # Only consider VERB governors
-    head_pos = ["VERB"]
+    # Select head POS based on head_type parameter
+    if head_type == 'verb':
+        head_pos = ["VERB"]
+    elif head_type == 'noun':
+        head_pos = ["NOUN", "PROPN"]
+    elif head_type == 'all':
+        head_pos = ["VERB", "NOUN", "PROPN"]
+    else:
+        head_pos = ["VERB"]  # Default fallback
     
     # Only consider these dependency relations
     deps = [
@@ -203,7 +236,7 @@ def get_ordering_stats(tree, include_bastards=False):
         "nmod", "appos", "nummod", "acl", "amod"
     ]
     
-    # Find all verb heads with spans
+    # Find all heads with spans matching the specified POS
     heads = [i for i in tree if len(tree[i]["span"]) > 1 and tree[i]["tag"] in head_pos]
     
     for head in heads:
@@ -359,11 +392,11 @@ def get_ordering_stats(tree, include_bastards=False):
     return ordering_stats
 
 
-def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None, include_bastards=False, position2charsizes=None):
+def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None, include_bastards=False, position2charsizes=None, head_type='verb'):
     """
     Get the sizes of dependents in a dependency tree.
     
-    Only considers governors that are verbs and specific dependency relations.
+    Considers governors based on head_type and specific dependency relations.
     
     Parameters
     ----------
@@ -379,6 +412,8 @@ def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None,
         Whether to include bastard dependencies
     position2charsizes : dict, optional
         Dictionary to accumulate total character sizes
+    head_type : str, optional
+        Type of heads to consider: 'verb', 'noun', or 'all' (default: 'verb')
         
     Returns
     -------
@@ -397,8 +432,15 @@ def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None,
         # Calling with None means "don't compute".
         pass
     
-    # Only consider VERB governors
-    head_pos = ["VERB"]
+    # Select head POS based on head_type parameter
+    if head_type == 'verb':
+        head_pos = ["VERB"]
+    elif head_type == 'noun':
+        head_pos = ["NOUN", "PROPN"]
+    elif head_type == 'all':
+        head_pos = ["VERB", "NOUN", "PROPN"]
+    else:
+        head_pos = ["VERB"]  # Default fallback
     
     # Only consider these dependency relations
     deps = [
@@ -407,7 +449,7 @@ def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None,
         "nmod", "appos", "nummod", "acl", "amod"
     ]
     
-    # Find all verb heads with spans
+    # Find all heads with spans matching the specified POS
     heads = [i for i in tree if len(tree[i]["span"]) > 1 and tree[i]["tag"] in head_pos]
     
     for head in heads:
@@ -547,7 +589,7 @@ def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None,
     return position2num, position2sizes, sizes2freq
 
 
-def get_dep_sizes_file(conll_filename, include_bastards=False, compute_sentence_disorder=False):
+def get_dep_sizes_file(conll_filename, include_bastards=False, compute_sentence_disorder=False, head_type='verb'):
     """
     Get the sizes of dependents in a CoNLL file.
     
@@ -561,6 +603,8 @@ def get_dep_sizes_file(conll_filename, include_bastards=False, compute_sentence_
         Whether to include bastard dependencies
     compute_sentence_disorder : bool
         Whether to also compute sentence-level disorder statistics
+    head_type : str
+        Type of heads to consider: 'verb', 'noun', or 'all' (default: 'verb')
         
     Returns
     -------
@@ -574,7 +618,7 @@ def get_dep_sizes_file(conll_filename, include_bastards=False, compute_sentence_
     
     for tree in conllFile2trees(conll_filename):
         tree.addspan(exclude=['punct'], compute_bastards=include_bastards)
-        get_dep_sizes(tree, position2num, position2sizes, sizes2freq, include_bastards=include_bastards, position2charsizes=position2charsizes)
+        get_dep_sizes(tree, position2num, position2sizes, sizes2freq, include_bastards=include_bastards, position2charsizes=position2charsizes, head_type=head_type)
         
         if compute_sentence_disorder:
             # Get disorder stats for this sentence
@@ -1095,7 +1139,7 @@ def extract_verb_config_examples(tree, include_bastards=False):
     return examples
 
 
-def process_file_complete(conll_filename, include_bastards=True, compute_sentence_disorder=False, collect_config_examples=True, max_examples_per_config=10):
+def process_file_complete(conll_filename, include_bastards=True, compute_sentence_disorder=False, collect_config_examples=True, max_examples_per_config=10, head_type='verb'):
     """
     Process a single CoNLL file to compute ALL metrics in one pass.
     
@@ -1105,6 +1149,11 @@ def process_file_complete(conll_filename, include_bastards=True, compute_sentenc
     3. VO / Head-Initiality statistics
     4. Sentence disorder statistics (optional)
     5. Configuration examples (optional)
+    
+    Parameters
+    ----------
+    head_type : str
+        Type of heads to consider: 'verb', 'noun', or 'all' (default: 'verb')
     
     Returns
     -------
@@ -1145,7 +1194,7 @@ def process_file_complete(conll_filename, include_bastards=True, compute_sentenc
         tree.addspan(exclude=['punct'], compute_bastards=include_bastards)
         
         # 1. Dep Sizes
-        get_dep_sizes(tree, position2num, position2sizes, sizes2freq, include_bastards=include_bastards, position2charsizes=position2charsizes)
+        get_dep_sizes(tree, position2num, position2sizes, sizes2freq, include_bastards=include_bastards, position2charsizes=position2charsizes, head_type=head_type)
         
         # 2. Bastard Stats
         v, b, r, ex = get_bastard_stats(tree)
@@ -1170,7 +1219,7 @@ def process_file_complete(conll_filename, include_bastards=True, compute_sentenc
             
         # 4. Ordering Stats
         if compute_sentence_disorder:
-            order_stats = get_ordering_stats(tree, include_bastards=include_bastards)
+            order_stats = get_ordering_stats(tree, include_bastards=include_bastards, head_type=head_type)
             for key, counts in order_stats.items():
                 if isinstance(counts, int):
                     if key not in ordering_stats:
@@ -1227,7 +1276,7 @@ def process_file_complete(conll_filename, include_bastards=True, compute_sentenc
             config_examples)
 
 
-def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentence_disorder=False, collect_config_examples=False, max_examples_per_config=10):
+def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentence_disorder=False, collect_config_examples=False, max_examples_per_config=10, head_type='verb'):
     """
     Process all short CoNLL files in parallel to compute ALL metrics.
     
@@ -1245,6 +1294,8 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
         Whether to collect configuration examples for HTML visualization
     max_examples_per_config : int
         Maximum number of examples to collect per configuration
+    head_type : str
+        Type of heads to consider: 'verb', 'noun', or 'all' (default: 'verb')
         
     Returns
     -------
@@ -1255,7 +1306,7 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
                    lang_vo_hi_scores, sentence_disorder_pct)
         - If collect_config_examples=True: also includes config_examples dict
     """
-    print(f"Starting unified processing on {psutil.cpu_count()} cores")
+    print(f"Starting unified processing on {psutil.cpu_count()} cores (head_type={head_type})")
     
     # Aggregators
     all_langs_average_sizes = {}
@@ -1279,7 +1330,8 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
             include_bastards=include_bastards,
             compute_sentence_disorder=compute_sentence_disorder,
             collect_config_examples=collect_config_examples,
-            max_examples_per_config=max_examples_per_config
+            max_examples_per_config=max_examples_per_config,
+            head_type=head_type
         )
         
         results = list(tqdm(
@@ -1303,8 +1355,9 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
                  position2num, position2sizes, sizes2freq, position2charsizes,
                  verbs, bastards, bastard_relations, bastard_examples,
                  vo_hi_file_stats,
-                 file_ordering_stats) = result
-                config_examples = None
+                 file_ordering_stats,
+                 config_examples) = result
+                # config_examples will be None since collect_config_examples=False
             
             # --- 1. Dep Sizes Aggregation ---
             all_langs_position2sizes[lang] = all_langs_position2sizes.get(lang, {})

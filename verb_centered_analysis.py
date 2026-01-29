@@ -11,7 +11,7 @@ computation, layout, and formatting.
 import numpy as np
 import os
 import warnings
-from typing import Dict, Optional, Union
+from typing import Dict, Optional, Union, List
 
 # Import refactored components
 from verb_centered_model import TableConfig, TableStructure, GridCell
@@ -188,6 +188,73 @@ def compute_aggregate_ordering_stats(all_langs_average_sizes_filtered):
     
     return ordering_stats
 
+
+def compute_averaged_ordering_stats(langs, all_ordering_stats):
+    """
+    Compute average ordering percentages across a list of languages.
+    
+    Instead of counting how many languages have L < R (binary voting),
+    this function averages the sentence-level percentages of each language.
+    
+    Args:
+        langs: List of language codes to aggregate
+        all_ordering_stats: Master dictionary of ordering stats {lang: {key: {lt, eq, gt}}}
+        
+    Returns:
+        Aggregated stats dict with averaged percentages
+    """
+    aggregated = {}
+    
+    # 1. Collect all keys present in any of the target languages
+    all_keys = set()
+    for lang in langs:
+        if lang in all_ordering_stats:
+            # Filter out keys that are not dictionaries (e.g. integer counts)
+            keys_to_add = [
+                k for k, v in all_ordering_stats[lang].items() 
+                if isinstance(v, dict)
+            ]
+            all_keys.update(keys_to_add)
+            
+    # Helper to get percentages
+    def get_pcts(stats):
+        total = stats.get('lt', 0) + stats.get('eq', 0) + stats.get('gt', 0)
+        if total == 0: return 0.0, 0.0, 0.0
+        return stats['lt']/total*100, stats['eq']/total*100, stats['gt']/total*100
+            
+    # 2. For each key, compute average percentage across VALID languages
+    for key in all_keys:
+        sum_lt, sum_eq, sum_gt = 0.0, 0.0, 0.0
+        count = 0
+        total_n_sentences = 0
+        
+        for lang in langs:
+            if lang in all_ordering_stats and key in all_ordering_stats[lang]:
+                stats = all_ordering_stats[lang][key]
+                if not isinstance(stats, dict):
+                    continue
+                    
+                lt, eq, gt = get_pcts(stats)
+                sum_lt += lt
+                sum_eq += eq
+                sum_gt += gt
+                count += 1
+                
+                # Also track total N for reference (though we average percentages, not weighted by N)
+                total_n_sentences += stats.get('lt', 0) + stats.get('eq', 0) + stats.get('gt', 0)
+        
+        if count > 0:
+            # Store as if it were a single count with total=100 (approximately)
+            # OrderingStatsFormatter will assume these are counts and divide by sum.
+            # So if we store percentages directly, the sum will be ~100.
+            aggregated[key] = {
+                'lt': sum_lt / count,
+                'eq': sum_eq / count,
+                'gt': sum_gt / count,
+                'total': total_n_sentences # Store raw total N for N=... display
+            }
+            
+    return aggregated
 
 # ============================================================================
 # UNIFIED COMPUTATION CORE
@@ -483,7 +550,8 @@ def compute_sizes_table(all_langs_average_sizes_filtered, table_type='standard',
                     pairs_to_track.append((key_b, key_a))
 
             # XVX: right_1 vs left_1
-            pairs_to_track.append(('xvx_right_1', 'xvx_left_1'))
+            # REPLACED: Now using Global Mean (Mean(X*)) for central row
+            pairs_to_track.append(('all_right', 'all_left'))
 
             # Diagonals Right: right_{pos+1}_totright_{tot} vs right_{pos}_totright_{tot-1}
             for tot in range(2, 5):
@@ -512,10 +580,11 @@ def compute_sizes_table(all_langs_average_sizes_filtered, table_type='standard',
             generate_keys,
             # Filter: Include standard keys AND zerootherside averages (local and global). 
             # Exclude standard 'average_' and 'average_global_' keys (which are Global/AnyOtherSide).
+            # explicitly include 'all_left' and 'all_right' for central row replacement.
             filter_fn=lambda k: ('_anyother' not in k) and (
                 (not k.startswith('average_') and not k.startswith('average_global_')) or 
                 k.endswith('_zerootherside')
-            ),
+            ) or k in ['all_left', 'all_right'], # Explicitly include these
             key_transformer=transform_standard_key,
             all_langs_position2num=all_langs_position2num
         )
@@ -550,7 +619,8 @@ def compute_sizes_table(all_langs_average_sizes_filtered, table_type='standard',
                 pairs_to_track.append((key_b, key_a))
             
             # XVX bilateral
-            pairs_to_track.append(('xvx_right_1_anyother', 'xvx_left_1_anyother'))
+            # REPLACED: Now using Global Mean (Mean(X*)) for central row
+            pairs_to_track.append(('all_right', 'all_left'))
             
             return [], pairs_to_track
         
@@ -564,10 +634,11 @@ def compute_sizes_table(all_langs_average_sizes_filtered, table_type='standard',
             generate_keys,
             # Filter: Include anyother keys AND global/anyotherside average keys.
             # Exclude '_zerootherside' keys.
+            # Also explicitly include 'all_left' and 'all_right' for the central row.
             filter_fn=lambda k: ('_anyother' in k or (
                 (k.startswith('average_') or k.startswith('average_global_')) and 
                 not k.endswith('_zerootherside')
-            )),
+            ) or k in ['all_left', 'all_right']), # Explicitly include these
             key_transformer=transform_anyother_key,
             all_langs_position2num=all_langs_position2num
         )
@@ -617,7 +688,8 @@ def format_verb_centered_table(
     validation_info: Optional[Dict] = None,
     save_tsv: bool = False,
     output_dir: str = 'data',
-    filename: Optional[str] = None
+    filename: Optional[str] = None,
+    extra_legend_items: Optional[List[str]] = None
 ) -> str:
     """
     Format verb-centered table as text (legacy API).
@@ -634,7 +706,13 @@ def format_verb_centered_table(
         arrow_direction=arrow_direction
     )
     
-    table = create_verb_centered_table(position_averages, config, ordering_stats, validation_info)
+    table = create_verb_centered_table(
+        position_averages, 
+        config, 
+        ordering_stats, 
+        validation_info,
+        extra_legend_items=extra_legend_items
+    )
     if table is None:
         return "Error: Could not create table"
     
@@ -807,8 +885,19 @@ def generate_mass_tables(
     
     # 1. GLOBAL AVERAGE
     print("Generating Global Table...")
+
     global_avgs = compute_average_sizes_table(all_langs_average_sizes)
-    global_ordering = compute_aggregate_ordering_stats(all_langs_average_sizes)
+    
+    if ordering_stats:
+        # Use sentence-level averages if available
+        global_ordering = compute_averaged_ordering_stats(list(all_langs_average_sizes.keys()), ordering_stats)
+    else:
+        # Fallback to language voting
+        global_ordering = compute_aggregate_ordering_stats(all_langs_average_sizes)
+
+    # Caveat for aggregate tables
+    aggregate_caveat = "Caveat: Row averages and frequencies are averages of language-level averages, not pooled sentence counts."
+    
     format_verb_centered_table(
         global_avgs,
         show_horizontal_factors=True,
@@ -816,6 +905,8 @@ def generate_mass_tables(
         arrow_direction=arrow_direction,
         ordering_stats=global_ordering,
         show_ordering_triples=True,
+        show_row_averages=True,  # Enable Row Averages
+        extra_legend_items=[aggregate_caveat], # Add Caveat
         save_tsv=True,
         output_dir=output_dir,
         filename="GLOBAL_average_table.tsv"
@@ -824,6 +915,8 @@ def generate_mass_tables(
     # 2. PER-FAMILY AVERAGE
     # Group languages by family
     family_langs = {}
+    non_ie_langs = {}
+    
     for lang in all_langs_average_sizes:
         lname = langnames.get(lang, lang)
         group = lang_groups.get(lname, 'Unknown')
@@ -831,11 +924,23 @@ def generate_mass_tables(
             family_langs[group] = {}
         family_langs[group][lang] = all_langs_average_sizes[lang]
         
+        # Collect Non-Indo-European languages
+        # Robust check for Indo-European family name
+        if group.strip() != 'Indo-European':
+            non_ie_langs[lang] = all_langs_average_sizes[lang]
+        
     print(f"Generating Family Tables ({len(family_langs)} families)...")
     for family, langs_data in family_langs.items():
         if not langs_data: continue
         family_avgs = compute_average_sizes_table(langs_data)
-        family_ordering = compute_aggregate_ordering_stats(langs_data)
+        
+        if ordering_stats:
+            # Use sentence-level averages if available
+            family_ordering = compute_averaged_ordering_stats(list(langs_data.keys()), ordering_stats)
+        else:
+            # Fallback to language voting
+            family_ordering = compute_aggregate_ordering_stats(langs_data)
+            
         safe_fam = "".join(x for x in family if x.isalnum() or x in " _-").strip().replace(" ", "_")
         format_verb_centered_table(
             family_avgs,
@@ -844,9 +949,35 @@ def generate_mass_tables(
             arrow_direction=arrow_direction,
             ordering_stats=family_ordering,
             show_ordering_triples=True,
+            show_row_averages=True, # Enable Row Averages
+            extra_legend_items=[aggregate_caveat], # Add Caveat
             save_tsv=True,
             output_dir=output_dir,
             filename=f"FAMILY_{safe_fam}_table.tsv"
+        )
+        
+    # Generate Non-Indo-European Table
+    if non_ie_langs:
+        print(f"Generating Non-Indo-European Table ({len(non_ie_langs)} languages)...")
+        non_ie_avgs = compute_average_sizes_table(non_ie_langs)
+        
+        if ordering_stats:
+             non_ie_ordering = compute_averaged_ordering_stats(list(non_ie_langs.keys()), ordering_stats)
+        else:
+             non_ie_ordering = compute_aggregate_ordering_stats(non_ie_langs)
+        
+        format_verb_centered_table(
+            non_ie_avgs,
+            show_horizontal_factors=True,
+            show_diagonal_factors=True,
+            arrow_direction=arrow_direction,
+            ordering_stats=non_ie_ordering,
+            show_ordering_triples=True,
+            show_row_averages=True, # Enable Row Averages
+            extra_legend_items=[aggregate_caveat], # Add Caveat
+            save_tsv=True,
+            output_dir=output_dir,
+            filename="FAMILY_Non-Indo-European_table.tsv"
         )
 
     # 3. INDIVIDUAL LANGUAGES & DISORDER METRICS
@@ -955,6 +1086,12 @@ def generate_mass_tables(
             # Compute Geometric Means
             r_gm = np.exp(np.mean(np.log(r_vals))) if r_vals else None
             l_gm = np.exp(np.mean(np.log(l_vals))) if l_vals else None
+            
+            # Invert Left Factor if arrow_direction is 'outward' to match table logic
+            # Current values are Inward (Target=Near, Source=Far).
+            # Outward requires (Target=Far, Source=Near).
+            if arrow_direction == 'outward' and l_gm is not None and l_gm != 0:
+                l_gm = 1.0 / l_gm
             
             lang_to_factors[lang] = (r_gm, l_gm)
 

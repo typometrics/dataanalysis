@@ -204,14 +204,23 @@ class MarginalMeansCalculator:
         sz_gm = calc_geometric_mean(values_sz)
         
         # Factors: L1T1->L2T2 etc. Inward keys: factor_L1T1_vs_L2T2.
-        # Wait, compute_sizes_table: key_b=L(p)T(p), key_a=L(p+1)T(p+1). (Inward)
-        keys_fac = []
+        # Fallback: compute from values if factor key missing
+        values_fac = []
         for u in range(1, 4): # 1, 2, 3
             k_b = f'left_{u}_totleft_{u}'     # target (Near)
             k_a = f'left_{u+1}_totleft_{u+1}' # source (Far)
-            keys_fac.append(f'factor_{k_b}_vs_{k_a}')
+            fac_key = f'factor_{k_b}_vs_{k_a}'
             
-        values_fac = [self.position_averages.get(k) for k in keys_fac]
+            val = self.position_averages.get(fac_key)
+            if val is None:
+                # Fallback
+                v_b = self.position_averages.get(k_b)
+                v_a = self.position_averages.get(k_a)
+                if v_a is not None and v_b is not None and v_a > 0:
+                    val = v_b / v_a
+            
+            values_fac.append(val)
+            
         fac_gm = calc_geometric_mean(values_fac)
         
         # Invert if outward
@@ -226,14 +235,22 @@ class MarginalMeansCalculator:
         sz_gm = calc_geometric_mean(values_sz)
         
         # Factors
-        keys_fac = []
+        values_fac = []
         for u in range(1, 3): # 1, 2
             # Pair: L(u)T(u+1) vs L(u+1)T(u+2)
             k_b = f'left_{u}_totleft_{u+1}'
             k_a = f'left_{u+1}_totleft_{u+2}'
-            keys_fac.append(f'factor_{k_b}_vs_{k_a}')
+            fac_key = f'factor_{k_b}_vs_{k_a}'
             
-        values_fac = [self.position_averages.get(k) for k in keys_fac]
+            val = self.position_averages.get(fac_key)
+            if val is None:
+                v_b = self.position_averages.get(k_b)
+                v_a = self.position_averages.get(k_a)
+                if v_a is not None and v_b is not None and v_a > 0:
+                    val = v_b / v_a
+            
+            values_fac.append(val)
+            
         fac_gm = calc_geometric_mean(values_fac)
         
         if is_outward and fac_gm is not None and fac_gm != 0:
@@ -247,13 +264,21 @@ class MarginalMeansCalculator:
         sz_gm = calc_geometric_mean(values_sz)
         
         # Factors
-        keys_fac = []
+        values_fac = []
         for u in range(1, 2): # 1
             k_b = f'left_{u}_totleft_{u+2}'
             k_a = f'left_{u+1}_totleft_{u+3}'
-            keys_fac.append(f'factor_{k_b}_vs_{k_a}')
+            fac_key = f'factor_{k_b}_vs_{k_a}'
             
-        values_fac = [self.position_averages.get(k) for k in keys_fac]
+            val = self.position_averages.get(fac_key)
+            if val is None:
+                v_b = self.position_averages.get(k_b)
+                v_a = self.position_averages.get(k_a)
+                if v_a is not None and v_b is not None and v_a > 0:
+                    val = v_b / v_a
+                    
+            values_fac.append(val)
+            
         fac_gm = calc_geometric_mean(values_fac)
         
         if is_outward and fac_gm is not None and fac_gm != 0:
@@ -427,6 +452,43 @@ class FactorCalculator:
             target_key=key_b,
             arrow_type='horizontal',
             side='xvx'
+        )
+
+    def get_factor(self, target_key: str, source_key: str) -> Optional[FactorData]:
+        """
+        Generic factor calculation between two keys.
+        
+        Assumes Left->Right flow (Source=Left, Target=Right).
+        
+        Args:
+            target_key: Key for target value (e.g. Right side)
+            source_key: Key for source value (e.g. Left side)
+            
+        Returns:
+            FactorData or None
+        """
+        fac_key = f'factor_{target_key}_vs_{source_key}'
+        
+        geo_factor = self.position_averages.get(fac_key)
+        
+        if geo_factor is None:
+            val_b = self.position_averages.get(target_key)
+            val_a = self.position_averages.get(source_key)
+            if val_a is None or val_b is None or val_a == 0:
+                return None
+            geo_factor = val_b / val_a
+        
+        # Direction logic: Assume central/horizontal flow follows Right side direction setting
+        # (Outward = Left->Right)
+        is_outward = self.config.get_growth_direction('right') == 'outward'
+        factor_val = geo_factor if is_outward else (1.0 / geo_factor if geo_factor != 0 else 1.0)
+        
+        return FactorData(
+            value=factor_val,
+            source_key=source_key,
+            target_key=target_key,
+            arrow_type='horizontal',
+            side='center'
         )
 
 
