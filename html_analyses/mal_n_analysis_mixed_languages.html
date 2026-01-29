@@ -1,0 +1,3098 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>MAL_n Analysis: Mixed Languages (VO Score 33-66%)</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; max-width: 1600px; margin: 0 auto; padding: 20px; }
+h1 { color: #333; }
+h2 { color: #1565c0; margin-top: 50px; padding-top: 20px; border-top: 3px solid #1565c0; }
+h3 { color: #666; margin-top: 20px; }
+.info-box { background: #f0f0f0; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+.info-box p { margin: 5px 0; }
+table { border-collapse: collapse; width: 100%; margin-bottom: 30px; }
+th, td { border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 12px; }
+th { background-color: #4CAF50; color: white; position: sticky; top: 0; z-index: 10; }
+th.mal-col { background-color: #2196F3; }
+th.score-col { background-color: #FF9800; }
+th.effect-col { background-color: #9C27B0; }
+th.group-col { background-color: #607D8B; }
+.effect-cell { font-weight: bold; }
+.group-cell { font-size: 11px; color: #555; white-space: nowrap; }
+tr:nth-child(even) { background-color: #f9f9f9; }
+tr:hover { background-color: #f1f1f1; }
+.lang-name { text-align: left; font-weight: bold; white-space: nowrap; }
+.mal-cell { background-color: #e3f2fd; }
+.score-cell { font-weight: bold; }
+.score-positive { background-color: #c8e6c9; }
+.score-negative { background-color: #ffcdd2; }
+.score-neutral { background-color: #fff9c4; }
+.na-cell { color: #999; }
+.explanation { background: #fff3e0; padding: 15px; border-left: 4px solid #ff9800; margin: 20px 0; }
+.chart-container { margin: 30px 0; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.chart-row { display: flex; flex-wrap: wrap; gap: 20px; }
+.chart-half { flex: 1; min-width: 400px; }
+canvas { max-width: 100%; }
+.nav-links { position: sticky; top: 0; background: #333; padding: 10px; z-index: 100; margin: -20px -20px 20px -20px; }
+.nav-links a { color: white; margin-right: 20px; text-decoration: none; }
+.nav-links a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="nav-links">
+<a href="#total-section">📊 Total (Bilateral)</a>
+<a href="#left-section">⬅️ Pure Left</a>
+<a href="#right-section">➡️ Pure Right</a>
+</div>
+
+<h1>MAL_n Analysis: Mixed Languages (VO Score 33-66%)</h1>
+
+<p style="color: #1565c0; font-weight: bold;">Languages with mixed or flexible word order.</p>
+
+<div class="info-box">
+<p><strong>Data source:</strong> Bilateral dependency configurations from Universal Dependencies treebanks</p>
+<p><strong>Minimum occurrences:</strong> 10 per configuration (to ensure statistical reliability)</p>
+<p><strong>MAL_n:</strong> Geometric mean of constituent sizes for heads with n total dependents</p>
+<p><strong>MAL Effect Score:</strong> Mean of all local change scores for a language (positive = MAL compliance)</p>
+<p><strong>Local Change Score (n→n+1):</strong> [ln(MAL_n) - ln(MAL_{n+1})] / [ln(n+1) - ln(n)]</p>
+<p style="margin-left: 20px;">• Positive values (green): MAL compliance - constituent size decreases as n increases</p>
+<p style="margin-left: 20px;">• Negative values (red): Anti-MAL - constituent size increases with n</p>
+<p style="margin-left: 20px;">• Values near 0 (yellow): Weak or no effect</p>
+</div>
+<h2 id="total-section">1. Total Dependents Analysis (Bilateral)</h2><p>This section shows MAL analysis for total dependents (left + right combined).</p><table id="malTable">
+<thead>
+<tr>
+<th onclick="sortTable(0, 'string')" style="cursor:pointer">Language ⇅</th>
+<th class="group-col" onclick="sortTable(1, 'string')" style="cursor:pointer">Family ⇅</th>
+<th class="effect-col" onclick="sortTable(2, 'number')" style="cursor:pointer">MAL Effect ⇅</th>
+<th class="mal-col" onclick="sortTable(3, 'number')" style="cursor:pointer">MAL_1<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(4, 'number')" style="cursor:pointer">1→2 ⇅</th>
+<th class="mal-col" onclick="sortTable(5, 'number')" style="cursor:pointer">MAL_2<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(6, 'number')" style="cursor:pointer">2→3 ⇅</th>
+<th class="mal-col" onclick="sortTable(7, 'number')" style="cursor:pointer">MAL_3<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(8, 'number')" style="cursor:pointer">3→4 ⇅</th>
+<th class="mal-col" onclick="sortTable(9, 'number')" style="cursor:pointer">MAL_4<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(10, 'number')" style="cursor:pointer">4→5 ⇅</th>
+<th class="mal-col" onclick="sortTable(11, 'number')" style="cursor:pointer">MAL_5<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(12, 'number')" style="cursor:pointer">5→6 ⇅</th>
+<th class="mal-col" onclick="sortTable(13, 'number')" style="cursor:pointer">MAL_6<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(14, 'number')" style="cursor:pointer">6→7 ⇅</th>
+<th class="mal-col" onclick="sortTable(15, 'number')" style="cursor:pointer">MAL_7<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(16, 'number')" style="cursor:pointer">7→8 ⇅</th>
+<th class="mal-col" onclick="sortTable(17, 'number')" style="cursor:pointer">MAL_8<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(18, 'number')" style="cursor:pointer">8→9 ⇅</th>
+<th class="mal-col" onclick="sortTable(19, 'number')" style="cursor:pointer">MAL_9<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(20, 'number')" style="cursor:pointer">9→10 ⇅</th>
+<th class="mal-col" onclick="sortTable(21, 'number')" style="cursor:pointer">MAL_10<br>(count) ⇅</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="lang-name">AncientGreek</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-neutral" data-value="0.039988">0.040</td>
+<td class="mal-cell" data-value="2.021357">2.021<br>(21481)</td>
+<td class="score-cell score-positive" data-value="0.107926">0.108</td>
+<td class="mal-cell" data-value="1.875660">1.876<br>(21916)</td>
+<td class="score-cell score-neutral" data-value="0.090297">0.090</td>
+<td class="mal-cell" data-value="1.808230">1.808<br>(14064)</td>
+<td class="score-cell score-positive" data-value="0.125177">0.125</td>
+<td class="mal-cell" data-value="1.744272">1.744<br>(7392)</td>
+<td class="score-cell score-neutral" data-value="-0.001665">-0.002</td>
+<td class="mal-cell" data-value="1.744921">1.745<br>(3675)</td>
+<td class="score-cell score-neutral" data-value="0.063566">0.064</td>
+<td class="mal-cell" data-value="1.724815">1.725<br>(1644)</td>
+<td class="score-cell score-neutral" data-value="-0.002140">-0.002</td>
+<td class="mal-cell" data-value="1.725384">1.725<br>(630)</td>
+<td class="score-cell score-neutral" data-value="0.033971">0.034</td>
+<td class="mal-cell" data-value="1.717575">1.718<br>(256)</td>
+<td class="score-cell score-negative" data-value="-0.233227">-0.233</td>
+<td class="mal-cell" data-value="1.765411">1.765<br>(90)</td>
+<td class="score-cell score-positive" data-value="0.175992">0.176</td>
+<td class="mal-cell" data-value="1.732977">1.733<br>(0)</td>
+</tr>
+<tr>
+<td class="lang-name">Armenian</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-neutral" data-value="0.060126">0.060</td>
+<td class="mal-cell" data-value="2.552252">2.552<br>(5883)</td>
+<td class="score-cell score-neutral" data-value="0.023572">0.024</td>
+<td class="mal-cell" data-value="2.510890">2.511<br>(3552)</td>
+<td class="score-cell score-neutral" data-value="0.059242">0.059</td>
+<td class="mal-cell" data-value="2.451296">2.451<br>(1377)</td>
+<td class="score-cell score-neutral" data-value="-0.029989">-0.030</td>
+<td class="mal-cell" data-value="2.472536">2.473<br>(384)</td>
+<td class="score-cell score-negative" data-value="-0.179522">-0.180</td>
+<td class="mal-cell" data-value="2.573594">2.574<br>(70)</td>
+<td class="score-cell score-positive" data-value="0.427325">0.427</td>
+<td class="mal-cell" data-value="2.380696">2.381<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Bavarian</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-positive" data-value="0.170282">0.170</td>
+<td class="mal-cell" data-value="2.275606">2.276<br>(202)</td>
+<td class="score-cell score-positive" data-value="0.227908">0.228</td>
+<td class="mal-cell" data-value="1.943076">1.943<br>(578)</td>
+<td class="score-cell score-positive" data-value="0.107927">0.108</td>
+<td class="mal-cell" data-value="1.859880">1.860<br>(714)</td>
+<td class="score-cell score-neutral" data-value="0.084404">0.084</td>
+<td class="mal-cell" data-value="1.815263">1.815<br>(392)</td>
+<td class="score-cell score-positive" data-value="0.260890">0.261</td>
+<td class="mal-cell" data-value="1.712603">1.713<br>(225)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Chukot</td>
+<td class="group-cell">Other</td>
+<td class="effect-cell score-neutral" data-value="-0.000440">-0.000</td>
+<td class="mal-cell" data-value="1.222658">1.223<br>(412)</td>
+<td class="score-cell score-neutral" data-value="-0.047115">-0.047</td>
+<td class="mal-cell" data-value="1.263246">1.263<br>(322)</td>
+<td class="score-cell score-neutral" data-value="0.033276">0.033</td>
+<td class="mal-cell" data-value="1.246316">1.246<br>(123)</td>
+<td class="score-cell score-neutral" data-value="0.012517">0.013</td>
+<td class="mal-cell" data-value="1.241837">1.242<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">ClassArmenian</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-neutral" data-value="-0.052817">-0.053</td>
+<td class="mal-cell" data-value="2.698140">2.698<br>(4253)</td>
+<td class="score-cell score-positive" data-value="0.239374">0.239</td>
+<td class="mal-cell" data-value="2.285629">2.286<br>(4946)</td>
+<td class="score-cell score-negative" data-value="-0.115605">-0.116</td>
+<td class="mal-cell" data-value="2.395316">2.395<br>(2202)</td>
+<td class="score-cell score-neutral" data-value="-0.007696">-0.008</td>
+<td class="mal-cell" data-value="2.400625">2.401<br>(492)</td>
+<td class="score-cell score-negative" data-value="-0.207871">-0.208</td>
+<td class="mal-cell" data-value="2.514602">2.515<br>(130)</td>
+<td class="score-cell score-negative" data-value="-0.172287">-0.172</td>
+<td class="mal-cell" data-value="2.594843">2.595<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Dutch</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-positive" data-value="0.109604">0.110</td>
+<td class="mal-cell" data-value="2.619511">2.620<br>(6528)</td>
+<td class="score-cell score-neutral" data-value="0.028944">0.029</td>
+<td class="mal-cell" data-value="2.567480">2.567<br>(11970)</td>
+<td class="score-cell score-positive" data-value="0.167882">0.168</td>
+<td class="mal-cell" data-value="2.398526">2.399<br>(12627)</td>
+<td class="score-cell score-positive" data-value="0.134136">0.134</td>
+<td class="mal-cell" data-value="2.307734">2.308<br>(6684)</td>
+<td class="score-cell score-positive" data-value="0.227708">0.228</td>
+<td class="mal-cell" data-value="2.193403">2.193<br>(2395)</td>
+<td class="score-cell score-neutral" data-value="0.031568">0.032</td>
+<td class="mal-cell" data-value="2.180815">2.181<br>(432)</td>
+<td class="score-cell score-neutral" data-value="0.067385">0.067</td>
+<td class="mal-cell" data-value="2.158279">2.158<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Erzya</td>
+<td class="group-cell">Uralic</td>
+<td class="effect-cell score-neutral" data-value="-0.058557">-0.059</td>
+<td class="mal-cell" data-value="1.494500">1.495<br>(1162)</td>
+<td class="score-cell score-neutral" data-value="-0.035029">-0.035</td>
+<td class="mal-cell" data-value="1.531231">1.531<br>(984)</td>
+<td class="score-cell score-neutral" data-value="0.018191">0.018</td>
+<td class="mal-cell" data-value="1.519978">1.520<br>(435)</td>
+<td class="score-cell score-neutral" data-value="0.021573">0.022</td>
+<td class="mal-cell" data-value="1.510574">1.511<br>(92)</td>
+<td class="score-cell score-negative" data-value="-0.238963">-0.239</td>
+<td class="mal-cell" data-value="1.593309">1.593<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">FrisianDutch</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-positive" data-value="0.272177">0.272</td>
+<td class="mal-cell" data-value="2.297398">2.297<br>(48)</td>
+<td class="score-cell score-positive" data-value="0.348954">0.349</td>
+<td class="mal-cell" data-value="1.803810">1.804<br>(126)</td>
+<td class="score-cell score-positive" data-value="0.261472">0.261</td>
+<td class="mal-cell" data-value="1.622362">1.622<br>(84)</td>
+<td class="score-cell score-positive" data-value="0.206106">0.206</td>
+<td class="mal-cell" data-value="1.528964">1.529<br>(76)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Georgian</td>
+<td class="group-cell">Caucasian</td>
+<td class="effect-cell score-neutral" data-value="-0.060828">-0.061</td>
+<td class="mal-cell" data-value="2.319797">2.320<br>(1327)</td>
+<td class="score-cell score-neutral" data-value="-0.003810">-0.004</td>
+<td class="mal-cell" data-value="2.325931">2.326<br>(2360)</td>
+<td class="score-cell score-positive" data-value="0.114322">0.114</td>
+<td class="mal-cell" data-value="2.220576">2.221<br>(1920)</td>
+<td class="score-cell score-neutral" data-value="0.077379">0.077</td>
+<td class="mal-cell" data-value="2.171691">2.172<br>(668)</td>
+<td class="score-cell score-positive" data-value="0.119222">0.119</td>
+<td class="mal-cell" data-value="2.114678">2.115<br>(220)</td>
+<td class="score-cell score-negative" data-value="-0.611255">-0.611</td>
+<td class="mal-cell" data-value="2.363982">2.364<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">German</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-positive" data-value="0.162829">0.163</td>
+<td class="mal-cell" data-value="2.948065">2.948<br>(27556)</td>
+<td class="score-cell score-neutral" data-value="0.082664">0.083</td>
+<td class="mal-cell" data-value="2.783894">2.784<br>(97150)</td>
+<td class="score-cell score-positive" data-value="0.168163">0.168</td>
+<td class="mal-cell" data-value="2.600403">2.600<br>(143832)</td>
+<td class="score-cell score-positive" data-value="0.260242">0.260</td>
+<td class="mal-cell" data-value="2.412828">2.413<br>(103540)</td>
+<td class="score-cell score-positive" data-value="0.251892">0.252</td>
+<td class="mal-cell" data-value="2.280949">2.281<br>(43885)</td>
+<td class="score-cell score-positive" data-value="0.280790">0.281</td>
+<td class="mal-cell" data-value="2.167116">2.167<br>(12168)</td>
+<td class="score-cell score-positive" data-value="0.243654">0.244</td>
+<td class="mal-cell" data-value="2.087230">2.087<br>(2415)</td>
+<td class="score-cell score-neutral" data-value="0.080183">0.080</td>
+<td class="mal-cell" data-value="2.065001">2.065<br>(392)</td>
+<td class="score-cell score-neutral" data-value="-0.064954">-0.065</td>
+<td class="mal-cell" data-value="2.080860">2.081<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Hungarian</td>
+<td class="group-cell">Uralic</td>
+<td class="effect-cell score-positive" data-value="0.105265">0.105</td>
+<td class="mal-cell" data-value="2.599998">2.600<br>(408)</td>
+<td class="score-cell score-neutral" data-value="-0.029788">-0.030</td>
+<td class="mal-cell" data-value="2.654240">2.654<br>(878)</td>
+<td class="score-cell score-positive" data-value="0.261040">0.261</td>
+<td class="mal-cell" data-value="2.387665">2.388<br>(786)</td>
+<td class="score-cell score-neutral" data-value="0.087784">0.088</td>
+<td class="mal-cell" data-value="2.328122">2.328<br>(296)</td>
+<td class="score-cell score-neutral" data-value="0.053268">0.053</td>
+<td class="mal-cell" data-value="2.300613">2.301<br>(105)</td>
+<td class="score-cell score-positive" data-value="0.154021">0.154</td>
+<td class="mal-cell" data-value="2.236907">2.237<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Komi</td>
+<td class="group-cell">Uralic</td>
+<td class="effect-cell score-neutral" data-value="-0.041931">-0.042</td>
+<td class="mal-cell" data-value="1.542285">1.542<br>(491)</td>
+<td class="score-cell score-neutral" data-value="-0.094915">-0.095</td>
+<td class="mal-cell" data-value="1.647165">1.647<br>(450)</td>
+<td class="score-cell score-neutral" data-value="0.077318">0.077</td>
+<td class="mal-cell" data-value="1.596327">1.596<br>(237)</td>
+<td class="score-cell score-neutral" data-value="-0.019331">-0.019</td>
+<td class="mal-cell" data-value="1.605230">1.605<br>(80)</td>
+<td class="score-cell score-negative" data-value="-0.130797">-0.131</td>
+<td class="mal-cell" data-value="1.652771">1.653<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Latin</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-negative" data-value="-0.329644">-0.330</td>
+<td class="mal-cell" data-value="2.101742">2.102<br>(38798)</td>
+<td class="score-cell score-neutral" data-value="0.038777">0.039</td>
+<td class="mal-cell" data-value="2.046004">2.046<br>(48028)</td>
+<td class="score-cell score-neutral" data-value="-0.024562">-0.025</td>
+<td class="mal-cell" data-value="2.066482">2.066<br>(30387)</td>
+<td class="score-cell score-neutral" data-value="-0.093722">-0.094</td>
+<td class="mal-cell" data-value="2.122957">2.123<br>(14280)</td>
+<td class="score-cell score-negative" data-value="-0.424408">-0.424</td>
+<td class="mal-cell" data-value="2.333837">2.334<br>(4330)</td>
+<td class="score-cell score-negative" data-value="-0.503318">-0.503</td>
+<td class="mal-cell" data-value="2.558138">2.558<br>(1668)</td>
+<td class="score-cell score-negative" data-value="-0.606441">-0.606</td>
+<td class="mal-cell" data-value="2.808816">2.809<br>(623)</td>
+<td class="score-cell score-negative" data-value="-0.380079">-0.380</td>
+<td class="mal-cell" data-value="2.955050">2.955<br>(144)</td>
+<td class="score-cell score-negative" data-value="-0.643397">-0.643</td>
+<td class="mal-cell" data-value="3.187691">3.188<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">LowSaxon</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-neutral" data-value="0.094654">0.095</td>
+<td class="mal-cell" data-value="2.020105">2.020<br>(269)</td>
+<td class="score-cell score-positive" data-value="0.184156">0.184</td>
+<td class="mal-cell" data-value="1.778024">1.778<br>(764)</td>
+<td class="score-cell score-neutral" data-value="0.041105">0.041</td>
+<td class="mal-cell" data-value="1.748636">1.749<br>(1002)</td>
+<td class="score-cell score-positive" data-value="0.157146">0.157</td>
+<td class="mal-cell" data-value="1.671343">1.671<br>(668)</td>
+<td class="score-cell score-neutral" data-value="0.063275">0.063</td>
+<td class="mal-cell" data-value="1.647911">1.648<br>(315)</td>
+<td class="score-cell score-neutral" data-value="0.027590">0.028</td>
+<td class="mal-cell" data-value="1.639642">1.640<br>(96)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">MbyáGuaraní</td>
+<td class="group-cell">South-American</td>
+<td class="effect-cell score-neutral" data-value="-0.081642">-0.082</td>
+<td class="mal-cell" data-value="2.162924">2.163<br>(706)</td>
+<td class="score-cell score-negative" data-value="-0.101548">-0.102</td>
+<td class="mal-cell" data-value="2.320653">2.321<br>(750)</td>
+<td class="score-cell score-neutral" data-value="-0.018492">-0.018</td>
+<td class="mal-cell" data-value="2.338119">2.338<br>(312)</td>
+<td class="score-cell score-negative" data-value="-0.124886">-0.125</td>
+<td class="mal-cell" data-value="2.423649">2.424<br>(64)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">OldEastSlavic</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-negative" data-value="-0.276367">-0.276</td>
+<td class="mal-cell" data-value="1.905196">1.905<br>(16674)</td>
+<td class="score-cell score-neutral" data-value="0.026032">0.026</td>
+<td class="mal-cell" data-value="1.871127">1.871<br>(24460)</td>
+<td class="score-cell score-neutral" data-value="-0.079494">-0.079</td>
+<td class="mal-cell" data-value="1.932420">1.932<br>(15768)</td>
+<td class="score-cell score-negative" data-value="-0.123510">-0.124</td>
+<td class="mal-cell" data-value="2.002317">2.002<br>(7224)</td>
+<td class="score-cell score-negative" data-value="-0.245781">-0.246</td>
+<td class="mal-cell" data-value="2.115200">2.115<br>(2960)</td>
+<td class="score-cell score-negative" data-value="-0.495102">-0.495</td>
+<td class="mal-cell" data-value="2.315017">2.315<br>(1086)</td>
+<td class="score-cell score-negative" data-value="-0.561328">-0.561</td>
+<td class="mal-cell" data-value="2.524256">2.524<br>(406)</td>
+<td class="score-cell score-negative" data-value="-0.455386">-0.455</td>
+<td class="mal-cell" data-value="2.682514">2.683<br>(120)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Paumarí</td>
+<td class="group-cell">South-American</td>
+<td class="effect-cell score-positive" data-value="0.166270">0.166</td>
+<td class="mal-cell" data-value="1.698922">1.699<br>(55)</td>
+<td class="score-cell score-positive" data-value="0.166270">0.166</td>
+<td class="mal-cell" data-value="1.513984">1.514<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">SkoltSami</td>
+<td class="group-cell">Uralic</td>
+<td class="effect-cell score-neutral" data-value="0.081605">0.082</td>
+<td class="mal-cell" data-value="1.367088">1.367<br>(237)</td>
+<td class="score-cell score-neutral" data-value="0.045397">0.045</td>
+<td class="mal-cell" data-value="1.324740">1.325<br>(150)</td>
+<td class="score-cell score-positive" data-value="0.117813">0.118</td>
+<td class="mal-cell" data-value="1.262946">1.263<br>(45)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">SpanishSign</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-neutral" data-value="-0.048647">-0.049</td>
+<td class="mal-cell" data-value="1.282910">1.283<br>(144)</td>
+<td class="score-cell score-neutral" data-value="-0.084217">-0.084</td>
+<td class="mal-cell" data-value="1.360029">1.360<br>(90)</td>
+<td class="score-cell score-neutral" data-value="-0.013077">-0.013</td>
+<td class="mal-cell" data-value="1.367259">1.367<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Teko</td>
+<td class="group-cell">South-American</td>
+<td class="effect-cell score-neutral" data-value="0.043337">0.043</td>
+<td class="mal-cell" data-value="1.277683">1.278<br>(372)</td>
+<td class="score-cell score-neutral" data-value="0.074356">0.074</td>
+<td class="mal-cell" data-value="1.213500">1.213<br>(232)</td>
+<td class="score-cell score-neutral" data-value="0.012319">0.012</td>
+<td class="mal-cell" data-value="1.207454">1.207<br>(48)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">TurkishEnglish</td>
+<td class="group-cell">Turkic</td>
+<td class="effect-cell score-positive" data-value="0.284349">0.284</td>
+<td class="mal-cell" data-value="1.819570">1.820<br>(27)</td>
+<td class="score-cell score-positive" data-value="0.284349">0.284</td>
+<td class="mal-cell" data-value="1.494070">1.494<br>(20)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">WestArmenian</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-neutral" data-value="-0.001263">-0.001</td>
+<td class="mal-cell" data-value="2.408395">2.408<br>(5141)</td>
+<td class="score-cell score-neutral" data-value="0.005059">0.005</td>
+<td class="mal-cell" data-value="2.399965">2.400<br>(3880)</td>
+<td class="score-cell score-neutral" data-value="-0.043040">-0.043</td>
+<td class="mal-cell" data-value="2.442214">2.442<br>(1521)</td>
+<td class="score-cell score-neutral" data-value="-0.053702">-0.054</td>
+<td class="mal-cell" data-value="2.480237">2.480<br>(364)</td>
+<td class="score-cell score-negative" data-value="-0.227285">-0.227</td>
+<td class="mal-cell" data-value="2.609272">2.609<br>(0)</td>
+<td class="score-cell score-positive" data-value="0.312655">0.313</td>
+<td class="mal-cell" data-value="2.464694">2.465<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Yupik</td>
+<td class="group-cell">Other</td>
+<td class="effect-cell score-neutral" data-value="0.033956">0.034</td>
+<td class="mal-cell" data-value="1.982283">1.982<br>(154)</td>
+<td class="score-cell score-neutral" data-value="-0.049029">-0.049</td>
+<td class="mal-cell" data-value="2.050808">2.051<br>(124)</td>
+<td class="score-cell score-positive" data-value="0.116942">0.117</td>
+<td class="mal-cell" data-value="1.955837">1.956<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+</tbody>
+</table>
+
+<script>
+let sortDirections = {};
+
+function sortTable(colIndex, type) {
+    const table = document.getElementById("malTable");
+    const tbody = table.tBodies[0];
+    const rows = Array.from(tbody.rows);
+    
+    // Toggle sort direction
+    sortDirections[colIndex] = !sortDirections[colIndex];
+    const ascending = sortDirections[colIndex];
+    
+    rows.sort((a, b) => {
+        let aVal, bVal;
+        
+        if (type === 'string') {
+            aVal = a.cells[colIndex].textContent.trim().toLowerCase();
+            bVal = b.cells[colIndex].textContent.trim().toLowerCase();
+            return ascending ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+        } else {
+            // Use data-value attribute for numeric sorting
+            aVal = a.cells[colIndex].getAttribute('data-value');
+            bVal = b.cells[colIndex].getAttribute('data-value');
+            
+            // Handle empty values (sort to end)
+            if (aVal === '' || aVal === null) return 1;
+            if (bVal === '' || bVal === null) return -1;
+            
+            aVal = parseFloat(aVal);
+            bVal = parseFloat(bVal);
+            
+            return ascending ? aVal - bVal : bVal - aVal;
+        }
+    });
+    
+    // Re-append rows in new order
+    rows.forEach(row => tbody.appendChild(row));
+}
+</script>
+
+<h2>Visualizations</h2>
+
+<!-- Chart 1: Mean MAL Curve -->
+<div class="chart-container">
+<h3>1. Mean MAL_n Curve Across Languages</h3>
+<canvas id="meanCurveChart" height="100"></canvas>
+<div class="explanation">
+<p><strong>Interpretation:</strong> This chart shows the average MAL_n trajectory across all languages. 
+The shaded area represents the interquartile range (25th-75th percentile), showing cross-linguistic variation.
+A downward trend confirms MAL: as n increases, constituent size decreases on average.</p>
+<p><strong>Note:</strong> The number of contributing languages decreases at higher n values (see Data Availability chart), 
+which may affect the reliability of the mean at those points.</p>
+</div>
+</div>
+
+<!-- Chart 2: Normalized Constituent Size -->
+<div class="chart-container">
+<h3>2. Normalized MAL Curve (MAL_n / MAL_1)</h3>
+<canvas id="normalizedCurveChart" height="100"></canvas>
+<div class="explanation">
+<p><strong>Interpretation:</strong> This chart shows the relative change in constituent size, normalized by each language's 
+starting point (MAL_1 = 1.0 for all languages). This allows direct comparison of the <em>rate of decline</em> across 
+languages, independent of their initial constituent sizes.</p>
+<p><strong>Key insight:</strong> All languages start at 1.0; the steeper the decline, the stronger the MAL effect.
+A value of 0.8 at n=3 means constituents are 80% of their size at n=1.</p>
+</div>
+</div>
+
+<!-- Chart 3: Data Availability -->
+<div class="chart-container">
+<h3>3. Data Availability by Number of Dependents</h3>
+<canvas id="availabilityChart" height="80"></canvas>
+<div class="explanation">
+<p><strong>Interpretation:</strong> This chart shows how many languages have sufficient data (≥10 occurrences) 
+at each value of n. The sharp decline at higher n values explains why mean curves may become less reliable 
+and potentially show unexpected patterns (survivor bias).</p>
+</div>
+</div>
+
+<!-- Chart 4: SVG Box Plot of Local Change Scores -->
+<div class="chart-container">
+<h3>4. Distribution of Local Change Scores by Transition</h3>
+<svg width="800" height="350" xmlns="http://www.w3.org/2000/svg" style="background: white; font-family: Arial, sans-serif;">
+<line x1="60" y1="30" x2="60" y2="290" stroke="#333" stroke-width="1"/>
+<line x1="55" y1="290.0" x2="60" y2="290.0" stroke="#333" stroke-width="1"/>
+<text x="50" y="294.0" text-anchor="end" font-size="11">-0.7</text>
+<line x1="60" y1="290.0" x2="770" y2="290.0" stroke="#eee" stroke-width="1"/>
+<line x1="55" y1="246.66666666666666" x2="60" y2="246.66666666666666" stroke="#333" stroke-width="1"/>
+<text x="50" y="250.66666666666666" text-anchor="end" font-size="11">-0.5</text>
+<line x1="60" y1="246.66666666666666" x2="770" y2="246.66666666666666" stroke="#eee" stroke-width="1"/>
+<line x1="55" y1="203.33333333333331" x2="60" y2="203.33333333333331" stroke="#333" stroke-width="1"/>
+<text x="50" y="207.33333333333331" text-anchor="end" font-size="11">-0.3</text>
+<line x1="60" y1="203.33333333333331" x2="770" y2="203.33333333333331" stroke="#eee" stroke-width="1"/>
+<line x1="55" y1="160.0" x2="60" y2="160.0" stroke="#333" stroke-width="1"/>
+<text x="50" y="164.0" text-anchor="end" font-size="11">-0.1</text>
+<line x1="60" y1="160.0" x2="770" y2="160.0" stroke="#eee" stroke-width="1"/>
+<line x1="55" y1="116.66666666666666" x2="60" y2="116.66666666666666" stroke="#333" stroke-width="1"/>
+<text x="50" y="120.66666666666666" text-anchor="end" font-size="11">0.1</text>
+<line x1="60" y1="116.66666666666666" x2="770" y2="116.66666666666666" stroke="#eee" stroke-width="1"/>
+<line x1="55" y1="73.33333333333331" x2="60" y2="73.33333333333331" stroke="#333" stroke-width="1"/>
+<text x="50" y="77.33333333333331" text-anchor="end" font-size="11">0.3</text>
+<line x1="60" y1="73.33333333333331" x2="770" y2="73.33333333333331" stroke="#eee" stroke-width="1"/>
+<line x1="55" y1="30.0" x2="60" y2="30.0" stroke="#333" stroke-width="1"/>
+<text x="50" y="34.0" text-anchor="end" font-size="11">0.5</text>
+<line x1="60" y1="30.0" x2="770" y2="30.0" stroke="#eee" stroke-width="1"/>
+<line x1="60" y1="137.89493427618478" x2="770" y2="137.89493427618478" stroke="#333" stroke-width="2" stroke-dasharray="6,4"/>
+<line x1="60" y1="290" x2="770" y2="290" stroke="#333" stroke-width="1"/>
+<text x="15" y="175.0" text-anchor="middle" font-size="12" transform="rotate(-90, 15, 175.0)">Local Change Score</text>
+<text x="415.0" y="340" text-anchor="middle" font-size="12">Transition</text>
+<line x1="99.44444444444444" y1="144.52598791347685" x2="99.44444444444444" y2="158.67240841106909" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="85.77777777777777" y1="158.67240841106909" x2="113.11111111111111" y2="158.67240841106909" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="99.44444444444444" y1="109.8436206014743" x2="99.44444444444444" y2="66.4961646851971" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="85.77777777777777" y1="66.4961646851971" x2="113.11111111111111" y2="66.4961646851971" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<rect x="75.77777777777777" y="109.8436206014743" width="47.33333333333333" height="34.682367312002555" fill="rgba(255, 193, 7, 0.6)" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="75.77777777777777" y1="131.97270188139785" x2="123.11111111111111" y2="131.97270188139785" stroke="#333" stroke-width="3"/>
+<text x="99.44444444444444" y="310" text-anchor="middle" font-size="11">1→2</text>
+<text x="99.44444444444444" y="325" text-anchor="middle" font-size="9" fill="#666">(n=23)</text>
+<line x1="178.33333333333331" y1="140.57069418774887" x2="178.33333333333331" y2="161.54868893142063" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="164.66666666666666" y1="161.54868893142063" x2="191.99999999999997" y2="161.54868893142063" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="178.33333333333331" y1="113.96773191783663" x2="178.33333333333331" y2="84.3957232011183" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="164.66666666666666" y1="84.3957232011183" x2="191.99999999999997" y2="84.3957232011183" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<rect x="154.66666666666666" y="113.96773191783663" width="47.33333333333333" height="26.60296226991224" fill="rgba(255, 193, 7, 0.6)" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="154.66666666666666" y1="125.77360749910636" x2="201.99999999999997" y2="125.77360749910636" stroke="#333" stroke-width="3"/>
+<text x="178.33333333333331" y="310" text-anchor="middle" font-size="11">2→3</text>
+<text x="178.33333333333331" y="325" text-anchor="middle" font-size="9" fill="#666">(n=21)</text>
+<line x1="257.22222222222223" y1="144.03091019136187" x2="257.22222222222223" y2="163.44766572792622" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="243.55555555555557" y1="163.44766572792622" x2="270.8888888888889" y2="163.44766572792622" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="257.22222222222223" y1="112.28273065352852" x2="257.22222222222223" y2="84.6473962507468" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="243.55555555555557" y1="84.6473962507468" x2="270.8888888888889" y2="84.6473962507468" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<rect x="233.55555555555557" y="112.28273065352852" width="47.33333333333333" height="31.74817953783335" fill="rgba(255, 193, 7, 0.6)" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="233.55555555555557" y1="133.48086864235373" x2="280.8888888888889" y2="133.48086864235373" stroke="#333" stroke-width="3"/>
+<text x="257.22222222222223" y="310" text-anchor="middle" font-size="11">3→4</text>
+<text x="257.22222222222223" y="325" text-anchor="middle" font-size="9" fill="#666">(n=17)</text>
+<line x1="336.1111111111111" y1="183.4061731001376" x2="336.1111111111111" y2="224.73232128873914" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="322.4444444444444" y1="224.73232128873914" x2="349.77777777777777" y2="224.73232128873914" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="336.1111111111111" y1="116.36296305210405" x2="336.1111111111111" y2="84.51465170777561" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="322.4444444444444" y1="84.51465170777561" x2="349.77777777777777" y2="84.51465170777561" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<rect x="312.4444444444444" y="116.36296305210405" width="47.33333333333333" height="67.04321004803356" fill="rgba(255, 193, 7, 0.6)" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="312.4444444444444" y1="151.44632577686232" x2="359.77777777777777" y2="151.44632577686232" stroke="#333" stroke-width="3"/>
+<text x="336.1111111111111" y="310" text-anchor="middle" font-size="11">4→5</text>
+<text x="336.1111111111111" y="325" text-anchor="middle" font-size="9" fill="#666">(n=14)</text>
+<line x1="415.0" y1="206.171485694098" x2="415.0" y2="262.9625921487026" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="401.3333333333333" y1="262.9625921487026" x2="428.6666666666667" y2="262.9625921487026" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="415.0" y1="93.41199637399563" x2="415.0" y2="50.460807405276" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="401.3333333333333" y1="50.460807405276" x2="428.6666666666667" y2="50.460807405276" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<rect x="391.3333333333333" y="93.41199637399563" width="47.33333333333333" height="112.75948932010238" fill="rgba(255, 193, 7, 0.6)" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="391.3333333333333" y1="131.43584909767594" x2="438.6666666666667" y2="131.43584909767594" stroke="#333" stroke-width="3"/>
+<text x="415.0" y="310" text-anchor="middle" font-size="11">5→6</text>
+<text x="415.0" y="325" text-anchor="middle" font-size="9" fill="#666">(n=11)</text>
+<line x1="493.88888888888886" y1="252.7471557590236" x2="493.88888888888886" y2="261.9776485568391" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="480.2222222222222" y1="261.9776485568391" x2="507.55555555555554" y2="261.9776485568391" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="493.88888888888886" y1="124.10737328781744" x2="493.88888888888886" y2="88.04136457480925" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="480.2222222222222" y1="88.04136457480925" x2="507.55555555555554" y2="88.04136457480925" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<rect x="470.2222222222222" y="124.10737328781744" width="47.33333333333333" height="128.63978247120616" fill="rgba(255, 193, 7, 0.6)" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="470.2222222222222" y1="138.33275168292866" x2="517.5555555555555" y2="138.33275168292866" stroke="#333" stroke-width="3"/>
+<text x="493.88888888888886" y="310" text-anchor="middle" font-size="11">6→7</text>
+<text x="493.88888888888886" y="325" text-anchor="middle" font-size="9" fill="#666">(n=5)</text>
+<line x1="572.7777777777777" y1="219.5142929358529" x2="572.7777777777777" y2="231.07057452140293" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="559.1111111111111" y1="231.07057452140293" x2="586.4444444444443" y2="231.07057452140293" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="572.7777777777777" y1="128.58039071095857" x2="572.7777777777777" y2="121.48883550514509" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="559.1111111111111" y1="121.48883550514509" x2="586.4444444444443" y2="121.48883550514509" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<rect x="549.1111111111111" y="128.58039071095857" width="47.33333333333333" height="90.93390222489433" fill="rgba(244, 67, 54, 0.6)" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="549.1111111111111" y1="173.30322076011626" x2="596.4444444444443" y2="173.30322076011626" stroke="#333" stroke-width="3"/>
+<text x="572.7777777777777" y="310" text-anchor="middle" font-size="11">7→8</text>
+<text x="572.7777777777777" y="325" text-anchor="middle" font-size="9" fill="#666">(n=4)</text>
+<line x1="651.6666666666666" y1="227.5771022036657" x2="651.6666666666666" y2="269.539192594724" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="638.0" y1="269.539192594724" x2="665.3333333333333" y2="269.539192594724" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="651.6666666666666" y1="168.39999414666846" x2="651.6666666666666" y2="151.1849764807295" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="638.0" y1="151.1849764807295" x2="665.3333333333333" y2="151.1849764807295" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<rect x="628.0" y="168.39999414666846" width="47.33333333333333" height="59.17710805699724" fill="rgba(244, 67, 54, 0.6)" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="628.0" y1="185.61501181260738" x2="675.3333333333333" y2="185.61501181260738" stroke="#333" stroke-width="3"/>
+<text x="651.6666666666666" y="310" text-anchor="middle" font-size="11">8→9</text>
+<text x="651.6666666666666" y="325" text-anchor="middle" font-size="9" fill="#666">(n=3)</text>
+<line x1="730.5555555555555" y1="101.88550974894659" x2="730.5555555555555" y2="101.88550974894659" stroke="rgba(76, 175, 80, 1)" stroke-width="2"/>
+<line x1="716.8888888888889" y1="101.88550974894659" x2="744.2222222222222" y2="101.88550974894659" stroke="rgba(76, 175, 80, 1)" stroke-width="2"/>
+<line x1="730.5555555555555" y1="101.88550974894659" x2="730.5555555555555" y2="101.88550974894659" stroke="rgba(76, 175, 80, 1)" stroke-width="2"/>
+<line x1="716.8888888888889" y1="101.88550974894659" x2="744.2222222222222" y2="101.88550974894659" stroke="rgba(76, 175, 80, 1)" stroke-width="2"/>
+<rect x="706.8888888888889" y="101.88550974894659" width="47.33333333333333" height="0.0" fill="rgba(76, 175, 80, 0.6)" stroke="rgba(76, 175, 80, 1)" stroke-width="2"/>
+<line x1="706.8888888888889" y1="101.88550974894659" x2="754.2222222222222" y2="101.88550974894659" stroke="#333" stroke-width="3"/>
+<text x="730.5555555555555" y="310" text-anchor="middle" font-size="11">9→10</text>
+<text x="730.5555555555555" y="325" text-anchor="middle" font-size="9" fill="#666">(n=1)</text>
+</svg>
+<div class="explanation">
+<p><strong>Interpretation:</strong> True box plot showing the distribution of local change scores across languages for each transition.
+The box spans the interquartile range (Q1 to Q3), with the median marked. Whiskers extend to the most extreme points within 1.5×IQR, and outliers are shown as individual dots.</p>
+<p><strong>Color coding:</strong> Green boxes indicate median > 0.1 (MAL compliant), yellow = near zero, red = median < -0.1 (anti-MAL).</p>
+<p><strong>Key insight:</strong> Values above the dashed zero line indicate MAL compliance — constituent size decreases as n increases.</p>
+</div>
+</div>
+
+<!-- Chart 5: Individual Language Trajectories -->
+<div class="chart-container">
+<h3>5. Individual Language MAL_n Trajectories</h3>
+<canvas id="trajectoriesChart" height="120"></canvas>
+<div class="explanation">
+<p><strong>Interpretation:</strong> Each line represents one language's MAL_n trajectory. 
+The thick black line shows the cross-linguistic mean. Most languages show a downward trend (MAL compliance), 
+but there is considerable variation in both the starting point (MAL_1) and the slope of decline.</p>
+<p><strong>Interactive:</strong> Hover over lines to see language names.</p>
+</div>
+</div>
+
+<!-- Chart 6: Histogram of Local Change Scores -->
+<div class="chart-container">
+<h3>6. Histogram of All Local Change Scores</h3>
+<canvas id="histogramChart" height="80"></canvas>
+<div class="explanation">
+<p><strong>Interpretation:</strong> This histogram shows the overall distribution of local change scores 
+across all languages and transitions. A distribution centered above zero indicates general MAL compliance.
+The spread shows how consistent the MAL effect is across the dataset.</p>
+</div>
+</div>
+
+<!-- Chart 7: MAL_1 vs Mean Slope Scatter Plot -->
+<div class="chart-container">
+<h3>7. MAL_1 vs. Average Slope (Initial Size vs. Decline Rate)</h3>
+<canvas id="mal1SlopeChart" height="120"></canvas>
+<div class="explanation">
+<p><strong>Interpretation:</strong> Each point represents one language. The x-axis shows MAL_1 (initial constituent size 
+when there's only 1 dependent), and the y-axis shows the mean local change score (average slope of the MAL curve).</p>
+<p><strong>Key questions:</strong></p>
+<ul>
+<li>Is there a relationship between starting size and rate of decline?</li>
+<li>Do languages with larger initial constituents show stronger or weaker MAL effects?</li>
+<li>A negative correlation would suggest a ceiling effect; a positive correlation would suggest compound effects.</li>
+</ul>
+<p><strong>Color coding:</strong> Points are colored by language family. Hover for details.</p>
+</div>
+</div>
+
+<!-- Chart 8: MAL Effect Score by Family -->
+<div class="chart-container">
+<h3>8. MAL Effect Score by Language Family</h3>
+<svg width="900" height="400" xmlns="http://www.w3.org/2000/svg" style="background: white; font-family: Arial, sans-serif;">
+<text x="450.0" y="25" text-anchor="middle" font-size="14" font-weight="bold">MAL Effect Score by Language Family</text>
+<line x1="180" y1="340" x2="850" y2="340" stroke="#333" stroke-width="1"/>
+<line x1="180.0" y1="340" x2="180.0" y2="345" stroke="#333" stroke-width="1"/>
+<text x="180.0" y="360" text-anchor="middle" font-size="10">-0.4</text>
+<line x1="180.0" y1="40" x2="180.0" y2="340" stroke="#eee" stroke-width="1"/>
+<line x1="263.75" y1="340" x2="263.75" y2="345" stroke="#333" stroke-width="1"/>
+<text x="263.75" y="360" text-anchor="middle" font-size="10">-0.3</text>
+<line x1="263.75" y1="40" x2="263.75" y2="340" stroke="#eee" stroke-width="1"/>
+<line x1="347.5" y1="340" x2="347.5" y2="345" stroke="#333" stroke-width="1"/>
+<text x="347.5" y="360" text-anchor="middle" font-size="10">-0.2</text>
+<line x1="347.5" y1="40" x2="347.5" y2="340" stroke="#eee" stroke-width="1"/>
+<line x1="431.25" y1="340" x2="431.25" y2="345" stroke="#333" stroke-width="1"/>
+<text x="431.25" y="360" text-anchor="middle" font-size="10">-0.1</text>
+<line x1="431.25" y1="40" x2="431.25" y2="340" stroke="#eee" stroke-width="1"/>
+<line x1="515.0" y1="340" x2="515.0" y2="345" stroke="#333" stroke-width="1"/>
+<text x="515.0" y="360" text-anchor="middle" font-size="10">0.0</text>
+<line x1="515.0" y1="40" x2="515.0" y2="340" stroke="#eee" stroke-width="1"/>
+<line x1="598.75" y1="340" x2="598.75" y2="345" stroke="#333" stroke-width="1"/>
+<text x="598.75" y="360" text-anchor="middle" font-size="10">0.1</text>
+<line x1="598.75" y1="40" x2="598.75" y2="340" stroke="#eee" stroke-width="1"/>
+<line x1="682.5" y1="340" x2="682.5" y2="345" stroke="#333" stroke-width="1"/>
+<text x="682.5" y="360" text-anchor="middle" font-size="10">0.2</text>
+<line x1="682.5" y1="40" x2="682.5" y2="340" stroke="#eee" stroke-width="1"/>
+<line x1="766.2499999999999" y1="340" x2="766.2499999999999" y2="345" stroke="#333" stroke-width="1"/>
+<text x="766.2499999999999" y="360" text-anchor="middle" font-size="10">0.3</text>
+<line x1="766.2499999999999" y1="40" x2="766.2499999999999" y2="340" stroke="#eee" stroke-width="1"/>
+<line x1="850.0" y1="340" x2="850.0" y2="345" stroke="#333" stroke-width="1"/>
+<text x="850.0" y="360" text-anchor="middle" font-size="10">0.4</text>
+<line x1="850.0" y1="40" x2="850.0" y2="340" stroke="#eee" stroke-width="1"/>
+<text x="515.0" y="385" text-anchor="middle" font-size="12">MAL Effect Score (mean of local change scores)</text>
+<text x="170" y="81.5" text-anchor="end" font-size="11">South-American (n=3)</text>
+<rect x="180" y="65.0" width="670" height="25" fill="#f5f5f5" stroke="#ddd" stroke-width="1"/>
+<rect x="515.0" y="65.0" width="35.72358084428163" height="25" fill="#2196F3" fill-opacity="0.6" stroke="#2196F3" stroke-width="1"/>
+<circle cx="446.62476618428315" cy="70.13692723626001" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>MbyáGuaraní: -0.082</title>
+</circle>
+<circle cx="654.250927895232" cy="77.62996203917305" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Paumarí: 0.166</title>
+</circle>
+<circle cx="551.2950484533296" cy="79.83908430908106" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Teko: 0.043</title>
+</circle>
+<line x1="550.7235808442816" y1="63.0" x2="550.7235808442816" y2="92.0" stroke="#333" stroke-width="2"/>
+<text x="170" y="156.5" text-anchor="end" font-size="11">Uralic (n=4)</text>
+<rect x="180" y="140.0" width="670" height="25" fill="#f5f5f5" stroke="#ddd" stroke-width="1"/>
+<rect x="515.0" y="140.0" width="18.086125638053204" height="25" fill="#4CAF50" fill-opacity="0.6" stroke="#4CAF50" stroke-width="1"/>
+<circle cx="465.95859230821793" cy="146.59321215493804" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Erzya: -0.059</title>
+</circle>
+<circle cx="603.1593843854961" cy="149.66359172700265" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Hungarian: 0.105</title>
+</circle>
+<circle cx="479.88256560806974" cy="159.64729057129358" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Komi: -0.042</title>
+</circle>
+<circle cx="583.3439602504291" cy="151.43136401588833" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>SkoltSami: 0.082</title>
+</circle>
+<line x1="533.0861256380532" y1="138.0" x2="533.0861256380532" y2="167.0" stroke="#333" stroke-width="2"/>
+<text x="170" y="231.5" text-anchor="end" font-size="11">Other (n=2)</text>
+<rect x="180" y="215.0" width="670" height="25" fill="#f5f5f5" stroke="#ddd" stroke-width="1"/>
+<rect x="515.0" y="215.0" width="14.034706798596517" height="25" fill="#F44336" fill-opacity="0.6" stroke="#F44336" stroke-width="1"/>
+<circle cx="514.6311586785828" cy="230.70686180626427" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Chukot: -0.000</title>
+</circle>
+<circle cx="543.4382549186104" cy="233.46465354054075" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Yupik: 0.034</title>
+</circle>
+<line x1="529.0347067985965" y1="213.0" x2="529.0347067985965" y2="242.0" stroke="#333" stroke-width="2"/>
+<text x="170" y="306.5" text-anchor="end" font-size="11">Indo-European (n=12)</text>
+<rect x="180" y="290.0" width="670" height="25" fill="#f5f5f5" stroke="#ddd" stroke-width="1"/>
+<rect x="515.0" y="290.0" width="14.02277862199594" height="25" fill="#9C27B0" fill-opacity="0.6" stroke="#9C27B0" stroke-width="1"/>
+<circle cx="548.4903445056428" cy="303.7814426277478" r="4" fill="#9C27B0" stroke="white" stroke-width="1">
+<title>AncientGreek: 0.040</title>
+</circle>
+<circle cx="565.3551448131593" cy="298.4233641954107" r="4" fill="#9C27B0" stroke="white" stroke-width="1">
+<title>Armenian: 0.060</title>
+</circle>
+<circle cx="657.6114635317647" cy="303.8676405225947" r="4" fill="#9C27B0" stroke="white" stroke-width="1">
+<title>Bavarian: 0.170</title>
+</circle>
+<circle cx="470.7656149542838" cy="297.6252813528097" r="4" fill="#9C27B0" stroke="white" stroke-width="1">
+<title>ClassArmenian: -0.053</title>
+</circle>
+<circle cx="606.7933932449469" cy="298.4188766653604" r="4" fill="#9C27B0" stroke="white" stroke-width="1">
+<title>Dutch: 0.110</title>
+</circle>
+<circle cx="742.9484342135473" cy="302.7013603996313" r="4" fill="#9C27B0" stroke="white" stroke-width="1">
+<title>FrisianDutch: 0.272</title>
+</circle>
+<circle cx="651.3695814950514" cy="308.44741288537153" r="4" fill="#9C27B0" stroke="white" stroke-width="1">
+<title>German: 0.163</title>
+</circle>
+<circle cx="238.923119788018" cy="304.4663393427221" r="4" fill="#9C27B0" stroke="white" stroke-width="1">
+<title>Latin: -0.330</title>
+</circle>
+<circle cx="594.2731090128095" cy="309.22566763658756" r="4" fill="#9C27B0" stroke="white" stroke-width="1">
+<title>LowSaxon: 0.095</title>
+</circle>
+<circle cx="283.54254679903465" cy="306.25234768467277" r="4" fill="#9C27B0" stroke="white" stroke-width="1">
+<title>OldEastSlavic: -0.276</title>
+</circle>
+<circle cx="474.25795118014383" cy="307.6498352656189" r="4" fill="#9C27B0" stroke="white" stroke-width="1">
+<title>SpanishSign: -0.049</title>
+</circle>
+<circle cx="513.9426399255497" cy="300.2374806688279" r="4" fill="#9C27B0" stroke="white" stroke-width="1">
+<title>WestArmenian: -0.001</title>
+</circle>
+<line x1="529.0227786219959" y1="288.0" x2="529.0227786219959" y2="317.0" stroke="#333" stroke-width="2"/>
+<line x1="515.0" y1="40" x2="515.0" y2="340" stroke="#333" stroke-width="1.5" stroke-dasharray="4,4"/>
+<text x="520.0" y="55" font-size="10" fill="#666">0</text>
+</svg>
+<div class="explanation">
+<p><strong>Interpretation:</strong> The MAL effect score is the mean of all local change scores for a language. 
+Positive values indicate MAL compliance (constituent size decreases with n); negative values indicate anti-MAL behavior.</p>
+<p><strong>Family comparison:</strong> This chart groups languages by family to reveal whether MAL strength 
+varies systematically across genealogical groups. Box plots show the distribution within each family.</p>
+<p><strong>Key insight:</strong> If MAL is a universal constraint, we expect positive effect scores across all families.
+Systematic differences might indicate structural factors that modulate MAL strength.</p>
+</div>
+</div>
+
+<!-- Chart 9: World Map of MAL Effect -->
+<div class="chart-container">
+<h3>9. World Map: Geographic Distribution of MAL Effect</h3>
+
+<div id="worldMap" style="width: 100%; max-width: 1000px; margin: 0 auto;"></div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://d3js.org/topojson.v3.min.js"></script>
+
+<script>
+(function() {
+    const geoData = [{"name": "AncientGreek", "code": "grc", "lat": 34.75, "lon": 33.0, "mal_score": 0.03998847105151379, "family": "Indo-European", "n_transitions": 9}, {"name": "Armenian", "code": "hy", "lat": 40.0, "lon": 45.0, "mal_score": 0.06012554604556332, "family": "Indo-European", "n_transitions": 5}, {"name": "Bavarian", "code": "bar", "lat": 47.0, "lon": 14.0, "mal_score": 0.1702823445155398, "family": "Indo-European", "n_transitions": 4}, {"name": "Chukot", "code": "ckt", "lat": 67.0, "lon": -173.0, "mal_score": -0.00044040754796090725, "family": "Chukotko-Kamchatkan", "n_transitions": 3}, {"name": "ClassArmenian", "code": "xcl", "lat": 40.0, "lon": 45.0, "mal_score": -0.052817176173989455, "family": "Indo-European", "n_transitions": 5}, {"name": "Dutch", "code": "nl", "lat": 5.33333333333, "lon": -58.0, "mal_score": 0.10960405163575733, "family": "other", "n_transitions": 6}, {"name": "Erzya", "code": "myv", "lat": 53.0, "lon": 45.5, "mal_score": -0.058556904706605455, "family": "Uralic", "n_transitions": 4}, {"name": "FrisianDutch", "code": "qfn", "lat": 50.75, "lon": 4.5, "mal_score": 0.27217723488184764, "family": "Indo-European", "n_transitions": 3}, {"name": "Georgian", "code": "ka", "lat": 42.0, "lon": 44.0, "mal_score": -0.06082831789110692, "family": "Kartvelian", "n_transitions": 5}, {"name": "German", "code": "de", "lat": 47.0, "lon": 14.0, "mal_score": 0.16282935103886742, "family": "Indo-European", "n_transitions": 8}, {"name": "Hungarian", "code": "hu", "lat": 47.0, "lon": 20.0, "mal_score": 0.1052649365796968, "family": "Uralic", "n_transitions": 5}, {"name": "Komi", "code": "kpv", "lat": 65.0, "lon": 55.0, "mal_score": -0.04193126494558834, "family": "Uralic", "n_transitions": 4}, {"name": "LowSaxon", "code": "nds", "lat": 53.0, "lon": 10.0, "mal_score": 0.09465445852275771, "family": "Indo-European", "n_transitions": 5}, {"name": "Mby\u00e1Guaran\u00ed", "code": "gun", "lat": -26.0, "lon": -56.0, "mal_score": -0.08164207022772164, "family": "Tupian", "n_transitions": 3}, {"name": "Paumar\u00ed", "code": "pad", "lat": -6.0, "lon": -64.0, "mal_score": 0.16626976465102333, "family": "Arauan", "n_transitions": 1}, {"name": "SkoltSami", "code": "sms", "lat": 11.8666666667, "lon": -2.91666666667, "mal_score": 0.08160472865722875, "family": "Niger-Congo", "n_transitions": 2}, {"name": "SpanishSign", "code": "ssp", "lat": 40.0, "lon": -3.0, "mal_score": -0.04864722247147006, "family": "other", "n_transitions": 2}, {"name": "Teko", "code": "eme", "lat": 3.16666666667, "lon": -52.4166666667, "mal_score": 0.043337371287557894, "family": "Tupian", "n_transitions": 2}, {"name": "TurkishEnglish", "code": "qti", "lat": 52.0, "lon": 0.0, "mal_score": 0.28434927964485096, "family": "Indo-European", "n_transitions": 1}, {"name": "WestArmenian", "code": "hyw", "lat": 38.5, "lon": 43.5, "mal_score": -0.0012625194918809758, "family": "Indo-European", "n_transitions": 5}, {"name": "Yupik", "code": "ess", "lat": 63.5, "lon": -170.5, "mal_score": 0.03395612527595274, "family": "Eskimo-Aleut", "n_transitions": 2}];
+    const container = document.getElementById("worldMap");
+    
+    // Dimensions
+    const width = Math.min(1000, container.clientWidth || 1000);
+    const height = width * 0.5;
+    
+    // Create SVG
+    const svg = d3.select("#worldMap")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .style("background", "#f0f8ff")
+        .style("border-radius", "8px")
+        .style("border", "1px solid #ddd");
+    
+    // Projection (Natural Earth for nice appearance)
+    const projection = d3.geoNaturalEarth1()
+        .scale(width / 5.5)
+        .translate([width / 2, height / 2]);
+    
+    const path = d3.geoPath().projection(projection);
+    
+    // Color scale for MAL scores
+    function scoreToColor(score) {
+        if (score > 0.1) {
+            // Green for MAL compliance (interpolate intensity)
+            const t = Math.min(1, score / 0.3);
+            return d3.interpolateRgb("#b8e6b8", "#2e7d32")(t);
+        } else if (score < -0.1) {
+            // Red for anti-MAL
+            const t = Math.min(1, Math.abs(score) / 0.3);
+            return d3.interpolateRgb("#ffcdd2", "#c62828")(t);
+        } else {
+            // Yellow for neutral
+            return "#ffc107";
+        }
+    }
+    
+    // Create tooltip
+    const tooltip = d3.select("body").append("div")
+        .attr("class", "map-tooltip")
+        .style("position", "absolute")
+        .style("visibility", "hidden")
+        .style("background", "rgba(255, 255, 255, 0.95)")
+        .style("border", "1px solid #ccc")
+        .style("border-radius", "6px")
+        .style("padding", "10px")
+        .style("font-size", "12px")
+        .style("box-shadow", "0 2px 8px rgba(0,0,0,0.15)")
+        .style("pointer-events", "none")
+        .style("z-index", "1000");
+    
+    // Load world map data
+    d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(function(world) {
+        // Draw countries
+        svg.append("g")
+            .selectAll("path")
+            .data(topojson.feature(world, world.objects.countries).features)
+            .enter().append("path")
+            .attr("d", path)
+            .attr("fill", "#e8e8e8")
+            .attr("stroke", "#999")
+            .attr("stroke-width", 0.5);
+        
+        // Draw country borders
+        svg.append("path")
+            .datum(topojson.mesh(world, world.objects.countries, (a, b) => a !== b))
+            .attr("fill", "none")
+            .attr("stroke", "#aaa")
+            .attr("stroke-width", 0.3)
+            .attr("d", path);
+        
+        // Add graticule (grid lines)
+        const graticule = d3.geoGraticule().step([30, 30]);
+        svg.append("path")
+            .datum(graticule)
+            .attr("d", path)
+            .attr("fill", "none")
+            .attr("stroke", "#ddd")
+            .attr("stroke-width", 0.3);
+        
+        // Draw language points
+        svg.selectAll("circle.lang-point")
+            .data(geoData.sort((a, b) => Math.abs(a.mal_score) - Math.abs(b.mal_score)))
+            .enter().append("circle")
+            .attr("class", "lang-point")
+            .attr("cx", d => projection([d.lon, d.lat])[0])
+            .attr("cy", d => projection([d.lon, d.lat])[1])
+            .attr("r", 5)
+            .attr("fill", d => scoreToColor(d.mal_score))
+            .attr("stroke", "white")
+            .attr("stroke-width", 1.5)
+            .attr("opacity", 0.85)
+            .style("cursor", "pointer")
+            .on("mouseover", function(event, d) {
+                d3.select(this).attr("r", 8).attr("stroke-width", 2);
+                tooltip.style("visibility", "visible")
+                    .html(`<strong>${d.name}</strong><br/>
+                           MAL Score: ${d.mal_score.toFixed(3)}<br/>
+                           Family: ${d.family}<br/>
+                           Transitions: ${d.n_transitions}`);
+            })
+            .on("mousemove", function(event) {
+                tooltip.style("top", (event.pageY - 10) + "px")
+                       .style("left", (event.pageX + 10) + "px");
+            })
+            .on("mouseout", function() {
+                d3.select(this).attr("r", 5).attr("stroke-width", 1.5);
+                tooltip.style("visibility", "hidden");
+            });
+        
+        // Add legend
+        const legendData = [
+            { label: "Strong MAL (>0.2)", score: 0.3 },
+            { label: "Moderate MAL", score: 0.15 },
+            { label: "Weak/Neutral", score: 0 },
+            { label: "Anti-MAL (<-0.1)", score: -0.2 }
+        ];
+        
+        const legend = svg.append("g")
+            .attr("transform", `translate(${width - 140}, ${height - 100})`);
+        
+        legend.append("rect")
+            .attr("x", -10)
+            .attr("y", -25)
+            .attr("width", 135)
+            .attr("height", 100)
+            .attr("fill", "white")
+            .attr("stroke", "#ccc")
+            .attr("rx", 5)
+            .attr("opacity", 0.9);
+        
+        legend.append("text")
+            .attr("x", 0)
+            .attr("y", -8)
+            .attr("font-size", "11px")
+            .attr("font-weight", "bold")
+            .text("MAL Effect Score");
+        
+        legendData.forEach((item, i) => {
+            legend.append("circle")
+                .attr("cx", 8)
+                .attr("cy", 12 + i * 18)
+                .attr("r", 5)
+                .attr("fill", scoreToColor(item.score))
+                .attr("stroke", "white")
+                .attr("stroke-width", 1);
+            
+            legend.append("text")
+                .attr("x", 20)
+                .attr("y", 16 + i * 18)
+                .attr("font-size", "10px")
+                .text(item.label);
+        });
+        
+        // Add language count
+        svg.append("text")
+            .attr("x", 10)
+            .attr("y", height - 10)
+            .attr("font-size", "10px")
+            .attr("fill", "#666")
+            .text(`Languages shown: ${geoData.length}`);
+            
+    }).catch(function(error) {
+        console.error("Error loading world map:", error);
+        svg.append("text")
+            .attr("x", width / 2)
+            .attr("y", height / 2)
+            .attr("text-anchor", "middle")
+            .attr("fill", "#666")
+            .text("Could not load world map. Check internet connection.");
+    });
+})();
+</script>
+
+<div class="explanation">
+<p><strong>Interpretation:</strong> Each dot represents a language positioned at its geographic location. 
+The color indicates the global MAL effect score (mean of all local change scores for that language).</p>
+<p><strong>Color scale:</strong> Green = strong MAL compliance (constituent size decreases with n), 
+Yellow = weak/neutral effect, Red = anti-MAL (constituent size increases with n).</p>
+<p><strong>Geographic patterns:</strong> If MAL is truly universal, we expect green dots distributed across 
+all continents. Clustering of colors might suggest areal effects or shared structural features.</p>
+<p><strong>Note:</strong> Only languages with geographic coordinates available in WALS are shown.</p>
+</div>
+</div>
+
+<script>
+// Data from Python
+const chartData = {"1\u21922": [0.10792580465458705, 0.023571745366101363, 0.22790848172620765, -0.04711471050075821, 0.23937352116086444, 0.028944275157293302, -0.035028636978083595, 0.34895382267552594, -0.0038102439271605762, 0.08266442042459467, -0.02978848881708125, -0.0949153796131467, 0.03877653826393299, 0.18415560018216548, -0.10154767465103373, 0.02603201268298161, 0.16626976465102333, 0.04539681401890711, -0.08421695558211402, 0.0743556343689359, 0.28434927964485096, 0.005058728841157235, -0.049029382710222426], "2\u21923": [0.09029657915077562, 0.05924168356109376, 0.10792662997352494, 0.03327623078947106, -0.11560518696411028, 0.1678819558000854, 0.018190901254585792, 0.26147165170652675, 0.1143224142924455, 0.16816278671077678, 0.2610398865978676, 0.07731842875243128, -0.024562206269257765, 0.04110509184691134, -0.018492303804792852, -0.07949435950544287, 0.11781264329555038, -0.013077489360826096, 0.01231910820617989, -0.04303965384160654, 0.11694163326212789], "3\u21924": [0.12517689607914456, -0.029988923670699604, 0.0844038649668072, 0.012517257067404426, -0.007695958339508834, 0.13413648795175148, 0.02157327199459799, 0.20610623026349023, 0.07737914402824494, 0.2602416266901944, 0.08778442831779665, -0.019331231765850502, -0.09372243274765278, 0.15714640828159177, -0.12488623222733834, -0.12351035943910499, -0.05370183679276685], "4\u21925": [-0.001665065643040749, -0.17952168522925654, 0.2608904013956195, -0.2078714539093936, 0.22770828097075588, -0.238963155097522, 0.11922184966700673, 0.25189233655768, 0.05326796322220799, -0.13079687715578744, -0.4244084081948916, 0.06327524375632806, -0.24578137649343512, -0.22728457500474578], "5\u21926": [0.06356561014927485, 0.4273249102005776, -0.172286802817799, 0.03156808551378734, -0.6112547535160712, 0.28079027512251015, 0.15402089357769305, -0.503318490500382, 0.02758994854679189, -0.4951018301479511, 0.3126547393385571], "6\u21927": [-0.0021397855816333864, 0.06738522442087064, 0.24365397080332402, -0.6064409474313243, -0.561327904651618], "7\u21928": [0.033970760255349446, 0.08018304676876649, -0.3800791594263534, -0.4553859405430502], "8\u21929": [-0.23322675684888935, -0.06495365476690705, -0.6433971822861381], "9\u219210": [0.17599219724805604]};
+const meanCurve = {"1": {"mean": 2.026886345807977, "std": 0.49024954315559394, "count": 23, "min": 1.2226581385099244, "max": 2.948065398326979, "q1": 1.6206037144765328, "median": 2.0213572608539194, "q3": 2.3640956310998265}, "2": {"mean": 1.9376155248253395, "std": 0.4652146673491697, "count": 23, "min": 1.2134999250722978, "max": 2.7838936688859115, "q1": 1.522607530987723, "median": 1.8756602483462033, "q3": 2.3232922715833584}, "3": {"mean": 1.925154530547748, "std": 0.440601219753261, "count": 21, "min": 1.2074536441850077, "max": 2.600402928712144, "q1": 1.5963272696053334, "median": 1.9324201310678968, "q3": 2.387664997616242}, "4": {"mean": 2.0141281538443048, "std": 0.3916408784790881, "count": 17, "min": 1.2418365572477346, "max": 2.480237037313849, "q1": 1.671343430258776, "median": 2.122956886223178, "q3": 2.4006253323753333}, "5": {"mean": 2.0991187219622005, "std": 0.3514930843254246, "count": 14, "min": 1.5933089614391343, "max": 2.609271914345121, "q1": 1.720682440378075, "median": 2.1543016181234727, "q3": 2.32553124675773}, "6": {"mean": 2.2387877598250565, "std": 0.2943499511793209, "count": 11, "min": 1.6396422000243631, "max": 2.5948430448764346, "q1": 2.173965622909792, "median": 2.315017282860561, "q3": 2.422694784153749}, "7": {"mean": 2.2607929031409904, "std": 0.37337321519388367, "count": 5, "min": 1.7253837436629078, "max": 2.808815794427801, "q1": 2.0872300650676565, "median": 2.158279252377591, "q3": 2.524255660168996}, "8": {"mean": 2.355035077149475, "std": 0.4893197586849286, "count": 4, "min": 1.717574846497857, "max": 2.9550496965977175, "q1": 1.97814476310443, "median": 2.3737578827511627, "q3": 2.7506481967962078}, "9": {"mean": 2.344653930280326, "std": 0.609869015510655, "count": 3, "min": 1.765410918548575, "max": 3.1876907179553067, "q1": 1.9231355364428357, "median": 2.080860154337097, "q3": 2.6342754361462015}, "10": {"mean": 1.7329771920373571, "std": 0.0, "count": 1, "min": 1.7329771920373571, "max": 1.7329771920373571, "q1": 1.7329771920373571, "median": 1.7329771920373571, "q3": 1.7329771920373571}};
+const normalizedCurve = {"1": {"mean": 1.0, "std": 0.0, "count": 23, "min": 1.0, "max": 1.0, "q1": 1.0, "median": 1.0, "q3": 1.0}, "2": {"mean": 0.960978168392662, "std": 0.07924838414344924, "count": 23, "min": 0.7851532492071152, "max": 1.072923841944235, "q1": 0.9095325225004902, "median": 0.9801372729202263, "q3": 1.0227198040325245}, "3": {"mean": 0.9471620225758005, "std": 0.08630003735963483, "count": 21, "min": 0.7061737338231769, "max": 1.0809988429858783, "q1": 0.8945624352377427, "median": 0.9572289391903394, "q3": 1.0142893027166513}, "4": {"mean": 0.9306887938397391, "std": 0.11249831748215663, "count": 17, "min": 0.665519688323425, "max": 1.1205425620900649, "q1": 0.8629213494003575, "median": 0.936155875464784, "q3": 1.015685839020532}, "5": {"mean": 0.9443727396858613, "std": 0.12386195839201611, "count": 14, "min": 0.7525919525896778, "max": 1.1104302274767135, "q1": 0.8438103964474714, "median": 0.921777645893984, "q3": 1.0702570640449487}, "6": {"mean": 0.9511010990330518, "std": 0.15037311358222163, "count": 11, "min": 0.7350976925489786, "max": 1.2171515615910957, "q1": 0.8429115284519733, "median": 0.9327824431178555, "q3": 1.02121164507736}, "7": {"mean": 1.00937129711083, "std": 0.2668439737747811, "count": 5, "min": 0.7079999196259876, "max": 1.3364229810970107, "q1": 0.8239246181772917, "median": 0.8535768402137988, "q3": 1.3249321264400618}, "8": {"mean": 1.0910432387659084, "std": 0.32033356964838516, "count": 4, "min": 0.7004598348276709, "max": 1.4079990057895286, "q1": 0.8124001926537374, "median": 1.127857057223217, "q3": 1.4065001033353879}, "9": {"mean": 1.0319694291509478, "std": 0.34950726776062285, "count": 3, "min": 0.7058392108662109, "max": 1.5166901085348496, "q1": 0.789609089458997, "median": 0.8733789680517831, "q3": 1.1950345382933163}, "10": {"mean": 0.8573334489645158, "std": 0.0, "count": 1, "min": 0.8573334489645158, "max": 0.8573334489645158, "q1": 0.8573334489645158, "median": 0.8573334489645158, "q3": 0.8573334489645158}};
+const languageCurves = [{"name": "AncientGreek", "code": "grc", "group": "Indo-European", "values": {"5": 1.744920537618323, "4": 1.7442723351562746, "2": 1.8756602483462033, "1": 2.0213572608539194, "3": 1.8082302737549754, "6": 1.7248147207177773, "7": 1.7253837436629078, "8": 1.717574846497857, "9": 1.765410918548575, "10": 1.7329771920373571}}, {"name": "Armenian", "code": "hy", "group": "Indo-European", "values": {"3": 2.4512963437591706, "2": 2.5108904222955677, "1": 2.552252056929987, "4": 2.4725358409304783, "5": 2.5735940541499076, "6": 2.3806959091157256}}, {"name": "Bavarian", "code": "bar", "group": "Indo-European", "values": {"2": 1.9430763238430087, "4": 1.8152632337683106, "1": 2.275606414257073, "3": 1.8598799978827842, "5": 1.7126030746313257}}, {"name": "Chukot", "code": "ckt", "group": "Other", "values": {"3": 1.2463164600391485, "1": 1.2226581385099244, "2": 1.2632461524141585, "4": 1.2418365572477346}}, {"name": "ClassArmenian", "code": "xcl", "group": "Indo-European", "values": {"3": 2.3953162530000753, "1": 2.698139552815052, "6": 2.5948430448764346, "2": 2.2856293193217527, "5": 2.514601729635353, "4": 2.4006253323753333}}, {"name": "Dutch", "code": "nl", "group": "Indo-European", "values": {"3": 2.3985264743228676, "2": 2.5674799538159743, "1": 2.6195105774994256, "4": 2.307733598953123, "5": 2.193403138969945, "6": 2.1808151740259367, "7": 2.158279252377591}}, {"name": "Erzya", "code": "myv", "group": "Uralic", "values": {"3": 1.519978390659313, "1": 1.4945002841453159, "2": 1.5312308572261069, "4": 1.5105742468935548, "5": 1.5933089614391343}}, {"name": "FrisianDutch", "code": "qfn", "group": "Indo-European", "values": {"2": 1.8038096412624618, "3": 1.622362246813478, "1": 2.297398174285127, "4": 1.5289637169050434}}, {"name": "Georgian", "code": "ka", "group": "Caucasian", "values": {"3": 2.22057635804034, "5": 2.1146781024247137, "2": 2.3259313349378417, "1": 2.3197965158873988, "4": 2.1716911382307234, "6": 2.3639820861364194}}, {"name": "German", "code": "de", "group": "Indo-European", "values": {"4": 2.412828124402668, "2": 2.7838936688859115, "5": 2.280948589729382, "1": 2.948065398326979, "3": 2.600402928712144, "6": 2.167116071793648, "7": 2.0872300650676565, "9": 2.080860154337097, "8": 2.0650014019732876}}, {"name": "Hungarian", "code": "hu", "group": "Uralic", "values": {"4": 2.328121906112044, "3": 2.387664997616242, "2": 2.654240277134961, "5": 2.300612728569747, "1": 2.5999979556464288, "6": 2.2369071207442723}}, {"name": "Komi", "code": "kpv", "group": "Uralic", "values": {"2": 1.6471647214579337, "3": 1.5963272696053334, "4": 1.6052295737661118, "1": 1.5422850747800918, "5": 1.6527709824644952}}, {"name": "Latin", "code": "la", "group": "Indo-European", "values": {"2": 2.0460037354419818, "1": 2.101741614860714, "3": 2.066481930412215, "4": 2.122956886223178, "6": 2.5581380885887093, "5": 2.333837419487058, "8": 2.9550496965977175, "7": 2.808815794427801, "9": 3.1876907179553067}}, {"name": "LowSaxon", "code": "nds", "group": "Indo-European", "values": {"4": 1.671343430258776, "1": 2.0201051656531153, "2": 1.7780240033756167, "6": 1.6396422000243631, "3": 1.748635827323469, "5": 1.6479107767293033}}, {"name": "Mby\u00e1Guaran\u00ed", "code": "gun", "group": "South-American", "values": {"2": 2.320653208228875, "3": 2.3381188253968035, "1": 2.1629244476696887, "4": 2.4236489021990315}}, {"name": "OldEastSlavic", "code": "orv", "group": "Indo-European", "values": {"1": 1.9051962057493292, "2": 1.8711271105745455, "3": 1.9324201310678968, "5": 2.1152000972770004, "4": 2.002316754616949, "6": 2.315017282860561, "7": 2.524255660168996, "8": 2.682514363529038}}, {"name": "Paumar\u00ed", "code": "pad", "group": "South-American", "values": {"1": 1.6989223541729739, "2": 1.5139842047493393}}, {"name": "SkoltSami", "code": "sms", "group": "Uralic", "values": {"3": 1.2629461572568168, "1": 1.3670878239287199, "2": 1.3247398860828696}}, {"name": "SpanishSign", "code": "ssp", "group": "Indo-European", "values": {"1": 1.2829102513595831, "2": 1.360028800455025, "3": 1.367259459654868}}, {"name": "Teko", "code": "eme", "group": "South-American", "values": {"2": 1.2134999250722978, "1": 1.2776827462420253, "3": 1.2074536441850077}}, {"name": "TurkishEnglish", "code": "qti", "group": "Turkic", "values": {"1": 1.8195698121397628, "2": 1.4940703959545578}}, {"name": "WestArmenian", "code": "hyw", "group": "Indo-European", "values": {"2": 2.3999646343807854, "1": 2.408394746312254, "3": 2.4422141820228314, "4": 2.480237037313849, "6": 2.4646936591917723, "5": 2.609271914345121}}, {"name": "Yupik", "code": "ess", "group": "Other", "values": {"2": 2.05080824572503, "1": 1.9822833815585825, "3": 1.9558369899769208}}];
+const dataAvailability = {"1": 23, "2": 23, "3": 21, "4": 17, "5": 14, "6": 11, "7": 5, "8": 4, "9": 3, "10": 1};
+const mal1VsSlope = [{"name": "AncientGreek", "code": "grc", "group": "Indo-European", "mal_1": 2.0213572608539194, "mean_slope": 0.03998847105151379, "n_transitions": 9}, {"name": "Armenian", "code": "hy", "group": "Indo-European", "mal_1": 2.552252056929987, "mean_slope": 0.06012554604556332, "n_transitions": 5}, {"name": "Bavarian", "code": "bar", "group": "Indo-European", "mal_1": 2.275606414257073, "mean_slope": 0.1702823445155398, "n_transitions": 4}, {"name": "Chukot", "code": "ckt", "group": "Other", "mal_1": 1.2226581385099244, "mean_slope": -0.00044040754796090725, "n_transitions": 3}, {"name": "ClassArmenian", "code": "xcl", "group": "Indo-European", "mal_1": 2.698139552815052, "mean_slope": -0.052817176173989455, "n_transitions": 5}, {"name": "Dutch", "code": "nl", "group": "Indo-European", "mal_1": 2.6195105774994256, "mean_slope": 0.10960405163575733, "n_transitions": 6}, {"name": "Erzya", "code": "myv", "group": "Uralic", "mal_1": 1.4945002841453159, "mean_slope": -0.058556904706605455, "n_transitions": 4}, {"name": "FrisianDutch", "code": "qfn", "group": "Indo-European", "mal_1": 2.297398174285127, "mean_slope": 0.27217723488184764, "n_transitions": 3}, {"name": "Georgian", "code": "ka", "group": "Caucasian", "mal_1": 2.3197965158873988, "mean_slope": -0.06082831789110692, "n_transitions": 5}, {"name": "German", "code": "de", "group": "Indo-European", "mal_1": 2.948065398326979, "mean_slope": 0.16282935103886742, "n_transitions": 8}, {"name": "Hungarian", "code": "hu", "group": "Uralic", "mal_1": 2.5999979556464288, "mean_slope": 0.1052649365796968, "n_transitions": 5}, {"name": "Komi", "code": "kpv", "group": "Uralic", "mal_1": 1.5422850747800918, "mean_slope": -0.04193126494558834, "n_transitions": 4}, {"name": "Latin", "code": "la", "group": "Indo-European", "mal_1": 2.101741614860714, "mean_slope": -0.3296440360740084, "n_transitions": 8}, {"name": "LowSaxon", "code": "nds", "group": "Indo-European", "mal_1": 2.0201051656531153, "mean_slope": 0.09465445852275771, "n_transitions": 5}, {"name": "Mby\u00e1Guaran\u00ed", "code": "gun", "group": "South-American", "mal_1": 2.1629244476696887, "mean_slope": -0.08164207022772164, "n_transitions": 3}, {"name": "OldEastSlavic", "code": "orv", "group": "Indo-European", "mal_1": 1.9051962057493292, "mean_slope": -0.2763671082996601, "n_transitions": 7}, {"name": "Paumar\u00ed", "code": "pad", "group": "South-American", "mal_1": 1.6989223541729739, "mean_slope": 0.16626976465102333, "n_transitions": 1}, {"name": "SkoltSami", "code": "sms", "group": "Uralic", "mal_1": 1.3670878239287199, "mean_slope": 0.08160472865722875, "n_transitions": 2}, {"name": "SpanishSign", "code": "ssp", "group": "Indo-European", "mal_1": 1.2829102513595831, "mean_slope": -0.04864722247147006, "n_transitions": 2}, {"name": "Teko", "code": "eme", "group": "South-American", "mal_1": 1.2776827462420253, "mean_slope": 0.043337371287557894, "n_transitions": 2}, {"name": "TurkishEnglish", "code": "qti", "group": "Turkic", "mal_1": 1.8195698121397628, "mean_slope": 0.28434927964485096, "n_transitions": 1}, {"name": "WestArmenian", "code": "hyw", "group": "Indo-European", "mal_1": 2.408394746312254, "mean_slope": -0.0012625194918809758, "n_transitions": 5}, {"name": "Yupik", "code": "ess", "group": "Other", "mal_1": 1.9822833815585825, "mean_slope": 0.03395612527595274, "n_transitions": 2}];
+const effectScores = [{"name": "AncientGreek", "code": "grc", "group": "Indo-European", "effect": 0.03998847105151379, "n_compliant": 6, "n_transitions": 9}, {"name": "Armenian", "code": "hy", "group": "Indo-European", "effect": 0.06012554604556332, "n_compliant": 3, "n_transitions": 5}, {"name": "Bavarian", "code": "bar", "group": "Indo-European", "effect": 0.1702823445155398, "n_compliant": 4, "n_transitions": 4}, {"name": "Chukot", "code": "ckt", "group": "Other", "effect": -0.00044040754796090725, "n_compliant": 2, "n_transitions": 3}, {"name": "ClassArmenian", "code": "xcl", "group": "Indo-European", "effect": -0.052817176173989455, "n_compliant": 1, "n_transitions": 5}, {"name": "Dutch", "code": "nl", "group": "Indo-European", "effect": 0.10960405163575733, "n_compliant": 6, "n_transitions": 6}, {"name": "Erzya", "code": "myv", "group": "Uralic", "effect": -0.058556904706605455, "n_compliant": 2, "n_transitions": 4}, {"name": "FrisianDutch", "code": "qfn", "group": "Indo-European", "effect": 0.27217723488184764, "n_compliant": 3, "n_transitions": 3}, {"name": "Georgian", "code": "ka", "group": "Caucasian", "effect": -0.06082831789110692, "n_compliant": 3, "n_transitions": 5}, {"name": "German", "code": "de", "group": "Indo-European", "effect": 0.16282935103886742, "n_compliant": 7, "n_transitions": 8}, {"name": "Hungarian", "code": "hu", "group": "Uralic", "effect": 0.1052649365796968, "n_compliant": 4, "n_transitions": 5}, {"name": "Komi", "code": "kpv", "group": "Uralic", "effect": -0.04193126494558834, "n_compliant": 1, "n_transitions": 4}, {"name": "Latin", "code": "la", "group": "Indo-European", "effect": -0.3296440360740084, "n_compliant": 1, "n_transitions": 8}, {"name": "LowSaxon", "code": "nds", "group": "Indo-European", "effect": 0.09465445852275771, "n_compliant": 5, "n_transitions": 5}, {"name": "Mby\u00e1Guaran\u00ed", "code": "gun", "group": "South-American", "effect": -0.08164207022772164, "n_compliant": 0, "n_transitions": 3}, {"name": "OldEastSlavic", "code": "orv", "group": "Indo-European", "effect": -0.2763671082996601, "n_compliant": 1, "n_transitions": 7}, {"name": "Paumar\u00ed", "code": "pad", "group": "South-American", "effect": 0.16626976465102333, "n_compliant": 1, "n_transitions": 1}, {"name": "SkoltSami", "code": "sms", "group": "Uralic", "effect": 0.08160472865722875, "n_compliant": 2, "n_transitions": 2}, {"name": "SpanishSign", "code": "ssp", "group": "Indo-European", "effect": -0.04864722247147006, "n_compliant": 0, "n_transitions": 2}, {"name": "Teko", "code": "eme", "group": "South-American", "effect": 0.043337371287557894, "n_compliant": 2, "n_transitions": 2}, {"name": "TurkishEnglish", "code": "qti", "group": "Turkic", "effect": 0.28434927964485096, "n_compliant": 1, "n_transitions": 1}, {"name": "WestArmenian", "code": "hyw", "group": "Indo-European", "effect": -0.0012625194918809758, "n_compliant": 2, "n_transitions": 5}, {"name": "Yupik", "code": "ess", "group": "Other", "effect": 0.03395612527595274, "n_compliant": 1, "n_transitions": 2}];
+const familyStats = {"Indo-European": {"mean": 0.016743616265069833, "std": 0.16897094930516085, "count": 12, "min": -0.3296440360740084, "max": 0.27217723488184764}, "Other": {"mean": 0.016757858863995913, "std": 0.01719826641195682, "count": 2, "min": -0.00044040754796090725, "max": 0.03395612527595274}, "Uralic": {"mean": 0.021595373896182934, "std": 0.07256331715515657, "count": 4, "min": -0.058556904706605455, "max": 0.1052649365796968}, "Caucasian": {"mean": -0.06082831789110692, "std": 0.0, "count": 1, "min": -0.06082831789110692, "max": -0.06082831789110692}, "South-American": {"mean": 0.04265502190361986, "std": 0.10121073285888162, "count": 3, "min": -0.08164207022772164, "max": 0.16626976465102333}, "Turkic": {"mean": 0.28434927964485096, "std": 0.0, "count": 1, "min": 0.28434927964485096, "max": 0.28434927964485096}};
+const geoData = [{"name": "AncientGreek", "code": "grc", "lat": 34.75, "lon": 33.0, "mal_score": 0.03998847105151379, "family": "Indo-European", "n_transitions": 9}, {"name": "Armenian", "code": "hy", "lat": 40.0, "lon": 45.0, "mal_score": 0.06012554604556332, "family": "Indo-European", "n_transitions": 5}, {"name": "Bavarian", "code": "bar", "lat": 47.0, "lon": 14.0, "mal_score": 0.1702823445155398, "family": "Indo-European", "n_transitions": 4}, {"name": "Chukot", "code": "ckt", "lat": 67.0, "lon": -173.0, "mal_score": -0.00044040754796090725, "family": "Chukotko-Kamchatkan", "n_transitions": 3}, {"name": "ClassArmenian", "code": "xcl", "lat": 40.0, "lon": 45.0, "mal_score": -0.052817176173989455, "family": "Indo-European", "n_transitions": 5}, {"name": "Dutch", "code": "nl", "lat": 5.33333333333, "lon": -58.0, "mal_score": 0.10960405163575733, "family": "other", "n_transitions": 6}, {"name": "Erzya", "code": "myv", "lat": 53.0, "lon": 45.5, "mal_score": -0.058556904706605455, "family": "Uralic", "n_transitions": 4}, {"name": "FrisianDutch", "code": "qfn", "lat": 50.75, "lon": 4.5, "mal_score": 0.27217723488184764, "family": "Indo-European", "n_transitions": 3}, {"name": "Georgian", "code": "ka", "lat": 42.0, "lon": 44.0, "mal_score": -0.06082831789110692, "family": "Kartvelian", "n_transitions": 5}, {"name": "German", "code": "de", "lat": 47.0, "lon": 14.0, "mal_score": 0.16282935103886742, "family": "Indo-European", "n_transitions": 8}, {"name": "Hungarian", "code": "hu", "lat": 47.0, "lon": 20.0, "mal_score": 0.1052649365796968, "family": "Uralic", "n_transitions": 5}, {"name": "Komi", "code": "kpv", "lat": 65.0, "lon": 55.0, "mal_score": -0.04193126494558834, "family": "Uralic", "n_transitions": 4}, {"name": "LowSaxon", "code": "nds", "lat": 53.0, "lon": 10.0, "mal_score": 0.09465445852275771, "family": "Indo-European", "n_transitions": 5}, {"name": "Mby\u00e1Guaran\u00ed", "code": "gun", "lat": -26.0, "lon": -56.0, "mal_score": -0.08164207022772164, "family": "Tupian", "n_transitions": 3}, {"name": "Paumar\u00ed", "code": "pad", "lat": -6.0, "lon": -64.0, "mal_score": 0.16626976465102333, "family": "Arauan", "n_transitions": 1}, {"name": "SkoltSami", "code": "sms", "lat": 11.8666666667, "lon": -2.91666666667, "mal_score": 0.08160472865722875, "family": "Niger-Congo", "n_transitions": 2}, {"name": "SpanishSign", "code": "ssp", "lat": 40.0, "lon": -3.0, "mal_score": -0.04864722247147006, "family": "other", "n_transitions": 2}, {"name": "Teko", "code": "eme", "lat": 3.16666666667, "lon": -52.4166666667, "mal_score": 0.043337371287557894, "family": "Tupian", "n_transitions": 2}, {"name": "TurkishEnglish", "code": "qti", "lat": 52.0, "lon": 0.0, "mal_score": 0.28434927964485096, "family": "Indo-European", "n_transitions": 1}, {"name": "WestArmenian", "code": "hyw", "lat": 38.5, "lon": 43.5, "mal_score": -0.0012625194918809758, "family": "Indo-European", "n_transitions": 5}, {"name": "Yupik", "code": "ess", "lat": 63.5, "lon": -170.5, "mal_score": 0.03395612527595274, "family": "Eskimo-Aleut", "n_transitions": 2}];
+const maxN = 10;
+
+// Color palette
+const colors = {
+    primary: 'rgba(33, 150, 243, 1)',
+    primaryLight: 'rgba(33, 150, 243, 0.2)',
+    positive: 'rgba(76, 175, 80, 0.7)',
+    negative: 'rgba(244, 67, 54, 0.7)',
+    neutral: 'rgba(255, 193, 7, 0.7)',
+    gray: 'rgba(158, 158, 158, 0.5)'
+};
+
+// Chart 1: Mean MAL Curve
+const meanLabels = Object.keys(meanCurve).map(n => 'n=' + n);
+const meanValues = Object.values(meanCurve).map(d => d.mean);
+const q1Values = Object.values(meanCurve).map(d => d.q1);
+const q3Values = Object.values(meanCurve).map(d => d.q3);
+
+new Chart(document.getElementById('meanCurveChart'), {
+    type: 'line',
+    data: {
+        labels: meanLabels,
+        datasets: [
+            {
+                label: 'Mean MAL_n',
+                data: meanValues,
+                borderColor: colors.primary,
+                backgroundColor: colors.primary,
+                borderWidth: 3,
+                fill: false,
+                tension: 0.1
+            },
+            {
+                label: 'Q3 (75th percentile)',
+                data: q3Values,
+                borderColor: 'rgba(33, 150, 243, 0.3)',
+                backgroundColor: colors.primaryLight,
+                borderWidth: 1,
+                fill: '+1',
+                tension: 0.1,
+                pointRadius: 0
+            },
+            {
+                label: 'Q1 (25th percentile)',
+                data: q1Values,
+                borderColor: 'rgba(33, 150, 243, 0.3)',
+                backgroundColor: 'transparent',
+                borderWidth: 1,
+                fill: false,
+                tension: 0.1,
+                pointRadius: 0
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            title: { display: false },
+            legend: { position: 'top' }
+        },
+        scales: {
+            y: {
+                title: { display: true, text: 'MAL_n (Geometric Mean Constituent Size)' },
+                beginAtZero: false
+            },
+            x: {
+                title: { display: true, text: 'Number of Dependents (n)' }
+            }
+        }
+    }
+});
+
+// Chart 2: Normalized MAL Curve
+const normLabels = Object.keys(normalizedCurve).map(n => 'n=' + n);
+const normMeanValues = Object.values(normalizedCurve).map(d => d.mean);
+const normQ1Values = Object.values(normalizedCurve).map(d => d.q1);
+const normQ3Values = Object.values(normalizedCurve).map(d => d.q3);
+
+new Chart(document.getElementById('normalizedCurveChart'), {
+    type: 'line',
+    data: {
+        labels: normLabels,
+        datasets: [
+            {
+                label: 'Mean (MAL_n / MAL_1)',
+                data: normMeanValues,
+                borderColor: 'rgba(156, 39, 176, 1)',
+                backgroundColor: 'rgba(156, 39, 176, 1)',
+                borderWidth: 3,
+                fill: false,
+                tension: 0.1
+            },
+            {
+                label: 'Q3 (75th percentile)',
+                data: normQ3Values,
+                borderColor: 'rgba(156, 39, 176, 0.3)',
+                backgroundColor: 'rgba(156, 39, 176, 0.2)',
+                borderWidth: 1,
+                fill: '+1',
+                tension: 0.1,
+                pointRadius: 0
+            },
+            {
+                label: 'Q1 (25th percentile)',
+                data: normQ1Values,
+                borderColor: 'rgba(156, 39, 176, 0.3)',
+                backgroundColor: 'transparent',
+                borderWidth: 1,
+                fill: false,
+                tension: 0.1,
+                pointRadius: 0
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            title: { display: false },
+            legend: { position: 'top' }
+        },
+        scales: {
+            y: {
+                title: { display: true, text: 'Relative Constituent Size (MAL_n / MAL_1)' },
+                beginAtZero: false,
+                suggestedMin: 0.5,
+                suggestedMax: 1.1
+            },
+            x: {
+                title: { display: true, text: 'Number of Dependents (n)' }
+            }
+        }
+    }
+});
+
+// Chart 3: Data Availability
+new Chart(document.getElementById('availabilityChart'), {
+    type: 'bar',
+    data: {
+        labels: Object.keys(dataAvailability).map(n => 'n=' + n),
+        datasets: [{
+            label: 'Number of Languages',
+            data: Object.values(dataAvailability),
+            backgroundColor: colors.primary,
+            borderColor: colors.primary,
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            y: {
+                title: { display: true, text: 'Number of Languages' },
+                beginAtZero: true
+            },
+            x: {
+                title: { display: true, text: 'Number of Dependents (n)' }
+            }
+        }
+    }
+});
+
+// Chart 5: Individual Language Trajectories
+const trajDatasets = [];
+
+// Add individual language lines (semi-transparent)
+languageCurves.forEach((lang, i) => {
+    const values = [];
+    for (let n = 1; n <= maxN; n++) {
+        values.push(lang.values[n] !== undefined ? lang.values[n] : null);
+    }
+    trajDatasets.push({
+        label: lang.name,
+        data: values,
+        borderColor: 'rgba(100, 100, 100, 0.15)',
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        fill: false,
+        tension: 0.1,
+        pointRadius: 0,
+        hidden: false
+    });
+});
+
+// Add mean line (prominent)
+trajDatasets.push({
+    label: 'Cross-linguistic Mean',
+    data: meanValues,
+    borderColor: 'black',
+    backgroundColor: 'black',
+    borderWidth: 3,
+    fill: false,
+    tension: 0.1,
+    pointRadius: 4
+});
+
+new Chart(document.getElementById('trajectoriesChart'), {
+    type: 'line',
+    data: {
+        labels: Array.from({length: maxN}, (_, i) => 'n=' + (i + 1)),
+        datasets: trajDatasets
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { 
+                display: true,
+                labels: {
+                    filter: (item) => item.text === 'Cross-linguistic Mean'
+                }
+            },
+            tooltip: {
+                mode: 'nearest',
+                intersect: true
+            }
+        },
+        scales: {
+            y: {
+                title: { display: true, text: 'MAL_n (Constituent Size)' },
+                beginAtZero: false
+            },
+            x: {
+                title: { display: true, text: 'Number of Dependents (n)' }
+            }
+        },
+        interaction: {
+            mode: 'nearest',
+            axis: 'x',
+            intersect: false
+        }
+    }
+});
+
+// Chart 6: Histogram of All Scores
+const allScores = Object.values(chartData).flat();
+const binWidth = 0.2;
+const minBin = Math.floor(Math.min(...allScores) / binWidth) * binWidth;
+const maxBin = Math.ceil(Math.max(...allScores) / binWidth) * binWidth;
+const bins = [];
+const binLabels = [];
+
+for (let b = minBin; b < maxBin; b += binWidth) {
+    const count = allScores.filter(s => s >= b && s < b + binWidth).length;
+    bins.push(count);
+    binLabels.push(b.toFixed(1));
+}
+
+new Chart(document.getElementById('histogramChart'), {
+    type: 'bar',
+    data: {
+        labels: binLabels,
+        datasets: [{
+            label: 'Frequency',
+            data: bins,
+            backgroundColor: binLabels.map(b => {
+                const v = parseFloat(b);
+                if (v >= 0.1) return colors.positive;
+                if (v <= -0.1) return colors.negative;
+                return colors.neutral;
+            }),
+            borderColor: 'rgba(0,0,0,0.3)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            y: {
+                title: { display: true, text: 'Frequency' },
+                beginAtZero: true
+            },
+            x: {
+                title: { display: true, text: 'Local Change Score' }
+            }
+        }
+    }
+});
+
+// Chart 7: MAL_1 vs Mean Slope Scatter Plot
+// Create unique color for each family
+const families = [...new Set(mal1VsSlope.map(d => d.group))].sort();
+const familyColors = {};
+const colorPalette = [
+    'rgba(33, 150, 243, 0.7)',   // Blue
+    'rgba(76, 175, 80, 0.7)',    // Green
+    'rgba(244, 67, 54, 0.7)',    // Red
+    'rgba(156, 39, 176, 0.7)',   // Purple
+    'rgba(255, 152, 0, 0.7)',    // Orange
+    'rgba(0, 188, 212, 0.7)',    // Cyan
+    'rgba(233, 30, 99, 0.7)',    // Pink
+    'rgba(139, 195, 74, 0.7)',   // Light Green
+    'rgba(121, 85, 72, 0.7)',    // Brown
+    'rgba(63, 81, 181, 0.7)',    // Indigo
+    'rgba(255, 87, 34, 0.7)',    // Deep Orange
+    'rgba(0, 150, 136, 0.7)',    // Teal
+    'rgba(158, 158, 158, 0.7)'   // Gray for "Other"
+];
+families.forEach((family, i) => {
+    familyColors[family] = colorPalette[i % colorPalette.length];
+});
+
+// Group data by family for the scatter plot
+const scatterDatasets = families.map(family => {
+    const points = mal1VsSlope.filter(d => d.group === family);
+    return {
+        label: family,
+        data: points.map(d => ({
+            x: d.mal_1,
+            y: d.mean_slope,
+            name: d.name,
+            transitions: d.n_transitions
+        })),
+        backgroundColor: familyColors[family],
+        borderColor: familyColors[family].replace('0.7', '1'),
+        pointRadius: 6,
+        pointHoverRadius: 8
+    };
+});
+
+new Chart(document.getElementById('mal1SlopeChart'), {
+    type: 'scatter',
+    data: {
+        datasets: scatterDatasets
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: true,
+                position: 'right',
+                labels: {
+                    usePointStyle: true,
+                    padding: 10
+                }
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        const point = context.raw;
+                        return [
+                            point.name,
+                            'MAL_1: ' + point.x.toFixed(2),
+                            'Mean slope: ' + point.y.toFixed(3),
+                            'Transitions: ' + point.transitions
+                        ];
+                    }
+                }
+            }
+        },
+        scales: {
+            x: {
+                title: { display: true, text: 'MAL_1 (Initial Constituent Size)' },
+                beginAtZero: false
+            },
+            y: {
+                title: { display: true, text: 'Mean Local Change Score (Slope)' },
+                grid: {
+                    color: function(context) {
+                        if (context.tick.value === 0) {
+                            return 'rgba(0, 0, 0, 0.5)';
+                        }
+                        return 'rgba(0, 0, 0, 0.1)';
+                    },
+                    lineWidth: function(context) {
+                        if (context.tick.value === 0) {
+                            return 2;
+                        }
+                        return 1;
+                    }
+                }
+            }
+        }
+    }
+});
+
+// Compute correlation coefficient for MAL_1 vs Slope
+const mal1Values = mal1VsSlope.map(d => d.mal_1);
+const slopeValues = mal1VsSlope.map(d => d.mean_slope);
+const n = mal1Values.length;
+const sumX = mal1Values.reduce((a, b) => a + b, 0);
+const sumY = slopeValues.reduce((a, b) => a + b, 0);
+const sumXY = mal1Values.reduce((total, x, i) => total + x * slopeValues[i], 0);
+const sumX2 = mal1Values.reduce((total, x) => total + x * x, 0);
+const sumY2 = slopeValues.reduce((total, y) => total + y * y, 0);
+const correlation = (n * sumXY - sumX * sumY) / 
+    Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
+console.log('Correlation between MAL_1 and mean slope: ' + correlation.toFixed(3));
+
+// Add correlation annotation to chart
+const mal1SlopeChart = Chart.getChart('mal1SlopeChart');
+if (mal1SlopeChart) {
+    const annotationText = 'r = ' + correlation.toFixed(3);
+    const canvas = document.getElementById('mal1SlopeChart');
+    const annotationDiv = document.createElement('div');
+    annotationDiv.style.cssText = 'position: relative; top: -80px; left: 70px; font-size: 14px; font-weight: bold; background: rgba(255,255,255,0.8); padding: 4px 8px; border-radius: 4px; display: inline-block;';
+    annotationDiv.innerHTML = 'Correlation: r = ' + correlation.toFixed(3);
+    canvas.parentNode.insertBefore(annotationDiv, canvas.nextSibling);
+}
+</script>
+<h2 id="left-section">2. Pure Left Dependents Analysis</h2><p>MAL analysis for <strong>pure left-side dependents only</strong> (verb-final configurations with 0 right dependents).</p><table id="malTable">
+<thead>
+<tr>
+<th onclick="sortTable(0, 'string')" style="cursor:pointer">Language ⇅</th>
+<th class="group-col" onclick="sortTable(1, 'string')" style="cursor:pointer">Family ⇅</th>
+<th class="effect-col" onclick="sortTable(2, 'number')" style="cursor:pointer">MAL Effect ⇅</th>
+<th class="mal-col" onclick="sortTable(3, 'number')" style="cursor:pointer">MAL_1<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(4, 'number')" style="cursor:pointer">1→2 ⇅</th>
+<th class="mal-col" onclick="sortTable(5, 'number')" style="cursor:pointer">MAL_2<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(6, 'number')" style="cursor:pointer">2→3 ⇅</th>
+<th class="mal-col" onclick="sortTable(7, 'number')" style="cursor:pointer">MAL_3<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(8, 'number')" style="cursor:pointer">3→4 ⇅</th>
+<th class="mal-col" onclick="sortTable(9, 'number')" style="cursor:pointer">MAL_4<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(10, 'number')" style="cursor:pointer">4→5 ⇅</th>
+<th class="mal-col" onclick="sortTable(11, 'number')" style="cursor:pointer">MAL_5<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(12, 'number')" style="cursor:pointer">5→6 ⇅</th>
+<th class="mal-col" onclick="sortTable(13, 'number')" style="cursor:pointer">MAL_6<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(14, 'number')" style="cursor:pointer">6→7 ⇅</th>
+<th class="mal-col" onclick="sortTable(15, 'number')" style="cursor:pointer">MAL_7<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(16, 'number')" style="cursor:pointer">7→8 ⇅</th>
+<th class="mal-col" onclick="sortTable(17, 'number')" style="cursor:pointer">MAL_8<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(18, 'number')" style="cursor:pointer">8→9 ⇅</th>
+<th class="mal-col" onclick="sortTable(19, 'number')" style="cursor:pointer">MAL_9<br>(count) ⇅</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="lang-name">AncientGreek</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-neutral" data-value="-0.097754">-0.098</td>
+<td class="mal-cell" data-value="1.530844">1.531<br>(9255)</td>
+<td class="score-cell score-neutral" data-value="0.064996">0.065</td>
+<td class="mal-cell" data-value="1.463407">1.463<br>(10580)</td>
+<td class="score-cell score-neutral" data-value="0.014411">0.014</td>
+<td class="mal-cell" data-value="1.454881">1.455<br>(8544)</td>
+<td class="score-cell score-neutral" data-value="-0.007428">-0.007</td>
+<td class="mal-cell" data-value="1.457993">1.458<br>(5480)</td>
+<td class="score-cell score-negative" data-value="-0.111497">-0.111</td>
+<td class="mal-cell" data-value="1.494723">1.495<br>(3090)</td>
+<td class="score-cell score-neutral" data-value="-0.009010">-0.009</td>
+<td class="mal-cell" data-value="1.497180">1.497<br>(1440)</td>
+<td class="score-cell score-negative" data-value="-0.472431">-0.472</td>
+<td class="mal-cell" data-value="1.610282">1.610<br>(630)</td>
+<td class="score-cell score-positive" data-value="0.505931">0.506</td>
+<td class="mal-cell" data-value="1.505088">1.505<br>(256)</td>
+<td class="score-cell score-negative" data-value="-0.767001">-0.767</td>
+<td class="mal-cell" data-value="1.647388">1.647<br>(90)</td>
+</tr>
+<tr>
+<td class="lang-name">Armenian</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-neutral" data-value="0.046373">0.046</td>
+<td class="mal-cell" data-value="1.891838">1.892<br>(3346)</td>
+<td class="score-cell score-neutral" data-value="-0.016009">-0.016</td>
+<td class="mal-cell" data-value="1.912948">1.913<br>(3104)</td>
+<td class="score-cell score-neutral" data-value="-0.052571">-0.053</td>
+<td class="mal-cell" data-value="1.954161">1.954<br>(1344)</td>
+<td class="score-cell score-negative" data-value="-0.204938">-0.205</td>
+<td class="mal-cell" data-value="2.072837">2.073<br>(384)</td>
+<td class="score-cell score-positive" data-value="0.459008">0.459</td>
+<td class="mal-cell" data-value="1.871038">1.871<br>(70)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Bavarian</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-neutral" data-value="0.042151">0.042</td>
+<td class="mal-cell" data-value="1.758047">1.758<br>(129)</td>
+<td class="score-cell score-neutral" data-value="0.080940">0.081</td>
+<td class="mal-cell" data-value="1.662131">1.662<br>(408)</td>
+<td class="score-cell score-neutral" data-value="0.056972">0.057</td>
+<td class="mal-cell" data-value="1.624175">1.624<br>(561)</td>
+<td class="score-cell score-neutral" data-value="0.039167">0.039</td>
+<td class="mal-cell" data-value="1.605978">1.606<br>(348)</td>
+<td class="score-cell score-positive" data-value="0.112306">0.112</td>
+<td class="mal-cell" data-value="1.566231">1.566<br>(225)</td>
+<td class="score-cell score-neutral" data-value="-0.078630">-0.079</td>
+<td class="mal-cell" data-value="1.588846">1.589<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Chukot</td>
+<td class="group-cell">Other</td>
+<td class="effect-cell score-negative" data-value="-0.119027">-0.119</td>
+<td class="mal-cell" data-value="1.261213">1.261<br>(266)</td>
+<td class="score-cell score-neutral" data-value="0.000057">0.000</td>
+<td class="mal-cell" data-value="1.261162">1.261<br>(266)</td>
+<td class="score-cell score-neutral" data-value="0.069455">0.069</td>
+<td class="mal-cell" data-value="1.226142">1.226<br>(123)</td>
+<td class="score-cell score-negative" data-value="-0.426594">-0.427</td>
+<td class="mal-cell" data-value="1.386241">1.386<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">ClassArmenian</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-negative" data-value="-0.151719">-0.152</td>
+<td class="mal-cell" data-value="1.804425">1.804<br>(1353)</td>
+<td class="score-cell score-neutral" data-value="0.007829">0.008</td>
+<td class="mal-cell" data-value="1.794660">1.795<br>(1576)</td>
+<td class="score-cell score-negative" data-value="-0.102325">-0.102</td>
+<td class="mal-cell" data-value="1.870686">1.871<br>(657)</td>
+<td class="score-cell score-negative" data-value="-0.171462">-0.171</td>
+<td class="mal-cell" data-value="1.965274">1.965<br>(248)</td>
+<td class="score-cell score-negative" data-value="-0.340918">-0.341</td>
+<td class="mal-cell" data-value="2.120613">2.121<br>(70)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Dutch</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-positive" data-value="0.180428">0.180</td>
+<td class="mal-cell" data-value="2.131805">2.132<br>(4088)</td>
+<td class="score-cell score-positive" data-value="0.162394">0.162</td>
+<td class="mal-cell" data-value="1.904856">1.905<br>(10308)</td>
+<td class="score-cell score-neutral" data-value="0.023055">0.023</td>
+<td class="mal-cell" data-value="1.887132">1.887<br>(11859)</td>
+<td class="score-cell score-positive" data-value="0.122055">0.122</td>
+<td class="mal-cell" data-value="1.822019">1.822<br>(6424)</td>
+<td class="score-cell score-neutral" data-value="0.064168">0.064</td>
+<td class="mal-cell" data-value="1.796116">1.796<br>(2330)</td>
+<td class="score-cell score-positive" data-value="0.530470">0.530</td>
+<td class="mal-cell" data-value="1.630539">1.631<br>(432)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Erzya</td>
+<td class="group-cell">Uralic</td>
+<td class="effect-cell score-neutral" data-value="-0.027768">-0.028</td>
+<td class="mal-cell" data-value="1.356828">1.357<br>(631)</td>
+<td class="score-cell score-neutral" data-value="-0.005177">-0.005</td>
+<td class="mal-cell" data-value="1.361706">1.362<br>(554)</td>
+<td class="score-cell score-neutral" data-value="0.087363">0.087</td>
+<td class="mal-cell" data-value="1.314315">1.314<br>(321)</td>
+<td class="score-cell score-negative" data-value="-0.165491">-0.165</td>
+<td class="mal-cell" data-value="1.378401">1.378<br>(92)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">FrisianDutch</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-neutral" data-value="0.021679">0.022</td>
+<td class="mal-cell" data-value="1.310397">1.310<br>(28)</td>
+<td class="score-cell score-negative" data-value="-0.160788">-0.161</td>
+<td class="mal-cell" data-value="1.464890">1.465<br>(92)</td>
+<td class="score-cell score-neutral" data-value="-0.052438">-0.052</td>
+<td class="mal-cell" data-value="1.496370">1.496<br>(84)</td>
+<td class="score-cell score-positive" data-value="0.278263">0.278</td>
+<td class="mal-cell" data-value="1.381252">1.381<br>(76)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Georgian</td>
+<td class="group-cell">Caucasian</td>
+<td class="effect-cell score-neutral" data-value="-0.039509">-0.040</td>
+<td class="mal-cell" data-value="1.679468">1.679<br>(797)</td>
+<td class="score-cell score-neutral" data-value="-0.009036">-0.009</td>
+<td class="mal-cell" data-value="1.690020">1.690<br>(2100)</td>
+<td class="score-cell score-neutral" data-value="-0.092453">-0.092</td>
+<td class="mal-cell" data-value="1.754575">1.755<br>(1836)</td>
+<td class="score-cell score-neutral" data-value="-0.025296">-0.025</td>
+<td class="mal-cell" data-value="1.767389">1.767<br>(668)</td>
+<td class="score-cell score-neutral" data-value="-0.074023">-0.074</td>
+<td class="mal-cell" data-value="1.796825">1.797<br>(220)</td>
+<td class="score-cell score-neutral" data-value="0.003262">0.003</td>
+<td class="mal-cell" data-value="1.795757">1.796<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">German</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-neutral" data-value="0.094689">0.095</td>
+<td class="mal-cell" data-value="2.581846">2.582<br>(17828)</td>
+<td class="score-cell score-positive" data-value="0.116625">0.117</td>
+<td class="mal-cell" data-value="2.381347">2.381<br>(83624)</td>
+<td class="score-cell score-positive" data-value="0.149461">0.149</td>
+<td class="mal-cell" data-value="2.241321">2.241<br>(135372)</td>
+<td class="score-cell score-positive" data-value="0.180450">0.180</td>
+<td class="mal-cell" data-value="2.127937">2.128<br>(100712)</td>
+<td class="score-cell score-positive" data-value="0.203007">0.203</td>
+<td class="mal-cell" data-value="2.033693">2.034<br>(42930)</td>
+<td class="score-cell score-positive" data-value="0.315930">0.316</td>
+<td class="mal-cell" data-value="1.919861">1.920<br>(12012)</td>
+<td class="score-cell score-positive" data-value="0.251050">0.251</td>
+<td class="mal-cell" data-value="1.846982">1.847<br>(2415)</td>
+<td class="score-cell score-negative" data-value="-0.553701">-0.554</td>
+<td class="mal-cell" data-value="1.988717">1.989<br>(392)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Hungarian</td>
+<td class="group-cell">Uralic</td>
+<td class="effect-cell score-neutral" data-value="0.076765">0.077</td>
+<td class="mal-cell" data-value="2.119453">2.119<br>(212)</td>
+<td class="score-cell score-neutral" data-value="0.087266">0.087</td>
+<td class="mal-cell" data-value="1.995051">1.995<br>(756)</td>
+<td class="score-cell score-neutral" data-value="-0.035336">-0.035</td>
+<td class="mal-cell" data-value="2.023841">2.024<br>(786)</td>
+<td class="score-cell score-neutral" data-value="0.048648">0.049</td>
+<td class="mal-cell" data-value="1.995714">1.996<br>(296)</td>
+<td class="score-cell score-neutral" data-value="0.085716">0.086</td>
+<td class="mal-cell" data-value="1.957905">1.958<br>(105)</td>
+<td class="score-cell score-positive" data-value="0.197530">0.198</td>
+<td class="mal-cell" data-value="1.888648">1.889<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Komi</td>
+<td class="group-cell">Uralic</td>
+<td class="effect-cell score-neutral" data-value="-0.082758">-0.083</td>
+<td class="mal-cell" data-value="1.390347">1.390<br>(303)</td>
+<td class="score-cell score-neutral" data-value="-0.038681">-0.039</td>
+<td class="mal-cell" data-value="1.428129">1.428<br>(322)</td>
+<td class="score-cell score-positive" data-value="0.136263">0.136</td>
+<td class="mal-cell" data-value="1.351365">1.351<br>(207)</td>
+<td class="score-cell score-negative" data-value="-0.345855">-0.346</td>
+<td class="mal-cell" data-value="1.492737">1.493<br>(80)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Latin</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-negative" data-value="-0.320394">-0.320</td>
+<td class="mal-cell" data-value="1.690203">1.690<br>(21436)</td>
+<td class="score-cell score-neutral" data-value="-0.037492">-0.037</td>
+<td class="mal-cell" data-value="1.734703">1.735<br>(36248)</td>
+<td class="score-cell score-neutral" data-value="-0.002630">-0.003</td>
+<td class="mal-cell" data-value="1.736553">1.737<br>(25125)</td>
+<td class="score-cell score-negative" data-value="-0.111506">-0.112</td>
+<td class="mal-cell" data-value="1.793162">1.793<br>(11936)</td>
+<td class="score-cell score-negative" data-value="-0.370173">-0.370</td>
+<td class="mal-cell" data-value="1.947570">1.948<br>(3690)</td>
+<td class="score-cell score-negative" data-value="-0.357943">-0.358</td>
+<td class="mal-cell" data-value="2.078909">2.079<br>(1410)</td>
+<td class="score-cell score-positive" data-value="0.457121">0.457</td>
+<td class="mal-cell" data-value="1.937459">1.937<br>(504)</td>
+<td class="score-cell score-negative" data-value="-1.820135">-1.820</td>
+<td class="mal-cell" data-value="2.470505">2.471<br>(144)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">LowSaxon</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-neutral" data-value="0.021078">0.021</td>
+<td class="mal-cell" data-value="1.558308">1.558<br>(151)</td>
+<td class="score-cell score-neutral" data-value="-0.066594">-0.067</td>
+<td class="mal-cell" data-value="1.631925">1.632<br>(556)</td>
+<td class="score-cell score-positive" data-value="0.328531">0.329</td>
+<td class="mal-cell" data-value="1.428397">1.428<br>(819)</td>
+<td class="score-cell score-neutral" data-value="-0.021185">-0.021</td>
+<td class="mal-cell" data-value="1.437129">1.437<br>(592)</td>
+<td class="score-cell score-neutral" data-value="0.041889">0.042</td>
+<td class="mal-cell" data-value="1.423758">1.424<br>(315)</td>
+<td class="score-cell score-negative" data-value="-0.177253">-0.177</td>
+<td class="mal-cell" data-value="1.470521">1.471<br>(96)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">MbyáGuaraní</td>
+<td class="group-cell">South-American</td>
+<td class="effect-cell score-neutral" data-value="-0.095999">-0.096</td>
+<td class="mal-cell" data-value="2.435659">2.436<br>(515)</td>
+<td class="score-cell score-neutral" data-value="0.035519">0.036</td>
+<td class="mal-cell" data-value="2.376426">2.376<br>(690)</td>
+<td class="score-cell score-neutral" data-value="-0.079565">-0.080</td>
+<td class="mal-cell" data-value="2.454341">2.454<br>(312)</td>
+<td class="score-cell score-negative" data-value="-0.243952">-0.244</td>
+<td class="mal-cell" data-value="2.632776">2.633<br>(64)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">OldEastSlavic</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-negative" data-value="-0.288284">-0.288</td>
+<td class="mal-cell" data-value="1.647574">1.648<br>(7104)</td>
+<td class="score-cell score-neutral" data-value="0.010783">0.011</td>
+<td class="mal-cell" data-value="1.635306">1.635<br>(11260)</td>
+<td class="score-cell score-negative" data-value="-0.109629">-0.110</td>
+<td class="mal-cell" data-value="1.709637">1.710<br>(9060)</td>
+<td class="score-cell score-negative" data-value="-0.141398">-0.141</td>
+<td class="mal-cell" data-value="1.780614">1.781<br>(4936)</td>
+<td class="score-cell score-negative" data-value="-0.291949">-0.292</td>
+<td class="mal-cell" data-value="1.900477">1.900<br>(2250)</td>
+<td class="score-cell score-negative" data-value="-0.539015">-0.539</td>
+<td class="mal-cell" data-value="2.096730">2.097<br>(834)</td>
+<td class="score-cell score-negative" data-value="-0.102937">-0.103</td>
+<td class="mal-cell" data-value="2.130266">2.130<br>(308)</td>
+<td class="score-cell score-negative" data-value="-0.843844">-0.844</td>
+<td class="mal-cell" data-value="2.384349">2.384<br>(120)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Paumarí</td>
+<td class="group-cell">South-American</td>
+<td class="effect-cell score-positive" data-value="0.491292">0.491</td>
+<td class="mal-cell" data-value="1.455276">1.455<br>(35)</td>
+<td class="score-cell score-positive" data-value="0.491292">0.491</td>
+<td class="mal-cell" data-value="1.035265">1.035<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">SkoltSami</td>
+<td class="group-cell">Uralic</td>
+<td class="effect-cell score-neutral" data-value="-0.016335">-0.016</td>
+<td class="mal-cell" data-value="1.160796">1.161<br>(174)</td>
+<td class="score-cell score-neutral" data-value="0.023234">0.023</td>
+<td class="mal-cell" data-value="1.142251">1.142<br>(150)</td>
+<td class="score-cell score-neutral" data-value="-0.055905">-0.056</td>
+<td class="mal-cell" data-value="1.168439">1.168<br>(45)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">SpanishSign</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-positive" data-value="0.113183">0.113</td>
+<td class="mal-cell" data-value="1.380984">1.381<br>(105)</td>
+<td class="score-cell score-positive" data-value="0.113183">0.113</td>
+<td class="mal-cell" data-value="1.276783">1.277<br>(90)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Teko</td>
+<td class="group-cell">South-American</td>
+<td class="effect-cell score-neutral" data-value="0.012756">0.013</td>
+<td class="mal-cell" data-value="1.289120">1.289<br>(218)</td>
+<td class="score-cell score-positive" data-value="0.102506">0.103</td>
+<td class="mal-cell" data-value="1.200704">1.201<br>(166)</td>
+<td class="score-cell score-neutral" data-value="-0.076994">-0.077</td>
+<td class="mal-cell" data-value="1.238779">1.239<br>(48)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">TurkishEnglish</td>
+<td class="group-cell">Turkic</td>
+<td class="effect-cell score-positive" data-value="0.181698">0.182</td>
+<td class="mal-cell" data-value="1.618632">1.619<br>(27)</td>
+<td class="score-cell score-positive" data-value="0.181698">0.182</td>
+<td class="mal-cell" data-value="1.427091">1.427<br>(20)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">WestArmenian</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-neutral" data-value="-0.030917">-0.031</td>
+<td class="mal-cell" data-value="1.852413">1.852<br>(3172)</td>
+<td class="score-cell score-neutral" data-value="-0.057853">-0.058</td>
+<td class="mal-cell" data-value="1.928206">1.928<br>(3300)</td>
+<td class="score-cell score-neutral" data-value="-0.091624">-0.092</td>
+<td class="mal-cell" data-value="2.001187">2.001<br>(1443)</td>
+<td class="score-cell score-negative" data-value="-0.117474">-0.117</td>
+<td class="mal-cell" data-value="2.069973">2.070<br>(364)</td>
+<td class="score-cell score-positive" data-value="0.143286">0.143</td>
+<td class="mal-cell" data-value="2.004836">2.005<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Yupik</td>
+<td class="group-cell">Other</td>
+<td class="effect-cell score-neutral" data-value="0.003037">0.003</td>
+<td class="mal-cell" data-value="1.831145">1.831<br>(107)</td>
+<td class="score-cell score-neutral" data-value="0.003037">0.003</td>
+<td class="mal-cell" data-value="1.827294">1.827<br>(82)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+</tbody>
+</table>
+
+<script>
+let sortDirections = {};
+
+function sortTable(colIndex, type) {
+    const table = document.getElementById("malTable");
+    const tbody = table.tBodies[0];
+    const rows = Array.from(tbody.rows);
+    
+    // Toggle sort direction
+    sortDirections[colIndex] = !sortDirections[colIndex];
+    const ascending = sortDirections[colIndex];
+    
+    rows.sort((a, b) => {
+        let aVal, bVal;
+        
+        if (type === 'string') {
+            aVal = a.cells[colIndex].textContent.trim().toLowerCase();
+            bVal = b.cells[colIndex].textContent.trim().toLowerCase();
+            return ascending ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+        } else {
+            // Use data-value attribute for numeric sorting
+            aVal = a.cells[colIndex].getAttribute('data-value');
+            bVal = b.cells[colIndex].getAttribute('data-value');
+            
+            // Handle empty values (sort to end)
+            if (aVal === '' || aVal === null) return 1;
+            if (bVal === '' || bVal === null) return -1;
+            
+            aVal = parseFloat(aVal);
+            bVal = parseFloat(bVal);
+            
+            return ascending ? aVal - bVal : bVal - aVal;
+        }
+    });
+    
+    // Re-append rows in new order
+    rows.forEach(row => tbody.appendChild(row));
+}
+</script>
+
+<h3>Left-Side Mean MAL Curve</h3>
+<div class="chart-container">
+<canvas id="meanCurveChart_left" height="100"></canvas>
+<div class="explanation">
+<p><strong>Mean MAL_n trajectory for left-side dependents.</strong> 
+Under MAL, we expect this curve to decrease monotonically.</p>
+</div>
+</div>
+
+<h3>Left-Side Local Change Score Distribution</h3>
+<div class="chart-container">
+<svg width="800" height="350" xmlns="http://www.w3.org/2000/svg" style="background: white; font-family: Arial, sans-serif;">
+<line x1="60" y1="30" x2="60" y2="290" stroke="#333" stroke-width="1"/>
+<line x1="55" y1="290.0" x2="60" y2="290.0" stroke="#333" stroke-width="1"/>
+<text x="50" y="294.0" text-anchor="end" font-size="11">-1.9</text>
+<line x1="60" y1="290.0" x2="770" y2="290.0" stroke="#eee" stroke-width="1"/>
+<line x1="55" y1="246.66666666666669" x2="60" y2="246.66666666666669" stroke="#333" stroke-width="1"/>
+<text x="50" y="250.66666666666669" text-anchor="end" font-size="11">-1.5</text>
+<line x1="60" y1="246.66666666666669" x2="770" y2="246.66666666666669" stroke="#eee" stroke-width="1"/>
+<line x1="55" y1="203.33333333333334" x2="60" y2="203.33333333333334" stroke="#333" stroke-width="1"/>
+<text x="50" y="207.33333333333334" text-anchor="end" font-size="11">-1.1</text>
+<line x1="60" y1="203.33333333333334" x2="770" y2="203.33333333333334" stroke="#eee" stroke-width="1"/>
+<line x1="55" y1="160.0" x2="60" y2="160.0" stroke="#333" stroke-width="1"/>
+<text x="50" y="164.0" text-anchor="end" font-size="11">-0.6</text>
+<line x1="60" y1="160.0" x2="770" y2="160.0" stroke="#eee" stroke-width="1"/>
+<line x1="55" y1="116.66666666666669" x2="60" y2="116.66666666666669" stroke="#333" stroke-width="1"/>
+<text x="50" y="120.66666666666669" text-anchor="end" font-size="11">-0.2</text>
+<line x1="60" y1="116.66666666666669" x2="770" y2="116.66666666666669" stroke="#eee" stroke-width="1"/>
+<line x1="55" y1="73.33333333333331" x2="60" y2="73.33333333333331" stroke="#333" stroke-width="1"/>
+<text x="50" y="77.33333333333331" text-anchor="end" font-size="11">0.2</text>
+<line x1="60" y1="73.33333333333331" x2="770" y2="73.33333333333331" stroke="#eee" stroke-width="1"/>
+<line x1="55" y1="30.0" x2="60" y2="30.0" stroke="#333" stroke-width="1"/>
+<text x="50" y="34.0" text-anchor="end" font-size="11">0.6</text>
+<line x1="60" y1="30.0" x2="770" y2="30.0" stroke="#eee" stroke-width="1"/>
+<line x1="60" y1="94.26796908386427" x2="770" y2="94.26796908386427" stroke="#333" stroke-width="2" stroke-dasharray="6,4"/>
+<line x1="60" y1="290" x2="770" y2="290" stroke="#333" stroke-width="1"/>
+<text x="15" y="175.0" text-anchor="middle" font-size="12" transform="rotate(-90, 15, 175.0)">Local Change Score</text>
+<text x="415.0" y="340" text-anchor="middle" font-size="12">Transition</text>
+<line x1="104.375" y1="95.54446353763419" x2="104.375" y2="110.65818950934397" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="87.75" y1="110.65818950934397" x2="121.0" y2="110.65818950934397" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="104.375" y1="84.59562410794771" x2="104.375" y2="75.7463076255874" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="87.75" y1="75.7463076255874" x2="121.0" y2="75.7463076255874" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<rect x="77.75" y="84.59562410794771" width="53.25" height="10.948839429686473" fill="rgba(255, 193, 7, 0.6)" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="77.75" y1="93.1688219056542" x2="131.0" y2="93.1688219056542" stroke="#333" stroke-width="3"/>
+<circle cx="104.375" cy="44.18730283251543" r="4" fill="none" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<text x="104.375" y="310" text-anchor="middle" font-size="11">1→2</text>
+<text x="104.375" y="325" text-anchor="middle" font-size="9" fill="#666">(n=23)</text>
+<line x1="193.125" y1="102.2474935988823" x2="193.125" y2="105.44320084468018" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="176.5" y1="105.44320084468018" x2="209.75" y2="105.44320084468018" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="193.125" y1="87.82421778560618" x2="193.125" y2="79.03247544073739" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="176.5" y1="79.03247544073739" x2="209.75" y2="79.03247544073739" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<rect x="166.5" y="87.82421778560618" width="53.25" height="14.42327581327612" fill="rgba(255, 193, 7, 0.6)" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="166.5" y1="97.87004692060495" x2="219.75" y2="97.87004692060495" stroke="#333" stroke-width="3"/>
+<circle cx="193.125" cy="60.778686654075045" r="4" fill="none" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<text x="193.125" y="310" text-anchor="middle" font-size="11">2→3</text>
+<text x="193.125" y="325" text-anchor="middle" font-size="9" fill="#666">(n=19)</text>
+<line x1="281.875" y1="111.74620602791404" x2="281.875" y2="137.75345653599388" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="265.25" y1="137.75345653599388" x2="298.5" y2="137.75345653599388" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="281.875" y1="90.27546219428896" x2="281.875" y2="65.90282622341368" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="265.25" y1="65.90282622341368" x2="298.5" y2="65.90282622341368" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<rect x="255.25" y="90.27546219428896" width="53.25" height="21.47074383362508" fill="rgba(244, 67, 54, 0.6)" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="255.25" y1="105.63449560865882" x2="308.5" y2="105.63449560865882" stroke="#333" stroke-width="3"/>
+<text x="281.875" y="310" text-anchor="middle" font-size="11">3→4</text>
+<text x="281.875" y="325" text-anchor="middle" font-size="9" fill="#666">(n=17)</text>
+<line x1="370.625" y1="110.23225334838696" x2="370.625" y2="132.00218568030118" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="354.0" y1="132.00218568030118" x2="387.25" y2="132.00218568030118" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="370.625" y1="82.03037678217046" x2="370.625" y2="47.47828928054622" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="354.0" y1="47.47828928054622" x2="387.25" y2="47.47828928054622" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<rect x="344.0" y="82.03037678217046" width="53.25" height="28.201876566216498" fill="rgba(255, 193, 7, 0.6)" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="344.0" y1="88.86244171439793" x2="397.25" y2="88.86244171439793" stroke="#333" stroke-width="3"/>
+<text x="370.625" y="310" text-anchor="middle" font-size="11">4→5</text>
+<text x="370.625" y="325" text-anchor="middle" font-size="9" fill="#666">(n=12)</text>
+<line x1="459.375" y1="112.33656189382489" x2="459.375" y2="149.21326966985274" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="442.75" y1="149.21326966985274" x2="476.0" y2="149.21326966985274" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="459.375" y1="74.13247279765696" x2="459.375" y2="40.193657790436475" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="442.75" y1="40.193657790436475" x2="476.0" y2="40.193657790436475" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<rect x="432.75" y="74.13247279765696" width="53.25" height="38.204089096167934" fill="rgba(255, 193, 7, 0.6)" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="432.75" y1="95.18645368446937" x2="486.0" y2="95.18645368446937" stroke="#333" stroke-width="3"/>
+<text x="459.375" y="310" text-anchor="middle" font-size="11">5→6</text>
+<text x="459.375" y="325" text-anchor="middle" font-size="9" fill="#666">(n=9)</text>
+<line x1="548.125" y1="114.17721623528746" x2="548.125" y2="142.42596464267456" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="531.5" y1="142.42596464267456" x2="564.75" y2="142.42596464267456" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="548.125" y1="63.42524144473393" x2="548.125" y2="47.6706021856981" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="531.5" y1="47.6706021856981" x2="564.75" y2="47.6706021856981" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<rect x="521.5" y="63.42524144473393" width="53.25" height="50.75197479055353" fill="rgba(255, 193, 7, 0.6)" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="521.5" y1="86.71887731528545" x2="574.75" y2="86.71887731528545" stroke="#333" stroke-width="3"/>
+<text x="548.125" y="310" text-anchor="middle" font-size="11">6→7</text>
+<text x="548.125" y="325" text-anchor="middle" font-size="9" fill="#666">(n=4)</text>
+<line x1="636.875" y1="205.166454376979" x2="636.875" y2="279.8063422095635" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="620.25" y1="279.8063422095635" x2="653.5" y2="279.8063422095635" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="636.875" y1="123.70655186215288" x2="636.875" y2="42.69505425006028" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="620.25" y1="42.69505425006028" x2="653.5" y2="42.69505425006028" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<rect x="610.25" y="123.70655186215288" width="53.25" height="81.45990251482613" fill="rgba(244, 67, 54, 0.6)" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="610.25" y1="165.4984380828173" x2="663.5" y2="165.4984380828173" stroke="#333" stroke-width="3"/>
+<text x="636.875" y="310" text-anchor="middle" font-size="11">7→8</text>
+<text x="636.875" y="325" text-anchor="middle" font-size="9" fill="#666">(n=4)</text>
+<line x1="725.625" y1="172.45346135485187" x2="725.625" y2="172.45346135485187" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="709.0" y1="172.45346135485187" x2="742.25" y2="172.45346135485187" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="725.625" y1="172.45346135485187" x2="725.625" y2="172.45346135485187" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="709.0" y1="172.45346135485187" x2="742.25" y2="172.45346135485187" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<rect x="699.0" y="172.45346135485187" width="53.25" height="0.0" fill="rgba(244, 67, 54, 0.6)" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="699.0" y1="172.45346135485187" x2="752.25" y2="172.45346135485187" stroke="#333" stroke-width="3"/>
+<text x="725.625" y="310" text-anchor="middle" font-size="11">8→9</text>
+<text x="725.625" y="325" text-anchor="middle" font-size="9" fill="#666">(n=1)</text>
+</svg>
+<div class="explanation">
+<p><strong>Distribution of local change scores</strong> for left-side dependents.
+Positive values indicate MAL compliance at that transition.</p>
+</div>
+</div>
+
+<script>
+(function() {
+    const meanCurve_left = {"1": {"mean": 1.6842008522841336, "std": 0.3614455490174187, "count": 23, "min": 1.1607956720163635, "max": 2.5818463792182467, "q1": 1.3856652046184805, "median": 1.6475740030343757, "q3": 1.841778922344543}, "2": {"mean": 1.6320112865360377, "std": 0.35056910978664935, "count": 23, "min": 1.0352649238413776, "max": 2.3813472793808805, "q1": 1.3943982603584808, "median": 1.6353059893908122, "q3": 1.866074936383724}, "3": {"mean": 1.6808576298327356, "std": 0.3520638751834839, "count": 19, "min": 1.16843889756546, "max": 2.454341420239775, "q1": 1.3898808595095598, "median": 1.7096365032179481, "q3": 1.9206465927692662}, "4": {"mean": 1.7745545367997337, "std": 0.335187362331245, "count": 17, "min": 1.3784010248260217, "max": 2.632776476944849, "q1": 1.4579930983591494, "median": 1.7806143916381607, "q3": 1.9957144011113268}, "5": {"mean": 1.8261487652406723, "std": 0.21260997437324866, "count": 12, "min": 1.4237579684926944, "max": 2.1206126880542686, "q1": 1.7386448585162249, "median": 1.8857576493460648, "q3": 1.969637835872113}, "6": {"mean": 1.774110023876486, "std": 0.22499583934665446, "count": 9, "min": 1.470521245328718, "max": 2.0967299838792224, "q1": 1.5888462874315763, "median": 1.7957566040386996, "q3": 1.9198607447179503}, "7": {"mean": 1.881247223775962, "std": 0.18692676526882512, "count": 4, "min": 1.6102815874987293, "max": 2.1302657064750745, "q1": 1.787807126497108, "median": 1.8922208005650223, "q3": 1.9856608978438763}, "8": {"mean": 2.0871648753143686, "std": 0.38202554674251166, "count": 4, "min": 1.5050879564562945, "max": 2.4705052553899725, "q1": 1.867809618873828, "median": 2.186533144705604, "q3": 2.405888401146144}, "9": {"mean": 1.647388136230767, "std": 0.0, "count": 1, "min": 1.647388136230767, "max": 1.647388136230767, "q1": 1.647388136230767, "median": 1.647388136230767, "q3": 1.647388136230767}};
+    const maxN_left = 9;
+    
+    // Colors
+    const colors = {
+        primary: 'rgba(33, 150, 243, 1)',
+        primaryLight: 'rgba(33, 150, 243, 0.2)'
+    };
+    
+    // Mean MAL Curve Chart
+    const meanLabels_left = Object.keys(meanCurve_left).map(n => 'n=' + n);
+    const meanValues_left = Object.values(meanCurve_left).map(d => d.mean);
+    const q1Values_left = Object.values(meanCurve_left).map(d => d.q1);
+    const q3Values_left = Object.values(meanCurve_left).map(d => d.q3);
+    
+    new Chart(document.getElementById('meanCurveChart_left'), {
+        type: 'line',
+        data: {
+            labels: meanLabels_left,
+            datasets: [
+                {
+                    label: 'IQR (Q1-Q3)',
+                    data: q3Values_left,
+                    fill: '+1',
+                    backgroundColor: colors.primaryLight,
+                    borderColor: 'transparent',
+                    pointRadius: 0
+                },
+                {
+                    label: 'Q1',
+                    data: q1Values_left,
+                    fill: false,
+                    borderColor: 'transparent',
+                    pointRadius: 0
+                },
+                {
+                    label: 'Mean MAL_n (Left)',
+                    data: meanValues_left,
+                    borderColor: colors.primary,
+                    backgroundColor: colors.primary,
+                    borderWidth: 3,
+                    pointRadius: 6,
+                    pointHoverRadius: 8,
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const n = context.dataIndex + 1;
+                            const stats = meanCurve_left[n];
+                            if (stats) {
+                                return [
+                                    `Mean: ${stats.mean.toFixed(3)}`,
+                                    `Median: ${stats.median.toFixed(3)}`,
+                                    `IQR: ${stats.q1.toFixed(3)} - ${stats.q3.toFixed(3)}`,
+                                    `n languages: ${stats.count}`
+                                ];
+                            }
+                            return context.formattedValue;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    title: { display: true, text: 'Mean Constituent Size' },
+                    beginAtZero: false
+                },
+                x: {
+                    title: { display: true, text: 'Number of Left Dependents' }
+                }
+            }
+        }
+    });
+})();
+</script>
+<h2 id="right-section">3. Pure Right Dependents Analysis</h2><p>MAL analysis for <strong>pure right-side dependents only</strong> (verb-initial configurations with 0 left dependents).</p><table id="malTable">
+<thead>
+<tr>
+<th onclick="sortTable(0, 'string')" style="cursor:pointer">Language ⇅</th>
+<th class="group-col" onclick="sortTable(1, 'string')" style="cursor:pointer">Family ⇅</th>
+<th class="effect-col" onclick="sortTable(2, 'number')" style="cursor:pointer">MAL Effect ⇅</th>
+<th class="mal-col" onclick="sortTable(3, 'number')" style="cursor:pointer">MAL_1<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(4, 'number')" style="cursor:pointer">1→2 ⇅</th>
+<th class="mal-col" onclick="sortTable(5, 'number')" style="cursor:pointer">MAL_2<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(6, 'number')" style="cursor:pointer">2→3 ⇅</th>
+<th class="mal-col" onclick="sortTable(7, 'number')" style="cursor:pointer">MAL_3<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(8, 'number')" style="cursor:pointer">3→4 ⇅</th>
+<th class="mal-col" onclick="sortTable(9, 'number')" style="cursor:pointer">MAL_4<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(10, 'number')" style="cursor:pointer">4→5 ⇅</th>
+<th class="mal-col" onclick="sortTable(11, 'number')" style="cursor:pointer">MAL_5<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(12, 'number')" style="cursor:pointer">5→6 ⇅</th>
+<th class="mal-col" onclick="sortTable(13, 'number')" style="cursor:pointer">MAL_6<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(14, 'number')" style="cursor:pointer">6→7 ⇅</th>
+<th class="mal-col" onclick="sortTable(15, 'number')" style="cursor:pointer">MAL_7<br>(count) ⇅</th>
+<th class="score-col" onclick="sortTable(16, 'number')" style="cursor:pointer">7→8 ⇅</th>
+<th class="mal-col" onclick="sortTable(17, 'number')" style="cursor:pointer">MAL_8<br>(count) ⇅</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="lang-name">AncientGreek</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-neutral" data-value="0.060292">0.060</td>
+<td class="mal-cell" data-value="2.464220">2.464<br>(12226)</td>
+<td class="score-cell score-neutral" data-value="0.054642">0.055</td>
+<td class="mal-cell" data-value="2.372633">2.373<br>(11336)</td>
+<td class="score-cell score-neutral" data-value="0.003428">0.003</td>
+<td class="mal-cell" data-value="2.369337">2.369<br>(5520)</td>
+<td class="score-cell score-positive" data-value="0.225593">0.226</td>
+<td class="mal-cell" data-value="2.220453">2.220<br>(1912)</td>
+<td class="score-cell score-neutral" data-value="0.046185">0.046</td>
+<td class="mal-cell" data-value="2.197687">2.198<br>(585)</td>
+<td class="score-cell score-positive" data-value="0.167943">0.168</td>
+<td class="mal-cell" data-value="2.131414">2.131<br>(204)</td>
+<td class="score-cell score-negative" data-value="-0.136040">-0.136</td>
+<td class="mal-cell" data-value="2.176583">2.177<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Armenian</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-positive" data-value="0.381652">0.382</td>
+<td class="mal-cell" data-value="4.092788">4.093<br>(2537)</td>
+<td class="score-cell score-positive" data-value="0.137904">0.138</td>
+<td class="mal-cell" data-value="3.719684">3.720<br>(448)</td>
+<td class="score-cell score-positive" data-value="0.625400">0.625</td>
+<td class="mal-cell" data-value="2.886546">2.887<br>(33)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Bavarian</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-positive" data-value="0.586068">0.586</td>
+<td class="mal-cell" data-value="4.524306">4.524<br>(73)</td>
+<td class="score-cell score-positive" data-value="1.057881">1.058</td>
+<td class="mal-cell" data-value="2.173192">2.173<br>(170)</td>
+<td class="score-cell score-positive" data-value="0.489261">0.489</td>
+<td class="mal-cell" data-value="1.782147">1.782<br>(153)</td>
+<td class="score-cell score-neutral" data-value="0.045575">0.046</td>
+<td class="mal-cell" data-value="1.758933">1.759<br>(44)</td>
+<td class="score-cell score-positive" data-value="0.751556">0.752</td>
+<td class="mal-cell" data-value="1.487360">1.487<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Chukot</td>
+<td class="group-cell">Other</td>
+<td class="effect-cell score-negative" data-value="-0.231282">-0.231</td>
+<td class="mal-cell" data-value="1.238892">1.239<br>(146)</td>
+<td class="score-cell score-neutral" data-value="0.040542">0.041</td>
+<td class="mal-cell" data-value="1.204561">1.205<br>(56)</td>
+<td class="score-cell score-negative" data-value="-0.503105">-0.503</td>
+<td class="mal-cell" data-value="1.477139">1.477<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">ClassArmenian</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-negative" data-value="-0.106333">-0.106</td>
+<td class="mal-cell" data-value="2.970252">2.970<br>(2900)</td>
+<td class="score-cell score-neutral" data-value="0.034437">0.034</td>
+<td class="mal-cell" data-value="2.900192">2.900<br>(3370)</td>
+<td class="score-cell score-neutral" data-value="-0.012303">-0.012</td>
+<td class="mal-cell" data-value="2.914695">2.915<br>(1545)</td>
+<td class="score-cell score-positive" data-value="0.125075">0.125</td>
+<td class="mal-cell" data-value="2.811684">2.812<br>(244)</td>
+<td class="score-cell score-negative" data-value="-0.572541">-0.573</td>
+<td class="mal-cell" data-value="3.194857">3.195<br>(60)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Dutch</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-positive" data-value="0.266627">0.267</td>
+<td class="mal-cell" data-value="5.080615">5.081<br>(2440)</td>
+<td class="score-cell score-positive" data-value="0.797536">0.798</td>
+<td class="mal-cell" data-value="2.923034">2.923<br>(1662)</td>
+<td class="score-cell score-positive" data-value="0.435454">0.435</td>
+<td class="mal-cell" data-value="2.449933">2.450<br>(768)</td>
+<td class="score-cell score-positive" data-value="0.331327">0.331</td>
+<td class="mal-cell" data-value="2.227197">2.227<br>(260)</td>
+<td class="score-cell score-positive" data-value="0.202752">0.203</td>
+<td class="mal-cell" data-value="2.128678">2.129<br>(65)</td>
+<td class="score-cell score-negative" data-value="-0.433933">-0.434</td>
+<td class="mal-cell" data-value="2.303930">2.304<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Erzya</td>
+<td class="group-cell">Uralic</td>
+<td class="effect-cell score-neutral" data-value="0.070809">0.071</td>
+<td class="mal-cell" data-value="1.880372">1.880<br>(531)</td>
+<td class="score-cell score-positive" data-value="0.215502">0.216</td>
+<td class="mal-cell" data-value="1.619464">1.619<br>(430)</td>
+<td class="score-cell score-neutral" data-value="-0.073883">-0.074</td>
+<td class="mal-cell" data-value="1.668713">1.669<br>(114)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">FrisianDutch</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-positive" data-value="0.428301">0.428</td>
+<td class="mal-cell" data-value="3.294275">3.294<br>(20)</td>
+<td class="score-cell score-positive" data-value="0.812857">0.813</td>
+<td class="mal-cell" data-value="1.875278">1.875<br>(34)</td>
+<td class="score-cell score-neutral" data-value="0.043744">0.044</td>
+<td class="mal-cell" data-value="1.842310">1.842<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Georgian</td>
+<td class="group-cell">Caucasian</td>
+<td class="effect-cell score-positive" data-value="0.264790">0.265</td>
+<td class="mal-cell" data-value="4.486705">4.487<br>(530)</td>
+<td class="score-cell score-positive" data-value="0.407109">0.407</td>
+<td class="mal-cell" data-value="3.383573">3.384<br>(260)</td>
+<td class="score-cell score-positive" data-value="0.324566">0.325</td>
+<td class="mal-cell" data-value="2.966350">2.966<br>(84)</td>
+<td class="score-cell score-negative" data-value="-0.162944">-0.163</td>
+<td class="mal-cell" data-value="3.108711">3.109<br>(0)</td>
+<td class="score-cell score-positive" data-value="0.490430">0.490</td>
+<td class="mal-cell" data-value="2.786460">2.786<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">German</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-positive" data-value="0.335849">0.336</td>
+<td class="mal-cell" data-value="5.614326">5.614<br>(9728)</td>
+<td class="score-cell score-positive" data-value="0.899734">0.900</td>
+<td class="mal-cell" data-value="3.009197">3.009<br>(13526)</td>
+<td class="score-cell score-positive" data-value="0.455018">0.455</td>
+<td class="mal-cell" data-value="2.502223">2.502<br>(8460)</td>
+<td class="score-cell score-positive" data-value="0.310370">0.310</td>
+<td class="mal-cell" data-value="2.288488">2.288<br>(2828)</td>
+<td class="score-cell score-positive" data-value="0.321201">0.321</td>
+<td class="mal-cell" data-value="2.130204">2.130<br>(955)</td>
+<td class="score-cell score-positive" data-value="0.121451">0.121</td>
+<td class="mal-cell" data-value="2.083553">2.084<br>(156)</td>
+<td class="score-cell score-neutral" data-value="0.014242">0.014</td>
+<td class="mal-cell" data-value="2.078984">2.079<br>(0)</td>
+<td class="score-cell score-positive" data-value="0.228924">0.229</td>
+<td class="mal-cell" data-value="2.016394">2.016<br>(0)</td>
+</tr>
+<tr>
+<td class="lang-name">Hungarian</td>
+<td class="group-cell">Uralic</td>
+<td class="effect-cell score-positive" data-value="0.171501">0.172</td>
+<td class="mal-cell" data-value="3.849761">3.850<br>(196)</td>
+<td class="score-cell score-positive" data-value="0.371197">0.371</td>
+<td class="mal-cell" data-value="2.976407">2.976<br>(122)</td>
+<td class="score-cell score-neutral" data-value="0.088095">0.088</td>
+<td class="mal-cell" data-value="2.871968">2.872<br>(0)</td>
+<td class="score-cell score-neutral" data-value="0.055212">0.055</td>
+<td class="mal-cell" data-value="2.826711">2.827<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Komi</td>
+<td class="group-cell">Uralic</td>
+<td class="effect-cell score-positive" data-value="0.248002">0.248</td>
+<td class="mal-cell" data-value="2.164420">2.164<br>(188)</td>
+<td class="score-cell score-positive" data-value="0.187044">0.187</td>
+<td class="mal-cell" data-value="1.901235">1.901<br>(128)</td>
+<td class="score-cell score-positive" data-value="0.308961">0.309</td>
+<td class="mal-cell" data-value="1.677376">1.677<br>(30)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Latin</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-neutral" data-value="-0.039439">-0.039</td>
+<td class="mal-cell" data-value="3.127391">3.127<br>(17362)</td>
+<td class="score-cell score-positive" data-value="0.147360">0.147</td>
+<td class="mal-cell" data-value="2.823726">2.824<br>(11780)</td>
+<td class="score-cell score-neutral" data-value="-0.045371">-0.045</td>
+<td class="mal-cell" data-value="2.876153">2.876<br>(5262)</td>
+<td class="score-cell score-negative" data-value="-0.504271">-0.504</td>
+<td class="mal-cell" data-value="3.325178">3.325<br>(2344)</td>
+<td class="score-cell score-negative" data-value="-0.178536">-0.179</td>
+<td class="mal-cell" data-value="3.460324">3.460<br>(640)</td>
+<td class="score-cell score-neutral" data-value="-0.093465">-0.093</td>
+<td class="mal-cell" data-value="3.519796">3.520<br>(258)</td>
+<td class="score-cell score-negative" data-value="-1.637629">-1.638</td>
+<td class="mal-cell" data-value="4.530556">4.531<br>(119)</td>
+<td class="score-cell score-positive" data-value="2.035837">2.036</td>
+<td class="mal-cell" data-value="3.452148">3.452<br>(0)</td>
+</tr>
+<tr>
+<td class="lang-name">LowSaxon</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-positive" data-value="0.394019">0.394</td>
+<td class="mal-cell" data-value="3.374114">3.374<br>(118)</td>
+<td class="score-cell score-positive" data-value="0.635444">0.635</td>
+<td class="mal-cell" data-value="2.172060">2.172<br>(208)</td>
+<td class="score-cell score-positive" data-value="0.435953">0.436</td>
+<td class="mal-cell" data-value="1.820138">1.820<br>(183)</td>
+<td class="score-cell score-positive" data-value="0.430605">0.431</td>
+<td class="mal-cell" data-value="1.608070">1.608<br>(76)</td>
+<td class="score-cell score-neutral" data-value="0.074073">0.074</td>
+<td class="mal-cell" data-value="1.581709">1.582<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">MbyáGuaraní</td>
+<td class="group-cell">South-American</td>
+<td class="effect-cell score-neutral" data-value="-0.089324">-0.089</td>
+<td class="mal-cell" data-value="2.005086">2.005<br>(191)</td>
+<td class="score-cell score-neutral" data-value="0.040898">0.041</td>
+<td class="mal-cell" data-value="1.949043">1.949<br>(60)</td>
+<td class="score-cell score-negative" data-value="-0.219546">-0.220</td>
+<td class="mal-cell" data-value="2.130500">2.131<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">OldEastSlavic</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-negative" data-value="-0.402158">-0.402</td>
+<td class="mal-cell" data-value="2.456520">2.457<br>(9570)</td>
+<td class="score-cell score-positive" data-value="0.173416">0.173</td>
+<td class="mal-cell" data-value="2.178295">2.178<br>(13200)</td>
+<td class="score-cell score-neutral" data-value="-0.070821">-0.071</td>
+<td class="mal-cell" data-value="2.241752">2.242<br>(6708)</td>
+<td class="score-cell score-negative" data-value="-0.345536">-0.346</td>
+<td class="mal-cell" data-value="2.476045">2.476<br>(2288)</td>
+<td class="score-cell score-negative" data-value="-0.438927">-0.439</td>
+<td class="mal-cell" data-value="2.730832">2.731<br>(710)</td>
+<td class="score-cell score-negative" data-value="-0.516259">-0.516</td>
+<td class="mal-cell" data-value="3.000357">3.000<br>(252)</td>
+<td class="score-cell score-negative" data-value="-0.924439">-0.924</td>
+<td class="mal-cell" data-value="3.459881">3.460<br>(98)</td>
+<td class="score-cell score-negative" data-value="-0.692539">-0.693</td>
+<td class="mal-cell" data-value="3.795097">3.795<br>(0)</td>
+</tr>
+<tr>
+<td class="lang-name">Paumarí</td>
+<td class="group-cell">Unknown</td>
+<td class="na-cell" data-value="">—</td>
+<td class="mal-cell" data-value="1.857852">1.858<br>(20)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">SkoltSami</td>
+<td class="group-cell">Uralic</td>
+<td class="effect-cell score-positive" data-value="0.502799">0.503</td>
+<td class="mal-cell" data-value="1.971917">1.972<br>(63)</td>
+<td class="score-cell score-positive" data-value="0.502799">0.503</td>
+<td class="mal-cell" data-value="1.391654">1.392<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">SpanishSign</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-negative" data-value="-0.137309">-0.137</td>
+<td class="mal-cell" data-value="1.323687">1.324<br>(39)</td>
+<td class="score-cell score-negative" data-value="-0.137309">-0.137</td>
+<td class="mal-cell" data-value="1.455859">1.456<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Teko</td>
+<td class="group-cell">South-American</td>
+<td class="effect-cell score-positive" data-value="0.153985">0.154</td>
+<td class="mal-cell" data-value="1.240369">1.240<br>(154)</td>
+<td class="score-cell score-positive" data-value="0.153985">0.154</td>
+<td class="mal-cell" data-value="1.114800">1.115<br>(66)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">TurkishEnglish</td>
+<td class="group-cell">Unknown</td>
+<td class="na-cell" data-value="">—</td>
+<td class="mal-cell" data-value="1.898349">1.898<br>(0)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">WestArmenian</td>
+<td class="group-cell">Indo-European</td>
+<td class="effect-cell score-positive" data-value="0.123016">0.123</td>
+<td class="mal-cell" data-value="3.911487">3.911<br>(1969)</td>
+<td class="score-cell score-positive" data-value="0.210350">0.210</td>
+<td class="mal-cell" data-value="3.380806">3.381<br>(580)</td>
+<td class="score-cell score-neutral" data-value="0.035682">0.036</td>
+<td class="mal-cell" data-value="3.332245">3.332<br>(78)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+<tr>
+<td class="lang-name">Yupik</td>
+<td class="group-cell">Other</td>
+<td class="effect-cell score-neutral" data-value="0.042935">0.043</td>
+<td class="mal-cell" data-value="2.468093">2.468<br>(47)</td>
+<td class="score-cell score-neutral" data-value="0.042935">0.043</td>
+<td class="mal-cell" data-value="2.395724">2.396<br>(42)</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+<td class="na-cell" data-value="">—</td>
+</tr>
+</tbody>
+</table>
+
+<script>
+let sortDirections = {};
+
+function sortTable(colIndex, type) {
+    const table = document.getElementById("malTable");
+    const tbody = table.tBodies[0];
+    const rows = Array.from(tbody.rows);
+    
+    // Toggle sort direction
+    sortDirections[colIndex] = !sortDirections[colIndex];
+    const ascending = sortDirections[colIndex];
+    
+    rows.sort((a, b) => {
+        let aVal, bVal;
+        
+        if (type === 'string') {
+            aVal = a.cells[colIndex].textContent.trim().toLowerCase();
+            bVal = b.cells[colIndex].textContent.trim().toLowerCase();
+            return ascending ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+        } else {
+            // Use data-value attribute for numeric sorting
+            aVal = a.cells[colIndex].getAttribute('data-value');
+            bVal = b.cells[colIndex].getAttribute('data-value');
+            
+            // Handle empty values (sort to end)
+            if (aVal === '' || aVal === null) return 1;
+            if (bVal === '' || bVal === null) return -1;
+            
+            aVal = parseFloat(aVal);
+            bVal = parseFloat(bVal);
+            
+            return ascending ? aVal - bVal : bVal - aVal;
+        }
+    });
+    
+    // Re-append rows in new order
+    rows.forEach(row => tbody.appendChild(row));
+}
+</script>
+
+<h3>Right-Side Mean MAL Curve</h3>
+<div class="chart-container">
+<canvas id="meanCurveChart_right" height="100"></canvas>
+<div class="explanation">
+<p><strong>Mean MAL_n trajectory for right-side dependents.</strong> 
+Under MAL, we expect this curve to decrease monotonically.</p>
+</div>
+</div>
+
+<h3>Right-Side Local Change Score Distribution</h3>
+<div class="chart-container">
+<svg width="800" height="350" xmlns="http://www.w3.org/2000/svg" style="background: white; font-family: Arial, sans-serif;">
+<line x1="60" y1="30" x2="60" y2="290" stroke="#333" stroke-width="1"/>
+<line x1="55" y1="290.0" x2="60" y2="290.0" stroke="#333" stroke-width="1"/>
+<text x="50" y="294.0" text-anchor="end" font-size="11">-1.7</text>
+<line x1="60" y1="290.0" x2="770" y2="290.0" stroke="#eee" stroke-width="1"/>
+<line x1="55" y1="246.66666666666666" x2="60" y2="246.66666666666666" stroke="#333" stroke-width="1"/>
+<text x="50" y="250.66666666666666" text-anchor="end" font-size="11">-1.1</text>
+<line x1="60" y1="246.66666666666666" x2="770" y2="246.66666666666666" stroke="#eee" stroke-width="1"/>
+<line x1="55" y1="203.33333333333334" x2="60" y2="203.33333333333334" stroke="#333" stroke-width="1"/>
+<text x="50" y="207.33333333333334" text-anchor="end" font-size="11">-0.4</text>
+<line x1="60" y1="203.33333333333334" x2="770" y2="203.33333333333334" stroke="#eee" stroke-width="1"/>
+<line x1="55" y1="159.99999999999997" x2="60" y2="159.99999999999997" stroke="#333" stroke-width="1"/>
+<text x="50" y="163.99999999999997" text-anchor="end" font-size="11">0.2</text>
+<line x1="60" y1="159.99999999999997" x2="770" y2="159.99999999999997" stroke="#eee" stroke-width="1"/>
+<line x1="55" y1="116.66666666666669" x2="60" y2="116.66666666666669" stroke="#333" stroke-width="1"/>
+<text x="50" y="120.66666666666669" text-anchor="end" font-size="11">0.8</text>
+<line x1="60" y1="116.66666666666669" x2="770" y2="116.66666666666669" stroke="#eee" stroke-width="1"/>
+<line x1="55" y1="73.33333333333334" x2="60" y2="73.33333333333334" stroke="#333" stroke-width="1"/>
+<text x="50" y="77.33333333333334" text-anchor="end" font-size="11">1.5</text>
+<line x1="60" y1="73.33333333333334" x2="770" y2="73.33333333333334" stroke="#eee" stroke-width="1"/>
+<line x1="55" y1="29.999999999999943" x2="60" y2="29.999999999999943" stroke="#333" stroke-width="1"/>
+<text x="50" y="33.99999999999994" text-anchor="end" font-size="11">2.1</text>
+<line x1="60" y1="29.999999999999943" x2="770" y2="29.999999999999943" stroke="#eee" stroke-width="1"/>
+<line x1="60" y1="173.364507603963" x2="770" y2="173.364507603963" stroke="#333" stroke-width="2" stroke-dasharray="6,4"/>
+<line x1="60" y1="290" x2="770" y2="290" stroke="#333" stroke-width="1"/>
+<text x="15" y="175.0" text-anchor="middle" font-size="12" transform="rotate(-90, 15, 175.0)">Local Change Score</text>
+<text x="415.0" y="340" text-anchor="middle" font-size="12">Transition</text>
+<line x1="110.71428571428572" y1="169.69673672304503" x2="110.71428571428572" y2="182.58111927136912" stroke="rgba(76, 175, 80, 1)" stroke-width="2"/>
+<line x1="90.71428571428572" y1="182.58111927136912" x2="130.71428571428572" y2="182.58111927136912" stroke="rgba(76, 175, 80, 1)" stroke-width="2"/>
+<line x1="110.71428571428572" y1="139.6149724285879" x2="110.71428571428572" y2="102.35598656944475" stroke="rgba(76, 175, 80, 1)" stroke-width="2"/>
+<line x1="90.71428571428572" y1="102.35598656944475" x2="130.71428571428572" y2="102.35598656944475" stroke="rgba(76, 175, 80, 1)" stroke-width="2"/>
+<rect x="80.71428571428572" y="139.6149724285879" width="60" height="30.081764294457145" fill="rgba(76, 175, 80, 0.6)" stroke="rgba(76, 175, 80, 1)" stroke-width="2"/>
+<line x1="80.71428571428572" y1="160.80950680823358" x2="140.71428571428572" y2="160.80950680823358" stroke="#333" stroke-width="3"/>
+<text x="110.71428571428572" y="310" text-anchor="middle" font-size="11">1→2</text>
+<text x="110.71428571428572" y="325" text-anchor="middle" font-size="9" fill="#666">(n=21)</text>
+<line x1="212.14285714285714" y1="176.4099681042922" x2="212.14285714285714" y2="207.13462056033677" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="192.14285714285714" y1="207.13462056033677" x2="232.14285714285714" y2="207.13462056033677" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="212.14285714285714" y1="144.13536824869786" x2="212.14285714285714" y2="131.38556499744524" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="192.14285714285714" y1="131.38556499744524" x2="232.14285714285714" y2="131.38556499744524" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<rect x="182.14285714285714" y="144.13536824869786" width="60" height="32.274599855594346" fill="rgba(255, 193, 7, 0.6)" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="182.14285714285714" y1="170.42824262918174" x2="242.14285714285714" y2="170.42824262918174" stroke="#333" stroke-width="3"/>
+<text x="212.14285714285714" y="310" text-anchor="middle" font-size="11">2→3</text>
+<text x="212.14285714285714" y="325" text-anchor="middle" font-size="9" fill="#666">(n=17)</text>
+<line x1="313.57142857142856" y1="180.80274682171708" x2="313.57142857142856" y2="207.21283148441307" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="293.57142857142856" y1="207.21283148441307" x2="333.57142857142856" y2="207.21283148441307" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="313.57142857142856" y1="153.95405828236306" x2="313.57142857142856" y2="144.46086755994529" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="293.57142857142856" y1="144.46086755994529" x2="333.57142857142856" y2="144.46086755994529" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<rect x="283.57142857142856" y="153.95405828236306" width="60" height="26.848688539354015" fill="rgba(255, 193, 7, 0.6)" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="283.57142857142856" y1="167.31378108795073" x2="343.57142857142856" y2="167.31378108795073" stroke="#333" stroke-width="3"/>
+<text x="313.57142857142856" y="310" text-anchor="middle" font-size="11">3→4</text>
+<text x="313.57142857142856" y="325" text-anchor="middle" font-size="9" fill="#666">(n=10)</text>
+<line x1="415.0" y1="185.34843258585826" x2="415.0" y2="211.79535431983717" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="395.0" y1="211.79535431983717" x2="435.0" y2="211.79535431983717" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="415.0" y1="151.80440516790364" x2="415.0" y2="122.91754555509496" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="395.0" y1="122.91754555509496" x2="435.0" y2="122.91754555509496" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<rect x="385.0" y="151.80440516790364" width="60" height="33.544027417954624" fill="rgba(255, 193, 7, 0.6)" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="385.0" y1="168.39249090482434" x2="445.0" y2="168.39249090482434" stroke="#333" stroke-width="3"/>
+<text x="415.0" y="310" text-anchor="middle" font-size="11">4→5</text>
+<text x="415.0" y="325" text-anchor="middle" font-size="9" fill="#666">(n=9)</text>
+<line x1="516.4285714285714" y1="202.49157183331977" x2="516.4285714285714" y2="208.01756181497552" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="496.42857142857144" y1="208.01756181497552" x2="536.4285714285714" y2="208.01756181497552" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="516.4285714285714" y1="165.21233221146417" x2="516.4285714285714" y2="162.09158891708222" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="496.42857142857144" y1="162.09158891708222" x2="536.4285714285714" y2="162.09158891708222" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<rect x="486.42857142857144" y="165.21233221146417" width="60" height="37.279239621855595" fill="rgba(255, 193, 7, 0.6)" stroke="rgba(255, 193, 7, 1)" stroke-width="2"/>
+<line x1="486.42857142857144" y1="179.6381583989418" x2="546.4285714285714" y2="179.6381583989418" stroke="#333" stroke-width="3"/>
+<text x="516.4285714285714" y="310" text-anchor="middle" font-size="11">5→6</text>
+<text x="516.4285714285714" y="325" text-anchor="middle" font-size="9" fill="#666">(n=5)</text>
+<line x1="617.8571428571429" y1="247.38388942979083" x2="617.8571428571429" y2="283.28766528717296" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="597.8571428571429" y1="283.28766528717296" x2="637.8571428571429" y2="283.28766528717296" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="617.8571428571429" y1="179.97410915441048" x2="617.8571428571429" y2="172.4085513627155" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="597.8571428571429" y1="172.4085513627155" x2="637.8571428571429" y2="172.4085513627155" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<rect x="587.8571428571429" y="179.97410915441048" width="60" height="67.40978027538034" fill="rgba(244, 67, 54, 0.6)" stroke="rgba(244, 67, 54, 1)" stroke-width="2"/>
+<line x1="587.8571428571429" y1="208.95596294781947" x2="647.8571428571429" y2="208.95596294781947" stroke="#333" stroke-width="3"/>
+<text x="617.8571428571429" y="310" text-anchor="middle" font-size="11">6→7</text>
+<text x="617.8571428571429" y="325" text-anchor="middle" font-size="9" fill="#666">(n=4)</text>
+<line x1="719.2857142857143" y1="188.92418890152442" x2="719.2857142857143" y2="219.85003119338188" stroke="rgba(76, 175, 80, 1)" stroke-width="2"/>
+<line x1="699.2857142857143" y1="219.85003119338188" x2="739.2857142857143" y2="219.85003119338188" stroke="rgba(76, 175, 80, 1)" stroke-width="2"/>
+<line x1="719.2857142857143" y1="97.355340661247" x2="719.2857142857143" y2="36.71233471282699" stroke="rgba(76, 175, 80, 1)" stroke-width="2"/>
+<line x1="699.2857142857143" y1="36.71233471282699" x2="739.2857142857143" y2="36.71233471282699" stroke="rgba(76, 175, 80, 1)" stroke-width="2"/>
+<rect x="689.2857142857143" y="97.355340661247" width="60" height="91.56884824027742" fill="rgba(76, 175, 80, 0.6)" stroke="rgba(76, 175, 80, 1)" stroke-width="2"/>
+<line x1="689.2857142857143" y1="157.998346609667" x2="749.2857142857143" y2="157.998346609667" stroke="#333" stroke-width="3"/>
+<text x="719.2857142857143" y="310" text-anchor="middle" font-size="11">7→8</text>
+<text x="719.2857142857143" y="325" text-anchor="middle" font-size="9" fill="#666">(n=3)</text>
+</svg>
+<div class="explanation">
+<p><strong>Distribution of local change scores</strong> for right-side dependents.
+Positive values indicate MAL compliance at that transition.</p>
+</div>
+</div>
+
+<script>
+(function() {
+    const meanCurve_right = {"1": {"mean": 2.9259042670233955, "std": 1.232738760683958, "count": 23, "min": 1.238891521392044, "max": 5.614325579624955, "q1": 1.9351332781944932, "median": 2.4680926543596846, "q3": 3.880624316885035}, "2": {"mean": 2.3295437174562443, "std": 0.7384790416027233, "count": 21, "min": 1.1147999334621097, "max": 3.7196835596668056, "q1": 1.875277850490657, "median": 2.1782950823208274, "q3": 2.9230342816593238}, "3": {"mean": 2.3417367823647917, "std": 0.5494614702110918, "count": 17, "min": 1.4771390948974985, "max": 3.332245377976746, "q1": 1.8201379783893041, "median": 2.369337075772307, "q3": 2.876153062700348}, "4": {"mean": 2.465147153872216, "std": 0.5278054392387408, "count": 10, "min": 1.6080704944409254, "max": 3.3251781177293847, "q1": 2.2221389408949146, "median": 2.3822666727743407, "q3": 2.8229544909515045}, "5": {"mean": 2.41090111303999, "std": 0.6414969500219238, "count": 9, "min": 1.487359681387349, "max": 3.4603244949356182, "q1": 2.128677971127663, "median": 2.197686551684188, "q3": 2.786459982967773}, "6": {"mean": 2.607810027960182, "std": 0.5621304465101065, "count": 5, "min": 2.0835527500304547, "max": 3.5197957572882945, "q1": 2.1314138729059975, "median": 2.3039304013573676, "q3": 3.0003573582187957}, "7": {"mean": 3.061500961318516, "std": 1.0081231966291118, "count": 4, "min": 2.078983575795489, "max": 4.530555817890084, "q1": 2.1521831087183463, "median": 2.8182322257942456, "q3": 3.7275500783944158}, "8": {"mean": 3.0878794203753537, "std": 0.7704825798327507, "count": 3, "min": 2.0163935343420296, "max": 3.7950971596803713, "q1": 2.7342705507228455, "median": 3.452147567103661, "q3": 3.623622363392016}};
+    const maxN_right = 8;
+    
+    // Colors
+    const colors = {
+        primary: 'rgba(33, 150, 243, 1)',
+        primaryLight: 'rgba(33, 150, 243, 0.2)'
+    };
+    
+    // Mean MAL Curve Chart
+    const meanLabels_right = Object.keys(meanCurve_right).map(n => 'n=' + n);
+    const meanValues_right = Object.values(meanCurve_right).map(d => d.mean);
+    const q1Values_right = Object.values(meanCurve_right).map(d => d.q1);
+    const q3Values_right = Object.values(meanCurve_right).map(d => d.q3);
+    
+    new Chart(document.getElementById('meanCurveChart_right'), {
+        type: 'line',
+        data: {
+            labels: meanLabels_right,
+            datasets: [
+                {
+                    label: 'IQR (Q1-Q3)',
+                    data: q3Values_right,
+                    fill: '+1',
+                    backgroundColor: colors.primaryLight,
+                    borderColor: 'transparent',
+                    pointRadius: 0
+                },
+                {
+                    label: 'Q1',
+                    data: q1Values_right,
+                    fill: false,
+                    borderColor: 'transparent',
+                    pointRadius: 0
+                },
+                {
+                    label: 'Mean MAL_n (Right)',
+                    data: meanValues_right,
+                    borderColor: colors.primary,
+                    backgroundColor: colors.primary,
+                    borderWidth: 3,
+                    pointRadius: 6,
+                    pointHoverRadius: 8,
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const n = context.dataIndex + 1;
+                            const stats = meanCurve_right[n];
+                            if (stats) {
+                                return [
+                                    `Mean: ${stats.mean.toFixed(3)}`,
+                                    `Median: ${stats.median.toFixed(3)}`,
+                                    `IQR: ${stats.q1.toFixed(3)} - ${stats.q3.toFixed(3)}`,
+                                    `n languages: ${stats.count}`
+                                ];
+                            }
+                            return context.formattedValue;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    title: { display: true, text: 'Mean Constituent Size' },
+                    beginAtZero: false
+                },
+                x: {
+                    title: { display: true, text: 'Number of Right Dependents' }
+                }
+            }
+        }
+    });
+})();
+</script>
+</body>
+</html>

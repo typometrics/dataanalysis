@@ -386,6 +386,10 @@ To prevent overwrites and ensure clarity, filenames follow specific patterns:
 
 **Description**: Disorder metrics vs. VO score for languages with extreme disorder values.
 
+**Definition**: The "extreme disorder" value refers to the disorder percentage for the most complex configuration analyzed: **Total Dependents = 4**.
+*   **Right Extreme Disorder**: The percentage of 4-dependent sequences (R1, R2, R3, R4) that violate strict size monotonicity (expecting R1 < R2 < R3 < R4).
+*   **Left Extreme Disorder**: The percentage of 4-dependent sequences (L4, L3, L2, L1) that violate strict size monotonicity (expecting L4 > L3 > L2 > L1).
+
 **Purpose**: Understand relationship between word order type and order flexibility
 
 ---
