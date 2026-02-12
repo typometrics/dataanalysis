@@ -96,7 +96,7 @@ def compute_MAL_per_language(all_langs_position2sizes, all_langs_position2num):
                 total_count += all_langs_position2num[lang].get(key, 0)
             
             if total_count > 0:
-                MAL_n[n] = np.exp(total_size / total_count)
+                MAL_n[n] = total_size / total_count
         
         lang2MAL[lang] = MAL_n
     
@@ -123,7 +123,7 @@ def compute_average_sizes(all_langs_position2sizes, all_langs_position2num):
     
     for lang in all_langs_position2sizes:
         all_langs_average_sizes[lang] = {
-            ty: np.exp(all_langs_position2sizes[lang][ty] / all_langs_position2num[lang][ty])
+            ty: all_langs_position2sizes[lang][ty] / all_langs_position2num[lang][ty]
             for ty in all_langs_position2sizes[lang]
         }
     

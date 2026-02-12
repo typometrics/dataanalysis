@@ -1,0 +1,2607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Dependencies Language Maps</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; color: #333; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 10px; font-size: 2em; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 30px; font-size: 1.1em; }
+        .map-section { background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 30px; overflow: hidden; }
+        .map-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 25px; }
+        .map-header h2 { margin: 0; font-size: 1.4em; }
+        .map-header p { margin: 5px 0 0 0; opacity: 0.9; font-size: 0.95em; }
+        .map-container { height: 500px; width: 100%; }
+        .info-box { background: #f8f9fa; border-top: 1px solid #e0e0e0; padding: 20px 25px; min-height: 120px; }
+        .info-box h3 { color: #2c3e50; margin-bottom: 10px; font-size: 1.2em; }
+        .info-box .placeholder { color: #999; font-style: italic; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 10px; }
+        .stat-item { background: white; padding: 12px 15px; border-radius: 8px; border-left: 4px solid #667eea; }
+        .stat-item .label { font-size: 0.85em; color: #666; margin-bottom: 3px; }
+        .stat-item .value { font-size: 1.3em; font-weight: 600; color: #2c3e50; }
+        .legend { background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 20px 25px; margin-bottom: 30px; }
+        .legend h3 { margin-bottom: 15px; color: #2c3e50; }
+        .legend-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+        .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.9em; }
+        .legend-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.3); flex-shrink: 0; }
+        .summary-stats { background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 20px 25px; margin-bottom: 30px; }
+        .summary-stats h3 { margin-bottom: 15px; color: #2c3e50; }
+        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .summary-item { text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px; }
+        .summary-item .number { font-size: 2em; font-weight: 700; color: #667eea; }
+        .summary-item .desc { color: #666; font-size: 0.9em; margin-top: 5px; }
+        footer { text-align: center; padding: 20px; color: #666; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌍 Universal Dependencies Language Maps</h1>
+        <p class="subtitle">Interactive visualization of UD 2.17 treebank coverage across world languages</p>
+        <div class="summary-stats"><h3>📊 Global Statistics</h3><div class="summary-grid" id="globalStats"></div></div>
+        <div class="legend"><h3>🎨 Language Family Colors</h3><div class="legend-grid" id="legendGrid"></div></div>
+        <div class="map-section">
+            <div class="map-header"><h2>📍 Map 1: Languages by Family</h2><p>Each dot represents a UD language, colored by language family. Hover for details.</p></div>
+            <div id="map1" class="map-container"></div>
+            <div class="info-box" id="info1"><h3>Language Information</h3><p class="placeholder">Hover over a language dot to see detailed statistics</p></div>
+        </div>
+        <div class="map-section">
+            <div class="map-header"><h2>📏 Map 2: Languages by Corpus Size</h2><p>Dot size represents relative corpus size (number of tokens). Hover for details.</p></div>
+            <div id="map2" class="map-container"></div>
+            <div class="info-box" id="info2"><h3>Language Information</h3><p class="placeholder">Hover over a language dot to see detailed statistics</p></div>
+        </div>
+        <footer>Data from Universal Dependencies v2.17 • Geographic coordinates from WALS</footer>
+    </div>
+    <script>
+    const languageData = [
+  {
+    "code": "ab",
+    "name": "Abkhaz",
+    "lat": 43.0833333333,
+    "lon": 41.0,
+    "wals_family": "Northwest Caucasian",
+    "ud_group": "Caucasian",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 1316,
+    "tokens": 10585,
+    "avg_sent_len": 8.0
+  },
+  {
+    "code": "abq",
+    "name": "Abaza",
+    "lat": 44.0,
+    "lon": 42.0,
+    "wals_family": "Northwest Caucasian",
+    "ud_group": "Caucasian",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 98,
+    "tokens": 652,
+    "avg_sent_len": 6.7
+  },
+  {
+    "code": "af",
+    "name": "Afrikaans",
+    "lat": -31.0,
+    "lon": 22.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 1934,
+    "tokens": 49258,
+    "avg_sent_len": 25.5
+  },
+  {
+    "code": "aii",
+    "name": "Assyrian",
+    "lat": 36.0,
+    "lon": 41.0,
+    "wals_family": "Afro-Asiatic",
+    "ud_group": "Afroasiatic",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 57,
+    "tokens": 453,
+    "avg_sent_len": 7.9
+  },
+  {
+    "code": "ajp",
+    "name": "SouthLevantineArabic",
+    "lat": 32.0,
+    "lon": 35.25,
+    "wals_family": "Afro-Asiatic",
+    "ud_group": "Afroasiatic",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 100,
+    "tokens": 789,
+    "avg_sent_len": 7.9
+  },
+  {
+    "code": "akk",
+    "name": "Akkadian",
+    "lat": 33.1,
+    "lon": 44.4,
+    "wals_family": "Afro-Asiatic",
+    "ud_group": "Afroasiatic",
+    "treebanks": 2,
+    "files": 2,
+    "sentences": 1975,
+    "tokens": 25017,
+    "avg_sent_len": 12.7
+  },
+  {
+    "code": "aln",
+    "name": "Gheg",
+    "lat": 41.3,
+    "lon": 19.8,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 966,
+    "tokens": 15990,
+    "avg_sent_len": 16.6
+  },
+  {
+    "code": "am",
+    "name": "Amharic",
+    "lat": 10.0,
+    "lon": 38.0,
+    "wals_family": "Afro-Asiatic",
+    "ud_group": "Afroasiatic",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 1074,
+    "tokens": 10010,
+    "avg_sent_len": 9.3
+  },
+  {
+    "code": "ang",
+    "name": "OldEnglish",
+    "lat": 51.06,
+    "lon": -1.31,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 20,
+    "tokens": 171,
+    "avg_sent_len": 8.6
+  },
+  {
+    "code": "apu",
+    "name": "Apurin\u00e3",
+    "lat": -9.0,
+    "lon": -67.0,
+    "wals_family": "Arawakan",
+    "ud_group": "South-American",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 165,
+    "tokens": 1000,
+    "avg_sent_len": 6.1
+  },
+  {
+    "code": "aqz",
+    "name": "Akuntsu",
+    "lat": -12.5,
+    "lon": -60.5,
+    "wals_family": "Tupian",
+    "ud_group": "South-American",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 343,
+    "tokens": 1468,
+    "avg_sent_len": 4.3
+  },
+  {
+    "code": "ar",
+    "name": "Arabic",
+    "lat": 24.7,
+    "lon": 46.7,
+    "wals_family": "Afro-Asiatic",
+    "ud_group": "Afroasiatic",
+    "treebanks": 3,
+    "files": 7,
+    "sentences": 28402,
+    "tokens": 1042020,
+    "avg_sent_len": 36.7
+  },
+  {
+    "code": "arh",
+    "name": "Arhuaco",
+    "lat": 10.6666666667,
+    "lon": -73.75,
+    "wals_family": "Chibchan",
+    "ud_group": "South-American",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 628,
+    "tokens": 5307,
+    "avg_sent_len": 8.5
+  },
+  {
+    "code": "arr",
+    "name": "Karo",
+    "lat": -10.3333333333,
+    "lon": -62.0,
+    "wals_family": "Tupian",
+    "ud_group": "South-American",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 674,
+    "tokens": 2319,
+    "avg_sent_len": 3.4
+  },
+  {
+    "code": "az",
+    "name": "Azerbaijani",
+    "lat": 40.5,
+    "lon": 48.5,
+    "wals_family": "Altaic",
+    "ud_group": "Turkic",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 148,
+    "tokens": 912,
+    "avg_sent_len": 6.2
+  },
+  {
+    "code": "azz",
+    "name": "HighlandNahuatl",
+    "lat": 19.5833333333,
+    "lon": -97.3333333333,
+    "wals_family": "Uto-Aztecan",
+    "ud_group": "South-American",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 1260,
+    "tokens": 10088,
+    "avg_sent_len": 8.0
+  },
+  {
+    "code": "bar",
+    "name": "Bavarian",
+    "lat": 48.14,
+    "lon": 11.58,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 1070,
+    "tokens": 15036,
+    "avg_sent_len": 14.1
+  },
+  {
+    "code": "be",
+    "name": "Belarusian",
+    "lat": 54.0,
+    "lon": 28.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 25231,
+    "tokens": 305109,
+    "avg_sent_len": 12.1
+  },
+  {
+    "code": "bej",
+    "name": "Beja",
+    "lat": 18.0,
+    "lon": 36.0,
+    "wals_family": "Afro-Asiatic",
+    "ud_group": "Afroasiatic",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 763,
+    "tokens": 11951,
+    "avg_sent_len": 15.7
+  },
+  {
+    "code": "bg",
+    "name": "Bulgarian",
+    "lat": 42.5,
+    "lon": 25.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 11138,
+    "tokens": 156149,
+    "avg_sent_len": 14.0
+  },
+  {
+    "code": "bho",
+    "name": "Bhojpuri",
+    "lat": 26.0,
+    "lon": 84.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 357,
+    "tokens": 6665,
+    "avg_sent_len": 18.7
+  },
+  {
+    "code": "bm",
+    "name": "Bambara",
+    "lat": 12.5,
+    "lon": -7.5,
+    "wals_family": "Mande",
+    "ud_group": "Niger-Congo",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 1026,
+    "tokens": 13823,
+    "avg_sent_len": 13.5
+  },
+  {
+    "code": "bn",
+    "name": "Bengali",
+    "lat": 24.0,
+    "lon": 90.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 56,
+    "tokens": 320,
+    "avg_sent_len": 5.7
+  },
+  {
+    "code": "bor",
+    "name": "Bor\u00f4ro",
+    "lat": -16.0,
+    "lon": -57.0,
+    "wals_family": "Bororoan",
+    "ud_group": "South-American",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 21384,
+    "tokens": 160356,
+    "avg_sent_len": 7.5
+  },
+  {
+    "code": "br",
+    "name": "Breton",
+    "lat": 48.0,
+    "lon": -3.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 884,
+    "tokens": 10006,
+    "avg_sent_len": 11.3
+  },
+  {
+    "code": "bxr",
+    "name": "Buryat",
+    "lat": 51.8,
+    "lon": 107.6,
+    "wals_family": "Mongolic",
+    "ud_group": "Other",
+    "treebanks": 1,
+    "files": 2,
+    "sentences": 927,
+    "tokens": 10187,
+    "avg_sent_len": 11.0
+  },
+  {
+    "code": "ca",
+    "name": "Catalan",
+    "lat": 41.75,
+    "lon": 2.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 16678,
+    "tokens": 547261,
+    "avg_sent_len": 32.8
+  },
+  {
+    "code": "ceb",
+    "name": "Cebuano",
+    "lat": 10.0,
+    "lon": 124.0,
+    "wals_family": "Austronesian",
+    "ud_group": "Sino-Austronesian",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 197,
+    "tokens": 1377,
+    "avg_sent_len": 7.0
+  },
+  {
+    "code": "ckb",
+    "name": "CentralKurdish",
+    "lat": 36.0,
+    "lon": 44.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 138,
+    "tokens": 765,
+    "avg_sent_len": 5.5
+  },
+  {
+    "code": "ckt",
+    "name": "Chukot",
+    "lat": 67.0,
+    "lon": -173.0,
+    "wals_family": "Chukotko-Kamchatkan",
+    "ud_group": "Other",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 1004,
+    "tokens": 6124,
+    "avg_sent_len": 6.1
+  },
+  {
+    "code": "cop",
+    "name": "Coptic",
+    "lat": 26.0,
+    "lon": 32.0,
+    "wals_family": "Afro-Asiatic",
+    "ud_group": "Afroasiatic",
+    "treebanks": 2,
+    "files": 6,
+    "sentences": 3204,
+    "tokens": 89827,
+    "avg_sent_len": 28.0
+  },
+  {
+    "code": "cpg",
+    "name": "CappadocianGreek",
+    "lat": 38.5,
+    "lon": 34.5,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 2,
+    "files": 2,
+    "sentences": 386,
+    "tokens": 4569,
+    "avg_sent_len": 11.8
+  },
+  {
+    "code": "cs",
+    "name": "Czech",
+    "lat": 50.0,
+    "lon": 15.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 6,
+    "files": 14,
+    "sentences": 253784,
+    "tokens": 4162402,
+    "avg_sent_len": 16.4
+  },
+  {
+    "code": "ctn",
+    "name": "Chhintange",
+    "lat": 27.3,
+    "lon": 87.2,
+    "wals_family": "Sino-Tibetan",
+    "ud_group": "Sino-Austronesian",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 2289,
+    "tokens": 14631,
+    "avg_sent_len": 6.4
+  },
+  {
+    "code": "cu",
+    "name": "OldChurchSlavonic",
+    "lat": 42.7,
+    "lon": 25.5,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 22628,
+    "tokens": 198843,
+    "avg_sent_len": 8.8
+  },
+  {
+    "code": "cy",
+    "name": "Welsh",
+    "lat": 52.75,
+    "lon": -3.5833,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 2717,
+    "tokens": 54712,
+    "avg_sent_len": 20.1
+  },
+  {
+    "code": "da",
+    "name": "Danish",
+    "lat": 56.0,
+    "lon": 10.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 5512,
+    "tokens": 100733,
+    "avg_sent_len": 18.3
+  },
+  {
+    "code": "de",
+    "name": "German",
+    "lat": 52.5,
+    "lon": 13.3333333333,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 4,
+    "files": 8,
+    "sentences": 208437,
+    "tokens": 3810118,
+    "avg_sent_len": 18.3
+  },
+  {
+    "code": "egy",
+    "name": "Egyptian",
+    "lat": 26.8,
+    "lon": 30.8,
+    "wals_family": "Afro-Asiatic",
+    "ud_group": "Afroasiatic",
+    "treebanks": 1,
+    "files": 2,
+    "sentences": 2347,
+    "tokens": 24375,
+    "avg_sent_len": 10.4
+  },
+  {
+    "code": "el",
+    "name": "Greek",
+    "lat": 34.75,
+    "lon": 33.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 5,
+    "files": 12,
+    "sentences": 5248,
+    "tokens": 100110,
+    "avg_sent_len": 19.1
+  },
+  {
+    "code": "eme",
+    "name": "Teko",
+    "lat": 3.16666666667,
+    "lon": -52.4166666667,
+    "wals_family": "Tupian",
+    "ud_group": "South-American",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 913,
+    "tokens": 2896,
+    "avg_sent_len": 3.2
+  },
+  {
+    "code": "en",
+    "name": "English",
+    "lat": 52.0,
+    "lon": 0.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 13,
+    "files": 29,
+    "sentences": 97896,
+    "tokens": 1103631,
+    "avg_sent_len": 11.3
+  },
+  {
+    "code": "eo",
+    "name": "Esperanto",
+    "lat": 53.1,
+    "lon": 23.2,
+    "wals_family": "Constructed",
+    "ud_group": "Indo-European",
+    "treebanks": 2,
+    "files": 2,
+    "sentences": 151,
+    "tokens": 3342,
+    "avg_sent_len": 22.1
+  },
+  {
+    "code": "es",
+    "name": "Spanish",
+    "lat": 40.0,
+    "lon": -4.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 4,
+    "files": 8,
+    "sentences": 35215,
+    "tokens": 1023093,
+    "avg_sent_len": 29.1
+  },
+  {
+    "code": "ess",
+    "name": "Yupik",
+    "lat": 63.5,
+    "lon": -170.5,
+    "wals_family": "Eskimo-Aleut",
+    "ud_group": "Other",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 309,
+    "tokens": 2568,
+    "avg_sent_len": 8.3
+  },
+  {
+    "code": "et",
+    "name": "Estonian",
+    "lat": 59.0,
+    "lon": 26.0,
+    "wals_family": "Uralic",
+    "ud_group": "Uralic",
+    "treebanks": 2,
+    "files": 6,
+    "sentences": 38120,
+    "tokens": 528372,
+    "avg_sent_len": 13.9
+  },
+  {
+    "code": "eu",
+    "name": "Basque",
+    "lat": 43.0,
+    "lon": -3.83333333333,
+    "wals_family": "Basque",
+    "ud_group": "Other",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 8993,
+    "tokens": 121443,
+    "avg_sent_len": 13.5
+  },
+  {
+    "code": "fa",
+    "name": "Persian",
+    "lat": 32.0,
+    "lon": 54.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 2,
+    "files": 6,
+    "sentences": 35104,
+    "tokens": 654699,
+    "avg_sent_len": 18.7
+  },
+  {
+    "code": "fi",
+    "name": "Finnish",
+    "lat": 62.0,
+    "lon": 25.0,
+    "wals_family": "Uralic",
+    "ud_group": "Uralic",
+    "treebanks": 4,
+    "files": 8,
+    "sentences": 36981,
+    "tokens": 397014,
+    "avg_sent_len": 10.7
+  },
+  {
+    "code": "fo",
+    "name": "Faroese",
+    "lat": 62.0,
+    "lon": -7.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 2,
+    "files": 4,
+    "sentences": 2829,
+    "tokens": 50486,
+    "avg_sent_len": 17.8
+  },
+  {
+    "code": "fr",
+    "name": "French",
+    "lat": 48.0,
+    "lon": 2.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 8,
+    "files": 18,
+    "sentences": 29974,
+    "tokens": 640645,
+    "avg_sent_len": 21.4
+  },
+  {
+    "code": "frm",
+    "name": "MiddleFrench",
+    "lat": 48.9,
+    "lon": 2.35,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 2,
+    "files": 4,
+    "sentences": 4801,
+    "tokens": 96893,
+    "avg_sent_len": 20.2
+  },
+  {
+    "code": "fro",
+    "name": "OldFrench",
+    "lat": 49.5,
+    "lon": 2.35,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 2,
+    "files": 4,
+    "sentences": 20912,
+    "tokens": 253107,
+    "avg_sent_len": 12.1
+  },
+  {
+    "code": "ga",
+    "name": "Irish",
+    "lat": 55.0,
+    "lon": -8.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 3,
+    "files": 7,
+    "sentences": 7699,
+    "tokens": 168563,
+    "avg_sent_len": 21.9
+  },
+  {
+    "code": "gd",
+    "name": "Gaelic",
+    "lat": 57.0,
+    "lon": -4.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 4748,
+    "tokens": 90016,
+    "avg_sent_len": 19.0
+  },
+  {
+    "code": "gl",
+    "name": "Galician",
+    "lat": 43.0,
+    "lon": -8.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 3,
+    "files": 6,
+    "sentences": 5993,
+    "tokens": 187895,
+    "avg_sent_len": 31.4
+  },
+  {
+    "code": "gn",
+    "name": "Guarani",
+    "lat": -23.4,
+    "lon": -58.4,
+    "wals_family": "Tupian",
+    "ud_group": "South-American",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 59,
+    "tokens": 217,
+    "avg_sent_len": 3.7
+  },
+  {
+    "code": "got",
+    "name": "Gothic",
+    "lat": 48.0,
+    "lon": 14.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 5401,
+    "tokens": 55336,
+    "avg_sent_len": 10.2
+  },
+  {
+    "code": "grc",
+    "name": "AncientGreek",
+    "lat": 38.0,
+    "lon": 23.7,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 3,
+    "files": 9,
+    "sentences": 32577,
+    "tokens": 456503,
+    "avg_sent_len": 14.0
+  },
+  {
+    "code": "gsw",
+    "name": "SwissGerman",
+    "lat": 47.37,
+    "lon": 8.54,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 2,
+    "files": 2,
+    "sentences": 1077,
+    "tokens": 21187,
+    "avg_sent_len": 19.7
+  },
+  {
+    "code": "gu",
+    "name": "Gujarati",
+    "lat": 23.0,
+    "lon": 72.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 187,
+    "tokens": 1885,
+    "avg_sent_len": 10.1
+  },
+  {
+    "code": "gub",
+    "name": "Guajaj\u00e1ra",
+    "lat": -5.0,
+    "lon": -46.0,
+    "wals_family": "Tupian",
+    "ud_group": "South-American",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 1182,
+    "tokens": 9160,
+    "avg_sent_len": 7.7
+  },
+  {
+    "code": "gun",
+    "name": "Mby\u00e1Guaran\u00ed",
+    "lat": -25.5,
+    "lon": -54.5,
+    "wals_family": "Tupian",
+    "ud_group": "South-American",
+    "treebanks": 2,
+    "files": 2,
+    "sentences": 1144,
+    "tokens": 13089,
+    "avg_sent_len": 11.4
+  },
+  {
+    "code": "gv",
+    "name": "Manx",
+    "lat": 54.1666666667,
+    "lon": -4.5,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 2,
+    "sentences": 2336,
+    "tokens": 20725,
+    "avg_sent_len": 8.9
+  },
+  {
+    "code": "gwi",
+    "name": "Gwich\u02bcin",
+    "lat": 67.0,
+    "lon": -146.0,
+    "wals_family": "Na-Dene",
+    "ud_group": "Other",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 313,
+    "tokens": 1008,
+    "avg_sent_len": 3.2
+  },
+  {
+    "code": "gya",
+    "name": "Gbaya",
+    "lat": 6.0,
+    "lon": 15.0,
+    "wals_family": "Niger-Congo",
+    "ud_group": "Niger-Congo",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 403,
+    "tokens": 2692,
+    "avg_sent_len": 6.7
+  },
+  {
+    "code": "ha",
+    "name": "Hausa",
+    "lat": 12.0,
+    "lon": 7.0,
+    "wals_family": "Afro-Asiatic",
+    "ud_group": "Afroasiatic",
+    "treebanks": 3,
+    "files": 3,
+    "sentences": 3125,
+    "tokens": 32447,
+    "avg_sent_len": 10.4
+  },
+  {
+    "code": "hbo",
+    "name": "AncientHebrew",
+    "lat": 32.3,
+    "lon": 35.2,
+    "wals_family": "Afro-Asiatic",
+    "ud_group": "Afroasiatic",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 5608,
+    "tokens": 145866,
+    "avg_sent_len": 26.0
+  },
+  {
+    "code": "he",
+    "name": "Hebrew",
+    "lat": 31.75,
+    "lon": 35.1666666667,
+    "wals_family": "Afro-Asiatic",
+    "ud_group": "Afroasiatic",
+    "treebanks": 3,
+    "files": 9,
+    "sentences": 14065,
+    "tokens": 368163,
+    "avg_sent_len": 26.2
+  },
+  {
+    "code": "hi",
+    "name": "Hindi",
+    "lat": 25.0,
+    "lon": 77.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 2,
+    "files": 4,
+    "sentences": 17649,
+    "tokens": 375533,
+    "avg_sent_len": 21.3
+  },
+  {
+    "code": "hit",
+    "name": "Hittite",
+    "lat": 39.0,
+    "lon": 33.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 136,
+    "tokens": 1309,
+    "avg_sent_len": 9.6
+  },
+  {
+    "code": "hr",
+    "name": "Croatian",
+    "lat": 45.8,
+    "lon": 15.98,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 9010,
+    "tokens": 199409,
+    "avg_sent_len": 22.1
+  },
+  {
+    "code": "hsb",
+    "name": "UpperSorbian",
+    "lat": 51.8333333333,
+    "lon": 14.5,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 644,
+    "tokens": 11167,
+    "avg_sent_len": 17.3
+  },
+  {
+    "code": "ht",
+    "name": "Haitian",
+    "lat": 18.9,
+    "lon": -72.3,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 2,
+    "files": 4,
+    "sentences": 3458,
+    "tokens": 75013,
+    "avg_sent_len": 21.7
+  },
+  {
+    "code": "hu",
+    "name": "Hungarian",
+    "lat": 47.0,
+    "lon": 20.0,
+    "wals_family": "Uralic",
+    "ud_group": "Uralic",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 1800,
+    "tokens": 42032,
+    "avg_sent_len": 23.4
+  },
+  {
+    "code": "hy",
+    "name": "Armenian",
+    "lat": 40.0,
+    "lon": 45.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 2,
+    "files": 6,
+    "sentences": 8050,
+    "tokens": 150461,
+    "avg_sent_len": 18.7
+  },
+  {
+    "code": "hyw",
+    "name": "WestArmenian",
+    "lat": 38.5,
+    "lon": 43.5,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 6644,
+    "tokens": 122752,
+    "avg_sent_len": 18.5
+  },
+  {
+    "code": "id",
+    "name": "Indonesian",
+    "lat": 0.0,
+    "lon": 106.0,
+    "wals_family": "Austronesian",
+    "ud_group": "Sino-Austronesian",
+    "treebanks": 3,
+    "files": 6,
+    "sentences": 7628,
+    "tokens": 169728,
+    "avg_sent_len": 22.3
+  },
+  {
+    "code": "is",
+    "name": "Icelandic",
+    "lat": 65.0,
+    "lon": -17.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 4,
+    "files": 10,
+    "sentences": 53564,
+    "tokens": 1183884,
+    "avg_sent_len": 22.1
+  },
+  {
+    "code": "it",
+    "name": "Italian",
+    "lat": 43.75,
+    "lon": 11.25,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 11,
+    "files": 26,
+    "sentences": 42297,
+    "tokens": 1011001,
+    "avg_sent_len": 23.9
+  },
+  {
+    "code": "ja",
+    "name": "Japanese",
+    "lat": 37.0,
+    "lon": 140.0,
+    "wals_family": "Japanese",
+    "ud_group": "Other",
+    "treebanks": 6,
+    "files": 14,
+    "sentences": 132418,
+    "tokens": 2645130,
+    "avg_sent_len": 20.0
+  },
+  {
+    "code": "jaa",
+    "name": "Madi",
+    "lat": -7.0,
+    "lon": -65.0,
+    "wals_family": "Arauan",
+    "ud_group": "South-American",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 20,
+    "tokens": 115,
+    "avg_sent_len": 5.8
+  },
+  {
+    "code": "jv",
+    "name": "Javanese",
+    "lat": -7.0,
+    "lon": 111.0,
+    "wals_family": "Austronesian",
+    "ud_group": "Sino-Austronesian",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 1000,
+    "tokens": 14343,
+    "avg_sent_len": 14.3
+  },
+  {
+    "code": "ka",
+    "name": "Georgian",
+    "lat": 42.0,
+    "lon": 44.0,
+    "wals_family": "Kartvelian",
+    "ud_group": "Caucasian",
+    "treebanks": 2,
+    "files": 6,
+    "sentences": 4982,
+    "tokens": 82729,
+    "avg_sent_len": 16.6
+  },
+  {
+    "code": "kfm",
+    "name": "Khunsari",
+    "lat": 33.0,
+    "lon": 51.5,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 10,
+    "tokens": 74,
+    "avg_sent_len": 7.4
+  },
+  {
+    "code": "kk",
+    "name": "Kazakh",
+    "lat": 50.0,
+    "lon": 70.0,
+    "wals_family": "Altaic",
+    "ud_group": "Turkic",
+    "treebanks": 1,
+    "files": 2,
+    "sentences": 1078,
+    "tokens": 10536,
+    "avg_sent_len": 9.8
+  },
+  {
+    "code": "kmr",
+    "name": "Kurmanji",
+    "lat": 38.0,
+    "lon": 42.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 2,
+    "sentences": 754,
+    "tokens": 10259,
+    "avg_sent_len": 13.6
+  },
+  {
+    "code": "ko",
+    "name": "Korean",
+    "lat": 37.5,
+    "lon": 128.0,
+    "wals_family": "Korean",
+    "ud_group": "Other",
+    "treebanks": 5,
+    "files": 11,
+    "sentences": 51928,
+    "tokens": 597774,
+    "avg_sent_len": 11.5
+  },
+  {
+    "code": "koi",
+    "name": "Komi-Permyak",
+    "lat": 59.5,
+    "lon": 54.5,
+    "wals_family": "Uralic",
+    "ud_group": "Uralic",
+    "treebanks": 1,
+    "files": 2,
+    "sentences": 128,
+    "tokens": 1081,
+    "avg_sent_len": 8.4
+  },
+  {
+    "code": "kpv",
+    "name": "Komi",
+    "lat": 65.0,
+    "lon": 55.0,
+    "wals_family": "Uralic",
+    "ud_group": "Uralic",
+    "treebanks": 2,
+    "files": 3,
+    "sentences": 877,
+    "tokens": 10392,
+    "avg_sent_len": 11.8
+  },
+  {
+    "code": "krl",
+    "name": "Karelian",
+    "lat": 64.0,
+    "lon": 32.0,
+    "wals_family": "Uralic",
+    "ud_group": "Uralic",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 228,
+    "tokens": 3094,
+    "avg_sent_len": 13.6
+  },
+  {
+    "code": "ky",
+    "name": "Kyrgyz",
+    "lat": 42.9,
+    "lon": 74.6,
+    "wals_family": "Turkic",
+    "ud_group": "Turkic",
+    "treebanks": 2,
+    "files": 3,
+    "sentences": 2703,
+    "tokens": 25378,
+    "avg_sent_len": 9.4
+  },
+  {
+    "code": "la",
+    "name": "Latin",
+    "lat": 41.9,
+    "lon": 12.5,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 6,
+    "files": 17,
+    "sentences": 60349,
+    "tokens": 1008167,
+    "avg_sent_len": 16.7
+  },
+  {
+    "code": "lb",
+    "name": "Luxembourgish",
+    "lat": 49.8333333333,
+    "lon": 6.16666666667,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 20,
+    "tokens": 206,
+    "avg_sent_len": 10.3
+  },
+  {
+    "code": "lij",
+    "name": "Ligurian",
+    "lat": 44.4166666667,
+    "lon": 8.95,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 2,
+    "sentences": 316,
+    "tokens": 6928,
+    "avg_sent_len": 21.9
+  },
+  {
+    "code": "lt",
+    "name": "Lithuanian",
+    "lat": 55.0,
+    "lon": 24.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 2,
+    "files": 6,
+    "sentences": 3905,
+    "tokens": 75403,
+    "avg_sent_len": 19.3
+  },
+  {
+    "code": "ltg",
+    "name": "Latgalian",
+    "lat": 56.5,
+    "lon": 27.3,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 20,
+    "tokens": 170,
+    "avg_sent_len": 8.5
+  },
+  {
+    "code": "lv",
+    "name": "Latvian",
+    "lat": 57.0,
+    "lon": 24.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 2,
+    "files": 4,
+    "sentences": 19600,
+    "tokens": 330486,
+    "avg_sent_len": 16.9
+  },
+  {
+    "code": "lzh",
+    "name": "ClassChinese",
+    "lat": 35.0,
+    "lon": 108.9,
+    "wals_family": "Sino-Tibetan",
+    "ud_group": "Sino-Austronesian",
+    "treebanks": 2,
+    "files": 4,
+    "sentences": 86339,
+    "tokens": 433817,
+    "avg_sent_len": 5.0
+  },
+  {
+    "code": "mdf",
+    "name": "Moksha",
+    "lat": 54.0,
+    "lon": 44.0,
+    "wals_family": "Uralic",
+    "ud_group": "Uralic",
+    "treebanks": 1,
+    "files": 2,
+    "sentences": 476,
+    "tokens": 4429,
+    "avg_sent_len": 9.3
+  },
+  {
+    "code": "mk",
+    "name": "Macedonian",
+    "lat": 41.6666666667,
+    "lon": 21.75,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 155,
+    "tokens": 1360,
+    "avg_sent_len": 8.8
+  },
+  {
+    "code": "ml",
+    "name": "Malayalam",
+    "lat": 10.0,
+    "lon": 76.5,
+    "wals_family": "Dravidian",
+    "ud_group": "Dravidian",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 218,
+    "tokens": 2403,
+    "avg_sent_len": 11.0
+  },
+  {
+    "code": "mpu",
+    "name": "Makur\u00e1p",
+    "lat": -12.0,
+    "lon": -63.0,
+    "wals_family": "Tupian",
+    "ud_group": "South-American",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 37,
+    "tokens": 178,
+    "avg_sent_len": 4.8
+  },
+  {
+    "code": "mr",
+    "name": "Marathi",
+    "lat": 19.0,
+    "lon": 76.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 466,
+    "tokens": 3847,
+    "avg_sent_len": 8.3
+  },
+  {
+    "code": "mt",
+    "name": "Maltese",
+    "lat": 35.9166666667,
+    "lon": 14.4166666667,
+    "wals_family": "Afro-Asiatic",
+    "ud_group": "Afroasiatic",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 2074,
+    "tokens": 44162,
+    "avg_sent_len": 21.3
+  },
+  {
+    "code": "myu",
+    "name": "Munduruk\u00fa",
+    "lat": -7.0,
+    "lon": -58.0,
+    "wals_family": "Tupian",
+    "ud_group": "South-American",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 158,
+    "tokens": 1022,
+    "avg_sent_len": 6.5
+  },
+  {
+    "code": "myv",
+    "name": "Erzya",
+    "lat": 53.0,
+    "lon": 45.5,
+    "wals_family": "Uralic",
+    "ud_group": "Uralic",
+    "treebanks": 1,
+    "files": 2,
+    "sentences": 2138,
+    "tokens": 20703,
+    "avg_sent_len": 9.7
+  },
+  {
+    "code": "nap",
+    "name": "Neapolitan",
+    "lat": 40.9166666667,
+    "lon": 14.25,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 20,
+    "tokens": 201,
+    "avg_sent_len": 10.1
+  },
+  {
+    "code": "naq",
+    "name": "Khoekhoe",
+    "lat": -25.5,
+    "lon": 18.0,
+    "wals_family": "Khoe-Kwadi",
+    "ud_group": "Other",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 3589,
+    "tokens": 29007,
+    "avg_sent_len": 8.1
+  },
+  {
+    "code": "nds",
+    "name": "LowSaxon",
+    "lat": 53.0,
+    "lon": 10.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 2,
+    "sentences": 1000,
+    "tokens": 22639,
+    "avg_sent_len": 22.6
+  },
+  {
+    "code": "nhi",
+    "name": "WestNahuatl",
+    "lat": 19.0,
+    "lon": -98.0,
+    "wals_family": "Uto-Aztecan",
+    "ud_group": "South-American",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 909,
+    "tokens": 9461,
+    "avg_sent_len": 10.4
+  },
+  {
+    "code": "nl",
+    "name": "Dutch",
+    "lat": 52.37,
+    "lon": 4.9,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 2,
+    "files": 6,
+    "sentences": 30723,
+    "tokens": 505679,
+    "avg_sent_len": 16.5
+  },
+  {
+    "code": "nmf",
+    "name": "Tangkhul",
+    "lat": 25.0,
+    "lon": 94.5,
+    "wals_family": "Sino-Tibetan",
+    "ud_group": "Sino-Austronesian",
+    "treebanks": 1,
+    "files": 2,
+    "sentences": 584,
+    "tokens": 3123,
+    "avg_sent_len": 5.3
+  },
+  {
+    "code": "no",
+    "name": "Norwegian",
+    "lat": 61.0,
+    "lon": 8.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 2,
+    "files": 6,
+    "sentences": 37619,
+    "tokens": 611574,
+    "avg_sent_len": 16.3
+  },
+  {
+    "code": "nyq",
+    "name": "Nayini",
+    "lat": 33.5,
+    "lon": 52.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 10,
+    "tokens": 78,
+    "avg_sent_len": 7.8
+  },
+  {
+    "code": "oc",
+    "name": "Occitan",
+    "lat": 44.0,
+    "lon": 2.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 1522,
+    "tokens": 25619,
+    "avg_sent_len": 16.8
+  },
+  {
+    "code": "olo",
+    "name": "Livvi",
+    "lat": 62.0,
+    "lon": 33.0,
+    "wals_family": "Uralic",
+    "ud_group": "Uralic",
+    "treebanks": 1,
+    "files": 2,
+    "sentences": 125,
+    "tokens": 1632,
+    "avg_sent_len": 13.1
+  },
+  {
+    "code": "or",
+    "name": "Oriya",
+    "lat": 18.3333333333,
+    "lon": 83.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 100,
+    "tokens": 1029,
+    "avg_sent_len": 10.3
+  },
+  {
+    "code": "orv",
+    "name": "OldEastSlavic",
+    "lat": 59.93,
+    "lon": 30.34,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 4,
+    "files": 12,
+    "sentences": 41092,
+    "tokens": 580154,
+    "avg_sent_len": 14.1
+  },
+  {
+    "code": "ota",
+    "name": "OttomanTurkish",
+    "lat": 41.0,
+    "lon": 29.0,
+    "wals_family": "Turkic",
+    "ud_group": "Turkic",
+    "treebanks": 2,
+    "files": 4,
+    "sentences": 2296,
+    "tokens": 25976,
+    "avg_sent_len": 11.3
+  },
+  {
+    "code": "otk",
+    "name": "OldTurkish",
+    "lat": 39.9,
+    "lon": 32.9,
+    "wals_family": "Turkic",
+    "ud_group": "Turkic",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 20,
+    "tokens": 158,
+    "avg_sent_len": 7.9
+  },
+  {
+    "code": "pad",
+    "name": "Paumar\u00ed",
+    "lat": -6.0,
+    "lon": -64.0,
+    "wals_family": "Arauan",
+    "ud_group": "South-American",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 101,
+    "tokens": 504,
+    "avg_sent_len": 5.0
+  },
+  {
+    "code": "pay",
+    "name": "Pesh",
+    "lat": 15.0,
+    "lon": -85.5,
+    "wals_family": "Chibchan",
+    "ud_group": "Other",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 524,
+    "tokens": 4275,
+    "avg_sent_len": 8.2
+  },
+  {
+    "code": "pcm",
+    "name": "Naija",
+    "lat": 6.5,
+    "lon": 3.33333333333,
+    "wals_family": "other",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 9241,
+    "tokens": 140837,
+    "avg_sent_len": 15.2
+  },
+  {
+    "code": "pl",
+    "name": "Polish",
+    "lat": 52.0,
+    "lon": 20.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 4,
+    "files": 10,
+    "sentences": 42416,
+    "tokens": 546602,
+    "avg_sent_len": 12.9
+  },
+  {
+    "code": "pro",
+    "name": "OldProven\u00e7al",
+    "lat": 43.7,
+    "lon": 4.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 1291,
+    "tokens": 45389,
+    "avg_sent_len": 35.2
+  },
+  {
+    "code": "ps",
+    "name": "Pashto",
+    "lat": 33.0,
+    "lon": 67.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 155,
+    "tokens": 4067,
+    "avg_sent_len": 26.2
+  },
+  {
+    "code": "pt",
+    "name": "Portuguese",
+    "lat": 39.0,
+    "lon": -8.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 7,
+    "files": 19,
+    "sentences": 82183,
+    "tokens": 1545443,
+    "avg_sent_len": 18.8
+  },
+  {
+    "code": "qaf",
+    "name": "Maghrebi",
+    "lat": 34.0,
+    "lon": 2.0,
+    "wals_family": "Afro-Asiatic",
+    "ud_group": "Afroasiatic",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 1287,
+    "tokens": 19793,
+    "avg_sent_len": 15.4
+  },
+  {
+    "code": "qfn",
+    "name": "FrisianDutch",
+    "lat": 53.2,
+    "lon": 5.8,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 400,
+    "tokens": 3729,
+    "avg_sent_len": 9.3
+  },
+  {
+    "code": "qpm",
+    "name": "Pomak",
+    "lat": 41.5,
+    "lon": 25.5,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 2250,
+    "tokens": 34348,
+    "avg_sent_len": 15.3
+  },
+  {
+    "code": "qtd",
+    "name": "TurkishGerman",
+    "lat": 48.78,
+    "lon": 9.18,
+    "wals_family": "Mixed",
+    "ud_group": "Turkic",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 2184,
+    "tokens": 37227,
+    "avg_sent_len": 17.0
+  },
+  {
+    "code": "qte",
+    "name": "TeluguEnglish",
+    "lat": 17.4,
+    "lon": 78.5,
+    "wals_family": "Mixed",
+    "ud_group": "Dravidian",
+    "treebanks": 1,
+    "files": 2,
+    "sentences": 97,
+    "tokens": 456,
+    "avg_sent_len": 4.7
+  },
+  {
+    "code": "qti",
+    "name": "TurkishEnglish",
+    "lat": 51.5,
+    "lon": -0.1,
+    "wals_family": "Mixed",
+    "ud_group": "Turkic",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 51,
+    "tokens": 393,
+    "avg_sent_len": 7.7
+  },
+  {
+    "code": "quc",
+    "name": "Kiche",
+    "lat": 15.0,
+    "lon": -91.4166666667,
+    "wals_family": "Mayan",
+    "ud_group": "South-American",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 1435,
+    "tokens": 10013,
+    "avg_sent_len": 7.0
+  },
+  {
+    "code": "ro",
+    "name": "Romanian",
+    "lat": 47.0,
+    "lon": 29.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 6,
+    "files": 12,
+    "sentences": 40720,
+    "tokens": 942209,
+    "avg_sent_len": 23.1
+  },
+  {
+    "code": "ru",
+    "name": "Russian",
+    "lat": 55.75,
+    "lon": 37.62,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 5,
+    "files": 13,
+    "sentences": 220419,
+    "tokens": 3455957,
+    "avg_sent_len": 15.7
+  },
+  {
+    "code": "sa",
+    "name": "Sanskrit",
+    "lat": 27.2,
+    "lon": 83.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 2,
+    "files": 4,
+    "sentences": 27412,
+    "tokens": 208283,
+    "avg_sent_len": 7.6
+  },
+  {
+    "code": "sab",
+    "name": "Buglere",
+    "lat": 8.5,
+    "lon": -81.25,
+    "wals_family": "Chibchan",
+    "ud_group": "South-American",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 406,
+    "tokens": 2713,
+    "avg_sent_len": 6.7
+  },
+  {
+    "code": "sah",
+    "name": "Yakut",
+    "lat": 62.0,
+    "lon": 130.0,
+    "wals_family": "Altaic",
+    "ud_group": "Turkic",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 299,
+    "tokens": 1460,
+    "avg_sent_len": 4.9
+  },
+  {
+    "code": "say",
+    "name": "Zaar",
+    "lat": 10.0,
+    "lon": 9.5,
+    "wals_family": "Afro-Asiatic",
+    "ud_group": "Afroasiatic",
+    "treebanks": 1,
+    "files": 2,
+    "sentences": 2105,
+    "tokens": 20758,
+    "avg_sent_len": 9.9
+  },
+  {
+    "code": "scn",
+    "name": "Sicilian",
+    "lat": 37.5,
+    "lon": 14.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 505,
+    "tokens": 11204,
+    "avg_sent_len": 22.2
+  },
+  {
+    "code": "sd",
+    "name": "Sindhi",
+    "lat": 26.0,
+    "lon": 69.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 5756,
+    "tokens": 95227,
+    "avg_sent_len": 16.5
+  },
+  {
+    "code": "sdh",
+    "name": "SouthernKurdish",
+    "lat": 35.5,
+    "lon": 46.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 221,
+    "tokens": 1685,
+    "avg_sent_len": 7.6
+  },
+  {
+    "code": "sga",
+    "name": "OldIrish",
+    "lat": 53.3,
+    "lon": -6.3,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 2,
+    "files": 2,
+    "sentences": 98,
+    "tokens": 856,
+    "avg_sent_len": 8.7
+  },
+  {
+    "code": "si",
+    "name": "Sinhalese",
+    "lat": 7.0,
+    "lon": 80.5,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 100,
+    "tokens": 880,
+    "avg_sent_len": 8.8
+  },
+  {
+    "code": "sjo",
+    "name": "Xibe",
+    "lat": 43.9,
+    "lon": 81.3,
+    "wals_family": "Tungusic",
+    "ud_group": "Other",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 810,
+    "tokens": 15401,
+    "avg_sent_len": 19.0
+  },
+  {
+    "code": "sk",
+    "name": "Slovak",
+    "lat": 49.0,
+    "lon": 20.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 10604,
+    "tokens": 106372,
+    "avg_sent_len": 10.0
+  },
+  {
+    "code": "sl",
+    "name": "Slovenian",
+    "lat": 46.0,
+    "lon": 15.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 2,
+    "files": 6,
+    "sentences": 19556,
+    "tokens": 365490,
+    "avg_sent_len": 18.7
+  },
+  {
+    "code": "sme",
+    "name": "NorthSami",
+    "lat": 69.0,
+    "lon": 24.0,
+    "wals_family": "Uralic",
+    "ud_group": "Uralic",
+    "treebanks": 1,
+    "files": 2,
+    "sentences": 3122,
+    "tokens": 26845,
+    "avg_sent_len": 8.6
+  },
+  {
+    "code": "sms",
+    "name": "SkoltSami",
+    "lat": 69.0,
+    "lon": 28.0,
+    "wals_family": "Uralic",
+    "ud_group": "Uralic",
+    "treebanks": 1,
+    "files": 2,
+    "sentences": 250,
+    "tokens": 2961,
+    "avg_sent_len": 11.8
+  },
+  {
+    "code": "soj",
+    "name": "Soi",
+    "lat": 33.5,
+    "lon": 51.9,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 8,
+    "tokens": 55,
+    "avg_sent_len": 6.9
+  },
+  {
+    "code": "sq",
+    "name": "Albanian",
+    "lat": 41.0,
+    "lon": 20.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 2,
+    "files": 4,
+    "sentences": 260,
+    "tokens": 4485,
+    "avg_sent_len": 17.2
+  },
+  {
+    "code": "sr",
+    "name": "Serbian",
+    "lat": 44.8,
+    "lon": 20.5,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 4384,
+    "tokens": 97673,
+    "avg_sent_len": 22.3
+  },
+  {
+    "code": "ssp",
+    "name": "SpanishSign",
+    "lat": 40.0,
+    "lon": -3.0,
+    "wals_family": "other",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 488,
+    "tokens": 1393,
+    "avg_sent_len": 2.9
+  },
+  {
+    "code": "sv",
+    "name": "Swedish",
+    "lat": 60.0,
+    "lon": 15.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 5,
+    "files": 9,
+    "sentences": 13284,
+    "tokens": 227585,
+    "avg_sent_len": 17.1
+  },
+  {
+    "code": "swl",
+    "name": "SwedishSign",
+    "lat": 59.0,
+    "lon": 15.0,
+    "wals_family": "other",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 203,
+    "tokens": 1610,
+    "avg_sent_len": 7.9
+  },
+  {
+    "code": "ta",
+    "name": "Tamil",
+    "lat": 11.0,
+    "lon": 78.5,
+    "wals_family": "Dravidian",
+    "ud_group": "Dravidian",
+    "treebanks": 2,
+    "files": 4,
+    "sentences": 1134,
+    "tokens": 12165,
+    "avg_sent_len": 10.7
+  },
+  {
+    "code": "te",
+    "name": "Telugu",
+    "lat": 16.0,
+    "lon": 79.0,
+    "wals_family": "Dravidian",
+    "ud_group": "Dravidian",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 1328,
+    "tokens": 6465,
+    "avg_sent_len": 4.9
+  },
+  {
+    "code": "th",
+    "name": "Thai",
+    "lat": 16.0,
+    "lon": 101.0,
+    "wals_family": "Tai-Kadai",
+    "ud_group": "Sino-Austronesian",
+    "treebanks": 2,
+    "files": 4,
+    "sentences": 4627,
+    "tokens": 99545,
+    "avg_sent_len": 21.5
+  },
+  {
+    "code": "tl",
+    "name": "Tagalog",
+    "lat": 15.0,
+    "lon": 121.0,
+    "wals_family": "Austronesian",
+    "ud_group": "Sino-Austronesian",
+    "treebanks": 2,
+    "files": 2,
+    "sentences": 222,
+    "tokens": 1831,
+    "avg_sent_len": 8.2
+  },
+  {
+    "code": "tn",
+    "name": "Tswana",
+    "lat": -24.0,
+    "lon": 26.0,
+    "wals_family": "Niger-Congo",
+    "ud_group": "Niger-Congo",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 20,
+    "tokens": 214,
+    "avg_sent_len": 10.7
+  },
+  {
+    "code": "tpn",
+    "name": "Tupinamb\u00e1",
+    "lat": -6.0,
+    "lon": -36.0,
+    "wals_family": "Tupian",
+    "ud_group": "South-American",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 581,
+    "tokens": 4508,
+    "avg_sent_len": 7.8
+  },
+  {
+    "code": "tr",
+    "name": "Turkish",
+    "lat": 39.0,
+    "lon": 35.0,
+    "wals_family": "Altaic",
+    "ud_group": "Turkic",
+    "treebanks": 10,
+    "files": 24,
+    "sentences": 82467,
+    "tokens": 736765,
+    "avg_sent_len": 8.9
+  },
+  {
+    "code": "tt",
+    "name": "Tatar",
+    "lat": 55.5,
+    "lon": 49.0,
+    "wals_family": "Altaic",
+    "ud_group": "Turkic",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 148,
+    "tokens": 2280,
+    "avg_sent_len": 15.4
+  },
+  {
+    "code": "ug",
+    "name": "Uyghur",
+    "lat": 40.0,
+    "lon": 80.0,
+    "wals_family": "Altaic",
+    "ud_group": "Turkic",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 3456,
+    "tokens": 40236,
+    "avg_sent_len": 11.6
+  },
+  {
+    "code": "uk",
+    "name": "Ukrainian",
+    "lat": 49.0,
+    "lon": 33.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 2,
+    "files": 6,
+    "sentences": 14234,
+    "tokens": 231916,
+    "avg_sent_len": 16.3
+  },
+  {
+    "code": "ur",
+    "name": "Urdu",
+    "lat": 25.0,
+    "lon": 67.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 5130,
+    "tokens": 138077,
+    "avg_sent_len": 26.9
+  },
+  {
+    "code": "urb",
+    "name": "Kaapor",
+    "lat": -2.33333333333,
+    "lon": -46.5,
+    "wals_family": "Tupian",
+    "ud_group": "South-American",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 83,
+    "tokens": 366,
+    "avg_sent_len": 4.4
+  },
+  {
+    "code": "uz",
+    "name": "Uzbek",
+    "lat": 39.0,
+    "lon": 66.0,
+    "wals_family": "Altaic",
+    "ud_group": "Turkic",
+    "treebanks": 3,
+    "files": 4,
+    "sentences": 1329,
+    "tokens": 14411,
+    "avg_sent_len": 10.8
+  },
+  {
+    "code": "vep",
+    "name": "Veps",
+    "lat": 60.0,
+    "lon": 35.0,
+    "wals_family": "Uralic",
+    "ud_group": "Uralic",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 103,
+    "tokens": 1303,
+    "avg_sent_len": 12.7
+  },
+  {
+    "code": "vi",
+    "name": "Vietnamese",
+    "lat": 10.5,
+    "lon": 106.5,
+    "wals_family": "Austro-Asiatic",
+    "ud_group": "Sino-Austronesian",
+    "treebanks": 2,
+    "files": 4,
+    "sentences": 3423,
+    "tokens": 59957,
+    "avg_sent_len": 17.5
+  },
+  {
+    "code": "wbp",
+    "name": "Warlpiri",
+    "lat": -20.0,
+    "lon": 132.333333333,
+    "wals_family": "Pama-Nyungan",
+    "ud_group": "Other",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 55,
+    "tokens": 315,
+    "avg_sent_len": 5.7
+  },
+  {
+    "code": "wo",
+    "name": "Wolof",
+    "lat": 15.25,
+    "lon": -16.0,
+    "wals_family": "Niger-Congo",
+    "ud_group": "Niger-Congo",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 2107,
+    "tokens": 44258,
+    "avg_sent_len": 21.0
+  },
+  {
+    "code": "wuu",
+    "name": "Wu",
+    "lat": 31.6666666667,
+    "lon": 119.916666667,
+    "wals_family": "Sino-Tibetan",
+    "ud_group": "Sino-Austronesian",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 983,
+    "tokens": 8584,
+    "avg_sent_len": 8.7
+  },
+  {
+    "code": "xav",
+    "name": "Xav\u00e1nte",
+    "lat": -15.0,
+    "lon": -52.5,
+    "wals_family": "Macro-Ge",
+    "ud_group": "South-American",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 248,
+    "tokens": 2239,
+    "avg_sent_len": 9.0
+  },
+  {
+    "code": "xcl",
+    "name": "ClassArmenian",
+    "lat": 40.0,
+    "lon": 44.5,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 4781,
+    "tokens": 99664,
+    "avg_sent_len": 20.8
+  },
+  {
+    "code": "xnr",
+    "name": "Kangri",
+    "lat": 32.5,
+    "lon": 76.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 288,
+    "tokens": 2514,
+    "avg_sent_len": 8.7
+  },
+  {
+    "code": "xpg",
+    "name": "Phrygian",
+    "lat": 39.0,
+    "lon": 30.0,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 132,
+    "tokens": 1687,
+    "avg_sent_len": 12.8
+  },
+  {
+    "code": "xum",
+    "name": "Umbrian",
+    "lat": 42.5,
+    "lon": 12.5,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 202,
+    "tokens": 1162,
+    "avg_sent_len": 5.8
+  },
+  {
+    "code": "yi",
+    "name": "Yiddish",
+    "lat": 47.0,
+    "lon": 28.5,
+    "wals_family": "Indo-European",
+    "ud_group": "Indo-European",
+    "treebanks": 1,
+    "files": 3,
+    "sentences": 3054,
+    "tokens": 27879,
+    "avg_sent_len": 9.1
+  },
+  {
+    "code": "yo",
+    "name": "Yoruba",
+    "lat": 8.0,
+    "lon": 4.33333333333,
+    "wals_family": "Niger-Congo",
+    "ud_group": "Niger-Congo",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 317,
+    "tokens": 8243,
+    "avg_sent_len": 26.0
+  },
+  {
+    "code": "yrk",
+    "name": "Nenets",
+    "lat": 69.0,
+    "lon": 72.0,
+    "wals_family": "Uralic",
+    "ud_group": "Uralic",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 170,
+    "tokens": 1272,
+    "avg_sent_len": 7.5
+  },
+  {
+    "code": "yrl",
+    "name": "Nhengatu",
+    "lat": -3.0,
+    "lon": -60.0,
+    "wals_family": "Tupian",
+    "ud_group": "South-American",
+    "treebanks": 1,
+    "files": 2,
+    "sentences": 2742,
+    "tokens": 26033,
+    "avg_sent_len": 9.5
+  },
+  {
+    "code": "yue",
+    "name": "Cantonese",
+    "lat": 23.0,
+    "lon": 113.0,
+    "wals_family": "Sino-Tibetan",
+    "ud_group": "Sino-Austronesian",
+    "treebanks": 1,
+    "files": 1,
+    "sentences": 1004,
+    "tokens": 13918,
+    "avg_sent_len": 13.9
+  },
+  {
+    "code": "zh",
+    "name": "Chinese",
+    "lat": 39.9,
+    "lon": 116.4,
+    "wals_family": "Sino-Tibetan",
+    "ud_group": "Sino-Austronesian",
+    "treebanks": 7,
+    "files": 11,
+    "sentences": 14944,
+    "tokens": 309906,
+    "avg_sent_len": 20.7
+  }
+];
+    const familyColors = {
+        'Indo-European': '#4169E1', 'Sino-Austronesian': '#2E8B57', 'Afroasiatic': '#FF8C00',
+        'Uralic': '#8B4513', 'Turkic': '#DC143C', 'Niger-Congo': '#228B22', 'Caucasian': '#FF69B4',
+        'Dravidian': '#C71585', 'South-American': '#5F9EA0', 'Austronesian': '#32CD32',
+        'Mongolic': '#9932CC', 'Sino-Tibetan': '#006400', 'Afro-Asiatic': '#FF8C00',
+        'Trans-New Guinea': '#8B0000', 'Tupian': '#20B2AA', 'Constructed': '#808080',
+        'Uto-Aztecan': '#DAA520', 'Tungusic': '#4B0082', 'Mixed': '#778899',
+        'Other': '#696969', 'Unknown': '#A9A9A9'
+    };
+    function getColor(lang) {
+        if (lang.ud_group && familyColors[lang.ud_group]) return familyColors[lang.ud_group];
+        if (lang.wals_family && familyColors[lang.wals_family]) return familyColors[lang.wals_family];
+        return familyColors['Other'];
+    }
+    function formatNumber(num) {
+        if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+        if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+        return num.toLocaleString();
+    }
+    function getRadius(tokens, maxTokens) {
+        const minRadius = 2, maxRadius = 15;
+        if (tokens <= 0) return minRadius;
+        return minRadius + (maxRadius - minRadius) * (Math.log10(tokens + 1) / Math.log10(maxTokens + 1));
+    }
+    function createInfoHTML(lang) {
+        const avgTreebankSentences = lang.treebanks > 0 ? Math.round(lang.sentences / lang.treebanks) : 0;
+        const avgTreebankTokens = lang.treebanks > 0 ? Math.round(lang.tokens / lang.treebanks) : 0;
+        return `<h3 style="color: ${getColor(lang)}; margin-bottom: 15px;">${lang.name} <span style="font-weight: normal; color: #666;">(${lang.code})</span></h3>
+            <div class="stats-grid">
+                <div class="stat-item"><div class="label">Language Family</div><div class="value">${lang.ud_group || lang.wals_family || 'Unknown'}</div></div>
+                <div class="stat-item"><div class="label">Treebanks</div><div class="value">${lang.treebanks}</div></div>
+                <div class="stat-item"><div class="label">Total Sentences</div><div class="value">${formatNumber(lang.sentences)}</div></div>
+                <div class="stat-item"><div class="label">Total Tokens</div><div class="value">${formatNumber(lang.tokens)}</div></div>
+                <div class="stat-item"><div class="label">Avg Sentence Length</div><div class="value">${lang.avg_sent_len} tokens</div></div>
+                <div class="stat-item"><div class="label">Avg Treebank Size</div><div class="value">${formatNumber(avgTreebankSentences)} sent / ${formatNumber(avgTreebankTokens)} tok</div></div>
+            </div>`;
+    }
+    function initMaps() {
+        const totalLanguages = languageData.length;
+        const totalTreebanks = languageData.reduce((sum, l) => sum + l.treebanks, 0);
+        const totalSentences = languageData.reduce((sum, l) => sum + l.sentences, 0);
+        const totalTokens = languageData.reduce((sum, l) => sum + l.tokens, 0);
+        const maxTokens = Math.max(...languageData.map(l => l.tokens));
+        document.getElementById('globalStats').innerHTML = `
+            <div class="summary-item"><div class="number">${totalLanguages}</div><div class="desc">Languages on map</div></div>
+            <div class="summary-item"><div class="number">${totalTreebanks}</div><div class="desc">Total Treebanks</div></div>
+            <div class="summary-item"><div class="number">${formatNumber(totalSentences)}</div><div class="desc">Total Sentences</div></div>
+            <div class="summary-item"><div class="number">${formatNumber(totalTokens)}</div><div class="desc">Total Tokens</div></div>`;
+        const families = new Set();
+        languageData.forEach(l => { if (l.ud_group) families.add(l.ud_group); else if (l.wals_family) families.add(l.wals_family); });
+        document.getElementById('legendGrid').innerHTML = Array.from(families).sort().map(family => 
+            `<div class="legend-item"><div class="legend-dot" style="background: ${familyColors[family] || familyColors['Other']}"></div><span>${family}</span></div>`
+        ).join('');
+        const map1 = L.map('map1', {attributionControl: false}).setView([30, 0], 2);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(map1);
+        languageData.forEach(lang => {
+            const marker = L.circleMarker([lang.lat, lang.lon], {radius: 7, fillColor: getColor(lang), color: '#333', weight: 1, opacity: 1, fillOpacity: 0.8}).addTo(map1);
+            marker.bindTooltip(lang.name, {permanent: false, direction: 'top'});
+            marker.on('mouseover', function() { document.getElementById('info1').innerHTML = createInfoHTML(lang); this.setStyle({weight: 3, radius: 10}); });
+            marker.on('mouseout', function() { this.setStyle({weight: 1, radius: 7}); });
+        });
+        const map2 = L.map('map2', {attributionControl: false}).setView([30, 0], 2);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(map2);
+        setTimeout(() => { map1.invalidateSize(); map2.invalidateSize(); }, 200);
+        [...languageData].sort((a, b) => b.tokens - a.tokens).forEach(lang => {
+            const radius = getRadius(lang.tokens, maxTokens);
+            const marker = L.circleMarker([lang.lat, lang.lon], {radius: radius, fillColor: getColor(lang), color: '#333', weight: 1, opacity: 1, fillOpacity: 0.7}).addTo(map2);
+            marker.bindTooltip(`${lang.name} (${formatNumber(lang.tokens)} tokens)`, {permanent: false, direction: 'top'});
+            marker.on('mouseover', function() { document.getElementById('info2').innerHTML = createInfoHTML(lang); this.setStyle({weight: 3}); });
+            marker.on('mouseout', function() { this.setStyle({weight: 1}); });
+        });
+    }
+    document.addEventListener('DOMContentLoaded', initMaps);
+    </script>
+
+<!-- Integration Documentation -->
+<div style="max-width: 1200px; margin: 60px auto 30px; padding: 0 20px;">
+    <details style="background: #f8f9fa; border-radius: 8px; padding: 20px; border: 1px solid #dee2e6;">
+        <summary style="font-size: 18px; font-weight: bold; cursor: pointer; color: #333;">🔧 Integration Guide: Embedding This Map</summary>
+        <div style="margin-top: 20px; line-height: 1.6;">
+            <h4 style="color: #495057;">Available JavaScript Functions</h4>
+            <ul style="color: #666;">
+                <li><code>initMaps()</code> - Initializes both map instances. Called automatically on DOMContentLoaded.</li>
+                <li><code>getColor(lang)</code> - Returns the color for a language based on its family.</li>
+                <li><code>getRadius(tokens, maxTokens)</code> - Calculates marker radius for corpus size map (logarithmic scale, min: 2px, max: 15px).</li>
+                <li><code>createInfoHTML(lang)</code> - Generates the HTML for the info panel when hovering over a marker.</li>
+                <li><code>formatNumber(num)</code> - Formats large numbers (e.g., 1.5M, 250K).</li>
+            </ul>
+            
+            <h4 style="color: #495057; margin-top: 20px;">Event Handlers</h4>
+            <ul style="color: #666;">
+                <li><strong>mouseover</strong>: Updates the info panel (<code>#info1</code> or <code>#info2</code>) with language details and enlarges the marker.</li>
+                <li><strong>mouseout</strong>: Resets marker size to default.</li>
+                <li><strong>tooltip</strong>: Displays language name on hover via Leaflet's <code>bindTooltip()</code>.</li>
+            </ul>
+            
+            <h4 style="color: #495057; margin-top: 20px;">Data Structure</h4>
+            <p style="color: #666;">The <code>languageData</code> array contains objects with:</p>
+            <pre style="background: #e9ecef; padding: 15px; border-radius: 4px; overflow-x: auto; font-size: 13px;">{
+  code: "en",           // UD language code
+  name: "English",      // Language name
+  lat: 52.0,            // Latitude
+  lon: -1.17,           // Longitude
+  treebanks: 5,         // Number of treebanks
+  sentences: 123456,    // Total sentences
+  tokens: 2345678,      // Total tokens
+  avg_sent_len: 19.0,   // Average sentence length
+  ud_group: "Indo-European",  // UD language family
+  wals_family: "Indo-European" // WALS family (fallback)
+}</pre>
+            
+            <h4 style="color: #495057; margin-top: 20px;">Embedding in Another Page</h4>
+            <ol style="color: #666;">
+                <li>Include Leaflet CSS and JS: <code>&lt;link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"&gt;</code></li>
+                <li>Create map container: <code>&lt;div id="myMap" style="height: 500px;"&gt;&lt;/div&gt;</code></li>
+                <li>Copy <code>languageData</code>, <code>familyColors</code>, and desired functions from this file.</li>
+                <li>Initialize with: <code>const map = L.map('myMap').setView([30, 0], 2);</code></li>
+                <li>Call <code>map.invalidateSize()</code> after the container becomes visible (e.g., in tabs).</li>
+            </ol>
+            
+            <h4 style="color: #495057; margin-top: 20px;">JSON Data File</h4>
+            <p style="color: #666;">Language statistics are also saved to <code>html_analyses/ud_language_stats.json</code> for programmatic access.</p>
+        </div>
+    </details>
+</div>
+
+</body>
+</html>

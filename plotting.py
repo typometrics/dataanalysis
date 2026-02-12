@@ -989,6 +989,645 @@ def adjust_text_labels(df, x_col, y_col, label_col, ax=None):
         adjust_text(texts, ax=ax, arrowprops=dict(arrowstyle='-', color='gray', alpha=0.5, lw=0.5))
 
 
+# =============================================================================
+# MAL (Menzerath-Altmann Law) Scatter Plot Functions
+# =============================================================================
+
+def plot_mal_left_vs_right_scatter(asymmetry_df, group_to_color, beta_cols=None,
+                                    figsize=(20, 10), plots_dir='plots', 
+                                    filename='mal_beta_asymmetry_left_vs_right.png'):
+    """
+    Plot Left vs Right β score scatter for MAL asymmetry analysis.
+    
+    Creates a side-by-side scatter plot comparing left and right β scores,
+    with a diagonal line indicating symmetric MAL effect.
+    
+    Parameters
+    ----------
+    asymmetry_df : pandas.DataFrame
+        DataFrame with columns: language_name, group, and pairs of 
+        {beta_col}_left, {beta_col}_right columns
+    group_to_color : dict
+        Mapping from group names to colors
+    beta_cols : list of tuples, optional
+        List of (column_prefix, title_suffix) pairs. Default: β_1max and β_2max
+    figsize : tuple
+        Figure size (width, height)
+    plots_dir : str
+        Directory to save plots
+    filename : str
+        Output filename
+    
+    Returns
+    -------
+    matplotlib.figure.Figure
+        The generated figure
+    """
+    try:
+        from adjustText import adjust_text
+    except ImportError:
+        adjust_text = None
+        print("Warning: adjustText not found. Labels may overlap.")
+    
+    if beta_cols is None:
+        beta_cols = [('beta_1max', 'β_1max (n=1→max)'), ('beta_2max', 'β_2max (n=2→max)')]
+    
+    if len(asymmetry_df) == 0:
+        print("No asymmetry data available for plotting")
+        return None
+    
+    fig, axes = plt.subplots(1, len(beta_cols), figsize=figsize)
+    if len(beta_cols) == 1:
+        axes = [axes]
+    
+    for idx, (beta_col, title_suffix) in enumerate(beta_cols):
+        ax = axes[idx]
+        col_left = f'{beta_col}_left'
+        col_right = f'{beta_col}_right'
+        
+        # Skip if columns don't exist or all NaN
+        if col_left not in asymmetry_df.columns or asymmetry_df[col_left].isna().all():
+            ax.text(0.5, 0.5, f'No data for {beta_col}', ha='center', va='center', 
+                    transform=ax.transAxes)
+            continue
+        
+        texts = []
+        for group in asymmetry_df['group'].unique():
+            subset = asymmetry_df[asymmetry_df['group'] == group].dropna(subset=[col_left, col_right])
+            if len(subset) == 0:
+                continue
+            color = group_to_color.get(group, 'gray')
+            ax.scatter(subset[col_left], subset[col_right], 
+                       c=color, alpha=0.7, s=60, label=group)
+            # Add language labels
+            for _, row in subset.iterrows():
+                texts.append(ax.text(row[col_left], row[col_right], 
+                                      row['language_name'], fontsize=9, alpha=0.8))
+        
+        # Adjust text to avoid overlaps
+        if texts and adjust_text is not None:
+            adjust_text(texts, ax=ax, arrowprops=dict(arrowstyle='-', color='gray', alpha=0.5, lw=0.5))
+        
+        # Diagonal line (symmetric)
+        lims = [min(ax.get_xlim()[0], ax.get_ylim()[0]), max(ax.get_xlim()[1], ax.get_ylim()[1])]
+        ax.plot(lims, lims, 'k--', alpha=0.5, linewidth=2, label='Symmetric')
+        ax.set_xlim(lims)
+        ax.set_ylim(lims)
+        ax.set_xlabel(f'{beta_col} (Left dependents)', fontsize=12)
+        ax.set_ylabel(f'{beta_col} (Right dependents)', fontsize=12)
+        ax.set_title(f'Left vs Right {title_suffix}\n(above diagonal = stronger right MAL)', fontsize=14)
+        ax.grid(True, alpha=0.3)
+        ax.legend(fontsize=7, loc='upper left', bbox_to_anchor=(1.02, 1))
+    
+    plt.tight_layout()
+    
+    if plots_dir:
+        os.makedirs(plots_dir, exist_ok=True)
+        output_path = os.path.join(plots_dir, filename)
+        plt.savefig(output_path, dpi=150, bbox_inches='tight')
+        print(f"✓ Saved: {output_path}")
+    
+    return fig
+
+
+def plot_mal_asymmetry_by_family(asymmetry_df, group_to_color, asym_cols=None,
+                                   figsize=(20, 10), plots_dir='plots',
+                                   filename='mal_beta_asymmetry_by_family.png'):
+    """
+    Plot MAL asymmetry by language family as horizontal bar charts.
+    
+    Parameters
+    ----------
+    asymmetry_df : pandas.DataFrame
+        DataFrame with columns: group and asymmetry columns
+    group_to_color : dict
+        Mapping from group names to colors
+    asym_cols : list of tuples, optional
+        List of (column_name, title_suffix) pairs. Default: β_1max and β_2max
+    figsize : tuple
+        Figure size (width, height)
+    plots_dir : str
+        Directory to save plots
+    filename : str
+        Output filename
+    
+    Returns
+    -------
+    matplotlib.figure.Figure
+        The generated figure
+    """
+    if asym_cols is None:
+        asym_cols = [('beta_1max_asymmetry', 'β_1max'), ('beta_2max_asymmetry', 'β_2max')]
+    
+    if len(asymmetry_df) == 0:
+        print("No asymmetry data available for plotting")
+        return None
+    
+    fig, axes = plt.subplots(1, len(asym_cols), figsize=figsize)
+    if len(asym_cols) == 1:
+        axes = [axes]
+    
+    for idx, (asym_col, title_suffix) in enumerate(asym_cols):
+        ax = axes[idx]
+        
+        asym_data = asymmetry_df.dropna(subset=[asym_col])
+        family_asymmetry = asym_data.groupby('group')[asym_col].agg(['mean', 'std', 'count'])
+        family_asymmetry = family_asymmetry.sort_values('mean')
+        
+        colors = [group_to_color.get(fam, 'gray') for fam in family_asymmetry.index]
+        bars = ax.barh(family_asymmetry.index, family_asymmetry['mean'], 
+                       xerr=family_asymmetry['std'], color=colors, alpha=0.7, capsize=3)
+        ax.axvline(x=0, color='black', linestyle='-', linewidth=1)
+        ax.set_xlabel(f'{title_suffix} Asymmetry (+ = right-biased, - = left-biased)', fontsize=12)
+        ax.set_ylabel('Language Family', fontsize=12)
+        ax.set_title(f'{title_suffix} Asymmetry by Language Family', fontsize=14)
+        ax.grid(axis='x', alpha=0.3)
+        
+        # Add count labels
+        for i, (fam, row) in enumerate(family_asymmetry.iterrows()):
+            ax.text(row['mean'] + row['std'] + 0.01, i, f"(n={int(row['count'])})", 
+                    va='center', fontsize=8)
+    
+    plt.tight_layout()
+    
+    if plots_dir:
+        os.makedirs(plots_dir, exist_ok=True)
+        output_path = os.path.join(plots_dir, filename)
+        plt.savefig(output_path, dpi=150, bbox_inches='tight')
+        print(f"✓ Saved: {output_path}")
+    
+    return fig
+
+
+def plot_mal_asymmetry_vs_vo(asymmetry_df, mal_vo_df, group_to_color, asym_cols=None,
+                              figsize=(20, 10), plots_dir='plots',
+                              filename='mal_beta_asymmetry_vs_vo.png'):
+    """
+    Plot MAL β asymmetry vs VO score with regression lines.
+    
+    Parameters
+    ----------
+    asymmetry_df : pandas.DataFrame
+        DataFrame with columns: language_code, language_name, group, and asymmetry columns
+    mal_vo_df : pandas.DataFrame
+        DataFrame with columns: language_code, vo_score
+    group_to_color : dict
+        Mapping from group names to colors
+    asym_cols : list of tuples, optional
+        List of (column_name, title_suffix) pairs. Default: β_1max and β_2max
+    figsize : tuple
+        Figure size (width, height)
+    plots_dir : str
+        Directory to save plots
+    filename : str
+        Output filename
+    
+    Returns
+    -------
+    tuple
+        (figure, correlations_dict) where correlations_dict contains r and p values
+    """
+    try:
+        from adjustText import adjust_text
+    except ImportError:
+        adjust_text = None
+        print("Warning: adjustText not found. Labels may overlap.")
+    
+    if asym_cols is None:
+        asym_cols = [('beta_1max_asymmetry', 'β_1max'), ('beta_2max_asymmetry', 'β_2max')]
+    
+    if 'vo_score' not in mal_vo_df.columns:
+        print("No VO score data available for asymmetry vs word order plot")
+        return None, {}
+    
+    asymmetry_vo = pd.merge(asymmetry_df, mal_vo_df[['language_code', 'vo_score']], 
+                             on='language_code', how='inner')
+    
+    if len(asymmetry_vo) == 0:
+        print("No merged data for asymmetry vs VO plot")
+        return None, {}
+    
+    fig, axes = plt.subplots(1, len(asym_cols), figsize=figsize)
+    if len(asym_cols) == 1:
+        axes = [axes]
+    
+    correlations = {}
+    
+    for idx, (asym_col, title_suffix) in enumerate(asym_cols):
+        ax = axes[idx]
+        plot_data = asymmetry_vo.dropna(subset=[asym_col])
+        
+        if len(plot_data) < 5:
+            ax.text(0.5, 0.5, f'Insufficient data for {title_suffix}', 
+                    ha='center', va='center', transform=ax.transAxes)
+            continue
+        
+        texts = []
+        for group in plot_data['group'].unique():
+            subset = plot_data[plot_data['group'] == group]
+            color = group_to_color.get(group, 'gray')
+            ax.scatter(subset['vo_score'], subset[asym_col], 
+                       c=color, alpha=0.7, s=60, label=group)
+            # Add language labels
+            for _, row in subset.iterrows():
+                texts.append(ax.text(row['vo_score'], row[asym_col], 
+                                      row['language_name'], fontsize=9, alpha=0.8))
+        
+        # Adjust text to avoid overlaps
+        if texts and adjust_text is not None:
+            adjust_text(texts, ax=ax, arrowprops=dict(arrowstyle='-', color='gray', alpha=0.5, lw=0.5))
+        
+        # Add regression line
+        slope, intercept, r, p, se = stats.linregress(plot_data['vo_score'], plot_data[asym_col])
+        x_line = np.linspace(plot_data['vo_score'].min(), plot_data['vo_score'].max(), 100)
+        ax.plot(x_line, slope * x_line + intercept, 'r-', linewidth=2, 
+                label=f'Regression: r={r:.3f}, p={p:.3f}')
+        
+        correlations[asym_col] = {'r': r, 'p': p, 'slope': slope, 'intercept': intercept}
+        
+        ax.axhline(y=0, color='black', linestyle='-', linewidth=1)
+        ax.set_xlabel('VO Score (higher = more VO)', fontsize=12)
+        ax.set_ylabel(f'{title_suffix} Asymmetry (+ = right-biased)', fontsize=12)
+        ax.set_title(f'{title_suffix} Asymmetry vs Word Order\n(r={r:.3f}, p={p:.3f})', fontsize=14)
+        ax.legend(fontsize=7, loc='upper left', bbox_to_anchor=(1.02, 1))
+        ax.grid(True, alpha=0.3)
+    
+    plt.tight_layout()
+    
+    if plots_dir:
+        os.makedirs(plots_dir, exist_ok=True)
+        output_path = os.path.join(plots_dir, filename)
+        plt.savefig(output_path, dpi=150, bbox_inches='tight')
+        print(f"✓ Saved: {output_path}")
+    
+    # Print correlations
+    print(f"\n{'='*60}")
+    print("Correlations: β Asymmetry ~ VO Score")
+    print(f"{'='*60}")
+    for asym_col, label in asym_cols:
+        if asym_col in correlations:
+            c = correlations[asym_col]
+            print(f"  {label} Asymmetry ~ VO Score: r={c['r']:.4f}, p={c['p']:.4f}")
+    
+    return fig, correlations
+
+
+def plot_mal_decay_rates(decay_df, group_to_color, figsize=(14, 12), 
+                          plots_dir='plots', filename='mal_decay_rates.png'):
+    """
+    Plot MAL decay rate analysis with 4 subplots.
+    
+    Subplots:
+    1. Histogram of decay rates by transition (early, mid, late)
+    2. Early vs Late decay scatter
+    3. Decay rates by family (grouped bar chart)
+    4. Decay pattern distribution (pie chart)
+    
+    Parameters
+    ----------
+    decay_df : pandas.DataFrame
+        DataFrame with columns: language_name, group, early_decay_1_2, 
+        mid_decay_2_3, late_decay_3_4, total_decay, decay_pattern
+    group_to_color : dict
+        Mapping from group names to colors
+    figsize : tuple
+        Figure size (width, height)
+    plots_dir : str
+        Directory to save plots
+    filename : str
+        Output filename
+    
+    Returns
+    -------
+    matplotlib.figure.Figure
+        The generated figure
+    """
+    fig, axes = plt.subplots(2, 2, figsize=figsize)
+    
+    # --- Plot 1: Histogram of decay rates ---
+    ax = axes[0, 0]
+    for col, color, label in [('early_decay_1_2', 'blue', 'Early (1→2)'),
+                               ('mid_decay_2_3', 'green', 'Mid (2→3)'),
+                               ('late_decay_3_4', 'red', 'Late (3→4)')]:
+        if col in decay_df.columns:
+            valid = decay_df[col].dropna()
+            if len(valid) > 0:
+                ax.hist(valid, bins=30, alpha=0.5, color=color, label=f'{label} (n={len(valid)})')
+    
+    ax.axvline(x=0, color='black', linestyle='--', linewidth=1)
+    ax.set_xlabel('Decay Rate (positive = shrinking)', fontsize=11)
+    ax.set_ylabel('Number of Languages', fontsize=11)
+    ax.set_title('Distribution of Decay Rates by Transition', fontsize=12)
+    ax.legend(fontsize=10)
+    ax.grid(True, alpha=0.3)
+    
+    # --- Plot 2: Early vs Late decay scatter ---
+    ax = axes[0, 1]
+    valid_both = decay_df.dropna(subset=['early_decay_1_2', 'late_decay_3_4'])
+    if len(valid_both) > 0:
+        for group in valid_both['group'].unique():
+            subset = valid_both[valid_both['group'] == group]
+            color = group_to_color.get(group, 'gray')
+            ax.scatter(subset['early_decay_1_2'], subset['late_decay_3_4'], 
+                       c=color, alpha=0.6, s=50)
+        
+        # Diagonal line
+        lims = [min(ax.get_xlim()[0], ax.get_ylim()[0]), max(ax.get_xlim()[1], ax.get_ylim()[1])]
+        ax.plot(lims, lims, 'k--', alpha=0.5, label='Equal decay')
+        ax.axhline(y=0, color='gray', linestyle='-', alpha=0.3)
+        ax.axvline(x=0, color='gray', linestyle='-', alpha=0.3)
+    
+    ax.set_xlabel('Early Decay (1→2)', fontsize=11)
+    ax.set_ylabel('Late Decay (3→4)', fontsize=11)
+    ax.set_title('Early vs Late Decay\n(above diagonal = back-loaded, below = front-loaded)', fontsize=12)
+    ax.grid(True, alpha=0.3)
+    
+    # --- Plot 3: Decay rates by family ---
+    ax = axes[1, 0]
+    decay_cols = ['early_decay_1_2', 'mid_decay_2_3', 'late_decay_3_4']
+    family_decay = decay_df.groupby('group')[decay_cols].mean()
+    family_decay = family_decay.sort_values('early_decay_1_2', ascending=True)
+    
+    x = np.arange(len(family_decay))
+    width = 0.25
+    ax.barh(x - width, family_decay['early_decay_1_2'], width, label='Early (1→2)', color='blue', alpha=0.7)
+    ax.barh(x, family_decay['mid_decay_2_3'], width, label='Mid (2→3)', color='green', alpha=0.7)
+    ax.barh(x + width, family_decay['late_decay_3_4'], width, label='Late (3→4)', color='red', alpha=0.7)
+    
+    ax.set_yticks(x)
+    ax.set_yticklabels(family_decay.index, fontsize=9)
+    ax.axvline(x=0, color='black', linestyle='-', linewidth=1)
+    ax.set_xlabel('Mean Decay Rate', fontsize=11)
+    ax.set_ylabel('Language Family', fontsize=11)
+    ax.set_title('Decay Rates by Family and Transition', fontsize=12)
+    ax.legend(loc='lower right', fontsize=9)
+    ax.grid(axis='x', alpha=0.3)
+    
+    # --- Plot 4: Decay pattern distribution ---
+    ax = axes[1, 1]
+    if 'decay_pattern' in decay_df.columns:
+        pattern_counts = decay_df['decay_pattern'].value_counts()
+        colors_pattern = {'Front-loaded': '#3498db', 'Gradual': '#2ecc71', 
+                          'Back-loaded': '#e74c3c', 'Unknown': '#95a5a6'}
+        
+        valid_patterns = [p for p in colors_pattern.keys() if pattern_counts.get(p, 0) > 0]
+        sizes = [pattern_counts.get(p, 0) for p in valid_patterns]
+        colors = [colors_pattern[p] for p in valid_patterns]
+        
+        if len(valid_patterns) > 0:
+            ax.pie(sizes, labels=valid_patterns, colors=colors,
+                   autopct='%1.1f%%', startangle=90, textprops={'fontsize': 11})
+            ax.set_title('MAL Decay Patterns\n(Front-loaded = big early drop, Back-loaded = late drop)', fontsize=12)
+        else:
+            ax.text(0.5, 0.5, 'No decay patterns computed', ha='center', va='center', transform=ax.transAxes)
+    else:
+        ax.text(0.5, 0.5, 'No decay pattern data', ha='center', va='center', transform=ax.transAxes)
+    
+    plt.tight_layout()
+    
+    if plots_dir:
+        os.makedirs(plots_dir, exist_ok=True)
+        output_path = os.path.join(plots_dir, filename)
+        plt.savefig(output_path, dpi=150, bbox_inches='tight')
+        print(f"✓ Saved: {output_path}")
+    
+    return fig
+
+
+def plot_mal_trajectories(trajectory_df, group_to_color, cluster_names=None,
+                           figsize=(16, 14), plots_dir='plots', 
+                           filename='mal_trajectories.png'):
+    """
+    Plot MAL trajectory analysis with 4 subplots.
+    
+    Subplots:
+    1. All trajectories colored by family
+    2. Trajectories by cluster (if clustering performed)
+    3. Mean trajectory by family
+    4. Cluster distribution by family
+    
+    Parameters
+    ----------
+    trajectory_df : pandas.DataFrame
+        DataFrame with columns: language_name, group, MAL_1_norm, MAL_2_norm, 
+        MAL_3_norm, MAL_4_norm, and optionally trajectory_cluster, trajectory_type
+    group_to_color : dict
+        Mapping from group names to colors
+    cluster_names : dict, optional
+        Mapping from cluster IDs to descriptive names
+    figsize : tuple
+        Figure size (width, height)
+    plots_dir : str
+        Directory to save plots
+    filename : str
+        Output filename
+    
+    Returns
+    -------
+    matplotlib.figure.Figure
+        The generated figure
+    """
+    if cluster_names is None:
+        cluster_names = {}
+    
+    fig, axes = plt.subplots(2, 2, figsize=figsize)
+    ns = [1, 2, 3, 4]
+    
+    # --- Plot 1: All trajectories colored by family ---
+    ax = axes[0, 0]
+    for group in trajectory_df['group'].unique():
+        subset = trajectory_df[trajectory_df['group'] == group]
+        color = group_to_color.get(group, 'gray')
+        
+        for _, row in subset.iterrows():
+            vals = [row.get(f'MAL_{n}_norm') for n in ns]
+            if not any(pd.isna(vals)):
+                ax.plot(ns, vals, color=color, alpha=0.3, linewidth=0.8)
+    
+    # Mean trajectory
+    mean_traj = [trajectory_df[f'MAL_{n}_norm'].mean() for n in ns]
+    ax.plot(ns, mean_traj, color='black', linewidth=3, label=f'Global mean (n={len(trajectory_df)})')
+    
+    ax.set_xticks(ns)
+    ax.set_xticklabels(['n=1', 'n=2', 'n=3', 'n=4'])
+    ax.set_xlabel('Number of Dependents (n)', fontsize=11)
+    ax.set_ylabel('Normalized MAL (MAL_n / MAL_1)', fontsize=11)
+    ax.set_title('MAL Trajectories (Normalized)\nColored by Language Family', fontsize=12)
+    ax.axhline(y=1.0, color='gray', linestyle='--', alpha=0.5)
+    ax.legend(loc='upper right')
+    ax.grid(True, alpha=0.3)
+    ax.set_ylim([0, 1.5])
+    
+    # --- Plot 2: Trajectories by cluster ---
+    ax = axes[0, 1]
+    if 'trajectory_cluster' in trajectory_df.columns:
+        cluster_colors = ['#e74c3c', '#3498db', '#2ecc71', '#9b59b6', '#f39c12']
+        
+        for c in sorted(trajectory_df['trajectory_cluster'].dropna().unique()):
+            subset = trajectory_df[trajectory_df['trajectory_cluster'] == c]
+            color = cluster_colors[int(c) % len(cluster_colors)]
+            cname = cluster_names.get(c, f'Cluster {int(c)}')
+            
+            # Plot individual trajectories
+            for _, row in subset.iterrows():
+                vals = [row.get(f'MAL_{n}_norm') for n in ns]
+                if not any(pd.isna(vals)):
+                    ax.plot(ns, vals, color=color, alpha=0.2, linewidth=0.5)
+            
+            # Plot mean trajectory for cluster
+            mean_vals = [subset[f'MAL_{n}_norm'].mean() for n in ns]
+            ax.plot(ns, mean_vals, color=color, linewidth=3, label=f'{cname} (n={len(subset)})')
+        
+        ax.set_xticks(ns)
+        ax.set_xticklabels(['n=1', 'n=2', 'n=3', 'n=4'])
+        ax.set_xlabel('Number of Dependents (n)', fontsize=11)
+        ax.set_ylabel('Normalized MAL', fontsize=11)
+        ax.set_title('MAL Trajectory Clusters', fontsize=12)
+        ax.legend(loc='upper right', fontsize=9)
+        ax.grid(True, alpha=0.3)
+        ax.set_ylim([0, 1.5])
+    else:
+        ax.text(0.5, 0.5, 'Clustering not performed', ha='center', va='center', transform=ax.transAxes)
+    
+    # --- Plot 3: Mean trajectory by family ---
+    ax = axes[1, 0]
+    family_trajectories = trajectory_df.groupby('group')[[f'MAL_{n}_norm' for n in ns]].mean()
+    
+    for family in family_trajectories.index:
+        color = group_to_color.get(family, 'gray')
+        vals = [family_trajectories.loc[family, f'MAL_{n}_norm'] for n in ns]
+        ax.plot(ns, vals, color=color, linewidth=2, marker='o', markersize=6, label=family, alpha=0.8)
+    
+    ax.set_xticks(ns)
+    ax.set_xticklabels(['n=1', 'n=2', 'n=3', 'n=4'])
+    ax.set_xlabel('Number of Dependents (n)', fontsize=11)
+    ax.set_ylabel('Normalized MAL (family mean)', fontsize=11)
+    ax.set_title('Mean MAL Trajectory by Language Family', fontsize=12)
+    ax.axhline(y=1.0, color='gray', linestyle='--', alpha=0.5)
+    ax.legend(loc='upper right', fontsize=8, ncol=2)
+    ax.grid(True, alpha=0.3)
+    ax.set_ylim([0.4, 1.1])
+    
+    # --- Plot 4: Cluster distribution by family ---
+    ax = axes[1, 1]
+    if 'trajectory_type' in trajectory_df.columns:
+        cluster_by_family = trajectory_df.groupby(['group', 'trajectory_type']).size().unstack(fill_value=0)
+        
+        # Sort by most "Steep decline"
+        if 'Steep decline' in cluster_by_family.columns:
+            cluster_by_family['_sort'] = cluster_by_family.get('Steep decline', 0) / cluster_by_family.sum(axis=1)
+            cluster_by_family = cluster_by_family.sort_values('_sort', ascending=True).drop('_sort', axis=1)
+        
+        # Plot stacked bar
+        cluster_colors_map = {'Steep decline': '#e74c3c', 'Gradual decline': '#3498db', 
+                              'Early steep': '#2ecc71', 'Flat/Weak MAL': '#95a5a6'}
+        colors = [cluster_colors_map.get(c, 'gray') for c in cluster_by_family.columns]
+        
+        cluster_by_family.plot(kind='barh', stacked=True, ax=ax, color=colors, alpha=0.8)
+        ax.set_xlabel('Number of Languages', fontsize=11)
+        ax.set_ylabel('Language Family', fontsize=11)
+        ax.set_title('Trajectory Type Distribution by Family', fontsize=12)
+        ax.legend(loc='lower right', fontsize=9)
+        ax.grid(axis='x', alpha=0.3)
+    else:
+        ax.text(0.5, 0.5, 'Clustering not performed', ha='center', va='center', transform=ax.transAxes)
+    
+    plt.tight_layout()
+    
+    if plots_dir:
+        os.makedirs(plots_dir, exist_ok=True)
+        output_path = os.path.join(plots_dir, filename)
+        plt.savefig(output_path, dpi=150, bbox_inches='tight')
+        print(f"✓ Saved: {output_path}")
+    
+    return fig
+
+
+def plot_mal_universality(universality_df, figsize=(18, 6), plots_dir='plots',
+                           filename='mal_universality_test_beta.png'):
+    """
+    Plot MAL universality test results with 3 subplots.
+    
+    Subplots:
+    1. Pie chart: Significant MAL vs not significant
+    2. Pie chart: Direction of effect (MAL, anti-MAL, not significant)
+    3. Histogram: β_1max distribution
+    
+    Parameters
+    ----------
+    universality_df : pandas.DataFrame
+        DataFrame with columns: beta_1max, significant, significant_mal
+    figsize : tuple
+        Figure size (width, height)
+    plots_dir : str
+        Directory to save plots
+    filename : str
+        Output filename
+    
+    Returns
+    -------
+    matplotlib.figure.Figure
+        The generated figure
+    """
+    if len(universality_df) == 0:
+        print("No universality data available for plotting")
+        return None
+    
+    n_total = len(universality_df)
+    n_significant_mal = universality_df['significant_mal'].sum()
+    n_significant = universality_df['significant'].sum()
+    
+    fig, axes = plt.subplots(1, 3, figsize=figsize)
+    
+    # Pie 1: Significant vs not
+    ax = axes[0]
+    sizes = [n_significant_mal, n_total - n_significant_mal]
+    labels = [f'Significant MAL\n(β>0, p<0.05, n={n_significant_mal})', 
+              f'Not significant\n(n={n_total - n_significant_mal})']
+    colors = ['#2ecc71', '#e74c3c']
+    ax.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=90,
+           explode=(0.05, 0), shadow=True)
+    ax.set_title(f'Cross-Linguistic Universality of MAL\n(n={n_total} languages, permutation test α=0.05)')
+    
+    # Pie 2: Direction of effect
+    ax = axes[1]
+    n_sig_negative = ((universality_df['beta_1max'] < 0) & universality_df['significant']).sum()
+    n_sig_positive = n_significant_mal
+    n_not_sig = n_total - n_significant
+    sizes = [n_sig_positive, n_sig_negative, n_not_sig]
+    labels = [f'Significant MAL\n(β>0, n={n_sig_positive})', 
+              f'Significant anti-MAL\n(β<0, n={n_sig_negative})',
+              f'Not significant\n(n={n_not_sig})']
+    colors = ['#2ecc71', '#e74c3c', '#95a5a6']
+    ax.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=90)
+    ax.set_title('Direction of Significant Effects')
+    
+    # Histogram: β_1max distribution
+    ax = axes[2]
+    ax.hist(universality_df['beta_1max'], bins=30, color='steelblue', alpha=0.7, edgecolor='white')
+    ax.axvline(x=0, color='red', linestyle='--', linewidth=2, label='β=0 (no effect)')
+    ax.axvline(x=0.1, color='green', linestyle=':', linewidth=2, label='β=0.1 (strong MAL)')
+    ax.axvline(x=-0.1, color='orange', linestyle=':', linewidth=2, label='β=-0.1 (anti-MAL)')
+    mean_beta = universality_df['beta_1max'].mean()
+    ax.axvline(x=mean_beta, color='black', linestyle='-', linewidth=2, 
+               label=f"Mean={mean_beta:.3f}")
+    ax.set_xlabel('β_1max (MAL effect score)', fontsize=12)
+    ax.set_ylabel('Number of Languages', fontsize=12)
+    ax.set_title('Distribution of β_1max across Languages', fontsize=12)
+    ax.legend(loc='upper right', fontsize=9)
+    ax.grid(True, alpha=0.3)
+    
+    plt.tight_layout()
+    
+    if plots_dir:
+        os.makedirs(plots_dir, exist_ok=True)
+        output_path = os.path.join(plots_dir, filename)
+        plt.savefig(output_path, dpi=150, bbox_inches='tight')
+        print(f"✓ Saved: {output_path}")
+    
+    return fig
+
+
 def _plot_sv_vs_vo_task(args):
     """
     Worker function for parallel SV vs VO plot generation.

@@ -66,9 +66,9 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
         size = len(span_nodes) # Word count
         char_size = sum(len(tree[node_id].get('t', '')) for node_id in span_nodes) # Character count
         
-        # Update position2sizes: accumulate sizes (GEOMETRIC MEAN CHANGE: accumulate logs)
+        # Update position2sizes: accumulate sizes (ARITHMETIC MEAN: accumulate actual sizes)
         if size > 0:
-            position2sizes[key_base] = position2sizes.get(key_base, 0) + np.log(size)
+            position2sizes[key_base] = position2sizes.get(key_base, 0) + size
         
         if position2charsizes is not None and char_size > 0:
             position2charsizes[key_base] = position2charsizes.get(key_base, 0) + np.log(char_size)
@@ -79,7 +79,7 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
             key_tot = f'{key_base}_tot{direction}_{len(kids)}'
             position2num[key_tot] = position2num.get(key_tot, 0) + 1
             if size > 0:
-                position2sizes[key_tot] = position2sizes.get(key_tot, 0) + np.log(size)
+                position2sizes[key_tot] = position2sizes.get(key_tot, 0) + size
             
             if position2charsizes is not None and char_size > 0:
                 position2charsizes[key_tot] = position2charsizes.get(key_tot, 0) + np.log(char_size)
@@ -88,7 +88,7 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
         key_anyother = f'{key_base}_anyother'
         position2num[key_anyother] = position2num.get(key_anyother, 0) + 1
         if size > 0:
-            position2sizes[key_anyother] = position2sizes.get(key_anyother, 0) + np.log(size)
+            position2sizes[key_anyother] = position2sizes.get(key_anyother, 0) + size
         
         if position2charsizes is not None and char_size > 0:
             position2charsizes[key_anyother] = position2charsizes.get(key_anyother, 0) + np.log(char_size)
@@ -97,7 +97,7 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
         key_anyother_tot = f'{key_base}_anyother_tot{direction}_{len(kids)}'
         position2num[key_anyother_tot] = position2num.get(key_anyother_tot, 0) + 1
         if size > 0:
-            position2sizes[key_anyother_tot] = position2sizes.get(key_anyother_tot, 0) + np.log(size)
+            position2sizes[key_anyother_tot] = position2sizes.get(key_anyother_tot, 0) + size
         
         if position2charsizes is not None and char_size > 0:
             position2charsizes[key_anyother_tot] = position2charsizes.get(key_anyother_tot, 0) + np.log(char_size)
@@ -107,7 +107,7 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
         key_all = f'all_{direction}'
         position2num[key_all] = position2num.get(key_all, 0) + 1
         if size > 0:
-            position2sizes[key_all] = position2sizes.get(key_all, 0) + np.log(size)
+            position2sizes[key_all] = position2sizes.get(key_all, 0) + size
         if position2charsizes is not None and char_size > 0:
             position2charsizes[key_all] = position2charsizes.get(key_all, 0) + np.log(char_size)
         
@@ -122,7 +122,7 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
         key_bilateral = f'bilateral_L{n_left}_R{n_right}_pos_{i+1}_{direction}'
         position2num[key_bilateral] = position2num.get(key_bilateral, 0) + 1
         if size > 0:
-            position2sizes[key_bilateral] = position2sizes.get(key_bilateral, 0) + np.log(size)
+            position2sizes[key_bilateral] = position2sizes.get(key_bilateral, 0) + size
         if position2charsizes is not None and char_size > 0:
             position2charsizes[key_bilateral] = position2charsizes.get(key_bilateral, 0) + np.log(char_size)
         
@@ -548,7 +548,7 @@ def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None,
             kl = 'xvx_left_1'
             position2num[kl] = position2num.get(kl, 0) + 1
             if l_size > 0:
-                position2sizes[kl] = position2sizes.get(kl, 0) + np.log(l_size)
+                position2sizes[kl] = position2sizes.get(kl, 0) + l_size
             if position2charsizes is not None and l_char_size > 0:
                 position2charsizes[kl] = position2charsizes.get(kl, 0) + np.log(l_char_size)
             
@@ -556,7 +556,7 @@ def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None,
             kl_anyother = 'xvx_left_1_anyother'
             position2num[kl_anyother] = position2num.get(kl_anyother, 0) + 1
             if l_size > 0:
-                position2sizes[kl_anyother] = position2sizes.get(kl_anyother, 0) + np.log(l_size)
+                position2sizes[kl_anyother] = position2sizes.get(kl_anyother, 0) + l_size
             if position2charsizes is not None and l_char_size > 0:
                 position2charsizes[kl_anyother] = position2charsizes.get(kl_anyother, 0) + np.log(l_char_size)
             
@@ -564,7 +564,7 @@ def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None,
             kr = 'xvx_right_1'
             position2num[kr] = position2num.get(kr, 0) + 1
             if r_size > 0:
-                position2sizes[kr] = position2sizes.get(kr, 0) + np.log(r_size)
+                position2sizes[kr] = position2sizes.get(kr, 0) + r_size
             if position2charsizes is not None and r_char_size > 0:
                 position2charsizes[kr] = position2charsizes.get(kr, 0) + np.log(r_char_size)
             
@@ -572,7 +572,7 @@ def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None,
             kr_anyother = 'xvx_right_1_anyother'
             position2num[kr_anyother] = position2num.get(kr_anyother, 0) + 1
             if r_size > 0:
-                position2sizes[kr_anyother] = position2sizes.get(kr_anyother, 0) + np.log(r_size)
+                position2sizes[kr_anyother] = position2sizes.get(kr_anyother, 0) + r_size
             if position2charsizes is not None and r_char_size > 0:
                 position2charsizes[kr_anyother] = position2charsizes.get(kr_anyother, 0) + np.log(r_char_size)
 
