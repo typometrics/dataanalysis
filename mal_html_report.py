@@ -390,9 +390,9 @@ def _compute_chart_data(lang2MAL_total, lang2local_scores, langNames, langnameGr
                 'q3': float(np.percentile(values, 75))
             }
     
-    # Normalized MAL curve (MAL_n / MAL_2)
+    # Normalized MAL curve (MAL_n / MAL_2) — includes n=1
     normalized_curve = {}
-    for n in range(2, max_n + 1):
+    for n in range(1, max_n + 1):
         normalized_values = []
         for lang in lang2MAL_total:
             if 2 in lang2MAL_total[lang] and n in lang2MAL_total[lang]:
@@ -478,22 +478,29 @@ def _compute_chart_data(lang2MAL_total, lang2local_scores, langNames, langnameGr
             continue
         beta_2max = regression['slope']
         
+        # Compute β(1→max): log-log regression slope from n=1
+        regression_1max = compute_loglog_regression(mal_data, start_n=1)
+        beta_1max = regression_1max['slope'] if regression_1max is not None else None
+        
         beta_scatter.append({
             'name': lang_name,
             'code': lang,
             'group': group,
             'beta_1_2': float(beta_1_2),
-            'beta_2max': float(beta_2max),
-            'r_squared': float(regression['r_squared'])
+            'beta_2max': float(-beta_2max),  # Negate: positive = MAL compliance (matching local change score convention)
+            'beta_1max': float(-beta_1max) if beta_1max is not None else None,  # Negate: positive = MAL compliance
+            'r_squared': float(regression['r_squared']),
+            'r_squared_1max': float(regression_1max['r_squared']) if regression_1max is not None else None
         })
     
-    # Effect score: β(1→max) = log-log regression slope from n=1 (the MAL effect)
+    # Effect score: β(2→max) = log-log regression slope from n=2 (the MAL effect)
+    # We exclude n=1 because MAL_1 values are often atypical/unreliable.
     effect_scores = []
     for lang, mal_data in lang2MAL_total.items():
         lang_name = langNames.get(lang, lang)
         group = langnameGroup.get(lang_name, 'Other') if langnameGroup else 'Other'
         
-        regression = compute_loglog_regression(mal_data, start_n=1)
+        regression = compute_loglog_regression(mal_data, start_n=2)
         if regression is None:
             continue
         effect = float(regression['slope'])
@@ -529,10 +536,10 @@ def _compute_chart_data(lang2MAL_total, lang2local_scores, langNames, langnameGr
     effect_by_lang = {item['code']: item['effect'] for item in effect_scores}
     group_by_lang = {item['code']: item['group'] for item in effect_scores}
     
-    # R² distribution for β(1→max) regressions
+    # R² distribution for β(2→max) regressions
     r2_distribution = []
     for lang, mal_data in lang2MAL_total.items():
-        reg = compute_loglog_regression(mal_data, start_n=1)
+        reg = compute_loglog_regression(mal_data, start_n=2)
         if reg is not None:
             lang_name = langNames.get(lang, lang)
             group = langnameGroup.get(lang_name, 'Other') if langnameGroup else 'Other'
@@ -607,9 +614,9 @@ def _load_geographic_data(wals_path, lang2MAL_total, lang2local_scores, langName
     for lang_code, mal_data in lang2MAL_total.items():
         lang_name = langNames.get(lang_code, lang_code)
         
-        # Compute global MAL score: β(1→max) log-log regression slope
-        regression = compute_loglog_regression(mal_data, start_n=1)
-        mal_score = float(regression['slope']) if regression else 0.0
+        # Compute global MAL score: −β(2→max) (negated so positive = MAL compliance)
+        regression = compute_loglog_regression(mal_data, start_n=2)
+        mal_score = float(-regression['slope']) if regression else 0.0
         
         # MANUAL_COORDS takes priority (for relocated/corrected languages)
         # This matches the behavior of generate_ud_maps.py
@@ -774,11 +781,20 @@ def generate_mal_html_report(
     # Slope distribution summary table
     html_parts.append(_generate_slope_summary_table(lang2MAL_filtered, lang2local_scores))
     
+    # Directional β comparison table and scatter plots (if directional data available)
+    if has_directional:
+        html_parts.append(_generate_directional_beta_table(
+            lang2MAL_filtered, lang2MAL_left_filtered, lang2MAL_right_filtered,
+            langNames, langnameGroup))
+        html_parts.append(_generate_directional_scatter_section(
+            lang2MAL_filtered, lang2MAL_left_filtered, lang2MAL_right_filtered,
+            langNames, langnameGroup))
+    
     # Charts section (pass directional data if available for combined chart)
     if has_directional:
-        html_parts.append(_get_charts_section(viz_data, min_count, viz_data_left, viz_data_right))
+        html_parts.append(_get_charts_section(viz_data, min_count, viz_data_left, viz_data_right, lang_to_vo=lang_to_vo))
     else:
-        html_parts.append(_get_charts_section(viz_data, min_count))
+        html_parts.append(_get_charts_section(viz_data, min_count, lang_to_vo=lang_to_vo))
     
     # Directional sections if data provided
     n_languages_left = 0
@@ -864,10 +880,9 @@ def _build_table(lang_names_sorted, lang2MAL_total, lang2counts, lang2local_scor
     html_parts.append(f'<th onclick="sortTable(\'{table_id}\', 0, \'string\')" style="cursor:pointer">Language ⇅</th>\n')
     html_parts.append(f'<th class="vo-col" onclick="sortTable(\'{table_id}\', 1, \'number\')" style="cursor:pointer">VO ⇅</th>\n')
     html_parts.append(f'<th class="group-col" onclick="sortTable(\'{table_id}\', 2, \'string\')" style="cursor:pointer">Family ⇅</th>\n')
-    html_parts.append(f'<th class="effect-col" onclick="sortTable(\'{table_id}\', 3, \'number\')" style="cursor:pointer;min-width:140px;">Regression 1→max<br><small>β (slope)</small> ⇅</th>\n')
-    html_parts.append(f'<th class="effect-col" onclick="sortTable(\'{table_id}\', 4, \'number\')" style="cursor:pointer;min-width:140px;">Regression 2→max<br><small>β (slope)</small> ⇅</th>\n')
-    html_parts.append(f'<th class="conform-col" onclick="sortTable(\'{table_id}\', 5, \'number\')" style="cursor:pointer;min-width:100px;">Decrease<br><small>ratio</small> ⇅</th>\n')
-    col_idx = 6
+    html_parts.append(f'<th class="effect-col" onclick="sortTable(\'{table_id}\', 3, \'number\')" style="cursor:pointer;min-width:140px;">Regression 2→max<br><small>β (slope)</small> ⇅</th>\n')
+    html_parts.append(f'<th class="conform-col" onclick="sortTable(\'{table_id}\', 4, \'number\')" style="cursor:pointer;min-width:100px;">Decrease<br><small>ratio</small> ⇅</th>\n')
+    col_idx = 5
     for n in range(1, max_n + 1):
         html_parts.append(f'<th class="mal-col" onclick="sortTable(\'{table_id}\', {col_idx}, \'number\')" style="cursor:pointer">MAL_{n}<br>(count) ⇅</th>\n')
         col_idx += 1
@@ -905,23 +920,9 @@ def _build_table(lang_names_sorted, lang2MAL_total, lang2counts, lang2local_scor
         
         html_parts.append(f'<td class="group-cell">{group}</td>\n')
         
-        # Generate log-log plots and get effect scores (using only filtered data with sufficient counts)
-        # Plot 1: Regression from 1 to max
-        svg1, effect1 = generate_loglog_svg(mal_data_filtered, start_n=1, width=120, height=50, lang_name=lang_name, lang_code=lang, mal_label=mal_label)
-        # Plot 2: Regression from 2 to max
+        # Generate log-log plot and get effect score (using only filtered data with sufficient counts)
+        # Regression from 2 to max (n=1 excluded: MAL_1 values are often atypical)
         svg2, effect2 = generate_loglog_svg(mal_data_filtered, start_n=2, width=120, height=50, lang_name=lang_name, lang_code=lang, mal_label=mal_label)
-        
-        # Effect score 1→max column with plot
-        if effect1 is not None:
-            if effect1 > 0.1:
-                css_class = "effect-cell score-positive"
-            elif effect1 < -0.1:
-                css_class = "effect-cell score-negative"
-            else:
-                css_class = "effect-cell score-neutral"
-            html_parts.append(f'<td class="{css_class}" data-value="{effect1:.6f}" style="vertical-align:middle;">{svg1}<br><strong>β= {effect1:.3f}</strong></td>\n')
-        else:
-            html_parts.append(f'<td class="na-cell" data-value="" style="vertical-align:middle;">{svg1}</td>\n')
         
         # Effect score 2→max column with plot
         if effect2 is not None:
@@ -1227,9 +1228,9 @@ document.addEventListener('keydown', function(e) {{
 <p><strong>Count:</strong> Number of observations contributing to the MAL_n value</p>
 
 <h4 style="margin-top:15px;">Log-Log Regression (β = MAL Effect Score)</h4>
-<p>Each language has two inline plots showing log(n) vs log(MAL_n) with linear regression:</p>
-<p><strong>Regression 1→max:</strong> Uses all available data points (n=1 to max) <em>where count ≥ {min_count}</em></p>
-<p><strong>Regression 2→max:</strong> Excludes n=1 (starts from n=2 to max) <em>where count ≥ {min_count}</em></p>
+<p>Each language has an inline plot showing log(n) vs log(MAL_n) with linear regression:</p>
+<p><strong>Regression 2→max:</strong> Regression from n=2 to max <em>where count ≥ {min_count}</em>. 
+MAL_1 is excluded because it often behaves atypically and can distort the regression slope.</p>
 <p><strong>β (slope):</strong> The negative of the log-log regression slope. Under MAL: log(MAL_n) = a - β·log(n)</p>
 <p style="margin-left: 20px;">• <span style="background:#c8e6c9;padding:2px 6px;">β &gt; 0.1 (green)</span>: MAL compliance</p>
 <p style="margin-left: 20px;">• <span style="background:#ffcdd2;padding:2px 6px;">β &lt; -0.1 (red)</span>: Anti-MAL</p>
@@ -1453,9 +1454,9 @@ document.addEventListener('keydown', function(e) {{
 <p><strong>Count:</strong> Number of observations contributing to the MAL_n value</p>
 
 <h4 style="margin-top:15px;">Log-Log Regression (β = MAL Effect Score)</h4>
-<p>Each language has two inline plots showing log(n) vs log(MAL_n) with linear regression:</p>
-<p><strong>Regression 1→max:</strong> Uses all available data points (n=1 to max) <em>where count ≥ {min_count}</em></p>
-<p><strong>Regression 2→max:</strong> Excludes n=1 (starts from n=2 to max) <em>where count ≥ {min_count}</em></p>
+<p>Each language has an inline plot showing log(n) vs log(MAL_n) with linear regression:</p>
+<p><strong>Regression 2→max:</strong> Regression from n=2 to max <em>where count ≥ {min_count}</em>. 
+MAL_1 is excluded because it often behaves atypically and can distort the regression slope.</p>
 <p><strong>β (slope):</strong> The negative of the log-log regression slope. Under MAL: log(MAL_n) = a - β·log(n)</p>
 <p style="margin-left: 20px;">• <span style="background:#c8e6c9;padding:2px 6px;">β &gt; 0.1 (green)</span>: MAL compliance</p>
 <p style="margin-left: 20px;">• <span style="background:#ffcdd2;padding:2px 6px;">β &lt; -0.1 (red)</span>: Anti-MAL</p>
@@ -1479,14 +1480,14 @@ def _get_table_explanation(min_count):
     return f'''
 <div class="explanation">
 <h2>Understanding the Table</h2>
-<p><strong>Log-Log Regression Plots:</strong> Each language has two inline plots showing the log-log relationship 
+<p><strong>Log-Log Regression Plot:</strong> Each language has an inline plot showing the log-log relationship 
 between n (number of dependents) and MAL_n (mean constituent size). The data points (blue circles) and regression 
-line are shown. The slope β is displayed in each plot — this is the negative of the regression slope, so positive β 
+line are shown. The slope β is displayed — this is the negative of the regression slope, so positive β 
 indicates MAL compliance.</p>
 
-<p><strong>Regression 1→max:</strong> Linear regression using all available data points from n=1 to the maximum n.</p>
-<p><strong>Regression 2→max:</strong> Linear regression starting from n=2, which may give a more stable estimate 
-by excluding the potentially atypical n=1 configuration.</p>
+<p><strong>Regression 2→max:</strong> Regression from n=2 to max, excluding the often atypical MAL_1 value. 
+MAL_1 (size of constructions with a single dependent) tends to behave differently from higher n values 
+and can distort the overall regression slope.</p>
 
 <p><strong>Decrease Ratio:</strong> The proportion of consecutive n values where MAL decreases (MAL_{{n+1}} &lt; MAL_n).
 A value of 1.0 indicates perfect MAL compliance (all consecutive pairs show decrease).
@@ -1518,20 +1519,18 @@ def _generate_slope_summary_table(lang2MAL_filtered, lang2local_scores, max_n=5)
     """
     Generate an HTML table counting languages per slope category.
     
-    Columns: β(1→max), β(2→max), 1→2, 2→3, ..., (max_n-1)→max_n
+    Columns: β(2→max), 1→2, 2→3, ..., (max_n-1)→max_n
     Rows: green (>0.1), yellow-high (0 to 0.1), yellow-low (-0.1 to 0), red (<-0.1), total
     """
     # Define columns
     columns = []
-    # Regression slopes
-    for start_n in [1, 2]:
-        col_label = f"β({start_n}→max)"
-        values = []
-        for lang, mal_data in lang2MAL_filtered.items():
-            reg = compute_loglog_regression(mal_data, start_n=start_n)
-            if reg is not None:
-                values.append(reg['slope'])
-        columns.append((col_label, values))
+    # Regression slope β(2→max)
+    values_2max = []
+    for lang, mal_data in lang2MAL_filtered.items():
+        reg = compute_loglog_regression(mal_data, start_n=2)
+        if reg is not None:
+            values_2max.append(reg['slope'])
+    columns.append(('β(2→max)', values_2max))
     
     # Local change scores
     for n in range(1, max_n):
@@ -1543,12 +1542,12 @@ def _generate_slope_summary_table(lang2MAL_filtered, lang2local_scores, max_n=5)
                 values.append(scores[key])
         columns.append((col_label, values))
     
-    # Define row categories
+    # Define row categories (raw slope: negative = MAL compliance, positive = anti-MAL)
     categories = [
-        ("β > 0.1",   "#c8e6c9", lambda v: v > 0.1),
-        ("0 < β ≤ 0.1", "#fff9c4", lambda v: 0 < v <= 0.1),
-        ("-0.1 ≤ β ≤ 0", "#fff9c4", lambda v: -0.1 <= v <= 0),
-        ("β < -0.1",  "#ffcdd2", lambda v: v < -0.1),
+        ("β < -0.1",   "#c8e6c9", lambda v: v < -0.1),
+        ("-0.1 ≤ β < 0", "#fff9c4", lambda v: -0.1 <= v < 0),
+        ("0 ≤ β ≤ 0.1", "#fff9c4", lambda v: 0 <= v <= 0.1),
+        ("β > 0.1",  "#ffcdd2", lambda v: v > 0.1),
     ]
     
     # Build HTML
@@ -1582,7 +1581,7 @@ def _generate_slope_summary_table(lang2MAL_filtered, lang2local_scores, max_n=5)
     
     html.append('</table>')
     html.append('<div class="explanation">')
-    html.append('<p><strong>Note:</strong> β(1→max) and β(2→max) are log-log regression slopes (negative = MAL compliance). ')
+    html.append('<p><strong>Note:</strong> β(2→max) is the log-log regression slope from n=2 (negative = MAL compliance). ')
     html.append('Local change scores (1→2, 2→3, ...) are positive when MAL holds (constituent size decreases).</p>')
     html.append('</div>')
     html.append('</div>')
@@ -1590,7 +1589,347 @@ def _generate_slope_summary_table(lang2MAL_filtered, lang2local_scores, max_n=5)
     return '\n'.join(html)
 
 
-def _get_charts_section(viz_data, min_count, viz_data_left=None, viz_data_right=None):
+def _generate_directional_beta_table(lang2MAL_filtered, lang2MAL_left_filtered, lang2MAL_right_filtered,
+                                      langNames, langnameGroup=None):
+    """
+    Generate an HTML table comparing β(2→max) and β(1→max) across MAL, LMAL, RMAL for each language.
+    
+    Columns: Language | Family | β(2→max) MAL | β(2→max) LMAL | β(2→max) RMAL | β(1→max) MAL | β(1→max) LMAL | β(1→max) RMAL
+    Sortable by any column.
+    """
+    # Compute betas for all languages
+    all_langs = set(lang2MAL_filtered.keys()) | set(lang2MAL_left_filtered.keys()) | set(lang2MAL_right_filtered.keys())
+    
+    rows = []
+    for lang in all_langs:
+        lang_name = langNames.get(lang, lang)
+        group = langnameGroup.get(lang_name, 'Other') if langnameGroup else 'Other'
+        
+        # β(2→max) for each direction
+        mal_total = lang2MAL_filtered.get(lang, {})
+        mal_left = lang2MAL_left_filtered.get(lang, {})
+        mal_right = lang2MAL_right_filtered.get(lang, {})
+        
+        reg_total_2 = compute_loglog_regression(mal_total, start_n=2) if mal_total else None
+        reg_left_2 = compute_loglog_regression(mal_left, start_n=2) if mal_left else None
+        reg_right_2 = compute_loglog_regression(mal_right, start_n=2) if mal_right else None
+        
+        # β(1→max) for each direction
+        reg_total_1 = compute_loglog_regression(mal_total, start_n=1) if mal_total else None
+        reg_left_1 = compute_loglog_regression(mal_left, start_n=1) if mal_left else None
+        reg_right_1 = compute_loglog_regression(mal_right, start_n=1) if mal_right else None
+        
+        beta_2_total = float(reg_total_2['slope']) if reg_total_2 else None
+        beta_2_left = float(reg_left_2['slope']) if reg_left_2 else None
+        beta_2_right = float(reg_right_2['slope']) if reg_right_2 else None
+        
+        beta_1_total = float(reg_total_1['slope']) if reg_total_1 else None
+        beta_1_left = float(reg_left_1['slope']) if reg_left_1 else None
+        beta_1_right = float(reg_right_1['slope']) if reg_right_1 else None
+        
+        # Skip languages with no data at all
+        if all(b is None for b in [beta_2_total, beta_2_left, beta_2_right, beta_1_total, beta_1_left, beta_1_right]):
+            continue
+        
+        rows.append({
+            'name': lang_name,
+            'code': lang,
+            'group': group,
+            'beta_2_total': beta_2_total,
+            'beta_2_left': beta_2_left,
+            'beta_2_right': beta_2_right,
+            'beta_1_total': beta_1_total,
+            'beta_1_left': beta_1_left,
+            'beta_1_right': beta_1_right,
+        })
+    
+    # Sort by language name
+    rows.sort(key=lambda r: r['name'])
+    
+    def beta_cell(val):
+        """Generate a colored table cell for a beta value (raw slope: negative = MAL compliance)."""
+        if val is None:
+            return '<td class="na-cell" data-value="" style="text-align:center;">—</td>'
+        if val < -0.1:
+            css = "background:#c8e6c9;"
+        elif val > 0.1:
+            css = "background:#ffcdd2;"
+        else:
+            css = "background:#fff9c4;"
+        return f'<td style="{css} text-align:center; padding:4px 8px;" data-value="{val:.6f}">{val:.3f}</td>'
+    
+    html = []
+    html.append('<div class="chart-container">')
+    html.append('<h3>Directional β Comparison: LMAL / MAL / RMAL</h3>')
+    html.append('<table id="directionalBetaTable" style="border-collapse:collapse; width:auto; margin:10px auto; font-size:13px;">')
+    
+    # Header
+    html.append('<thead>')
+    html.append('<tr style="border-bottom:2px solid #333;">')
+    html.append('<th colspan="2" style="border:1px solid #ddd;"></th>')
+    html.append('<th colspan="3" style="border:1px solid #ddd; text-align:center; background:#e3f2fd; padding:6px;">β(2→max)</th>')
+    html.append('<th colspan="3" style="border:1px solid #ddd; text-align:center; background:#fce4ec; padding:6px;">β(1→max)</th>')
+    html.append('</tr>')
+    html.append('<tr style="border-bottom:1px solid #999;">')
+    html.append('<th onclick="sortTable(\'directionalBetaTable\', 0, \'string\')" style="cursor:pointer; padding:6px 10px; border:1px solid #ddd;">Language ⇅</th>')
+    html.append('<th onclick="sortTable(\'directionalBetaTable\', 1, \'string\')" style="cursor:pointer; padding:6px 10px; border:1px solid #ddd;">Family ⇅</th>')
+    html.append('<th onclick="sortTable(\'directionalBetaTable\', 2, \'number\')" style="cursor:pointer; padding:6px 8px; border:1px solid #ddd; background:#e3f2fd;">MAL ⇅</th>')
+    html.append('<th onclick="sortTable(\'directionalBetaTable\', 3, \'number\')" style="cursor:pointer; padding:6px 8px; border:1px solid #ddd; background:#e3f2fd;">LMAL ⇅</th>')
+    html.append('<th onclick="sortTable(\'directionalBetaTable\', 4, \'number\')" style="cursor:pointer; padding:6px 8px; border:1px solid #ddd; background:#e3f2fd;">RMAL ⇅</th>')
+    html.append('<th onclick="sortTable(\'directionalBetaTable\', 5, \'number\')" style="cursor:pointer; padding:6px 8px; border:1px solid #ddd; background:#fce4ec;">MAL ⇅</th>')
+    html.append('<th onclick="sortTable(\'directionalBetaTable\', 6, \'number\')" style="cursor:pointer; padding:6px 8px; border:1px solid #ddd; background:#fce4ec;">LMAL ⇅</th>')
+    html.append('<th onclick="sortTable(\'directionalBetaTable\', 7, \'number\')" style="cursor:pointer; padding:6px 8px; border:1px solid #ddd; background:#fce4ec;">RMAL ⇅</th>')
+    html.append('</tr>')
+    html.append('</thead>')
+    
+    # Body
+    html.append('<tbody>')
+    for row in rows:
+        html.append('<tr>')
+        html.append(f'<td style="padding:4px 10px; border:1px solid #ddd; white-space:nowrap;">{row["name"]}</td>')
+        html.append(f'<td style="padding:4px 8px; border:1px solid #ddd; font-size:11px;">{row["group"]}</td>')
+        html.append(beta_cell(row['beta_2_total']))
+        html.append(beta_cell(row['beta_2_left']))
+        html.append(beta_cell(row['beta_2_right']))
+        html.append(beta_cell(row['beta_1_total']))
+        html.append(beta_cell(row['beta_1_left']))
+        html.append(beta_cell(row['beta_1_right']))
+        html.append('</tr>')
+    html.append('</tbody>')
+    html.append('</table>')
+    
+    html.append('<div class="explanation">')
+    html.append('<p><strong>Color coding:</strong> <span style="background:#c8e6c9;padding:2px 6px;">Green (β < -0.1)</span> = MAL compliance (negative slope), ')
+    html.append('<span style="background:#ffcdd2;padding:2px 6px;">Red (β > 0.1)</span> = Anti-MAL (positive slope), ')
+    html.append('<span style="background:#fff9c4;padding:2px 6px;">Yellow (|β| ≤ 0.1)</span> = Weak effect.</p>')
+    html.append('<p><strong>β(2→max):</strong> Log-log regression slope from n=2 (excludes atypical MAL_1). ')
+    html.append('<strong>β(1→max):</strong> Log-log regression slope from n=1 (includes MAL_1).</p>')
+    html.append('<p><strong>Key insight:</strong> Languages where MAL and LMAL/RMAL diverge reveal asymmetric processing. ')
+    html.append('For instance, a language with anti-MAL overall but MAL-compliant RMAL suggests right-side dependents ')
+    html.append('follow different compression patterns than left-side ones.</p>')
+    html.append('</div>')
+    html.append('</div>')
+    
+    return '\n'.join(html)
+
+
+def _generate_directional_scatter_section(lang2MAL_filtered, lang2MAL_left_filtered, lang2MAL_right_filtered,
+                                           langNames, langnameGroup=None):
+    """
+    Generate 3 scatter plots comparing β(2→max) between MAL/LMAL/RMAL directions.
+    Returns HTML with canvas elements and a script block.
+    """
+    # Compute β(2→max) for all languages across all three directions
+    scatter_data = []
+    for lang in set(lang2MAL_filtered.keys()) | set(lang2MAL_left_filtered.keys()) | set(lang2MAL_right_filtered.keys()):
+        lang_name = langNames.get(lang, lang)
+        group = langnameGroup.get(lang_name, 'Other') if langnameGroup else 'Other'
+        
+        mal_total = lang2MAL_filtered.get(lang, {})
+        mal_left = lang2MAL_left_filtered.get(lang, {})
+        mal_right = lang2MAL_right_filtered.get(lang, {})
+        
+        reg_total = compute_loglog_regression(mal_total, start_n=2) if mal_total else None
+        reg_left = compute_loglog_regression(mal_left, start_n=2) if mal_left else None
+        reg_right = compute_loglog_regression(mal_right, start_n=2) if mal_right else None
+        
+        scatter_data.append({
+            'name': lang_name,
+            'code': lang,
+            'group': group,
+            'beta_mal': float(reg_total['slope']) if reg_total else None,
+            'beta_lmal': float(reg_left['slope']) if reg_left else None,
+            'beta_rmal': float(reg_right['slope']) if reg_right else None,
+        })
+    
+    scatter_json = json.dumps(scatter_data)
+    
+    html = f'''
+<div class="chart-container">
+<h3>Directional β(2→max) Scatter Plots</h3>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+<div style="flex: 1; min-width: 400px; max-width: 550px;">
+<h4 style="text-align:center; margin-bottom:5px;">MAL vs RMAL</h4>
+<canvas id="scatterMalRmal" height="300"></canvas>
+</div>
+<div style="flex: 1; min-width: 400px; max-width: 550px;">
+<h4 style="text-align:center; margin-bottom:5px;">MAL vs LMAL</h4>
+<canvas id="scatterMalLmal" height="300"></canvas>
+</div>
+<div style="flex: 1; min-width: 400px; max-width: 550px;">
+<h4 style="text-align:center; margin-bottom:5px;">LMAL vs RMAL</h4>
+<canvas id="scatterLmalRmal" height="300"></canvas>
+</div>
+</div>
+
+<div class="explanation">
+<p><strong>Interpretation:</strong> Each point represents one language. The diagonal line marks where the two β values 
+are equal. Points above the line have a higher β on the y-axis direction; points below have a higher β on the x-axis direction.</p>
+<p><strong>Key insight:</strong> If left and right dependents follow the same MAL pattern, points should cluster 
+near the diagonal. Deviations reveal directional asymmetries — for instance, languages where RMAL is much stronger 
+than LMAL may have different planning constraints for post-verbal material.</p>
+<p><strong>Color coding:</strong> Points are colored by language family. Hover for language details.</p>
+</div>
+</div>
+
+<script>
+(function() {{
+    const scatterData = {scatter_json};
+    
+    // Family color palette
+    const familyColors = {{}};
+    const palette = [
+        'rgba(33, 150, 243, 0.7)',   // blue
+        'rgba(244, 67, 54, 0.7)',    // red
+        'rgba(76, 175, 80, 0.7)',    // green
+        'rgba(255, 152, 0, 0.7)',    // orange
+        'rgba(156, 39, 176, 0.7)',   // purple
+        'rgba(0, 150, 136, 0.7)',    // teal
+        'rgba(121, 85, 72, 0.7)',    // brown
+        'rgba(233, 30, 99, 0.7)',    // pink
+        'rgba(63, 81, 181, 0.7)',    // indigo
+        'rgba(255, 87, 34, 0.7)',    // deep orange
+        'rgba(0, 188, 212, 0.7)',    // cyan
+        'rgba(139, 195, 74, 0.7)',   // light green
+        'rgba(255, 193, 7, 0.7)',    // amber
+        'rgba(96, 125, 139, 0.7)',   // blue grey
+        'rgba(158, 158, 158, 0.5)'   // grey (Other)
+    ];
+    let familyIdx = 0;
+    scatterData.forEach(d => {{
+        if (d.group && !familyColors[d.group]) {{
+            familyColors[d.group] = palette[familyIdx % palette.length];
+            familyIdx++;
+        }}
+    }});
+    
+    function makeScatter(canvasId, xKey, yKey, xLabel, yLabel) {{
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        
+        // Filter to languages that have both values
+        const points = scatterData.filter(d => d[xKey] !== null && d[yKey] !== null);
+        if (points.length === 0) return;
+        
+        // Find axis range for diagonal
+        const allVals = points.map(d => d[xKey]).concat(points.map(d => d[yKey]));
+        const minVal = Math.min(...allVals) - 0.1;
+        const maxVal = Math.max(...allVals) + 0.1;
+        
+        // Group by family
+        const familyGroups = {{}};
+        points.forEach(d => {{
+            const grp = d.group || 'Other';
+            if (!familyGroups[grp]) familyGroups[grp] = [];
+            familyGroups[grp].push({{
+                x: d[xKey],
+                y: d[yKey],
+                name: d.name,
+                code: d.code,
+                group: grp
+            }});
+        }});
+        
+        const datasets = [];
+        // Diagonal line
+        datasets.push({{
+            label: 'Diagonal (x=y)',
+            data: [{{x: minVal, y: minVal}}, {{x: maxVal, y: maxVal}}],
+            type: 'line',
+            borderColor: 'rgba(0,0,0,0.3)',
+            borderWidth: 1,
+            borderDash: [5, 5],
+            pointRadius: 0,
+            fill: false
+        }});
+        
+        // Scatter points by family
+        for (const [family, pts] of Object.entries(familyGroups)) {{
+            datasets.push({{
+                label: family,
+                data: pts,
+                backgroundColor: familyColors[family] || 'rgba(158,158,158,0.5)',
+                borderColor: (familyColors[family] || 'rgba(158,158,158,0.5)').replace('0.7', '1.0').replace('0.5', '0.8'),
+                borderWidth: 1,
+                pointRadius: 5,
+                pointHoverRadius: 8
+            }});
+        }}
+        
+        // Compute correlation
+        const xs = points.map(d => d[xKey]);
+        const ys = points.map(d => d[yKey]);
+        const n = xs.length;
+        const meanX = xs.reduce((a, b) => a + b, 0) / n;
+        const meanY = ys.reduce((a, b) => a + b, 0) / n;
+        let num = 0, denX = 0, denY = 0;
+        for (let i = 0; i < n; i++) {{
+            num += (xs[i] - meanX) * (ys[i] - meanY);
+            denX += (xs[i] - meanX) ** 2;
+            denY += (ys[i] - meanY) ** 2;
+        }}
+        const correlation = num / Math.sqrt(denX * denY);
+        
+        new Chart(canvas.getContext('2d'), {{
+            type: 'scatter',
+            data: {{ datasets: datasets }},
+            options: {{
+                responsive: true,
+                aspectRatio: 1,
+                plugins: {{
+                    legend: {{ display: false }},
+                    tooltip: {{
+                        callbacks: {{
+                            label: function(context) {{
+                                const pt = context.raw;
+                                if (pt.name) {{
+                                    return [pt.name + ' (' + pt.group + ')',
+                                            xLabel + ': ' + pt.x.toFixed(3),
+                                            yLabel + ': ' + pt.y.toFixed(3)];
+                                }}
+                                return '';
+                            }}
+                        }}
+                    }}
+                }},
+                scales: {{
+                    x: {{
+                        title: {{ display: true, text: xLabel + ' β(2→max)' }},
+                        grid: {{
+                            color: ctx => ctx.tick.value === 0 ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.1)',
+                            lineWidth: ctx => ctx.tick.value === 0 ? 2 : 1
+                        }}
+                    }},
+                    y: {{
+                        title: {{ display: true, text: yLabel + ' β(2→max)' }},
+                        grid: {{
+                            color: ctx => ctx.tick.value === 0 ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.1)',
+                            lineWidth: ctx => ctx.tick.value === 0 ? 2 : 1
+                        }}
+                    }}
+                }}
+            }}
+        }});
+        
+        // Add correlation annotation
+        const annotDiv = document.createElement('div');
+        annotDiv.style.cssText = 'text-align:center; font-size:13px; margin-top:4px; color:#555;';
+        annotDiv.innerHTML = 'r = ' + correlation.toFixed(3) + ' (n=' + n + ')';
+        canvas.parentNode.insertBefore(annotDiv, canvas.nextSibling);
+    }}
+    
+    makeScatter('scatterMalRmal', 'beta_mal', 'beta_rmal', 'MAL', 'RMAL');
+    makeScatter('scatterMalLmal', 'beta_mal', 'beta_lmal', 'MAL', 'LMAL');
+    makeScatter('scatterLmalRmal', 'beta_lmal', 'beta_rmal', 'LMAL', 'RMAL');
+}})();
+</script>
+'''
+    
+    return html
+
+
+def _get_charts_section(viz_data, min_count, viz_data_left=None, viz_data_right=None, lang_to_vo=None):
     """Generate all charts using Chart.js and SVG."""
     
     chart_data_json = json.dumps(viz_data['chart_data'])
@@ -1634,6 +1973,44 @@ If RMAL shows stronger effects, it might suggest different planning for post-ver
     # Generate SVG effect by family chart
     svg_effect_by_family = _generate_svg_effect_by_family(viz_data['family_stats'], viz_data['effect_scores'])
     
+    # Generate SVG effect by IE vs non-IE grouping
+    effect_scores = viz_data['effect_scores']
+    
+    def ie_group_fn(item):
+        if item['group'] == 'Indo-European':
+            return 'Indo-European'
+        else:
+            return 'Non-Indo-European'
+    
+    svg_effect_by_ie = _generate_svg_effect_by_grouping(
+        effect_scores, ie_group_fn,
+        title='MAL Effect −β(2→max) by Indo-European vs Non-Indo-European',
+        x_label='−β(2→max) — Negated Log-Log Regression Slope (positive = MAL compliance)',
+        min_group_count=1
+    )
+    
+    # Generate SVG effect by VO typology
+    if lang_to_vo:
+        def vo_group_fn(item):
+            vo_score = lang_to_vo.get(item['code'])
+            if vo_score is None:
+                return None
+            if vo_score > 0.66:
+                return 'VO'
+            elif vo_score < 0.33:
+                return 'OV'
+            else:
+                return 'NDO (mixed)'
+        
+        svg_effect_by_vo = _generate_svg_effect_by_grouping(
+            effect_scores, vo_group_fn,
+            title='MAL Effect −β(2→max) by Word Order Typology (OV vs NDO vs VO)',
+            x_label='−β(2→max) — Negated Log-Log Regression Slope (positive = MAL compliance)',
+            min_group_count=1
+        )
+    else:
+        svg_effect_by_vo = None
+    
     # Generate SVG world map
     svg_world_map = _generate_svg_world_map(viz_data.get('geo_data', []))
     
@@ -1643,16 +2020,17 @@ If RMAL shows stronger effects, it might suggest different planning for post-ver
     return f'''
 <h2>Visualizations</h2>
 
-<!-- Chart 1: Normalized Constituent Size (log-log, normalized by MAL_2, up to n=5) -->
+<!-- Chart 1: Individual Normalized Curves in Log-Log Space (MAL_n / MAL_2) -->
 <div class="chart-container">
-<h3>1. Normalized MAL Curve in Log-Log Space (MAL_n / MAL_2)</h3>
-<canvas id="normalizedCurveChart" height="100"></canvas>
+<h3>1. Individual Normalized MAL Curves in Log-Log Space (MAL_n / MAL_2)</h3>
+<canvas id="normalizedCurveChart" height="120"></canvas>
 <div class="explanation">
-<p><strong>Interpretation:</strong> This chart shows the relative change in constituent size in log-log space, 
-normalized by each language's MAL_2 value. This allows direct comparison of the <em>rate of decline</em> across 
-languages, independent of their initial constituent sizes.</p>
-<p><strong>Key insight:</strong> All languages start at 1.0 for n=2; the steeper the decline, the stronger the MAL effect.
-Only data up to n=5 is shown, as higher n values have insufficient language coverage.</p>
+<p><strong>Interpretation:</strong> Each line represents one language's MAL trajectory normalized by its MAL_2 value,
+plotted in log-log space: x = log(n), y = log(MAL_n / MAL_2). This removes differences in absolute constituent 
+size and allows direct comparison of the <em>rate of decline</em> across languages.</p>
+<p><strong>Key insight:</strong> All curves pass through the anchor point (log 2, 0) since MAL_2/MAL_2 = 1 and log(1) = 0.
+The thick black line shows the cross-linguistic mean. n=1 is included: languages where MAL_1 > MAL_2 appear above
+the anchor; languages where MAL_1 < MAL_2 appear below. Hover over lines to see language names.</p>
 </div>
 </div>
 
@@ -1685,51 +2063,102 @@ but there is considerable variation in both the starting point (MAL_1) and the s
 <h3>4. Histogram of All Local Change Scores</h3>
 <canvas id="histogramChart" height="80"></canvas>
 <div class="explanation">
-<p><strong>Interpretation:</strong> This histogram shows the overall distribution of local change scores 
-across all languages and transitions. A distribution centered above zero indicates general MAL compliance.
-The spread shows how consistent the MAL effect is across the dataset.</p>
+<p><strong>Interpretation:</strong> This histogram pools <em>all</em> local change scores 
+(MAL_n − MAL_{{n+1}}) / MAL_n across all languages and all transitions n→n+1 together.
+The x-axis labels show the center of each 0.2-wide bin.
+A distribution centered above zero indicates that, on average, constituent size decreases with n (MAL compliance).</p>
+<p><strong>Important caveat:</strong> Because the histogram mixes transitions from different values of n, 
+it can be misleading. Transitions at higher n (e.g., 4→5 or 5→6) are based on far fewer languages 
+and noisier data, so their contribution fluctuates. This chart gives a rough first impression of 
+the overall direction of the MAL effect, but the <strong>regression slope β(2→max)</strong> shown in Charts 6 and 7 
+is a much more reliable measure: it captures the overall trend per language rather than individual 
+transition-by-transition fluctuations.</p>
 </div>
 </div>
 
-<!-- Chart 5: β(2→max) vs β(1→2) Scatter Plot -->
+<!-- Chart 5: −β(2→max) vs β(1→2) Scatter Plot -->
 <div class="chart-container">
-<h3>5. β(2→max) vs. β(1→2) — Regression Slope vs. Initial Transition</h3>
+<h3>5. −β(2→max) vs. β(1→2) — Regression Slope vs. Initial Transition</h3>
 <canvas id="betaScatterChart" height="120"></canvas>
 <div class="explanation">
 <p><strong>Interpretation:</strong> Each point represents one language. The x-axis shows β(1→2) — the local change 
-score for the first transition (n=1 to n=2). The y-axis shows β(2→max) — the log-log regression slope 
-from n=2 onward, capturing the overall rate of decline.</p>
-<p><strong>Key insight:</strong> A correlation between these two measures would suggest that languages with a strong 
-initial MAL effect also maintain a steep decline for higher n. A lack of correlation might indicate that the 
-initial transition is governed by different factors than the subsequent ones.</p>
+score for the first transition (n=1 to n=2). The y-axis shows −β(2→max) — the <em>negated</em> log-log regression slope 
+from n=2 onward. Both axes use the same sign convention: <strong>positive = MAL compliance</strong> 
+(constituent size decreases with n). MAL-compliant languages cluster in the top-right quadrant.</p>
+<p><strong>Key insight:</strong> A positive correlation between these two measures would suggest that languages with a strong 
+initial MAL effect (large β(1→2)) also maintain a steep decline for higher n (large −β(2→max)). A lack of correlation 
+might indicate that the initial transition is governed by different factors than the subsequent ones.</p>
+<p><strong>Color coding:</strong> Points are colored by language family. Hover for details.</p>
+</div>
+</div>
+
+<!-- Chart 5b: −β(2→max) vs −β(1→max) Scatter Plot -->
+<div class="chart-container">
+<h3>5b. −β(2→max) vs. −β(1→max) — Regression Slopes With and Without MAL_1</h3>
+<canvas id="betaScatter2Chart" height="120"></canvas>
+<div class="explanation">
+<p><strong>Interpretation:</strong> Each point represents one language. The x-axis shows −β(1→max) — the negated 
+log-log regression slope computed from n=1 (including MAL_1). The y-axis shows −β(2→max) — the negated 
+log-log regression slope from n=2 (excluding the often atypical MAL_1). Both axes use the same sign convention: 
+<strong>positive = MAL compliance</strong>.</p>
+<p><strong>Key insight:</strong> Points near the diagonal (y = x) indicate languages where including or excluding 
+MAL_1 makes little difference. Points well above the diagonal have a stronger MAL effect when MAL_1 is excluded 
+(MAL_1 is unusually large, pulling the slope toward zero). Points well below the diagonal have a weaker MAL effect 
+when MAL_1 is excluded (MAL_1 is unusually small or MAL_1 contributes positively to the slope).</p>
 <p><strong>Color coding:</strong> Points are colored by language family. Hover for details.</p>
 </div>
 </div>
 
 <!-- Chart 6: MAL Effect Score by Family -->
 <div class="chart-container">
-<h3>6. MAL Effect β(1→max) by Language Family</h3>
+<h3>6. MAL Effect −β(2→max) by Language Family</h3>
 {svg_effect_by_family}
 <div class="explanation">
-<p><strong>Interpretation:</strong> The MAL effect β(1→max) is the slope of the log-log regression of MAL_n on n, 
-starting from n=1. Negative values indicate MAL compliance (constituent size decreases with n); 
-positive values indicate anti-MAL behavior.</p>
+<p><strong>Interpretation:</strong> This chart shows −β(2→max), the <em>negated</em> log-log regression slope from n=2 onward. 
+<strong>Positive values = MAL compliance</strong> (constituent size decreases with n); 
+negative values = anti-MAL behavior. This sign convention matches the main table and Chart 5.</p>
 <p><strong>Family comparison:</strong> This chart groups languages by family to reveal whether MAL strength 
-varies systematically across genealogical groups. Box plots show the distribution within each family.</p>
-<p><strong>Key insight:</strong> If MAL is a universal constraint, we expect negative slopes across all families.
+varies systematically across genealogical groups. Individual language dots are shown with jitter.</p>
+<p><strong>Key insight:</strong> If MAL is a universal constraint, we expect positive values across all families.
 Systematic differences might indicate structural factors that modulate MAL strength.</p>
 </div>
 </div>
 
+<!-- Chart 6b: MAL Effect by IE vs non-IE -->
+<div class="chart-container">
+<h3>6b. MAL Effect −β(2→max): Indo-European vs Non-Indo-European</h3>
+{svg_effect_by_ie}
+<div class="explanation">
+<p><strong>Interpretation:</strong> This chart compares −β(2→max) between Indo-European and non-Indo-European languages.
+<strong>Positive values = MAL compliance.</strong></p>
+<p><strong>Key question:</strong> Is MAL compliance an artifact of over-representing Indo-European languages in the sample,
+or does it hold equally well for non-Indo-European languages?</p>
+</div>
+</div>
+
+''' + (f'''<!-- Chart 6c: MAL Effect by VO typology -->
+<div class="chart-container">
+<h3>6c. MAL Effect −β(2→max): OV vs NDO vs VO</h3>
+{svg_effect_by_vo}
+<div class="explanation">
+<p><strong>Interpretation:</strong> This chart compares −β(2→max) across word-order typological groups based on WALS VO scores:
+<strong>OV</strong> (score &lt; 0.33), <strong>NDO/mixed</strong> (0.33–0.66), <strong>VO</strong> (score &gt; 0.66).
+Positive values = MAL compliance.</p>
+<p><strong>Key question:</strong> Does basic word order (head-initial vs head-final) modulate MAL strength?
+OV languages place the head last, which may create different dependency-length pressures than VO languages.</p>
+</div>
+</div>
+''' if svg_effect_by_vo else '') + f'''
 <!-- Chart 7: World Map of MAL Effect -->
 <div class="chart-container">
-<h3>7. World Map: Geographic Distribution of MAL Effect β(1→max)</h3>
+<h3>7. World Map: Geographic Distribution of MAL Effect −β(2→max)</h3>
 {svg_world_map}
 <div class="explanation">
 <p><strong>Interpretation:</strong> Each dot represents a language positioned at its geographic location. 
-The color indicates the MAL effect β(1→max) — the log-log regression slope from n=1.</p>
-<p><strong>Color scale:</strong> Green = strong MAL compliance (negative slope, constituent size decreases with n), 
-Yellow = weak/neutral effect, Red = anti-MAL (positive slope, constituent size increases with n).</p>
+The color indicates −β(2→max), the negated log-log regression slope from n=2. 
+<strong>Positive values = MAL compliance</strong> (constituent size decreases with n).</p>
+<p><strong>Color scale:</strong> Green = strong MAL compliance (positive −β, constituent size decreases with n), 
+Yellow = weak/neutral effect, Red = anti-MAL (negative −β, constituent size increases with n).</p>
 <p><strong>Geographic patterns:</strong> If MAL is truly universal, we expect green dots distributed across 
 all continents. Clustering of colors might suggest areal effects or shared structural features.</p>
 <p><strong>Note:</strong> Only languages with geographic coordinates available in WALS are shown.</p>
@@ -1738,11 +2167,11 @@ all continents. Clustering of colors might suggest areal effects or shared struc
 
 <!-- Chart 8: R² Goodness-of-Fit Distribution -->
 <div class="chart-container">
-<h3>8. R² Goodness-of-Fit Distribution for β(1→max) Regressions</h3>
+<h3>8. R² Goodness-of-Fit Distribution for β(2→max) Regressions</h3>
 <canvas id="r2DistributionChart" height="80"></canvas>
 <div class="explanation">
 <p><strong>Interpretation:</strong> This histogram shows the distribution of R² values from the log-log regressions 
-that produce each language's β(1→max) slope. R² measures how well a straight line in log-log space fits 
+that produce each language's β(2→max) slope. R² measures how well a straight line in log-log space fits 
 a language's MAL_n trajectory — in other words, how closely the relationship between log(n) and log(MAL_n) 
 follows the power-law form predicted by Menzerath-Altmann's Law.</p>
 <p><strong>Note on color:</strong> The blue shading here indicates <em>regression fit quality</em>, not MAL compliance direction. 
@@ -1812,60 +2241,76 @@ const colors = {{
     gray: 'rgba(158, 158, 158, 0.5)'
 }};
 
-// Chart 1: Normalized MAL Curve in Log-Log space (MAL_n / MAL_2, up to n=5)
-// Filter normalized curve to n=2..5
-const normEntries = Object.entries(normalizedCurve).filter(([n, d]) => parseInt(n) <= 5);
-const normLabels = normEntries.map(([n, d]) => 'n=' + n);
-const normMeanValues = normEntries.map(([n, d]) => Math.log(d.mean));
-const normQ1Values = normEntries.map(([n, d]) => Math.log(d.q1));
-const normQ3Values = normEntries.map(([n, d]) => Math.log(d.q3));
-const normLogN = normEntries.map(([n, d]) => Math.log(parseInt(n)));
+// Chart 1: Individual Normalized MAL Curves in Log-Log space (MAL_n / MAL_2)
+const maxNnorm = Math.min(maxN, 5);
+const normTrajDatasets = [];
+
+// Compute cross-linguistic mean of log(MAL_n / MAL_2) for n=1..maxNnorm
+const normMeanPoints = [];
+for (let n = 1; n <= maxNnorm; n++) {{
+    const normVals = languageCurves
+        .filter(lang => lang.values[2] !== undefined && lang.values[n] !== undefined && lang.values[2] > 0)
+        .map(lang => Math.log(lang.values[n] / lang.values[2]));
+    if (normVals.length > 0) {{
+        normMeanPoints.push({{ x: Math.log(n), y: normVals.reduce((a, b) => a + b, 0) / normVals.length }});
+    }}
+}}
+
+// Add individual language lines (semi-transparent)
+languageCurves.forEach((lang) => {{
+    if (lang.values[2] === undefined || lang.values[2] <= 0) return;
+    const mal2 = lang.values[2];
+    const points = [];
+    for (let n = 1; n <= maxNnorm; n++) {{
+        if (lang.values[n] !== undefined) {{
+            points.push({{ x: Math.log(n), y: Math.log(lang.values[n] / mal2) }});
+        }}
+    }}
+    if (points.length >= 2) {{
+        normTrajDatasets.push({{
+            label: lang.name,
+            data: points,
+            borderColor: 'rgba(100, 100, 100, 0.15)',
+            backgroundColor: 'transparent',
+            borderWidth: 1,
+            showLine: true,
+            fill: false,
+            tension: 0.1,
+            pointRadius: 0
+        }});
+    }}
+}});
+
+// Add mean line (prominent)
+normTrajDatasets.push({{
+    label: 'Cross-linguistic Mean',
+    data: normMeanPoints,
+    borderColor: 'black',
+    backgroundColor: 'black',
+    borderWidth: 3,
+    showLine: true,
+    fill: false,
+    tension: 0.1,
+    pointRadius: 4
+}});
 
 new Chart(document.getElementById('normalizedCurveChart'), {{
     type: 'scatter',
     data: {{
-        datasets: [
-            {{
-                label: 'Mean log(MAL_n / MAL_2)',
-                data: normLogN.map((x, i) => ({{ x: x, y: normMeanValues[i] }})),
-                borderColor: 'rgba(156, 39, 176, 1)',
-                backgroundColor: 'rgba(156, 39, 176, 1)',
-                borderWidth: 3,
-                showLine: true,
-                fill: false,
-                tension: 0.1,
-                pointRadius: 5
-            }},
-            {{
-                label: 'Q3 (75th percentile)',
-                data: normLogN.map((x, i) => ({{ x: x, y: normQ3Values[i] }})),
-                borderColor: 'rgba(156, 39, 176, 0.3)',
-                backgroundColor: 'rgba(156, 39, 176, 0.2)',
-                borderWidth: 1,
-                showLine: true,
-                fill: '+1',
-                tension: 0.1,
-                pointRadius: 0
-            }},
-            {{
-                label: 'Q1 (25th percentile)',
-                data: normLogN.map((x, i) => ({{ x: x, y: normQ1Values[i] }})),
-                borderColor: 'rgba(156, 39, 176, 0.3)',
-                backgroundColor: 'transparent',
-                borderWidth: 1,
-                showLine: true,
-                fill: false,
-                tension: 0.1,
-                pointRadius: 0
-            }}
-        ]
+        datasets: normTrajDatasets
     }},
     options: {{
         responsive: true,
         plugins: {{
-            title: {{ display: false }},
-            legend: {{ position: 'top' }},
+            legend: {{
+                display: true,
+                labels: {{
+                    filter: (item) => item.text === 'Cross-linguistic Mean'
+                }}
+            }},
             tooltip: {{
+                mode: 'nearest',
+                intersect: true,
                 callbacks: {{
                     label: function(context) {{
                         const n = Math.round(Math.exp(context.parsed.x));
@@ -1884,10 +2329,17 @@ new Chart(document.getElementById('normalizedCurveChart'), {{
                 title: {{ display: true, text: 'log(n)' }},
                 ticks: {{
                     callback: function(value) {{
-                        return 'n=' + Math.round(Math.exp(value));
+                        const n = Math.round(Math.exp(value));
+                        if (n >= 1 && n <= 5) return 'n=' + n;
+                        return '';
                     }}
                 }}
             }}
+        }},
+        interaction: {{
+            mode: 'nearest',
+            axis: 'x',
+            intersect: false
         }}
     }}
 }});
@@ -2035,23 +2487,23 @@ const binWidth = 0.2;
 const minBin = Math.floor(Math.min(...allScores) / binWidth) * binWidth;
 const maxBin = Math.ceil(Math.max(...allScores) / binWidth) * binWidth;
 const bins = [];
-const binLabels = [];
+const binCenters = [];
 
 for (let b = minBin; b < maxBin; b += binWidth) {{
     const count = allScores.filter(s => s >= b && s < b + binWidth).length;
     bins.push(count);
-    binLabels.push(b.toFixed(1));
+    binCenters.push((b + binWidth / 2).toFixed(2));
 }}
 
 new Chart(document.getElementById('histogramChart'), {{
     type: 'bar',
     data: {{
-        labels: binLabels,
+        labels: binCenters,
         datasets: [{{
             label: 'Frequency',
             data: bins,
-            backgroundColor: binLabels.map(b => {{
-                const v = parseFloat(b);
+            backgroundColor: binCenters.map(c => {{
+                const v = parseFloat(c);
                 if (v >= 0.1) return colors.positive;
                 if (v <= -0.1) return colors.negative;
                 return colors.neutral;
@@ -2063,7 +2515,17 @@ new Chart(document.getElementById('histogramChart'), {{
     options: {{
         responsive: true,
         plugins: {{
-            legend: {{ display: false }}
+            legend: {{ display: false }},
+            tooltip: {{
+                callbacks: {{
+                    title: function(items) {{
+                        const center = parseFloat(items[0].label);
+                        const lo = (center - binWidth / 2).toFixed(1);
+                        const hi = (center + binWidth / 2).toFixed(1);
+                        return '[' + lo + ', ' + hi + ')';
+                    }}
+                }}
+            }}
         }},
         scales: {{
             y: {{
@@ -2078,13 +2540,13 @@ new Chart(document.getElementById('histogramChart'), {{
                 }}
             }},
             x: {{
-                title: {{ display: true, text: 'Local Change Score' }}
+                title: {{ display: true, text: 'Local Change Score (bin center)' }}
             }}
         }}
     }}
 }});
 
-// Chart 5: β(2→max) vs β(1→2) Scatter Plot
+// Chart 5: −β(2→max) vs β(1→2) Scatter Plot
 const families = [...new Set(betaScatter.map(d => d.group))].sort();
 const familyColors = {{}};
 const colorPalette = [
@@ -2182,7 +2644,7 @@ new Chart(document.getElementById('betaScatterChart'), {{
                             return [
                                 point.name,
                                 '\u03b2(1\u21922): ' + point.x.toFixed(3),
-                                '\u03b2(2\u2192max): ' + point.y.toFixed(3),
+                                '\u2212\u03b2(2\u2192max): ' + point.y.toFixed(3),
                                 'R\u00b2: ' + point.r2.toFixed(3)
                             ];
                         }}
@@ -2193,7 +2655,7 @@ new Chart(document.getElementById('betaScatterChart'), {{
         }},
         scales: {{
             x: {{
-                title: {{ display: true, text: '\u03b2(1\u21922) \u2014 Local Change Score (n=1 to n=2)' }},
+                title: {{ display: true, text: '\u03b2(1\u21922) \u2014 Local Change Score (n=1 to n=2, positive = MAL compliance)' }},
                 grid: {{
                     color: function(context) {{
                         if (context.tick.value === 0) return 'rgba(0, 0, 0, 0.5)';
@@ -2206,7 +2668,7 @@ new Chart(document.getElementById('betaScatterChart'), {{
                 }}
             }},
             y: {{
-                title: {{ display: true, text: '\u03b2(2\u2192max) \u2014 Log-Log Regression Slope' }},
+                title: {{ display: true, text: '\u2212\u03b2(2\u2192max) \u2014 Negated Log-Log Regression Slope (positive = MAL compliance)' }},
                 grid: {{
                     color: function(context) {{
                         if (context.tick.value === 0) return 'rgba(0, 0, 0, 0.5)';
@@ -2230,6 +2692,128 @@ if (betaChart) {{
     annotationDiv.style.cssText = 'position: relative; top: -80px; left: 70px; font-size: 14px; font-weight: bold; background: rgba(255,255,255,0.8); padding: 4px 8px; border-radius: 4px; display: inline-block;';
     annotationDiv.innerHTML = 'r = ' + correlation.toFixed(3) + ' | y = ' + regSlope.toFixed(3) + 'x + ' + regIntercept.toFixed(3);
     canvas.parentNode.insertBefore(annotationDiv, canvas.nextSibling);
+}}
+
+// Chart 5b: −β(2→max) vs −β(1→max) Scatter Plot
+{{
+    const scatter2Data = betaScatter.filter(d => d.beta_1max !== null && d.beta_1max !== undefined);
+    const families5b = [...new Set(scatter2Data.map(d => d.group))].sort();
+    
+    const scatter2Datasets = families5b.map(family => {{
+        const points = scatter2Data.filter(d => d.group === family);
+        return {{
+            label: family,
+            data: points.map(d => ({{
+                x: d.beta_1max,
+                y: d.beta_2max,
+                name: d.name,
+                r2_2max: d.r_squared,
+                r2_1max: d.r_squared_1max
+            }})),
+            backgroundColor: familyColors[family] || 'rgba(158,158,158,0.7)',
+            borderColor: (familyColors[family] || 'rgba(158,158,158,0.7)').replace('0.7', '1'),
+            pointRadius: 6,
+            pointHoverRadius: 8
+        }};
+    }});
+    
+    // Compute trendline
+    const x5b = scatter2Data.map(d => d.beta_1max);
+    const y5b = scatter2Data.map(d => d.beta_2max);
+    const n5b = x5b.length;
+    const sx = x5b.reduce((a, b) => a + b, 0);
+    const sy = y5b.reduce((a, b) => a + b, 0);
+    const sxy = x5b.reduce((t, x, i) => t + x * y5b[i], 0);
+    const sx2 = x5b.reduce((t, x) => t + x * x, 0);
+    const sy2 = y5b.reduce((t, y) => t + y * y, 0);
+    const slope5b = (n5b * sxy - sx * sy) / (n5b * sx2 - sx * sx);
+    const intercept5b = (sy - slope5b * sx) / n5b;
+    const corr5b = (n5b * sxy - sx * sy) / Math.sqrt((n5b * sx2 - sx * sx) * (n5b * sy2 - sy * sy));
+    
+    // Identity line (y = x)
+    const allVals5b = x5b.concat(y5b);
+    const min5b = Math.min(...allVals5b);
+    const max5b = Math.max(...allVals5b);
+    
+    scatter2Datasets.push({{
+        label: 'y = x (identity)',
+        data: [{{ x: min5b, y: min5b }}, {{ x: max5b, y: max5b }}],
+        type: 'line',
+        borderColor: 'rgba(150, 150, 150, 0.5)',
+        borderWidth: 1,
+        borderDash: [3, 3],
+        pointRadius: 0,
+        fill: false,
+        order: 0
+    }});
+    
+    scatter2Datasets.push({{
+        label: 'Trendline (r=' + corr5b.toFixed(3) + ')',
+        data: [{{ x: Math.min(...x5b), y: slope5b * Math.min(...x5b) + intercept5b }},
+               {{ x: Math.max(...x5b), y: slope5b * Math.max(...x5b) + intercept5b }}],
+        type: 'line',
+        borderColor: 'rgba(0, 0, 0, 0.7)',
+        borderWidth: 2,
+        borderDash: [5, 5],
+        pointRadius: 0,
+        fill: false,
+        order: 0
+    }});
+    
+    new Chart(document.getElementById('betaScatter2Chart'), {{
+        type: 'scatter',
+        data: {{ datasets: scatter2Datasets }},
+        options: {{
+            responsive: true,
+            plugins: {{
+                legend: {{
+                    display: true,
+                    position: 'right',
+                    labels: {{ usePointStyle: true, padding: 10 }}
+                }},
+                tooltip: {{
+                    callbacks: {{
+                        label: function(context) {{
+                            const p = context.raw;
+                            if (p.name) {{
+                                return [
+                                    p.name,
+                                    '\u2212\u03b2(1\u2192max): ' + p.x.toFixed(3),
+                                    '\u2212\u03b2(2\u2192max): ' + p.y.toFixed(3),
+                                    'R\u00b2(1\u2192max): ' + (p.r2_1max !== null ? p.r2_1max.toFixed(3) : 'N/A'),
+                                    'R\u00b2(2\u2192max): ' + p.r2_2max.toFixed(3)
+                                ];
+                            }}
+                            return context.dataset.label;
+                        }}
+                    }}
+                }}
+            }},
+            scales: {{
+                x: {{
+                    title: {{ display: true, text: '\u2212\u03b2(1\u2192max) \u2014 Negated Slope Including MAL_1 (positive = MAL compliance)' }},
+                    grid: {{
+                        color: ctx => ctx.tick.value === 0 ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.1)',
+                        lineWidth: ctx => ctx.tick.value === 0 ? 2 : 1
+                    }}
+                }},
+                y: {{
+                    title: {{ display: true, text: '\u2212\u03b2(2\u2192max) \u2014 Negated Slope Excluding MAL_1 (positive = MAL compliance)' }},
+                    grid: {{
+                        color: ctx => ctx.tick.value === 0 ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.1)',
+                        lineWidth: ctx => ctx.tick.value === 0 ? 2 : 1
+                    }}
+                }}
+            }}
+        }}
+    }});
+    
+    // Annotation
+    const c5b = document.getElementById('betaScatter2Chart');
+    const ann5b = document.createElement('div');
+    ann5b.style.cssText = 'position:relative;top:-80px;left:70px;font-size:14px;font-weight:bold;background:rgba(255,255,255,0.8);padding:4px 8px;border-radius:4px;display:inline-block;';
+    ann5b.innerHTML = 'r = ' + corr5b.toFixed(3) + ' | y = ' + slope5b.toFixed(3) + 'x + ' + intercept5b.toFixed(3);
+    c5b.parentNode.insertBefore(ann5b, c5b.nextSibling);
 }}
 
 // Chart 8: R² Goodness-of-Fit Distribution
@@ -2635,14 +3219,26 @@ def _generate_svg_combined_box_plot(box_plot_total, box_plot_left, box_plot_righ
 
 
 def _generate_svg_effect_by_family(family_stats, effect_scores):
-    """Generate an SVG chart showing MAL effect scores by language family."""
+    """Generate an SVG chart showing MAL effect scores by language family.
+    Values are negated so that positive = MAL compliance."""
     
     
     if not family_stats or not effect_scores:
         return "<p>No effect data available.</p>"
     
-    # Sort families by mean β (ascending = most negative/strongest MAL first)
-    sorted_families = sorted(family_stats.items(), key=lambda x: x[1]['mean'])
+    # Negate family stats so positive = MAL compliance
+    negated_family_stats = {}
+    for family, stats in family_stats.items():
+        negated_family_stats[family] = {
+            'mean': -stats['mean'],
+            'std': stats['std'],
+            'count': stats['count'],
+            'min': -stats['max'],  # negate swaps min/max
+            'max': -stats['min']
+        }
+    
+    # Sort families by mean (descending = most positive/strongest MAL first)
+    sorted_families = sorted(negated_family_stats.items(), key=lambda x: x[1]['mean'], reverse=True)
     
     # Filter to families with at least 2 languages
     sorted_families = [(f, s) for f, s in sorted_families if s['count'] >= 2]
@@ -2668,7 +3264,7 @@ def _generate_svg_effect_by_family(family_stats, effect_scores):
     bar_height = min(25, (plot_height / len(sorted_families)) * 0.7)
     bar_spacing = plot_height / len(sorted_families)
     
-    # Get individual scores by family for jittered points
+    # Get individual scores by family for jittered points (negated)
     family_scores = {}
     for item in effect_scores:
         family = item['group']
@@ -2676,14 +3272,14 @@ def _generate_svg_effect_by_family(family_stats, effect_scores):
             family_scores[family] = []
         family_scores[family].append({
             'name': item['name'],
-            'effect': item['effect']
+            'effect': -item['effect']  # Negate: positive = MAL compliance
         })
     
     svg_parts = []
     svg_parts.append(f'<svg width="{width}" height="{height}" xmlns="http://www.w3.org/2000/svg" style="background: white; font-family: Arial, sans-serif;">')
     
     # Title
-    svg_parts.append(f'<text x="{width/2}" y="25" text-anchor="middle" font-size="14" font-weight="bold">MAL Effect β(1→max) by Language Family</text>')
+    svg_parts.append(f'<text x="{width/2}" y="25" text-anchor="middle" font-size="14" font-weight="bold">MAL Effect −β(2→max) by Language Family (positive = MAL compliance)</text>')
     
     # X-axis
     svg_parts.append(f'<line x1="{margin_left}" y1="{margin_top + plot_height}" x2="{width - margin_right}" y2="{margin_top + plot_height}" stroke="#333" stroke-width="1"/>')
@@ -2698,7 +3294,7 @@ def _generate_svg_effect_by_family(family_stats, effect_scores):
         svg_parts.append(f'<line x1="{x_pos}" y1="{margin_top}" x2="{x_pos}" y2="{margin_top + plot_height}" stroke="#eee" stroke-width="1"/>')
     
     # X-axis label
-    svg_parts.append(f'<text x="{margin_left + plot_width/2}" y="{height - 15}" text-anchor="middle" font-size="12">β(1→max) — Log-Log Regression Slope</text>')
+    svg_parts.append(f'<text x="{margin_left + plot_width/2}" y="{height - 15}" text-anchor="middle" font-size="12">−β(2→max) — Negated Log-Log Regression Slope (positive = MAL compliance)</text>')
     
     # Color palette for families
     color_palette = [
@@ -2755,6 +3351,147 @@ def _generate_svg_effect_by_family(family_stats, effect_scores):
     
     svg_parts.append('</svg>')
     
+    return '\n'.join(svg_parts)
+
+
+def _generate_svg_effect_by_grouping(effect_scores, group_fn, title, x_label, min_group_count=1):
+    """Generate an SVG chart showing MAL effect scores by arbitrary grouping.
+    
+    Args:
+        effect_scores: List of dicts with 'name', 'code', 'effect' (raw slope), etc.
+        group_fn: Function that takes an effect_score item and returns a group label string (or None to exclude).
+        title: Chart title.
+        x_label: X-axis label.
+        min_group_count: Minimum number of languages in a group to display it.
+    """
+    if not effect_scores:
+        return "<p>No effect data available.</p>"
+    
+    # Group scores
+    grouped = defaultdict(list)
+    for item in effect_scores:
+        grp = group_fn(item)
+        if grp is not None:
+            grouped[grp].append(-item['effect'])  # Negate: positive = MAL compliance
+    
+    if not grouped:
+        return "<p>No grouping data available.</p>"
+    
+    # Compute stats per group
+    group_stats = {}
+    for grp, scores in grouped.items():
+        if len(scores) >= min_group_count:
+            group_stats[grp] = {
+                'mean': float(np.mean(scores)),
+                'std': float(np.std(scores)),
+                'count': len(scores),
+                'min': float(np.min(scores)),
+                'max': float(np.max(scores)),
+                'scores': scores
+            }
+    
+    if not group_stats:
+        return "<p>Not enough data for this grouping.</p>"
+    
+    # Sort by mean descending (strongest MAL first)
+    sorted_groups = sorted(group_stats.items(), key=lambda x: x[1]['mean'], reverse=True)
+    
+    # SVG dimensions
+    width = 900
+    height = max(250, len(sorted_groups) * 60 + 100)
+    margin_left = 200
+    margin_right = 50
+    margin_top = 40
+    margin_bottom = 60
+    plot_width = width - margin_left - margin_right
+    plot_height = height - margin_top - margin_bottom
+    
+    x_min, x_max = -0.4, 0.4
+    def scale_x(val):
+        return margin_left + (val - x_min) / (x_max - x_min) * plot_width
+    
+    bar_height = min(35, (plot_height / len(sorted_groups)) * 0.7)
+    bar_spacing = plot_height / len(sorted_groups)
+    
+    # Store individual scores by group for jitter
+    group_individual = {}
+    for item in effect_scores:
+        grp = group_fn(item)
+        if grp is not None and grp in group_stats:
+            if grp not in group_individual:
+                group_individual[grp] = []
+            group_individual[grp].append({
+                'name': item['name'],
+                'effect': -item['effect']
+            })
+    
+    color_palette = [
+        '#2196F3', '#4CAF50', '#F44336', '#9C27B0', '#FF9800',
+        '#00BCD4', '#E91E63', '#8BC34A', '#795548', '#3F51B5'
+    ]
+    
+    svg_parts = []
+    svg_parts.append(f'<svg width="{width}" height="{height}" xmlns="http://www.w3.org/2000/svg" style="background: white; font-family: Arial, sans-serif;">')
+    
+    # Title
+    svg_parts.append(f'<text x="{width/2}" y="25" text-anchor="middle" font-size="14" font-weight="bold">{title}</text>')
+    
+    # X-axis
+    svg_parts.append(f'<line x1="{margin_left}" y1="{margin_top + plot_height}" x2="{width - margin_right}" y2="{margin_top + plot_height}" stroke="#333" stroke-width="1"/>')
+    
+    for i in range(-4, 5):
+        x_val = i / 10
+        x_pos = scale_x(x_val)
+        svg_parts.append(f'<line x1="{x_pos}" y1="{margin_top + plot_height}" x2="{x_pos}" y2="{margin_top + plot_height + 5}" stroke="#333" stroke-width="1"/>')
+        svg_parts.append(f'<text x="{x_pos}" y="{margin_top + plot_height + 20}" text-anchor="middle" font-size="10">{x_val:.1f}</text>')
+        svg_parts.append(f'<line x1="{x_pos}" y1="{margin_top}" x2="{x_pos}" y2="{margin_top + plot_height}" stroke="#eee" stroke-width="1"/>')
+    
+    svg_parts.append(f'<text x="{margin_left + plot_width/2}" y="{height - 15}" text-anchor="middle" font-size="12">{x_label}</text>')
+    
+    # Draw bars and points
+    for i, (grp, stats) in enumerate(sorted_groups):
+        y_center = margin_top + (i + 0.5) * bar_spacing
+        y_top = y_center - bar_height / 2
+        color = color_palette[i % len(color_palette)]
+        
+        # Group label
+        svg_parts.append(f'<text x="{margin_left - 10}" y="{y_center + 4}" text-anchor="end" font-size="11">{grp} (n={stats["count"]})</text>')
+        
+        # Background bar
+        svg_parts.append(f'<rect x="{margin_left}" y="{y_top}" width="{plot_width}" height="{bar_height}" fill="#f5f5f5" stroke="#ddd" stroke-width="1"/>')
+        
+        # Mean bar
+        zero_x = scale_x(0)
+        mean_x = scale_x(stats['mean'])
+        if stats['mean'] >= 0:
+            bar_x = zero_x
+            bar_width = mean_x - zero_x
+        else:
+            bar_x = mean_x
+            bar_width = zero_x - mean_x
+        svg_parts.append(f'<rect x="{bar_x}" y="{y_top}" width="{bar_width}" height="{bar_height}" fill="{color}" fill-opacity="0.6" stroke="{color}" stroke-width="1"/>')
+        
+        # Individual language points (jittered)
+        if grp in group_individual:
+            np.random.seed(hash(grp) % 2**32)
+            for lang_item in group_individual[grp]:
+                x_pos = scale_x(lang_item['effect'])
+                x_pos = max(margin_left, min(width - margin_right, x_pos))
+                jitter = (np.random.random() - 0.5) * bar_height * 0.6
+                y_pos = y_center + jitter
+                svg_parts.append(f'<circle cx="{x_pos}" cy="{y_pos}" r="4" fill="{color}" stroke="white" stroke-width="1">')
+                svg_parts.append(f'<title>{lang_item["name"]}: {lang_item["effect"]:.3f}</title>')
+                svg_parts.append('</circle>')
+        
+        # Mean marker
+        svg_parts.append(f'<line x1="{mean_x}" y1="{y_top - 2}" x2="{mean_x}" y2="{y_top + bar_height + 2}" stroke="#333" stroke-width="2"/>')
+    
+    # Zero reference line
+    x_zero = scale_x(0)
+    svg_parts.append(f'<line x1="{x_zero}" y1="{margin_top}" x2="{x_zero}" y2="{margin_top + plot_height}" stroke="#333" stroke-width="1.5" stroke-dasharray="4,4"/>')
+    svg_parts.append(f'<text x="{x_zero + 5}" y="{margin_top + 15}" font-size="10" fill="#666">0</text>')
+    
+    svg_parts.append('</svg>')
     return '\n'.join(svg_parts)
 
 
@@ -2980,15 +3717,15 @@ def _generate_svg_world_map(geo_data):
     
     const path = d3.geoPath().projection(projection);
     
-    // Color scale for β(1→max) scores: negative = MAL compliance (green), positive = anti-MAL (red)
+    // Color scale for −β(2→max) scores: positive = MAL compliance (green), negative = anti-MAL (red)
     function scoreToColor(score) {{
-        if (score < -0.1) {{
-            // Green for MAL compliance (negative slope means size decreases with n)
-            const t = Math.min(1, Math.abs(score) / 0.3);
-            return d3.interpolateRgb("#b8e6b8", "#2e7d32")(t);
-        }} else if (score > 0.1) {{
-            // Red for anti-MAL (positive slope)
+        if (score > 0.1) {{
+            // Green for MAL compliance (positive −β means size decreases with n)
             const t = Math.min(1, score / 0.3);
+            return d3.interpolateRgb("#b8e6b8", "#2e7d32")(t);
+        }} else if (score < -0.1) {{
+            // Red for anti-MAL (negative −β)
+            const t = Math.min(1, Math.abs(score) / 0.3);
             return d3.interpolateRgb("#ffcdd2", "#c62828")(t);
         }} else {{
             // Yellow for neutral
@@ -3056,7 +3793,7 @@ def _generate_svg_world_map(geo_data):
                 d3.select(this).attr("r", 8).attr("stroke-width", 2);
                 tooltip.style("visibility", "visible")
                     .html(`<strong>${{d.name}}</strong><br/>
-                           β(1→max): ${{d.mal_score.toFixed(3)}}<br/>
+                           −β(2→max): ${{d.mal_score.toFixed(3)}}<br/>
                            Family: ${{d.family}}<br/>
                            Data points: ${{d.n_points}}`);
             }})
@@ -3071,10 +3808,10 @@ def _generate_svg_world_map(geo_data):
         
         // Add legend
         const legendData = [
-            {{ label: "Strong MAL (<-0.2)", score: -0.3 }},
-            {{ label: "Moderate MAL", score: -0.15 }},
+            {{ label: "Strong MAL (>0.2)", score: 0.3 }},
+            {{ label: "Moderate MAL", score: 0.15 }},
             {{ label: "Weak/Neutral", score: 0 }},
-            {{ label: "Anti-MAL (>0.1)", score: 0.2 }}
+            {{ label: "Anti-MAL (<-0.1)", score: -0.2 }}
         ];
         
         const legend = svg.append("g")
@@ -3095,7 +3832,7 @@ def _generate_svg_world_map(geo_data):
             .attr("y", -8)
             .attr("font-size", "11px")
             .attr("font-weight", "bold")
-            .text("β(1→max)");
+            .text("−β(2→max)");
         
         legendData.forEach((item, i) => {{
             legend.append("circle")
@@ -3230,7 +3967,7 @@ def generate_directional_mal_html_report(
         viz_data_total['group_by_lang'], max_n, min_count,
         table_id="malTable_total", include_sort_script=True, lang_to_vo=lang_to_vo, mal_label="MAL"
     ))
-    html_parts.append(_get_charts_section(viz_data_total, min_count))
+    html_parts.append(_get_charts_section(viz_data_total, min_count, lang_to_vo=lang_to_vo))
     
     # Section 2: Left Dependents
     html_parts.append('<h2 id="left-section">2. Left Dependents Analysis</h2>')
@@ -3355,9 +4092,9 @@ canvas {{ max-width: 100%; }}
 <p><strong>MAL_n:</strong> Arithmetic mean of constituent sizes for heads with n total dependents</p>
 
 <h4 style="margin-top:15px;">Log-Log Regression (β = MAL Effect Score)</h4>
-<p>Each language has two inline plots showing log(n) vs log(MAL_n) with linear regression:</p>
-<p><strong>Regression 1→max:</strong> Uses all available data points (n=1 to max) <em>where count ≥ {min_count}</em></p>
-<p><strong>Regression 2→max:</strong> Excludes n=1 (starts from n=2 to max) <em>where count ≥ {min_count}</em></p>
+<p>Each language has an inline plot showing log(n) vs log(MAL_n) with linear regression:</p>
+<p><strong>Regression 2→max:</strong> Regression from n=2 to max <em>where count ≥ {min_count}</em>. 
+MAL_1 is excluded because it often behaves atypically and can distort the regression slope.</p>
 <p><strong>β (slope):</strong> The negative of the log-log regression slope. Under MAL: log(MAL_n) = a - β·log(n)</p>
 <p style="margin-left: 20px;">• <span style="background:#c8e6c9;padding:2px 6px;">β &gt; 0.1 (green)</span>: MAL compliance</p>
 <p style="margin-left: 20px;">• <span style="background:#ffcdd2;padding:2px 6px;">β &lt; -0.1 (red)</span>: Anti-MAL</p>
