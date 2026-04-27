@@ -88,6 +88,34 @@ DEFAULT_N_AXIS_MAX = 7
 _EXAMPLES_INDEX: dict = {}
 
 
+def _load_universality_significance(data_dir='data'):
+    """Load per-language significance from ``mal_universality_test_beta.csv``.
+
+    Returns ``{lang_code: {'beta_1max': float, 'p_value': float,
+                          'significant': bool, 'significant_mal': bool}}``
+    or ``{}`` if the CSV is missing.
+    """
+    path = os.path.join(data_dir, 'mal_universality_test_beta.csv')
+    if not os.path.exists(path):
+        return {}
+    try:
+        import pandas as pd  # local import: optional dependency
+        df = pd.read_csv(path)
+    except Exception:
+        return {}
+    out = {}
+    for _, r in df.iterrows():
+        code = r.get('language_code')
+        if not isinstance(code, str):
+            continue
+        out[code] = {
+            'beta_1max': float(r['beta_1max']) if pd.notna(r.get('beta_1max')) else None,
+            'p_value': float(r['p_value']) if pd.notna(r.get('p_value')) else None,
+            'significant': bool(r.get('significant', False)),
+            'significant_mal': bool(r.get('significant_mal', False)),
+        }
+    return out
+
 def _build_examples_index(output_dir, langNames):
     """Scan ``<output_dir>/examples/<lang_code>/index.html`` for each language
     in ``langNames`` and return ``{lang_code: rel_url}``.
@@ -139,6 +167,8 @@ def _paper_citation_html():
 
 
 _COMMON_CSS = """
+:root { color-scheme: light; }
+html, body { background: #fff; }
 body { font-family: Arial, sans-serif; max-width: 1500px; margin: 0 auto; padding: 20px; color: #222; }
 h1 { color: #333; }
 h2 { color: #555; margin-top: 30px; }
@@ -1416,7 +1446,8 @@ def generate_commentary_html(output_dir,
 
 def generate_index_html(output_dir, per_lang_mal, per_lang_lmal, per_lang_rmal,
                         langNames, global_bounds, n_axis_max,
-                        paper_pdf_available=False):
+                        paper_pdf_available=False,
+                        significance_by_lang=None):
     path = os.path.join(output_dir, 'index.html')
     body = []
     body.append(_html_head('MAL Analysis — UDW26 Companion Site', with_chartjs=False))
@@ -1439,6 +1470,15 @@ def generate_index_html(output_dir, per_lang_mal, per_lang_lmal, per_lang_rmal,
     n_lmal_anti = cats_lmal['anti']
     n_rmal_mal  = cats_rmal['mal']
     n_total_langs = len(per_lang_mal)
+
+    # --- significance test stats (permutation test on β_1max) ---
+    sig_dict = significance_by_lang or {}
+    n_sig_total = len(sig_dict)
+    n_sig_mal  = sum(1 for v in sig_dict.values() if v.get('significant_mal'))
+    n_sig_anti = sum(1 for v in sig_dict.values()
+                     if v.get('significant') and not v.get('significant_mal')
+                     and (v.get('beta_1max') or 0) < 0)
+    pct_sig_mal = (100.0 * n_sig_mal / n_sig_total) if n_sig_total else 0.0
 
     # --- HERO ---
     body.append('<style>'
@@ -1510,6 +1550,13 @@ def generate_index_html(output_dir, per_lang_mal, per_lang_lmal, per_lang_rmal,
     body.append(f'<div class="kpi purple"><div class="num">{n_rmal_mal}</div>'
                 f'<div class="lbl">Languages with strong <strong>RMAL</strong> '
                 f'(<em>postverbal</em> compression)</div></div>')
+    if n_sig_total:
+        body.append(f'<div class="kpi orange"><div class="num">{pct_sig_mal:.1f}%'
+                    f'</div><div class="lbl"><strong>{n_sig_mal}/{n_sig_total}</strong> '
+                    f'pass the universality test '
+                    f'(β&nbsp;&gt;&nbsp;0, <em>p</em>&nbsp;&lt;&nbsp;0.05); '
+                    f'<strong>{n_sig_anti}</strong> are significantly anti-MAL.'
+                    f'</div></div>')
     body.append('</div>')
 
     # --- Key findings (paper abstract, distilled) ---
@@ -1537,6 +1584,15 @@ def generate_index_html(output_dir, per_lang_mal, per_lang_lmal, per_lang_rmal,
                 'OV languages on the preverbal side. Fisher\u2019s exact tests '
                 '(<a href="mal_statistical_tests.html">all p-values here</a>) '
                 'confirm this is significant.</p></div>')
+    if n_sig_total:
+        body.append('<div class="finding">'
+                    '<h3>\U0001F9EA Universality? Only for some.</h3>'
+                    f'<p>A permutation test on the slope \u03b2(1\u2192max) '
+                    f'flags only <strong>{n_sig_mal} of {n_sig_total}</strong> '
+                    f'languages ({pct_sig_mal:.1f}%) as showing a '
+                    f'<em>significantly positive</em> MAL effect (\u03b1=0.05); '
+                    f'<strong>{n_sig_anti}</strong> go the other way. The '
+                    f'<em>p</em>-values are now in the big effect table.</p></div>')
     body.append('</div>')
 
     # --- Featured live plots ---
@@ -1680,8 +1736,10 @@ def generate_index_html(output_dir, per_lang_mal, per_lang_lmal, per_lang_rmal,
 
 def _build_effect_table(per_lang_mal, per_lang_lmal, per_lang_rmal,
                        langNames, langnameGroup, lang_to_vo,
-                       global_bounds, n_axis_max, table_id='effectTable'):
+                       global_bounds, n_axis_max, table_id='effectTable',
+                       significance_by_lang=None):
     """The single big table on mal_effect.html."""
+    sig_by_lang = significance_by_lang or {}
     rows = sorted(((lang, langNames.get(lang, lang)) for lang in per_lang_mal),
                   key=lambda x: x[1].lower())
     out = []
@@ -1692,6 +1750,9 @@ def _build_effect_table(per_lang_mal, per_lang_lmal, per_lang_rmal,
     out.append(f'<th class="effect-col" onclick="sortTable(\'{table_id}\',3,\'number\')" style="cursor:pointer;min-width:160px">MAL β(1→max) ⇅</th>')
     out.append(f'<th class="effect-col" onclick="sortTable(\'{table_id}\',4,\'number\')" style="cursor:pointer;min-width:160px">LMAL β(1→max) ⇅</th>')
     out.append(f'<th class="effect-col" onclick="sortTable(\'{table_id}\',5,\'number\')" style="cursor:pointer;min-width:160px">RMAL β(1→max) ⇅</th>')
+    if sig_by_lang:
+        out.append(f'<th onclick="sortTable(\'{table_id}\',6,\'number\')" style="cursor:pointer" title="Permutation-test p-value on MAL β(1→max), α=0.05"><i>p</i>-value ⇅</th>')
+        out.append(f'<th onclick="sortTable(\'{table_id}\',7,\'string\')" style="cursor:pointer" title="MAL✓ = significantly positive (β>0, p<0.05); anti✓ = significantly negative; n.s. = not significant.">Sig. ⇅</th>')
     out.append('</tr></thead><tbody>')
 
     for lang, name in rows:
@@ -1711,6 +1772,22 @@ def _build_effect_table(per_lang_mal, per_lang_lmal, per_lang_rmal,
                 lang_name=name, lang_code=lang, mal_label=d_label,
                 fixed_bounds=global_bounds, n_axis_max=n_axis_max)
             out.append(_effect_cell_with_plot(svg, beta))
+        if sig_by_lang:
+            sig = sig_by_lang.get(lang)
+            if sig is None or sig.get('p_value') is None:
+                out.append('<td style="color:#888;">—</td>')
+                out.append('<td style="color:#888;">—</td>')
+            else:
+                p = sig['p_value']
+                p_str = (f'{p:.3g}' if p >= 0.001 else '&lt;0.001')
+                out.append(f'<td data-sort="{p:.6f}" style="font-family:monospace;">{p_str}</td>')
+                if sig.get('significant_mal'):
+                    badge = '<span style="background:#c8e6c9;color:#1b5e20;padding:2px 8px;border-radius:10px;font-weight:bold;">MAL✓</span>'
+                elif sig.get('significant') and (sig.get('beta_1max') or 0) < 0:
+                    badge = '<span style="background:#ffcdd2;color:#b71c1c;padding:2px 8px;border-radius:10px;font-weight:bold;">anti✓</span>'
+                else:
+                    badge = '<span style="background:#eee;color:#666;padding:2px 8px;border-radius:10px;">n.s.</span>'
+                out.append(f'<td>{badge}</td>')
         out.append('</tr>')
 
     out.append('</tbody></table>')
@@ -1719,7 +1796,8 @@ def _build_effect_table(per_lang_mal, per_lang_lmal, per_lang_rmal,
 
 def generate_mal_effect_html(output_dir, per_lang_mal, per_lang_lmal, per_lang_rmal,
                               langNames, langnameGroup, lang_to_vo,
-                              global_bounds, n_axis_max, min_count):
+                              global_bounds, n_axis_max, min_count,
+                              significance_by_lang=None):
     path = os.path.join(output_dir, 'mal_effect.html')
     body = []
     body.append(_html_head('MAL Effect — UDW26'))
@@ -1766,7 +1844,8 @@ def generate_mal_effect_html(output_dir, per_lang_mal, per_lang_lmal, per_lang_r
     body.append(_examples_legend_html())
     body.append(_build_effect_table(per_lang_mal, per_lang_lmal, per_lang_rmal,
                                     langNames, langnameGroup, lang_to_vo,
-                                    global_bounds, n_axis_max))
+                                    global_bounds, n_axis_max,
+                                    significance_by_lang=significance_by_lang))
     body.append(_csv_download_button('effectTable', 'mal_effect_table.csv'))
     body.append(_table_sort_script())
 
@@ -4560,11 +4639,16 @@ def generate_directional_histograms_html(output_dir, per_lang_mal, per_lang_lmal
     body.append('<h1>β(1→max) distribution faceted by VO / OV / NDO</h1>')
     body.append('<div class="info-box">')
     body.append(_paper_citation_html())
-    body.append('<p>This view splits the β histograms across the three VO/OV/NDO buckets, '
+    body.append('<p><strong>VO/OV/NDO definitions</strong> (verb-object order ratio): '
+                '<span style="background:#c8e6c9;padding:2px 6px;border-radius:3px;"><strong>VO</strong> if the ratio &ge; 2/3 (&approx;0.667)</span> &middot; '
+                '<span style="background:#ffcdd2;padding:2px 6px;border-radius:3px;"><strong>OV</strong> if the ratio &le; 1/3 (&approx;0.333)</span> &middot; '
+                '<span style="background:#fff9c4;padding:2px 6px;border-radius:3px;"><strong>NDO</strong> (no dominant order) otherwise</span>.</p>')
+    body.append('<p>This view splits the &beta; histograms across the three VO/OV/NDO buckets, '
                 'making the central contrast of the paper directly visible: '
                 '<strong>VO languages cluster on the MAL side of RMAL</strong>, while '
                 '<strong>OV languages cluster on the MAL side of LMAL</strong> '
-                '(see paper §5.1).</p>')
+                '(see paper &sect;5.1). Bars for the three groups are shown '
+                'side-by-side in each bin to make per-bin comparison easy.</p>')
     body.append('</div>')
     for direction, label in [('mal', 'MAL'), ('lmal', 'LMAL'), ('rmal', 'RMAL')]:
         body.append(f'<div class="chart-container">'
@@ -4597,7 +4681,7 @@ function makeChart(direction) {{
     for (const k of ['VO', 'OV', 'NDO']) {{
         const b = bin(groups[k], lo, hi, n);
         datasets.push({{label: k + ' (n=' + groups[k].length + ')',
-                        data: b.counts, backgroundColor: palette[k], stack: 's'}});
+                        data: b.counts, backgroundColor: palette[k]}});
     }}
     new Chart(document.getElementById('hist_' + direction), {{
         type: 'bar', data: {{labels, datasets}},
@@ -4608,10 +4692,9 @@ function makeChart(direction) {{
                 tooltip: {{callbacks: {{title: ctx => 'β bin: ' + ctx[0].label}}}}
             }},
             scales: {{
-                x: {{title: {{display: true, text: 'β(1→max)'}},
-                     stacked: true}},
+                x: {{title: {{display: true, text: 'β(1→max)'}}}},
                 y: {{title: {{display: true, text: '# languages'}},
-                     stacked: true, beginAtZero: true}}
+                     beginAtZero: true}}
             }}
         }}
     }});
@@ -4807,6 +4890,7 @@ def generate_site(output_dir,
                   notebook_path='08_menzerath_altmann_analysis.ipynb',
                   plots_dir='plots',
                   paper_pdf_path='latex/main.pdf',
+                  data_dir='data',
                   examples_mode='reuse',
                   examples_languages=None,
                   examples_max_per_bucket=20,
@@ -4893,6 +4977,8 @@ def generate_site(output_dir,
     max_n_right = _max_n(lang2MAL_right)
 
     written = []
+    # Per-language permutation-test significance for MAL \u03b2(1\u2192max).
+    significance_by_lang = _load_universality_significance(data_dir)
     # Copy paper PDF next to the site so the index can link to it.
     paper_pdf_available = False
     if paper_pdf_path and os.path.exists(paper_pdf_path):
@@ -4905,11 +4991,13 @@ def generate_site(output_dir,
     written.append(generate_index_html(
         output_dir, per_mal, per_lmal, per_rmal,
         langNames, global_bounds, n_axis_max,
-        paper_pdf_available=paper_pdf_available))
+        paper_pdf_available=paper_pdf_available,
+        significance_by_lang=significance_by_lang))
     written.append(generate_mal_effect_html(
         output_dir, per_mal, per_lmal, per_rmal,
         langNames, langnameGroup, lang_to_vo,
-        global_bounds, n_axis_max, min_count))
+        global_bounds, n_axis_max, min_count,
+        significance_by_lang=significance_by_lang))
     for direction, per_lang in (('mal', per_mal), ('lmal', per_lmal), ('rmal', per_rmal)):
         written.append(generate_more_effect_html(
             output_dir, direction, per_lang, langNames, langnameGroup,
@@ -5071,6 +5159,7 @@ def main(argv=None):
     stats = generate_site(output_dir=args.output_dir, min_count=args.min_count,
                           notebook_path=args.notebook, plots_dir=args.plots_dir,
                           paper_pdf_path=args.paper_pdf,
+                          data_dir=args.data_dir,
                           examples_mode=args.examples_mode,
                           examples_languages=examples_languages,
                           examples_max_per_bucket=args.examples_max_per_bucket,

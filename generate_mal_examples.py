@@ -68,6 +68,8 @@ DIRECTION_DESC = {
 }
 
 PAGE_CSS = """
+:root { color-scheme: light; }
+html, body { background: #fff; }
 body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
        padding: 0 20px; color: #222; }
 h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
