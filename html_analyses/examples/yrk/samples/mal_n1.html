@@ -1,0 +1,313 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Nenets — MAL_1</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Nenets examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Nenets <small style="color:#999;font-weight:normal">(yrk)</small> — MAL<sub>1</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>1</b> dependents in total (left + right combined).</p><p><b>MAL<sub>1</sub> = 1.879</b> &nbsp; <span style="color:#666">(114 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over all dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: yrk_tundra-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ӈохолё мадав <p> яда нэкалӈав <p>
+1	ӈохолё	ӈохолё	VERB	VERB	_	2	advcl	_	_
+2	мадав	мадав	VERB	VERB	_	0	root	_	_
+3	<p>	<p>	PUNCT	PUNCT	_	2	punct	_	_
+4	яда	яда	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+5	нэкалӈав	нэкалӈав	VERB	VERB	_	2	parataxis	_	highlight=red
+6	<p>	<p>	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: yrk_tundra-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Грушамʼ тэˮӈада <p> хыдяʼ мюʼ пуняˮ <p> мэда <p>
+1	Грушамʼ	Грушамʼ	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
+2	тэˮӈада	тэˮӈада	VERB	VERB	_	0	root	_	highlight=red
+3	<p>	<p>	PUNCT	PUNCT	_	2	punct	_	_
+4	хыдяʼ	хыдяʼ	NOUN	NOUN	_	8	obl:mod	_	_
+5	мюʼ	мюʼ	ADP	ADP	_	4	case	_	_
+6	пуняˮ	пуняˮ	ADV	ADV	_	8	advmod	_	_
+7	<p>	<p>	INTJ	INTJ	_	6	discourse	_	_
+8	мэда	мэда	VERB	VERB	_	2	parataxis	_	_
+9	<p>	<p>	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: yrk_tundra-ud-test.conllu · this verb has L=1, R=0 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Тадтикахавахад <p> маха харадмʼ <f>сюрт<un> сятаняӈы хэвувнанда сюрте хэя <p> хойʼ <iw>ниӈа тирʼ серʼ ялъянаˮ <p>
+1	Тадтикахавахад	Тадтикахавахад	ADV	ADV	_	9	advmod	_	_
+2	<p>	<p>	X	X	_	1	discourse	_	_
+3	маха	маха	NOUN	NOUN	_	9	obl:mod	_	_
+4	харадмʼ	харадмʼ	NOUN	NOUN	_	9	obj	_	_
+5	<f>сюрт<un>	<f>сюрт<un>	ADP	ADP	_	9	dep	_	_
+6	сятаняӈы	сятаняӈы	ADJ	ADJ	_	7	amod	_	_
+7	хэвувнанда	хэвувнанда	NOUN	NOUN	_	5	reparandum	_	_
+8	сюрте	сюрте	ADP	ADP	_	7	case	_	_
+9	хэя	хэя	VERB	VERB	_	0	root	_	_
+10	<p>	<p>	PUNCT	PUNCT	_	9	punct	_	_
+11	хойʼ	хойʼ	NOUN	NOUN	_	13	nmod:poss	_	_
+12	<iw>ниӈа	<iw>ниӈа	ADP	ADP	_	11	case	_	_
+13	тирʼ	тирʼ	NOUN	NOUN	_	15	obl:mod	_	highlight=green|span=4
+14	серʼ	серʼ	ADP	ADP	_	13	case	_	_
+15	ялъянаˮ	ялъянаˮ	VERB	VERB	_	9	parataxis	_	highlight=red
+16	<p>	<p>	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: yrk_tundra-ud-test.conllu · this verb has L=1, R=0 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = нерни няна <p> пирця махалэйтана харадмʼ манэˮӈадмʼ <p>
+1	нерни	нерни	ADP	ADP	_	7	dep	_	_
+2	няна	няна	ADP	ADP	_	1	dep	_	_
+3	<p>	<p>	X	X	_	1	discourse	_	_
+4	пирця	пирця	ADJ	ADJ	_	5	amod	_	_
+5	махалэйтана	махалэйтана	ADJ	ADJ	_	6	amod	_	_
+6	харадмʼ	харадмʼ	NOUN	NOUN	_	7	obj	_	highlight=green|span=3
+7	манэˮӈадмʼ	манэˮӈадмʼ	VERB	VERB	_	0	root	_	highlight=red
+8	<p>	<p>	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: yrk_tundra-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = маханякубтаʼ миманиʼ серʼ яхаʼ таркавна ӈадимядмʼ <p>
+1	маханякубтаʼ	маханякубтаʼ	NOUN	NOUN	_	2	obl:mod	_	highlight=green|span=1
+2	миманиʼ	миманиʼ	VERB	VERB	_	6	advcl	_	highlight=red
+3	серʼ	серʼ	ADP	ADP	_	2	mark	_	_
+4	яхаʼ	яхаʼ	NOUN	NOUN	_	5	nmod:poss	_	_
+5	таркавна	таркавна	NOUN	NOUN	_	6	obl:mod	_	_
+6	ӈадимядмʼ	ӈадимядмʼ	VERB	VERB	_	0	root	_	_
+7	<p>	<p>	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: yrk_tundra-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ӈоди маˮламбада?мэ? <p> груши хаˮаврамбада <p> хасавар <p> танцяӈгаданда ӈаниʼ тасиʼ хаˮмыˮ <p>
+1	ӈоди	ӈоди	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
+2	маˮламбада?мэ?	маˮламбада?мэ?	VERB	VERB	_	7	acl	_	highlight=red
+3	<p>	<p>	INTJ	INTJ	_	2	discourse	_	_
+4	груши	груши	NOUN	NOUN	_	5	obj	_	_
+5	хаˮаврамбада	хаˮаврамбада	VERB	VERB	_	7	acl	_	_
+6	<p>	<p>	INTJ	INTJ	_	5	discourse	_	_
+7	хасавар	хасавар	NOUN	NOUN	_	12	nsubj	_	_
+8	<p>	<p>	INTJ	INTJ	_	7	discourse	_	_
+9	танцяӈгаданда	танцяӈгаданда	NOUN	NOUN	_	12	obl:mod	_	_
+10	ӈаниʼ	ӈаниʼ	ADV	ADV	_	12	advmod	_	_
+11	тасиʼ	тасиʼ	ADP	ADP	_	12	dep	_	_
+12	хаˮмыˮ	хаˮмыˮ	VERB	VERB	_	0	root	_	_
+13	<p>	<p>	PUNCT	PUNCT	_	12	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: yrk_tundra-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = таремʼ пэрӈава <p> яхаʼ варувна <p> яхаʼ лаӈгʼ сятаняюмна ӈобʼ яда нэкалӈав <p>
+1	таремʼ	таремʼ	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+2	пэрӈава	пэрӈава	VERB	VERB	_	0	root	_	highlight=red
+3	<p>	<p>	PUNCT	PUNCT	_	2	punct	_	_
+4	яхаʼ	яхаʼ	NOUN	NOUN	_	5	nmod:poss	_	_
+5	варувна	варувна	NOUN	NOUN	_	12	obl:mod	_	_
+6	<p>	<p>	X	X	_	5	discourse	_	_
+7	яхаʼ	яхаʼ	NOUN	NOUN	_	8	nmod:poss	_	_
+8	лаӈгʼ	лаӈгʼ	NOUN	NOUN	_	12	obl:mod	_	_
+9	сятаняюмна	сятаняюмна	ADJ	ADJ	_	12	advcl	_	_
+10	ӈобʼ	ӈобʼ	ADV	ADV	_	11	advmod	_	_
+11	яда	яда	ADV	ADV	_	12	advmod	_	_
+12	нэкалӈав	нэкалӈав	VERB	VERB	_	2	parataxis	_	_
+13	<p>	<p>	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: yrk_tundra-ud-test.conllu · this verb has L=1, R=0 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = вэбаˮ тяхад <p> ӈадиберӈа <p>
+1	вэбаˮ	вэбаˮ	NOUN	NOUN	_	4	obl:mod	_	highlight=green|span=3
+2	тяхад	тяхад	ADP	ADP	_	1	case	_	_
+3	<p>	<p>	INTJ	INTJ	_	1	discourse	_	_
+4	ӈадиберӈа	ӈадиберӈа	VERB	VERB	_	0	root	_	highlight=red
+5	<p>	<p>	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: yrk_tundra-ud-test.conllu · this verb has L=1, R=0 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = яʼ тирʼ ниʼ танаˮмахаданаˮ пирця <p> махалэй саблюй харадмʼ манэˮӈаваˮ <p>
+1	яʼ	яʼ	NOUN	NOUN	_	2	nmod:poss	_	_
+2	тирʼ	тирʼ	NOUN	NOUN	_	4	obl:mod	_	highlight=green|span=3
+3	ниʼ	ниʼ	ADP	ADP	_	2	case	_	_
+4	танаˮмахаданаˮ	танаˮмахаданаˮ	VERB	VERB	_	10	advcl	_	highlight=red
+5	пирця	пирця	ADJ	ADJ	_	7	amod	_	_
+6	<p>	<p>	X	X	_	5	discourse	_	_
+7	махалэй	махалэй	NOUN	NOUN	_	9	nmod	_	_
+8	саблюй	саблюй	ADJ	ADJ	_	9	amod	_	_
+9	харадмʼ	харадмʼ	NOUN	NOUN	_	10	obj	_	_
+10	манэˮӈаваˮ	манэˮӈаваˮ	VERB	VERB	_	0	root	_	_
+11	<p>	<p>	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: yrk_tundra-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ӈобкана маˮлэйдоʼ <p>
+1	ӈобкана	ӈобкана	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+2	маˮлэйдоʼ	маˮлэйдоʼ	VERB	VERB	_	0	root	_	highlight=red
+3	<p>	<p>	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: yrk_tundra-ud-test.conllu · this verb has L=1, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = танцяʼ серʼ хаˮмывʼ <p> тамна тяхаʼ ядалъявʼ <p> сятаняюʼ сюртев <p>
+1	танцяʼ	танцяʼ	NOUN	NOUN	_	3	obl:mod	_	highlight=green|span=2
+2	серʼ	серʼ	ADP	ADP	_	1	case	_	_
+3	хаˮмывʼ	хаˮмывʼ	VERB	VERB	_	0	root	_	highlight=red
+4	<p>	<p>	PUNCT	PUNCT	_	3	punct	_	_
+5	тамна	тамна	ADV	ADV	_	6	advmod	_	_
+6	тяхаʼ	тяхаʼ	ADV	ADV	_	7	advmod	_	_
+7	ядалъявʼ	ядалъявʼ	VERB	VERB	_	3	parataxis	_	_
+8	<p>	<p>	PUNCT	PUNCT	_	3	punct	_	_
+9	сятаняюʼ	сятаняюʼ	ADV	ADV	_	10	advmod	_	_
+10	сюртев	сюртев	VERB	VERB	_	3	parataxis	_	_
+11	<p>	<p>	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: yrk_tundra-ud-test.conllu · this verb has L=1, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = танцяʼ серʼ хаˮмывʼ <p> тамна тяхаʼ ядалъявʼ <p> сятаняюʼ сюртев <p>
+1	танцяʼ	танцяʼ	NOUN	NOUN	_	3	obl:mod	_	_
+2	серʼ	серʼ	ADP	ADP	_	1	case	_	_
+3	хаˮмывʼ	хаˮмывʼ	VERB	VERB	_	0	root	_	_
+4	<p>	<p>	PUNCT	PUNCT	_	3	punct	_	_
+5	тамна	тамна	ADV	ADV	_	6	advmod	_	_
+6	тяхаʼ	тяхаʼ	ADV	ADV	_	7	advmod	_	highlight=green|span=2
+7	ядалъявʼ	ядалъявʼ	VERB	VERB	_	3	parataxis	_	highlight=red
+8	<p>	<p>	PUNCT	PUNCT	_	3	punct	_	_
+9	сятаняюʼ	сятаняюʼ	ADV	ADV	_	10	advmod	_	_
+10	сюртев	сюртев	VERB	VERB	_	3	parataxis	_	_
+11	<p>	<p>	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: yrk_tundra-ud-test.conllu · this verb has L=0, R=1 (mean span = 11.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = маˮнив : ӈамгэ няхарˮ <p> грушиˮ хыдя ӈэсь таранархасиʼ ӈопой сидя няхаромдэйми яӈгу <p>
+1	маˮнив	маˮнив	VERB	VERB	_	0	root	_	highlight=red
+2	:	:	PUNCT	PUNCT	_	3	punct	_	_
+3	ӈамгэ	ӈамгэ	PRON	PRON	_	1	obj	_	highlight=green|span=11
+4	няхарˮ	няхарˮ	NUM	NUM	_	7	nummod	_	_
+5	<p>	<p>	INTJ	INTJ	_	4	discourse	_	_
+6	грушиˮ	грушиˮ	NOUN	NOUN	_	7	nmod:poss	_	_
+7	хыдя	хыдя	NOUN	NOUN	_	8	nsubj	_	_
+8	ӈэсь	ӈэсь	VERB	VERB	_	3	parataxis	_	_
+9	таранархасиʼ	таранархасиʼ	AUX	AUX	_	8	aux	_	_
+10	ӈопой	ӈопой	NUM	NUM	_	8	parataxis	_	_
+11	сидя	сидя	NUM	NUM	_	8	parataxis	_	_
+12	няхаромдэйми	няхаромдэйми	NUM	NUM	_	13	nsubj	_	_
+13	яӈгу	яӈгу	VERB	VERB	_	8	parataxis	_	_
+14	<p>	<p>	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: yrk_tundra-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = таремʼ яднахандоʼ иня_няӈыʼ хэвувнандоʼ <p> няндоʼ <p> ха&quot;маэм мантэвы савамʼ хоˮ <p>
+1	таремʼ	таремʼ	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+2	яднахандоʼ	яднахандоʼ	VERB	VERB	_	11	advcl	_	highlight=red
+3	иня_няӈыʼ	иня_няӈыʼ	ADJ	ADJ	_	4	amod	_	_
+4	хэвувнандоʼ	хэвувнандоʼ	NOUN	NOUN	_	11	obl:mod	_	_
+5	<p>	<p>	PUNCT	PUNCT	_	11	punct	_	_
+6	няндоʼ	няндоʼ	NOUN	NOUN	_	10	nmod:poss	_	_
+7	<p>	<p>	INTJ	INTJ	_	6	discourse	_	_
+8	ха&quot;маэм	ха&quot;маэм	VERB	VERB	_	10	acl	_	_
+9	мантэвы	мантэвы	VERB	VERB	_	10	acl	_	_
+10	савамʼ	савамʼ	NOUN	NOUN	_	11	obj	_	_
+11	хоˮ	хоˮ	VERB	VERB	_	0	root	_	_
+12	<p>	<p>	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: yrk_tundra-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = хасаванд тикы <p> ӈоди маˮламбаданд сидя хыдяда терсавэйхаʼ ӈоб хыдяда терси <p>
+1	хасаванд	хасаванд	NOUN	NOUN	_	7	nmod:poss	_	_
+2	тикы	тикы	PRON	PRON	_	7	nmod	_	_
+3	<p>	<p>	INTJ	INTJ	_	2	discourse	_	_
+4	ӈоди	ӈоди	NOUN	NOUN	_	5	obj	_	highlight=green|span=1
+5	маˮламбаданд	маˮламбаданд	VERB	VERB	_	7	acl	_	highlight=red
+6	сидя	сидя	NUM	NUM	_	7	nummod	_	_
+7	хыдяда	хыдяда	NOUN	NOUN	_	8	nsubj	_	_
+8	терсавэйхаʼ	терсавэйхаʼ	ADJ	ADJ	_	0	root	_	_
+9	ӈоб	ӈоб	NUM	NUM	_	10	nummod	_	_
+10	хыдяда	хыдяда	NOUN	NOUN	_	11	nsubj	_	_
+11	терси	терси	ADJ	ADJ	_	8	parataxis	_	_
+12	<p>	<p>	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: yrk_tundra-ud-test.conllu · this verb has L=1, R=0 (mean span = 6.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = сюнраха имбытадотана хасава ӈацекы нянда савамʼ няˮмада няханда тёренакыˮ <p> хасавов <p> савамд юрвэнэй <p>
+1	сюнраха	сюнраха	ADJ	ADJ	_	2	advcl	_	_
+2	имбытадотана	имбытадотана	VERB	VERB	_	4	acl	_	_
+3	хасава	хасава	NOUN	NOUN	_	4	nmod	_	_
+4	ӈацекы	ӈацекы	NOUN	NOUN	_	5	nmod	_	_
+5	нянда	нянда	NOUN	NOUN	_	6	nmod:poss	_	_
+6	савамʼ	савамʼ	NOUN	NOUN	_	7	obj	_	highlight=green|span=6
+7	няˮмада	няˮмада	VERB	VERB	_	0	root	_	highlight=red
+8	няханда	няханда	NOUN	NOUN	_	9	obl:mod	_	_
+9	тёренакыˮ	тёренакыˮ	VERB	VERB	_	7	parataxis	_	_
+10	<p>	<p>	PUNCT	PUNCT	_	9	punct	_	_
+11	хасавов	хасавов	NOUN	NOUN	_	14	vocative	_	_
+12	<p>	<p>	PUNCT	PUNCT	_	11	punct	_	_
+13	савамд	савамд	NOUN	NOUN	_	14	obj	_	_
+14	юрвэнэй	юрвэнэй	VERB	VERB	_	9	ccomp	_	_
+15	<p>	<p>	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: yrk_tundra-ud-test.conllu · this verb has L=1, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = тамна тяхаˮ ялъявʼ <p> ядваниʼ серʼ <p> пулмʼ манэˮӈадмʼ <p>
+1	тамна	тамна	ADV	ADV	_	2	advmod	_	_
+2	тяхаˮ	тяхаˮ	ADV	ADV	_	3	advmod	_	highlight=green|span=2
+3	ялъявʼ	ялъявʼ	VERB	VERB	_	0	root	_	highlight=red
+4	<p>	<p>	PUNCT	PUNCT	_	3	punct	_	_
+5	ядваниʼ	ядваниʼ	VERB	VERB	_	9	advcl	_	_
+6	серʼ	серʼ	ADP	ADP	_	5	mark	_	_
+7	<p>	<p>	X	X	_	5	discourse	_	_
+8	пулмʼ	пулмʼ	NOUN	NOUN	_	9	obj	_	_
+9	манэˮӈадмʼ	манэˮӈадмʼ	VERB	VERB	_	3	parataxis	_	_
+10	<p>	<p>	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: yrk_tundra-ud-test.conllu · this verb has L=1, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = <d> тасехэй имбытадотана сюнраха имбытадотана няръяна имбытадотана хасава ӈацекы <p>
+1	<d>	<d>	INTJ	INTJ	_	2	discourse	_	_
+2	тасехэй	тасехэй	ADJ	ADJ	_	3	advcl	_	highlight=green|span=2
+3	имбытадотана	имбытадотана	VERB	VERB	_	9	acl	_	highlight=red
+4	сюнраха	сюнраха	ADJ	ADJ	_	5	advcl	_	_
+5	имбытадотана	имбытадотана	VERB	VERB	_	9	acl	_	_
+6	няръяна	няръяна	ADJ	ADJ	_	7	advcl	_	_
+7	имбытадотана	имбытадотана	VERB	VERB	_	9	acl	_	_
+8	хасава	хасава	NOUN	NOUN	_	9	nmod	_	_
+9	ӈацекы	ӈацекы	NOUN	NOUN	_	0	root	_	_
+10	<p>	<p>	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: yrk_tundra-ud-test.conllu · this verb has L=1, R=0 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = савами нерʼ не ӈацекымʼ <p> манэˮмани серʼ ӈэвани нид <p> ӈобтʼ тебваниʼ серʼ хэ<un> хэвняʼ мантэрхавыˮнёʼ <p>
+1	савами	савами	NOUN	NOUN	_	16	nsubj	_	_
+2	нерʼ	нерʼ	ADV	ADV	_	16	advmod	_	_
+3	не	не	NOUN	NOUN	_	4	nmod	_	_
+4	ӈацекымʼ	ӈацекымʼ	NOUN	NOUN	_	6	obj	_	highlight=green|span=3
+5	<p>	<p>	INTJ	INTJ	_	4	discourse	_	_
+6	манэˮмани	манэˮмани	VERB	VERB	_	16	advcl	_	highlight=red
+7	серʼ	серʼ	ADP	ADP	_	6	mark	_	_
+8	ӈэвани	ӈэвани	NOUN	NOUN	_	16	obl:mod	_	_
+9	нид	нид	ADP	ADP	_	8	case	_	_
+10	<p>	<p>	INTJ	INTJ	_	8	discourse	_	_
+11	ӈобтʼ	ӈобтʼ	ADV	ADV	_	12	advmod	_	_
+12	тебваниʼ	тебваниʼ	VERB	VERB	_	16	advcl	_	_
+13	серʼ	серʼ	ADP	ADP	_	12	mark	_	_
+14	хэ<un>	хэ<un>	ADV	ADV	_	15	reparandum	_	_
+15	хэвняʼ	хэвняʼ	ADV	ADV	_	16	advmod	_	_
+16	мантэрхавыˮнёʼ	мантэрхавыˮнёʼ	VERB	VERB	_	0	root	_	_
+17	<p>	<p>	PUNCT	PUNCT	_	16	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: yrk_tundra-ud-test.conllu · this verb has L=1, R=0 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = хасаван хэванʼ <p> нултада <p>
+1	хасаван	хасаван	NOUN	NOUN	_	2	nmod:poss	_	_
+2	хэванʼ	хэванʼ	NOUN	NOUN	_	4	obl:mod	_	highlight=green|span=3
+3	<p>	<p>	INTJ	INTJ	_	2	discourse	_	_
+4	нултада	нултада	VERB	VERB	_	0	root	_	highlight=red
+5	<p>	<p>	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

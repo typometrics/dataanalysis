@@ -1,0 +1,272 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>ClassChinese — RMAL_3</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to ClassChinese examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>ClassChinese <small style="color:#999;font-weight:normal">(lzh)</small> — RMAL<sub>3</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>3</b> right dependents (left side may be anything).</p><p><b>RMAL<sub>3</sub> = 2.032</b> &nbsp; <span style="color:#666">(21 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>right</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: lzh_kyoto-ud-dev.conllu · this verb has L=0, R=3 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 如 之 何 其 徹 也
+1	如	如	VERB	VERB	_	0	root	_	highlight=red
+2	之	之	PRON	PRON	_	1	expl	_	highlight=green|span=1
+3	何	何	PRON	PRON	_	1	xcomp	_	highlight=green|span=1
+4	其	其	PART	PART	_	5	discourse	_	_
+5	徹	徹	VERB	VERB	_	1	ccomp	_	highlight=green|span=3
+6	也	也	PART	PART	_	5	discourse:sp	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: lzh_kyoto-ud-test.conllu · this verb has L=0, R=3 (mean span = 3.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 如 之 何 其 使 斯 民 飢 而 死 也
+1	如	如	VERB	VERB	_	0	root	_	highlight=red
+2	之	之	PRON	PRON	_	1	expl	_	highlight=green|span=1
+3	何	何	PRON	PRON	_	1	xcomp	_	highlight=green|span=1
+4	其	其	PRON	PRON	_	5	nsubj	_	_
+5	使	使	VERB	VERB	_	1	ccomp	_	highlight=green|span=8
+6	斯	斯	PRON	PRON	_	7	det	_	_
+7	民	民	NOUN	NOUN	_	5	obj	_	_
+8	飢	飢	VERB	VERB	_	5	xcomp	_	_
+9	而	而	CCONJ	CCONJ	_	10	cc	_	_
+10	死	死	VERB	VERB	_	8	conj	_	_
+11	也	也	PART	PART	_	5	mark	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: lzh_kyoto-ud-test.conllu · this verb has L=1, R=3 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 西 喪 地 於 秦 七百 里
+1	西	西	NOUN	NOUN	_	2	obl:lmod	_	highlight=green|span=1
+2	喪	喪	VERB	VERB	_	0	root	_	highlight=red
+3	地	地	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
+4	於	於	ADP	ADP	_	5	case	_	_
+5	秦	秦	PROPN	PROPN	_	2	obl:lmod	_	highlight=green|span=2
+6	七百	七百	NUM	NUM	_	2	nummod	_	highlight=green|span=2
+7	里	里	NOUN	NOUN	_	6	clf	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: lzh_kyoto-ud-test.conllu · this verb has L=2, R=3 (mean span = 1.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 夫 何 使 我 至 於 此 極 也
+1	夫	夫	PART	PART	_	3	advmod	_	highlight=green|span=1
+2	何	何	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+3	使	使	VERB	VERB	_	0	root	_	highlight=red
+4	我	我	PRON	PRON	_	3	obj	_	highlight=green|span=1
+5	至	至	VERB	VERB	_	3	xcomp	_	highlight=green|span=1
+6	於	於	ADP	ADP	_	8	case	_	_
+7	此	此	PRON	PRON	_	8	det	_	_
+8	極	極	NOUN	NOUN	_	3	obl:lmod	_	highlight=green|span=3
+9	也	也	PART	PART	_	3	discourse:sp	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: lzh_kyoto-ud-test.conllu · this verb has L=0, R=3 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 如 之 何 其 可 也
+1	如	如	VERB	VERB	_	0	root	_	highlight=red
+2	之	之	PRON	PRON	_	1	expl	_	highlight=green|span=1
+3	何	何	PRON	PRON	_	1	xcomp	_	highlight=green|span=1
+4	其	其	PRON	PRON	_	5	nsubj	_	_
+5	可	可	VERB	VERB	_	1	ccomp	_	highlight=green|span=3
+6	也	也	PART	PART	_	5	discourse:sp	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: lzh_kyoto-ud-train.conllu · this verb has L=0, R=3 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 如 之 何 其 聞 斯 行 之
+1	如	如	VERB	VERB	_	0	root	_	highlight=red
+2	之	之	PRON	PRON	_	1	expl	_	highlight=green|span=1
+3	何	何	PRON	PRON	_	1	xcomp	_	highlight=green|span=1
+4	其	其	PRON	PRON	_	5	nsubj	_	_
+5	聞	聞	VERB	VERB	_	7	advcl	_	_
+6	斯	斯	ADV	ADV	_	7	advmod	_	_
+7	行	行	VERB	VERB	_	1	ccomp	_	highlight=green|span=5
+8	之	之	PRON	PRON	_	7	obj	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: lzh_kyoto-ud-dev.conllu · this verb has L=0, R=3 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 如 之 何 其 可 也
+1	如	如	VERB	VERB	_	0	root	_	highlight=red
+2	之	之	PRON	PRON	_	1	expl	_	highlight=green|span=1
+3	何	何	PRON	PRON	_	1	xcomp	_	highlight=green|span=1
+4	其	其	PRON	PRON	_	5	nsubj	_	_
+5	可	可	VERB	VERB	_	1	ccomp	_	highlight=green|span=3
+6	也	也	PART	PART	_	5	discourse:sp	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: lzh_kyoto-ud-train.conllu · this verb has L=1, R=3 (mean span = 2.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 君 臣 之 義 如 之 何 其 廢 之
+1	君	君	NOUN	NOUN	_	4	nmod	_	_
+2	臣	臣	NOUN	NOUN	_	1	flat	_	_
+3	之	之	SCONJ	SCONJ	_	1	case	_	_
+4	義	義	NOUN	NOUN	_	5	nsubj	_	highlight=green|span=4
+5	如	如	VERB	VERB	_	0	root	_	highlight=red
+6	之	之	PRON	PRON	_	5	expl	_	highlight=green|span=1
+7	何	何	PRON	PRON	_	5	xcomp	_	highlight=green|span=1
+8	其	其	PRON	PRON	_	9	nsubj	_	_
+9	廢	廢	VERB	VERB	_	5	ccomp	_	highlight=green|span=3
+10	之	之	PRON	PRON	_	9	obj	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: lzh_kyoto-ud-train.conllu · this verb has L=2, R=3 (mean span = 1.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 是 何 以 為 公 之 王 使 乎
+1	是	是	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+2	何	何	PRON	PRON	_	3	obj	_	_
+3	以	以	VERB	VERB	_	4	advcl	_	highlight=green|span=2
+4	為	為	VERB	VERB	_	0	root	_	highlight=red
+5	公	公	NOUN	NOUN	_	4	iobj	_	highlight=green|span=1
+6	之	之	PRON	PRON	_	4	expl	_	highlight=green|span=1
+7	王	王	NOUN	NOUN	_	8	nmod	_	_
+8	使	使	NOUN	NOUN	_	4	obj	_	highlight=green|span=2
+9	乎	乎	PART	PART	_	4	discourse:sp	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: lzh_kyoto-ud-train.conllu · this verb has L=0, R=3 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 引 而 置 之 莊 嶽 之 間 數 年
+1	引	引	VERB	VERB	_	0	root	_	_
+2	而	而	CCONJ	CCONJ	_	3	cc	_	_
+3	置	置	VERB	VERB	_	1	conj	_	highlight=red
+4	之	之	PRON	PRON	_	3	obj	_	highlight=green|span=1
+5	莊	莊	PROPN	PROPN	_	8	nmod	_	_
+6	嶽	嶽	PROPN	PROPN	_	5	flat	_	_
+7	之	之	SCONJ	SCONJ	_	5	case	_	_
+8	間	間	NOUN	NOUN	_	3	obl:lmod	_	highlight=green|span=4
+9	數	數	NOUN	NOUN	_	10	nmod	_	_
+10	年	年	NOUN	NOUN	_	3	obl:tmod	_	highlight=green|span=2"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: lzh_kyoto-ud-dev.conllu · this verb has L=0, R=3 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 若 之 何 取 之
+1	若	若	VERB	VERB	_	0	root	_	highlight=red
+2	之	之	PRON	PRON	_	1	expl	_	highlight=green|span=1
+3	何	何	PRON	PRON	_	1	xcomp	_	highlight=green|span=1
+4	取	取	VERB	VERB	_	1	ccomp	_	highlight=green|span=2
+5	之	之	PRON	PRON	_	4	obj	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: lzh_kyoto-ud-train.conllu · this verb has L=2, R=3 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 昔 者 舜 薦 禹 於 天 十 有 七 年
+1	昔	昔	NOUN	NOUN	_	2	nmod	_	_
+2	者	者	PART	PART	_	4	advmod	_	highlight=green|span=2
+3	舜	舜	PROPN	PROPN	_	4	nsubj	_	highlight=green|span=1
+4	薦	薦	VERB	VERB	_	0	root	_	highlight=red
+5	禹	禹	PROPN	PROPN	_	4	obj	_	highlight=green|span=1
+6	於	於	ADP	ADP	_	7	case	_	_
+7	天	天	NOUN	NOUN	_	4	obl:lmod	_	highlight=green|span=2
+8	十	十	NUM	NUM	_	11	nummod	_	_
+9	有	有	ADP	ADP	_	10	cc	_	_
+10	七	七	NUM	NUM	_	8	conj	_	_
+11	年	年	NOUN	NOUN	_	4	obl:tmod	_	highlight=green|span=4"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: lzh_kyoto-ud-train.conllu · this verb has L=1, R=3 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 禹 薦 益 於 天 七 年
+1	禹	禹	PROPN	PROPN	_	2	nsubj	_	highlight=green|span=1
+2	薦	薦	VERB	VERB	_	0	root	_	highlight=red
+3	益	益	PROPN	PROPN	_	2	obj	_	highlight=green|span=1
+4	於	於	ADP	ADP	_	5	case	_	_
+5	天	天	NOUN	NOUN	_	2	obl:lmod	_	highlight=green|span=2
+6	七	七	NUM	NUM	_	7	nummod	_	_
+7	年	年	NOUN	NOUN	_	2	obl:tmod	_	highlight=green|span=2"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: lzh_kyoto-ud-train.conllu · this verb has L=0, R=3 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 如 之 何 其 受 之
+1	如	如	VERB	VERB	_	0	root	_	highlight=red
+2	之	之	PRON	PRON	_	1	expl	_	highlight=green|span=1
+3	何	何	PRON	PRON	_	1	xcomp	_	highlight=green|span=1
+4	其	其	PRON	PRON	_	5	nsubj	_	_
+5	受	受	VERB	VERB	_	1	ccomp	_	highlight=green|span=3
+6	之	之	PRON	PRON	_	5	obj	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: lzh_kyoto-ud-train.conllu · this verb has L=1, R=3 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 天 子 賜 諸 侯 大 夫 冕 弁 服 於 大 廟
+1	天	天	NOUN	NOUN	_	2	nmod	_	_
+2	子	子	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=2
+3	賜	賜	VERB	VERB	_	0	root	_	highlight=red
+4	諸	諸	NOUN	NOUN	_	5	nmod	_	_
+5	侯	侯	NOUN	NOUN	_	3	iobj	_	highlight=green|span=4
+6	大	大	VERB	VERB	_	7	amod	_	_
+7	夫	夫	NOUN	NOUN	_	5	conj	_	_
+8	冕	冕	NOUN	NOUN	_	10	nmod	_	_
+9	弁	弁	NOUN	NOUN	_	8	conj	_	_
+10	服	服	NOUN	NOUN	_	3	obj	_	highlight=green|span=3
+11	於	於	ADP	ADP	_	13	case	_	_
+12	大	大	VERB	VERB	_	13	amod	_	_
+13	廟	廟	NOUN	NOUN	_	3	obl:lmod	_	highlight=green|span=3"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: lzh_kyoto-ud-train.conllu · this verb has L=1, R=3 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 故 學 之 為 父 子 焉
+1	故	故	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+2	學	學	VERB	VERB	_	0	root	_	highlight=red
+3	之	之	PRON	PRON	_	2	obj	_	highlight=green|span=1
+4	為	為	AUX	AUX	_	5	cop	_	_
+5	父	父	NOUN	NOUN	_	2	ccomp	_	highlight=green|span=3
+6	子	子	NOUN	NOUN	_	5	flat	_	_
+7	焉	焉	PART	PART	_	2	obl	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: lzh_kyoto-ud-train.conllu · this verb has L=0, R=3 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 使 左 右 於 餅 中 進 毒
+1	使	使	VERB	VERB	_	0	root	_	highlight=red
+2	左	左	NOUN	NOUN	_	1	obj	_	highlight=green|span=2
+3	右	右	NOUN	NOUN	_	2	flat	_	_
+4	於	於	ADP	ADP	_	6	case	_	_
+5	餅	餅	NOUN	NOUN	_	6	nmod	_	_
+6	中	中	NOUN	NOUN	_	1	obl:lmod	_	highlight=green|span=3
+7	進	進	VERB	VERB	_	1	xcomp	_	highlight=green|span=2
+8	毒	毒	NOUN	NOUN	_	7	obj	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: lzh_kyoto-ud-train.conllu · this verb has L=0, R=3 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 如 之 何 無 積 陰 之 譴
+1	如	如	VERB	VERB	_	0	root	_	highlight=red
+2	之	之	PRON	PRON	_	1	expl	_	highlight=green|span=1
+3	何	何	PRON	PRON	_	1	xcomp	_	highlight=green|span=1
+4	無	無	VERB	VERB	_	1	ccomp	_	highlight=green|span=5
+5	積	積	VERB	VERB	_	8	acl	_	_
+6	陰	陰	NOUN	NOUN	_	5	obj	_	_
+7	之	之	SCONJ	SCONJ	_	5	mark	_	_
+8	譴	譴	NOUN	NOUN	_	4	obj	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: lzh_kyoto-ud-train.conllu · this verb has L=1, R=3 (mean span = 2.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 魏 使 人 因 平原 君 請 從 於 趙
+1	魏	魏	PROPN	PROPN	_	2	nsubj	_	highlight=green|span=1
+2	使	使	VERB	VERB	_	0	root	_	highlight=red
+3	人	人	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
+4	因	因	VERB	VERB	_	2	xcomp	_	highlight=green|span=3
+5	平原	平原	PROPN	PROPN	_	6	compound	_	_
+6	君	君	NOUN	NOUN	_	4	obj	_	_
+7	請	請	VERB	VERB	_	2	xcomp	_	highlight=green|span=4
+8	從	從	VERB	VERB	_	7	obj	_	_
+9	於	於	ADP	ADP	_	10	case	_	_
+10	趙	趙	PROPN	PROPN	_	7	obl:lmod	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: lzh_kyoto-ud-train.conllu · this verb has L=1, R=3 (mean span = 2.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 魏 使 人 因 平原 君 請 從 於 趙
+1	魏	魏	PROPN	PROPN	_	2	nsubj	_	highlight=green|span=1
+2	使	使	VERB	VERB	_	0	root	_	highlight=red
+3	人	人	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
+4	因	因	VERB	VERB	_	2	xcomp	_	highlight=green|span=3
+5	平原	平原	PROPN	PROPN	_	6	compound	_	_
+6	君	君	NOUN	NOUN	_	4	obj	_	_
+7	請	請	VERB	VERB	_	2	xcomp	_	highlight=green|span=4
+8	從	從	VERB	VERB	_	7	obj	_	_
+9	於	於	ADP	ADP	_	10	case	_	_
+10	趙	趙	PROPN	PROPN	_	7	obl:lmod	_	_"></reactive-dep-tree>
+</div>
+</body></html>

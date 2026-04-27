@@ -1,0 +1,370 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Kiche — RMAL_3</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Kiche examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Kiche <small style="color:#999;font-weight:normal">(quc)</small> — RMAL<sub>3</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>3</b> right dependents (left side may be anything).</p><p><b>RMAL<sub>3</sub> = 2.039</b> &nbsp; <span style="color:#666">(51 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>right</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: quc_iu-ud-test.conllu · this verb has L=1, R=3 (mean span = 1.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Kʼo kebʼ ubʼantajik le kubʼan kʼax chi kech le e winaq , Trypanosoma brucei gambiense ( T.b.g ) chiʼl Trypanosoma brucei rhodesiense ( T.b.r. ) .
+1	Kʼo	Kʼo	PART	PART	_	0	root	_	_
+2	kebʼ	kebʼ	NUM	NUM	_	3	nummod	_	_
+3	ubʼantajik	ubʼantajik	NOUN	NOUN	_	1	nsubj	_	_
+4	le	le	PRON	PRON	_	5	nsubj	_	highlight=green|span=1
+5	kubʼan	kubʼan	VERB	VERB	_	3	acl	_	highlight=red
+6	kʼax	kʼax	NOUN	NOUN	_	5	obj	_	highlight=green|span=1
+7	chi	chi	ADP	ADP	_	8	case	_	_
+8	kech	kech	NOUN	NOUN	_	5	obl	_	highlight=green|span=2
+9	le	le	DET	DET	_	11	det	_	_
+10	e	e	DET	DET	_	11	det	_	_
+11	winaq	winaq	NOUN	NOUN	_	5	nmod	_	highlight=green|span=3
+12	,	,	PUNCT	PUNCT	_	13	punct	_	_
+13	Trypanosoma	Trypanosoma	NOUN	NOUN	_	3	appos	_	_
+14	brucei	brucei	NOUN	NOUN	_	13	flat	_	_
+15	gambiense	gambiense	ADJ	ADJ	_	13	flat	_	_
+16	(	(	PUNCT	PUNCT	_	17	punct	_	_
+17	T.b.g	T.b.g	NOUN	NOUN	_	13	appos	_	_
+18	)	)	PUNCT	PUNCT	_	17	punct	_	_
+19	chiʼl	chiʼl	CCONJ	CCONJ	_	20	cc	_	_
+20	Trypanosoma	Trypanosoma	NOUN	NOUN	_	13	conj	_	_
+21	brucei	brucei	NOUN	NOUN	_	20	flat	_	_
+22	rhodesiense	rhodesiense	ADJ	ADJ	_	20	flat	_	_
+23	(	(	PUNCT	PUNCT	_	24	punct	_	_
+24	T.b.r.	T.b.r.	NOUN	NOUN	_	20	appos	_	_
+25	)	)	PUNCT	PUNCT	_	24	punct	_	_
+26	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: quc_iu-ud-test.conllu · this verb has L=0, R=3 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ri alabʼom ri alitomabʼ tajin kikitijoj kibʼ rech sutaq , are kakaj kikibʼan nimaq achijabʼ ch upam ri kikʼaslemal , xuquje kʼo chik jupuq bʼixonel ch upam ri komon .
+1	Ri	Ri	DET	DET	_	2	det	_	_
+2	alabʼom	alabʼom	NOUN	NOUN	_	6	nsubj	_	_
+3	ri	ri	DET	DET	_	4	det	_	_
+4	alitomabʼ	alitomabʼ	NOUN	NOUN	_	2	conj	_	_
+5	tajin	tajin	AUX	AUX	_	6	aux	_	_
+6	kikitijoj	kikitijoj	VERB	VERB	_	0	root	_	_
+7	kibʼ	kibʼ	NOUN	NOUN	_	6	obj	_	_
+8	rech	rech	NOUN	NOUN	_	6	obl	_	_
+9	sutaq	sutaq	NOUN	NOUN	_	8	nmod	_	_
+10	,	,	PUNCT	PUNCT	_	12	punct	_	_
+11	are	are	ADV	ADV	_	12	advmod	_	_
+12	kakaj	kakaj	VERB	VERB	_	6	parataxis	_	_
+13	kikibʼan	kikibʼan	VERB	VERB	_	12	ccomp	_	highlight=red
+14	nimaq	nimaq	ADJ	ADJ	_	15	amod	_	_
+15	achijabʼ	achijabʼ	NOUN	NOUN	_	13	obj	_	highlight=green|span=2
+16	ch	ch	ADP	ADP	_	17	case	_	_
+17	upam	upam	NOUN	NOUN	_	13	obl	_	highlight=green|span=2
+18	ri	ri	DET	DET	_	19	det	_	_
+19	kikʼaslemal	kikʼaslemal	NOUN	NOUN	_	13	obl	_	highlight=green|span=2
+20	,	,	PUNCT	PUNCT	_	22	punct	_	_
+21	xuquje	xuquje	ADV	ADV	_	22	advmod	_	_
+22	kʼo	kʼo	PART	PART	_	12	parataxis	_	_
+23	chik	chik	ADV	ADV	_	22	advmod	_	_
+24	jupuq	jupuq	NOUN	NOUN	_	22	nsubj	_	_
+25	bʼixonel	bʼixonel	NOUN	NOUN	_	24	nmod	_	_
+26	ch	ch	ADP	ADP	_	27	case	_	_
+27	upam	upam	NOUN	NOUN	_	22	obl	_	_
+28	ri	ri	DET	DET	_	29	det	_	_
+29	komon	komon	NOUN	NOUN	_	27	nmod	_	_
+30	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: quc_iu-ud-test.conllu · this verb has L=0, R=3 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ri nan Toʼn aninaq xukʼex o ratzʼyaq ri ral , xukʼam bʼi pa tinimit rukʼ ajkun .
+1	Ri	Ri	DET	DET	_	3	det	_	_
+2	nan	nan	NOUN	NOUN	_	3	clf	_	_
+3	Toʼn	Toʼn	PROPN	PROPN	_	5	nsubj	_	_
+4	aninaq	aninaq	ADV	ADV	_	5	advmod	_	_
+5	xukʼex	xukʼex	VERB	VERB	_	0	root	_	_
+6	o	o	PART	PART	_	5	dep:ss	_	_
+7	ratzʼyaq	ratzʼyaq	NOUN	NOUN	_	5	obj	_	_
+8	ri	ri	DET	DET	_	9	det	_	_
+9	ral	ral	NOUN	NOUN	_	7	nmod	_	_
+10	,	,	PUNCT	PUNCT	_	11	punct	_	_
+11	xukʼam	xukʼam	VERB	VERB	_	5	parataxis	_	highlight=red
+12	bʼi	bʼi	ADV	ADV	_	11	advmod	_	highlight=green|span=1
+13	pa	pa	ADP	ADP	_	14	case	_	_
+14	tinimit	tinimit	NOUN	NOUN	_	11	obl	_	highlight=green|span=2
+15	rukʼ	rukʼ	NOUN	NOUN	_	11	obl	_	highlight=green|span=2
+16	ajkun	ajkun	NOUN	NOUN	_	15	nmod	_	_
+17	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: quc_iu-ud-test.conllu · this verb has L=0, R=3 (mean span = 2.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Xkanaj kan oq chi uxeʼ ri jabʼ ri chʼaʼn .
+1	Xkanaj	Xkanaj	VERB	VERB	_	0	root	_	highlight=red
+2	kan	kan	ADV	ADV	_	1	advmod	_	highlight=green|span=2
+3	oq	oq	PART	PART	_	2	dep:ss	_	_
+4	chi	chi	ADP	ADP	_	5	case	_	_
+5	uxeʼ	uxeʼ	NOUN	NOUN	_	1	obl	_	highlight=green|span=4
+6	ri	ri	DET	DET	_	7	det	_	_
+7	jabʼ	jabʼ	NOUN	NOUN	_	5	nmod	_	_
+8	ri	ri	DET	DET	_	9	det	_	_
+9	chʼaʼn	chʼaʼn	NOUN	NOUN	_	1	nsubj	_	highlight=green|span=2
+10	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: quc_iu-ud-test.conllu · this verb has L=1, R=3 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ri numiʼal xutaq loq jun taqoʼm wuj chi we .
+1	Ri	Ri	DET	DET	_	2	det	_	_
+2	numiʼal	numiʼal	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=2
+3	xutaq	xutaq	VERB	VERB	_	0	root	_	highlight=red
+4	loq	loq	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+5	jun	jun	DET	DET	_	7	det	_	_
+6	taqoʼm	taqoʼm	ADJ	ADJ	_	7	amod	_	_
+7	wuj	wuj	NOUN	NOUN	_	3	obj	_	highlight=green|span=3
+8	chi	chi	ADP	ADP	_	9	case	_	_
+9	we	we	NOUN	NOUN	_	3	obl	_	highlight=green|span=2
+10	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: quc_iu-ud-test.conllu · this verb has L=1, R=3 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Jas xukʼam bʼi le tzʼiʼ xawil o ?
+1	Jas	Jas	PRON	PRON	_	2	obj	_	highlight=green|span=1
+2	xukʼam	xukʼam	VERB	VERB	_	0	root	_	highlight=red
+3	bʼi	bʼi	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+4	le	le	DET	DET	_	5	det	_	_
+5	tzʼiʼ	tzʼiʼ	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=2
+6	xawil	xawil	VERB	VERB	_	2	acl	_	highlight=green|span=2
+7	o	o	PART	PART	_	6	dep:ss	_	_
+8	?	?	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: quc_iu-ud-test.conllu · this verb has L=3, R=3 (mean span = 2.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Kʼatekʼuriʼ , pa taq we qʼij riʼ , ri Jesus kpe uloq chi pa ri Nasaret rech ri Galileʼa , kʼatekʼuriʼ ri Xwan kubʼan uqasnaʼ pa ri Jordan .
+1	Kʼatekʼuriʼ	Kʼatekʼuriʼ	ADV	ADV	_	11	advmod	_	highlight=green|span=1
+2	,	,	PUNCT	PUNCT	_	1	punct	_	_
+3	pa	pa	ADP	ADP	_	6	case	_	_
+4	taq	taq	DET	DET	_	6	det	_	_
+5	we	we	DET	DET	_	6	det	_	_
+6	qʼij	qʼij	NOUN	NOUN	_	11	obl	_	highlight=green|span=5
+7	riʼ	riʼ	PRON	PRON	_	6	det	_	_
+8	,	,	PUNCT	PUNCT	_	6	punct	_	_
+9	ri	ri	DET	DET	_	10	det	_	_
+10	Jesus	Jesus	PROPN	PROPN	_	11	nsubj	_	highlight=green|span=2
+11	kpe	kpe	VERB	VERB	_	0	root	_	highlight=red
+12	uloq	uloq	ADV	ADV	_	11	advmod	_	highlight=green|span=1
+13	chi	chi	ADV	ADV	_	11	advmod	_	highlight=green|span=1
+14	pa	pa	ADP	ADP	_	16	case	_	_
+15	ri	ri	DET	DET	_	16	det	_	_
+16	Nasaret	Nasaret	PROPN	PROPN	_	11	obl	_	highlight=green|span=6
+17	rech	rech	NOUN	NOUN	_	16	nmod	_	_
+18	ri	ri	DET	DET	_	19	det	_	_
+19	Galileʼa	Galileʼa	PROPN	PROPN	_	17	nmod	_	_
+20	,	,	PUNCT	PUNCT	_	24	punct	_	_
+21	kʼatekʼuriʼ	kʼatekʼuriʼ	ADV	ADV	_	24	advmod	_	_
+22	ri	ri	DET	DET	_	23	det	_	_
+23	Xwan	Xwan	PROPN	PROPN	_	24	nsubj	_	_
+24	kubʼan	kubʼan	VERB	VERB	_	11	conj	_	_
+25	uqasnaʼ	uqasnaʼ	NOUN	NOUN	_	24	obj	_	_
+26	pa	pa	ADP	ADP	_	28	case	_	_
+27	ri	ri	DET	DET	_	28	det	_	_
+28	Jordan	Jordan	PROPN	PROPN	_	24	obl	_	_
+29	.	.	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: quc_iu-ud-test.conllu · this verb has L=0, R=3 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Kinkʼam na bʼi k chweʼq .
+1	Kinkʼam	Kinkʼam	VERB	VERB	_	0	root	_	highlight=red
+2	na	na	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+3	bʼi	bʼi	ADV	ADV	_	1	advmod	_	highlight=green|span=2
+4	k	k	PART	PART	_	3	dep:ss	_	_
+5	chweʼq	chweʼq	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+6	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: quc_iu-ud-test.conllu · this verb has L=0, R=3 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Xubʼan kʼax chi wech ri a Luʼ .
+1	Xubʼan	Xubʼan	VERB	VERB	_	0	root	_	highlight=red
+2	kʼax	kʼax	NOUN	NOUN	_	1	obj	_	highlight=green|span=1
+3	chi	chi	ADP	ADP	_	4	case	_	_
+4	wech	wech	NOUN	NOUN	_	1	obl	_	highlight=green|span=2
+5	ri	ri	DET	DET	_	7	det	_	_
+6	a	a	NOUN	NOUN	_	7	clf	_	_
+7	Luʼ	Luʼ	PROPN	PROPN	_	1	nsubj	_	highlight=green|span=3
+8	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: quc_iu-ud-test.conllu · this verb has L=2, R=3 (mean span = 1.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Pa oxqʼij ri Saʼn kbʼe na rukʼ ri ajkun .
+1	Pa	Pa	ADP	ADP	_	2	case	_	_
+2	oxqʼij	oxqʼij	NOUN	NOUN	_	5	obl	_	highlight=green|span=2
+3	ri	ri	DET	DET	_	4	det	_	_
+4	Saʼn	Saʼn	PROPN	PROPN	_	5	nsubj	_	highlight=green|span=2
+5	kbʼe	kbʼe	VERB	VERB	_	0	root	_	highlight=red
+6	na	na	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+7	rukʼ	rukʼ	NOUN	NOUN	_	5	obl	_	highlight=green|span=1
+8	ri	ri	DET	DET	_	9	det	_	_
+9	ajkun	ajkun	NOUN	NOUN	_	5	nmod	_	highlight=green|span=2
+10	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: quc_iu-ud-test.conllu · this verb has L=1, R=3 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Jawi xakʼam wuʼ la laʼ le atzʼyaq ?
+1	Jawi	Jawi	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+2	xakʼam	xakʼam	VERB	VERB	_	0	root	_	highlight=red
+3	wuʼ	wuʼ	PART	PART	_	2	advmod	_	highlight=green|span=1
+4	la	la	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+5	laʼ	laʼ	PRON	PRON	_	7	det	_	_
+6	le	le	DET	DET	_	7	det	_	_
+7	atzʼyaq	atzʼyaq	NOUN	NOUN	_	2	obj	_	highlight=green|span=3
+8	?	?	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: quc_iu-ud-test.conllu · this verb has L=1, R=3 (mean span = 1.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Pa jun jeʼl tijobʼal kutijoj ribʼ jun akʼal , ubʼiʼ Poʼx , utz kuril o ke pa tijobʼal ronojel taq qʼij .
+1	Pa	Pa	ADP	ADP	_	4	case	_	_
+2	jun	jun	DET	DET	_	4	det	_	_
+3	jeʼl	jeʼl	ADJ	ADJ	_	4	amod	_	_
+4	tijobʼal	tijobʼal	NOUN	NOUN	_	5	obl	_	_
+5	kutijoj	kutijoj	VERB	VERB	_	0	root	_	_
+6	ribʼ	ribʼ	NOUN	NOUN	_	5	obj	_	_
+7	jun	jun	DET	DET	_	8	det	_	_
+8	akʼal	akʼal	NOUN	NOUN	_	5	nsubj	_	_
+9	,	,	PUNCT	PUNCT	_	10	punct	_	_
+10	ubʼiʼ	ubʼiʼ	NOUN	NOUN	_	8	appos	_	_
+11	Poʼx	Poʼx	PROPN	PROPN	_	10	nmod	_	_
+12	,	,	PUNCT	PUNCT	_	10	punct	_	_
+13	utz	utz	ADV	ADV	_	14	advmod	_	highlight=green|span=1
+14	kuril	kuril	VERB	VERB	_	5	parataxis	_	highlight=red
+15	o	o	PART	PART	_	14	dep:ss	_	_
+16	ke	ke	NOUN	NOUN	_	14	obl	_	highlight=green|span=1
+17	pa	pa	ADP	ADP	_	18	case	_	_
+18	tijobʼal	tijobʼal	NOUN	NOUN	_	14	obl	_	highlight=green|span=2
+19	ronojel	ronojel	NOUN	NOUN	_	14	obl	_	highlight=green|span=3
+20	taq	taq	DET	DET	_	21	det	_	_
+21	qʼij	qʼij	NOUN	NOUN	_	19	nmod	_	_
+22	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: quc_iu-ud-test.conllu · this verb has L=2, R=3 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Bʼay xaq si xintatabʼej na in taq xumaj ubʼixik laʼ le jwes ...
+1	Bʼay	Bʼay	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+2	xaq	xaq	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+3	si	si	PART	PART	_	4	discourse	_	_
+4	xintatabʼej	xintatabʼej	VERB	VERB	_	0	root	_	highlight=red
+5	na	na	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+6	in	in	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+7	taq	taq	SCONJ	SCONJ	_	8	mark	_	_
+8	xumaj	xumaj	VERB	VERB	_	4	advcl	_	highlight=green|span=6
+9	ubʼixik	ubʼixik	VERB	VERB	_	8	ccomp	_	_
+10	laʼ	laʼ	PRON	PRON	_	12	det	_	_
+11	le	le	DET	DET	_	12	det	_	_
+12	jwes	jwes	NOUN	NOUN	_	9	nsubj	_	_
+13	...	...	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: quc_iu-ud-test.conllu · this verb has L=0, R=3 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Kkoj kan retal chi uwach ri ulew .
+1	Kkoj	Kkoj	VERB	VERB	_	0	root	_	highlight=red
+2	kan	kan	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+3	retal	retal	NOUN	NOUN	_	1	nsubj	_	highlight=green|span=1
+4	chi	chi	ADP	ADP	_	5	case	_	_
+5	uwach	uwach	NOUN	NOUN	_	1	obl	_	highlight=green|span=4
+6	ri	ri	DET	DET	_	7	det	_	_
+7	ulew	ulew	NOUN	NOUN	_	5	nmod	_	_
+8	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: quc_iu-ud-test.conllu · this verb has L=0, R=3 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Xubʼij loq chi we rukʼ rutzil animaʼ .
+1	Xubʼij	Xubʼij	VERB	VERB	_	0	root	_	highlight=red
+2	loq	loq	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+3	chi	chi	ADP	ADP	_	4	case	_	_
+4	we	we	NOUN	NOUN	_	1	obl	_	highlight=green|span=2
+5	rukʼ	rukʼ	NOUN	NOUN	_	1	obl	_	highlight=green|span=3
+6	rutzil	rutzil	NOUN	NOUN	_	5	nmod	_	_
+7	animaʼ	animaʼ	NOUN	NOUN	_	6	nmod	_	_
+8	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: quc_iu-ud-test.conllu · this verb has L=0, R=3 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Xukʼaq bʼi jun abʼaj rech kixkil loq .
+1	Xukʼaq	Xukʼaq	VERB	VERB	_	0	root	_	highlight=red
+2	bʼi	bʼi	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+3	jun	jun	DET	DET	_	4	det	_	_
+4	abʼaj	abʼaj	NOUN	NOUN	_	1	obj	_	highlight=green|span=2
+5	rech	rech	SCONJ	SCONJ	_	6	mark	_	_
+6	kixkil	kixkil	VERB	VERB	_	1	advcl	_	highlight=green|span=3
+7	loq	loq	ADV	ADV	_	6	advmod	_	_
+8	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: quc_iu-ud-test.conllu · this verb has L=0, R=3 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Sipakapense ubʼiʼ le tzij kkikoj ri winaq jelaʼ pa Sipakapa .
+1	Sipakapense	Sipakapense	NOUN	NOUN	_	2	nsubj	_	_
+2	ubʼiʼ	ubʼiʼ	NOUN	NOUN	_	0	root	_	_
+3	le	le	DET	DET	_	4	det	_	_
+4	tzij	tzij	NOUN	NOUN	_	2	nmod	_	_
+5	kkikoj	kkikoj	VERB	VERB	_	4	acl	_	highlight=red
+6	ri	ri	DET	DET	_	7	det	_	_
+7	winaq	winaq	NOUN	NOUN	_	5	nsubj	_	highlight=green|span=2
+8	jelaʼ	jelaʼ	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+9	pa	pa	ADP	ADP	_	10	case	_	_
+10	Sipakapa	Sipakapa	PROPN	PROPN	_	5	obl	_	highlight=green|span=2
+11	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: quc_iu-ud-test.conllu · this verb has L=0, R=3 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Xinya kan le nuchim pa kʼaybʼal .
+1	Xinya	Xinya	VERB	VERB	_	0	root	_	highlight=red
+2	kan	kan	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+3	le	le	DET	DET	_	4	det	_	_
+4	nuchim	nuchim	NOUN	NOUN	_	1	obj	_	highlight=green|span=2
+5	pa	pa	ADP	ADP	_	6	case	_	_
+6	kʼaybʼal	kʼaybʼal	NOUN	NOUN	_	1	obl	_	highlight=green|span=2
+7	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: quc_iu-ud-test.conllu · this verb has L=1, R=3 (mean span = 2.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = pine mna kabʼe le watz , kimbʼe wi in pa kaʼyibʼal .
+1	pine	pine	SCONJ	SCONJ	_	3	mark	_	_
+2	mna	mna	PART	PART	_	3	advmod:neg	_	_
+3	kabʼe	kabʼe	VERB	VERB	_	7	advcl	_	highlight=green|span=5
+4	le	le	DET	DET	_	5	det	_	_
+5	watz	watz	NOUN	NOUN	_	3	nsubj	_	_
+6	,	,	PUNCT	PUNCT	_	3	punct	_	_
+7	kimbʼe	kimbʼe	VERB	VERB	_	0	root	_	highlight=red
+8	wi	wi	PART	PART	_	7	advmod	_	highlight=green|span=1
+9	in	in	PRON	PRON	_	7	nsubj	_	highlight=green|span=1
+10	pa	pa	ADP	ADP	_	11	case	_	_
+11	kaʼyibʼal	kaʼyibʼal	NOUN	NOUN	_	7	obl	_	highlight=green|span=2
+12	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: quc_iu-ud-test.conllu · this verb has L=0, R=3 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Xkibʼan kʼax ch e le uwosaq rumal man utz ta chi kakay ik .
+1	Xkibʼan	Xkibʼan	VERB	VERB	_	0	root	_	highlight=red
+2	kʼax	kʼax	NOUN	NOUN	_	1	obj	_	highlight=green|span=1
+3	ch	ch	ADP	ADP	_	4	case	_	_
+4	e	e	NOUN	NOUN	_	1	obl	_	highlight=green|span=4
+5	le	le	DET	DET	_	6	det	_	_
+6	uwosaq	uwosaq	NOUN	NOUN	_	4	nmod	_	_
+7	rumal	rumal	NOUN	NOUN	_	1	obl	_	highlight=green|span=7
+8	man	man	PART	PART	_	9	advmod:neg	_	_
+9	utz	utz	ADJ	ADJ	_	7	acl	_	_
+10	ta	ta	AUX	AUX	_	9	aux	_	_
+11	chi	chi	SCONJ	SCONJ	_	12	mark	_	_
+12	kakay	kakay	VERB	VERB	_	9	csubj	_	_
+13	ik	ik	PART	PART	_	12	dep:ss	_	_
+14	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

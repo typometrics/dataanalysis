@@ -1,0 +1,936 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Irish — MAL_6</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Irish examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Irish <small style="color:#999;font-weight:normal">(ga)</small> — MAL<sub>6</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>6</b> dependents in total (left + right combined).</p><p><b>MAL<sub>6</sub> = 4.184</b> &nbsp; <span style="color:#666">(66 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over all dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: ga_idt-ud-train.conllu · this verb has L=1, R=5 (mean span = 4.17)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Do na tionscail atá ann cheana , tá sé thar a bheith tairbheach dóibh an feabhas infreastruchtúir agus seirbhíse atá bainte amach sa tseirbhís gréasáin agus leathanbhanda .
+1	Do	Do	ADP	ADP	_	3	case	_	_
+2	na	na	DET	DET	_	3	det	_	_
+3	tionscail	tionscail	NOUN	NOUN	_	8	obl	_	highlight=green|span=6
+4	atá	atá	VERB	VERB	_	3	acl:relcl	_	_
+5	ann	ann	ADP	ADP	_	4	xcomp:pred	_	_
+6	cheana	cheana	ADV	ADV	_	4	advmod	_	_
+7	,	,	PUNCT	PUNCT	_	8	punct	_	_
+8	tá	tá	VERB	VERB	_	0	root	_	highlight=red
+9	sé	sé	PRON	PRON	_	8	nsubj	_	highlight=green|span=1
+10	thar	thar	ADV	ADV	_	8	advmod	_	highlight=green|span=3
+11	a	a	ADV	ADV	_	10	fixed	_	_
+12	bheith	bheith	ADV	ADV	_	10	fixed	_	_
+13	tairbheach	tairbheach	ADJ	ADJ	_	8	xcomp:pred	_	highlight=green|span=1
+14	dóibh	dóibh	ADP	ADP	_	8	obl:prep	_	highlight=green|span=1
+15	an	an	DET	DET	_	16	det	_	_
+16	feabhas	feabhas	NOUN	NOUN	_	8	obj	_	highlight=green|span=13
+17	infreastruchtúir	infreastruchtúir	NOUN	NOUN	_	16	nmod	_	_
+18	agus	agus	CCONJ	CCONJ	_	19	cc	_	_
+19	seirbhíse	seirbhíse	NOUN	NOUN	_	17	conj	_	_
+20	atá	atá	VERB	VERB	_	16	acl:relcl	_	_
+21	bainte	bainte	ADJ	ADJ	_	20	xcomp:pred	_	_
+22	amach	amach	ADV	ADV	_	21	advmod	_	_
+23	sa	sa	ADP	ADP	_	24	case	_	_
+24	tseirbhís	tseirbhís	NOUN	NOUN	_	21	obl	_	_
+25	gréasáin	gréasáin	NOUN	NOUN	_	24	nmod	_	_
+26	agus	agus	CCONJ	CCONJ	_	27	cc	_	_
+27	leathanbhanda	leathanbhanda	NOUN	NOUN	_	25	conj	_	_
+28	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: ga_idt-ud-test.conllu · this verb has L=1, R=5 (mean span = 3.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Chuir sé sin an ' t-ábhar bunaidh ' ar fáil do bhaill de na Cumainn Thíreolaíocha a bhí níos acadúla grúpa 2 thuas agus de réir a chéile chuir siad sin a gcás le chéile ar son tógáil na ' Tíreolaíochta ' mar dhisciplín ( Céim II thíos ) Ba mhór an chabhair : Chabhraigh sé chun tuairim na ' saorthrádála ' a spreagadh Níor chabhair : An ' Taiscéalaí mar laoch ' agus mar ghníomhaire Impiriúil : -- Bhailigh siad eolas a bhí riachtanach chun cóilíniú a dhéanamh níos déanaí -- d' ullmhaigh an talamh go hintleachtúil chomh maith ... Chuir sí an t-éadach anuas orthu agus bhí sí faoi réir le imtheacht in ath-uair ... Chumfadh sé rann faoi rud bheag ar bith ar an saol .
+1	Chuir	Chuir	VERB	VERB	_	0	root	_	_
+2	sé	sé	PRON	PRON	_	1	nsubj	_	_
+3	sin	sin	PRON	PRON	_	2	det	_	_
+4	an	an	DET	DET	_	6	det	_	_
+5	'	'	PUNCT	PUNCT	_	6	punct	_	_
+6	t-ábhar	t-ábhar	NOUN	NOUN	_	1	obj	_	_
+7	bunaidh	bunaidh	NOUN	NOUN	_	6	nmod	_	_
+8	'	'	PUNCT	PUNCT	_	6	punct	_	_
+9	ar	ar	ADP	ADP	_	10	case	_	_
+10	fáil	fáil	NOUN	NOUN	_	1	xcomp	_	_
+11	do	do	ADP	ADP	_	12	case	_	_
+12	bhaill	bhaill	NOUN	NOUN	_	1	obl	_	_
+13	de	de	ADP	ADP	_	15	case	_	_
+14	na	na	DET	DET	_	15	det	_	_
+15	Cumainn	Cumainn	NOUN	NOUN	_	12	nmod	_	_
+16	Thíreolaíocha	Thíreolaíocha	ADJ	ADJ	_	15	amod	_	_
+17	a	a	PART	PART	_	18	nsubj	_	_
+18	bhí	bhí	VERB	VERB	_	12	acl:relcl	_	_
+19	níos	níos	PART	PART	_	20	mark:prt	_	_
+20	acadúla	acadúla	ADJ	ADJ	_	18	amod	_	_
+21	grúpa	grúpa	NOUN	NOUN	_	20	nmod	_	_
+22	2	2	NUM	NUM	_	21	nmod	_	_
+23	thuas	thuas	ADV	ADV	_	21	advmod	_	_
+24	agus	agus	CCONJ	CCONJ	_	29	mark	_	_
+25	de	de	ADP	ADP	_	28	case	_	_
+26	réir	réir	NOUN	NOUN	_	25	fixed	_	_
+27	a	a	DET	DET	_	28	nmod:poss	_	_
+28	chéile	chéile	NOUN	NOUN	_	29	obl	_	highlight=green|span=4
+29	chuir	chuir	VERB	VERB	_	1	conj	_	highlight=red
+30	siad	siad	PRON	PRON	_	29	nsubj	_	highlight=green|span=2
+31	sin	sin	PRON	PRON	_	30	det	_	_
+32	a	a	DET	DET	_	33	nmod:poss	_	_
+33	gcás	gcás	NOUN	NOUN	_	29	obj	_	highlight=green|span=2
+34	le	le	ADP	ADP	_	35	case	_	_
+35	chéile	chéile	NOUN	NOUN	_	29	obl	_	highlight=green|span=2
+36	ar	ar	ADP	ADP	_	38	case	_	_
+37	son	son	NOUN	NOUN	_	36	fixed	_	_
+38	tógáil	tógáil	NOUN	NOUN	_	29	obl	_	highlight=green|span=7
+39	na	na	DET	DET	_	41	det	_	_
+40	'	'	PUNCT	PUNCT	_	41	punct	_	_
+41	Tíreolaíochta	Tíreolaíochta	NOUN	NOUN	_	38	nmod	_	_
+42	'	'	PUNCT	PUNCT	_	41	punct	_	_
+43	mar	mar	ADP	ADP	_	44	case	_	_
+44	dhisciplín	dhisciplín	NOUN	NOUN	_	38	nmod	_	_
+45	(	(	PUNCT	PUNCT	_	46	punct	_	_
+46	Céim	Céim	NOUN	NOUN	_	33	appos	_	highlight=green|span=3
+47	II	II	NUM	NUM	_	46	nmod	_	_
+48	thíos	thíos	ADV	ADV	_	46	advmod	_	_
+49	)	)	PUNCT	PUNCT	_	46	punct	_	_
+50	Ba	Ba	AUX	AUX	_	51	cop	_	_
+51	mhór	mhór	ADJ	ADJ	_	1	parataxis	_	_
+52	an	an	DET	DET	_	53	det	_	_
+53	chabhair	chabhair	NOUN	NOUN	_	51	nsubj	_	_
+54	:	:	PUNCT	PUNCT	_	55	punct	_	_
+55	Chabhraigh	Chabhraigh	VERB	VERB	_	1	parataxis	_	_
+56	sé	sé	PRON	PRON	_	55	nsubj	_	_
+57	chun	chun	ADP	ADP	_	64	case	_	_
+58	tuairim	tuairim	NOUN	NOUN	_	64	obj	_	_
+59	na	na	DET	DET	_	61	det	_	_
+60	'	'	PUNCT	PUNCT	_	61	punct	_	_
+61	saorthrádála	saorthrádála	NOUN	NOUN	_	58	nmod	_	_
+62	'	'	PUNCT	PUNCT	_	61	punct	_	_
+63	a	a	PART	PART	_	64	mark	_	_
+64	spreagadh	spreagadh	NOUN	NOUN	_	55	xcomp	_	_
+65	Níor	Níor	PART	PART	_	66	advmod	_	_
+66	chabhair	chabhair	VERB	VERB	_	1	dislocated	_	_
+67	:	:	PUNCT	PUNCT	_	70	punct	_	_
+68	An	An	DET	DET	_	70	det	_	_
+69	'	'	PUNCT	PUNCT	_	70	punct	_	_
+70	Taiscéalaí	Taiscéalaí	NOUN	NOUN	_	66	nsubj	_	_
+71	mar	mar	ADP	ADP	_	72	case	_	_
+72	laoch	laoch	NOUN	NOUN	_	66	obl	_	_
+73	'	'	PUNCT	PUNCT	_	72	punct	_	_
+74	agus	agus	CCONJ	CCONJ	_	76	cc	_	_
+75	mar	mar	ADP	ADP	_	76	case	_	_
+76	ghníomhaire	ghníomhaire	NOUN	NOUN	_	72	conj	_	_
+77	Impiriúil	Impiriúil	ADJ	ADJ	_	76	amod	_	_
+78	:	:	PUNCT	PUNCT	_	80	punct	_	_
+79	--	--	PUNCT	PUNCT	_	80	punct	_	_
+80	Bhailigh	Bhailigh	VERB	VERB	_	1	parataxis	_	_
+81	siad	siad	PRON	PRON	_	80	nsubj	_	_
+82	eolas	eolas	NOUN	NOUN	_	80	obj	_	_
+83	a	a	PART	PART	_	84	nsubj	_	_
+84	bhí	bhí	VERB	VERB	_	82	acl:relcl	_	_
+85	riachtanach	riachtanach	ADJ	ADJ	_	84	xcomp:pred	_	_
+86	chun	chun	ADP	ADP	_	89	case	_	_
+87	cóilíniú	cóilíniú	NOUN	NOUN	_	89	obj	_	_
+88	a	a	PART	PART	_	89	mark	_	_
+89	dhéanamh	dhéanamh	NOUN	NOUN	_	80	xcomp	_	_
+90	níos	níos	PART	PART	_	91	mark:prt	_	_
+91	déanaí	déanaí	ADJ	ADJ	_	89	advmod	_	_
+92	--	--	PUNCT	PUNCT	_	94	punct	_	_
+93	d'	d'	PART	PART	_	94	mark:prt	_	_
+94	ullmhaigh	ullmhaigh	VERB	VERB	_	1	parataxis	_	_
+95	an	an	DET	DET	_	96	det	_	_
+96	talamh	talamh	NOUN	NOUN	_	94	nsubj	_	_
+97	go	go	PART	PART	_	98	mark:prt	_	_
+98	hintleachtúil	hintleachtúil	ADJ	ADJ	_	94	advmod	_	_
+99	chomh	chomh	ADV	ADV	_	94	advmod	_	_
+100	maith	maith	ADJ	ADJ	_	99	fixed	_	_
+101	...	...	PUNCT	PUNCT	_	102	punct	_	_
+102	Chuir	Chuir	VERB	VERB	_	1	parataxis	_	_
+103	sí	sí	PRON	PRON	_	102	nsubj	_	_
+104	an	an	DET	DET	_	105	det	_	_
+105	t-éadach	t-éadach	NOUN	NOUN	_	102	obj	_	_
+106	anuas	anuas	ADV	ADV	_	102	advmod	_	_
+107	orthu	orthu	ADP	ADP	_	102	obl:prep	_	_
+108	agus	agus	CCONJ	CCONJ	_	109	mark	_	_
+109	bhí	bhí	VERB	VERB	_	102	advcl	_	_
+110	sí	sí	PRON	PRON	_	109	nsubj	_	_
+111	faoi	faoi	ADP	ADP	_	112	case	_	_
+112	réir	réir	NOUN	NOUN	_	109	xcomp:pred	_	_
+113	le	le	ADP	ADP	_	114	case	_	_
+114	imtheacht	imtheacht	NOUN	NOUN	_	109	xcomp	_	_
+115	in	in	ADP	ADP	_	116	case	_	_
+116	ath-uair	ath-uair	NOUN	NOUN	_	114	obl	_	_
+117	...	...	PUNCT	PUNCT	_	118	punct	_	_
+118	Chumfadh	Chumfadh	VERB	VERB	_	1	parataxis	_	_
+119	sé	sé	PRON	PRON	_	118	nsubj	_	_
+120	rann	rann	NOUN	NOUN	_	118	obj	_	_
+121	faoi	faoi	ADP	ADP	_	122	case	_	_
+122	rud	rud	NOUN	NOUN	_	118	obl	_	_
+123	bheag	bheag	ADJ	ADJ	_	122	amod	_	_
+124	ar	ar	ADP	ADP	_	122	nmod	_	_
+125	bith	bith	NOUN	NOUN	_	124	fixed	_	_
+126	ar	ar	ADP	ADP	_	128	case	_	_
+127	an	an	DET	DET	_	128	det	_	_
+128	saol	saol	NOUN	NOUN	_	122	nmod	_	_
+129	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: ga_idt-ud-train.conllu · this verb has L=1, R=5 (mean span = 3.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Maidir leis an lucht tacaíochta , faigheann siadsan deis daoine le míchumas foghlama a fheiceáil agus iad ag imirt ar chaighdeán an-ard ar fad .
+1	Maidir	Maidir	ADP	ADP	_	4	case	_	_
+2	leis	leis	ADP	ADP	_	1	fixed	_	_
+3	an	an	DET	DET	_	4	det	_	_
+4	lucht	lucht	NOUN	NOUN	_	7	obl	_	highlight=green|span=5
+5	tacaíochta	tacaíochta	NOUN	NOUN	_	4	compound	_	_
+6	,	,	PUNCT	PUNCT	_	4	punct	_	_
+7	faigheann	faigheann	VERB	VERB	_	0	root	_	highlight=red
+8	siadsan	siadsan	PRON	PRON	_	7	nsubj	_	highlight=green|span=1
+9	deis	deis	NOUN	NOUN	_	7	obj	_	highlight=green|span=1
+10	daoine	daoine	NOUN	NOUN	_	15	obj	_	highlight=green|span=1
+11	le	le	ADP	ADP	_	15	case	_	_
+12	míchumas	míchumas	NOUN	NOUN	_	10	nmod	_	_
+13	foghlama	foghlama	NOUN	NOUN	_	12	nmod	_	_
+14	a	a	PART	PART	_	15	mark	_	_
+15	fheiceáil	fheiceáil	NOUN	NOUN	_	7	xcomp	_	highlight=green|span=3
+16	agus	agus	SCONJ	SCONJ	_	17	mark	_	_
+17	iad	iad	PRON	PRON	_	7	advcl	_	highlight=green|span=9
+18	ag	ag	ADP	ADP	_	19	case	_	_
+19	imirt	imirt	NOUN	NOUN	_	17	xcomp	_	_
+20	ar	ar	ADP	ADP	_	21	case	_	_
+21	chaighdeán	chaighdeán	NOUN	NOUN	_	19	obl	_	_
+22	an-ard	an-ard	ADJ	ADJ	_	21	amod	_	_
+23	ar	ar	ADP	ADP	_	24	case	_	_
+24	fad	fad	NOUN	NOUN	_	21	nmod	_	_
+25	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: ga_idt-ud-train.conllu · this verb has L=0, R=6 (mean span = 4.83)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Beidh forálacha Airteagal 7 de Reacht an Bhainc incurtha chun feidhme ar na híocaíochtaí go léir a íocfaidh na Ballstáit nua ina n-airgead reatha náisiúnta , faoi seach , faoin Airteagal seo .
+1	Beidh	Beidh	VERB	VERB	_	0	root	_	highlight=red
+2	forálacha	forálacha	NOUN	NOUN	_	1	nsubj	_	highlight=green|span=7
+3	Airteagal	Airteagal	NOUN	NOUN	_	2	nmod	_	_
+4	7	7	NUM	NUM	_	3	nmod	_	_
+5	de	de	ADP	ADP	_	6	case	_	_
+6	Reacht	Reacht	PROPN	PROPN	_	2	nmod	_	_
+7	an	an	DET	DET	_	8	det	_	_
+8	Bhainc	Bhainc	PROPN	PROPN	_	6	nmod	_	_
+9	incurtha	incurtha	ADJ	ADJ	_	1	xcomp:pred	_	highlight=green|span=1
+10	chun	chun	ADP	ADP	_	11	case	_	_
+11	feidhme	feidhme	NOUN	NOUN	_	1	obl	_	highlight=green|span=2
+12	ar	ar	ADP	ADP	_	14	case	_	_
+13	na	na	DET	DET	_	14	det	_	_
+14	híocaíochtaí	híocaíochtaí	NOUN	NOUN	_	1	obl	_	highlight=green|span=3
+15	go	go	PART	PART	_	16	mark:prt	_	_
+16	léir	léir	ADJ	ADJ	_	1	advmod	_	highlight=green|span=2
+17	a	a	PART	PART	_	18	obj	_	_
+18	íocfaidh	íocfaidh	VERB	VERB	_	14	acl:relcl	_	highlight=green|span=14
+19	na	na	DET	DET	_	20	det	_	_
+20	Ballstáit	Ballstáit	NOUN	NOUN	_	18	nsubj	_	_
+21	nua	nua	ADJ	ADJ	_	20	amod	_	_
+22	ina	ina	ADP	ADP	_	23	case	_	_
+23	n-airgead	n-airgead	NOUN	NOUN	_	18	obl	_	_
+24	reatha	reatha	NOUN	NOUN	_	23	nmod	_	_
+25	náisiúnta	náisiúnta	ADJ	ADJ	_	23	amod	_	_
+26	,	,	PUNCT	PUNCT	_	28	punct	_	_
+27	faoi	faoi	ADP	ADP	_	28	case	_	_
+28	seach	seach	NOUN	NOUN	_	18	obl	_	_
+29	,	,	PUNCT	PUNCT	_	31	punct	_	_
+30	faoin	faoin	ADP	ADP	_	31	case	_	_
+31	Airteagal	Airteagal	NOUN	NOUN	_	18	obl	_	_
+32	seo	seo	DET	DET	_	31	det	_	_
+33	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: ga_idt-ud-train.conllu · this verb has L=0, R=6 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Le linn an ama sin samhlaítear go gcoimeádfaidh Oideoirí Páistí agus Luathóige araon an ceangal lena leabharlann áitiúil agus go bhfreastalóidh siad agus go bhfaighidh siad taithí ar chláir bhreise um Ealaíona Luathbhlianta laistigh den Leabharlann áit is féidir .
+1	Le	Le	ADP	ADP	_	4	case	_	_
+2	linn	linn	NOUN	NOUN	_	1	fixed	_	_
+3	an	an	DET	DET	_	4	det	_	_
+4	ama	ama	NOUN	NOUN	_	6	obl	_	_
+5	sin	sin	DET	DET	_	4	det	_	_
+6	samhlaítear	samhlaítear	VERB	VERB	_	0	root	_	_
+7	go	go	PART	PART	_	8	mark:prt	_	_
+8	gcoimeádfaidh	gcoimeádfaidh	VERB	VERB	_	6	ccomp	_	_
+9	Oideoirí	Oideoirí	NOUN	NOUN	_	8	nsubj	_	_
+10	Páistí	Páistí	NOUN	NOUN	_	9	nmod	_	_
+11	agus	agus	CCONJ	CCONJ	_	12	cc	_	_
+12	Luathóige	Luathóige	NOUN	NOUN	_	10	conj	_	_
+13	araon	araon	ADV	ADV	_	8	advmod	_	_
+14	an	an	DET	DET	_	15	det	_	_
+15	ceangal	ceangal	NOUN	NOUN	_	8	obj	_	_
+16	lena	lena	ADP	ADP	_	17	case	_	_
+17	leabharlann	leabharlann	NOUN	NOUN	_	8	obl	_	_
+18	áitiúil	áitiúil	ADJ	ADJ	_	17	amod	_	_
+19	agus	agus	CCONJ	CCONJ	_	21	cc	_	_
+20	go	go	PART	PART	_	21	mark:prt	_	_
+21	bhfreastalóidh	bhfreastalóidh	VERB	VERB	_	8	conj	_	_
+22	siad	siad	PRON	PRON	_	21	nsubj	_	_
+23	agus	agus	CCONJ	CCONJ	_	25	cc	_	_
+24	go	go	PART	PART	_	25	mark:prt	_	_
+25	bhfaighidh	bhfaighidh	VERB	VERB	_	21	conj	_	highlight=red
+26	siad	siad	PRON	PRON	_	25	nsubj	_	highlight=green|span=1
+27	taithí	taithí	NOUN	NOUN	_	25	obj	_	highlight=green|span=1
+28	ar	ar	ADP	ADP	_	29	case	_	_
+29	chláir	chláir	NOUN	NOUN	_	25	obl	_	highlight=green|span=3
+30	bhreise	bhreise	NOUN	NOUN	_	29	nmod	_	_
+31	um	um	ADP	ADP	_	32	case	_	_
+32	Ealaíona	Ealaíona	NOUN	NOUN	_	25	obl	_	highlight=green|span=3
+33	Luathbhlianta	Luathbhlianta	NOUN	NOUN	_	32	nmod	_	_
+34	laistigh	laistigh	ADV	ADV	_	25	advmod	_	highlight=green|span=1
+35	den	den	ADP	ADP	_	36	case	_	_
+36	Leabharlann	Leabharlann	NOUN	NOUN	_	37	obl	_	_
+37	áit	áit	NOUN	NOUN	_	25	obl	_	highlight=green|span=5
+38	is	is	AUX	AUX	_	39	cop	_	_
+39	féidir	féidir	NOUN	NOUN	_	37	acl:relcl	_	_
+40	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: ga_idt-ud-train.conllu · this verb has L=2, R=4 (mean span = 4.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ach go háirithe , ní dhéanfaidh na bearta dá dtagraítear i bpointe (a) de mhír 4 difear d' fhorálacha náisiúnta maidir le deonú nó úsáid mhíochaine orgán agus fola .
+1	Ach	Ach	SCONJ	SCONJ	_	6	mark	_	_
+2	go	go	PART	PART	_	3	mark:prt	_	_
+3	háirithe	háirithe	ADJ	ADJ	_	6	advmod	_	highlight=green|span=2
+4	,	,	PUNCT	PUNCT	_	6	punct	_	_
+5	ní	ní	PART	PART	_	6	advmod	_	highlight=green|span=1
+6	dhéanfaidh	dhéanfaidh	VERB	VERB	_	0	root	_	highlight=red
+7	na	na	DET	DET	_	8	det	_	_
+8	bearta	bearta	NOUN	NOUN	_	6	nsubj	_	highlight=green|span=10
+9	dá	dá	PART	PART	_	10	obl	_	_
+10	dtagraítear	dtagraítear	VERB	VERB	_	8	acl:relcl	_	_
+11	i	i	ADP	ADP	_	12	case	_	_
+12	bpointe	bpointe	NOUN	NOUN	_	10	obl	_	_
+13	(a)	(a)	NUM	NUM	_	12	nmod	_	_
+14	de	de	ADP	ADP	_	15	case	_	_
+15	mhír	mhír	NOUN	NOUN	_	12	nmod	_	_
+16	4	4	NUM	NUM	_	15	nmod	_	_
+17	difear	difear	NOUN	NOUN	_	6	obj	_	highlight=green|span=1
+18	d'	d'	ADP	ADP	_	19	case	_	_
+19	fhorálacha	fhorálacha	NOUN	NOUN	_	6	obl	_	highlight=green|span=3
+20	náisiúnta	náisiúnta	ADJ	ADJ	_	19	amod	_	_
+21	maidir	maidir	ADP	ADP	_	23	case	_	_
+22	le	le	ADP	ADP	_	21	fixed	_	_
+23	deonú	deonú	NOUN	NOUN	_	6	xcomp	_	highlight=green|span=9
+24	nó	nó	CCONJ	CCONJ	_	25	cc	_	_
+25	úsáid	úsáid	NOUN	NOUN	_	23	conj	_	_
+26	mhíochaine	mhíochaine	NOUN	NOUN	_	25	nmod	_	_
+27	orgán	orgán	NOUN	NOUN	_	25	nmod	_	_
+28	agus	agus	CCONJ	CCONJ	_	29	cc	_	_
+29	fola	fola	NOUN	NOUN	_	27	conj	_	_
+30	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: ga_twittirish-ud-dev.conllu · this verb has L=0, R=6 (mean span = 3.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = RT @user10 : Tháinig an seachtar againn le chéile arís sa Ghrianán ar maidin , le athdhéanamh seanghrianghraf a chéad tógadh thart fa ' 53 nó …
+1	RT	RT	SYM	SYM	_	4	parataxis:rt	_	_
+2	@user10	@user10	PROPN	PROPN	_	4	vocative:mention	_	_
+3	:	:	PUNCT	PUNCT	_	4	punct	_	_
+4	Tháinig	Tháinig	VERB	VERB	_	0	root	_	highlight=red
+5	an	an	DET	DET	_	6	det	_	_
+6	seachtar	seachtar	NOUN	NOUN	_	4	nsubj	_	highlight=green|span=3
+7	againn	againn	ADP	ADP	_	6	obl:prep	_	_
+8	le	le	ADP	ADP	_	9	case	_	_
+9	chéile	chéile	NOUN	NOUN	_	4	obl	_	highlight=green|span=2
+10	arís	arís	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+11	sa	sa	ADP	ADP	_	12	case	_	_
+12	Ghrianán	Ghrianán	NOUN	NOUN	_	4	obl	_	highlight=green|span=2
+13	ar	ar	ADP	ADP	_	14	case	_	_
+14	maidin	maidin	NOUN	NOUN	_	4	obl:tmod	_	highlight=green|span=2
+15	,	,	PUNCT	PUNCT	_	17	punct	_	_
+16	le	le	ADP	ADP	_	17	case	_	_
+17	athdhéanamh	athdhéanamh	NOUN	NOUN	_	4	obl	_	highlight=green|span=10
+18	seanghrianghraf	seanghrianghraf	NOUN	NOUN	_	17	nmod	_	_
+19	a	a	PART	PART	_	21	obj	_	_
+20	chéad	chéad	NUM	NUM	_	21	obj	_	_
+21	tógadh	tógadh	VERB	VERB	_	17	acl:relcl	_	_
+22	thart	thart	ADV	ADV	_	21	advmod	_	_
+23	fa	fa	ADP	ADP	_	25	case	_	_
+24	'	'	PUNCT	PUNCT	_	25	punct	_	_
+25	53	53	NUM	NUM	_	21	obl	_	_
+26	nó	nó	CCONJ	CCONJ	_	21	cc	_	_
+27	…	…	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: ga_twittirish-ud-train.conllu · this verb has L=0, R=6 (mean span = 1.83)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = @user459 Thug mé íde béil duit tráth mar v poloneck a chaitheamh agat . Tá seo orm inniu : http://t.co/czqlQirT #Fimínteacht #Brónzees
+1	@user459	@user459	PROPN	PROPN	_	2	vocative:mention	_	_
+2	Thug	Thug	VERB	VERB	_	0	root	_	highlight=red
+3	mé	mé	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+4	íde	íde	NOUN	NOUN	_	2	obj	_	highlight=green|span=2
+5	béil	béil	NOUN	NOUN	_	4	nmod	_	_
+6	duit	duit	ADP	ADP	_	2	obl:prep	_	highlight=green|span=1
+7	tráth	tráth	NOUN	NOUN	_	2	obl:tmod	_	highlight=green|span=1
+8	mar	mar	SCONJ	SCONJ	_	9	mark	_	_
+9	v	v	VERB	VERB	_	2	advcl	_	highlight=green|span=3
+10	poloneck	poloneck	NOUN	NOUN	_	9	nsubj	_	_
+11	a	a	PART	PART	_	12	mark	_	_
+12	chaitheamh	chaitheamh	NOUN	NOUN	_	2	xcomp	_	highlight=green|span=3
+13	agat	agat	ADP	ADP	_	12	obl:prep	_	_
+14	.	.	PUNCT	PUNCT	_	2	punct	_	_
+15	Tá	Tá	VERB	VERB	_	2	parataxis:sentence	_	_
+16	seo	seo	PRON	PRON	_	15	nsubj	_	_
+17	orm	orm	ADP	ADP	_	15	obl:prep	_	_
+18	inniu	inniu	ADV	ADV	_	15	advmod	_	_
+19	:	:	PUNCT	PUNCT	_	20	punct	_	_
+20	http://t.co/czqlQirT	http://t.co/czqlQirT	SYM	SYM	_	2	parataxis:url	_	_
+21	#Fimínteacht	#Fimínteacht	X	X	_	2	parataxis:hashtag	_	_
+22	#Brónzees	#Brónzees	X	X	_	2	parataxis:hashtag	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: ga_idt-ud-dev.conllu · this verb has L=1, R=5 (mean span = 2.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ó shin i leith bhí beirt Aire Gaeltachta againn anseo i nGaillimh a chuir peann le pár - Máire Geoghegan-Quinn , a scríobh The Green Diamond , agus Michael D. Ó hUiginn .
+1	Ó	Ó	ADP	ADP	_	5	obl	_	highlight=green|span=4
+2	shin	shin	PRON	PRON	_	1	fixed	_	_
+3	i	i	ADP	ADP	_	1	fixed	_	_
+4	leith	leith	NOUN	NOUN	_	1	fixed	_	_
+5	bhí	bhí	VERB	VERB	_	0	root	_	highlight=red
+6	beirt	beirt	NOUN	NOUN	_	5	nsubj	_	highlight=green|span=3
+7	Aire	Aire	NOUN	NOUN	_	6	nmod	_	_
+8	Gaeltachta	Gaeltachta	PROPN	PROPN	_	7	nmod	_	_
+9	againn	againn	ADP	ADP	_	5	obl:prep	_	highlight=green|span=1
+10	anseo	anseo	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+11	i	i	ADP	ADP	_	12	case	_	_
+12	nGaillimh	nGaillimh	PROPN	PROPN	_	5	obl	_	highlight=green|span=2
+13	a	a	PART	PART	_	14	nsubj	_	_
+14	chuir	chuir	VERB	VERB	_	6	acl:relcl	_	highlight=green|span=5
+15	peann	peann	NOUN	NOUN	_	14	obj	_	_
+16	le	le	ADP	ADP	_	17	case	_	_
+17	pár	pár	NOUN	NOUN	_	14	obl	_	_
+18	-	-	PUNCT	PUNCT	_	19	punct	_	_
+19	Máire	Máire	PROPN	PROPN	_	5	parataxis	_	_
+20	Geoghegan-Quinn	Geoghegan-Quinn	PROPN	PROPN	_	19	flat:name	_	_
+21	,	,	PUNCT	PUNCT	_	23	punct	_	_
+22	a	a	PART	PART	_	23	nsubj	_	_
+23	scríobh	scríobh	VERB	VERB	_	19	acl:relcl	_	_
+24	The	The	X	X	_	23	obj	_	_
+25	Green	Green	X	X	_	24	flat:foreign	_	_
+26	Diamond	Diamond	X	X	_	24	flat:foreign	_	_
+27	,	,	PUNCT	PUNCT	_	29	punct	_	_
+28	agus	agus	CCONJ	CCONJ	_	29	cc	_	_
+29	Michael	Michael	PROPN	PROPN	_	19	conj	_	_
+30	D.	D.	PROPN	PROPN	_	29	flat:name	_	_
+31	Ó	Ó	PART	PART	_	29	flat:name	_	_
+32	hUiginn	hUiginn	PROPN	PROPN	_	29	flat:name	_	_
+33	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: ga_twittirish-ud-train.conllu · this verb has L=0, R=6 (mean span = 4.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Beidh mé ar &quot; I Lár an Aonaigh &quot; Dé Luain , BBC 2 NI ag a 10 pm , ag caint faoi m' úrscéal &quot; An Tearmann &quot; agus rud nó dhó … https://t.co/vwjWtoDJXG
+1	Beidh	Beidh	VERB	VERB	_	0	root	_	highlight=red
+2	mé	mé	PRON	PRON	_	1	nsubj	_	highlight=green|span=1
+3	ar	ar	ADP	ADP	_	6	case	_	_
+4	&quot;	&quot;	PUNCT	PUNCT	_	6	punct	_	_
+5	I	I	ADP	ADP	_	6	case	_	_
+6	Lár	Lár	NOUN	NOUN	_	1	obl	_	highlight=green|span=5
+7	an	an	DET	DET	_	8	det	_	_
+8	Aonaigh	Aonaigh	PROPN	PROPN	_	6	nmod	_	_
+9	&quot;	&quot;	PUNCT	PUNCT	_	6	punct	_	_
+10	Dé	Dé	PROPN	PROPN	_	1	obl:tmod	_	highlight=green|span=2
+11	Luain	Luain	PROPN	PROPN	_	10	nmod	_	_
+12	,	,	PUNCT	PUNCT	_	13	punct	_	_
+13	BBC	BBC	PROPN	PROPN	_	1	obl	_	highlight=green|span=3
+14	2	2	NUM	NUM	_	13	flat:name	_	_
+15	NI	NI	PROPN	PROPN	_	13	flat:name	_	_
+16	ag	ag	ADP	ADP	_	18	case	_	_
+17	a	a	PART	PART	_	18	mark:prt	_	_
+18	10	10	NUM	NUM	_	1	obl:tmod	_	highlight=green|span=4
+19	pm	pm	NOUN	NOUN	_	18	nmod	_	_
+20	,	,	PUNCT	PUNCT	_	22	punct	_	_
+21	ag	ag	ADP	ADP	_	22	case	_	_
+22	caint	caint	NOUN	NOUN	_	1	xcomp	_	highlight=green|span=11
+23	faoi	faoi	ADP	ADP	_	24	case	_	_
+24	m'	m'	DET	DET	_	25	det	_	_
+25	úrscéal	úrscéal	NOUN	NOUN	_	22	obl	_	_
+26	&quot;	&quot;	PUNCT	PUNCT	_	28	punct	_	_
+27	An	An	DET	DET	_	28	det	_	_
+28	Tearmann	Tearmann	NOUN	NOUN	_	25	appos	_	_
+29	&quot;	&quot;	PUNCT	PUNCT	_	28	punct	_	_
+30	agus	agus	CCONJ	CCONJ	_	31	cc	_	_
+31	rud	rud	NOUN	NOUN	_	25	conj	_	_
+32	nó	nó	CCONJ	CCONJ	_	33	cc	_	_
+33	dhó	dhó	NUM	NUM	_	31	conj	_	_
+34	…	…	PUNCT	PUNCT	_	1	punct	_	_
+35	https://t.co/vwjWtoDJXG	https://t.co/vwjWtoDJXG	SYM	SYM	_	1	parataxis:url	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: ga_twittirish-ud-train.conllu · this verb has L=0, R=6 (mean span = 3.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Cén mhaith dóibh bheith ann mura bhfuil le déanamh acu ach an cnaipe a roghnaíonn an aoire a bhrú ? Má bhíonn vóta ann in aon chor ! @user872
+1	Cén	Cén	VERB	VERB	_	0	root	_	highlight=red
+2	mhaith	mhaith	NOUN	NOUN	_	1	nsubj	_	highlight=green|span=1
+3	dóibh	dóibh	ADP	ADP	_	1	obl:prep	_	highlight=green|span=1
+4	bheith	bheith	NOUN	NOUN	_	1	xcomp	_	highlight=green|span=2
+5	ann	ann	ADP	ADP	_	4	xcomp:pred	_	_
+6	mura	mura	SCONJ	SCONJ	_	7	mark	_	_
+7	bhfuil	bhfuil	VERB	VERB	_	1	advcl	_	highlight=green|span=5
+8	le	le	ADP	ADP	_	9	case	_	_
+9	déanamh	déanamh	NOUN	NOUN	_	7	xcomp	_	_
+10	acu	acu	ADP	ADP	_	9	obl:prep	_	_
+11	ach	ach	CCONJ	CCONJ	_	13	cc	_	_
+12	an	an	DET	DET	_	13	det	_	_
+13	cnaipe	cnaipe	NOUN	NOUN	_	1	conj	_	_
+14	a	a	PART	PART	_	15	nsubj	_	_
+15	roghnaíonn	roghnaíonn	VERB	VERB	_	1	acl:relcl	_	highlight=green|span=6
+16	an	an	DET	DET	_	17	det	_	_
+17	aoire	aoire	NOUN	NOUN	_	19	obj	_	_
+18	a	a	PART	PART	_	19	mark	_	_
+19	bhrú	bhrú	NOUN	NOUN	_	15	xcomp	_	_
+20	?	?	PUNCT	PUNCT	_	1	punct	_	_
+21	Má	Má	SCONJ	SCONJ	_	22	mark	_	_
+22	bhíonn	bhíonn	VERB	VERB	_	1	advcl	_	highlight=green|span=7
+23	vóta	vóta	NOUN	NOUN	_	22	nsubj	_	_
+24	ann	ann	ADP	ADP	_	22	obl:prep	_	_
+25	in	in	ADP	ADP	_	27	case	_	_
+26	aon	aon	DET	DET	_	27	det	_	_
+27	chor	chor	NOUN	NOUN	_	22	obl	_	_
+28	!	!	PUNCT	PUNCT	_	1	punct	_	_
+29	@user872	@user872	PROPN	PROPN	_	1	vocative:mention	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: ga_idt-ud-train.conllu · this verb has L=0, R=6 (mean span = 3.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Seo mar a d' inis sé féin an scéal : Jimí : Bhí mé i mo stócach ins an am sin , thart fá , b' fhéidir deich mbliana nó , bhí mé naoi nó deich ' e bhliana cá bith agus d' iarr Antain Mór thíos anseo orm na caoirigh a cheapadh suas chun Dúin , de thairbhe gur an Domhnach a bhí ann .
+1	Seo	Seo	PRON	PRON	_	0	root	_	_
+2	mar	mar	SCONJ	SCONJ	_	5	mark	_	_
+3	a	a	PART	PART	_	5	mark:prt	_	_
+4	d'	d'	PART	PART	_	5	mark:prt	_	_
+5	inis	inis	VERB	VERB	_	1	advcl	_	_
+6	sé	sé	PRON	PRON	_	5	nsubj	_	_
+7	féin	féin	PRON	PRON	_	5	nmod	_	_
+8	an	an	DET	DET	_	9	det	_	_
+9	scéal	scéal	NOUN	NOUN	_	5	obj	_	_
+10	:	:	PUNCT	PUNCT	_	11	punct	_	_
+11	Jimí	Jimí	PROPN	PROPN	_	1	parataxis	_	_
+12	:	:	PUNCT	PUNCT	_	13	punct	_	_
+13	Bhí	Bhí	VERB	VERB	_	11	parataxis	_	_
+14	mé	mé	PRON	PRON	_	13	nsubj	_	_
+15	i	i	ADP	ADP	_	17	case	_	_
+16	mo	mo	DET	DET	_	17	nmod:poss	_	_
+17	stócach	stócach	NOUN	NOUN	_	13	xcomp:pred	_	_
+18	ins	ins	ADP	ADP	_	20	case	_	_
+19	an	an	DET	DET	_	20	det	_	_
+20	am	am	NOUN	NOUN	_	13	obl:tmod	_	_
+21	sin	sin	DET	DET	_	20	det	_	_
+22	,	,	PUNCT	PUNCT	_	23	punct	_	_
+23	thart	thart	ADV	ADV	_	29	advmod	_	_
+24	fá	fá	ADP	ADP	_	29	case	_	_
+25	,	,	PUNCT	PUNCT	_	24	punct	_	_
+26	b'	b'	AUX	AUX	_	29	advmod	_	_
+27	fhéidir	fhéidir	NOUN	NOUN	_	26	fixed	_	_
+28	deich	deich	NUM	NUM	_	29	nummod	_	_
+29	mbliana	mbliana	NOUN	NOUN	_	13	obl:tmod	_	_
+30	nó	nó	CCONJ	CCONJ	_	32	cc	_	_
+31	,	,	PUNCT	PUNCT	_	30	punct	_	_
+32	bhí	bhí	VERB	VERB	_	13	conj	_	_
+33	mé	mé	PRON	PRON	_	32	nsubj	_	_
+34	naoi	naoi	NUM	NUM	_	39	nummod	_	_
+35	nó	nó	CCONJ	CCONJ	_	36	cc	_	_
+36	deich	deich	NUM	NUM	_	34	conj	_	_
+37	'	'	PUNCT	PUNCT	_	34	punct	_	_
+38	e	e	ADP	ADP	_	39	case	_	_
+39	bhliana	bhliana	NOUN	NOUN	_	32	xcomp:pred	_	_
+40	cá	cá	ADV	ADV	_	32	advmod	_	_
+41	bith	bith	NOUN	NOUN	_	40	fixed	_	_
+42	agus	agus	CCONJ	CCONJ	_	44	cc	_	_
+43	d'	d'	PART	PART	_	44	mark:prt	_	_
+44	iarr	iarr	VERB	VERB	_	13	conj	_	highlight=red
+45	Antain	Antain	PROPN	PROPN	_	44	nsubj	_	highlight=green|span=2
+46	Mór	Mór	ADJ	ADJ	_	45	flat:name	_	_
+47	thíos	thíos	ADV	ADV	_	44	advmod	_	highlight=green|span=1
+48	anseo	anseo	ADV	ADV	_	44	advmod	_	highlight=green|span=1
+49	orm	orm	ADP	ADP	_	44	obl:prep	_	highlight=green|span=1
+50	na	na	DET	DET	_	51	det	_	_
+51	caoirigh	caoirigh	NOUN	NOUN	_	53	obj	_	_
+52	a	a	PART	PART	_	53	mark	_	_
+53	cheapadh	cheapadh	NOUN	NOUN	_	44	xcomp	_	highlight=green|span=7
+54	suas	suas	ADV	ADV	_	53	advmod	_	_
+55	chun	chun	ADP	ADP	_	56	case	_	_
+56	Dúin	Dúin	PROPN	PROPN	_	53	obl	_	_
+57	,	,	PUNCT	PUNCT	_	62	punct	_	_
+58	de	de	ADP	ADP	_	62	mark	_	_
+59	thairbhe	thairbhe	NOUN	NOUN	_	58	fixed	_	_
+60	gur	gur	AUX	AUX	_	62	cop	_	_
+61	an	an	DET	DET	_	62	det	_	_
+62	Domhnach	Domhnach	PROPN	PROPN	_	44	advcl	_	highlight=green|span=8
+63	a	a	PART	PART	_	64	mark:prt	_	_
+64	bhí	bhí	VERB	VERB	_	62	csubj:cleft	_	_
+65	ann	ann	ADP	ADP	_	64	xcomp:pred	_	_
+66	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: ga_idt-ud-train.conllu · this verb has L=1, R=5 (mean span = 2.17)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Mar sin féin , bhí íosdul chun cinn i saothrú na Gaeilge déanta ag beagnach 60% .
+1	Mar	Mar	ADP	ADP	_	5	advmod	_	highlight=green|span=3
+2	sin	sin	PRON	PRON	_	1	fixed	_	_
+3	féin	féin	PRON	PRON	_	1	fixed	_	_
+4	,	,	PUNCT	PUNCT	_	1	punct	_	_
+5	bhí	bhí	VERB	VERB	_	0	root	_	highlight=red
+6	íosdul	íosdul	NOUN	NOUN	_	5	nsubj	_	highlight=green|span=3
+7	chun	chun	ADP	ADP	_	8	case	_	_
+8	cinn	cinn	NOUN	NOUN	_	6	nmod	_	_
+9	i	i	ADP	ADP	_	10	case	_	_
+10	saothrú	saothrú	NOUN	NOUN	_	5	obl	_	highlight=green|span=4
+11	na	na	DET	DET	_	12	det	_	_
+12	Gaeilge	Gaeilge	PROPN	PROPN	_	10	nmod	_	_
+13	déanta	déanta	ADJ	ADJ	_	5	xcomp:pred	_	highlight=green|span=1
+14	ag	ag	ADP	ADP	_	16	case	_	_
+15	beagnach	beagnach	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+16	60%	60%	NUM	NUM	_	13	obl	_	highlight=green|span=1
+17	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: ga_idt-ud-train.conllu · this verb has L=0, R=6 (mean span = 3.83)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Thug sé an íde ( nó an oidhe ) chéanna do laochra eile dá chuid : M. , a cuireadh i gcosúlacht le Cú Chulainn agus le Suibhne ; an Cú Chulainnín in ' Cé Acu ' ( An tSraith ar Lár ) ; lánúin ' Mhuintir na Croise ' ( An tSraith Tógtha ) a samhlaítear le Diarmaid agus Gráinne ; agus fiú J. , ar féidir a bhás a chur i gcosúlacht le bás Chonaire in Togail Bruidne Da Derga .
+1	Thug	Thug	VERB	VERB	_	0	root	_	highlight=red
+2	sé	sé	PRON	PRON	_	1	nsubj	_	highlight=green|span=1
+3	an	an	DET	DET	_	4	det	_	_
+4	íde	íde	NOUN	NOUN	_	1	obj	_	highlight=green|span=2
+5	(	(	PUNCT	PUNCT	_	8	punct	_	_
+6	nó	nó	CCONJ	CCONJ	_	8	cc	_	_
+7	an	an	DET	DET	_	8	det	_	_
+8	oidhe	oidhe	NOUN	NOUN	_	4	conj	_	highlight=green|span=3
+9	)	)	PUNCT	PUNCT	_	8	punct	_	_
+10	chéanna	chéanna	ADJ	ADJ	_	4	amod	_	highlight=green|span=1
+11	do	do	ADP	ADP	_	12	case	_	_
+12	laochra	laochra	NOUN	NOUN	_	1	obl	_	highlight=green|span=6
+13	eile	eile	DET	DET	_	12	det	_	_
+14	dá	dá	ADP	ADP	_	15	case	_	_
+15	chuid	chuid	NOUN	NOUN	_	12	nmod	_	_
+16	:	:	PUNCT	PUNCT	_	17	punct	_	_
+17	M.	M.	PROPN	PROPN	_	12	appos	_	_
+18	,	,	PUNCT	PUNCT	_	20	punct	_	_
+19	a	a	PART	PART	_	20	obj	_	_
+20	cuireadh	cuireadh	VERB	VERB	_	4	acl:relcl	_	highlight=green|span=10
+21	i	i	ADP	ADP	_	22	case	_	_
+22	gcosúlacht	gcosúlacht	NOUN	NOUN	_	20	obl	_	_
+23	le	le	ADP	ADP	_	24	case	_	_
+24	Cú	Cú	NOUN	NOUN	_	22	nmod	_	_
+25	Chulainn	Chulainn	PROPN	PROPN	_	24	flat:name	_	_
+26	agus	agus	CCONJ	CCONJ	_	28	cc	_	_
+27	le	le	ADP	ADP	_	28	case	_	_
+28	Suibhne	Suibhne	PROPN	PROPN	_	24	conj	_	_
+29	;	;	PUNCT	PUNCT	_	31	punct	_	_
+30	an	an	DET	DET	_	31	det	_	_
+31	Cú	Cú	NOUN	NOUN	_	17	conj	_	_
+32	Chulainnín	Chulainnín	PROPN	PROPN	_	31	flat:name	_	_
+33	in	in	ADP	ADP	_	35	case	_	_
+34	'	'	PUNCT	PUNCT	_	35	punct	_	_
+35	Cé	Cé	PRON	PRON	_	31	nmod	_	_
+36	Acu	Acu	ADP	ADP	_	35	obl:prep	_	_
+37	'	'	PUNCT	PUNCT	_	35	punct	_	_
+38	(	(	PUNCT	PUNCT	_	40	punct	_	_
+39	An	An	DET	DET	_	40	det	_	_
+40	tSraith	tSraith	NOUN	NOUN	_	35	appos	_	_
+41	ar	ar	ADP	ADP	_	42	case	_	_
+42	Lár	Lár	NOUN	NOUN	_	40	nmod	_	_
+43	)	)	PUNCT	PUNCT	_	40	punct	_	_
+44	;	;	PUNCT	PUNCT	_	45	punct	_	_
+45	lánúin	lánúin	NOUN	NOUN	_	17	conj	_	_
+46	'	'	PUNCT	PUNCT	_	47	punct	_	_
+47	Mhuintir	Mhuintir	NOUN	NOUN	_	45	appos	_	_
+48	na	na	DET	DET	_	49	det	_	_
+49	Croise	Croise	NOUN	NOUN	_	47	nmod	_	_
+50	'	'	PUNCT	PUNCT	_	47	punct	_	_
+51	(	(	PUNCT	PUNCT	_	53	punct	_	_
+52	An	An	DET	DET	_	53	det	_	_
+53	tSraith	tSraith	NOUN	NOUN	_	47	appos	_	_
+54	Tógtha	Tógtha	ADJ	ADJ	_	53	amod	_	_
+55	)	)	PUNCT	PUNCT	_	53	punct	_	_
+56	a	a	PART	PART	_	57	obj	_	_
+57	samhlaítear	samhlaítear	VERB	VERB	_	45	acl:relcl	_	_
+58	le	le	ADP	ADP	_	59	case	_	_
+59	Diarmaid	Diarmaid	PROPN	PROPN	_	57	obl	_	_
+60	agus	agus	CCONJ	CCONJ	_	61	cc	_	_
+61	Gráinne	Gráinne	PROPN	PROPN	_	59	conj	_	_
+62	;	;	PUNCT	PUNCT	_	64	punct	_	_
+63	agus	agus	CCONJ	CCONJ	_	64	mark	_	_
+64	fiú	fiú	ADV	ADV	_	65	advmod	_	_
+65	J.	J.	PROPN	PROPN	_	17	conj	_	_
+66	,	,	PUNCT	PUNCT	_	68	punct	_	_
+67	ar	ar	AUX	AUX	_	68	cop	_	_
+68	féidir	féidir	NOUN	NOUN	_	65	acl:relcl	_	_
+69	a	a	DET	DET	_	70	nmod:poss	_	_
+70	bhás	bhás	NOUN	NOUN	_	72	obj	_	_
+71	a	a	PART	PART	_	72	mark	_	_
+72	chur	chur	NOUN	NOUN	_	68	xcomp	_	_
+73	i	i	ADP	ADP	_	74	case	_	_
+74	gcosúlacht	gcosúlacht	NOUN	NOUN	_	72	obl	_	_
+75	le	le	ADP	ADP	_	76	case	_	_
+76	bás	bás	NOUN	NOUN	_	74	nmod	_	_
+77	Chonaire	Chonaire	PROPN	PROPN	_	76	nmod	_	_
+78	in	in	ADP	ADP	_	79	case	_	_
+79	Togail	Togail	NOUN	NOUN	_	76	nmod	_	_
+80	Bruidne	Bruidne	NOUN	NOUN	_	79	nmod	_	_
+81	Da	Da	PROPN	PROPN	_	80	nmod	_	_
+82	Derga	Derga	ADJ	ADJ	_	81	amod	_	_
+83	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: ga_idt-ud-dev.conllu · this verb has L=0, R=6 (mean span = 3.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Chuaigh an Ghaeilge chun cinn go mór san Fhichiú hAois de bhrí gur glacadh lena hathréimiú mar chuid d' obair an stáit .
+1	Chuaigh	Chuaigh	VERB	VERB	_	0	root	_	highlight=red
+2	an	an	DET	DET	_	3	det	_	_
+3	Ghaeilge	Ghaeilge	PROPN	PROPN	_	1	nsubj	_	highlight=green|span=2
+4	chun	chun	ADP	ADP	_	5	case	_	_
+5	cinn	cinn	NOUN	NOUN	_	1	obl	_	highlight=green|span=2
+6	go	go	PART	PART	_	7	mark:prt	_	_
+7	mór	mór	ADJ	ADJ	_	1	advmod	_	highlight=green|span=2
+8	san	san	ADP	ADP	_	10	case	_	_
+9	Fhichiú	Fhichiú	NUM	NUM	_	10	amod	_	_
+10	hAois	hAois	NOUN	NOUN	_	1	obl:tmod	_	highlight=green|span=3
+11	de	de	ADP	ADP	_	12	case	_	_
+12	bhrí	bhrí	NOUN	NOUN	_	1	obl	_	highlight=green|span=2
+13	gur	gur	PART	PART	_	14	mark:prt	_	_
+14	glacadh	glacadh	VERB	VERB	_	1	ccomp	_	highlight=green|span=10
+15	lena	lena	ADP	ADP	_	16	case	_	_
+16	hathréimiú	hathréimiú	NOUN	NOUN	_	14	obl	_	_
+17	mar	mar	ADP	ADP	_	18	case	_	_
+18	chuid	chuid	NOUN	NOUN	_	14	obl	_	_
+19	d'	d'	ADP	ADP	_	20	case	_	_
+20	obair	obair	NOUN	NOUN	_	18	nmod	_	_
+21	an	an	DET	DET	_	22	det	_	_
+22	stáit	stáit	NOUN	NOUN	_	20	nmod	_	_
+23	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: ga_idt-ud-train.conllu · this verb has L=0, R=6 (mean span = 4.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Bhain 55 duine tairbhe as an Scéim Forbartha Bainistíochta le linn 2006 , chomh maith le 22 fochéimí Gaeltachta a chaith tréimhse ar thaithí oibre phraiticiúil le linn an tSamhraidh .
+1	Bhain	Bhain	VERB	VERB	_	0	root	_	highlight=red
+2	55	55	NUM	NUM	_	3	nummod	_	_
+3	duine	duine	NOUN	NOUN	_	1	nsubj	_	highlight=green|span=2
+4	tairbhe	tairbhe	NOUN	NOUN	_	1	obj	_	highlight=green|span=1
+5	as	as	ADP	ADP	_	7	case	_	_
+6	an	an	DET	DET	_	7	det	_	_
+7	Scéim	Scéim	NOUN	NOUN	_	1	obl	_	highlight=green|span=5
+8	Forbartha	Forbartha	NOUN	NOUN	_	7	nmod	_	_
+9	Bainistíochta	Bainistíochta	NOUN	NOUN	_	7	nmod	_	_
+10	le	le	ADP	ADP	_	12	case	_	_
+11	linn	linn	NOUN	NOUN	_	10	fixed	_	_
+12	2006	2006	NUM	NUM	_	1	obl:tmod	_	highlight=green|span=3
+13	,	,	PUNCT	PUNCT	_	14	punct	_	_
+14	chomh	chomh	ADV	ADV	_	1	advmod	_	highlight=green|span=2
+15	maith	maith	ADJ	ADJ	_	14	fixed	_	_
+16	le	le	ADP	ADP	_	18	case	_	_
+17	22	22	NUM	NUM	_	18	nummod	_	_
+18	fochéimí	fochéimí	NOUN	NOUN	_	1	obl	_	highlight=green|span=15
+19	Gaeltachta	Gaeltachta	PROPN	PROPN	_	18	nmod	_	_
+20	a	a	PART	PART	_	21	nsubj	_	_
+21	chaith	chaith	VERB	VERB	_	18	acl:relcl	_	_
+22	tréimhse	tréimhse	NOUN	NOUN	_	21	obj	_	_
+23	ar	ar	ADP	ADP	_	24	case	_	_
+24	thaithí	thaithí	NOUN	NOUN	_	21	obl	_	_
+25	oibre	oibre	NOUN	NOUN	_	24	nmod	_	_
+26	phraiticiúil	phraiticiúil	ADJ	ADJ	_	24	amod	_	_
+27	le	le	ADP	ADP	_	30	case	_	_
+28	linn	linn	NOUN	NOUN	_	27	fixed	_	_
+29	an	an	DET	DET	_	30	det	_	_
+30	tSamhraidh	tSamhraidh	NOUN	NOUN	_	21	obl	_	_
+31	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: ga_twittirish-ud-train.conllu · this verb has L=0, R=6 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = @user1673 @user145 Mhol mé daoibh staoiseog ( 😋 ) a chur leis don ‘ o ’ mí nó dhó ó shin , gan éifeacht is cosúil . @user425
+1	@user1673	@user1673	PROPN	PROPN	_	3	vocative:mention	_	_
+2	@user145	@user145	PROPN	PROPN	_	3	vocative:mention	_	_
+3	Mhol	Mhol	VERB	VERB	_	0	root	_	highlight=red
+4	mé	mé	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+5	daoibh	daoibh	ADP	ADP	_	3	obl:prep	_	highlight=green|span=1
+6	staoiseog	staoiseog	NOUN	NOUN	_	11	obj	_	highlight=green|span=2
+7	(	(	PUNCT	PUNCT	_	8	punct	_	_
+8	😋	😋	SYM	SYM	_	6	appos	_	_
+9	)	)	PUNCT	PUNCT	_	8	punct	_	_
+10	a	a	PART	PART	_	11	mark	_	_
+11	chur	chur	NOUN	NOUN	_	3	xcomp	_	highlight=green|span=7
+12	leis	leis	ADP	ADP	_	11	obl:prep	_	_
+13	don	don	ADP	ADP	_	15	case	_	_
+14	‘	‘	PUNCT	PUNCT	_	15	punct	_	_
+15	o	o	NOUN	NOUN	_	11	obl	_	highlight=green|span=2
+16	’	’	PUNCT	PUNCT	_	15	punct	_	_
+17	mí	mí	NOUN	NOUN	_	3	obl:tmod	_	highlight=green|span=5
+18	nó	nó	CCONJ	CCONJ	_	19	cc	_	_
+19	dhó	dhó	NUM	NUM	_	17	conj	_	_
+20	ó	ó	ADP	ADP	_	21	case	_	_
+21	shin	shin	PRON	PRON	_	17	nmod	_	_
+22	,	,	PUNCT	PUNCT	_	23	punct	_	_
+23	gan	gan	ADP	ADP	_	24	case	_	_
+24	éifeacht	éifeacht	NOUN	NOUN	_	13	obl	_	_
+25	is	is	AUX	AUX	_	26	cop	_	_
+26	cosúil	cosúil	ADJ	ADJ	_	24	acl:relcl	_	_
+27	.	.	PUNCT	PUNCT	_	3	punct	_	_
+28	@user425	@user425	PROPN	PROPN	_	3	vocative:mention	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: ga_idt-ud-train.conllu · this verb has L=0, R=6 (mean span = 8.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Tá sé in am dúinn anois na huirlisí agus na struchtúir pholaitiúla a chur ar bun chun go mbeimid in ann tabhairt faoi na ceisteanna ar shlí a thuigfidh an pobal agus a chuirfidh ar chumas an phobail páirt a ghlacadh i pé réiteach is fearr a oireann dúinn .
+1	Tá	Tá	VERB	VERB	_	0	root	_	highlight=red
+2	sé	sé	PRON	PRON	_	1	nsubj	_	highlight=green|span=1
+3	in	in	ADP	ADP	_	4	case	_	_
+4	am	am	NOUN	NOUN	_	1	xcomp:pred	_	highlight=green|span=2
+5	dúinn	dúinn	ADP	ADP	_	1	obl:prep	_	highlight=green|span=1
+6	anois	anois	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+7	na	na	DET	DET	_	8	det	_	_
+8	huirlisí	huirlisí	NOUN	NOUN	_	14	obj	_	_
+9	agus	agus	CCONJ	CCONJ	_	11	cc	_	_
+10	na	na	DET	DET	_	11	det	_	_
+11	struchtúir	struchtúir	NOUN	NOUN	_	8	conj	_	_
+12	pholaitiúla	pholaitiúla	ADJ	ADJ	_	11	amod	_	_
+13	a	a	PART	PART	_	14	mark	_	_
+14	chur	chur	NOUN	NOUN	_	1	xcomp	_	highlight=green|span=10
+15	ar	ar	ADP	ADP	_	16	case	_	_
+16	bun	bun	NOUN	NOUN	_	14	obl	_	_
+17	chun	chun	SCONJ	SCONJ	_	19	mark	_	_
+18	go	go	SCONJ	SCONJ	_	17	fixed	_	_
+19	mbeimid	mbeimid	VERB	VERB	_	1	advcl	_	highlight=green|span=33
+20	in	in	ADP	ADP	_	19	xcomp:pred	_	_
+21	ann	ann	NOUN	NOUN	_	20	fixed	_	_
+22	tabhairt	tabhairt	NOUN	NOUN	_	19	xcomp	_	_
+23	faoi	faoi	ADP	ADP	_	22	compound:prt	_	_
+24	na	na	DET	DET	_	25	det	_	_
+25	ceisteanna	ceisteanna	NOUN	NOUN	_	22	obl	_	_
+26	ar	ar	ADP	ADP	_	27	case	_	_
+27	shlí	shlí	NOUN	NOUN	_	25	nmod	_	_
+28	a	a	PART	PART	_	29	obl	_	_
+29	thuigfidh	thuigfidh	VERB	VERB	_	27	acl:relcl	_	_
+30	an	an	DET	DET	_	31	det	_	_
+31	pobal	pobal	NOUN	NOUN	_	29	nsubj	_	_
+32	agus	agus	CCONJ	CCONJ	_	34	cc	_	_
+33	a	a	PART	PART	_	34	obj	_	_
+34	chuirfidh	chuirfidh	VERB	VERB	_	29	conj	_	_
+35	ar	ar	ADP	ADP	_	36	case	_	_
+36	chumas	chumas	NOUN	NOUN	_	34	obl	_	_
+37	an	an	DET	DET	_	38	det	_	_
+38	phobail	phobail	NOUN	NOUN	_	36	nmod	_	_
+39	páirt	páirt	NOUN	NOUN	_	41	obj	_	_
+40	a	a	PART	PART	_	41	mark	_	_
+41	ghlacadh	ghlacadh	NOUN	NOUN	_	34	xcomp	_	_
+42	i	i	ADP	ADP	_	43	case	_	_
+43	pé	pé	PRON	PRON	_	44	det	_	_
+44	réiteach	réiteach	NOUN	NOUN	_	41	obl	_	_
+45	is	is	PART	PART	_	46	mark:prt	_	_
+46	fearr	fearr	ADJ	ADJ	_	44	amod	_	_
+47	a	a	PART	PART	_	48	nsubj	_	_
+48	oireann	oireann	VERB	VERB	_	44	acl:relcl	_	_
+49	dúinn	dúinn	ADP	ADP	_	48	obl:prep	_	_
+50	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: ga_idt-ud-test.conllu · this verb has L=1, R=5 (mean span = 3.83)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ní raibh ach 24 ina gcónaí ann i 1991 ach bíonn Clann Mc Ewen ag déanamh fógraíochta ag iarraidh teaghlaigh a mhealladh chun an oileáin .
+1	Ní	Ní	PART	PART	_	2	advmod	_	highlight=green|span=1
+2	raibh	raibh	VERB	VERB	_	0	root	_	highlight=red
+3	ach	ach	SCONJ	SCONJ	_	2	mark:prt	_	_
+4	24	24	NUM	NUM	_	2	nsubj	_	highlight=green|span=1
+5	ina	ina	ADP	ADP	_	6	case	_	_
+6	gcónaí	gcónaí	NOUN	NOUN	_	2	xcomp:pred	_	highlight=green|span=2
+7	ann	ann	ADP	ADP	_	2	obl:prep	_	highlight=green|span=1
+8	i	i	ADP	ADP	_	9	case	_	_
+9	1991	1991	NUM	NUM	_	2	obl	_	highlight=green|span=2
+10	ach	ach	SCONJ	SCONJ	_	11	mark	_	_
+11	bíonn	bíonn	VERB	VERB	_	2	advcl	_	highlight=green|span=16
+12	Clann	Clann	PROPN	PROPN	_	11	nsubj	_	_
+13	Mc	Mc	PART	PART	_	12	flat:name	_	_
+14	Ewen	Ewen	PROPN	PROPN	_	12	flat:name	_	_
+15	ag	ag	ADP	ADP	_	16	case	_	_
+16	déanamh	déanamh	NOUN	NOUN	_	11	xcomp	_	_
+17	fógraíochta	fógraíochta	NOUN	NOUN	_	16	obj	_	_
+18	ag	ag	ADP	ADP	_	19	case	_	_
+19	iarraidh	iarraidh	NOUN	NOUN	_	11	xcomp	_	_
+20	teaghlaigh	teaghlaigh	NOUN	NOUN	_	22	obj	_	_
+21	a	a	PART	PART	_	22	mark	_	_
+22	mhealladh	mhealladh	NOUN	NOUN	_	19	xcomp	_	_
+23	chun	chun	ADP	ADP	_	25	case	_	_
+24	an	an	DET	DET	_	25	det	_	_
+25	oileáin	oileáin	NOUN	NOUN	_	22	obl	_	_
+26	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: ga_idt-ud-dev.conllu · this verb has L=1, R=5 (mean span = 8.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = (5) Ní bheidh d' éifeacht uathoibríoch le hachomharc a dhéanamh i gcoinne fógra toirmisc de réir fho-alt (4) oibriú an fhógra a fhionraí , ach féadfaidh an t-achomharcóir iarratas a dhéanamh chuig an gCúirt lena chur faoi deara oibriú an fhógra a fhionraí go dtí go ndéanfar an t-achomharc a chur de láimh agus féadfaidh an Chúirt , más cuí léi sin a dhéanamh , a ordú go bhfionrófar oibriú an fhógra dá réir sin .
+1	(5)	(5)	NUM	NUM	_	3	list	_	_
+2	Ní	Ní	PART	PART	_	3	advmod	_	highlight=green|span=1
+3	bheidh	bheidh	VERB	VERB	_	0	root	_	highlight=red
+4	d'	d'	ADP	ADP	_	5	case	_	_
+5	éifeacht	éifeacht	NOUN	NOUN	_	3	xcomp:pred	_	highlight=green|span=3
+6	uathoibríoch	uathoibríoch	ADJ	ADJ	_	5	amod	_	_
+7	le	le	ADP	ADP	_	10	case	_	_
+8	hachomharc	hachomharc	NOUN	NOUN	_	10	obj	_	_
+9	a	a	PART	PART	_	10	mark	_	_
+10	dhéanamh	dhéanamh	NOUN	NOUN	_	3	xcomp	_	highlight=green|span=8
+11	i	i	ADP	ADP	_	13	case	_	_
+12	gcoinne	gcoinne	NOUN	NOUN	_	11	fixed	_	_
+13	fógra	fógra	NOUN	NOUN	_	10	obl	_	_
+14	toirmisc	toirmisc	NOUN	NOUN	_	13	nmod	_	_
+15	de	de	ADP	ADP	_	17	case	_	_
+16	réir	réir	NOUN	NOUN	_	15	fixed	_	_
+17	fho-alt	fho-alt	NOUN	NOUN	_	3	obl	_	highlight=green|span=4
+18	(4)	(4)	NUM	NUM	_	17	nmod	_	_
+19	oibriú	oibriú	NOUN	NOUN	_	23	obj	_	_
+20	an	an	DET	DET	_	21	det	_	_
+21	fhógra	fhógra	NOUN	NOUN	_	19	nmod	_	_
+22	a	a	PART	PART	_	23	mark	_	_
+23	fhionraí	fhionraí	NOUN	NOUN	_	10	xcomp	_	highlight=green|span=5
+24	,	,	PUNCT	PUNCT	_	25	punct	_	_
+25	ach	ach	SCONJ	SCONJ	_	26	mark	_	_
+26	féadfaidh	féadfaidh	VERB	VERB	_	3	advcl	_	highlight=green|span=29
+27	an	an	DET	DET	_	28	det	_	_
+28	t-achomharcóir	t-achomharcóir	NOUN	NOUN	_	26	nsubj	_	_
+29	iarratas	iarratas	NOUN	NOUN	_	31	obj	_	_
+30	a	a	PART	PART	_	31	mark	_	_
+31	dhéanamh	dhéanamh	NOUN	NOUN	_	26	xcomp	_	_
+32	chuig	chuig	ADP	ADP	_	34	case	_	_
+33	an	an	DET	DET	_	34	det	_	_
+34	gCúirt	gCúirt	NOUN	NOUN	_	31	obl	_	_
+35	lena	lena	ADP	ADP	_	36	case	_	_
+36	chur	chur	NOUN	NOUN	_	31	nmod	_	_
+37	faoi	faoi	ADP	ADP	_	38	case	_	_
+38	deara	deara	NOUN	NOUN	_	36	obl	_	_
+39	oibriú	oibriú	NOUN	NOUN	_	43	obj	_	_
+40	an	an	DET	DET	_	41	det	_	_
+41	fhógra	fhógra	NOUN	NOUN	_	39	nmod	_	_
+42	a	a	PART	PART	_	43	mark	_	_
+43	fhionraí	fhionraí	NOUN	NOUN	_	31	xcomp	_	_
+44	go	go	ADP	ADP	_	47	mark	_	_
+45	dtí	dtí	NOUN	NOUN	_	44	fixed	_	_
+46	go	go	PART	PART	_	47	mark:prt	_	_
+47	ndéanfar	ndéanfar	VERB	VERB	_	31	ccomp	_	_
+48	an	an	DET	DET	_	49	det	_	_
+49	t-achomharc	t-achomharc	NOUN	NOUN	_	51	obj	_	_
+50	a	a	PART	PART	_	51	mark	_	_
+51	chur	chur	NOUN	NOUN	_	31	xcomp	_	_
+52	de	de	ADP	ADP	_	53	case	_	_
+53	láimh	láimh	NOUN	NOUN	_	51	obl	_	_
+54	agus	agus	CCONJ	CCONJ	_	55	cc	_	_
+55	féadfaidh	féadfaidh	VERB	VERB	_	3	conj	_	_
+56	an	an	DET	DET	_	57	det	_	_
+57	Chúirt	Chúirt	NOUN	NOUN	_	55	nsubj	_	_
+58	,	,	PUNCT	PUNCT	_	59	punct	_	_
+59	más	más	SCONJ	SCONJ	_	60	mark	_	_
+60	cuí	cuí	ADJ	ADJ	_	55	advcl	_	_
+61	léi	léi	ADP	ADP	_	60	obl:prep	_	_
+62	sin	sin	PRON	PRON	_	64	obj	_	_
+63	a	a	PART	PART	_	64	mark	_	_
+64	dhéanamh	dhéanamh	NOUN	NOUN	_	55	xcomp	_	_
+65	,	,	PUNCT	PUNCT	_	67	punct	_	_
+66	a	a	PART	PART	_	67	mark	_	_
+67	ordú	ordú	NOUN	NOUN	_	55	xcomp	_	_
+68	go	go	PART	PART	_	69	mark:prt	_	_
+69	bhfionrófar	bhfionrófar	VERB	VERB	_	67	ccomp	_	_
+70	oibriú	oibriú	NOUN	NOUN	_	69	obj	_	_
+71	an	an	DET	DET	_	72	det	_	_
+72	fhógra	fhógra	NOUN	NOUN	_	70	nmod	_	_
+73	dá	dá	ADP	ADP	_	74	case	_	_
+74	réir	réir	NOUN	NOUN	_	69	obl	_	_
+75	sin	sin	PRON	PRON	_	74	det	_	_
+76	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>More on LMAL effect — UDW26</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://d3js.org/d3.v7.min.js"></script><script src="https://d3js.org/topojson.v3.min.js"></script>
+<style>
+body { font-family: Arial, sans-serif; max-width: 1500px; margin: 0 auto; padding: 20px; color: #222; }
+h1 { color: #333; }
+h2 { color: #555; margin-top: 30px; }
+h3 { color: #666; margin-top: 20px; }
+a { color: #1976d2; }
+table { border-collapse: collapse; width: 100%; margin-bottom: 30px; }
+th, td { border: 1px solid #ddd; padding: 6px 8px; text-align: center; font-size: 12px; }
+th { background-color: #4CAF50; color: white; position: sticky; top: 44px; z-index: 5; }
+th.mal-col { background-color: #2196F3; }
+th.score-col { background-color: #FF9800; }
+th.effect-col { background-color: #9C27B0; }
+th.conform-col { background-color: #00BCD4; }
+th.group-col { background-color: #607D8B; }
+th.vo-col { background-color: #795548; }
+.lang-name { text-align: left; font-weight: bold; white-space: nowrap; }
+.mal-cell { background-color: #e3f2fd; }
+.mal-cell-lowcount { background-color: #f5f5f5; color: #999; font-style: italic; }
+.score-cell { font-weight: bold; }
+.score-cell-lowcount { color: #bbb; font-style: italic; }
+.score-positive { background-color: #c8e6c9; }
+.score-negative { background-color: #ffcdd2; }
+.score-neutral  { background-color: #fff9c4; }
+.compliance-cell { font-weight: bold; }     /* no color background */
+.vo-cell { font-weight: bold; font-size: 11px; }
+.vo-high { background-color: #c8e6c9; }
+.vo-low  { background-color: #ffcdd2; }
+.vo-mid  { background-color: #fff9c4; }
+.na-cell { color: #999; }
+.group-cell { font-size: 11px; color: #555; white-space: nowrap; }
+tr:nth-child(even) { background-color: #f9f9f9; }
+tr:hover { background-color: #f1f1f1; }
+tr:target { background-color: #fff59d !important; outline: 2px solid #fbc02d; }
+.info-box { background: #f0f0f0; padding: 15px; border-radius: 5px; margin: 10px 0 20px 0; }
+.paper-table { max-width: 720px; margin: 10px 0 18px 0; }
+.paper-table table { width: auto; min-width: 320px; }
+.paper-table th { background: #607D8B; }
+.paper-table td.row-anti  { background: #f4cccc; }
+.paper-table td.row-gray  { background: #fff2cc; }
+.paper-table td.row-mal   { background: #d9ead3; }
+.paper-table td.row-total { background: #d9d9d9; font-weight: bold; }
+.paper-table td.row-high  { background: #d9ead3; }
+.paper-table td.row-mid   { background: #fff2cc; }
+.paper-table td.row-low   { background: #f4cccc; }
+.paper-table td.tot-col   { color: #38761D; font-weight: bold; }
+.paper-table caption { caption-side: top; font-weight: bold; padding: 6px 0;
+                       text-align: left; color: #333; font-size: 14px;
+                       min-height: 2.6em; line-height: 1.3em;
+                       display: table-caption; }
+.highlight-box { background: #e8f5e9; border-left: 4px solid #2e7d32;
+                 padding: 12px 16px; margin: 18px 0; border-radius: 4px; }
+.highlight-box h3 { margin-top: 0; color: #2e7d32; }
+.highlight-box ul { margin: 6px 0 0 0; padding-left: 22px; }
+.highlight-box li { margin: 3px 0; font-size: 14px; }
+.paper-link { color: #1976d2; text-decoration: none; font-weight: bold; }
+.paper-link:hover { text-decoration: underline; }
+.explanation { background: #fff3e0; padding: 15px; border-left: 4px solid #ff9800; margin: 20px 0; }
+.chart-container { margin: 30px 0; background: white; padding: 20px; border-radius: 8px;
+                   box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+canvas { max-width: 100%; }
+.nav-top { background: #333; color: white; padding: 0; margin: -20px -20px 20px -20px;
+           border-radius: 0 0 6px 6px; position: sticky; top: 0; z-index: 100; }
+.nav-top > ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; }
+.nav-top > ul > li { position: relative; }
+.nav-top > ul > li > a, .nav-top > ul > li > span {
+    display: block; color: #fff; padding: 10px 16px; text-decoration: none; cursor: pointer; }
+.nav-top > ul > li:hover > a, .nav-top > ul > li:hover > span { background: #555; }
+.nav-top a:hover { text-decoration: underline; }
+.nav-top .crumb-current > a, .nav-top .crumb-current > span { color: #ffeb3b; font-weight: bold; }
+.nav-top .has-sub > span::after { content: ' ▾'; font-size: 10px; }
+.nav-top ul ul { display: none; position: absolute; top: 100%; left: 0; min-width: 240px;
+                 background: #444; list-style: none; margin: 0; padding: 4px 0; z-index: 200;
+                 box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+.nav-top ul li:hover > ul { display: block; }
+.nav-top ul ul li a { display: block; padding: 8px 16px; color: #fff; text-decoration: none;
+                      font-size: 14px; white-space: nowrap; }
+.nav-top ul ul li a:hover { background: #1976d2; text-decoration: none; }
+.nav-top ul ul li.crumb-current a { color: #ffeb3b; font-weight: bold; }
+.nav-top .nav-spacer { flex: 1; }
+.nav-top .nav-github { padding: 10px 16px; color: #fff; text-decoration: none; opacity: 0.85; }
+.nav-top .nav-github:hover { opacity: 1; text-decoration: underline; }
+
+/* Log-log popup modal */
+.loglog-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.7); z-index: 1000; }
+.loglog-modal-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                        background: white; padding: 30px; border-radius: 10px; max-width: 720px;
+                        width: 90%; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+.loglog-modal-close { position: absolute; top: 10px; right: 15px; font-size: 28px; cursor: pointer;
+                      color: #666; }
+.loglog-modal-close:hover { color: #000; }
+.loglog-modal-stats { background: #f5f5f5; padding: 10px 15px; border-radius: 5px; margin-top: 15px;
+                      font-size: 14px; }
+.loglog-modal-stats span { margin-right: 20px; }
+</style>
+</head>
+<body>
+<nav class="nav-top"><ul><li><a href="index.html">Home</a></li><li class="crumb-current has-sub"><span><a href="mal_effect.html" style="color:inherit;text-decoration:none;">MAL Effect</a></span><ul><li class="crumb-current"><a href="mal_effect.html">Summary table</a></li><li><a href="mal_effect_mal.html">More on MAL effect</a></li><li><a href="mal_effect_lmal.html">More on LMAL effect</a></li><li><a href="mal_effect_rmal.html">More on RMAL effect</a></li></ul></li><li class="has-sub"><span><a href="mal_compliance.html" style="color:inherit;text-decoration:none;">MAL Compliance</a></span><ul><li><a href="mal_compliance.html">Index</a></li><li><a href="mal_compliance_summary.html">Summary across directions</a></li><li><a href="mal_compliance_mal.html">MAL per-language details</a></li><li><a href="mal_compliance_lmal.html">LMAL per-language details</a></li><li><a href="mal_compliance_rmal.html">RMAL per-language details</a></li></ul></li><li class="has-sub"><span><a href="mal_paper_figures.html" style="color:inherit;text-decoration:none;">Paper Figures</a></span><ul><li><a href="mal_paper_figures.html">Featured per-language plots</a></li><li><a href="mal_statistical_tests.html">Fisher's exact tests (§5.1)</a></li><li><a href="mal_typological_maps.html">Typology dashboard</a></li></ul></li><li class="has-sub"><span><a href="mal_explorer.html" style="color:inherit;text-decoration:none;">Explorer</a></span><ul><li><a href="mal_explorer.html">Interactive table (filters + slider)</a></li><li><a href="mal_directional_histograms.html">VO/OV/NDO histograms</a></li><li><a href="mal_data_coverage.html">Data coverage by n</a></li></ul></li><li><a href="examples/index.html">Examples</a></li><li><a href="mal_notebook_plots_and_commentary.html">Commentary</a></li><li class="nav-spacer"></li><li><a class="nav-github" href="https://github.com/typometrics/UDW26-Menzerath" target="_blank" rel="noopener">GitHub ↗</a></li></ul></nav><h1>More on LMAL effect</h1><p><a href="mal_effect.html">← back to MAL Effect summary</a></p><div class="chart-container"><h3>World map: geographic distribution of −β(1→max) (LMAL)</h3>
+<div id="worldMap" style="width: 100%; max-width: 1000px; margin: 0 auto;"></div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://d3js.org/topojson.v3.min.js"></script>
+
+<script>
+(function() {
+    const geoData = [{"name": "Abaza", "code": "abq", "lat": 44.0, "lon": 42.0, "mal_score": 0.0, "family": "Northwest Caucasian", "macroarea": "Eurasia", "n_points": 0}, {"name": "Abkhaz", "code": "ab", "lat": 43.0833333333, "lon": 41.0, "mal_score": 0.07270588555432811, "family": "Northwest Caucasian", "macroarea": "Eurasia", "n_points": 2}, {"name": "Afrikaans", "code": "af", "lat": -31.0, "lon": 22.0, "mal_score": 0.18657356883438003, "family": "Indo-European", "macroarea": "Africa", "n_points": 3}, {"name": "Akkadian", "code": "akk", "lat": 33.1, "lon": 44.4, "mal_score": 0.08629214962430054, "family": "Afro-Asiatic", "macroarea": "Africa", "n_points": 3}, {"name": "Akuntsu", "code": "aqz", "lat": -12.5, "lon": -60.5, "mal_score": 0.0, "family": "Tupian", "macroarea": "South America", "n_points": 0}, {"name": "Albanian", "code": "sq", "lat": 41.0, "lon": 20.0, "mal_score": 0.11594061810444654, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 0}, {"name": "SwissGerman", "code": "gsw", "lat": 47.37, "lon": 8.54, "mal_score": 0.17025070605188608, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 3}, {"name": "Amharic", "code": "am", "lat": 10.0, "lon": 38.0, "mal_score": 0.3021673944516608, "family": "Afro-Asiatic", "macroarea": "Africa", "n_points": 2}, {"name": "AncientGreek", "code": "grc", "lat": 38.0, "lon": 23.7, "mal_score": -0.055918615618526235, "family": "Indo-European", "macroarea": "Africa", "n_points": 6}, {"name": "AncientHebrew", "code": "hbo", "lat": 32.3, "lon": 35.2, "mal_score": -0.1291244738784615, "family": "Afro-Asiatic", "macroarea": "Africa", "n_points": 0}, {"name": "Apurin\u00e3", "code": "apu", "lat": -9.0, "lon": -67.0, "mal_score": 0.0, "family": "Arawakan", "macroarea": "South America", "n_points": 0}, {"name": "Arabic", "code": "ar", "lat": 24.7, "lon": 46.7, "mal_score": -0.11819781420963756, "family": "Afro-Asiatic", "macroarea": "Africa", "n_points": 2}, {"name": "Armenian", "code": "hy", "lat": 40.0, "lon": 45.0, "mal_score": -0.054878215368489296, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 3}, {"name": "Bambara", "code": "bm", "lat": 12.5, "lon": -7.5, "mal_score": -0.514567605639444, "family": "Mande", "macroarea": "Africa", "n_points": 2}, {"name": "Basque", "code": "eu", "lat": 43.0, "lon": -3.83333333333, "mal_score": 0.18342316879424916, "family": "Basque", "macroarea": "Eurasia", "n_points": 3}, {"name": "Bavarian", "code": "bar", "lat": 48.14, "lon": 11.58, "mal_score": 0.08929288716299437, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 3}, {"name": "Beja", "code": "bej", "lat": 18.0, "lon": 36.0, "mal_score": 0.4038766954328656, "family": "Afro-Asiatic", "macroarea": "Africa", "n_points": 2}, {"name": "Belarusian", "code": "be", "lat": 54.0, "lon": 28.0, "mal_score": 0.08515685480668032, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 3}, {"name": "Bhojpuri", "code": "bho", "lat": 26.0, "lon": 84.0, "mal_score": 0.09206698118457701, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 0}, {"name": "Buglere", "code": "sab", "lat": 8.5, "lon": -81.25, "mal_score": -0.05130348676049947, "family": "Chibchan", "macroarea": "North America", "n_points": 0}, {"name": "Bor\u00f4ro", "code": "bor", "lat": -16.0, "lon": -57.0, "mal_score": 0.22936856187209032, "family": "Bororoan", "macroarea": "South America", "n_points": 3}, {"name": "Breton", "code": "br", "lat": 48.0, "lon": -3.0, "mal_score": 0.0, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 0}, {"name": "Bulgarian", "code": "bg", "lat": 42.5, "lon": 25.0, "mal_score": 0.16616752878794153, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 3}, {"name": "Buryat", "code": "bxr", "lat": 51.8, "lon": 107.6, "mal_score": 0.19465821324172689, "family": "Mongolic", "macroarea": "Eurasia", "n_points": 2}, {"name": "Cantonese", "code": "yue", "lat": 23.0, "lon": 113.0, "mal_score": -0.23758257259081908, "family": "Sino-Tibetan", "macroarea": "Eurasia", "n_points": 2}, {"name": "CappadocianGreek", "code": "cpg", "lat": 38.5, "lon": 34.5, "mal_score": 0.0, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 0}, {"name": "Catalan", "code": "ca", "lat": 41.75, "lon": 2.0, "mal_score": 0.25104240422595475, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 3}, {"name": "Chinese", "code": "zh", "lat": 39.9, "lon": 116.4, "mal_score": -0.15101768658227477, "family": "Sino-Tibetan", "macroarea": "Eurasia", "n_points": 5}, {"name": "Chhintange", "code": "ctn", "lat": 27.3, "lon": 87.2, "mal_score": 0.1932764817191259, "family": "Sino-Tibetan", "macroarea": "Eurasia", "n_points": 2}, {"name": "Chukot", "code": "ckt", "lat": 67.0, "lon": -173.0, "mal_score": 0.006539750542513044, "family": "Chukotko-Kamchatkan", "macroarea": "Eurasia", "n_points": 0}, {"name": "ClassArmenian", "code": "xcl", "lat": 40.0, "lon": 44.5, "mal_score": -0.06826133394732246, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 3}, {"name": "ClassChinese", "code": "lzh", "lat": 35.0, "lon": 108.9, "mal_score": 0.03937718388009544, "family": "Sino-Tibetan", "macroarea": "Eurasia", "n_points": 3}, {"name": "Coptic", "code": "cop", "lat": 26.0, "lon": 32.0, "mal_score": -0.48568170447225517, "family": "Afro-Asiatic", "macroarea": "Africa", "n_points": 3}, {"name": "Croatian", "code": "hr", "lat": 45.8, "lon": 15.98, "mal_score": 0.14532536183171219, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 3}, {"name": "Czech", "code": "cs", "lat": 50.0, "lon": 15.0, "mal_score": 0.2226401153960194, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 5}, {"name": "Danish", "code": "da", "lat": 56.0, "lon": 10.0, "mal_score": 0.2614683455663327, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 2}, {"name": "Dutch", "code": "nl", "lat": 52.37, "lon": 4.9, "mal_score": 0.15110705577171585, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 5}, {"name": "Egyptian", "code": "egy", "lat": 26.8, "lon": 30.8, "mal_score": 0.0, "family": "Afro-Asiatic", "macroarea": "Africa", "n_points": 0}, {"name": "English", "code": "en", "lat": 52.0, "lon": 0.0, "mal_score": -0.29678512413177166, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 3}, {"name": "Erzya", "code": "myv", "lat": 53.0, "lon": 45.5, "mal_score": -0.0018369467021386629, "family": "Uralic", "macroarea": "Eurasia", "n_points": 2}, {"name": "Esperanto", "code": "eo", "lat": 53.1, "lon": 23.2, "mal_score": 0.0, "family": "Constructed", "macroarea": "Eurasia", "n_points": 0}, {"name": "Estonian", "code": "et", "lat": 59.0, "lon": 26.0, "mal_score": 0.17701016739550962, "family": "Uralic", "macroarea": "Eurasia", "n_points": 4}, {"name": "Faroese", "code": "fo", "lat": 62.0, "lon": -7.0, "mal_score": -0.010072489023013753, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 2}, {"name": "Finnish", "code": "fi", "lat": 62.0, "lon": 25.0, "mal_score": 0.06406762472404647, "family": "Uralic", "macroarea": "Eurasia", "n_points": 3}, {"name": "French", "code": "fr", "lat": 48.0, "lon": 2.0, "mal_score": 0.005789397944280323, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 3}, {"name": "FrisianDutch", "code": "qfn", "lat": 53.2, "lon": 5.8, "mal_score": 0.0, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 0}, {"name": "Galician", "code": "gl", "lat": 43.0, "lon": -8.0, "mal_score": 0.24180686361237974, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 2}, {"name": "Georgian", "code": "ka", "lat": 42.0, "lon": 44.0, "mal_score": -0.03780499331062692, "family": "Kartvelian", "macroarea": "Eurasia", "n_points": 3}, {"name": "German", "code": "de", "lat": 52.5, "lon": 13.3333333333, "mal_score": 0.19988707390375515, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 6}, {"name": "Gheg", "code": "aln", "lat": 41.3, "lon": 19.8, "mal_score": -0.039175803150997876, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 2}, {"name": "Gothic", "code": "got", "lat": 48.0, "lon": 14.0, "mal_score": -0.06546240329907703, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 3}, {"name": "Greek", "code": "el", "lat": 34.75, "lon": 33.0, "mal_score": -0.03583789269827601, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 2}, {"name": "Guajaj\u00e1ra", "code": "gub", "lat": -5.0, "lon": -46.0, "mal_score": 0.0, "family": "Tupian", "macroarea": "South America", "n_points": 0}, {"name": "Gwich\u02bcin", "code": "gwi", "lat": 67.0, "lon": -146.0, "mal_score": 0.0, "family": "Na-Dene", "macroarea": "North America", "n_points": 0}, {"name": "Haitian", "code": "ht", "lat": 18.9, "lon": -72.3, "mal_score": -0.29380222615264895, "family": "Indo-European", "macroarea": "North America", "n_points": 2}, {"name": "Hausa", "code": "ha", "lat": 12.0, "lon": 7.0, "mal_score": -0.4005733970767004, "family": "Afro-Asiatic", "macroarea": "Africa", "n_points": 2}, {"name": "Hebrew", "code": "he", "lat": 31.75, "lon": 35.1666666667, "mal_score": 0.1965768245922209, "family": "Afro-Asiatic", "macroarea": "Eurasia", "n_points": 2}, {"name": "HighlandNahuatl", "code": "azz", "lat": 19.5833333333, "lon": -97.3333333333, "mal_score": 0.10424502120969814, "family": "Uto-Aztecan", "macroarea": "North America", "n_points": 0}, {"name": "Hindi", "code": "hi", "lat": 25.0, "lon": 77.0, "mal_score": 0.026979826907818284, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 5}, {"name": "Hungarian", "code": "hu", "lat": 47.0, "lon": 20.0, "mal_score": 0.07573057661435485, "family": "Uralic", "macroarea": "Eurasia", "n_points": 3}, {"name": "Icelandic", "code": "is", "lat": 65.0, "lon": -17.0, "mal_score": -0.1723805512972845, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 4}, {"name": "Arhuaco", "code": "arh", "lat": 10.6666666667, "lon": -73.75, "mal_score": 0.2528821997920866, "family": "Chibchan", "macroarea": "South America", "n_points": 0}, {"name": "Indonesian", "code": "id", "lat": 0.0, "lon": 106.0, "mal_score": -0.06897061623081695, "family": "Austronesian", "macroarea": "Papunesia", "n_points": 3}, {"name": "Irish", "code": "ga", "lat": 55.0, "lon": -8.0, "mal_score": -0.3133748669925551, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 0}, {"name": "Italian", "code": "it", "lat": 43.75, "lon": 11.25, "mal_score": 0.002710558068125851, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 4}, {"name": "Japanese", "code": "ja", "lat": 37.0, "lon": 140.0, "mal_score": 0.021523633510769084, "family": "Japanese", "macroarea": "Eurasia", "n_points": 5}, {"name": "Javanese", "code": "jv", "lat": -7.0, "lon": 111.0, "mal_score": -0.0046694739841687954, "family": "Austronesian", "macroarea": "Papunesia", "n_points": 2}, {"name": "Karelian", "code": "krl", "lat": 64.0, "lon": 32.0, "mal_score": 0.0, "family": "Uralic", "macroarea": "Eurasia", "n_points": 0}, {"name": "Karo", "code": "arr", "lat": -10.3333333333, "lon": -62.0, "mal_score": 0.06652681916281149, "family": "Tupian", "macroarea": "South America", "n_points": 0}, {"name": "Kazakh", "code": "kk", "lat": 50.0, "lon": 70.0, "mal_score": 0.07415545702844126, "family": "Altaic", "macroarea": "Eurasia", "n_points": 2}, {"name": "Khoekhoe", "code": "naq", "lat": -25.5, "lon": 18.0, "mal_score": 0.0650143882445322, "family": "Khoe-Kwadi", "macroarea": "Africa", "n_points": 3}, {"name": "Kiche", "code": "quc", "lat": 15.0, "lon": -91.4166666667, "mal_score": 0.0, "family": "Mayan", "macroarea": "North America", "n_points": 0}, {"name": "Komi", "code": "kpv", "lat": 65.0, "lon": 55.0, "mal_score": 0.010008150478659689, "family": "Uralic", "macroarea": "Eurasia", "n_points": 2}, {"name": "Korean", "code": "ko", "lat": 37.5, "lon": 128.0, "mal_score": 0.12148748137329894, "family": "Korean", "macroarea": "Eurasia", "n_points": 5}, {"name": "Kyrgyz", "code": "ky", "lat": 42.9, "lon": 74.6, "mal_score": 0.15016745537181939, "family": "Turkic", "macroarea": "Eurasia", "n_points": 3}, {"name": "Latin", "code": "la", "lat": 41.9, "lon": 12.5, "mal_score": -0.13658743904168955, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 6}, {"name": "Latvian", "code": "lv", "lat": 57.0, "lon": 24.0, "mal_score": -0.0162257342164773, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 3}, {"name": "Ligurian", "code": "lij", "lat": 44.4166666667, "lon": 8.95, "mal_score": 0.05207962671034042, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 0}, {"name": "Lithuanian", "code": "lt", "lat": 55.0, "lon": 24.0, "mal_score": -0.07741651922908528, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 2}, {"name": "Livvi", "code": "olo", "lat": 62.0, "lon": 33.0, "mal_score": 0.0, "family": "Uralic", "macroarea": "Eurasia", "n_points": 0}, {"name": "LowSaxon", "code": "nds", "lat": 53.0, "lon": 10.0, "mal_score": 0.13942381230411421, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 3}, {"name": "Macedonian", "code": "mk", "lat": 41.6666666667, "lon": 21.75, "mal_score": 0.0, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 0}, {"name": "Maghrebi", "code": "qaf", "lat": 34.0, "lon": 2.0, "mal_score": 0.1533358612108689, "family": "Afro-Asiatic", "macroarea": "Africa", "n_points": 0}, {"name": "Malayalam", "code": "ml", "lat": 10.0, "lon": 76.5, "mal_score": 0.0, "family": "Dravidian", "macroarea": "Eurasia", "n_points": 0}, {"name": "Maltese", "code": "mt", "lat": 35.9166666667, "lon": 14.4166666667, "mal_score": -0.06823517118762812, "family": "Afro-Asiatic", "macroarea": "Eurasia", "n_points": 2}, {"name": "Marathi", "code": "mr", "lat": 19.0, "lon": 76.0, "mal_score": 0.09880318454589046, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 2}, {"name": "Mby\u00e1Guaran\u00ed", "code": "gun", "lat": -25.5, "lon": -54.5, "mal_score": 0.0022502865095379476, "family": "Tupian", "macroarea": "South America", "n_points": 2}, {"name": "MiddleFrench", "code": "frm", "lat": 48.9, "lon": 2.35, "mal_score": -0.288449350509536, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 3}, {"name": "Moksha", "code": "mdf", "lat": 54.0, "lon": 44.0, "mal_score": 0.06435034827994922, "family": "Uralic", "macroarea": "Eurasia", "n_points": 0}, {"name": "Tangkhul", "code": "nmf", "lat": 25.0, "lon": 94.5, "mal_score": 0.09079873915528348, "family": "Sino-Tibetan", "macroarea": "Eurasia", "n_points": 0}, {"name": "Naija", "code": "pcm", "lat": 6.5, "lon": 3.33333333333, "mal_score": -0.733510216022364, "family": "other", "macroarea": "Africa", "n_points": 3}, {"name": "Nenets", "code": "yrk", "lat": 69.0, "lon": 72.0, "mal_score": 0.0, "family": "Uralic", "macroarea": "Eurasia", "n_points": 0}, {"name": "Nhengatu", "code": "yrl", "lat": -3.0, "lon": -60.0, "mal_score": 0.13696443738898537, "family": "Tupian", "macroarea": "South America", "n_points": 2}, {"name": "NorthSami", "code": "sme", "lat": 69.0, "lon": 24.0, "mal_score": -0.004431772421313065, "family": "Uralic", "macroarea": "Eurasia", "n_points": 2}, {"name": "Kurmanji", "code": "kmr", "lat": 38.0, "lon": 42.0, "mal_score": -0.12638679586452123, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 2}, {"name": "Gbaya", "code": "gya", "lat": 6.0, "lon": 15.0, "mal_score": 0.0, "family": "Niger-Congo", "macroarea": "Africa", "n_points": 0}, {"name": "Norwegian", "code": "no", "lat": 61.0, "lon": 8.0, "mal_score": 0.1839063225164855, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 3}, {"name": "Occitan", "code": "oc", "lat": 44.0, "lon": 2.0, "mal_score": -0.15168051072470978, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 2}, {"name": "OldChurchSlavonic", "code": "cu", "lat": 42.7, "lon": 25.5, "mal_score": -0.16934482826268646, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 4}, {"name": "OldEastSlavic", "code": "orv", "lat": 59.93, "lon": 30.34, "mal_score": -0.2092295443972323, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 5}, {"name": "OldFrench", "code": "fro", "lat": 49.5, "lon": 2.35, "mal_score": -0.17677343415649496, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 4}, {"name": "OldProven\u00e7al", "code": "pro", "lat": 43.7, "lon": 4.0, "mal_score": -0.4432179753639867, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 3}, {"name": "OttomanTurkish", "code": "ota", "lat": 41.0, "lon": 29.0, "mal_score": 0.028512873736120263, "family": "Turkic", "macroarea": "Eurasia", "n_points": 3}, {"name": "Pashto", "code": "ps", "lat": 33.0, "lon": 67.0, "mal_score": 0.0, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 0}, {"name": "Persian", "code": "fa", "lat": 32.0, "lon": 54.0, "mal_score": -0.08582583163696862, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 5}, {"name": "Pesh", "code": "pay", "lat": 15.0, "lon": -85.5, "mal_score": -0.044662883557728524, "family": "Chibchan", "macroarea": "North America", "n_points": 0}, {"name": "Polish", "code": "pl", "lat": 52.0, "lon": 20.0, "mal_score": 0.11788936139832278, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 4}, {"name": "Pomak", "code": "qpm", "lat": 41.5, "lon": 25.5, "mal_score": 0.10246111521633962, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 2}, {"name": "Portuguese", "code": "pt", "lat": 39.0, "lon": -8.0, "mal_score": 0.13390310219849852, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 3}, {"name": "Romanian", "code": "ro", "lat": 47.0, "lon": 29.0, "mal_score": -0.11035561213378736, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 4}, {"name": "Russian", "code": "ru", "lat": 55.75, "lon": 37.62, "mal_score": 0.07483470274056922, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 4}, {"name": "Sanskrit", "code": "sa", "lat": 27.2, "lon": 83.0, "mal_score": 0.03079922326524169, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 5}, {"name": "Gaelic", "code": "gd", "lat": 57.0, "lon": -4.0, "mal_score": 0.0, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 0}, {"name": "Serbian", "code": "sr", "lat": 44.8, "lon": 20.5, "mal_score": 0.23497598180435347, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 2}, {"name": "Wu", "code": "wuu", "lat": 31.6666666667, "lon": 119.916666667, "mal_score": -0.05456198324423444, "family": "Sino-Tibetan", "macroarea": "Eurasia", "n_points": 0}, {"name": "Sicilian", "code": "scn", "lat": 37.5, "lon": 14.0, "mal_score": -0.07940677675035616, "family": "Indo-European", "macroarea": "Africa", "n_points": 2}, {"name": "Sindhi", "code": "sd", "lat": 26.0, "lon": 69.0, "mal_score": 0.054885251878059337, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 4}, {"name": "SkoltSami", "code": "sms", "lat": 69.0, "lon": 28.0, "mal_score": -0.09890365707355513, "family": "Uralic", "macroarea": "Eurasia", "n_points": 0}, {"name": "Slovak", "code": "sk", "lat": 49.0, "lon": 20.0, "mal_score": 0.23501744784456402, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 3}, {"name": "Slovenian", "code": "sl", "lat": 46.0, "lon": 15.0, "mal_score": 0.058829467892205875, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 4}, {"name": "SouthernKurdish", "code": "sdh", "lat": 35.5, "lon": 46.0, "mal_score": 0.0, "family": "Indo-European", "macroarea": "Africa", "n_points": 0}, {"name": "Spanish", "code": "es", "lat": 40.0, "lon": -4.0, "mal_score": 0.2202816335249719, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 3}, {"name": "SpanishSign", "code": "ssp", "lat": 40.0, "lon": -3.0, "mal_score": 0.0, "family": "other", "macroarea": "Eurasia", "n_points": 0}, {"name": "Swedish", "code": "sv", "lat": 60.0, "lon": 15.0, "mal_score": 0.09835494434539786, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 3}, {"name": "SwedishSign", "code": "swl", "lat": 59.0, "lon": 15.0, "mal_score": 0.0, "family": "other", "macroarea": "Eurasia", "n_points": 0}, {"name": "Tamil", "code": "ta", "lat": 11.0, "lon": 78.5, "mal_score": 0.3794793829365845, "family": "Dravidian", "macroarea": "Eurasia", "n_points": 3}, {"name": "Tatar", "code": "tt", "lat": 55.5, "lon": 49.0, "mal_score": -0.13081377270850053, "family": "Altaic", "macroarea": "Eurasia", "n_points": 0}, {"name": "Teko", "code": "eme", "lat": 3.16666666667, "lon": -52.4166666667, "mal_score": 0.1267401822727616, "family": "Tupian", "macroarea": "South America", "n_points": 0}, {"name": "Telugu", "code": "te", "lat": 16.0, "lon": 79.0, "mal_score": 0.08634697894108134, "family": "Dravidian", "macroarea": "Eurasia", "n_points": 2}, {"name": "Thai", "code": "th", "lat": 16.0, "lon": 101.0, "mal_score": -0.22498857987762383, "family": "Tai-Kadai", "macroarea": "Eurasia", "n_points": 2}, {"name": "Tupinamb\u00e1", "code": "tpn", "lat": -6.0, "lon": -36.0, "mal_score": 0.0, "family": "Tupian", "macroarea": "South America", "n_points": 0}, {"name": "Turkish", "code": "tr", "lat": 39.0, "lon": 35.0, "mal_score": 0.13553462018544035, "family": "Altaic", "macroarea": "Eurasia", "n_points": 5}, {"name": "TurkishGerman", "code": "qtd", "lat": 48.78, "lon": 9.18, "mal_score": 0.13135566627490383, "family": "Mixed", "macroarea": "Eurasia", "n_points": 4}, {"name": "Ukrainian", "code": "uk", "lat": 49.0, "lon": 33.0, "mal_score": -0.04340547555863665, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 3}, {"name": "Umbrian", "code": "xum", "lat": 42.5, "lon": 12.5, "mal_score": 0.0, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 0}, {"name": "UpperSorbian", "code": "hsb", "lat": 51.8333333333, "lon": 14.5, "mal_score": 0.500031140923519, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 0}, {"name": "Urdu", "code": "ur", "lat": 25.0, "lon": 67.0, "mal_score": 0.047640897004853855, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 5}, {"name": "Uyghur", "code": "ug", "lat": 40.0, "lon": 80.0, "mal_score": 0.043961863390976866, "family": "Altaic", "macroarea": "Eurasia", "n_points": 4}, {"name": "Uzbek", "code": "uz", "lat": 39.0, "lon": 66.0, "mal_score": 0.162569204130822, "family": "Altaic", "macroarea": "Eurasia", "n_points": 3}, {"name": "Vietnamese", "code": "vi", "lat": 10.5, "lon": 106.5, "mal_score": -0.19843506260753654, "family": "Austro-Asiatic", "macroarea": "Eurasia", "n_points": 3}, {"name": "Welsh", "code": "cy", "lat": 52.75, "lon": -3.5833, "mal_score": -0.01633576507898997, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 0}, {"name": "WestArmenian", "code": "hyw", "lat": 38.5, "lon": 43.5, "mal_score": -0.09616958024005401, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 3}, {"name": "WestNahuatl", "code": "nhi", "lat": 19.0, "lon": -98.0, "mal_score": 0.02839311952408144, "family": "Uto-Aztecan", "macroarea": "North America", "n_points": 0}, {"name": "Wolof", "code": "wo", "lat": 15.25, "lon": -16.0, "mal_score": -0.31686323521191234, "family": "Niger-Congo", "macroarea": "Africa", "n_points": 2}, {"name": "Xav\u00e1nte", "code": "xav", "lat": -15.0, "lon": -52.5, "mal_score": 0.0, "family": "Macro-Ge", "macroarea": "South America", "n_points": 0}, {"name": "Xibe", "code": "sjo", "lat": 43.9, "lon": 81.3, "mal_score": -0.13207386729783252, "family": "Tungusic", "macroarea": "Eurasia", "n_points": 3}, {"name": "Yakut", "code": "sah", "lat": 62.0, "lon": 130.0, "mal_score": 0.0, "family": "Altaic", "macroarea": "Eurasia", "n_points": 0}, {"name": "Yiddish", "code": "yi", "lat": 47.0, "lon": 28.5, "mal_score": -0.10162715076400196, "family": "Indo-European", "macroarea": "Eurasia", "n_points": 2}, {"name": "Yoruba", "code": "yo", "lat": 8.0, "lon": 4.33333333333, "mal_score": -0.2098644116044725, "family": "Niger-Congo", "macroarea": "Africa", "n_points": 0}, {"name": "Yupik", "code": "ess", "lat": 63.5, "lon": -170.5, "mal_score": 0.0, "family": "Eskimo-Aleut", "macroarea": "Eurasia", "n_points": 0}, {"name": "Zaar", "code": "say", "lat": 10.0, "lon": 9.5, "mal_score": -0.27833447700151537, "family": "Afro-Asiatic", "macroarea": "Africa", "n_points": 0}];
+    const container = document.getElementById("worldMap");
+    
+    // Dimensions
+    const width = Math.min(1000, container.clientWidth || 1000);
+    const height = width * 0.5;
+    
+    // Create SVG
+    const svg = d3.select("#worldMap")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .style("background", "#f0f8ff")
+        .style("border-radius", "8px")
+        .style("border", "1px solid #ddd");
+    
+    // Projection (Natural Earth for nice appearance)
+    const projection = d3.geoNaturalEarth1()
+        .scale(width / 5.5)
+        .translate([width / 2, height / 2]);
+    
+    const path = d3.geoPath().projection(projection);
+    
+    // Color scale for −β(2→max) scores: positive = MAL compliance (green), negative = anti-MAL (red)
+    function scoreToColor(score) {
+        if (score > 0.1) {
+            // Green for MAL compliance (positive −β means size decreases with n)
+            const t = Math.min(1, score / 0.3);
+            return d3.interpolateRgb("#b8e6b8", "#2e7d32")(t);
+        } else if (score < -0.1) {
+            // Red for anti-MAL (negative −β)
+            const t = Math.min(1, Math.abs(score) / 0.3);
+            return d3.interpolateRgb("#ffcdd2", "#c62828")(t);
+        } else {
+            // Yellow for neutral
+            return "#ffc107";
+        }
+    }
+    
+    // Create tooltip
+    const tooltip = d3.select("body").append("div")
+        .attr("class", "map-tooltip")
+        .style("position", "absolute")
+        .style("visibility", "hidden")
+        .style("background", "rgba(255, 255, 255, 0.95)")
+        .style("border", "1px solid #ccc")
+        .style("border-radius", "6px")
+        .style("padding", "10px")
+        .style("font-size", "12px")
+        .style("box-shadow", "0 2px 8px rgba(0,0,0,0.15)")
+        .style("pointer-events", "none")
+        .style("z-index", "1000");
+    
+    // Load world map data
+    d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(function(world) {
+        // Draw countries
+        svg.append("g")
+            .selectAll("path")
+            .data(topojson.feature(world, world.objects.countries).features)
+            .enter().append("path")
+            .attr("d", path)
+            .attr("fill", "#e8e8e8")
+            .attr("stroke", "#999")
+            .attr("stroke-width", 0.5);
+        
+        // Draw country borders
+        svg.append("path")
+            .datum(topojson.mesh(world, world.objects.countries, (a, b) => a !== b))
+            .attr("fill", "none")
+            .attr("stroke", "#aaa")
+            .attr("stroke-width", 0.3)
+            .attr("d", path);
+        
+        // Add graticule (grid lines)
+        const graticule = d3.geoGraticule().step([30, 30]);
+        svg.append("path")
+            .datum(graticule)
+            .attr("d", path)
+            .attr("fill", "none")
+            .attr("stroke", "#ddd")
+            .attr("stroke-width", 0.3);
+        
+        // Draw language points
+        svg.selectAll("circle.lang-point")
+            .data(geoData.sort((a, b) => Math.abs(a.mal_score) - Math.abs(b.mal_score)))
+            .enter().append("circle")
+            .attr("class", "lang-point")
+            .attr("cx", d => projection([d.lon, d.lat])[0])
+            .attr("cy", d => projection([d.lon, d.lat])[1])
+            .attr("r", 5)
+            .attr("fill", d => scoreToColor(d.mal_score))
+            .attr("stroke", "white")
+            .attr("stroke-width", 1.5)
+            .attr("opacity", 0.85)
+            .style("cursor", "pointer")
+            .on("mouseover", function(event, d) {
+                d3.select(this).attr("r", 8).attr("stroke-width", 2);
+                tooltip.style("visibility", "visible")
+                    .html(`<strong>${d.name}</strong><br/>
+                           −β(2→max): ${d.mal_score.toFixed(3)}<br/>
+                           Family: ${d.family}<br/>
+                           Data points: ${d.n_points}`);
+            })
+            .on("mousemove", function(event) {
+                tooltip.style("top", (event.pageY - 10) + "px")
+                       .style("left", (event.pageX + 10) + "px");
+            })
+            .on("mouseout", function() {
+                d3.select(this).attr("r", 5).attr("stroke-width", 1.5);
+                tooltip.style("visibility", "hidden");
+            });
+        
+        // Add legend
+        const legendData = [
+            { label: "Strong MAL (>0.2)", score: 0.3 },
+            { label: "Moderate MAL", score: 0.15 },
+            { label: "Weak/Neutral", score: 0 },
+            { label: "Anti-MAL (<-0.1)", score: -0.2 }
+        ];
+        
+        const legend = svg.append("g")
+            .attr("transform", `translate(${width - 140}, ${height - 100})`);
+        
+        legend.append("rect")
+            .attr("x", -10)
+            .attr("y", -25)
+            .attr("width", 135)
+            .attr("height", 100)
+            .attr("fill", "white")
+            .attr("stroke", "#ccc")
+            .attr("rx", 5)
+            .attr("opacity", 0.9);
+        
+        legend.append("text")
+            .attr("x", 0)
+            .attr("y", -8)
+            .attr("font-size", "11px")
+            .attr("font-weight", "bold")
+            .text("−β(2→max)");
+        
+        legendData.forEach((item, i) => {
+            legend.append("circle")
+                .attr("cx", 8)
+                .attr("cy", 12 + i * 18)
+                .attr("r", 5)
+                .attr("fill", scoreToColor(item.score))
+                .attr("stroke", "white")
+                .attr("stroke-width", 1);
+            
+            legend.append("text")
+                .attr("x", 20)
+                .attr("y", 16 + i * 18)
+                .attr("font-size", "10px")
+                .text(item.label);
+        });
+        
+        // Add language count
+        svg.append("text")
+            .attr("x", 10)
+            .attr("y", height - 10)
+            .attr("font-size", "10px")
+            .attr("fill", "#666")
+            .text(`Languages shown: ${geoData.length}`);
+            
+    }).catch(function(error) {
+        console.error("Error loading world map:", error);
+        svg.append("text")
+            .attr("x", width / 2)
+            .attr("y", height / 2)
+            .attr("text-anchor", "middle")
+            .attr("fill", "#666")
+            .text("Could not load world map. Check internet connection.");
+    });
+})();
+</script>
+</div>
+<div class="chart-container">
+<h3>R² Goodness-of-Fit Distribution for β(1→max) regressions (LMAL)</h3>
+<canvas id="r2dist_lmal" height="100"></canvas>
+</div>
+
+<script>
+(function() {
+    const d = {"labels": ["0.00\u20130.05", "0.05\u20130.10", "0.10\u20130.15", "0.15\u20130.20", "0.20\u20130.25", "0.25\u20130.30", "0.30\u20130.35", "0.35\u20130.40", "0.40\u20130.45", "0.45\u20130.50", "0.50\u20130.55", "0.55\u20130.60", "0.60\u20130.65", "0.65\u20130.70", "0.70\u20130.75", "0.75\u20130.80", "0.80\u20130.85", "0.85\u20130.90", "0.90\u20130.95", "0.95\u20131.00"], "bins": [6, 1, 1, 1, 0, 2, 4, 0, 3, 3, 2, 3, 7, 4, 7, 10, 3, 6, 9, 52], "count": 124, "mean": 0.7687899741600276, "median": 0.8922662434627392};
+    const colors = d.bins.map((_, i) => i >= 18 ? 'rgba(13,71,161,0.85)'
+                                : i >= 14 ? 'rgba(30,136,229,0.8)'
+                                : i >= 10 ? 'rgba(100,181,246,0.75)'
+                                : 'rgba(187,222,251,0.7)');
+    new Chart(document.getElementById('r2dist_lmal'), {
+        type: 'bar', data: {labels: d.labels, datasets: [{
+            label: 'Number of languages', data: d.bins,
+            backgroundColor: colors, borderWidth: 1
+        }]},
+        options: { responsive: true, plugins: {legend: {display: false}},
+            scales: {
+                x: {title: {display: true, text: 'R² value'}},
+                y: {title: {display: true, text: 'Number of languages'}, beginAtZero: true}
+            }
+        }
+    });
+})();
+</script>
+<div class="explanation"><p>Mean R² = 0.769, median R² = 0.892, n = 124.</p></div>
+
+<div class="chart-container">
+<h3>β(1→2) vs −β(2→max)</h3>
+<canvas id="sc_b12_b2max_lmal" height="120"></canvas>
+</div>
+
+<script>
+(function() {
+    const raw = [{"name": "Abkhaz", "code": "ab", "group": "Caucasian", "beta_1_2": 0.13742640343482362, "beta_2max": -0.05909656378748677, "beta_1max": 0.07270588555432811, "r_squared_2max": 1.0, "r_squared_1max": 0.6645107293882851}, {"name": "Afrikaans", "code": "af", "group": "Indo-European", "beta_1_2": 0.25970423607967374, "beta_2max": 0.10963889120965194, "beta_1max": 0.18657356883438003, "r_squared_2max": 0.9971760027508729, "r_squared_1max": 0.9530913424887756}, {"name": "Akkadian", "code": "akk", "group": "Afroasiatic", "beta_1_2": 0.2046695106618754, "beta_2max": -0.07797084132657472, "beta_1max": 0.08629214962430054, "r_squared_2max": 0.17370882791149966, "r_squared_1max": 0.34329500640514266}, {"name": "SwissGerman", "code": "gsw", "group": "Indo-European", "beta_1_2": 0.23755203810150208, "beta_2max": 0.12015824896485773, "beta_1max": 0.17025070605188608, "r_squared_2max": 0.7016446682108881, "r_squared_1max": 0.9325501065481789}, {"name": "Amharic", "code": "am", "group": "Afroasiatic", "beta_1_2": 0.3715721371189246, "beta_2max": 0.16082558540781494, "beta_1max": 0.3021673944516608, "r_squared_2max": 1.0, "r_squared_1max": 0.9674795389927728}, {"name": "AncientGreek", "code": "grc", "group": "Indo-European", "beta_1_2": 0.060207026544945655, "beta_2max": -0.12657330448220822, "beta_1max": -0.055918615618526235, "r_squared_2max": 0.6892365653617349, "r_squared_1max": 0.34613918099160457}, {"name": "Arabic", "code": "ar", "group": "Afroasiatic", "beta_1_2": 0.19929020953875212, "beta_2max": -0.7647578316062353, "beta_1max": -0.11819781420963756, "r_squared_2max": 1.0, "r_squared_1max": 0.17866947192317462}, {"name": "Armenian", "code": "hy", "group": "Indo-European", "beta_1_2": 0.011734604046005803, "beta_2max": -0.12683599317789607, "beta_1max": -0.054878215368489296, "r_squared_2max": 0.9897384100657858, "r_squared_1max": 0.663202945439257}, {"name": "Bambara", "code": "bm", "group": "Niger-Congo", "beta_1_2": -0.16714888252447757, "beta_2max": -1.2220810828694835, "beta_1max": -0.514567605639444, "r_squared_2max": 1.0, "r_squared_1max": 0.7749307123605096}, {"name": "Basque", "code": "eu", "group": "Other", "beta_1_2": 0.20491325674371888, "beta_2max": 0.16674418425227974, "beta_1max": 0.18342316879424916, "r_squared_2max": 0.9824987114047915, "r_squared_1max": 0.9943562665312338}, {"name": "Bavarian", "code": "bar", "group": "Indo-European", "beta_1_2": 0.07526318177874314, "beta_2max": 0.09600127415142058, "beta_1max": 0.08929288716299437, "r_squared_2max": 0.9031962850125664, "r_squared_1max": 0.9714959000567033}, {"name": "Beja", "code": "bej", "group": "Afroasiatic", "beta_1_2": 0.4775893870840398, "beta_2max": 0.2537618072123767, "beta_1max": 0.4038766954328656, "r_squared_2max": 1.0, "r_squared_1max": 0.9792174936247924}, {"name": "Belarusian", "code": "be", "group": "Indo-European", "beta_1_2": 0.010334721690974666, "beta_2max": 0.18355546386971655, "beta_1max": 0.08515685480668032, "r_squared_2max": 0.8215469077206623, "r_squared_1max": 0.6209196658113928}, {"name": "Bor\u00f4ro", "code": "bor", "group": "South-American", "beta_1_2": 0.3066787764981807, "beta_2max": 0.16022415315797395, "beta_1max": 0.22936856187209032, "r_squared_2max": 0.9325178904107199, "r_squared_1max": 0.9670372669481144}, {"name": "Bulgarian", "code": "bg", "group": "Indo-European", "beta_1_2": 0.254031945149221, "beta_2max": 0.06294362485267989, "beta_1max": 0.16616752878794153, "r_squared_2max": 0.6071840121031988, "r_squared_1max": 0.8834182908322874}, {"name": "Buryat", "code": "bxr", "group": "Other", "beta_1_2": 0.26192122274838203, "beta_2max": 0.057678014482367715, "beta_1max": 0.19465821324172689, "r_squared_2max": 1.0, "r_squared_1max": 0.9293037131813886}, {"name": "Cantonese", "code": "yue", "group": "Sino-Austronesian", "beta_1_2": -0.275410229279644, "beta_2max": -0.16054706719430054, "beta_1max": -0.23758257259081908, "r_squared_2max": 1.0, "r_squared_1max": 0.9841049124809774}, {"name": "Catalan", "code": "ca", "group": "Indo-European", "beta_1_2": 0.4649129018506293, "beta_2max": 0.031068086757801736, "beta_1max": 0.25104240422595475, "r_squared_2max": 0.9892720672965842, "r_squared_1max": 0.8188061323369473}, {"name": "Chinese", "code": "zh", "group": "Sino-Austronesian", "beta_1_2": -0.09213382643296751, "beta_2max": -0.17282644117757542, "beta_1max": -0.15101768658227477, "r_squared_2max": 0.9099962374512599, "r_squared_1max": 0.9476146056870135}, {"name": "Chhintange", "code": "ctn", "group": "Sino-Austronesian", "beta_1_2": 0.18656342528865094, "beta_2max": 0.2069475293108668, "beta_1max": 0.1932764817191259, "r_squared_2max": 1.0, "r_squared_1max": 0.9992319655527667}, {"name": "ClassArmenian", "code": "xcl", "group": "Indo-European", "beta_1_2": -0.011052468037576346, "beta_2max": -0.1391405225707511, "beta_1max": -0.06826133394732246, "r_squared_2max": 0.8944424569975937, "r_squared_1max": 0.7040373099297483}, {"name": "ClassChinese", "code": "lzh", "group": "Sino-Austronesian", "beta_1_2": 0.03219160041648173, "beta_2max": 0.04123993327487619, "beta_1max": 0.03937718388009544, "r_squared_2max": 0.7712968549875101, "r_squared_1max": 0.9316188649931525}, {"name": "Coptic", "code": "cop", "group": "Afroasiatic", "beta_1_2": -1.0345026603141811, "beta_2max": -0.025448575757582925, "beta_1max": -0.48568170447225517, "r_squared_2max": 0.0034942329364592295, "r_squared_1max": 0.697393408421761}, {"name": "Croatian", "code": "hr", "group": "Indo-European", "beta_1_2": 0.3070774540581764, "beta_2max": -0.05031492507134137, "beta_1max": 0.14532536183171219, "r_squared_2max": 0.15859736571763194, "r_squared_1max": 0.6007790439947511}, {"name": "Czech", "code": "cs", "group": "Indo-European", "beta_1_2": 0.6785550250654435, "beta_2max": -0.03406793775260213, "beta_1max": 0.2226401153960194, "r_squared_2max": 0.20508188736896615, "r_squared_1max": 0.5798642627915906}, {"name": "Danish", "code": "da", "group": "Indo-European", "beta_1_2": 0.3835792025090271, "beta_2max": 0.01279125577553147, "beta_1max": 0.2614683455663327, "r_squared_2max": 1.0, "r_squared_1max": 0.8779909200701649}, {"name": "Dutch", "code": "nl", "group": "Indo-European", "beta_1_2": 0.2519762390278467, "beta_2max": 0.11536815424916831, "beta_1max": 0.15110705577171585, "r_squared_2max": 0.6529903726501562, "r_squared_1max": 0.8807749271533601}, {"name": "English", "code": "en", "group": "Indo-European", "beta_1_2": -0.20822247367773186, "beta_2max": -0.3885753316009324, "beta_1max": -0.29678512413177166, "r_squared_2max": 0.9999852930964159, "r_squared_1max": 0.9731696973672653}, {"name": "Erzya", "code": "myv", "group": "Uralic", "beta_1_2": -0.016659910534847413, "beta_2max": 0.028349816377594598, "beta_1max": -0.0018369467021386629, "r_squared_2max": 1.0, "r_squared_1max": 0.023536782527677436}, {"name": "Estonian", "code": "et", "group": "Uralic", "beta_1_2": 0.40980127510547787, "beta_2max": 0.0027239370986882065, "beta_1max": 0.17701016739550962, "r_squared_2max": 0.0008241905614304601, "r_squared_1max": 0.6754057670438762}, {"name": "Faroese", "code": "fo", "group": "Indo-European", "beta_1_2": -0.048861920446524446, "beta_2max": 0.06892165746442935, "beta_1max": -0.010072489023013753, "r_squared_2max": 1.0, "r_squared_1max": 0.09570310142770833}, {"name": "Finnish", "code": "fi", "group": "Uralic", "beta_1_2": 0.011509520348036182, "beta_2max": 0.10463174104700183, "beta_1max": 0.06406762472404647, "r_squared_2max": 0.7813627492795941, "r_squared_1max": 0.7797463072780424}, {"name": "French", "code": "fr", "group": "Indo-European", "beta_1_2": -0.06544650012252895, "beta_2max": 0.0844884595743588, "beta_1max": 0.005789397944280323, "r_squared_2max": 0.9424668351760254, "r_squared_1max": 0.017495538001927047}, {"name": "Galician", "code": "gl", "group": "Indo-European", "beta_1_2": 0.28329586488201847, "beta_2max": 0.15731508006112294, "beta_1max": 0.24180686361237974, "r_squared_2max": 1.0, "r_squared_1max": 0.9815884663017205}, {"name": "Georgian", "code": "ka", "group": "Caucasian", "beta_1_2": 0.0030015416904050716, "beta_2max": -0.0721706452381893, "beta_1max": -0.03780499331062692, "r_squared_2max": 0.8411390555406564, "r_squared_1max": 0.7183450224099013}, {"name": "German", "code": "de", "group": "Indo-European", "beta_1_2": 0.17600403527140507, "beta_2max": 0.21965713524581826, "beta_1max": 0.19988707390375515, "r_squared_2max": 0.979521209005577, "r_squared_1max": 0.9844016385801688}, {"name": "Gheg", "code": "aln", "group": "Indo-European", "beta_1_2": -0.023844725348390213, "beta_2max": -0.07039733337986219, "beta_1max": -0.039175803150997876, "r_squared_2max": 1.0, "r_squared_1max": 0.9110989461379588}, {"name": "Gothic", "code": "got", "group": "Indo-European", "beta_1_2": -0.016341599970552977, "beta_2max": -0.11724394184619225, "beta_1max": -0.06546240329907703, "r_squared_2max": 0.9986278001760932, "r_squared_1max": 0.8465320738582656}, {"name": "Greek", "code": "el", "group": "Indo-European", "beta_1_2": 0.006651726486211672, "beta_2max": -0.12236742094551821, "beta_1max": -0.03583789269827601, "r_squared_2max": 1.0, "r_squared_1max": 0.5275383331026967}, {"name": "Haitian", "code": "ht", "group": "Indo-European", "beta_1_2": -0.3044688589291568, "beta_2max": -0.27207977441378384, "beta_1max": -0.29380222615264895, "r_squared_2max": 1.0, "r_squared_1max": 0.9991609037837385}, {"name": "Hausa", "code": "ha", "group": "Afroasiatic", "beta_1_2": -0.40065250347816206, "beta_2max": -0.4004122979722318, "beta_1max": -0.4005733970767004, "r_squared_2max": 1.0, "r_squared_1max": 0.9999999751520338}, {"name": "Hebrew", "code": "he", "group": "Afroasiatic", "beta_1_2": 0.259371319305421, "beta_2max": 0.06869669508423867, "beta_1max": 0.1965768245922209, "r_squared_2max": 1.0, "r_squared_1max": 0.9389543403964854}, {"name": "Hindi", "code": "hi", "group": "Indo-European", "beta_1_2": -0.07569828158746915, "beta_2max": 0.06805130456718274, "beta_1max": 0.026979826907818284, "r_squared_2max": 0.6708382947069843, "r_squared_1max": 0.3049871228711354}, {"name": "Hungarian", "code": "hu", "group": "Uralic", "beta_1_2": 0.22931066826066063, "beta_2max": -0.08189036715524203, "beta_1max": 0.07573057661435485, "r_squared_2max": 0.9979549473212653, "r_squared_1max": 0.44467104650307354}, {"name": "Icelandic", "code": "is", "group": "Indo-European", "beta_1_2": -0.2149264743774088, "beta_2max": -0.20147917176234945, "beta_1max": -0.1723805512972845, "r_squared_2max": 0.5367051919950536, "r_squared_1max": 0.7383447836993129}, {"name": "Indonesian", "code": "id", "group": "Sino-Austronesian", "beta_1_2": -0.11600905656302221, "beta_2max": -0.010666533772111629, "beta_1max": -0.06897061623081695, "r_squared_2max": 0.06827002770049717, "r_squared_1max": 0.7818938266414215}, {"name": "Italian", "code": "it", "group": "Indo-European", "beta_1_2": 0.015537301608196405, "beta_2max": -0.02132787169582884, "beta_1max": 0.002710558068125851, "r_squared_2max": 0.03734525214609663, "r_squared_1max": 0.002011990569414035}, {"name": "Japanese", "code": "ja", "group": "Other", "beta_1_2": 0.0065007915134794045, "beta_2max": 0.021096835769421684, "beta_1max": 0.021523633510769084, "r_squared_2max": 0.35261205960948694, "r_squared_1max": 0.6231094758244649}, {"name": "Javanese", "code": "jv", "group": "Sino-Austronesian", "beta_1_2": -0.056918358199087846, "beta_2max": 0.10173466399907435, "beta_1max": -0.0046694739841687954, "r_squared_2max": 1.0, "r_squared_1max": 0.012380543462562232}, {"name": "Kazakh", "code": "kk", "group": "Turkic", "beta_1_2": 0.06816333083861127, "beta_2max": 0.08635834004682269, "beta_1max": 0.07415545702844126, "r_squared_2max": 1.0, "r_squared_1max": 0.9958570995201199}, {"name": "Khoekhoe", "code": "naq", "group": "Other", "beta_1_2": 0.18921142309360273, "beta_2max": -0.0710419483440334, "beta_1max": 0.0650143882445322, "r_squared_2max": 0.8336428690329909, "r_squared_1max": 0.4319097430777338}, {"name": "Komi", "code": "kpv", "group": "Uralic", "beta_1_2": -0.05631005073969724, "beta_2max": 0.14506426008307494, "beta_1max": 0.010008150478659689, "r_squared_2max": 1.0, "r_squared_1max": 0.034511011977795714}, {"name": "Korean", "code": "ko", "group": "Other", "beta_1_2": 0.08123097456775252, "beta_2max": 0.14162337322816654, "beta_1max": 0.12148748137329894, "r_squared_2max": 0.9538166992261172, "r_squared_1max": 0.9644274240486246}, {"name": "Kyrgyz", "code": "ky", "group": "Turkic", "beta_1_2": -0.25718344908942503, "beta_2max": 0.5763760303425514, "beta_1max": 0.15016745537181939, "r_squared_2max": 0.9983998305799758, "r_squared_1max": 0.3006083062258794}, {"name": "Latin", "code": "la", "group": "Indo-European", "beta_1_2": -0.010537706909880647, "beta_2max": -0.19813768546265612, "beta_1max": -0.13658743904168955, "r_squared_2max": 0.6356943099297174, "r_squared_1max": 0.6283524900853172}, {"name": "Latvian", "code": "lv", "group": "Indo-European", "beta_1_2": 0.04902381964744957, "beta_2max": -0.0878872794481018, "beta_1max": -0.0162257342164773, "r_squared_2max": 0.9622548569616746, "r_squared_1max": 0.14538452426449866}, {"name": "Lithuanian", "code": "lt", "group": "Indo-European", "beta_1_2": -0.10450930237231576, "beta_2max": -0.022242436964201057, "beta_1max": -0.07741651922908528, "r_squared_2max": 1.0, "r_squared_1max": 0.9276163989867889}, {"name": "LowSaxon", "code": "nds", "group": "Indo-European", "beta_1_2": -0.06685876551353662, "beta_2max": 0.2919728893275499, "beta_1max": 0.13942381230411421, "r_squared_2max": 0.5884945156746965, "r_squared_1max": 0.4923791588032186}, {"name": "Maltese", "code": "mt", "group": "Afroasiatic", "beta_1_2": -0.09267778588628273, "beta_2max": -0.018458120708064532, "beta_1max": -0.06823517118762812, "r_squared_2max": 1.0, "r_squared_1max": 0.9244243426676656}, {"name": "Marathi", "code": "mr", "group": "Indo-European", "beta_1_2": 0.03901557771682455, "beta_2max": 0.2205598280095097, "beta_1max": 0.09880318454589046, "r_squared_2max": 1.0, "r_squared_1max": 0.8108336000300476}, {"name": "Mby\u00e1Guaran\u00ed", "code": "gun", "group": "South-American", "beta_1_2": 0.02506748513004092, "beta_2max": -0.04421662636118414, "beta_1max": 0.0022502865095379476, "r_squared_2max": 1.0, "r_squared_1max": 0.01503624623124078}, {"name": "MiddleFrench", "code": "frm", "group": "Indo-European", "beta_1_2": -0.10596899667215948, "beta_2max": -0.4687754207815179, "beta_1max": -0.288449350509536, "r_squared_2max": 0.9952093685796399, "r_squared_1max": 0.8964874438927524}, {"name": "Naija", "code": "pcm", "group": "Indo-European", "beta_1_2": -0.9495873213128846, "beta_2max": -0.4824912822283972, "beta_1max": -0.733510216022364, "r_squared_2max": 0.9479486199071216, "r_squared_1max": 0.9624063413361948}, {"name": "Nhengatu", "code": "yrl", "group": "South-American", "beta_1_2": 0.09942022127450566, "beta_2max": 0.2134227199330763, "beta_1max": 0.13696443738898537, "r_squared_2max": 1.0, "r_squared_1max": 0.9543129545827493}, {"name": "NorthSami", "code": "sme", "group": "Uralic", "beta_1_2": 0.004976137549648954, "beta_2max": -0.023590852384944988, "beta_1max": -0.004431772421313065, "r_squared_2max": 1.0, "r_squared_1max": 0.25831793731818065}, {"name": "Kurmanji", "code": "kmr", "group": "Indo-European", "beta_1_2": -0.29491423548107004, "beta_2max": 0.21681702960208418, "beta_1max": -0.12638679586452123, "r_squared_2max": 1.0, "r_squared_1max": 0.46885781007114113}, {"name": "Norwegian", "code": "no", "group": "Indo-European", "beta_1_2": 0.5393849080959453, "beta_2max": -0.19093591647580485, "beta_1max": 0.1839063225164855, "r_squared_2max": 0.9728616603382936, "r_squared_1max": 0.4537488736342724}, {"name": "Occitan", "code": "oc", "group": "Indo-European", "beta_1_2": -0.13798483550219967, "beta_2max": -0.17957156597012622, "beta_1max": -0.15168051072470978, "r_squared_2max": 1.0, "r_squared_1max": 0.9948323979699435}, {"name": "OldChurchSlavonic", "code": "cu", "group": "Indo-European", "beta_1_2": -0.05719717934591632, "beta_2max": -0.2610439106466068, "beta_1max": -0.16934482826268646, "r_squared_2max": 0.96353932017128, "r_squared_1max": 0.8724078774194238}, {"name": "OldEastSlavic", "code": "orv", "group": "Indo-European", "beta_1_2": -0.038863176177922225, "beta_2max": -0.32790733354837626, "beta_1max": -0.2092295443972323, "r_squared_2max": 0.8949016705247911, "r_squared_1max": 0.7894575850147557}, {"name": "OldFrench", "code": "fro", "group": "Indo-European", "beta_1_2": 0.03168302268983003, "beta_2max": -0.37240482767412486, "beta_1max": -0.17677343415649496, "r_squared_2max": 0.8160118798543663, "r_squared_1max": 0.5578647787416651}, {"name": "OldProven\u00e7al", "code": "pro", "group": "Indo-European", "beta_1_2": -0.45116399598354706, "beta_2max": -0.46200749893841936, "beta_1max": -0.4432179753639867, "r_squared_2max": 0.9471617812541866, "r_squared_1max": 0.9861176628685433}, {"name": "OttomanTurkish", "code": "ota", "group": "Turkic", "beta_1_2": 0.012600083806878862, "beta_2max": 0.04954482231666189, "beta_1max": 0.028512873736120263, "r_squared_2max": 0.8762540357706694, "r_squared_1max": 0.7986102243074418}, {"name": "Persian", "code": "fa", "group": "Indo-European", "beta_1_2": -0.020062031332367152, "beta_2max": -0.1275827048174862, "beta_1max": -0.08582583163696862, "r_squared_2max": 0.8306539045191274, "r_squared_1max": 0.7825349103195647}, {"name": "Polish", "code": "pl", "group": "Indo-European", "beta_1_2": 0.13805385262623723, "beta_2max": 0.0670290605136033, "beta_1max": 0.11788936139832278, "r_squared_2max": 0.23578043977287555, "r_squared_1max": 0.7242370512401378}, {"name": "Pomak", "code": "qpm", "group": "Indo-European", "beta_1_2": 0.18202741510152048, "beta_2max": -0.05957456610030516, "beta_1max": 0.10246111521633962, "r_squared_2max": 1.0, "r_squared_1max": 0.7224322062011247}, {"name": "Portuguese", "code": "pt", "group": "Indo-European", "beta_1_2": 0.1804436467035362, "beta_2max": 0.08720348459074562, "beta_1max": 0.13390310219849852, "r_squared_2max": 0.9961366077414826, "r_squared_1max": 0.9657937810627778}, {"name": "Romanian", "code": "ro", "group": "Indo-European", "beta_1_2": -0.002497483670368583, "beta_2max": -0.200609248821782, "beta_1max": -0.11035561213378736, "r_squared_2max": 0.943924633360847, "r_squared_1max": 0.7512766568704305}, {"name": "Russian", "code": "ru", "group": "Indo-European", "beta_1_2": -0.010685203637913568, "beta_2max": 0.14243869537157622, "beta_1max": 0.07483470274056922, "r_squared_2max": 0.9686818865644458, "r_squared_1max": 0.7307972052139712}, {"name": "Sanskrit", "code": "sa", "group": "Indo-European", "beta_1_2": 0.12550279194023442, "beta_2max": -0.02012687104396324, "beta_1max": 0.03079922326524169, "r_squared_2max": 0.12368016691132655, "r_squared_1max": 0.2887457091099189}, {"name": "Serbian", "code": "sr", "group": "Indo-European", "beta_1_2": 0.27875135640131815, "beta_2max": 0.1458280302476461, "beta_1max": 0.23497598180435347, "r_squared_2max": 1.0, "r_squared_1max": 0.978365555022113}, {"name": "Sicilian", "code": "scn", "group": "Indo-European", "beta_1_2": -0.15429767727578644, "beta_2max": 0.0731075177256558, "beta_1max": -0.07940677675035616, "r_squared_2max": 1.0, "r_squared_1max": 0.6382728275023739}, {"name": "Sindhi", "code": "sd", "group": "Indo-European", "beta_1_2": -0.012759322444771877, "beta_2max": 0.09569086050823998, "beta_1max": 0.054885251878059337, "r_squared_2max": 0.8550962314608657, "r_squared_1max": 0.7266689819503955}, {"name": "Slovak", "code": "sk", "group": "Indo-European", "beta_1_2": 0.4653894131072548, "beta_2max": 0.002355227687789435, "beta_1max": 0.23501744784456402, "r_squared_2max": 0.01265190751682388, "r_squared_1max": 0.7787127827736707}, {"name": "Slovenian", "code": "sl", "group": "Indo-European", "beta_1_2": 0.154783651952824, "beta_2max": -0.016099844408154852, "beta_1max": 0.058829467892205875, "r_squared_2max": 0.08018475477193676, "r_squared_1max": 0.5223947466622547}, {"name": "Spanish", "code": "es", "group": "Indo-European", "beta_1_2": 0.3982920834798808, "beta_2max": 0.010888696433373196, "beta_1max": 0.2202816335249719, "r_squared_2max": 0.010917747527212529, "r_squared_1max": 0.7634183738863524}, {"name": "Swedish", "code": "sv", "group": "Indo-European", "beta_1_2": 0.2542182562611269, "beta_2max": -0.06533494488193553, "beta_1max": 0.09835494434539786, "r_squared_2max": 0.9709572027331568, "r_squared_1max": 0.5552117724594734}, {"name": "Tamil", "code": "ta", "group": "Dravidian", "beta_1_2": 0.4625602072342186, "beta_2max": 0.2835123252732773, "beta_1max": 0.3794793829365845, "r_squared_2max": 0.979266668559399, "r_squared_1max": 0.9793620001041071}, {"name": "Telugu", "code": "te", "group": "Dravidian", "beta_1_2": 0.08037464869018107, "beta_2max": 0.09850954780062479, "beta_1max": 0.08634697894108134, "r_squared_2max": 1.0, "r_squared_1max": 0.9969611910622443}, {"name": "Thai", "code": "th", "group": "Sino-Austronesian", "beta_1_2": -0.24346667982748801, "beta_2max": -0.18735818209446764, "beta_1max": -0.22498857987762383, "r_squared_2max": 1.0, "r_squared_1max": 0.9957207953227795}, {"name": "Turkish", "code": "tr", "group": "Turkic", "beta_1_2": 0.11527892399978665, "beta_2max": 0.15504141203368513, "beta_1max": 0.13553462018544035, "r_squared_2max": 0.9671738450669376, "r_squared_1max": 0.9746313810722922}, {"name": "TurkishGerman", "code": "qtd", "group": "Turkic", "beta_1_2": 0.12182076672791005, "beta_2max": 0.13445371739023496, "beta_1max": 0.13135566627490383, "r_squared_2max": 0.9920923619802222, "r_squared_1max": 0.9973521964530164}, {"name": "Ukrainian", "code": "uk", "group": "Indo-European", "beta_1_2": -0.05293154209388363, "beta_2max": -0.022246207731556833, "beta_1max": -0.04340547555863665, "r_squared_2max": 0.19098153360547143, "r_squared_1max": 0.7590723831038677}, {"name": "Urdu", "code": "ur", "group": "Indo-European", "beta_1_2": 0.022598093257070136, "beta_2max": 0.04420634482118337, "beta_1max": 0.047640897004853855, "r_squared_2max": 0.3320555840333098, "r_squared_1max": 0.6264027303879659}, {"name": "Uyghur", "code": "ug", "group": "Turkic", "beta_1_2": 0.05461328884722334, "beta_2max": 0.030610711649247224, "beta_1max": 0.043961863390976866, "r_squared_2max": 0.10021021784230777, "r_squared_1max": 0.43422872355417275}, {"name": "Uzbek", "code": "uz", "group": "Turkic", "beta_1_2": 0.23676720132679627, "beta_2max": 0.11272461995025077, "beta_1max": 0.162569204130822, "r_squared_2max": 0.5207595302663229, "r_squared_1max": 0.888045043032726}, {"name": "Vietnamese", "code": "vi", "group": "Sino-Austronesian", "beta_1_2": -0.2152875998694502, "beta_2max": -0.1551320641198231, "beta_1max": -0.19843506260753654, "r_squared_2max": 0.6869135143553982, "r_squared_1max": 0.9293349282180331}, {"name": "WestArmenian", "code": "hyw", "group": "Indo-European", "beta_1_2": -0.09222981270530103, "beta_2max": -0.1043731810880108, "beta_1max": -0.09616958024005401, "r_squared_2max": 0.9749699722790692, "r_squared_1max": 0.9912163739936805}, {"name": "Wolof", "code": "wo", "group": "Niger-Congo", "beta_1_2": -0.2567654477650941, "beta_2max": -0.4392515572605758, "beta_1max": -0.31686323521191234, "r_squared_2max": 1.0, "r_squared_1max": 0.9775940370381692}, {"name": "Xibe", "code": "sjo", "group": "Other", "beta_1_2": 0.05988662203965354, "beta_2max": -0.32626386867036666, "beta_1max": -0.13207386729783252, "r_squared_2max": 0.9975892495215426, "r_squared_1max": 0.6149085127585616}, {"name": "Yiddish", "code": "yi", "group": "Indo-European", "beta_1_2": -0.10419927554816762, "beta_2max": -0.09638905382553487, "beta_1max": -0.10162715076400196, "r_squared_2max": 1.0, "r_squared_1max": 0.9995920385145544}];
+    const data = raw.map(d => ({x: d.beta_1_2, y: d.beta_2max, name: d.name, group: d.group}));
+    const groups = {};
+    data.forEach(d => {
+        const g = d.group || 'Other';
+        if (!groups[g]) groups[g] = [];
+        groups[g].push(d);
+    });
+    const palette = ['rgba(33,150,243,0.7)','rgba(244,67,54,0.7)','rgba(76,175,80,0.7)',
+                     'rgba(255,152,0,0.7)','rgba(156,39,176,0.7)','rgba(0,150,136,0.7)',
+                     'rgba(121,85,72,0.7)','rgba(233,30,99,0.7)','rgba(63,81,181,0.7)',
+                     'rgba(255,87,34,0.7)','rgba(0,188,212,0.7)','rgba(139,195,74,0.7)',
+                     'rgba(255,193,7,0.7)','rgba(96,125,139,0.7)','rgba(158,158,158,0.5)'];
+    let idx = 0;
+    const datasets = [];
+    
+    for (const g of Object.keys(groups)) {
+        const c = palette[idx++ % palette.length];
+        datasets.push({label: g, data: groups[g], backgroundColor: c, borderColor: c,
+                       pointRadius: 5, pointHoverRadius: 8});
+    }
+    new Chart(document.getElementById('sc_b12_b2max_lmal'), {
+        type: 'scatter', data: {datasets},
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {position:'right', labels:{usePointStyle: true}},
+                tooltip: {callbacks:{label: ctx => ctx.raw.name + ' (' + ctx.raw.group + ')'
+                                                 + ' x=' + ctx.raw.x.toFixed(3)
+                                                 + ' y=' + ctx.raw.y.toFixed(3)}}
+            },
+            scales: {
+                x: {title:{display:true, text:'β(1→2)'},
+                     grid:{color: ctx => ctx.tick.value === 0 ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.1)'}},
+                y: {title:{display:true, text:'−β(2→max)'},
+                     grid:{color: ctx => ctx.tick.value === 0 ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.1)'}}
+            }
+        }
+    });
+})();
+</script>
+
+<div class="chart-container">
+<h3>−β(1→max) vs −β(2→max)</h3>
+<canvas id="sc_b1max_b2max_lmal" height="120"></canvas>
+</div>
+
+<script>
+(function() {
+    const raw = [{"name": "Abkhaz", "code": "ab", "group": "Caucasian", "beta_1_2": 0.13742640343482362, "beta_2max": -0.05909656378748677, "beta_1max": 0.07270588555432811, "r_squared_2max": 1.0, "r_squared_1max": 0.6645107293882851}, {"name": "Afrikaans", "code": "af", "group": "Indo-European", "beta_1_2": 0.25970423607967374, "beta_2max": 0.10963889120965194, "beta_1max": 0.18657356883438003, "r_squared_2max": 0.9971760027508729, "r_squared_1max": 0.9530913424887756}, {"name": "Akkadian", "code": "akk", "group": "Afroasiatic", "beta_1_2": 0.2046695106618754, "beta_2max": -0.07797084132657472, "beta_1max": 0.08629214962430054, "r_squared_2max": 0.17370882791149966, "r_squared_1max": 0.34329500640514266}, {"name": "SwissGerman", "code": "gsw", "group": "Indo-European", "beta_1_2": 0.23755203810150208, "beta_2max": 0.12015824896485773, "beta_1max": 0.17025070605188608, "r_squared_2max": 0.7016446682108881, "r_squared_1max": 0.9325501065481789}, {"name": "Amharic", "code": "am", "group": "Afroasiatic", "beta_1_2": 0.3715721371189246, "beta_2max": 0.16082558540781494, "beta_1max": 0.3021673944516608, "r_squared_2max": 1.0, "r_squared_1max": 0.9674795389927728}, {"name": "AncientGreek", "code": "grc", "group": "Indo-European", "beta_1_2": 0.060207026544945655, "beta_2max": -0.12657330448220822, "beta_1max": -0.055918615618526235, "r_squared_2max": 0.6892365653617349, "r_squared_1max": 0.34613918099160457}, {"name": "Arabic", "code": "ar", "group": "Afroasiatic", "beta_1_2": 0.19929020953875212, "beta_2max": -0.7647578316062353, "beta_1max": -0.11819781420963756, "r_squared_2max": 1.0, "r_squared_1max": 0.17866947192317462}, {"name": "Armenian", "code": "hy", "group": "Indo-European", "beta_1_2": 0.011734604046005803, "beta_2max": -0.12683599317789607, "beta_1max": -0.054878215368489296, "r_squared_2max": 0.9897384100657858, "r_squared_1max": 0.663202945439257}, {"name": "Bambara", "code": "bm", "group": "Niger-Congo", "beta_1_2": -0.16714888252447757, "beta_2max": -1.2220810828694835, "beta_1max": -0.514567605639444, "r_squared_2max": 1.0, "r_squared_1max": 0.7749307123605096}, {"name": "Basque", "code": "eu", "group": "Other", "beta_1_2": 0.20491325674371888, "beta_2max": 0.16674418425227974, "beta_1max": 0.18342316879424916, "r_squared_2max": 0.9824987114047915, "r_squared_1max": 0.9943562665312338}, {"name": "Bavarian", "code": "bar", "group": "Indo-European", "beta_1_2": 0.07526318177874314, "beta_2max": 0.09600127415142058, "beta_1max": 0.08929288716299437, "r_squared_2max": 0.9031962850125664, "r_squared_1max": 0.9714959000567033}, {"name": "Beja", "code": "bej", "group": "Afroasiatic", "beta_1_2": 0.4775893870840398, "beta_2max": 0.2537618072123767, "beta_1max": 0.4038766954328656, "r_squared_2max": 1.0, "r_squared_1max": 0.9792174936247924}, {"name": "Belarusian", "code": "be", "group": "Indo-European", "beta_1_2": 0.010334721690974666, "beta_2max": 0.18355546386971655, "beta_1max": 0.08515685480668032, "r_squared_2max": 0.8215469077206623, "r_squared_1max": 0.6209196658113928}, {"name": "Bor\u00f4ro", "code": "bor", "group": "South-American", "beta_1_2": 0.3066787764981807, "beta_2max": 0.16022415315797395, "beta_1max": 0.22936856187209032, "r_squared_2max": 0.9325178904107199, "r_squared_1max": 0.9670372669481144}, {"name": "Bulgarian", "code": "bg", "group": "Indo-European", "beta_1_2": 0.254031945149221, "beta_2max": 0.06294362485267989, "beta_1max": 0.16616752878794153, "r_squared_2max": 0.6071840121031988, "r_squared_1max": 0.8834182908322874}, {"name": "Buryat", "code": "bxr", "group": "Other", "beta_1_2": 0.26192122274838203, "beta_2max": 0.057678014482367715, "beta_1max": 0.19465821324172689, "r_squared_2max": 1.0, "r_squared_1max": 0.9293037131813886}, {"name": "Cantonese", "code": "yue", "group": "Sino-Austronesian", "beta_1_2": -0.275410229279644, "beta_2max": -0.16054706719430054, "beta_1max": -0.23758257259081908, "r_squared_2max": 1.0, "r_squared_1max": 0.9841049124809774}, {"name": "Catalan", "code": "ca", "group": "Indo-European", "beta_1_2": 0.4649129018506293, "beta_2max": 0.031068086757801736, "beta_1max": 0.25104240422595475, "r_squared_2max": 0.9892720672965842, "r_squared_1max": 0.8188061323369473}, {"name": "Chinese", "code": "zh", "group": "Sino-Austronesian", "beta_1_2": -0.09213382643296751, "beta_2max": -0.17282644117757542, "beta_1max": -0.15101768658227477, "r_squared_2max": 0.9099962374512599, "r_squared_1max": 0.9476146056870135}, {"name": "Chhintange", "code": "ctn", "group": "Sino-Austronesian", "beta_1_2": 0.18656342528865094, "beta_2max": 0.2069475293108668, "beta_1max": 0.1932764817191259, "r_squared_2max": 1.0, "r_squared_1max": 0.9992319655527667}, {"name": "ClassArmenian", "code": "xcl", "group": "Indo-European", "beta_1_2": -0.011052468037576346, "beta_2max": -0.1391405225707511, "beta_1max": -0.06826133394732246, "r_squared_2max": 0.8944424569975937, "r_squared_1max": 0.7040373099297483}, {"name": "ClassChinese", "code": "lzh", "group": "Sino-Austronesian", "beta_1_2": 0.03219160041648173, "beta_2max": 0.04123993327487619, "beta_1max": 0.03937718388009544, "r_squared_2max": 0.7712968549875101, "r_squared_1max": 0.9316188649931525}, {"name": "Coptic", "code": "cop", "group": "Afroasiatic", "beta_1_2": -1.0345026603141811, "beta_2max": -0.025448575757582925, "beta_1max": -0.48568170447225517, "r_squared_2max": 0.0034942329364592295, "r_squared_1max": 0.697393408421761}, {"name": "Croatian", "code": "hr", "group": "Indo-European", "beta_1_2": 0.3070774540581764, "beta_2max": -0.05031492507134137, "beta_1max": 0.14532536183171219, "r_squared_2max": 0.15859736571763194, "r_squared_1max": 0.6007790439947511}, {"name": "Czech", "code": "cs", "group": "Indo-European", "beta_1_2": 0.6785550250654435, "beta_2max": -0.03406793775260213, "beta_1max": 0.2226401153960194, "r_squared_2max": 0.20508188736896615, "r_squared_1max": 0.5798642627915906}, {"name": "Danish", "code": "da", "group": "Indo-European", "beta_1_2": 0.3835792025090271, "beta_2max": 0.01279125577553147, "beta_1max": 0.2614683455663327, "r_squared_2max": 1.0, "r_squared_1max": 0.8779909200701649}, {"name": "Dutch", "code": "nl", "group": "Indo-European", "beta_1_2": 0.2519762390278467, "beta_2max": 0.11536815424916831, "beta_1max": 0.15110705577171585, "r_squared_2max": 0.6529903726501562, "r_squared_1max": 0.8807749271533601}, {"name": "English", "code": "en", "group": "Indo-European", "beta_1_2": -0.20822247367773186, "beta_2max": -0.3885753316009324, "beta_1max": -0.29678512413177166, "r_squared_2max": 0.9999852930964159, "r_squared_1max": 0.9731696973672653}, {"name": "Erzya", "code": "myv", "group": "Uralic", "beta_1_2": -0.016659910534847413, "beta_2max": 0.028349816377594598, "beta_1max": -0.0018369467021386629, "r_squared_2max": 1.0, "r_squared_1max": 0.023536782527677436}, {"name": "Estonian", "code": "et", "group": "Uralic", "beta_1_2": 0.40980127510547787, "beta_2max": 0.0027239370986882065, "beta_1max": 0.17701016739550962, "r_squared_2max": 0.0008241905614304601, "r_squared_1max": 0.6754057670438762}, {"name": "Faroese", "code": "fo", "group": "Indo-European", "beta_1_2": -0.048861920446524446, "beta_2max": 0.06892165746442935, "beta_1max": -0.010072489023013753, "r_squared_2max": 1.0, "r_squared_1max": 0.09570310142770833}, {"name": "Finnish", "code": "fi", "group": "Uralic", "beta_1_2": 0.011509520348036182, "beta_2max": 0.10463174104700183, "beta_1max": 0.06406762472404647, "r_squared_2max": 0.7813627492795941, "r_squared_1max": 0.7797463072780424}, {"name": "French", "code": "fr", "group": "Indo-European", "beta_1_2": -0.06544650012252895, "beta_2max": 0.0844884595743588, "beta_1max": 0.005789397944280323, "r_squared_2max": 0.9424668351760254, "r_squared_1max": 0.017495538001927047}, {"name": "Galician", "code": "gl", "group": "Indo-European", "beta_1_2": 0.28329586488201847, "beta_2max": 0.15731508006112294, "beta_1max": 0.24180686361237974, "r_squared_2max": 1.0, "r_squared_1max": 0.9815884663017205}, {"name": "Georgian", "code": "ka", "group": "Caucasian", "beta_1_2": 0.0030015416904050716, "beta_2max": -0.0721706452381893, "beta_1max": -0.03780499331062692, "r_squared_2max": 0.8411390555406564, "r_squared_1max": 0.7183450224099013}, {"name": "German", "code": "de", "group": "Indo-European", "beta_1_2": 0.17600403527140507, "beta_2max": 0.21965713524581826, "beta_1max": 0.19988707390375515, "r_squared_2max": 0.979521209005577, "r_squared_1max": 0.9844016385801688}, {"name": "Gheg", "code": "aln", "group": "Indo-European", "beta_1_2": -0.023844725348390213, "beta_2max": -0.07039733337986219, "beta_1max": -0.039175803150997876, "r_squared_2max": 1.0, "r_squared_1max": 0.9110989461379588}, {"name": "Gothic", "code": "got", "group": "Indo-European", "beta_1_2": -0.016341599970552977, "beta_2max": -0.11724394184619225, "beta_1max": -0.06546240329907703, "r_squared_2max": 0.9986278001760932, "r_squared_1max": 0.8465320738582656}, {"name": "Greek", "code": "el", "group": "Indo-European", "beta_1_2": 0.006651726486211672, "beta_2max": -0.12236742094551821, "beta_1max": -0.03583789269827601, "r_squared_2max": 1.0, "r_squared_1max": 0.5275383331026967}, {"name": "Haitian", "code": "ht", "group": "Indo-European", "beta_1_2": -0.3044688589291568, "beta_2max": -0.27207977441378384, "beta_1max": -0.29380222615264895, "r_squared_2max": 1.0, "r_squared_1max": 0.9991609037837385}, {"name": "Hausa", "code": "ha", "group": "Afroasiatic", "beta_1_2": -0.40065250347816206, "beta_2max": -0.4004122979722318, "beta_1max": -0.4005733970767004, "r_squared_2max": 1.0, "r_squared_1max": 0.9999999751520338}, {"name": "Hebrew", "code": "he", "group": "Afroasiatic", "beta_1_2": 0.259371319305421, "beta_2max": 0.06869669508423867, "beta_1max": 0.1965768245922209, "r_squared_2max": 1.0, "r_squared_1max": 0.9389543403964854}, {"name": "Hindi", "code": "hi", "group": "Indo-European", "beta_1_2": -0.07569828158746915, "beta_2max": 0.06805130456718274, "beta_1max": 0.026979826907818284, "r_squared_2max": 0.6708382947069843, "r_squared_1max": 0.3049871228711354}, {"name": "Hungarian", "code": "hu", "group": "Uralic", "beta_1_2": 0.22931066826066063, "beta_2max": -0.08189036715524203, "beta_1max": 0.07573057661435485, "r_squared_2max": 0.9979549473212653, "r_squared_1max": 0.44467104650307354}, {"name": "Icelandic", "code": "is", "group": "Indo-European", "beta_1_2": -0.2149264743774088, "beta_2max": -0.20147917176234945, "beta_1max": -0.1723805512972845, "r_squared_2max": 0.5367051919950536, "r_squared_1max": 0.7383447836993129}, {"name": "Indonesian", "code": "id", "group": "Sino-Austronesian", "beta_1_2": -0.11600905656302221, "beta_2max": -0.010666533772111629, "beta_1max": -0.06897061623081695, "r_squared_2max": 0.06827002770049717, "r_squared_1max": 0.7818938266414215}, {"name": "Italian", "code": "it", "group": "Indo-European", "beta_1_2": 0.015537301608196405, "beta_2max": -0.02132787169582884, "beta_1max": 0.002710558068125851, "r_squared_2max": 0.03734525214609663, "r_squared_1max": 0.002011990569414035}, {"name": "Japanese", "code": "ja", "group": "Other", "beta_1_2": 0.0065007915134794045, "beta_2max": 0.021096835769421684, "beta_1max": 0.021523633510769084, "r_squared_2max": 0.35261205960948694, "r_squared_1max": 0.6231094758244649}, {"name": "Javanese", "code": "jv", "group": "Sino-Austronesian", "beta_1_2": -0.056918358199087846, "beta_2max": 0.10173466399907435, "beta_1max": -0.0046694739841687954, "r_squared_2max": 1.0, "r_squared_1max": 0.012380543462562232}, {"name": "Kazakh", "code": "kk", "group": "Turkic", "beta_1_2": 0.06816333083861127, "beta_2max": 0.08635834004682269, "beta_1max": 0.07415545702844126, "r_squared_2max": 1.0, "r_squared_1max": 0.9958570995201199}, {"name": "Khoekhoe", "code": "naq", "group": "Other", "beta_1_2": 0.18921142309360273, "beta_2max": -0.0710419483440334, "beta_1max": 0.0650143882445322, "r_squared_2max": 0.8336428690329909, "r_squared_1max": 0.4319097430777338}, {"name": "Komi", "code": "kpv", "group": "Uralic", "beta_1_2": -0.05631005073969724, "beta_2max": 0.14506426008307494, "beta_1max": 0.010008150478659689, "r_squared_2max": 1.0, "r_squared_1max": 0.034511011977795714}, {"name": "Korean", "code": "ko", "group": "Other", "beta_1_2": 0.08123097456775252, "beta_2max": 0.14162337322816654, "beta_1max": 0.12148748137329894, "r_squared_2max": 0.9538166992261172, "r_squared_1max": 0.9644274240486246}, {"name": "Kyrgyz", "code": "ky", "group": "Turkic", "beta_1_2": -0.25718344908942503, "beta_2max": 0.5763760303425514, "beta_1max": 0.15016745537181939, "r_squared_2max": 0.9983998305799758, "r_squared_1max": 0.3006083062258794}, {"name": "Latin", "code": "la", "group": "Indo-European", "beta_1_2": -0.010537706909880647, "beta_2max": -0.19813768546265612, "beta_1max": -0.13658743904168955, "r_squared_2max": 0.6356943099297174, "r_squared_1max": 0.6283524900853172}, {"name": "Latvian", "code": "lv", "group": "Indo-European", "beta_1_2": 0.04902381964744957, "beta_2max": -0.0878872794481018, "beta_1max": -0.0162257342164773, "r_squared_2max": 0.9622548569616746, "r_squared_1max": 0.14538452426449866}, {"name": "Lithuanian", "code": "lt", "group": "Indo-European", "beta_1_2": -0.10450930237231576, "beta_2max": -0.022242436964201057, "beta_1max": -0.07741651922908528, "r_squared_2max": 1.0, "r_squared_1max": 0.9276163989867889}, {"name": "LowSaxon", "code": "nds", "group": "Indo-European", "beta_1_2": -0.06685876551353662, "beta_2max": 0.2919728893275499, "beta_1max": 0.13942381230411421, "r_squared_2max": 0.5884945156746965, "r_squared_1max": 0.4923791588032186}, {"name": "Maltese", "code": "mt", "group": "Afroasiatic", "beta_1_2": -0.09267778588628273, "beta_2max": -0.018458120708064532, "beta_1max": -0.06823517118762812, "r_squared_2max": 1.0, "r_squared_1max": 0.9244243426676656}, {"name": "Marathi", "code": "mr", "group": "Indo-European", "beta_1_2": 0.03901557771682455, "beta_2max": 0.2205598280095097, "beta_1max": 0.09880318454589046, "r_squared_2max": 1.0, "r_squared_1max": 0.8108336000300476}, {"name": "Mby\u00e1Guaran\u00ed", "code": "gun", "group": "South-American", "beta_1_2": 0.02506748513004092, "beta_2max": -0.04421662636118414, "beta_1max": 0.0022502865095379476, "r_squared_2max": 1.0, "r_squared_1max": 0.01503624623124078}, {"name": "MiddleFrench", "code": "frm", "group": "Indo-European", "beta_1_2": -0.10596899667215948, "beta_2max": -0.4687754207815179, "beta_1max": -0.288449350509536, "r_squared_2max": 0.9952093685796399, "r_squared_1max": 0.8964874438927524}, {"name": "Naija", "code": "pcm", "group": "Indo-European", "beta_1_2": -0.9495873213128846, "beta_2max": -0.4824912822283972, "beta_1max": -0.733510216022364, "r_squared_2max": 0.9479486199071216, "r_squared_1max": 0.9624063413361948}, {"name": "Nhengatu", "code": "yrl", "group": "South-American", "beta_1_2": 0.09942022127450566, "beta_2max": 0.2134227199330763, "beta_1max": 0.13696443738898537, "r_squared_2max": 1.0, "r_squared_1max": 0.9543129545827493}, {"name": "NorthSami", "code": "sme", "group": "Uralic", "beta_1_2": 0.004976137549648954, "beta_2max": -0.023590852384944988, "beta_1max": -0.004431772421313065, "r_squared_2max": 1.0, "r_squared_1max": 0.25831793731818065}, {"name": "Kurmanji", "code": "kmr", "group": "Indo-European", "beta_1_2": -0.29491423548107004, "beta_2max": 0.21681702960208418, "beta_1max": -0.12638679586452123, "r_squared_2max": 1.0, "r_squared_1max": 0.46885781007114113}, {"name": "Norwegian", "code": "no", "group": "Indo-European", "beta_1_2": 0.5393849080959453, "beta_2max": -0.19093591647580485, "beta_1max": 0.1839063225164855, "r_squared_2max": 0.9728616603382936, "r_squared_1max": 0.4537488736342724}, {"name": "Occitan", "code": "oc", "group": "Indo-European", "beta_1_2": -0.13798483550219967, "beta_2max": -0.17957156597012622, "beta_1max": -0.15168051072470978, "r_squared_2max": 1.0, "r_squared_1max": 0.9948323979699435}, {"name": "OldChurchSlavonic", "code": "cu", "group": "Indo-European", "beta_1_2": -0.05719717934591632, "beta_2max": -0.2610439106466068, "beta_1max": -0.16934482826268646, "r_squared_2max": 0.96353932017128, "r_squared_1max": 0.8724078774194238}, {"name": "OldEastSlavic", "code": "orv", "group": "Indo-European", "beta_1_2": -0.038863176177922225, "beta_2max": -0.32790733354837626, "beta_1max": -0.2092295443972323, "r_squared_2max": 0.8949016705247911, "r_squared_1max": 0.7894575850147557}, {"name": "OldFrench", "code": "fro", "group": "Indo-European", "beta_1_2": 0.03168302268983003, "beta_2max": -0.37240482767412486, "beta_1max": -0.17677343415649496, "r_squared_2max": 0.8160118798543663, "r_squared_1max": 0.5578647787416651}, {"name": "OldProven\u00e7al", "code": "pro", "group": "Indo-European", "beta_1_2": -0.45116399598354706, "beta_2max": -0.46200749893841936, "beta_1max": -0.4432179753639867, "r_squared_2max": 0.9471617812541866, "r_squared_1max": 0.9861176628685433}, {"name": "OttomanTurkish", "code": "ota", "group": "Turkic", "beta_1_2": 0.012600083806878862, "beta_2max": 0.04954482231666189, "beta_1max": 0.028512873736120263, "r_squared_2max": 0.8762540357706694, "r_squared_1max": 0.7986102243074418}, {"name": "Persian", "code": "fa", "group": "Indo-European", "beta_1_2": -0.020062031332367152, "beta_2max": -0.1275827048174862, "beta_1max": -0.08582583163696862, "r_squared_2max": 0.8306539045191274, "r_squared_1max": 0.7825349103195647}, {"name": "Polish", "code": "pl", "group": "Indo-European", "beta_1_2": 0.13805385262623723, "beta_2max": 0.0670290605136033, "beta_1max": 0.11788936139832278, "r_squared_2max": 0.23578043977287555, "r_squared_1max": 0.7242370512401378}, {"name": "Pomak", "code": "qpm", "group": "Indo-European", "beta_1_2": 0.18202741510152048, "beta_2max": -0.05957456610030516, "beta_1max": 0.10246111521633962, "r_squared_2max": 1.0, "r_squared_1max": 0.7224322062011247}, {"name": "Portuguese", "code": "pt", "group": "Indo-European", "beta_1_2": 0.1804436467035362, "beta_2max": 0.08720348459074562, "beta_1max": 0.13390310219849852, "r_squared_2max": 0.9961366077414826, "r_squared_1max": 0.9657937810627778}, {"name": "Romanian", "code": "ro", "group": "Indo-European", "beta_1_2": -0.002497483670368583, "beta_2max": -0.200609248821782, "beta_1max": -0.11035561213378736, "r_squared_2max": 0.943924633360847, "r_squared_1max": 0.7512766568704305}, {"name": "Russian", "code": "ru", "group": "Indo-European", "beta_1_2": -0.010685203637913568, "beta_2max": 0.14243869537157622, "beta_1max": 0.07483470274056922, "r_squared_2max": 0.9686818865644458, "r_squared_1max": 0.7307972052139712}, {"name": "Sanskrit", "code": "sa", "group": "Indo-European", "beta_1_2": 0.12550279194023442, "beta_2max": -0.02012687104396324, "beta_1max": 0.03079922326524169, "r_squared_2max": 0.12368016691132655, "r_squared_1max": 0.2887457091099189}, {"name": "Serbian", "code": "sr", "group": "Indo-European", "beta_1_2": 0.27875135640131815, "beta_2max": 0.1458280302476461, "beta_1max": 0.23497598180435347, "r_squared_2max": 1.0, "r_squared_1max": 0.978365555022113}, {"name": "Sicilian", "code": "scn", "group": "Indo-European", "beta_1_2": -0.15429767727578644, "beta_2max": 0.0731075177256558, "beta_1max": -0.07940677675035616, "r_squared_2max": 1.0, "r_squared_1max": 0.6382728275023739}, {"name": "Sindhi", "code": "sd", "group": "Indo-European", "beta_1_2": -0.012759322444771877, "beta_2max": 0.09569086050823998, "beta_1max": 0.054885251878059337, "r_squared_2max": 0.8550962314608657, "r_squared_1max": 0.7266689819503955}, {"name": "Slovak", "code": "sk", "group": "Indo-European", "beta_1_2": 0.4653894131072548, "beta_2max": 0.002355227687789435, "beta_1max": 0.23501744784456402, "r_squared_2max": 0.01265190751682388, "r_squared_1max": 0.7787127827736707}, {"name": "Slovenian", "code": "sl", "group": "Indo-European", "beta_1_2": 0.154783651952824, "beta_2max": -0.016099844408154852, "beta_1max": 0.058829467892205875, "r_squared_2max": 0.08018475477193676, "r_squared_1max": 0.5223947466622547}, {"name": "Spanish", "code": "es", "group": "Indo-European", "beta_1_2": 0.3982920834798808, "beta_2max": 0.010888696433373196, "beta_1max": 0.2202816335249719, "r_squared_2max": 0.010917747527212529, "r_squared_1max": 0.7634183738863524}, {"name": "Swedish", "code": "sv", "group": "Indo-European", "beta_1_2": 0.2542182562611269, "beta_2max": -0.06533494488193553, "beta_1max": 0.09835494434539786, "r_squared_2max": 0.9709572027331568, "r_squared_1max": 0.5552117724594734}, {"name": "Tamil", "code": "ta", "group": "Dravidian", "beta_1_2": 0.4625602072342186, "beta_2max": 0.2835123252732773, "beta_1max": 0.3794793829365845, "r_squared_2max": 0.979266668559399, "r_squared_1max": 0.9793620001041071}, {"name": "Telugu", "code": "te", "group": "Dravidian", "beta_1_2": 0.08037464869018107, "beta_2max": 0.09850954780062479, "beta_1max": 0.08634697894108134, "r_squared_2max": 1.0, "r_squared_1max": 0.9969611910622443}, {"name": "Thai", "code": "th", "group": "Sino-Austronesian", "beta_1_2": -0.24346667982748801, "beta_2max": -0.18735818209446764, "beta_1max": -0.22498857987762383, "r_squared_2max": 1.0, "r_squared_1max": 0.9957207953227795}, {"name": "Turkish", "code": "tr", "group": "Turkic", "beta_1_2": 0.11527892399978665, "beta_2max": 0.15504141203368513, "beta_1max": 0.13553462018544035, "r_squared_2max": 0.9671738450669376, "r_squared_1max": 0.9746313810722922}, {"name": "TurkishGerman", "code": "qtd", "group": "Turkic", "beta_1_2": 0.12182076672791005, "beta_2max": 0.13445371739023496, "beta_1max": 0.13135566627490383, "r_squared_2max": 0.9920923619802222, "r_squared_1max": 0.9973521964530164}, {"name": "Ukrainian", "code": "uk", "group": "Indo-European", "beta_1_2": -0.05293154209388363, "beta_2max": -0.022246207731556833, "beta_1max": -0.04340547555863665, "r_squared_2max": 0.19098153360547143, "r_squared_1max": 0.7590723831038677}, {"name": "Urdu", "code": "ur", "group": "Indo-European", "beta_1_2": 0.022598093257070136, "beta_2max": 0.04420634482118337, "beta_1max": 0.047640897004853855, "r_squared_2max": 0.3320555840333098, "r_squared_1max": 0.6264027303879659}, {"name": "Uyghur", "code": "ug", "group": "Turkic", "beta_1_2": 0.05461328884722334, "beta_2max": 0.030610711649247224, "beta_1max": 0.043961863390976866, "r_squared_2max": 0.10021021784230777, "r_squared_1max": 0.43422872355417275}, {"name": "Uzbek", "code": "uz", "group": "Turkic", "beta_1_2": 0.23676720132679627, "beta_2max": 0.11272461995025077, "beta_1max": 0.162569204130822, "r_squared_2max": 0.5207595302663229, "r_squared_1max": 0.888045043032726}, {"name": "Vietnamese", "code": "vi", "group": "Sino-Austronesian", "beta_1_2": -0.2152875998694502, "beta_2max": -0.1551320641198231, "beta_1max": -0.19843506260753654, "r_squared_2max": 0.6869135143553982, "r_squared_1max": 0.9293349282180331}, {"name": "WestArmenian", "code": "hyw", "group": "Indo-European", "beta_1_2": -0.09222981270530103, "beta_2max": -0.1043731810880108, "beta_1max": -0.09616958024005401, "r_squared_2max": 0.9749699722790692, "r_squared_1max": 0.9912163739936805}, {"name": "Wolof", "code": "wo", "group": "Niger-Congo", "beta_1_2": -0.2567654477650941, "beta_2max": -0.4392515572605758, "beta_1max": -0.31686323521191234, "r_squared_2max": 1.0, "r_squared_1max": 0.9775940370381692}, {"name": "Xibe", "code": "sjo", "group": "Other", "beta_1_2": 0.05988662203965354, "beta_2max": -0.32626386867036666, "beta_1max": -0.13207386729783252, "r_squared_2max": 0.9975892495215426, "r_squared_1max": 0.6149085127585616}, {"name": "Yiddish", "code": "yi", "group": "Indo-European", "beta_1_2": -0.10419927554816762, "beta_2max": -0.09638905382553487, "beta_1max": -0.10162715076400196, "r_squared_2max": 1.0, "r_squared_1max": 0.9995920385145544}];
+    const data = raw.map(d => ({x: d.beta_1max, y: d.beta_2max, name: d.name, group: d.group}));
+    const groups = {};
+    data.forEach(d => {
+        const g = d.group || 'Other';
+        if (!groups[g]) groups[g] = [];
+        groups[g].push(d);
+    });
+    const palette = ['rgba(33,150,243,0.7)','rgba(244,67,54,0.7)','rgba(76,175,80,0.7)',
+                     'rgba(255,152,0,0.7)','rgba(156,39,176,0.7)','rgba(0,150,136,0.7)',
+                     'rgba(121,85,72,0.7)','rgba(233,30,99,0.7)','rgba(63,81,181,0.7)',
+                     'rgba(255,87,34,0.7)','rgba(0,188,212,0.7)','rgba(139,195,74,0.7)',
+                     'rgba(255,193,7,0.7)','rgba(96,125,139,0.7)','rgba(158,158,158,0.5)'];
+    let idx = 0;
+    const datasets = [];
+    
+        const allV = data.map(d => d.x).concat(data.map(d => d.y));
+        const lo = Math.min(...allV), hi = Math.max(...allV);
+        datasets.push({label:'y=x', type:'line',
+                       data:[{x:lo,y:lo},{x:hi,y:hi}],
+                       borderColor:'rgba(150,150,150,0.6)', borderDash:[3,3],
+                       borderWidth:1, pointRadius:0, fill:false});
+        
+    for (const g of Object.keys(groups)) {
+        const c = palette[idx++ % palette.length];
+        datasets.push({label: g, data: groups[g], backgroundColor: c, borderColor: c,
+                       pointRadius: 5, pointHoverRadius: 8});
+    }
+    new Chart(document.getElementById('sc_b1max_b2max_lmal'), {
+        type: 'scatter', data: {datasets},
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {position:'right', labels:{usePointStyle: true}},
+                tooltip: {callbacks:{label: ctx => ctx.raw.name + ' (' + ctx.raw.group + ')'
+                                                 + ' x=' + ctx.raw.x.toFixed(3)
+                                                 + ' y=' + ctx.raw.y.toFixed(3)}}
+            },
+            scales: {
+                x: {title:{display:true, text:'−β(1→max)'},
+                     grid:{color: ctx => ctx.tick.value === 0 ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.1)'}},
+                y: {title:{display:true, text:'−β(2→max)'},
+                     grid:{color: ctx => ctx.tick.value === 0 ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.1)'}}
+            }
+        }
+    });
+})();
+</script>
+<div class="chart-container"><svg width="900" height="450" xmlns="http://www.w3.org/2000/svg" style="background:white;font-family:Arial,sans-serif;">
+<text x="450.0" y="25" text-anchor="middle" font-size="14" font-weight="bold">LMAL Effect −β(1→max) by Language Family (positive = MAL compliance)</text>
+<line x1="200" y1="390" x2="850" y2="390" stroke="#333"/>
+<line x1="200.0" y1="390" x2="200.0" y2="395" stroke="#333"/>
+<text x="200.0" y="410" text-anchor="middle" font-size="10">-0.4</text>
+<line x1="200.0" y1="40" x2="200.0" y2="390" stroke="#eee"/>
+<line x1="281.25" y1="390" x2="281.25" y2="395" stroke="#333"/>
+<text x="281.25" y="410" text-anchor="middle" font-size="10">-0.3</text>
+<line x1="281.25" y1="40" x2="281.25" y2="390" stroke="#eee"/>
+<line x1="362.5" y1="390" x2="362.5" y2="395" stroke="#333"/>
+<text x="362.5" y="410" text-anchor="middle" font-size="10">-0.2</text>
+<line x1="362.5" y1="40" x2="362.5" y2="390" stroke="#eee"/>
+<line x1="443.75" y1="390" x2="443.75" y2="395" stroke="#333"/>
+<text x="443.75" y="410" text-anchor="middle" font-size="10">-0.1</text>
+<line x1="443.75" y1="40" x2="443.75" y2="390" stroke="#eee"/>
+<line x1="525.0" y1="390" x2="525.0" y2="395" stroke="#333"/>
+<text x="525.0" y="410" text-anchor="middle" font-size="10">0.0</text>
+<line x1="525.0" y1="40" x2="525.0" y2="390" stroke="#eee"/>
+<line x1="606.25" y1="390" x2="606.25" y2="395" stroke="#333"/>
+<text x="606.25" y="410" text-anchor="middle" font-size="10">0.1</text>
+<line x1="606.25" y1="40" x2="606.25" y2="390" stroke="#eee"/>
+<line x1="687.5" y1="390" x2="687.5" y2="395" stroke="#333"/>
+<text x="687.5" y="410" text-anchor="middle" font-size="10">0.2</text>
+<line x1="687.5" y1="40" x2="687.5" y2="390" stroke="#eee"/>
+<line x1="768.7499999999999" y1="390" x2="768.7499999999999" y2="395" stroke="#333"/>
+<text x="768.7499999999999" y="410" text-anchor="middle" font-size="10">0.3</text>
+<line x1="768.7499999999999" y1="40" x2="768.7499999999999" y2="390" stroke="#eee"/>
+<line x1="850.0" y1="390" x2="850.0" y2="395" stroke="#333"/>
+<text x="850.0" y="410" text-anchor="middle" font-size="10">0.4</text>
+<line x1="850.0" y1="40" x2="850.0" y2="390" stroke="#eee"/>
+<text x="525.0" y="435" text-anchor="middle" font-size="12">−β(1→max) — Negated Log-Log Regression Slope (positive = MAL compliance)</text>
+<text x="190" y="61.5" text-anchor="end" font-size="11">Dravidian (n=2)</text>
+<rect x="200" y="45.25" width="650" height="24.5" fill="#f5f5f5" stroke="#ddd"/>
+<rect x="525.0" y="45.25" width="189.2419595128017" height="24.5" fill="#2196F3" fill-opacity="0.6" stroke="#2196F3"/>
+<circle cx="833.3269986359749" cy="50.58515987312204" r="4" fill="#2196F3" stroke="white"><title>Tamil: 0.379</title></circle>
+<circle cx="595.1569203896286" cy="63.403799941876485" r="4" fill="#2196F3" stroke="white"><title>Telugu: 0.086</title></circle>
+<line x1="714.2419595128017" y1="43.25" x2="714.2419595128017" y2="71.75" stroke="#333" stroke-width="2"/>
+<text x="190" y="96.5" text-anchor="end" font-size="11">South-American (n=9)</text>
+<rect x="200" y="80.25" width="650" height="24.5" fill="#f5f5f5" stroke="#ddd"/>
+<rect x="525.0" y="80.25" width="80.89495022659867" height="24.5" fill="#4CAF50" fill-opacity="0.6" stroke="#4CAF50"/>
+<circle cx="483.31591700709424" cy="97.79812442909984" r="4" fill="#4CAF50" stroke="white"><title>Buglere: -0.051</title></circle>
+<circle cx="711.3619565210734" cy="92.57245536960133" r="4" fill="#4CAF50" stroke="white"><title>Borôro: 0.229</title></circle>
+<circle cx="609.6990797328797" cy="90.25172841401964" r="4" fill="#4CAF50" stroke="white"><title>HighlandNahuatl: 0.104</title></circle>
+<circle cx="730.4667873310703" cy="89.55933663177022" r="4" fill="#4CAF50" stroke="white"><title>Arhuaco: 0.253</title></circle>
+<circle cx="579.0530405697843" cy="87.26022460695444" r="4" fill="#4CAF50" stroke="white"><title>Karo: 0.067</title></circle>
+<circle cx="526.8283577889996" cy="90.14439093839788" r="4" fill="#4CAF50" stroke="white"><title>MbyáGuaraní: 0.002</title></circle>
+<circle cx="636.2836053785506" cy="85.5024553915776" r="4" fill="#4CAF50" stroke="white"><title>Nhengatu: 0.137</title></circle>
+<circle cx="627.9763980966188" cy="92.39508011998332" r="4" fill="#4CAF50" stroke="white"><title>Teko: 0.127</title></circle>
+<circle cx="548.0694096133161" cy="97.71273469272353" r="4" fill="#4CAF50" stroke="white"><title>WestNahuatl: 0.028</title></circle>
+<line x1="605.8949502265987" y1="78.25" x2="605.8949502265987" y2="106.75" stroke="#333" stroke-width="2"/>
+<text x="190" y="131.5" text-anchor="end" font-size="11">Turkic (n=8)</text>
+<rect x="200" y="115.25" width="650" height="24.5" fill="#f5f5f5" stroke="#ddd"/>
+<rect x="525.0" y="115.25" width="60.47471700258052" height="24.5" fill="#F44336" fill-opacity="0.6" stroke="#F44336"/>
+<circle cx="585.2513088356085" cy="134.16995832819964" r="4" fill="#F44336" stroke="white"><title>Kazakh: 0.074</title></circle>
+<circle cx="647.0110574896032" cy="132.79640532990186" r="4" fill="#F44336" stroke="white"><title>Kyrgyz: 0.150</title></circle>
+<circle cx="548.1667099105978" cy="127.70195690599982" r="4" fill="#F44336" stroke="white"><title>OttomanTurkish: 0.029</title></circle>
+<circle cx="418.71380967434334" cy="126.77753294871307" r="4" fill="#F44336" stroke="white"><title>Tatar: -0.131</title></circle>
+<circle cx="635.1218789006703" cy="126.95189618772748" r="4" fill="#F44336" stroke="white"><title>Turkish: 0.136</title></circle>
+<circle cx="631.7264788483594" cy="121.6922602526276" r="4" fill="#F44336" stroke="white"><title>TurkishGerman: 0.131</title></circle>
+<circle cx="560.7190140051687" cy="134.84084384563" r="4" fill="#F44336" stroke="white"><title>Uyghur: 0.044</title></circle>
+<circle cx="657.0874783562929" cy="127.98799353860743" r="4" fill="#F44336" stroke="white"><title>Uzbek: 0.163</title></circle>
+<line x1="585.4747170025805" y1="113.25" x2="585.4747170025805" y2="141.75" stroke="#333" stroke-width="2"/>
+<text x="190" y="166.5" text-anchor="end" font-size="11">Other (n=8)</text>
+<rect x="200" y="150.25" width="650" height="24.5" fill="#f5f5f5" stroke="#ddd"/>
+<rect x="525.0" y="150.25" width="42.24084768023329" height="24.5" fill="#9C27B0" fill-opacity="0.6" stroke="#9C27B0"/>
+<circle cx="674.0313246453275" cy="166.4719454579839" r="4" fill="#9C27B0" stroke="white"><title>Basque: 0.183</title></circle>
+<circle cx="683.159798258903" cy="159.800559715882" r="4" fill="#9C27B0" stroke="white"><title>Buryat: 0.195</title></circle>
+<circle cx="530.3135473157918" cy="158.1221360231073" r="4" fill="#9C27B0" stroke="white"><title>Chukot: 0.007</title></circle>
+<circle cx="542.4879522274998" cy="168.8432871834947" r="4" fill="#9C27B0" stroke="white"><title>Japanese: 0.022</title></circle>
+<circle cx="577.8241904486824" cy="169.337483009656" r="4" fill="#9C27B0" stroke="white"><title>Khoekhoe: 0.065</title></circle>
+<circle cx="623.7085786158053" cy="167.56349365323933" r="4" fill="#9C27B0" stroke="white"><title>Korean: 0.121</title></circle>
+<circle cx="488.7114071093456" cy="162.4097156246891" r="4" fill="#9C27B0" stroke="white"><title>Pesh: -0.045</title></circle>
+<circle cx="417.6899828205111" cy="165.48660070019562" r="4" fill="#9C27B0" stroke="white"><title>Xibe: -0.132</title></circle>
+<line x1="567.2408476802333" y1="148.25" x2="567.2408476802333" y2="176.75" stroke="#333" stroke-width="2"/>
+<text x="190" y="201.5" text-anchor="end" font-size="11">Uralic (n=8)</text>
+<rect x="200" y="185.25" width="650" height="24.5" fill="#f5f5f5" stroke="#ddd"/>
+<rect x="525.0" y="185.25" width="29.04631552220053" height="24.5" fill="#FF9800" fill-opacity="0.6" stroke="#FF9800"/>
+<circle cx="523.5074808045124" cy="193.57441746934" r="4" fill="#FF9800" stroke="white"><title>Erzya: -0.002</title></circle>
+<circle cx="668.8207610088516" cy="196.32830099076142" r="4" fill="#FF9800" stroke="white"><title>Estonian: 0.177</title></circle>
+<circle cx="577.0549450882877" cy="198.53325205681867" r="4" fill="#FF9800" stroke="white"><title>Finnish: 0.064</title></circle>
+<circle cx="586.5310934991633" cy="202.7396935407821" r="4" fill="#FF9800" stroke="white"><title>Hungarian: 0.076</title></circle>
+<circle cx="533.1316222639109" cy="195.33468524571998" r="4" fill="#FF9800" stroke="white"><title>Komi: 0.010</title></circle>
+<circle cx="577.2846579774587" cy="195.62029766283297" r="4" fill="#FF9800" stroke="white"><title>Moksha: 0.064</title></circle>
+<circle cx="521.3991849076831" cy="190.50867427890796" r="4" fill="#FF9800" stroke="white"><title>NorthSami: -0.004</title></circle>
+<circle cx="444.6407786277365" cy="194.76214487570937" r="4" fill="#FF9800" stroke="white"><title>SkoltSami: -0.099</title></circle>
+<line x1="554.0463155222005" y1="183.25" x2="554.0463155222005" y2="211.75" stroke="#333" stroke-width="2"/>
+<text x="190" y="236.5" text-anchor="end" font-size="11">Caucasian (n=2)</text>
+<rect x="200" y="220.25" width="650" height="24.5" fill="#f5f5f5" stroke="#ddd"/>
+<rect x="525.0" y="220.25" width="14.178487474003532" height="24.5" fill="#00BCD4" fill-opacity="0.6" stroke="#00BCD4"/>
+<circle cx="584.0735320128915" cy="237.34371916239414" r="4" fill="#00BCD4" stroke="white"><title>Abkhaz: 0.073</title></circle>
+<circle cx="494.28344293511566" cy="230.34485174186776" r="4" fill="#00BCD4" stroke="white"><title>Georgian: -0.038</title></circle>
+<line x1="539.1784874740035" y1="218.25" x2="539.1784874740035" y2="246.75" stroke="#333" stroke-width="2"/>
+<text x="190" y="271.5" text-anchor="end" font-size="11">Indo-European (n=63)</text>
+<rect x="200" y="255.25" width="650" height="24.5" fill="#f5f5f5" stroke="#ddd"/>
+<rect x="525.0" y="255.25" width="4.261437434882282" height="24.5" fill="#E91E63" fill-opacity="0.6" stroke="#E91E63"/>
+<circle cx="676.5910246779338" cy="264.81010387854303" r="4" fill="#E91E63" stroke="white"><title>Afrikaans: 0.187</title></circle>
+<circle cx="619.2017522098629" cy="271.82711639202375" r="4" fill="#E91E63" stroke="white"><title>Albanian: 0.116</title></circle>
+<circle cx="663.3286986671574" cy="262.0279746061749" r="4" fill="#E91E63" stroke="white"><title>SwissGerman: 0.170</title></circle>
+<circle cx="479.56612480994744" cy="260.7140900468585" r="4" fill="#E91E63" stroke="white"><title>AncientGreek: -0.056</title></circle>
+<circle cx="480.41145001310247" cy="273.42512881333397" r="4" fill="#E91E63" stroke="white"><title>Armenian: -0.055</title></circle>
+<circle cx="597.5504708199329" cy="267.07372934693046" r="4" fill="#E91E63" stroke="white"><title>Bavarian: 0.089</title></circle>
+<circle cx="594.1899445304277" cy="267.21654726265365" r="4" fill="#E91E63" stroke="white"><title>Belarusian: 0.085</title></circle>
+<circle cx="599.8044222124688" cy="271.5274143312971" r="4" fill="#E91E63" stroke="white"><title>Bhojpuri: 0.092</title></circle>
+<circle cx="660.0111171402025" cy="269.611672091502" r="4" fill="#E91E63" stroke="white"><title>Bulgarian: 0.166</title></circle>
+<circle cx="728.9719534335883" cy="262.3482685876172" r="4" fill="#E91E63" stroke="white"><title>Catalan: 0.251</title></circle>
+<circle cx="469.5376661678005" cy="262.91109829112196" r="4" fill="#E91E63" stroke="white"><title>ClassArmenian: -0.068</title></circle>
+<circle cx="643.0768564882662" cy="273.0067242455125" r="4" fill="#E91E63" stroke="white"><title>Croatian: 0.145</title></circle>
+<circle cx="705.8950937592658" cy="272.8522407324885" r="4" fill="#E91E63" stroke="white"><title>Czech: 0.223</title></circle>
+<circle cx="737.4430307726453" cy="274.7920723230505" r="4" fill="#E91E63" stroke="white"><title>Danish: 0.261</title></circle>
+<circle cx="647.7744828145192" cy="262.2172244436217" r="4" fill="#E91E63" stroke="white"><title>Dutch: 0.151</title></circle>
+<circle cx="283.86208664293554" cy="266.6090122855711" r="4" fill="#E91E63" stroke="white"><title>English: -0.297</title></circle>
+<circle cx="516.8161026688012" cy="269.3981196873719" r="4" fill="#E91E63" stroke="white"><title>Faroese: -0.010</title></circle>
+<circle cx="529.7038858297278" cy="273.8247850113208" r="4" fill="#E91E63" stroke="white"><title>French: 0.006</title></circle>
+<circle cx="721.4680766850585" cy="262.11105874826814" r="4" fill="#E91E63" stroke="white"><title>Galician: 0.242</title></circle>
+<circle cx="687.408247546801" cy="267.2734790971092" r="4" fill="#E91E63" stroke="white"><title>German: 0.200</title></circle>
+<circle cx="493.1696599398142" cy="260.2540053757209" r="4" fill="#E91E63" stroke="white"><title>Gheg: -0.039</title></circle>
+<circle cx="471.81179731949993" cy="272.8253753318238" r="4" fill="#E91E63" stroke="white"><title>Gothic: -0.065</title></circle>
+<circle cx="495.88171218265074" cy="273.08375810201636" r="4" fill="#E91E63" stroke="white"><title>Greek: -0.036</title></circle>
+<circle cx="286.2856912509727" cy="262.98912857792277" r="4" fill="#E91E63" stroke="white"><title>Haitian: -0.294</title></circle>
+<circle cx="546.9211093626024" cy="270.3445981207774" r="4" fill="#E91E63" stroke="white"><title>Hindi: 0.027</title></circle>
+<circle cx="384.94080207095635" cy="274.3597728026858" r="4" fill="#E91E63" stroke="white"><title>Icelandic: -0.172</title></circle>
+<circle cx="270.38292056854897" cy="262.6662349155752" r="4" fill="#E91E63" stroke="white"><title>Irish: -0.313</title></circle>
+<circle cx="527.2023284303523" cy="264.5854639831007" r="4" fill="#E91E63" stroke="white"><title>Italian: 0.003</title></circle>
+<circle cx="414.02270577862726" cy="265.7218388015188" r="4" fill="#E91E63" stroke="white"><title>Latin: -0.137</title></circle>
+<circle cx="511.8165909491122" cy="267.033410841108" r="4" fill="#E91E63" stroke="white"><title>Latvian: -0.016</title></circle>
+<circle cx="567.3146967021517" cy="266.442611753945" r="4" fill="#E91E63" stroke="white"><title>Ligurian: 0.052</title></circle>
+<circle cx="462.0990781263682" cy="265.94123728771143" r="4" fill="#E91E63" stroke="white"><title>Lithuanian: -0.077</title></circle>
+<circle cx="638.2818474970927" cy="260.75363838081734" r="4" fill="#E91E63" stroke="white"><title>LowSaxon: 0.139</title></circle>
+<circle cx="605.2775874435359" cy="261.4118255859137" r="4" fill="#E91E63" stroke="white"><title>Marathi: 0.099</title></circle>
+<circle cx="290.634902711002" cy="271.43240700298657" r="4" fill="#E91E63" stroke="white"><title>MiddleFrench: -0.288</title></circle>
+<circle cx="200" cy="273.8978003875122" r="4" fill="#E91E63" stroke="white"><title>Naija: -0.734</title></circle>
+<circle cx="422.3107283600765" cy="266.18932772036527" r="4" fill="#E91E63" stroke="white"><title>Kurmanji: -0.126</title></circle>
+<circle cx="674.4238870446445" cy="262.07299474307666" r="4" fill="#E91E63" stroke="white"><title>Norwegian: 0.184</title></circle>
+<circle cx="401.75958503617335" cy="274.18274649906" r="4" fill="#E91E63" stroke="white"><title>Occitan: -0.152</title></circle>
+<circle cx="387.40732703656727" cy="266.87786675371905" r="4" fill="#E91E63" stroke="white"><title>OldChurchSlavonic: -0.169</title></circle>
+<circle cx="355.0009951772488" cy="262.0794550769841" r="4" fill="#E91E63" stroke="white"><title>OldEastSlavic: -0.209</title></circle>
+<circle cx="381.3715847478478" cy="264.6890588338016" r="4" fill="#E91E63" stroke="white"><title>OldFrench: -0.177</title></circle>
+<circle cx="200" cy="265.78090939385413" r="4" fill="#E91E63" stroke="white"><title>OldProvençal: -0.443</title></circle>
+<circle cx="455.266511794963" cy="273.61265084443977" r="4" fill="#E91E63" stroke="white"><title>Persian: -0.086</title></circle>
+<circle cx="620.7851061361373" cy="265.0255792756196" r="4" fill="#E91E63" stroke="white"><title>Polish: 0.118</title></circle>
+<circle cx="608.2496561132759" cy="260.9415375083206" r="4" fill="#E91E63" stroke="white"><title>Pomak: 0.102</title></circle>
+<circle cx="633.7962705362801" cy="267.31994906890736" r="4" fill="#E91E63" stroke="white"><title>Portuguese: 0.134</title></circle>
+<circle cx="435.33606514129775" cy="261.22701286226635" r="4" fill="#E91E63" stroke="white"><title>Romanian: -0.110</title></circle>
+<circle cx="585.8031959767125" cy="270.0802239708366" r="4" fill="#E91E63" stroke="white"><title>Russian: 0.075</title></circle>
+<circle cx="550.0243689030088" cy="263.1144214245945" r="4" fill="#E91E63" stroke="white"><title>Sanskrit: 0.031</title></circle>
+<circle cx="715.9179852160371" cy="270.82035549584805" r="4" fill="#E91E63" stroke="white"><title>Serbian: 0.235</title></circle>
+<circle cx="460.4819938903356" cy="274.5959557036496" r="4" fill="#E91E63" stroke="white"><title>Sicilian: -0.079</title></circle>
+<circle cx="569.5942671509231" cy="262.6037780526962" r="4" fill="#E91E63" stroke="white"><title>Sindhi: 0.055</title></circle>
+<circle cx="715.9516763737083" cy="269.3165362289312" r="4" fill="#E91E63" stroke="white"><title>Slovak: 0.235</title></circle>
+<circle cx="572.7989426624172" cy="270.80584696824627" r="4" fill="#E91E63" stroke="white"><title>Slovenian: 0.059</title></circle>
+<circle cx="703.9788272390397" cy="274.0210217501418" r="4" fill="#E91E63" stroke="white"><title>Spanish: 0.220</title></circle>
+<circle cx="604.9133922806358" cy="269.10074583934045" r="4" fill="#E91E63" stroke="white"><title>Swedish: 0.098</title></circle>
+<circle cx="489.7330511086077" cy="269.22027678284354" r="4" fill="#E91E63" stroke="white"><title>Ukrainian: -0.043</title></circle>
+<circle cx="850" cy="268.73822531266023" r="4" fill="#E91E63" stroke="white"><title>UpperSorbian: 0.500</title></circle>
+<circle cx="563.7082288164438" cy="266.2205597213434" r="4" fill="#E91E63" stroke="white"><title>Urdu: 0.048</title></circle>
+<circle cx="511.72719087332064" cy="262.6750703780488" r="4" fill="#E91E63" stroke="white"><title>Welsh: -0.016</title></circle>
+<circle cx="446.8622160549561" cy="267.4252039505962" r="4" fill="#E91E63" stroke="white"><title>WestArmenian: -0.096</title></circle>
+<circle cx="442.4279400042484" cy="264.51057913969214" r="4" fill="#E91E63" stroke="white"><title>Yiddish: -0.102</title></circle>
+<line x1="529.2614374348823" y1="253.25" x2="529.2614374348823" y2="281.75" stroke="#333" stroke-width="2"/>
+<text x="190" y="306.5" text-anchor="end" font-size="11">Afroasiatic (n=11)</text>
+<rect x="200" y="290.25" width="650" height="24.5" fill="#f5f5f5" stroke="#ddd"/>
+<rect x="500.04161668928606" y="290.25" width="24.95838331071394" height="24.5" fill="#8BC34A" fill-opacity="0.6" stroke="#8BC34A"/>
+<circle cx="595.1123715697441" cy="306.0983918197429" r="4" fill="#8BC34A" stroke="white"><title>Akkadian: 0.086</title></circle>
+<circle cx="770.5110079919745" cy="308.4583935525515" r="4" fill="#8BC34A" stroke="white"><title>Amharic: 0.302</title></circle>
+<circle cx="420.08636497375005" cy="299.2075837497926" r="4" fill="#8BC34A" stroke="white"><title>AncientHebrew: -0.129</title></circle>
+<circle cx="428.96427595466946" cy="308.5447791516841" r="4" fill="#8BC34A" stroke="white"><title>Arabic: -0.118</title></circle>
+<circle cx="850" cy="308.5938134642199" r="4" fill="#8BC34A" stroke="white"><title>Beja: 0.404</title></circle>
+<circle cx="200" cy="306.74983757375304" r="4" fill="#8BC34A" stroke="white"><title>Coptic: -0.486</title></circle>
+<circle cx="200" cy="303.4326138174722" r="4" fill="#8BC34A" stroke="white"><title>Hausa: -0.401</title></circle>
+<circle cx="684.7186699811796" cy="303.0307990084236" r="4" fill="#8BC34A" stroke="white"><title>Hebrew: 0.197</title></circle>
+<circle cx="649.585387233831" cy="307.6094782067427" r="4" fill="#8BC34A" stroke="white"><title>Maghrebi: 0.153</title></circle>
+<circle cx="469.55892341005216" cy="307.90920521177424" r="4" fill="#8BC34A" stroke="white"><title>Maltese: -0.068</title></circle>
+<circle cx="298.8532374362688" cy="298.104185066106" r="4" fill="#8BC34A" stroke="white"><title>Zaar: -0.278</title></circle>
+<line x1="500.04161668928606" y1="288.25" x2="500.04161668928606" y2="316.75" stroke="#333" stroke-width="2"/>
+<text x="190" y="341.5" text-anchor="end" font-size="11">Sino-Austronesian (n=10)</text>
+<rect x="200" y="325.25" width="650" height="24.5" fill="#f5f5f5" stroke="#ddd"/>
+<rect x="474.88714740800873" y="325.25" width="50.11285259199127" height="24.5" fill="#795548" fill-opacity="0.6" stroke="#795548"/>
+<circle cx="331.9641597699595" cy="338.8230877468044" r="4" fill="#795548" stroke="white"><title>Cantonese: -0.238</title></circle>
+<circle cx="402.2981296519017" cy="340.8626339353363" r="4" fill="#795548" stroke="white"><title>Chinese: -0.151</title></circle>
+<circle cx="682.0371413967898" cy="342.17186917114674" r="4" fill="#795548" stroke="white"><title>Chhintange: 0.193</title></circle>
+<circle cx="556.9939619025774" cy="333.22685436413775" r="4" fill="#795548" stroke="white"><title>ClassChinese: 0.039</title></circle>
+<circle cx="468.9613743124612" cy="333.0683578316019" r="4" fill="#795548" stroke="white"><title>Indonesian: -0.069</title></circle>
+<circle cx="521.2060523878629" cy="343.2434380658599" r="4" fill="#795548" stroke="white"><title>Javanese: -0.005</title></circle>
+<circle cx="598.7739755636678" cy="341.60350380788265" r="4" fill="#795548" stroke="white"><title>Tangkhul: 0.091</title></circle>
+<circle cx="480.66838861405955" cy="339.29580683300514" r="4" fill="#795548" stroke="white"><title>Wu: -0.055</title></circle>
+<circle cx="342.19677884943064" cy="341.33723913174873" r="4" fill="#795548" stroke="white"><title>Thai: -0.225</title></circle>
+<circle cx="363.7715116313766" cy="332.9034764281111" r="4" fill="#795548" stroke="white"><title>Vietnamese: -0.198</title></circle>
+<line x1="474.88714740800873" y1="323.25" x2="474.88714740800873" y2="351.75" stroke="#333" stroke-width="2"/>
+<text x="190" y="376.5" text-anchor="end" font-size="11">Niger-Congo (n=3)</text>
+<rect x="200" y="360.25" width="650" height="24.5" fill="#f5f5f5" stroke="#ddd"/>
+<rect x="242.982535793213" y="360.25" width="282.017464206787" height="24.5" fill="#3F51B5" fill-opacity="0.6" stroke="#3F51B5"/>
+<circle cx="200" cy="378.332530153146" r="4" fill="#3F51B5" stroke="white"><title>Bambara: -0.515</title></circle>
+<circle cx="267.5486213903213" cy="365.9752138793782" r="4" fill="#3F51B5" stroke="white"><title>Wolof: -0.317</title></circle>
+<circle cx="354.4851655713661" cy="366.229209889579" r="4" fill="#3F51B5" stroke="white"><title>Yoruba: -0.210</title></circle>
+<line x1="242.982535793213" y1="358.25" x2="242.982535793213" y2="386.75" stroke="#333" stroke-width="2"/>
+<line x1="525.0" y1="40" x2="525.0" y2="390" stroke="#333" stroke-dasharray="4,4"/>
+</svg></div><div class="chart-container"><svg width="900" height="250" xmlns="http://www.w3.org/2000/svg" style="background: white; font-family: Arial, sans-serif;">
+<text x="450.0" y="25" text-anchor="middle" font-size="14" font-weight="bold">LMAL Effect −β(1→max): Indo-European vs Non-Indo-European</text>
+<line x1="200" y1="190" x2="850" y2="190" stroke="#333" stroke-width="1"/>
+<line x1="200.0" y1="190" x2="200.0" y2="195" stroke="#333" stroke-width="1"/>
+<text x="200.0" y="210" text-anchor="middle" font-size="10">-0.4</text>
+<line x1="200.0" y1="40" x2="200.0" y2="190" stroke="#eee" stroke-width="1"/>
+<line x1="281.25" y1="190" x2="281.25" y2="195" stroke="#333" stroke-width="1"/>
+<text x="281.25" y="210" text-anchor="middle" font-size="10">-0.3</text>
+<line x1="281.25" y1="40" x2="281.25" y2="190" stroke="#eee" stroke-width="1"/>
+<line x1="362.5" y1="190" x2="362.5" y2="195" stroke="#333" stroke-width="1"/>
+<text x="362.5" y="210" text-anchor="middle" font-size="10">-0.2</text>
+<line x1="362.5" y1="40" x2="362.5" y2="190" stroke="#eee" stroke-width="1"/>
+<line x1="443.75" y1="190" x2="443.75" y2="195" stroke="#333" stroke-width="1"/>
+<text x="443.75" y="210" text-anchor="middle" font-size="10">-0.1</text>
+<line x1="443.75" y1="40" x2="443.75" y2="190" stroke="#eee" stroke-width="1"/>
+<line x1="525.0" y1="190" x2="525.0" y2="195" stroke="#333" stroke-width="1"/>
+<text x="525.0" y="210" text-anchor="middle" font-size="10">0.0</text>
+<line x1="525.0" y1="40" x2="525.0" y2="190" stroke="#eee" stroke-width="1"/>
+<line x1="606.25" y1="190" x2="606.25" y2="195" stroke="#333" stroke-width="1"/>
+<text x="606.25" y="210" text-anchor="middle" font-size="10">0.1</text>
+<line x1="606.25" y1="40" x2="606.25" y2="190" stroke="#eee" stroke-width="1"/>
+<line x1="687.5" y1="190" x2="687.5" y2="195" stroke="#333" stroke-width="1"/>
+<text x="687.5" y="210" text-anchor="middle" font-size="10">0.2</text>
+<line x1="687.5" y1="40" x2="687.5" y2="190" stroke="#eee" stroke-width="1"/>
+<line x1="768.7499999999999" y1="190" x2="768.7499999999999" y2="195" stroke="#333" stroke-width="1"/>
+<text x="768.7499999999999" y="210" text-anchor="middle" font-size="10">0.3</text>
+<line x1="768.7499999999999" y1="40" x2="768.7499999999999" y2="190" stroke="#eee" stroke-width="1"/>
+<line x1="850.0" y1="190" x2="850.0" y2="195" stroke="#333" stroke-width="1"/>
+<text x="850.0" y="210" text-anchor="middle" font-size="10">0.4</text>
+<line x1="850.0" y1="40" x2="850.0" y2="190" stroke="#eee" stroke-width="1"/>
+<text x="525.0" y="235" text-anchor="middle" font-size="12">−β(1→max) — positive = MAL compliance</text>
+<text x="190" y="81.5" text-anchor="end" font-size="11">Non-Indo-European (n=61)</text>
+<rect x="200" y="60.0" width="650" height="35" fill="#f5f5f5" stroke="#ddd" stroke-width="1"/>
+<rect x="525.0" y="60.0" width="9.29946479827845" height="35" fill="#2196F3" fill-opacity="0.6" stroke="#2196F3" stroke-width="1"/>
+<circle cx="584.0735320128915" cy="84.81167923254614" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Abkhaz: 0.073</title>
+</circle>
+<circle cx="595.1123715697441" cy="82.98639374431961" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Akkadian: 0.086</title>
+</circle>
+<circle cx="770.5110079919745" cy="69.93691703657291" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Amharic: 0.302</title>
+</circle>
+<circle cx="420.08636497375005" cy="67.52205461668963" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>AncientHebrew: -0.129</title>
+</circle>
+<circle cx="428.96427595466946" cy="72.49687315810824" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Arabic: -0.118</title>
+</circle>
+<circle cx="200" cy="80.61295476776074" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Bambara: -0.515</title>
+</circle>
+<circle cx="674.0313246453275" cy="71.96795543792096" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Basque: 0.183</title>
+</circle>
+<circle cx="850" cy="67.92474349560182" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Beja: 0.404</title>
+</circle>
+<circle cx="483.31591700709424" cy="83.10756417594033" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Buglere: -0.051</title>
+</circle>
+<circle cx="711.3619565210734" cy="78.68377195750243" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Borôro: 0.229</title>
+</circle>
+<circle cx="683.159798258903" cy="82.08193299540797" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Buryat: 0.195</title>
+</circle>
+<circle cx="331.9641597699595" cy="83.3968799583149" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Cantonese: -0.238</title>
+</circle>
+<circle cx="402.2981296519017" cy="71.10060048038589" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Chinese: -0.151</title>
+</circle>
+<circle cx="682.0371413967898" cy="76.04479040455651" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Chhintange: 0.193</title>
+</circle>
+<circle cx="530.3135473157918" cy="84.61560442973237" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Chukot: 0.007</title>
+</circle>
+<circle cx="556.9939619025774" cy="84.24098296390738" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>ClassChinese: 0.039</title>
+</circle>
+<circle cx="200" cy="79.44711805534078" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Coptic: -0.486</title>
+</circle>
+<circle cx="523.5074808045124" cy="86.60566769026418" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Erzya: -0.002</title>
+</circle>
+<circle cx="668.8207610088516" cy="84.27848481935276" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Estonian: 0.177</title>
+</circle>
+<circle cx="577.0549450882877" cy="84.10306103125316" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Finnish: 0.064</title>
+</circle>
+<circle cx="494.28344293511566" cy="68.07348078031278" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Georgian: -0.038</title>
+</circle>
+<circle cx="200" cy="73.02634463583766" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Hausa: -0.401</title>
+</circle>
+<circle cx="684.7186699811796" cy="83.28724416668179" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Hebrew: 0.197</title>
+</circle>
+<circle cx="609.6990797328797" cy="81.18184393440487" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>HighlandNahuatl: 0.104</title>
+</circle>
+<circle cx="586.5310934991633" cy="79.15236515649565" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Hungarian: 0.076</title>
+</circle>
+<circle cx="730.4667873310703" cy="83.77978155252526" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Arhuaco: 0.253</title>
+</circle>
+<circle cx="468.9613743124612" cy="74.30529963621447" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Indonesian: -0.069</title>
+</circle>
+<circle cx="542.4879522274998" cy="68.11674141959188" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Japanese: 0.022</title>
+</circle>
+<circle cx="521.2060523878629" cy="74.91317268757888" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Javanese: -0.005</title>
+</circle>
+<circle cx="579.0530405697843" cy="68.05400852563525" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Karo: 0.067</title>
+</circle>
+<circle cx="585.2513088356085" cy="87.83870086109351" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Kazakh: 0.074</title>
+</circle>
+<circle cx="577.8241904486824" cy="86.1554557523128" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Khoekhoe: 0.065</title>
+</circle>
+<circle cx="533.1316222639109" cy="68.41195967917429" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Komi: 0.010</title>
+</circle>
+<circle cx="623.7085786158053" cy="68.73319088714942" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Korean: 0.121</title>
+</circle>
+<circle cx="647.0110574896032" cy="69.54252342047926" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Kyrgyz: 0.150</title>
+</circle>
+<circle cx="649.585387233831" cy="85.86832727869906" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Maghrebi: 0.153</title>
+</circle>
+<circle cx="469.55892341005216" cy="81.43120417710381" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Maltese: -0.068</title>
+</circle>
+<circle cx="526.8283577889996" cy="72.27934981476875" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>MbyáGuaraní: 0.002</title>
+</circle>
+<circle cx="577.2846579774587" cy="80.24657991021988" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Moksha: 0.064</title>
+</circle>
+<circle cx="598.7739755636678" cy="81.21424347320603" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Tangkhul: 0.091</title>
+</circle>
+<circle cx="636.2836053785506" cy="86.83911660287427" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Nhengatu: 0.137</title>
+</circle>
+<circle cx="521.3991849076831" cy="76.11165027482603" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>NorthSami: -0.004</title>
+</circle>
+<circle cx="548.1667099105978" cy="82.8412497353252" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>OttomanTurkish: 0.029</title>
+</circle>
+<circle cx="488.7114071093456" cy="79.02531591609419" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Pesh: -0.045</title>
+</circle>
+<circle cx="480.66838861405955" cy="69.04469627329429" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Wu: -0.055</title>
+</circle>
+<circle cx="444.6407786277365" cy="84.41964954288675" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>SkoltSami: -0.099</title>
+</circle>
+<circle cx="833.3269986359749" cy="86.3994689740346" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Tamil: 0.379</title>
+</circle>
+<circle cx="418.71380967434334" cy="86.73107991356667" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Tatar: -0.131</title>
+</circle>
+<circle cx="627.9763980966188" cy="67.9835466108988" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Teko: 0.127</title>
+</circle>
+<circle cx="595.1569203896286" cy="71.1199239392143" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Telugu: 0.086</title>
+</circle>
+<circle cx="342.19677884943064" cy="75.8416741185185" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Thai: -0.225</title>
+</circle>
+<circle cx="635.1218789006703" cy="85.46198070004665" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Turkish: 0.136</title>
+</circle>
+<circle cx="631.7264788483594" cy="79.4447522420601" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>TurkishGerman: 0.131</title>
+</circle>
+<circle cx="560.7190140051687" cy="69.76175580189316" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Uyghur: 0.044</title>
+</circle>
+<circle cx="657.0874783562929" cy="86.9558825332659" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Uzbek: 0.163</title>
+</circle>
+<circle cx="363.7715116313766" cy="70.85521679387104" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Vietnamese: -0.198</title>
+</circle>
+<circle cx="548.0694096133161" cy="72.60502349449506" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>WestNahuatl: 0.028</title>
+</circle>
+<circle cx="267.5486213903213" cy="69.37435440248382" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Wolof: -0.317</title>
+</circle>
+<circle cx="417.6899828205111" cy="72.42035092459656" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Xibe: -0.132</title>
+</circle>
+<circle cx="354.4851655713661" cy="80.79281964544964" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Yoruba: -0.210</title>
+</circle>
+<circle cx="298.8532374362688" cy="82.36870507198037" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Zaar: -0.278</title>
+</circle>
+<line x1="534.2994647982784" y1="58.0" x2="534.2994647982784" y2="97.0" stroke="#333" stroke-width="2"/>
+<text x="190" y="156.5" text-anchor="end" font-size="11">Indo-European (n=63)</text>
+<rect x="200" y="135.0" width="650" height="35" fill="#f5f5f5" stroke="#ddd" stroke-width="1"/>
+<rect x="525.0" y="135.0" width="4.261437434882282" height="35" fill="#4CAF50" fill-opacity="0.6" stroke="#4CAF50" stroke-width="1"/>
+<circle cx="676.5910246779338" cy="148.6572912550615" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Afrikaans: 0.187</title>
+</circle>
+<circle cx="619.2017522098629" cy="158.6815948457482" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Albanian: 0.116</title>
+</circle>
+<circle cx="663.3286986671574" cy="144.68282086596415" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>SwissGerman: 0.170</title>
+</circle>
+<circle cx="479.56612480994744" cy="142.80584292408352" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>AncientGreek: -0.056</title>
+</circle>
+<circle cx="480.41145001310247" cy="160.96446973333423" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Armenian: -0.055</title>
+</circle>
+<circle cx="597.5504708199329" cy="151.89104192418634" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Bavarian: 0.089</title>
+</circle>
+<circle cx="594.1899445304277" cy="152.09506751807666" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Belarusian: 0.085</title>
+</circle>
+<circle cx="599.8044222124688" cy="158.25344904471015" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Bhojpuri: 0.092</title>
+</circle>
+<circle cx="660.0111171402025" cy="155.51667441643144" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Bulgarian: 0.166</title>
+</circle>
+<circle cx="728.9719534335883" cy="145.14038369659605" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Catalan: 0.251</title>
+</circle>
+<circle cx="469.5376661678005" cy="145.9444261301742" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>ClassArmenian: -0.068</title>
+</circle>
+<circle cx="643.0768564882662" cy="160.36674892216072" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Croatian: 0.145</title>
+</circle>
+<circle cx="705.8950937592658" cy="160.14605818926924" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Czech: 0.223</title>
+</circle>
+<circle cx="737.4430307726453" cy="162.91724617578643" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Danish: 0.261</title>
+</circle>
+<circle cx="647.7744828145192" cy="144.95317777660244" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Dutch: 0.151</title>
+</circle>
+<circle cx="283.86208664293554" cy="151.2271604079587" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>English: -0.297</title>
+</circle>
+<circle cx="516.8161026688012" cy="155.2115995533884" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Faroese: -0.010</title>
+</circle>
+<circle cx="529.7038858297278" cy="161.53540715902966" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>French: 0.006</title>
+</circle>
+<circle cx="721.4680766850585" cy="144.80151249752595" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Galician: 0.242</title>
+</circle>
+<circle cx="687.408247546801" cy="152.17639871015598" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>German: 0.200</title>
+</circle>
+<circle cx="493.1696599398142" cy="142.14857910817275" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Gheg: -0.039</title>
+</circle>
+<circle cx="471.81179731949993" cy="160.10767904546253" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Gothic: -0.065</title>
+</circle>
+<circle cx="495.88171218265074" cy="160.47679728859484" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Greek: -0.036</title>
+</circle>
+<circle cx="286.2856912509727" cy="146.0558979684611" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Haitian: -0.294</title>
+</circle>
+<circle cx="546.9211093626024" cy="156.56371160111055" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Hindi: 0.027</title>
+</circle>
+<circle cx="384.94080207095635" cy="162.29967543240835" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Icelandic: -0.172</title>
+</circle>
+<circle cx="270.38292056854897" cy="145.59462130796462" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Irish: -0.313</title>
+</circle>
+<circle cx="527.2023284303523" cy="148.3363771187153" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Italian: 0.003</title>
+</circle>
+<circle cx="414.02270577862726" cy="149.9597697164554" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Latin: -0.137</title>
+</circle>
+<circle cx="511.8165909491122" cy="151.83344405872566" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Latvian: -0.016</title>
+</circle>
+<circle cx="567.3146967021517" cy="150.9894453627786" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Ligurian: 0.052</title>
+</circle>
+<circle cx="462.0990781263682" cy="150.27319612530206" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Lithuanian: -0.077</title>
+</circle>
+<circle cx="638.2818474970927" cy="142.86234054402476" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>LowSaxon: 0.139</title>
+</circle>
+<circle cx="605.2775874435359" cy="143.8026079798767" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Marathi: 0.099</title>
+</circle>
+<circle cx="290.634902711002" cy="158.11772428998083" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>MiddleFrench: -0.288</title>
+</circle>
+<circle cx="200" cy="161.6397148393031" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Naija: -0.734</title>
+</circle>
+<circle cx="422.3107283600765" cy="150.6276110290933" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Kurmanji: -0.126</title>
+</circle>
+<circle cx="674.4238870446445" cy="144.74713534725242" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Norwegian: 0.184</title>
+</circle>
+<circle cx="401.75958503617335" cy="162.04678071294282" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Occitan: -0.152</title>
+</circle>
+<circle cx="387.40732703656727" cy="151.61123821959865" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>OldChurchSlavonic: -0.169</title>
+</circle>
+<circle cx="355.0009951772488" cy="144.75636439569158" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>OldEastSlavic: -0.209</title>
+</circle>
+<circle cx="381.3715847478478" cy="148.4843697625737" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>OldFrench: -0.177</title>
+</circle>
+<circle cx="200" cy="150.0441562769345" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>OldProvençal: -0.443</title>
+</circle>
+<circle cx="455.266511794963" cy="161.23235834919967" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Persian: -0.086</title>
+</circle>
+<circle cx="620.7851061361373" cy="148.96511325088514" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Polish: 0.118</title>
+</circle>
+<circle cx="608.2496561132759" cy="143.13076786902943" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Pomak: 0.102</title>
+</circle>
+<circle cx="633.7962705362801" cy="152.24278438415337" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Portuguese: 0.134</title>
+</circle>
+<circle cx="435.33606514129775" cy="143.53858980323767" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Romanian: -0.110</title>
+</circle>
+<circle cx="585.8031959767125" cy="156.18603424405225" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Russian: 0.075</title>
+</circle>
+<circle cx="550.0243689030088" cy="146.23488774942075" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Sanskrit: 0.031</title>
+</circle>
+<circle cx="715.9179852160371" cy="157.24336499406863" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Serbian: 0.235</title>
+</circle>
+<circle cx="460.4819938903356" cy="162.6370795766423" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Sicilian: -0.079</title>
+</circle>
+<circle cx="569.5942671509231" cy="145.5053972181374" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Sindhi: 0.055</title>
+</circle>
+<circle cx="715.9516763737083" cy="155.09505175561608" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Slovak: 0.235</title>
+</circle>
+<circle cx="572.7989426624172" cy="157.22263852606608" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Slovenian: 0.059</title>
+</circle>
+<circle cx="703.9788272390397" cy="161.81574535734543" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Spanish: 0.220</title>
+</circle>
+<circle cx="604.9133922806358" cy="154.78677977048633" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Swedish: 0.098</title>
+</circle>
+<circle cx="489.7330511086077" cy="154.95753826120506" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Ukrainian: -0.043</title>
+</circle>
+<circle cx="850" cy="154.26889330380033" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>UpperSorbian: 0.500</title>
+</circle>
+<circle cx="563.7082288164438" cy="150.67222817334778" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Urdu: 0.048</title>
+</circle>
+<circle cx="511.72719087332064" cy="145.60724339721259" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Welsh: -0.016</title>
+</circle>
+<circle cx="446.8622160549561" cy="152.3931485008517" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>WestArmenian: -0.096</title>
+</circle>
+<circle cx="442.4279400042484" cy="148.22939877098878" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Yiddish: -0.102</title>
+</circle>
+<line x1="529.2614374348823" y1="133.0" x2="529.2614374348823" y2="172.0" stroke="#333" stroke-width="2"/>
+<line x1="525.0" y1="40" x2="525.0" y2="190" stroke="#333" stroke-width="1.5" stroke-dasharray="4,4"/>
+<text x="530.0" y="55" font-size="10" fill="#666">0</text>
+</svg></div><div class="chart-container"><svg width="900" height="280" xmlns="http://www.w3.org/2000/svg" style="background: white; font-family: Arial, sans-serif;">
+<text x="450.0" y="25" text-anchor="middle" font-size="14" font-weight="bold">LMAL Effect −β(1→max): OV vs NDO vs VO</text>
+<line x1="200" y1="220" x2="850" y2="220" stroke="#333" stroke-width="1"/>
+<line x1="200.0" y1="220" x2="200.0" y2="225" stroke="#333" stroke-width="1"/>
+<text x="200.0" y="240" text-anchor="middle" font-size="10">-0.4</text>
+<line x1="200.0" y1="40" x2="200.0" y2="220" stroke="#eee" stroke-width="1"/>
+<line x1="281.25" y1="220" x2="281.25" y2="225" stroke="#333" stroke-width="1"/>
+<text x="281.25" y="240" text-anchor="middle" font-size="10">-0.3</text>
+<line x1="281.25" y1="40" x2="281.25" y2="220" stroke="#eee" stroke-width="1"/>
+<line x1="362.5" y1="220" x2="362.5" y2="225" stroke="#333" stroke-width="1"/>
+<text x="362.5" y="240" text-anchor="middle" font-size="10">-0.2</text>
+<line x1="362.5" y1="40" x2="362.5" y2="220" stroke="#eee" stroke-width="1"/>
+<line x1="443.75" y1="220" x2="443.75" y2="225" stroke="#333" stroke-width="1"/>
+<text x="443.75" y="240" text-anchor="middle" font-size="10">-0.1</text>
+<line x1="443.75" y1="40" x2="443.75" y2="220" stroke="#eee" stroke-width="1"/>
+<line x1="525.0" y1="220" x2="525.0" y2="225" stroke="#333" stroke-width="1"/>
+<text x="525.0" y="240" text-anchor="middle" font-size="10">0.0</text>
+<line x1="525.0" y1="40" x2="525.0" y2="220" stroke="#eee" stroke-width="1"/>
+<line x1="606.25" y1="220" x2="606.25" y2="225" stroke="#333" stroke-width="1"/>
+<text x="606.25" y="240" text-anchor="middle" font-size="10">0.1</text>
+<line x1="606.25" y1="40" x2="606.25" y2="220" stroke="#eee" stroke-width="1"/>
+<line x1="687.5" y1="220" x2="687.5" y2="225" stroke="#333" stroke-width="1"/>
+<text x="687.5" y="240" text-anchor="middle" font-size="10">0.2</text>
+<line x1="687.5" y1="40" x2="687.5" y2="220" stroke="#eee" stroke-width="1"/>
+<line x1="768.7499999999999" y1="220" x2="768.7499999999999" y2="225" stroke="#333" stroke-width="1"/>
+<text x="768.7499999999999" y="240" text-anchor="middle" font-size="10">0.3</text>
+<line x1="768.7499999999999" y1="40" x2="768.7499999999999" y2="220" stroke="#eee" stroke-width="1"/>
+<line x1="850.0" y1="220" x2="850.0" y2="225" stroke="#333" stroke-width="1"/>
+<text x="850.0" y="240" text-anchor="middle" font-size="10">0.4</text>
+<line x1="850.0" y1="40" x2="850.0" y2="220" stroke="#eee" stroke-width="1"/>
+<text x="525.0" y="265" text-anchor="middle" font-size="12">−β(1→max) — positive = MAL compliance</text>
+<text x="190" y="74.0" text-anchor="end" font-size="11">OV (n=38)</text>
+<rect x="200" y="52.5" width="650" height="35" fill="#f5f5f5" stroke="#ddd" stroke-width="1"/>
+<rect x="525.0" y="52.5" width="66.24976847322841" height="35" fill="#2196F3" fill-opacity="0.6" stroke="#2196F3" stroke-width="1"/>
+<circle cx="584.0735320128915" cy="75.36206527246412" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Abkhaz: 0.073</title>
+</circle>
+<circle cx="676.5910246779338" cy="61.72201548663905" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Afrikaans: 0.187</title>
+</circle>
+<circle cx="595.1123715697441" cy="69.55368165570482" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Akkadian: 0.086</title>
+</circle>
+<circle cx="663.3286986671574" cy="71.86385864017588" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>SwissGerman: 0.170</title>
+</circle>
+<circle cx="770.5110079919745" cy="62.528831868194644" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Amharic: 0.302</title>
+</circle>
+<circle cx="200" cy="71.0122161117886" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Bambara: -0.515</title>
+</circle>
+<circle cx="674.0313246453275" cy="67.19483709357172" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Basque: 0.183</title>
+</circle>
+<circle cx="850" cy="76.18806474564708" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Beja: 0.404</title>
+</circle>
+<circle cx="599.8044222124688" cy="69.9844910480312" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Bhojpuri: 0.092</title>
+</circle>
+<circle cx="483.31591700709424" cy="74.06827623294016" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Buglere: -0.051</title>
+</circle>
+<circle cx="711.3619565210734" cy="61.93911278031541" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Borôro: 0.229</title>
+</circle>
+<circle cx="683.159798258903" cy="67.86857659585381" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Buryat: 0.195</title>
+</circle>
+<circle cx="682.0371413967898" cy="74.70214642298949" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Chhintange: 0.193</title>
+</circle>
+<circle cx="546.9211093626024" cy="63.60796388949027" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Hindi: 0.027</title>
+</circle>
+<circle cx="730.4667873310703" cy="72.77494583236137" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Arhuaco: 0.253</title>
+</circle>
+<circle cx="542.4879522274998" cy="69.50714916282155" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Japanese: 0.022</title>
+</circle>
+<circle cx="579.0530405697843" cy="64.68680421456018" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Karo: 0.067</title>
+</circle>
+<circle cx="585.2513088356085" cy="77.5113964705877" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Kazakh: 0.074</title>
+</circle>
+<circle cx="577.8241904486824" cy="71.55966740405793" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Khoekhoe: 0.065</title>
+</circle>
+<circle cx="623.7085786158053" cy="71.34361450572436" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Korean: 0.121</title>
+</circle>
+<circle cx="647.0110574896032" cy="72.68621661306175" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Kyrgyz: 0.150</title>
+</circle>
+<circle cx="605.2775874435359" cy="79.49908234315441" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Marathi: 0.099</title>
+</circle>
+<circle cx="598.7739755636678" cy="68.38729313564808" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Tangkhul: 0.091</title>
+</circle>
+<circle cx="422.3107283600765" cy="77.22446234406064" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Kurmanji: -0.126</title>
+</circle>
+<circle cx="548.1667099105978" cy="70.1699871485499" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>OttomanTurkish: 0.029</title>
+</circle>
+<circle cx="455.266511794963" cy="78.81798703991423" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Persian: -0.086</title>
+</circle>
+<circle cx="488.7114071093456" cy="61.01622973905128" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Pesh: -0.045</title>
+</circle>
+<circle cx="550.0243689030088" cy="66.62339051622062" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Sanskrit: 0.031</title>
+</circle>
+<circle cx="569.5942671509231" cy="65.94657631873493" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Sindhi: 0.055</title>
+</circle>
+<circle cx="833.3269986359749" cy="60.84796750155447" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Tamil: 0.379</title>
+</circle>
+<circle cx="418.71380967434334" cy="79.96506841475394" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Tatar: -0.131</title>
+</circle>
+<circle cx="595.1569203896286" cy="68.66865431346129" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Telugu: 0.086</title>
+</circle>
+<circle cx="635.1218789006703" cy="59.752896650291525" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Turkish: 0.136</title>
+</circle>
+<circle cx="631.7264788483594" cy="61.40929008446474" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>TurkishGerman: 0.131</title>
+</circle>
+<circle cx="563.7082288164438" cy="78.64425522737483" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Urdu: 0.048</title>
+</circle>
+<circle cx="560.7190140051687" cy="78.36127087137396" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Uyghur: 0.044</title>
+</circle>
+<circle cx="657.0874783562929" cy="74.64360785236731" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Uzbek: 0.163</title>
+</circle>
+<circle cx="417.6899828205111" cy="79.8659167403989" r="4" fill="#2196F3" stroke="white" stroke-width="1">
+<title>Xibe: -0.132</title>
+</circle>
+<line x1="591.2497684732284" y1="50.5" x2="591.2497684732284" y2="89.5" stroke="#333" stroke-width="2"/>
+<text x="190" y="134.0" text-anchor="end" font-size="11">NDO (mixed) (n=19)</text>
+<rect x="200" y="112.5" width="650" height="35" fill="#f5f5f5" stroke="#ddd" stroke-width="1"/>
+<rect x="525.0" y="112.5" width="9.339457316880498" height="35" fill="#4CAF50" fill-opacity="0.6" stroke="#4CAF50" stroke-width="1"/>
+<circle cx="479.56612480994744" cy="120.97983190907759" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>AncientGreek: -0.056</title>
+</circle>
+<circle cx="480.41145001310247" cy="137.5856968934405" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Armenian: -0.055</title>
+</circle>
+<circle cx="597.5504708199329" cy="137.35794878177055" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Bavarian: 0.089</title>
+</circle>
+<circle cx="530.3135473157918" cy="129.33294011912406" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Chukot: 0.007</title>
+</circle>
+<circle cx="469.5376661678005" cy="135.45853857976334" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>ClassArmenian: -0.068</title>
+</circle>
+<circle cx="647.7744828145192" cy="137.95054197201617" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Dutch: 0.151</title>
+</circle>
+<circle cx="523.5074808045124" cy="123.6928484669646" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Erzya: -0.002</title>
+</circle>
+<circle cx="668.8207610088516" cy="127.5085352927258" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Estonian: 0.177</title>
+</circle>
+<circle cx="494.28344293511566" cy="121.31184424702357" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Georgian: -0.038</title>
+</circle>
+<circle cx="687.408247546801" cy="123.3529477943752" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>German: 0.200</title>
+</circle>
+<circle cx="586.5310934991633" cy="139.9707925675585" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Hungarian: 0.076</title>
+</circle>
+<circle cx="533.1316222639109" cy="136.6890266719321" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Komi: 0.010</title>
+</circle>
+<circle cx="414.02270577862726" cy="119.8764401494272" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Latin: -0.137</title>
+</circle>
+<circle cx="638.2818474970927" cy="125.52202534203045" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>LowSaxon: 0.139</title>
+</circle>
+<circle cx="526.8283577889996" cy="126.40001700016263" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>MbyáGuaraní: 0.002</title>
+</circle>
+<circle cx="355.0009951772488" cy="135.6149095291384" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>OldEastSlavic: -0.209</title>
+</circle>
+<circle cx="444.6407786277365" cy="139.09532434548825" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>SkoltSami: -0.099</title>
+</circle>
+<circle cx="627.9763980966188" cy="138.82906666222254" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>Teko: 0.127</title>
+</circle>
+<circle cx="446.8622160549561" cy="136.58883745470038" r="4" fill="#4CAF50" stroke="white" stroke-width="1">
+<title>WestArmenian: -0.096</title>
+</circle>
+<line x1="534.3394573168805" y1="110.5" x2="534.3394573168805" y2="149.5" stroke="#333" stroke-width="2"/>
+<text x="190" y="194.0" text-anchor="end" font-size="11">VO (n=67)</text>
+<rect x="200" y="172.5" width="650" height="35" fill="#f5f5f5" stroke="#ddd" stroke-width="1"/>
+<rect x="497.2507017923756" y="172.5" width="27.749298207624406" height="35" fill="#F44336" fill-opacity="0.6" stroke="#F44336" stroke-width="1"/>
+<circle cx="619.2017522098629" cy="186.0498387260652" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Albanian: 0.116</title>
+</circle>
+<circle cx="420.08636497375005" cy="195.53301966754216" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>AncientHebrew: -0.129</title>
+</circle>
+<circle cx="428.96427595466946" cy="187.1388718254811" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Arabic: -0.118</title>
+</circle>
+<circle cx="594.1899445304277" cy="195.7740695453581" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Belarusian: 0.085</title>
+</circle>
+<circle cx="660.0111171402025" cy="191.47303269665912" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Bulgarian: 0.166</title>
+</circle>
+<circle cx="331.9641597699595" cy="191.65395695814075" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Cantonese: -0.238</title>
+</circle>
+<circle cx="728.9719534335883" cy="194.1945643080093" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Catalan: 0.251</title>
+</circle>
+<circle cx="402.2981296519017" cy="190.01588888508803" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Chinese: -0.151</title>
+</circle>
+<circle cx="556.9939619025774" cy="199.10716998997495" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>ClassChinese: 0.039</title>
+</circle>
+<circle cx="200" cy="193.90843307780497" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Coptic: -0.486</title>
+</circle>
+<circle cx="643.0768564882662" cy="187.1334047244018" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Croatian: 0.145</title>
+</circle>
+<circle cx="705.8950937592658" cy="184.25869664576948" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Czech: 0.223</title>
+</circle>
+<circle cx="737.4430307726453" cy="197.6127990042352" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Danish: 0.261</title>
+</circle>
+<circle cx="283.86208664293554" cy="196.47375127429603" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>English: -0.297</title>
+</circle>
+<circle cx="516.8161026688012" cy="182.91055714799006" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Faroese: -0.010</title>
+</circle>
+<circle cx="577.0549450882877" cy="182.59966922835073" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Finnish: 0.064</title>
+</circle>
+<circle cx="529.7038858297278" cy="183.23128941612248" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>French: 0.006</title>
+</circle>
+<circle cx="721.4680766850585" cy="187.96660449556782" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Galician: 0.242</title>
+</circle>
+<circle cx="493.1696599398142" cy="196.68785466770046" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Gheg: -0.039</title>
+</circle>
+<circle cx="471.81179731949993" cy="191.14491526593412" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Gothic: -0.065</title>
+</circle>
+<circle cx="495.88171218265074" cy="190.3213226539301" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Greek: -0.036</title>
+</circle>
+<circle cx="286.2856912509727" cy="198.4306675369885" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Haitian: -0.294</title>
+</circle>
+<circle cx="200" cy="187.55531857739498" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Hausa: -0.401</title>
+</circle>
+<circle cx="684.7186699811796" cy="179.7329866716468" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Hebrew: 0.197</title>
+</circle>
+<circle cx="609.6990797328797" cy="197.51357355234302" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>HighlandNahuatl: 0.104</title>
+</circle>
+<circle cx="384.94080207095635" cy="191.75867677468628" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Icelandic: -0.172</title>
+</circle>
+<circle cx="468.9613743124612" cy="181.53805881488057" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Indonesian: -0.069</title>
+</circle>
+<circle cx="270.38292056854897" cy="180.91589839539697" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Irish: -0.313</title>
+</circle>
+<circle cx="527.2023284303523" cy="181.8412167569933" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Italian: 0.003</title>
+</circle>
+<circle cx="521.2060523878629" cy="192.09242726468136" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Javanese: -0.005</title>
+</circle>
+<circle cx="511.8165909491122" cy="188.58098074221303" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Latvian: -0.016</title>
+</circle>
+<circle cx="567.3146967021517" cy="187.5258913623926" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Ligurian: 0.052</title>
+</circle>
+<circle cx="462.0990781263682" cy="188.612894923363" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Lithuanian: -0.077</title>
+</circle>
+<circle cx="649.585387233831" cy="188.32129598806245" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Maghrebi: 0.153</title>
+</circle>
+<circle cx="469.55892341005216" cy="182.29997510753262" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Maltese: -0.068</title>
+</circle>
+<circle cx="290.634902711002" cy="192.8328442473363" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>MiddleFrench: -0.288</title>
+</circle>
+<circle cx="577.2846579774587" cy="200.01075022977793" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Moksha: 0.064</title>
+</circle>
+<circle cx="200" cy="196.6024548916547" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Naija: -0.734</title>
+</circle>
+<circle cx="636.2836053785506" cy="195.10777934763874" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Nhengatu: 0.137</title>
+</circle>
+<circle cx="521.3991849076831" cy="191.99323159581417" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>NorthSami: -0.004</title>
+</circle>
+<circle cx="674.4238870446445" cy="179.9739248868388" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Norwegian: 0.184</title>
+</circle>
+<circle cx="401.75958503617335" cy="183.24656558598642" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Occitan: -0.152</title>
+</circle>
+<circle cx="387.40732703656727" cy="193.4079883364973" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>OldChurchSlavonic: -0.169</title>
+</circle>
+<circle cx="381.3715847478478" cy="194.59470755344213" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>OldFrench: -0.177</title>
+</circle>
+<circle cx="200" cy="184.97977530357974" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>OldProvençal: -0.443</title>
+</circle>
+<circle cx="620.7851061361373" cy="179.79459716855038" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Polish: 0.118</title>
+</circle>
+<circle cx="608.2496561132759" cy="196.51472633341507" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Pomak: 0.102</title>
+</circle>
+<circle cx="633.7962705362801" cy="191.31853185810763" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Portuguese: 0.134</title>
+</circle>
+<circle cx="435.33606514129775" cy="183.56563496350986" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Romanian: -0.110</title>
+</circle>
+<circle cx="585.8031959767125" cy="194.9992547419074" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Russian: 0.075</title>
+</circle>
+<circle cx="715.9179852160371" cy="184.6122657748426" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Serbian: 0.235</title>
+</circle>
+<circle cx="480.66838861405955" cy="181.52214006606602" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Wu: -0.055</title>
+</circle>
+<circle cx="460.4819938903356" cy="198.89491588531615" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Sicilian: -0.079</title>
+</circle>
+<circle cx="715.9516763737083" cy="191.30587286231355" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Slovak: 0.235</title>
+</circle>
+<circle cx="572.7989426624172" cy="197.00649057826325" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Slovenian: 0.059</title>
+</circle>
+<circle cx="703.9788272390397" cy="179.99096333229977" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Spanish: 0.220</title>
+</circle>
+<circle cx="604.9133922806358" cy="183.64995489342522" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Swedish: 0.098</title>
+</circle>
+<circle cx="342.19677884943064" cy="199.80471057025682" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Thai: -0.225</title>
+</circle>
+<circle cx="489.7330511086077" cy="185.20780708850216" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Ukrainian: -0.043</title>
+</circle>
+<circle cx="850" cy="184.54201602039214" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>UpperSorbian: 0.500</title>
+</circle>
+<circle cx="363.7715116313766" cy="192.64698409820045" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Vietnamese: -0.198</title>
+</circle>
+<circle cx="511.72719087332064" cy="182.10365901457038" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Welsh: -0.016</title>
+</circle>
+<circle cx="548.0694096133161" cy="187.57626562779436" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>WestNahuatl: 0.028</title>
+</circle>
+<circle cx="267.5486213903213" cy="181.1158167275994" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Wolof: -0.317</title>
+</circle>
+<circle cx="442.4279400042484" cy="191.1363820367058" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Yiddish: -0.102</title>
+</circle>
+<circle cx="354.4851655713661" cy="199.37425881852707" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Yoruba: -0.210</title>
+</circle>
+<circle cx="298.8532374362688" cy="180.85556117567137" r="4" fill="#F44336" stroke="white" stroke-width="1">
+<title>Zaar: -0.278</title>
+</circle>
+<line x1="497.2507017923756" y1="170.5" x2="497.2507017923756" y2="209.5" stroke="#333" stroke-width="2"/>
+<line x1="525.0" y1="40" x2="525.0" y2="220" stroke="#333" stroke-width="1.5" stroke-dasharray="4,4"/>
+<text x="530.0" y="55" font-size="10" fill="#666">0</text>
+</svg></div></body></html>

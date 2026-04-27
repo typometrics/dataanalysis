@@ -1,0 +1,436 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Breton — MAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Breton examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Breton <small style="color:#999;font-weight:normal">(br)</small> — MAL<sub>2</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>2</b> dependents in total (left + right combined).</p><p><b>MAL<sub>2</sub> = 3.345</b> &nbsp; <span style="color:#666">(147 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over all dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: br_keb-ud-test.conllu · this verb has L=0, R=2 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Dihunet out bremañ , ma Breizh !
+1	Dihunet	Dihunet	VERB	VERB	_	0	root	_	highlight=red
+2	out	out	AUX	AUX	_	1	aux:pass	_	_
+3	bremañ	bremañ	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+4	,	,	PUNCT	PUNCT	_	6	punct	_	_
+5	ma	ma	DET	DET	_	6	det	_	_
+6	Breizh	Breizh	PROPN	PROPN	_	1	dislocated	_	highlight=green|span=2
+7	!	!	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: br_keb-ud-test.conllu · this verb has L=0, R=2 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Adalek 2007 e vo ur programm nevez war meur a vloaz evit ar frammoù a labour evit skoazellañ ar yezhoù bihanniver en Europa .
+1	Adalek	Adalek	ADP	ADP	_	2	case	_	_
+2	2007	2007	NUM	NUM	_	6	obl	_	_
+3	e	e	AUX	AUX	_	6	aux	_	_
+4	vo	vo	AUX	AUX	_	6	cop	_	_
+5	ur	ur	DET	DET	_	6	det	_	_
+6	programm	programm	NOUN	NOUN	_	0	root	_	_
+7	nevez	nevez	ADJ	ADJ	_	6	amod	_	_
+8	war	war	ADP	ADP	_	11	case	_	_
+9	meur	meur	X	X	_	10	dep	_	_
+10	a	a	DET	DET	_	11	det	_	_
+11	vloaz	vloaz	NOUN	NOUN	_	6	nmod	_	_
+12	evit	evit	ADP	ADP	_	14	case	_	_
+13	ar	ar	DET	DET	_	14	det	_	_
+14	frammoù	frammoù	NOUN	NOUN	_	6	nmod	_	_
+15	a	a	AUX	AUX	_	16	aux	_	_
+16	labour	labour	VERB	VERB	_	14	acl	_	_
+17	evit	evit	ADP	ADP	_	18	case	_	_
+18	skoazellañ	skoazellañ	VERB	VERB	_	16	advcl	_	highlight=red
+19	ar	ar	DET	DET	_	20	det	_	_
+20	yezhoù	yezhoù	NOUN	NOUN	_	18	obj	_	highlight=green|span=3
+21	bihanniver	bihanniver	NOUN	NOUN	_	20	nmod:gen	_	_
+22	en	en	ADP	ADP	_	23	case	_	_
+23	Europa	Europa	PROPN	PROPN	_	18	obl	_	highlight=green|span=2
+24	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: br_keb-ud-test.conllu · this verb has L=1, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Adwelet eo bet hounnezh , met n' eus bet cheñchet netra enn i , hag evel-se ne savo tabut ebet war ar 56 testenn - kemm a vez kinniget .
+1	Adwelet	Adwelet	VERB	VERB	_	0	root	_	_
+2	eo	eo	AUX	AUX	_	1	aux	_	_
+3	bet	bet	AUX	AUX	_	1	aux:pass	_	_
+4	hounnezh	hounnezh	PRON	PRON	_	1	nsubj	_	_
+5	,	,	PUNCT	PUNCT	_	10	punct	_	_
+6	met	met	CCONJ	CCONJ	_	10	cc	_	_
+7	n'	n'	ADV	ADV	_	10	advmod	_	highlight=green|span=1
+8	eus	eus	AUX	AUX	_	10	aux	_	_
+9	bet	bet	AUX	AUX	_	10	aux:pass	_	_
+10	cheñchet	cheñchet	VERB	VERB	_	1	conj	_	highlight=red
+11	netra	netra	PRON	PRON	_	10	nsubj	_	highlight=green|span=3
+12	enn	enn	ADP	ADP	_	13	case	_	_
+13	i	i	PRON	PRON	_	11	obl	_	_
+14	,	,	PUNCT	PUNCT	_	18	punct	_	_
+15	hag	hag	CCONJ	CCONJ	_	18	cc	_	_
+16	evel-se	evel-se	ADV	ADV	_	18	advmod	_	_
+17	ne	ne	ADV	ADV	_	18	advmod	_	_
+18	savo	savo	VERB	VERB	_	1	conj	_	_
+19	tabut	tabut	NOUN	NOUN	_	18	obj	_	_
+20	ebet	ebet	ADV	ADV	_	18	advmod	_	_
+21	war	war	ADP	ADP	_	24	case	_	_
+22	ar	ar	DET	DET	_	24	det	_	_
+23	56	56	NUM	NUM	_	24	nummod	_	_
+24	testenn	testenn	NOUN	NOUN	_	18	obl	_	_
+25	-	-	PUNCT	PUNCT	_	26	punct	_	_
+26	kemm	kemm	NOUN	NOUN	_	24	compound	_	_
+27	a	a	AUX	AUX	_	29	aux	_	_
+28	vez	vez	AUX	AUX	_	29	aux:pass	_	_
+29	kinniget	kinniget	VERB	VERB	_	24	acl	_	_
+30	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: br_keb-ud-test.conllu · this verb has L=0, R=2 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Degasit d' ar berv ar banne laezh .
+1	Degasit	Degasit	VERB	VERB	_	0	root	_	highlight=red
+2	d'	d'	ADP	ADP	_	4	case	_	_
+3	ar	ar	DET	DET	_	4	det	_	_
+4	berv	berv	NOUN	NOUN	_	1	obl	_	highlight=green|span=3
+5	ar	ar	DET	DET	_	6	det	_	_
+6	banne	banne	NOUN	NOUN	_	1	obj	_	highlight=green|span=3
+7	laezh	laezh	NOUN	NOUN	_	6	nmod:gen	_	_
+8	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: br_keb-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = N' ouzer ket mat eus pelec'h e teue Nevenoe .
+1	N'	N'	ADV	ADV	_	2	advmod	_	_
+2	ouzer	ouzer	VERB	VERB	_	0	root	_	_
+3	ket	ket	ADV	ADV	_	2	advmod	_	_
+4	mat	mat	ADJ	ADJ	_	2	advmod	_	_
+5	eus	eus	ADP	ADP	_	6	case	_	_
+6	pelec'h	pelec'h	ADV	ADV	_	8	advmod	_	highlight=green|span=2
+7	e	e	AUX	AUX	_	8	aux	_	_
+8	teue	teue	VERB	VERB	_	2	ccomp	_	highlight=red
+9	Nevenoe	Nevenoe	PROPN	PROPN	_	8	nsubj	_	highlight=green|span=1
+10	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: br_keb-ud-test.conllu · this verb has L=0, R=2 (mean span = 3.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Implijet eo ar japaneg gant 130 milion a dud , tout ar re zo bar vro .
+1	Implijet	Implijet	VERB	VERB	_	0	root	_	highlight=red
+2	eo	eo	AUX	AUX	_	1	aux:pass	_	_
+3	ar	ar	DET	DET	_	4	det	_	_
+4	japaneg	japaneg	NOUN	NOUN	_	1	nsubj	_	highlight=green|span=2
+5	gant	gant	ADP	ADP	_	7	case	_	_
+6	130	130	NUM	NUM	_	7	nummod	_	_
+7	milion	milion	NOUN	NOUN	_	1	obl:agent	_	highlight=green|span=5
+8	a	a	ADP	ADP	_	9	case	_	_
+9	dud	dud	NOUN	NOUN	_	7	nmod	_	_
+10	,	,	PUNCT	PUNCT	_	16	punct	_	_
+11	tout	tout	ADJ	ADJ	_	13	amod	_	_
+12	ar	ar	X	X	_	13	dep	_	_
+13	re	re	PRON	PRON	_	16	nsubj	_	_
+14	zo	zo	AUX	AUX	_	16	cop	_	_
+15	bar	bar	ADJ	ADJ	_	16	amod	_	_
+16	vro	vro	NOUN	NOUN	_	1	parataxis	_	_
+17	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: br_keb-ud-test.conllu · this verb has L=1, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ur pred krampouezh a vo kinniget war al lec'h .
+1	Ur	Ur	DET	DET	_	2	det	_	_
+2	pred	pred	NOUN	NOUN	_	6	nsubj	_	highlight=green|span=3
+3	krampouezh	krampouezh	NOUN	NOUN	_	2	nmod:gen	_	_
+4	a	a	AUX	AUX	_	6	aux	_	_
+5	vo	vo	AUX	AUX	_	6	aux:pass	_	_
+6	kinniget	kinniget	VERB	VERB	_	0	root	_	highlight=red
+7	war	war	ADP	ADP	_	9	case	_	_
+8	al	al	DET	DET	_	9	det	_	_
+9	lec'h	lec'h	NOUN	NOUN	_	6	obl	_	highlight=green|span=3
+10	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: br_keb-ud-test.conllu · this verb has L=0, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Degouezhet eo gan in ho lizher .
+1	Degouezhet	Degouezhet	VERB	VERB	_	0	root	_	highlight=red
+2	eo	eo	AUX	AUX	_	1	aux	_	_
+3	gan	gan	ADP	ADP	_	4	case	_	_
+4	in	in	PRON	PRON	_	1	obl	_	highlight=green|span=2
+5	ho	ho	DET	DET	_	6	det	_	_
+6	lizher	lizher	NOUN	NOUN	_	1	nsubj	_	highlight=green|span=2
+7	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: br_keb-ud-test.conllu · this verb has L=1, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ar c'harotez a zle dont da vezañ tener -kenañ .
+1	Ar	Ar	DET	DET	_	2	det	_	_
+2	c'harotez	c'harotez	NOUN	NOUN	_	5	nsubj	_	highlight=green|span=2
+3	a	a	AUX	AUX	_	5	aux	_	_
+4	zle	zle	AUX	AUX	_	5	aux	_	_
+5	dont	dont	VERB	VERB	_	0	root	_	highlight=red
+6	da	da	ADP	ADP	_	8	mark	_	_
+7	vezañ	vezañ	AUX	AUX	_	8	cop	_	_
+8	tener	tener	ADJ	ADJ	_	5	advcl	_	highlight=green|span=4
+9	-kenañ	-kenañ	ADV	ADV	_	8	advmod	_	_
+10	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: br_keb-ud-test.conllu · this verb has L=0, R=2 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Lavaret em eus de oc'h e oa Janed .
+1	Lavaret	Lavaret	VERB	VERB	_	0	root	_	highlight=red
+2	em eus	em eus	AUX	AUX	_	1	aux	_	_
+3	de	de	ADP	ADP	_	4	case	_	_
+4	oc'h	oc'h	PRON	PRON	_	1	obl	_	highlight=green|span=2
+5	e	e	AUX	AUX	_	6	aux	_	_
+6	oa	oa	VERB	VERB	_	1	ccomp	_	highlight=green|span=3
+7	Janed	Janed	PROPN	PROPN	_	6	nsubj	_	_
+8	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: br_keb-ud-test.conllu · this verb has L=1, R=1 (mean span = 6.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Hervez enklask an INSEE , kempoelloc'h hervez Hervé Abalain , graet e 1999 , e vefe 295 000 .
+1	Hervez	Hervez	ADP	ADP	_	2	case	_	_
+2	enklask	enklask	NOUN	NOUN	_	16	obl	_	highlight=green|span=11
+3	an	an	DET	DET	_	4	det	_	_
+4	INSEE	INSEE	NOUN	NOUN	_	2	nmod:gen	_	_
+5	,	,	PUNCT	PUNCT	_	2	punct	_	_
+6	kempoelloc'h	kempoelloc'h	ADJ	ADJ	_	2	amod	_	_
+7	hervez	hervez	ADP	ADP	_	8	case	_	_
+8	Hervé	Hervé	PROPN	PROPN	_	6	dep	_	_
+9	Abalain	Abalain	PROPN	PROPN	_	8	flat:name	_	_
+10	,	,	PUNCT	PUNCT	_	8	punct	_	_
+11	graet	graet	VERB	VERB	_	2	acl	_	_
+12	e	e	ADP	ADP	_	13	case	_	_
+13	1999	1999	NUM	NUM	_	11	obl	_	_
+14	,	,	PUNCT	PUNCT	_	16	punct	_	_
+15	e	e	AUX	AUX	_	16	aux	_	_
+16	vefe	vefe	VERB	VERB	_	0	root	_	highlight=red
+17	295	295	X	X	_	18	dep	_	_
+18	000	000	NUM	NUM	_	16	nsubj	_	highlight=green|span=2
+19	.	.	PUNCT	PUNCT	_	16	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: br_keb-ud-test.conllu · this verb has L=0, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Dibabet he deus Breizh ivez degas skoazell d' an deskadurezh uhel evit diorren ur c'hinnig stummañ kempouezet e-barzh ar vro .
+1	Dibabet	Dibabet	VERB	VERB	_	0	root	_	highlight=red
+2	he deus	he deus	AUX	AUX	_	1	aux	_	_
+3	Breizh	Breizh	PROPN	PROPN	_	1	nsubj	_	highlight=green|span=1
+4	ivez	ivez	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+5	degas	degas	VERB	VERB	_	1	dep	_	_
+6	skoazell	skoazell	NOUN	NOUN	_	5	obj	_	_
+7	d'	d'	ADP	ADP	_	9	case	_	_
+8	an	an	DET	DET	_	9	det	_	_
+9	deskadurezh	deskadurezh	NOUN	NOUN	_	5	nmod	_	_
+10	uhel	uhel	ADJ	ADJ	_	9	amod	_	_
+11	evit	evit	ADP	ADP	_	12	case	_	_
+12	diorren	diorren	VERB	VERB	_	5	advcl	_	_
+13	ur	ur	DET	DET	_	14	det	_	_
+14	c'hinnig	c'hinnig	NOUN	NOUN	_	12	obj	_	_
+15	stummañ	stummañ	NOUN	NOUN	_	14	nmod:gen	_	_
+16	kempouezet	kempouezet	VERB	VERB	_	14	acl	_	_
+17	e-barzh	e-barzh	ADP	ADP	_	19	case	_	_
+18	ar	ar	DET	DET	_	19	det	_	_
+19	vro	vro	NOUN	NOUN	_	16	obl	_	_
+20	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: br_keb-ud-test.conllu · this verb has L=0, R=2 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Hag anavezout a rit an abadenn &quot; Mil dremm &quot; a vez kinniget bep sizhun war TV Breizh ?
+1	Hag	Hag	CCONJ	CCONJ	_	2	cc	_	_
+2	anavezout	anavezout	VERB	VERB	_	0	root	_	_
+3	a	a	AUX	AUX	_	2	aux	_	_
+4	rit	rit	AUX	AUX	_	2	aux	_	_
+5	an	an	DET	DET	_	6	det	_	_
+6	abadenn	abadenn	NOUN	NOUN	_	2	obj	_	_
+7	&quot;	&quot;	PUNCT	PUNCT	_	8	punct	_	_
+8	Mil	Mil	NOUN	NOUN	_	6	appos	_	_
+9	dremm	dremm	NOUN	NOUN	_	8	nmod:gen	_	_
+10	&quot;	&quot;	PUNCT	PUNCT	_	8	punct	_	_
+11	a	a	AUX	AUX	_	13	aux	_	_
+12	vez	vez	AUX	AUX	_	13	aux:pass	_	_
+13	kinniget	kinniget	VERB	VERB	_	6	acl	_	highlight=red
+14	bep	bep	DET	DET	_	15	det	_	_
+15	sizhun	sizhun	NOUN	NOUN	_	13	obl	_	highlight=green|span=2
+16	war	war	ADP	ADP	_	18	case	_	_
+17	TV	TV	X	X	_	18	dep	_	_
+18	Breizh	Breizh	PROPN	PROPN	_	13	obl	_	highlight=green|span=3
+19	?	?	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: br_keb-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = O Breizh , ma Bro , me ' gar ma Bro .
+1	O	O	INTJ	INTJ	_	2	case	_	_
+2	Breizh	Breizh	PROPN	PROPN	_	9	discourse	_	_
+3	,	,	PUNCT	PUNCT	_	5	punct	_	_
+4	ma	ma	DET	DET	_	5	det	_	_
+5	Bro	Bro	NOUN	NOUN	_	2	appos	_	_
+6	,	,	PUNCT	PUNCT	_	5	punct	_	_
+7	me	me	PRON	PRON	_	9	nsubj	_	highlight=green|span=1
+8	'	'	AUX	AUX	_	9	aux	_	_
+9	gar	gar	VERB	VERB	_	0	root	_	highlight=red
+10	ma	ma	DET	DET	_	11	det	_	_
+11	Bro	Bro	NOUN	NOUN	_	9	obj	_	highlight=green|span=2
+12	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: br_keb-ud-test.conllu · this verb has L=1, R=1 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = En holl e vefe bet tizhet etre 2,1 ha 4,8 milion a dud .
+1	En	En	ADP	ADP	_	2	case	_	_
+2	holl	holl	PRON	PRON	_	6	obl	_	highlight=green|span=2
+3	e	e	AUX	AUX	_	6	aux	_	_
+4	vefe	vefe	AUX	AUX	_	6	aux	_	_
+5	bet	bet	AUX	AUX	_	6	aux:pass	_	_
+6	tizhet	tizhet	VERB	VERB	_	0	root	_	highlight=red
+7	etre	etre	ADP	ADP	_	11	case	_	_
+8	2,1	2,1	NUM	NUM	_	10	nummod	_	_
+9	ha	ha	CCONJ	CCONJ	_	10	cc	_	_
+10	4,8	4,8	NUM	NUM	_	6	obl	_	highlight=green|span=6
+11	milion	milion	NOUN	NOUN	_	10	conj	_	_
+12	a	a	ADP	ADP	_	13	case	_	_
+13	dud	dud	NOUN	NOUN	_	11	nmod	_	_
+14	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: br_keb-ud-test.conllu · this verb has L=0, R=2 (mean span = 8.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Sinet e oa bet ur c’hendivizad palioù ha danvezioù etre ar Stad , France 3 ha Strollegezh Korsika evit krouiñ ar chadenn e miz Ebrel 2006 .
+1	Sinet	Sinet	VERB	VERB	_	0	root	_	highlight=red
+2	e	e	AUX	AUX	_	1	aux	_	_
+3	oa	oa	AUX	AUX	_	1	aux	_	_
+4	bet	bet	AUX	AUX	_	1	aux	_	_
+5	ur	ur	DET	DET	_	6	det	_	_
+6	c’hendivizad	c’hendivizad	NOUN	NOUN	_	1	dep	_	_
+7	palioù	palioù	NOUN	NOUN	_	6	nmod:gen	_	_
+8	ha	ha	CCONJ	CCONJ	_	9	cc	_	_
+9	danvezioù	danvezioù	NOUN	NOUN	_	7	conj	_	_
+10	etre	etre	ADP	ADP	_	12	case	_	_
+11	ar	ar	DET	DET	_	12	det	_	_
+12	Stad	Stad	NOUN	NOUN	_	1	obl	_	highlight=green|span=8
+13	,	,	PUNCT	PUNCT	_	14	punct	_	_
+14	France	France	PROPN	PROPN	_	12	conj	_	_
+15	3	3	NUM	NUM	_	14	flat:name	_	_
+16	ha	ha	CCONJ	CCONJ	_	17	cc	_	_
+17	Strollegezh	Strollegezh	NOUN	NOUN	_	12	conj	_	_
+18	Korsika	Korsika	PROPN	PROPN	_	17	nmod:gen	_	_
+19	evit	evit	ADP	ADP	_	20	mark	_	_
+20	krouiñ	krouiñ	VERB	VERB	_	1	advcl	_	highlight=green|span=8
+21	ar	ar	DET	DET	_	22	det	_	_
+22	chadenn	chadenn	NOUN	NOUN	_	20	obj	_	_
+23	e	e	ADP	ADP	_	25	case	_	_
+24	miz	miz	X	X	_	25	dep	_	_
+25	Ebrel	Ebrel	NOUN	NOUN	_	20	obl	_	_
+26	2006	2006	NUM	NUM	_	25	dep	_	_
+27	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: br_keb-ud-test.conllu · this verb has L=0, R=2 (mean span = 3.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = « Ma'z on dilennet da brezidant ar Republik e vo degemeret mat ar c'hinnig -se gan in » , en doa lavaret dirak 1.000 den bodet d'abardaez e Palez ar C'hendalc'hioù an Oriant .
+1	«	«	PUNCT	PUNCT	_	11	punct	_	_
+2	Ma'z	Ma'z	SCONJ	SCONJ	_	4	mark	_	_
+3	on	on	AUX	AUX	_	4	aux	_	_
+4	dilennet	dilennet	VERB	VERB	_	11	advcl	_	_
+5	da	da	ADP	ADP	_	6	case	_	_
+6	brezidant	brezidant	NOUN	NOUN	_	4	obl	_	_
+7	ar	ar	DET	DET	_	8	det	_	_
+8	Republik	Republik	NOUN	NOUN	_	6	nmod:gen	_	_
+9	e	e	AUX	AUX	_	11	aux	_	_
+10	vo	vo	AUX	AUX	_	11	aux	_	_
+11	degemeret	degemeret	VERB	VERB	_	21	parataxis	_	_
+12	mat	mat	ADJ	ADJ	_	11	advmod	_	_
+13	ar	ar	DET	DET	_	14	det	_	_
+14	c'hinnig	c'hinnig	NOUN	NOUN	_	11	obj	_	_
+15	-se	-se	ADV	ADV	_	14	advmod	_	_
+16	gan	gan	ADP	ADP	_	17	case	_	_
+17	in	in	PRON	PRON	_	11	obl	_	_
+18	»	»	PUNCT	PUNCT	_	11	punct	_	_
+19	,	,	PUNCT	PUNCT	_	21	punct	_	_
+20	en doa	en doa	AUX	AUX	_	21	aux	_	_
+21	lavaret	lavaret	VERB	VERB	_	0	root	_	_
+22	dirak	dirak	ADP	ADP	_	24	case	_	_
+23	1.000	1.000	NUM	NUM	_	24	nummod	_	_
+24	den	den	NOUN	NOUN	_	21	obl	_	_
+25	bodet	bodet	VERB	VERB	_	24	acl	_	highlight=red
+26	d'abardaez	d'abardaez	ADV	ADV	_	25	advmod	_	highlight=green|span=1
+27	e	e	ADP	ADP	_	28	case	_	_
+28	Palez	Palez	NOUN	NOUN	_	25	obl	_	highlight=green|span=6
+29	ar	ar	DET	DET	_	30	det	_	_
+30	C'hendalc'hioù	C'hendalc'hioù	NOUN	NOUN	_	28	nmod:gen	_	_
+31	an	an	X	X	_	32	dep	_	_
+32	Oriant	Oriant	PROPN	PROPN	_	28	nmod:gen	_	_
+33	.	.	PUNCT	PUNCT	_	21	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: br_keb-ud-test.conllu · this verb has L=1, R=1 (mean span = 4.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = D' ar greanterezhioù nevez eo gouestlet ar peurrest eus ar sal .
+1	D'	D'	ADP	ADP	_	3	case	_	_
+2	ar	ar	DET	DET	_	3	det	_	_
+3	greanterezhioù	greanterezhioù	NOUN	NOUN	_	6	obl	_	highlight=green|span=4
+4	nevez	nevez	ADJ	ADJ	_	3	amod	_	_
+5	eo	eo	AUX	AUX	_	6	aux:pass	_	_
+6	gouestlet	gouestlet	VERB	VERB	_	0	root	_	highlight=red
+7	ar	ar	DET	DET	_	8	det	_	_
+8	peurrest	peurrest	NOUN	NOUN	_	6	nsubj	_	highlight=green|span=5
+9	eus	eus	ADP	ADP	_	11	case	_	_
+10	ar	ar	DET	DET	_	11	det	_	_
+11	sal	sal	NOUN	NOUN	_	8	nmod	_	_
+12	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: br_keb-ud-test.conllu · this verb has L=0, R=2 (mean span = 7.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Savet ez eus bet ur c'houlennaoueg gant tud Divskouarn eta , a-benn gouzout &quot; piv , petra ha penaos &quot; e-keñver ar c'hinnig brezhoneg d' ar bugaligoù e r vro .
+1	Savet	Savet	VERB	VERB	_	0	root	_	_
+2	ez eus	ez eus	AUX	AUX	_	1	aux	_	_
+3	bet	bet	AUX	AUX	_	1	aux:pass	_	_
+4	ur	ur	DET	DET	_	5	det	_	_
+5	c'houlennaoueg	c'houlennaoueg	NOUN	NOUN	_	1	nsubj	_	_
+6	gant	gant	ADP	ADP	_	7	case	_	_
+7	tud	tud	NOUN	NOUN	_	1	obl:agent	_	_
+8	Divskouarn	Divskouarn	PROPN	PROPN	_	7	nmod:gen	_	_
+9	eta	eta	ADV	ADV	_	1	advmod	_	_
+10	,	,	PUNCT	PUNCT	_	12	punct	_	_
+11	a-benn	a-benn	ADP	ADP	_	12	mark	_	_
+12	gouzout	gouzout	VERB	VERB	_	1	advcl	_	highlight=red
+13	&quot;	&quot;	PUNCT	PUNCT	_	14	punct	_	_
+14	piv	piv	PRON	PRON	_	12	obj	_	highlight=green|span=4
+15	,	,	PUNCT	PUNCT	_	16	punct	_	_
+16	petra	petra	PRON	PRON	_	14	conj	_	_
+17	ha	ha	CCONJ	CCONJ	_	18	cc	_	_
+18	penaos	penaos	ADV	ADV	_	14	conj	_	_
+19	&quot;	&quot;	PUNCT	PUNCT	_	14	punct	_	_
+20	e-keñver	e-keñver	ADP	ADP	_	22	case	_	_
+21	ar	ar	DET	DET	_	22	det	_	_
+22	c'hinnig	c'hinnig	NOUN	NOUN	_	12	obl	_	highlight=green|span=10
+23	brezhoneg	brezhoneg	NOUN	NOUN	_	22	nmod:gen	_	_
+24	d'	d'	ADP	ADP	_	26	case	_	_
+25	ar	ar	DET	DET	_	26	det	_	_
+26	bugaligoù	bugaligoù	NOUN	NOUN	_	22	nmod	_	_
+27	e	e	ADP	ADP	_	29	case	_	_
+28	r	r	DET	DET	_	29	det	_	_
+29	vro	vro	NOUN	NOUN	_	26	nmod	_	_
+30	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: br_keb-ud-test.conllu · this verb has L=0, R=2 (mean span = 6.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Meskit an hanter eus ar c'heuz gant ar c'hraoñ-kelvez pilet hag an eoul .
+1	Meskit	Meskit	VERB	VERB	_	0	root	_	highlight=red
+2	an	an	DET	DET	_	3	det	_	_
+3	hanter	hanter	NOUN	NOUN	_	1	obj	_	highlight=green|span=5
+4	eus	eus	ADP	ADP	_	6	case	_	_
+5	ar	ar	DET	DET	_	6	det	_	_
+6	c'heuz	c'heuz	NOUN	NOUN	_	3	nmod	_	_
+7	gant	gant	ADP	ADP	_	9	case	_	_
+8	ar	ar	DET	DET	_	9	det	_	_
+9	c'hraoñ-kelvez	c'hraoñ-kelvez	NOUN	NOUN	_	1	obl	_	highlight=green|span=7
+10	pilet	pilet	VERB	VERB	_	9	acl	_	_
+11	hag	hag	CCONJ	CCONJ	_	13	cc	_	_
+12	an	an	DET	DET	_	13	det	_	_
+13	eoul	eoul	NOUN	NOUN	_	9	conj	_	_
+14	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

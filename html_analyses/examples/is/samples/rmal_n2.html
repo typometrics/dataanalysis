@@ -1,0 +1,971 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Icelandic — RMAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Icelandic examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Icelandic <small style="color:#999;font-weight:normal">(is)</small> — RMAL<sub>2</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>2</b> right dependents (left side may be anything).</p><p><b>RMAL<sub>2</sub> = 3.942</b> &nbsp; <span style="color:#666">(43,080 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>right</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: is_icepahc-ud-train.conllu · this verb has L=1, R=2 (mean span = 2.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Grettir sagði sér það eigi mundu vera vel hent og spurði þó að hvað hann skyldi gera .
+1	Grettir	Grettir	PROPN	PROPN	_	2	nsubj	_	highlight=green|span=1
+2	sagði	sagði	VERB	VERB	_	0	root	_	highlight=red
+3	sér	sér	PRON	PRON	_	2	iobj	_	highlight=green|span=1
+4	það	það	PRON	PRON	_	2	ccomp	_	highlight=green|span=6
+5	eigi	eigi	ADV	ADV	_	9	advmod	_	_
+6	mundu	mundu	AUX	AUX	_	9	aux	_	_
+7	vera	vera	AUX	AUX	_	9	cop	_	_
+8	vel	vel	ADV	ADV	_	9	advmod	_	_
+9	hent	hent	VERB	VERB	_	4	acl	_	_
+10	og	og	CCONJ	CCONJ	_	11	cc	_	_
+11	spurði	spurði	VERB	VERB	_	2	conj	_	_
+12	þó	þó	ADV	ADV	_	11	advmod	_	_
+13	að	að	ADP	ADP	_	11	compound:prt	_	_
+14	hvað	hvað	PRON	PRON	_	17	obj	_	_
+15	hann	hann	PRON	PRON	_	17	nsubj	_	_
+16	skyldi	skyldi	AUX	AUX	_	17	aux	_	_
+17	gera	gera	VERB	VERB	_	11	ccomp	_	_
+18	.	.	PUNCT	PUNCT	_	17	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: is_icepahc-ud-train.conllu · this verb has L=0, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Líður nú á veturinn , og er fátt um með þeim , og er vorar segir hann Hákon konungsdóttur : &quot; Nú skalt þú vita ætlan mína .
+1	Líður	Líður	VERB	VERB	_	0	root	_	highlight=red
+2	nú	nú	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+3	á	á	ADP	ADP	_	1	compound:prt	_	_
+4	veturinn	veturinn	NOUN	NOUN	_	1	nsubj	_	highlight=green|span=1
+5	,	,	PUNCT	PUNCT	_	4	punct	_	_
+6	og	og	CCONJ	CCONJ	_	11	cc	_	_
+7	er	er	AUX	AUX	_	11	cop	_	_
+8	fátt	fátt	DET	DET	_	11	obl	_	_
+9	um	um	ADP	ADP	_	11	compound:prt	_	_
+10	með	með	ADP	ADP	_	11	case	_	_
+11	þeim	þeim	PRON	PRON	_	1	conj	_	_
+12	,	,	PUNCT	PUNCT	_	11	punct	_	_
+13	og	og	CCONJ	CCONJ	_	16	cc	_	_
+14	er	er	SCONJ	SCONJ	_	15	mark	_	_
+15	vorar	vorar	VERB	VERB	_	16	advcl	_	_
+16	segir	segir	VERB	VERB	_	1	conj	_	_
+17	hann	hann	PRON	PRON	_	16	nsubj	_	_
+18	Hákon	Hákon	PROPN	PROPN	_	17	appos	_	_
+19	konungsdóttur	konungsdóttur	NOUN	NOUN	_	16	iobj	_	_
+20	:	:	PUNCT	PUNCT	_	19	punct	_	_
+21	&quot;	&quot;	PUNCT	PUNCT	_	20	punct	_	_
+22	Nú	Nú	ADV	ADV	_	25	advmod	_	_
+23	skalt	skalt	AUX	AUX	_	25	aux	_	_
+24	þú	þú	PRON	PRON	_	25	nsubj	_	_
+25	vita	vita	VERB	VERB	_	16	ccomp	_	_
+26	ætlan	ætlan	NOUN	NOUN	_	25	obj	_	_
+27	mína	mína	PRON	PRON	_	26	nmod:poss	_	_
+28	.	.	PUNCT	PUNCT	_	27	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: is_gc-ud-train.conllu · this verb has L=0, R=2 (mean span = 6.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Hann kvaðst enda mæla með chhaupadi við að þær konur sem leiti til hans með vandamál .
+1	Hann	Hann	PRON	PRON	_	2	nsubj	_	_
+2	kvaðst	kvaðst	VERB	VERB	_	0	root	_	_
+3	enda	enda	ADV	ADV	_	2	advmod	_	_
+4	mæla	mæla	VERB	VERB	_	2	obl	_	highlight=red
+5	með	með	ADP	ADP	_	6	case	_	_
+6	chhaupadi	chhaupadi	X	X	_	4	obl	_	highlight=green|span=2
+7	við	við	ADP	ADP	_	10	case	_	_
+8	að	að	X	X	_	10	dep	_	_
+9	þær	þær	PRON	PRON	_	10	nmod	_	_
+10	konur	konur	NOUN	NOUN	_	4	obl	_	highlight=green|span=10
+11	sem	sem	SCONJ	SCONJ	_	12	mark	_	_
+12	leiti	leiti	VERB	VERB	_	10	acl:relcl	_	_
+13	til	til	ADP	ADP	_	14	case	_	_
+14	hans	hans	PRON	PRON	_	12	obl	_	_
+15	með	með	ADP	ADP	_	16	case	_	_
+16	vandamál	vandamál	NOUN	NOUN	_	12	obl	_	_
+17	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: is_icepahc-ud-train.conllu · this verb has L=1, R=2 (mean span = 2.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Hann svaraði : &quot; Viljir þú banna mér að forsvara sannleikann með orðum mínum svo býð eg þér til að forsvara hann með mínu sverði , og ef þú þorir að mæta mér á því þingi þá er eg strax til reiðu . &quot;
+1	Hann	Hann	PRON	PRON	_	2	nsubj	_	_
+2	svaraði	svaraði	VERB	VERB	_	0	root	_	_
+3	:	:	PUNCT	PUNCT	_	2	punct	_	_
+4	&quot;	&quot;	PUNCT	PUNCT	_	3	punct	_	_
+5	Viljir	Viljir	AUX	AUX	_	7	aux	_	_
+6	þú	þú	PRON	PRON	_	7	nsubj	_	highlight=green|span=1
+7	banna	banna	VERB	VERB	_	16	advcl	_	highlight=red
+8	mér	mér	PRON	PRON	_	7	iobj	_	highlight=green|span=1
+9	að	að	PART	PART	_	10	mark	_	_
+10	forsvara	forsvara	VERB	VERB	_	7	acl	_	highlight=green|span=6
+11	sannleikann	sannleikann	NOUN	NOUN	_	10	obj	_	_
+12	með	með	ADP	ADP	_	13	case	_	_
+13	orðum	orðum	NOUN	NOUN	_	10	obl	_	_
+14	mínum	mínum	PRON	PRON	_	13	nmod:poss	_	_
+15	svo	svo	ADV	ADV	_	16	advmod	_	_
+16	býð	býð	VERB	VERB	_	2	ccomp	_	_
+17	eg	eg	PRON	PRON	_	16	nsubj	_	_
+18	þér	þér	PRON	PRON	_	16	iobj	_	_
+19	til	til	ADP	ADP	_	21	case	_	_
+20	að	að	PART	PART	_	21	advcl	_	_
+21	forsvara	forsvara	VERB	VERB	_	16	obl	_	_
+22	hann	hann	PRON	PRON	_	21	obj	_	_
+23	með	með	ADP	ADP	_	25	case	_	_
+24	mínu	mínu	PRON	PRON	_	25	nmod:poss	_	_
+25	sverði	sverði	NOUN	NOUN	_	21	obl	_	_
+26	,	,	PUNCT	PUNCT	_	25	punct	_	_
+27	og	og	CCONJ	CCONJ	_	37	cc	_	_
+28	ef	ef	SCONJ	SCONJ	_	30	mark	_	_
+29	þú	þú	PRON	PRON	_	30	nsubj	_	_
+30	þorir	þorir	VERB	VERB	_	37	advcl	_	_
+31	að	að	PART	PART	_	32	mark	_	_
+32	mæta	mæta	VERB	VERB	_	30	acl	_	_
+33	mér	mér	PRON	PRON	_	32	obj	_	_
+34	á	á	ADP	ADP	_	36	case	_	_
+35	því	því	DET	DET	_	36	det	_	_
+36	þingi	þingi	NOUN	NOUN	_	32	obl	_	_
+37	þá	þá	ADV	ADV	_	2	conj	_	_
+38	er	er	AUX	AUX	_	37	cop	_	_
+39	eg	eg	PRON	PRON	_	37	nsubj	_	_
+40	strax	strax	ADV	ADV	_	37	advmod	_	_
+41	til	til	ADP	ADP	_	42	case	_	_
+42	reiðu	reiðu	NOUN	NOUN	_	37	obl	_	_
+43	.	.	PUNCT	PUNCT	_	42	punct	_	_
+44	&quot;	&quot;	PUNCT	PUNCT	_	43	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: is_icepahc-ud-train.conllu · this verb has L=0, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = En sem ég sá loftið út af kirkjudyrunum óttaðist ég að líta það með mínum augum .
+1	En	En	CCONJ	CCONJ	_	9	cc	_	_
+2	sem	sem	SCONJ	SCONJ	_	4	mark	_	_
+3	ég	ég	PRON	PRON	_	4	nsubj	_	_
+4	sá	sá	VERB	VERB	_	9	advcl	_	_
+5	loftið	loftið	NOUN	NOUN	_	4	obj	_	_
+6	út	út	ADP	ADP	_	8	compound:prt	_	_
+7	af	af	ADP	ADP	_	8	case	_	_
+8	kirkjudyrunum	kirkjudyrunum	NOUN	NOUN	_	4	obl	_	_
+9	óttaðist	óttaðist	VERB	VERB	_	0	root	_	_
+10	ég	ég	PRON	PRON	_	9	nsubj	_	_
+11	að	að	PART	PART	_	12	mark	_	_
+12	líta	líta	VERB	VERB	_	9	acl	_	highlight=red
+13	það	það	PRON	PRON	_	12	obj	_	highlight=green|span=1
+14	með	með	ADP	ADP	_	16	case	_	_
+15	mínum	mínum	PRON	PRON	_	16	nmod:poss	_	_
+16	augum	augum	NOUN	NOUN	_	12	obl	_	highlight=green|span=3
+17	.	.	PUNCT	PUNCT	_	16	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: is_icepahc-ud-train.conllu · this verb has L=1, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Finnbogi sagði til sín . &quot; Mikinn trúnað hefir Álfur lagt undir þig er hann hefir fengið dóttur sína þér í hendur enda munt þú ágætur maður vera . &quot;
+1	Finnbogi	Finnbogi	PROPN	PROPN	_	2	nsubj	_	_
+2	sagði	sagði	VERB	VERB	_	0	root	_	_
+3	til	til	ADP	ADP	_	4	case	_	_
+4	sín	sín	PRON	PRON	_	2	obl	_	_
+5	.	.	PUNCT	PUNCT	_	4	punct	_	_
+6	&quot;	&quot;	PUNCT	PUNCT	_	5	punct	_	_
+7	Mikinn	Mikinn	ADJ	ADJ	_	8	amod	_	_
+8	trúnað	trúnað	NOUN	NOUN	_	11	obj	_	_
+9	hefir	hefir	AUX	AUX	_	11	aux	_	_
+10	Álfur	Álfur	PROPN	PROPN	_	11	nsubj	_	_
+11	lagt	lagt	VERB	VERB	_	2	ccomp	_	_
+12	undir	undir	ADP	ADP	_	13	case	_	_
+13	þig	þig	PRON	PRON	_	11	obl	_	_
+14	er	er	SCONJ	SCONJ	_	17	mark	_	_
+15	hann	hann	PRON	PRON	_	17	nsubj	_	highlight=green|span=1
+16	hefir	hefir	AUX	AUX	_	17	aux	_	_
+17	fengið	fengið	VERB	VERB	_	11	advcl	_	highlight=red
+18	dóttur	dóttur	NOUN	NOUN	_	17	obj	_	highlight=green|span=2
+19	sína	sína	PRON	PRON	_	18	nmod:poss	_	_
+20	þér	þér	PRON	PRON	_	17	obl	_	highlight=green|span=3
+21	í	í	ADP	ADP	_	20	case	_	_
+22	hendur	hendur	NOUN	NOUN	_	20	obl	_	_
+23	enda	enda	CCONJ	CCONJ	_	2	conj	_	_
+24	munt	munt	AUX	AUX	_	23	aux	_	_
+25	þú	þú	PRON	PRON	_	23	nsubj	_	_
+26	ágætur	ágætur	ADJ	ADJ	_	23	xcomp	_	_
+27	maður	maður	NOUN	NOUN	_	26	conj	_	_
+28	vera	vera	AUX	AUX	_	23	cop	_	_
+29	.	.	PUNCT	PUNCT	_	28	punct	_	_
+30	&quot;	&quot;	PUNCT	PUNCT	_	29	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: is_icepahc-ud-train.conllu · this verb has L=1, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Hann ásetti sér ekkert .
+1	Hann	Hann	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	ásetti	ásetti	VERB	VERB	_	0	root	_	highlight=red
+3	sér	sér	PRON	PRON	_	2	iobj	_	highlight=green|span=1
+4	ekkert	ekkert	DET	DET	_	2	obj	_	highlight=green|span=1
+5	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: is_icepahc-ud-train.conllu · this verb has L=1, R=2 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = En sem Finnur komst á land gjörðist hann þeim þungur í fangi og óþjálgur í gangi , því : Margur þá að hauðri hné | og hrökk við ekki í glímu , | dregist hefði að dönskum spé ef dagurinn brygði grímu . | Þetta þjark varaði víst hálfan eyktartíma .
+1	En	En	CCONJ	CCONJ	_	7	cc	_	_
+2	sem	sem	SCONJ	SCONJ	_	4	mark	_	_
+3	Finnur	Finnur	PROPN	PROPN	_	4	nsubj	_	_
+4	komst	komst	VERB	VERB	_	7	advcl	_	_
+5	á	á	ADP	ADP	_	6	case	_	_
+6	land	land	NOUN	NOUN	_	4	obl	_	_
+7	gjörðist	gjörðist	VERB	VERB	_	0	root	_	_
+8	hann	hann	PRON	PRON	_	7	nsubj	_	_
+9	þeim	þeim	PRON	PRON	_	10	obl	_	_
+10	þungur	þungur	ADJ	ADJ	_	7	amod	_	_
+11	í	í	ADP	ADP	_	12	case	_	_
+12	fangi	fangi	NOUN	NOUN	_	10	amod	_	_
+13	og	og	CCONJ	CCONJ	_	14	cc	_	_
+14	óþjálgur	óþjálgur	ADJ	ADJ	_	10	amod	_	_
+15	í	í	ADP	ADP	_	16	case	_	_
+16	gangi	gangi	NOUN	NOUN	_	14	obl	_	_
+17	,	,	PUNCT	PUNCT	_	16	punct	_	_
+18	því	því	PRON	PRON	_	7	obl	_	_
+19	:	:	PUNCT	PUNCT	_	18	punct	_	_
+20	Margur	Margur	DET	DET	_	24	nsubj	_	_
+21	þá	þá	ADV	ADV	_	24	advmod	_	_
+22	að	að	ADP	ADP	_	23	case	_	_
+23	hauðri	hauðri	NOUN	NOUN	_	24	obl	_	_
+24	hné	hné	VERB	VERB	_	18	ccomp	_	_
+25	|	|	PUNCT	PUNCT	_	27	punct	_	_
+26	og	og	CCONJ	CCONJ	_	27	cc	_	_
+27	hrökk	hrökk	VERB	VERB	_	7	conj	_	_
+28	við	við	ADP	ADP	_	29	case	_	_
+29	ekki	ekki	DET	DET	_	27	obl	_	_
+30	í	í	ADP	ADP	_	31	case	_	_
+31	glímu	glímu	NOUN	NOUN	_	27	obl	_	_
+32	,	,	PUNCT	PUNCT	_	31	punct	_	_
+33	|	|	PUNCT	PUNCT	_	34	punct	_	_
+34	dregist	dregist	VERB	VERB	_	7	conj	_	_
+35	hefði	hefði	AUX	AUX	_	34	aux	_	_
+36	að	að	ADP	ADP	_	37	case	_	_
+37	dönskum	dönskum	ADJ	ADJ	_	34	obl	_	_
+38	spé	spé	NOUN	NOUN	_	34	nsubj	_	_
+39	ef	ef	SCONJ	SCONJ	_	41	mark	_	_
+40	dagurinn	dagurinn	NOUN	NOUN	_	41	nsubj	_	_
+41	brygði	brygði	VERB	VERB	_	34	advcl	_	_
+42	grímu	grímu	NOUN	NOUN	_	41	obj	_	_
+43	.	.	PUNCT	PUNCT	_	42	punct	_	_
+44	|	|	PUNCT	PUNCT	_	43	punct	_	_
+45	Þetta	Þetta	DET	DET	_	46	det	_	_
+46	þjark	þjark	NOUN	NOUN	_	47	nsubj	_	highlight=green|span=2
+47	varaði	varaði	VERB	VERB	_	7	conj	_	highlight=red
+48	víst	víst	ADV	ADV	_	47	advmod	_	highlight=green|span=1
+49	hálfan	hálfan	NUM	NUM	_	47	obl	_	highlight=green|span=2
+50	eyktartíma	eyktartíma	NOUN	NOUN	_	49	conj	_	_
+51	.	.	PUNCT	PUNCT	_	50	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: is_icepahc-ud-train.conllu · this verb has L=1, R=2 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Það ætlaði allt um koll að keyra í heimi mauranna , hlaup og óðagot og pat .
+1	Það	Það	PRON	PRON	_	2	expl	_	highlight=green|span=1
+2	ætlaði	ætlaði	VERB	VERB	_	0	root	_	highlight=red
+3	allt	allt	DET	DET	_	2	obl	_	highlight=green|span=1
+4	um	um	ADP	ADP	_	5	case	_	_
+5	koll	koll	NOUN	NOUN	_	7	obl	_	_
+6	að	að	PART	PART	_	7	mark	_	_
+7	keyra	keyra	VERB	VERB	_	2	acl	_	highlight=green|span=7
+8	í	í	ADP	ADP	_	9	case	_	_
+9	heimi	heimi	NOUN	NOUN	_	7	obl	_	_
+10	mauranna	mauranna	NOUN	NOUN	_	9	nmod:poss	_	_
+11	,	,	PUNCT	PUNCT	_	10	punct	_	_
+12	hlaup	hlaup	NOUN	NOUN	_	2	conj	_	_
+13	og	og	CCONJ	CCONJ	_	12	cc	_	_
+14	óðagot	óðagot	NOUN	NOUN	_	12	conj	_	_
+15	og	og	CCONJ	CCONJ	_	12	cc	_	_
+16	pat	pat	NOUN	NOUN	_	12	conj	_	_
+17	.	.	PUNCT	PUNCT	_	16	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: is_icepahc-ud-train.conllu · this verb has L=1, R=2 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Þá fjaraði uppi skip Skjálgs Erlingssonar , og voru þeir þegar allir drepnir af landherinum , þeim er Sveinn konungur hafði eigi mátt koma á skip sín .
+1	Þá	Þá	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+2	fjaraði	fjaraði	VERB	VERB	_	0	root	_	highlight=red
+3	uppi	uppi	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+4	skip	skip	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=3
+5	Skjálgs	Skjálgs	PROPN	PROPN	_	4	nmod:poss	_	_
+6	Erlingssonar	Erlingssonar	PROPN	PROPN	_	5	flat:name	_	_
+7	,	,	PUNCT	PUNCT	_	6	punct	_	_
+8	og	og	CCONJ	CCONJ	_	13	cc	_	_
+9	voru	voru	AUX	AUX	_	13	cop	_	_
+10	þeir	þeir	PRON	PRON	_	13	nsubj	_	_
+11	þegar	þegar	ADV	ADV	_	13	advmod	_	_
+12	allir	allir	DET	DET	_	13	amod	_	_
+13	drepnir	drepnir	VERB	VERB	_	2	conj	_	_
+14	af	af	ADP	ADP	_	15	case	_	_
+15	landherinum	landherinum	NOUN	NOUN	_	13	obl	_	_
+16	,	,	PUNCT	PUNCT	_	15	punct	_	_
+17	þeim	þeim	PRON	PRON	_	15	appos	_	_
+18	er	er	SCONJ	SCONJ	_	24	mark	_	_
+19	Sveinn	Sveinn	PROPN	PROPN	_	24	nsubj	_	_
+20	konungur	konungur	NOUN	NOUN	_	19	appos	_	_
+21	hafði	hafði	AUX	AUX	_	24	aux	_	_
+22	eigi	eigi	ADV	ADV	_	24	advmod	_	_
+23	mátt	mátt	AUX	AUX	_	24	aux	_	_
+24	koma	koma	VERB	VERB	_	17	acl:relcl	_	_
+25	á	á	ADP	ADP	_	26	case	_	_
+26	skip	skip	NOUN	NOUN	_	24	obl	_	_
+27	sín	sín	PRON	PRON	_	26	nmod	_	_
+28	.	.	PUNCT	PUNCT	_	27	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: is_icepahc-ud-train.conllu · this verb has L=1, R=2 (mean span = 5.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Brátt verða þeir Ari þess varir , að þar er skortur á vistaföngum , engi kvikfénaður og lítið sjávargagn , en vistabirgðir þeirra mundu eigi endast næsta vetur , ef eigi kemur þeim til bóta .
+1	Brátt	Brátt	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+2	verða	verða	VERB	VERB	_	0	root	_	highlight=red
+3	þeir	þeir	PRON	PRON	_	2	nsubj	_	highlight=green|span=2
+4	Ari	Ari	PROPN	PROPN	_	3	appos	_	_
+5	þess	þess	PRON	PRON	_	6	obl	_	_
+6	varir	varir	ADJ	ADJ	_	2	amod	_	highlight=green|span=13
+7	,	,	PUNCT	PUNCT	_	6	punct	_	_
+8	að	að	SCONJ	SCONJ	_	11	mark	_	_
+9	þar	þar	ADV	ADV	_	11	advmod	_	_
+10	er	er	AUX	AUX	_	11	cop	_	_
+11	skortur	skortur	NOUN	NOUN	_	6	amod	_	_
+12	á	á	ADP	ADP	_	13	case	_	_
+13	vistaföngum	vistaföngum	NOUN	NOUN	_	11	obl	_	_
+14	,	,	PUNCT	PUNCT	_	13	punct	_	_
+15	engi	engi	DET	DET	_	16	amod	_	_
+16	kvikfénaður	kvikfénaður	NOUN	NOUN	_	11	conj	_	_
+17	og	og	CCONJ	CCONJ	_	19	cc	_	_
+18	lítið	lítið	DET	DET	_	19	amod	_	_
+19	sjávargagn	sjávargagn	NOUN	NOUN	_	16	conj	_	_
+20	,	,	PUNCT	PUNCT	_	19	punct	_	_
+21	en	en	CCONJ	CCONJ	_	26	cc	_	_
+22	vistabirgðir	vistabirgðir	NOUN	NOUN	_	26	nsubj	_	_
+23	þeirra	þeirra	PRON	PRON	_	22	nmod:poss	_	_
+24	mundu	mundu	AUX	AUX	_	26	aux	_	_
+25	eigi	eigi	ADV	ADV	_	26	advmod	_	_
+26	endast	endast	VERB	VERB	_	2	conj	_	_
+27	næsta	næsta	ADJ	ADJ	_	28	amod	_	_
+28	vetur	vetur	NOUN	NOUN	_	26	obl	_	_
+29	,	,	PUNCT	PUNCT	_	28	punct	_	_
+30	ef	ef	SCONJ	SCONJ	_	32	mark	_	_
+31	eigi	eigi	ADV	ADV	_	32	advmod	_	_
+32	kemur	kemur	VERB	VERB	_	26	advcl	_	_
+33	þeim	þeim	PRON	PRON	_	32	nsubj	_	_
+34	til	til	ADP	ADP	_	35	case	_	_
+35	bóta	bóta	NOUN	NOUN	_	32	obl	_	_
+36	.	.	PUNCT	PUNCT	_	35	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: is_gc-ud-train.conllu · this verb has L=1, R=2 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Það mál er enn til rannsóknar .
+1	Það	Það	PRON	PRON	_	2	nmod	_	_
+2	mál	mál	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=2
+3	er	er	VERB	VERB	_	0	root	_	highlight=red
+4	enn	enn	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+5	til	til	ADP	ADP	_	6	case	_	_
+6	rannsóknar	rannsóknar	NOUN	NOUN	_	3	obl	_	highlight=green|span=2
+7	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: is_icepahc-ud-dev.conllu · this verb has L=1, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Hann hafði verið svo strekktur og fjarhuga alveg frá atburðunum þegar Sturla Sighvatsson lokkaði hann í gildruna við Apavatn og svo því sem gerðist við Örlygsstaði og þótt þeir Kolbeinn hefðu sigur þar þá komst ekkert annað að upp frá því hjá Gissuri en stríð og barátta og það var horfin öll mýkt úr hans fasi ; árum saman voru augu hans hörð og andlitsdrættir stífir og mér fannst eins og hann svæfi aldrei almennilega á nóttum því hann kipptist til við minnsta þrusk , átti sér jafnan ills von , sem auðvitað var ; hann var hættur að geta hjalað við drengina sína , var sífelldlega að gefa fyrirmæli um vopnabúnað og varðhöld , treysti aldrei neinum til fulls , ég var ekki einu sinni alveg viss um að hann treysti mér fullkomlega En svo kom hann heim úr ferðinni löngu og maður fann að þar fór maður sem var á einhvern hátt orðinn sáttari við allt og alla kannski mest við sjálfan sig þó og nú vildi hann fara að búa í haginn fyrir betra líf , kannski rólegra líf eða jafnvel efri árin ; við gengum loksins í hjónaband ; hann gaf sér tíma til að ryðja burt öllum hindrunum sem stóðu í vegi fyrir því og hann talaði um að setja syni okkar til mannaforráða sunnanlands en róttækust var samt sú breyting að hann vildi núna sættast við óvini sína , &quot; tala við Sturlungana eins og maður talar við menn &quot; sagði hann , og ég fann að hann meinti það sem hann var að segja .
+1	Hann	Hann	PRON	PRON	_	2	nsubj	_	_
+2	hafði	hafði	VERB	VERB	_	0	root	_	_
+3	verið	verið	AUX	AUX	_	2	cop	_	_
+4	svo	svo	ADV	ADV	_	5	amod	_	_
+5	strekktur	strekktur	ADJ	ADJ	_	2	amod	_	_
+6	og	og	CCONJ	CCONJ	_	7	cc	_	_
+7	fjarhuga	fjarhuga	ADJ	ADJ	_	5	amod	_	_
+8	alveg	alveg	ADV	ADV	_	2	advmod	_	_
+9	frá	frá	ADP	ADP	_	10	case	_	_
+10	atburðunum	atburðunum	NOUN	NOUN	_	2	obl	_	_
+11	þegar	þegar	SCONJ	SCONJ	_	14	mark	_	_
+12	Sturla	Sturla	PROPN	PROPN	_	14	nsubj	_	_
+13	Sighvatsson	Sighvatsson	PROPN	PROPN	_	12	flat:name	_	_
+14	lokkaði	lokkaði	VERB	VERB	_	10	advcl	_	_
+15	hann	hann	PRON	PRON	_	14	obj	_	_
+16	í	í	ADP	ADP	_	17	case	_	_
+17	gildruna	gildruna	NOUN	NOUN	_	14	obl	_	_
+18	við	við	ADP	ADP	_	19	case	_	_
+19	Apavatn	Apavatn	PROPN	PROPN	_	14	obl	_	_
+20	og	og	CCONJ	CCONJ	_	22	cc	_	_
+21	svo	svo	ADV	ADV	_	22	advmod	_	_
+22	því	því	PRON	PRON	_	14	conj	_	_
+23	sem	sem	SCONJ	SCONJ	_	24	mark	_	_
+24	gerðist	gerðist	VERB	VERB	_	22	acl:relcl	_	_
+25	við	við	ADP	ADP	_	26	case	_	_
+26	Örlygsstaði	Örlygsstaði	PROPN	PROPN	_	24	obl	_	_
+27	og	og	CCONJ	CCONJ	_	35	cc	_	_
+28	þótt	þótt	SCONJ	SCONJ	_	31	mark	_	_
+29	þeir	þeir	PRON	PRON	_	31	nsubj	_	_
+30	Kolbeinn	Kolbeinn	PROPN	PROPN	_	29	appos	_	_
+31	hefðu	hefðu	AUX	AUX	_	35	advcl	_	_
+32	sigur	sigur	NOUN	NOUN	_	31	obj	_	_
+33	þar	þar	ADV	ADV	_	31	advmod	_	_
+34	þá	þá	ADV	ADV	_	35	advmod	_	_
+35	komst	komst	VERB	VERB	_	2	conj	_	_
+36	ekkert	ekkert	DET	DET	_	37	amod	_	_
+37	annað	annað	PRON	PRON	_	35	nsubj	_	_
+38	að	að	ADP	ADP	_	35	compound:prt	_	_
+39	upp	upp	ADP	ADP	_	41	compound:prt	_	_
+40	frá	frá	ADP	ADP	_	41	case	_	_
+41	því	því	PRON	PRON	_	35	obl	_	_
+42	hjá	hjá	ADP	ADP	_	43	case	_	_
+43	Gissuri	Gissuri	PROPN	PROPN	_	35	obl	_	_
+44	en	en	SCONJ	SCONJ	_	45	mark	_	_
+45	stríð	stríð	NOUN	NOUN	_	35	advcl	_	_
+46	og	og	CCONJ	CCONJ	_	45	cc	_	_
+47	barátta	barátta	NOUN	NOUN	_	45	conj	_	_
+48	og	og	CCONJ	CCONJ	_	51	cc	_	_
+49	það	það	PRON	PRON	_	51	expl	_	_
+50	var	var	AUX	AUX	_	51	cop	_	_
+51	horfin	horfin	VERB	VERB	_	2	conj	_	_
+52	öll	öll	DET	DET	_	53	amod	_	_
+53	mýkt	mýkt	NOUN	NOUN	_	51	obl	_	_
+54	úr	úr	ADP	ADP	_	56	case	_	_
+55	hans	hans	PRON	PRON	_	56	nmod:poss	_	_
+56	fasi	fasi	NOUN	NOUN	_	51	obl	_	_
+57	;	;	PUNCT	PUNCT	_	56	punct	_	_
+58	árum	árum	NOUN	NOUN	_	63	obl	_	_
+59	saman	saman	ADV	ADV	_	58	advmod	_	_
+60	voru	voru	AUX	AUX	_	63	cop	_	_
+61	augu	augu	NOUN	NOUN	_	63	nsubj	_	_
+62	hans	hans	PRON	PRON	_	61	nmod:poss	_	_
+63	hörð	hörð	ADJ	ADJ	_	2	conj	_	_
+64	og	og	CCONJ	CCONJ	_	66	cc	_	_
+65	andlitsdrættir	andlitsdrættir	NOUN	NOUN	_	66	nsubj	_	_
+66	stífir	stífir	ADJ	ADJ	_	63	conj	_	_
+67	og	og	CCONJ	CCONJ	_	69	cc	_	_
+68	mér	mér	PRON	PRON	_	69	nsubj	_	_
+69	fannst	fannst	VERB	VERB	_	2	conj	_	_
+70	eins	eins	ADV	ADV	_	69	advmod	_	_
+71	og	og	ADP	ADP	_	73	case	_	_
+72	hann	hann	PRON	PRON	_	73	nsubj	_	_
+73	svæfi	svæfi	VERB	VERB	_	70	obl	_	_
+74	aldrei	aldrei	ADV	ADV	_	73	advmod	_	_
+75	almennilega	almennilega	ADV	ADV	_	73	advmod	_	_
+76	á	á	ADP	ADP	_	77	case	_	_
+77	nóttum	nóttum	NOUN	NOUN	_	73	obl	_	_
+78	því	því	PRON	PRON	_	69	obl	_	_
+79	hann	hann	PRON	PRON	_	80	nsubj	_	_
+80	kipptist	kipptist	VERB	VERB	_	78	ccomp	_	_
+81	til	til	ADP	ADP	_	80	compound:prt	_	_
+82	við	við	ADP	ADP	_	84	case	_	_
+83	minnsta	minnsta	DET	DET	_	84	amod	_	_
+84	þrusk	þrusk	NOUN	NOUN	_	80	obl	_	_
+85	,	,	PUNCT	PUNCT	_	86	punct	_	_
+86	átti	átti	VERB	VERB	_	80	conj	_	_
+87	sér	sér	PRON	PRON	_	86	iobj	_	_
+88	jafnan	jafnan	ADV	ADV	_	86	advmod	_	_
+89	ills	ills	ADJ	ADJ	_	90	nmod:poss	_	_
+90	von	von	NOUN	NOUN	_	86	obj	_	_
+91	,	,	PUNCT	PUNCT	_	90	punct	_	_
+92	sem	sem	SCONJ	SCONJ	_	93	mark	_	_
+93	auðvitað	auðvitað	ADV	ADV	_	90	acl:relcl	_	_
+94	var	var	AUX	AUX	_	93	cop	_	_
+95	;	;	PUNCT	PUNCT	_	94	punct	_	_
+96	hann	hann	PRON	PRON	_	98	nsubj	_	_
+97	var	var	AUX	AUX	_	98	cop	_	_
+98	hættur	hættur	VERB	VERB	_	2	conj	_	_
+99	að	að	PART	PART	_	101	mark	_	_
+100	geta	geta	AUX	AUX	_	101	aux	_	_
+101	hjalað	hjalað	VERB	VERB	_	98	acl	_	_
+102	við	við	ADP	ADP	_	103	case	_	_
+103	drengina	drengina	NOUN	NOUN	_	101	obl	_	_
+104	sína	sína	PRON	PRON	_	103	nmod:poss	_	_
+105	,	,	PUNCT	PUNCT	_	104	punct	_	_
+106	var	var	VERB	VERB	_	2	conj	_	_
+107	sífelldlega	sífelldlega	ADV	ADV	_	106	advmod	_	_
+108	að	að	PART	PART	_	109	mark	_	_
+109	gefa	gefa	VERB	VERB	_	106	acl	_	_
+110	fyrirmæli	fyrirmæli	NOUN	NOUN	_	109	obj	_	_
+111	um	um	ADP	ADP	_	112	case	_	_
+112	vopnabúnað	vopnabúnað	NOUN	NOUN	_	109	obl	_	_
+113	og	og	CCONJ	CCONJ	_	112	cc	_	_
+114	varðhöld	varðhöld	NOUN	NOUN	_	112	conj	_	_
+115	,	,	PUNCT	PUNCT	_	114	punct	_	_
+116	treysti	treysti	VERB	VERB	_	2	conj	_	_
+117	aldrei	aldrei	ADV	ADV	_	116	advmod	_	_
+118	neinum	neinum	DET	DET	_	116	obj	_	_
+119	til	til	ADP	ADP	_	120	case	_	_
+120	fulls	fulls	ADJ	ADJ	_	116	obl	_	_
+121	,	,	PUNCT	PUNCT	_	120	punct	_	_
+122	ég	ég	PRON	PRON	_	128	nsubj	_	_
+123	var	var	AUX	AUX	_	128	cop	_	_
+124	ekki	ekki	ADV	ADV	_	128	advmod	_	_
+125	einu	einu	DET	DET	_	126	det	_	_
+126	sinni	sinni	NOUN	NOUN	_	128	obl	_	_
+127	alveg	alveg	ADV	ADV	_	128	amod	_	_
+128	viss	viss	ADJ	ADJ	_	2	conj	_	_
+129	um	um	ADP	ADP	_	132	case	_	_
+130	að	að	SCONJ	SCONJ	_	132	mark	_	_
+131	hann	hann	PRON	PRON	_	132	nsubj	_	highlight=green|span=1
+132	treysti	treysti	VERB	VERB	_	128	obl	_	highlight=red
+133	mér	mér	PRON	PRON	_	132	obj	_	highlight=green|span=1
+134	fullkomlega	fullkomlega	ADV	ADV	_	132	advmod	_	highlight=green|span=1
+135	En	En	CCONJ	CCONJ	_	137	cc	_	_
+136	svo	svo	ADV	ADV	_	137	advmod	_	_
+137	kom	kom	VERB	VERB	_	2	conj	_	_
+138	hann	hann	PRON	PRON	_	137	nsubj	_	_
+139	heim	heim	ADV	ADV	_	137	advmod	_	_
+140	úr	úr	ADP	ADP	_	141	case	_	_
+141	ferðinni	ferðinni	NOUN	NOUN	_	137	obl	_	_
+142	löngu	löngu	ADJ	ADJ	_	141	amod	_	_
+143	og	og	CCONJ	CCONJ	_	145	cc	_	_
+144	maður	maður	NOUN	NOUN	_	145	nsubj	_	_
+145	fann	fann	VERB	VERB	_	2	conj	_	_
+146	að	að	SCONJ	SCONJ	_	148	mark	_	_
+147	þar	þar	ADV	ADV	_	148	advmod	_	_
+148	fór	fór	VERB	VERB	_	145	ccomp	_	_
+149	maður	maður	NOUN	NOUN	_	148	nsubj	_	_
+150	sem	sem	SCONJ	SCONJ	_	155	mark	_	_
+151	var	var	AUX	AUX	_	155	cop	_	_
+152	á	á	ADP	ADP	_	154	case	_	_
+153	einhvern	einhvern	DET	DET	_	154	amod	_	_
+154	hátt	hátt	NOUN	NOUN	_	155	obl	_	_
+155	orðinn	orðinn	VERB	VERB	_	149	acl:relcl	_	_
+156	sáttari	sáttari	ADJ	ADJ	_	155	amod	_	_
+157	við	við	ADP	ADP	_	158	case	_	_
+158	allt	allt	DET	DET	_	155	obl	_	_
+159	og	og	CCONJ	CCONJ	_	158	cc	_	_
+160	alla	alla	DET	DET	_	158	amod	_	_
+161	kannski	kannski	ADV	ADV	_	155	advmod	_	_
+162	mest	mest	DET	DET	_	155	obl	_	_
+163	við	við	ADP	ADP	_	164	case	_	_
+164	sjálfan	sjálfan	PRON	PRON	_	155	obl	_	_
+165	sig	sig	PRON	PRON	_	164	nmod	_	_
+166	þó	þó	SCONJ	SCONJ	_	171	mark	_	_
+167	og	og	ADV	ADV	_	171	advmod	_	_
+168	nú	nú	ADV	ADV	_	171	advmod	_	_
+169	vildi	vildi	AUX	AUX	_	171	aux	_	_
+170	hann	hann	PRON	PRON	_	171	nsubj	_	_
+171	fara	fara	VERB	VERB	_	155	advcl	_	_
+172	að	að	PART	PART	_	173	mark	_	_
+173	búa	búa	VERB	VERB	_	171	acl	_	_
+174	í	í	ADP	ADP	_	175	case	_	_
+175	haginn	haginn	NOUN	NOUN	_	173	obl	_	_
+176	fyrir	fyrir	ADP	ADP	_	178	case	_	_
+177	betra	betra	ADJ	ADJ	_	178	amod	_	_
+178	líf	líf	NOUN	NOUN	_	173	obl	_	_
+179	,	,	PUNCT	PUNCT	_	178	punct	_	_
+180	kannski	kannski	ADV	ADV	_	173	advmod	_	_
+181	rólegra	rólegra	ADJ	ADJ	_	182	amod	_	_
+182	líf	líf	NOUN	NOUN	_	173	obl	_	_
+183	eða	eða	CCONJ	CCONJ	_	186	cc	_	_
+184	jafnvel	jafnvel	ADV	ADV	_	186	advmod	_	_
+185	efri	efri	ADJ	ADJ	_	186	amod	_	_
+186	árin	árin	NOUN	NOUN	_	182	conj	_	_
+187	;	;	PUNCT	PUNCT	_	186	punct	_	_
+188	við	við	PRON	PRON	_	189	nsubj	_	_
+189	gengum	gengum	VERB	VERB	_	2	conj	_	_
+190	loksins	loksins	ADV	ADV	_	189	advmod	_	_
+191	í	í	ADP	ADP	_	192	case	_	_
+192	hjónaband	hjónaband	NOUN	NOUN	_	189	obl	_	_
+193	;	;	PUNCT	PUNCT	_	192	punct	_	_
+194	hann	hann	PRON	PRON	_	195	nsubj	_	_
+195	gaf	gaf	VERB	VERB	_	2	conj	_	_
+196	sér	sér	PRON	PRON	_	195	iobj	_	_
+197	tíma	tíma	NOUN	NOUN	_	195	obj	_	_
+198	til	til	ADP	ADP	_	200	case	_	_
+199	að	að	PART	PART	_	200	advcl	_	_
+200	ryðja	ryðja	VERB	VERB	_	195	obl	_	_
+201	burt	burt	ADV	ADV	_	200	advmod	_	_
+202	öllum	öllum	DET	DET	_	203	amod	_	_
+203	hindrunum	hindrunum	NOUN	NOUN	_	200	obj	_	_
+204	sem	sem	SCONJ	SCONJ	_	205	mark	_	_
+205	stóðu	stóðu	VERB	VERB	_	203	acl:relcl	_	_
+206	í	í	ADP	ADP	_	207	case	_	_
+207	vegi	vegi	NOUN	NOUN	_	205	obl	_	_
+208	fyrir	fyrir	ADP	ADP	_	209	case	_	_
+209	því	því	PRON	PRON	_	205	obl	_	_
+210	og	og	CCONJ	CCONJ	_	212	cc	_	_
+211	hann	hann	PRON	PRON	_	212	nsubj	_	_
+212	talaði	talaði	VERB	VERB	_	2	conj	_	_
+213	um	um	ADP	ADP	_	215	case	_	_
+214	að	að	PART	PART	_	215	mark	_	_
+215	setja	setja	VERB	VERB	_	212	obl	_	_
+216	syni	syni	NOUN	NOUN	_	215	obj	_	_
+217	okkar	okkar	PRON	PRON	_	216	nmod:poss	_	_
+218	til	til	ADP	ADP	_	219	case	_	_
+219	mannaforráða	mannaforráða	NOUN	NOUN	_	215	obl	_	_
+220	sunnanlands	sunnanlands	ADV	ADV	_	215	advmod	_	_
+221	en	en	CCONJ	CCONJ	_	222	cc	_	_
+222	róttækust	róttækust	ADJ	ADJ	_	2	conj	_	_
+223	var	var	AUX	AUX	_	222	cop	_	_
+224	samt	samt	ADV	ADV	_	222	advmod	_	_
+225	sú	sú	DET	DET	_	226	det	_	_
+226	breyting	breyting	NOUN	NOUN	_	222	nsubj	_	_
+227	að	að	SCONJ	SCONJ	_	231	mark	_	_
+228	hann	hann	PRON	PRON	_	231	nsubj	_	_
+229	vildi	vildi	AUX	AUX	_	231	aux	_	_
+230	núna	núna	ADV	ADV	_	231	advmod	_	_
+231	sættast	sættast	VERB	VERB	_	226	ccomp	_	_
+232	við	við	ADP	ADP	_	233	case	_	_
+233	óvini	óvini	NOUN	NOUN	_	231	obl	_	_
+234	sína	sína	PRON	PRON	_	233	nmod:poss	_	_
+235	,	,	PUNCT	PUNCT	_	234	punct	_	_
+236	&quot;	&quot;	PUNCT	PUNCT	_	247	punct	_	_
+237	tala	tala	VERB	VERB	_	247	dep	_	_
+238	við	við	ADP	ADP	_	239	case	_	_
+239	Sturlungana	Sturlungana	PROPN	PROPN	_	247	obl	_	_
+240	eins	eins	ADV	ADV	_	247	advmod	_	_
+241	og	og	ADP	ADP	_	243	case	_	_
+242	maður	maður	NOUN	NOUN	_	243	nsubj	_	_
+243	talar	talar	VERB	VERB	_	240	obl	_	_
+244	við	við	ADP	ADP	_	245	case	_	_
+245	menn	menn	NOUN	NOUN	_	243	obl	_	_
+246	&quot;	&quot;	PUNCT	PUNCT	_	245	punct	_	_
+247	sagði	sagði	VERB	VERB	_	2	conj	_	_
+248	hann	hann	PRON	PRON	_	247	nsubj	_	_
+249	,	,	PUNCT	PUNCT	_	248	punct	_	_
+250	og	og	CCONJ	CCONJ	_	252	cc	_	_
+251	ég	ég	PRON	PRON	_	252	nsubj	_	_
+252	fann	fann	VERB	VERB	_	2	conj	_	_
+253	að	að	SCONJ	SCONJ	_	255	mark	_	_
+254	hann	hann	PRON	PRON	_	255	nsubj	_	_
+255	meinti	meinti	VERB	VERB	_	252	ccomp	_	_
+256	það	það	PRON	PRON	_	255	obj	_	_
+257	sem	sem	SCONJ	SCONJ	_	261	mark	_	_
+258	hann	hann	PRON	PRON	_	261	nsubj	_	_
+259	var	var	AUX	AUX	_	261	cop	_	_
+260	að	að	PART	PART	_	261	mark	_	_
+261	segja	segja	VERB	VERB	_	256	acl:relcl	_	_
+262	.	.	PUNCT	PUNCT	_	261	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: is_pud-ud-test.conllu · this verb has L=1, R=2 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Yfirmaður náttúrverndarmála , Jeff Knott , sagði : „ Það kæmi mér mjög á óvart ef annaðhvort bann eða leyfisveiting kæmi til sögunnar í kjölfar hennar . “
+1	Yfirmaður	Yfirmaður	NOUN	NOUN	_	7	nsubj	_	_
+2	náttúrverndarmála	náttúrverndarmála	NOUN	NOUN	_	1	nmod:poss	_	_
+3	,	,	PUNCT	PUNCT	_	4	punct	_	_
+4	Jeff	Jeff	PROPN	PROPN	_	1	appos	_	_
+5	Knott	Knott	PROPN	PROPN	_	4	flat:name	_	_
+6	,	,	PUNCT	PUNCT	_	4	punct	_	_
+7	sagði	sagði	VERB	VERB	_	0	root	_	_
+8	:	:	PUNCT	PUNCT	_	7	punct	_	_
+9	„	„	PUNCT	PUNCT	_	11	punct	_	_
+10	Það	Það	PRON	PRON	_	11	expl	_	_
+11	kæmi	kæmi	VERB	VERB	_	7	parataxis	_	_
+12	mér	mér	PRON	PRON	_	11	nsubj	_	_
+13	mjög	mjög	ADV	ADV	_	15	advmod	_	_
+14	á	á	ADP	ADP	_	15	case	_	_
+15	óvart	óvart	ADJ	ADJ	_	11	obl	_	_
+16	ef	ef	SCONJ	SCONJ	_	21	mark	_	_
+17	annaðhvort	annaðhvort	CCONJ	CCONJ	_	18	cc	_	_
+18	bann	bann	NOUN	NOUN	_	15	conj	_	_
+19	eða	eða	CCONJ	CCONJ	_	20	cc	_	_
+20	leyfisveiting	leyfisveiting	NOUN	NOUN	_	21	nsubj	_	highlight=green|span=2
+21	kæmi	kæmi	VERB	VERB	_	11	advcl	_	highlight=red
+22	til	til	ADP	ADP	_	23	case	_	_
+23	sögunnar	sögunnar	NOUN	NOUN	_	21	obl	_	highlight=green|span=2
+24	í	í	ADP	ADP	_	25	case	_	_
+25	kjölfar	kjölfar	NOUN	NOUN	_	21	obl	_	highlight=green|span=3
+26	hennar	hennar	ADP	ADP	_	25	nmod:poss	_	_
+27	.	.	PUNCT	PUNCT	_	11	punct	_	_
+28	“	“	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: is_icepahc-ud-train.conllu · this verb has L=1, R=2 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = En berserkirnir gengu að Atriða og studdu hann allir ; þá snerist hesturinn Napóleons í kring og reis upp örðigur og beit Atriða á barkann , féll Atriði þar dauður en eigi lifandi ; síðan gekk hesturinn á apturfótunum og löðrungaði berserkina svo fast , að sundur gengu kjálkabeinin , en tennurnar hrutu víðs vegar um völlinn úr hausum þeim ; féllu þeir sem hráviði og létust níu , en þrír komust undan með skömm ; varð nú glaumur mikill í liði Frakka og hýrnaði yfir Napóleoni .
+1	En	En	CCONJ	CCONJ	_	3	cc	_	_
+2	berserkirnir	berserkirnir	NOUN	NOUN	_	3	nsubj	_	_
+3	gengu	gengu	VERB	VERB	_	0	root	_	_
+4	að	að	ADP	ADP	_	5	case	_	_
+5	Atriða	Atriða	PROPN	PROPN	_	3	obl	_	_
+6	og	og	CCONJ	CCONJ	_	7	cc	_	_
+7	studdu	studdu	VERB	VERB	_	3	conj	_	_
+8	hann	hann	PRON	PRON	_	7	obj	_	_
+9	allir	allir	DET	DET	_	7	nsubj	_	_
+10	;	;	PUNCT	PUNCT	_	9	punct	_	_
+11	þá	þá	ADV	ADV	_	12	advmod	_	highlight=green|span=1
+12	snerist	snerist	VERB	VERB	_	3	conj	_	highlight=red
+13	hesturinn	hesturinn	NOUN	NOUN	_	12	nsubj	_	highlight=green|span=2
+14	Napóleons	Napóleons	PROPN	PROPN	_	13	nmod:poss	_	_
+15	í	í	ADP	ADP	_	16	case	_	_
+16	kring	kring	ADV	ADV	_	12	obl	_	highlight=green|span=2
+17	og	og	CCONJ	CCONJ	_	18	cc	_	_
+18	reis	reis	VERB	VERB	_	3	conj	_	_
+19	upp	upp	ADP	ADP	_	18	compound:prt	_	_
+20	örðigur	örðigur	ADJ	ADJ	_	18	amod	_	_
+21	og	og	CCONJ	CCONJ	_	22	cc	_	_
+22	beit	beit	VERB	VERB	_	3	conj	_	_
+23	Atriða	Atriða	PROPN	PROPN	_	22	obj	_	_
+24	á	á	ADP	ADP	_	25	case	_	_
+25	barkann	barkann	NOUN	NOUN	_	22	obl	_	_
+26	,	,	PUNCT	PUNCT	_	25	punct	_	_
+27	féll	féll	VERB	VERB	_	3	conj	_	_
+28	Atriði	Atriði	PROPN	PROPN	_	27	nsubj	_	_
+29	þar	þar	ADV	ADV	_	27	advmod	_	_
+30	dauður	dauður	ADJ	ADJ	_	27	amod	_	_
+31	en	en	CCONJ	CCONJ	_	33	cc	_	_
+32	eigi	eigi	ADV	ADV	_	33	advmod	_	_
+33	lifandi	lifandi	VERB	VERB	_	30	amod	_	_
+34	;	;	PUNCT	PUNCT	_	33	punct	_	_
+35	síðan	síðan	ADV	ADV	_	36	advmod	_	_
+36	gekk	gekk	VERB	VERB	_	3	conj	_	_
+37	hesturinn	hesturinn	NOUN	NOUN	_	36	nsubj	_	_
+38	á	á	ADP	ADP	_	39	case	_	_
+39	apturfótunum	apturfótunum	NOUN	NOUN	_	36	obl	_	_
+40	og	og	CCONJ	CCONJ	_	41	cc	_	_
+41	löðrungaði	löðrungaði	VERB	VERB	_	3	conj	_	_
+42	berserkina	berserkina	NOUN	NOUN	_	41	obj	_	_
+43	svo	svo	ADV	ADV	_	41	advmod	_	_
+44	fast	fast	ADV	ADV	_	43	advmod	_	_
+45	,	,	PUNCT	PUNCT	_	44	punct	_	_
+46	að	að	SCONJ	SCONJ	_	48	mark	_	_
+47	sundur	sundur	ADV	ADV	_	48	advmod	_	_
+48	gengu	gengu	VERB	VERB	_	43	advcl	_	_
+49	kjálkabeinin	kjálkabeinin	NOUN	NOUN	_	48	nsubj	_	_
+50	,	,	PUNCT	PUNCT	_	49	punct	_	_
+51	en	en	CCONJ	CCONJ	_	53	cc	_	_
+52	tennurnar	tennurnar	NOUN	NOUN	_	53	nsubj	_	_
+53	hrutu	hrutu	VERB	VERB	_	3	conj	_	_
+54	víðs	víðs	ADJ	ADJ	_	55	amod	_	_
+55	vegar	vegar	NOUN	NOUN	_	53	obl	_	_
+56	um	um	ADP	ADP	_	55	case	_	_
+57	völlinn	völlinn	NOUN	NOUN	_	55	obl	_	_
+58	úr	úr	ADP	ADP	_	59	case	_	_
+59	hausum	hausum	NOUN	NOUN	_	53	obl	_	_
+60	þeim	þeim	PRON	PRON	_	59	nmod:poss	_	_
+61	;	;	PUNCT	PUNCT	_	60	punct	_	_
+62	féllu	féllu	VERB	VERB	_	3	conj	_	_
+63	þeir	þeir	PRON	PRON	_	62	nsubj	_	_
+64	sem	sem	SCONJ	SCONJ	_	65	mark	_	_
+65	hráviði	hráviði	NOUN	NOUN	_	62	advcl	_	_
+66	og	og	CCONJ	CCONJ	_	67	cc	_	_
+67	létust	létust	VERB	VERB	_	3	conj	_	_
+68	níu	níu	NUM	NUM	_	67	nsubj	_	_
+69	,	,	PUNCT	PUNCT	_	68	punct	_	_
+70	en	en	CCONJ	CCONJ	_	72	cc	_	_
+71	þrír	þrír	NUM	NUM	_	72	nsubj	_	_
+72	komust	komust	VERB	VERB	_	3	conj	_	_
+73	undan	undan	ADV	ADV	_	72	advmod	_	_
+74	með	með	ADP	ADP	_	75	case	_	_
+75	skömm	skömm	NOUN	NOUN	_	72	obl	_	_
+76	;	;	PUNCT	PUNCT	_	75	punct	_	_
+77	varð	varð	VERB	VERB	_	3	conj	_	_
+78	nú	nú	ADV	ADV	_	77	advmod	_	_
+79	glaumur	glaumur	NOUN	NOUN	_	77	nsubj	_	_
+80	mikill	mikill	DET	DET	_	79	amod	_	_
+81	í	í	ADP	ADP	_	82	case	_	_
+82	liði	liði	NOUN	NOUN	_	77	obl	_	_
+83	Frakka	Frakka	PROPN	PROPN	_	82	nmod:poss	_	_
+84	og	og	CCONJ	CCONJ	_	85	cc	_	_
+85	hýrnaði	hýrnaði	VERB	VERB	_	3	conj	_	_
+86	yfir	yfir	ADP	ADP	_	87	case	_	_
+87	Napóleoni	Napóleoni	PROPN	PROPN	_	85	obl	_	_
+88	.	.	PUNCT	PUNCT	_	87	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: is_icepahc-ud-train.conllu · this verb has L=1, R=2 (mean span = 6.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Og þó sleppir Jesús ekki hendi sinni af þér , heldur leitast því fremur við að hræra hjarta þitt með sinni blíðu náðarröddu og leiða þig á friðarins og lífsins veg .
+1	Og	Og	CCONJ	CCONJ	_	3	cc	_	_
+2	þó	þó	ADV	ADV	_	3	advmod	_	_
+3	sleppir	sleppir	VERB	VERB	_	0	root	_	_
+4	Jesús	Jesús	PROPN	PROPN	_	3	nsubj	_	_
+5	ekki	ekki	ADV	ADV	_	3	advmod	_	_
+6	hendi	hendi	NOUN	NOUN	_	3	obj	_	_
+7	sinni	sinni	PRON	PRON	_	6	nmod:poss	_	_
+8	af	af	ADP	ADP	_	9	case	_	_
+9	þér	þér	PRON	PRON	_	3	obl	_	_
+10	,	,	PUNCT	PUNCT	_	9	punct	_	_
+11	heldur	heldur	ADV	ADV	_	12	advmod	_	highlight=green|span=1
+12	leitast	leitast	VERB	VERB	_	3	conj	_	highlight=red
+13	því	því	PRON	PRON	_	14	obl	_	_
+14	fremur	fremur	ADV	ADV	_	12	obl	_	highlight=green|span=2
+15	við	við	ADP	ADP	_	17	case	_	_
+16	að	að	PART	PART	_	17	mark	_	_
+17	hræra	hræra	VERB	VERB	_	12	obl	_	highlight=green|span=17
+18	hjarta	hjarta	NOUN	NOUN	_	17	obj	_	_
+19	þitt	þitt	PRON	PRON	_	18	nmod:poss	_	_
+20	með	með	ADP	ADP	_	23	case	_	_
+21	sinni	sinni	PRON	PRON	_	23	nmod:poss	_	_
+22	blíðu	blíðu	ADJ	ADJ	_	23	amod	_	_
+23	náðarröddu	náðarröddu	NOUN	NOUN	_	17	obl	_	_
+24	og	og	CCONJ	CCONJ	_	25	cc	_	_
+25	leiða	leiða	VERB	VERB	_	17	acl	_	_
+26	þig	þig	PRON	PRON	_	25	obj	_	_
+27	á	á	ADP	ADP	_	31	case	_	_
+28	friðarins	friðarins	NOUN	NOUN	_	31	nmod:poss	_	_
+29	og	og	CCONJ	CCONJ	_	30	cc	_	_
+30	lífsins	lífsins	NOUN	NOUN	_	28	conj	_	_
+31	veg	veg	NOUN	NOUN	_	25	obl	_	_
+32	.	.	PUNCT	PUNCT	_	31	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: is_icepahc-ud-test.conllu · this verb has L=1, R=2 (mean span = 3.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Og þessir allir gjöra í móti keisarans boði , segjandi annan kóng vera Jesúm .
+1	Og	Og	CCONJ	CCONJ	_	4	cc	_	_
+2	þessir	þessir	DET	DET	_	3	det	_	_
+3	allir	allir	DET	DET	_	4	nsubj	_	highlight=green|span=2
+4	gjöra	gjöra	VERB	VERB	_	0	root	_	highlight=red
+5	í	í	ADP	ADP	_	6	case	_	_
+6	móti	móti	NOUN	NOUN	_	4	obl	_	highlight=green|span=4
+7	keisarans	keisarans	NOUN	NOUN	_	6	nmod:poss	_	_
+8	boði	boði	NOUN	NOUN	_	7	conj	_	_
+9	,	,	PUNCT	PUNCT	_	8	punct	_	_
+10	segjandi	segjandi	VERB	VERB	_	4	advcl	_	highlight=green|span=5
+11	annan	annan	PRON	PRON	_	12	det	_	_
+12	kóng	kóng	NOUN	NOUN	_	14	nsubj	_	_
+13	vera	vera	AUX	AUX	_	14	cop	_	_
+14	Jesúm	Jesúm	PROPN	PROPN	_	10	acl	_	_
+15	.	.	PUNCT	PUNCT	_	14	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: is_icepahc-ud-train.conllu · this verb has L=1, R=2 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Hann gekk við níunda mann hins níunda tugar til hestaatsins , og slíkt hið sama gerði Austurríkiskeisari .
+1	Hann	Hann	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	gekk	gekk	VERB	VERB	_	0	root	_	highlight=red
+3	við	við	ADP	ADP	_	5	case	_	_
+4	níunda	níunda	ADJ	ADJ	_	5	amod	_	_
+5	mann	mann	NOUN	NOUN	_	2	obl	_	highlight=green|span=6
+6	hins	hins	DET	DET	_	8	det	_	_
+7	níunda	níunda	ADJ	ADJ	_	8	amod	_	_
+8	tugar	tugar	NOUN	NOUN	_	5	nmod:poss	_	_
+9	til	til	ADP	ADP	_	10	case	_	_
+10	hestaatsins	hestaatsins	NOUN	NOUN	_	2	obl	_	highlight=green|span=2
+11	,	,	PUNCT	PUNCT	_	10	punct	_	_
+12	og	og	CCONJ	CCONJ	_	16	cc	_	_
+13	slíkt	slíkt	PRON	PRON	_	16	obj	_	_
+14	hið	hið	DET	DET	_	13	det	_	_
+15	sama	sama	ADJ	ADJ	_	13	amod	_	_
+16	gerði	gerði	VERB	VERB	_	2	conj	_	_
+17	Austurríkiskeisari	Austurríkiskeisari	PROPN	PROPN	_	16	nsubj	_	_
+18	.	.	PUNCT	PUNCT	_	17	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: is_icepahc-ud-test.conllu · this verb has L=1, R=2 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = En sé svo , á það að fylla alla þá , er þeirri sáning unnu og unna , glaðri von og öruggri trú á að það strá verði síðar að axi og loks komi fullt hveitikorn í axið .
+1	En	En	CCONJ	CCONJ	_	5	cc	_	_
+2	sé	sé	AUX	AUX	_	3	cop	_	_
+3	svo	svo	ADV	ADV	_	5	advcl	_	_
+4	,	,	PUNCT	PUNCT	_	3	punct	_	_
+5	á	á	VERB	VERB	_	0	root	_	_
+6	það	það	PRON	PRON	_	5	nsubj	_	_
+7	að	að	PART	PART	_	8	mark	_	_
+8	fylla	fylla	VERB	VERB	_	5	acl	_	_
+9	alla	alla	DET	DET	_	10	amod	_	_
+10	þá	þá	PRON	PRON	_	8	obj	_	_
+11	,	,	PUNCT	PUNCT	_	10	punct	_	_
+12	er	er	SCONJ	SCONJ	_	15	mark	_	_
+13	þeirri	þeirri	DET	DET	_	14	det	_	_
+14	sáning	sáning	NOUN	NOUN	_	15	obj	_	_
+15	unnu	unnu	VERB	VERB	_	10	acl:relcl	_	_
+16	og	og	CCONJ	CCONJ	_	17	cc	_	_
+17	unna	unna	VERB	VERB	_	15	conj	_	_
+18	,	,	PUNCT	PUNCT	_	17	punct	_	_
+19	glaðri	glaðri	ADJ	ADJ	_	20	amod	_	_
+20	von	von	NOUN	NOUN	_	8	obl	_	_
+21	og	og	CCONJ	CCONJ	_	23	cc	_	_
+22	öruggri	öruggri	ADJ	ADJ	_	23	amod	_	_
+23	trú	trú	NOUN	NOUN	_	20	conj	_	_
+24	á	á	ADP	ADP	_	28	case	_	_
+25	að	að	SCONJ	SCONJ	_	28	mark	_	_
+26	það	það	DET	DET	_	27	det	_	_
+27	strá	strá	NOUN	NOUN	_	28	nsubj	_	_
+28	verði	verði	VERB	VERB	_	23	obl	_	_
+29	síðar	síðar	ADV	ADV	_	28	advmod	_	_
+30	að	að	ADP	ADP	_	31	case	_	_
+31	axi	axi	NOUN	NOUN	_	28	obl	_	_
+32	og	og	CCONJ	CCONJ	_	34	cc	_	_
+33	loks	loks	ADV	ADV	_	34	advmod	_	highlight=green|span=1
+34	komi	komi	VERB	VERB	_	28	conj	_	highlight=red
+35	fullt	fullt	ADJ	ADJ	_	36	amod	_	_
+36	hveitikorn	hveitikorn	NOUN	NOUN	_	34	nsubj	_	highlight=green|span=2
+37	í	í	ADP	ADP	_	38	case	_	_
+38	axið	axið	NOUN	NOUN	_	34	obl	_	highlight=green|span=2
+39	.	.	PUNCT	PUNCT	_	38	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: is_icepahc-ud-test.conllu · this verb has L=2, R=2 (mean span = 4.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Framvegis , þegar ég nokkru sinni vitnaði til minnar samvisku , til að auðsýna og styrkja eina sérlega meiningu fyrir mínum mótparti , þá hrósaði hann að sönnu minni auðsýningar ástæðu , og ætlaði ég skyldi halda áfram að fylgja vitnisburði minnar samvisku , og hét mér að gjöra altíð eins á sína síðu ; og með slíku móti verður öll þræta fyrirbyggð , og allt tækifæri og tilefni til dispúterunar hjá sér leitt , ef í þrætumálum blífi hver við sína þekking og samvisku .
+1	Framvegis	Framvegis	ADV	ADV	_	25	advmod	_	_
+2	,	,	PUNCT	PUNCT	_	1	punct	_	_
+3	þegar	þegar	SCONJ	SCONJ	_	7	mark	_	_
+4	ég	ég	PRON	PRON	_	7	nsubj	_	highlight=green|span=1
+5	nokkru	nokkru	DET	DET	_	6	amod	_	_
+6	sinni	sinni	NOUN	NOUN	_	7	obl	_	highlight=green|span=2
+7	vitnaði	vitnaði	VERB	VERB	_	25	advcl	_	highlight=red
+8	til	til	ADP	ADP	_	10	case	_	_
+9	minnar	minnar	PRON	PRON	_	10	nmod:poss	_	_
+10	samvisku	samvisku	NOUN	NOUN	_	7	obl	_	highlight=green|span=3
+11	,	,	PUNCT	PUNCT	_	10	punct	_	_
+12	til	til	ADP	ADP	_	14	case	_	_
+13	að	að	PART	PART	_	14	mark	_	_
+14	auðsýna	auðsýna	VERB	VERB	_	7	obl	_	highlight=green|span=11
+15	og	og	CCONJ	CCONJ	_	16	cc	_	_
+16	styrkja	styrkja	VERB	VERB	_	14	advcl	_	_
+17	eina	eina	DET	DET	_	19	det	_	_
+18	sérlega	sérlega	ADJ	ADJ	_	19	amod	_	_
+19	meiningu	meiningu	NOUN	NOUN	_	16	obj	_	_
+20	fyrir	fyrir	ADP	ADP	_	22	case	_	_
+21	mínum	mínum	PRON	PRON	_	22	nmod:poss	_	_
+22	mótparti	mótparti	NOUN	NOUN	_	16	obl	_	_
+23	,	,	PUNCT	PUNCT	_	25	punct	_	_
+24	þá	þá	ADV	ADV	_	25	advmod	_	_
+25	hrósaði	hrósaði	VERB	VERB	_	0	root	_	_
+26	hann	hann	PRON	PRON	_	25	nsubj	_	_
+27	að	að	ADP	ADP	_	28	case	_	_
+28	sönnu	sönnu	ADJ	ADJ	_	25	obl	_	_
+29	minni	minni	PRON	PRON	_	31	nmod:poss	_	_
+30	auðsýningar	auðsýningar	NOUN	NOUN	_	31	nmod:poss	_	_
+31	ástæðu	ástæðu	NOUN	NOUN	_	25	obj	_	_
+32	,	,	PUNCT	PUNCT	_	31	punct	_	_
+33	og	og	CCONJ	CCONJ	_	34	cc	_	_
+34	ætlaði	ætlaði	VERB	VERB	_	25	conj	_	_
+35	ég	ég	PRON	PRON	_	37	nsubj	_	_
+36	skyldi	skyldi	AUX	AUX	_	37	aux	_	_
+37	halda	halda	VERB	VERB	_	34	ccomp	_	_
+38	áfram	áfram	ADV	ADV	_	37	advmod	_	_
+39	að	að	PART	PART	_	40	mark	_	_
+40	fylgja	fylgja	VERB	VERB	_	37	acl	_	_
+41	vitnisburði	vitnisburði	NOUN	NOUN	_	40	obj	_	_
+42	minnar	minnar	PRON	PRON	_	43	nmod:poss	_	_
+43	samvisku	samvisku	NOUN	NOUN	_	41	nmod:poss	_	_
+44	,	,	PUNCT	PUNCT	_	43	punct	_	_
+45	og	og	CCONJ	CCONJ	_	46	cc	_	_
+46	hét	hét	VERB	VERB	_	25	conj	_	_
+47	mér	mér	PRON	PRON	_	46	iobj	_	_
+48	að	að	PART	PART	_	49	mark	_	_
+49	gjöra	gjöra	VERB	VERB	_	46	acl	_	_
+50	altíð	altíð	ADV	ADV	_	49	advmod	_	_
+51	eins	eins	ADV	ADV	_	49	advmod	_	_
+52	á	á	ADP	ADP	_	54	case	_	_
+53	sína	sína	PRON	PRON	_	54	nmod:poss	_	_
+54	síðu	síðu	NOUN	NOUN	_	49	obl	_	_
+55	;	;	PUNCT	PUNCT	_	54	punct	_	_
+56	og	og	CCONJ	CCONJ	_	63	cc	_	_
+57	með	með	ADP	ADP	_	59	case	_	_
+58	slíku	slíku	PRON	PRON	_	59	det	_	_
+59	móti	móti	NOUN	NOUN	_	63	obl	_	_
+60	verður	verður	AUX	AUX	_	63	aux	_	_
+61	öll	öll	DET	DET	_	62	amod	_	_
+62	þræta	þræta	NOUN	NOUN	_	63	nsubj	_	_
+63	fyrirbyggð	fyrirbyggð	VERB	VERB	_	25	conj	_	_
+64	,	,	PUNCT	PUNCT	_	63	punct	_	_
+65	og	og	CCONJ	CCONJ	_	74	cc	_	_
+66	allt	allt	DET	DET	_	67	amod	_	_
+67	tækifæri	tækifæri	NOUN	NOUN	_	74	nsubj	_	_
+68	og	og	CCONJ	CCONJ	_	69	cc	_	_
+69	tilefni	tilefni	NOUN	NOUN	_	67	conj	_	_
+70	til	til	ADP	ADP	_	71	case	_	_
+71	dispúterunar	dispúterunar	NOUN	NOUN	_	74	obl	_	_
+72	hjá	hjá	ADP	ADP	_	73	case	_	_
+73	sér	sér	PRON	PRON	_	74	obl	_	_
+74	leitt	leitt	VERB	VERB	_	63	conj	_	_
+75	,	,	PUNCT	PUNCT	_	74	punct	_	_
+76	ef	ef	SCONJ	SCONJ	_	79	mark	_	_
+77	í	í	ADP	ADP	_	78	case	_	_
+78	þrætumálum	þrætumálum	NOUN	NOUN	_	79	obl	_	_
+79	blífi	blífi	VERB	VERB	_	74	advcl	_	_
+80	hver	hver	DET	DET	_	79	nsubj	_	_
+81	við	við	ADP	ADP	_	83	case	_	_
+82	sína	sína	PRON	PRON	_	83	nmod:poss	_	_
+83	þekking	þekking	NOUN	NOUN	_	79	obl	_	_
+84	og	og	CCONJ	CCONJ	_	85	cc	_	_
+85	samvisku	samvisku	NOUN	NOUN	_	83	conj	_	_
+86	.	.	PUNCT	PUNCT	_	85	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

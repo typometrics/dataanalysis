@@ -1,0 +1,299 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Buglere — MAL_1</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Buglere examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Buglere <small style="color:#999;font-weight:normal">(sab)</small> — MAL<sub>1</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>1</b> dependents in total (left + right combined).</p><p><b>MAL<sub>1</sub> = 1.476</b> &nbsp; <span style="color:#666">(114 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over all dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: sab_chibergis-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = kle nga lite .
+1	kle	kle	AUX	AUX	_	3	aux	_	_
+2	nga	nga	NOUN	NOUN	_	3	obj	_	highlight=green|span=1
+3	lite	lite	VERB	VERB	_	0	root	_	highlight=red
+4	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: sab_chibergis-ud-test.conllu · this verb has L=1, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = daba na kle chie kle kiro oli unie mlie geregda ske .
+1	daba	daba	NOUN	NOUN	_	4	nsubj	_	_
+2	na	na	ADJ	ADJ	_	1	amod	_	_
+3	kle	kle	AUX	AUX	_	4	aux	_	_
+4	chie	chie	VERB	VERB	_	0	root	_	_
+5	kle	kle	AUX	AUX	_	8	aux	_	_
+6	kiro	kiro	NOUN	NOUN	_	8	obj	_	highlight=green|span=2
+7	oli	oli	NOUN	NOUN	_	6	nmod	_	_
+8	unie	unie	VERB	VERB	_	1	acl:relcl	_	highlight=red
+9	mlie	mlie	VERB	VERB	_	4	advcl	_	_
+10	geregda	geregda	NOUN	NOUN	_	9	obl:arg	_	_
+11	ske	ske	ADP	ADP	_	10	case	_	_
+12	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: sab_chibergis-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = cha toidu .
+1	cha	cha	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	toidu	toidu	VERB	VERB	_	0	root	_	highlight=red
+3	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: sab_chibergis-ud-test.conllu · this verb has L=0, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ama chku cheke eni .
+1	ama	ama	ADV	ADV	_	2	discourse	_	_
+2	chku	chku	VERB	VERB	_	0	root	_	highlight=red
+3	cheke	cheke	VERB	VERB	_	2	advcl	_	highlight=green|span=2
+4	eni	eni	ADV	ADV	_	3	obl:lmod	_	_
+5	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: sab_chibergis-ud-test.conllu · this verb has L=0, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = entonces che chiu kike ula ngeru .
+1	entonces	entonces	ADV	ADV	_	3	discourse	_	_
+2	che	che	PRON	PRON	_	3	nsubj	_	_
+3	chiu	chiu	VERB	VERB	_	0	root	_	_
+4	kike	kike	VERB	VERB	_	3	advcl:purp	_	highlight=red
+5	ula	ula	NOUN	NOUN	_	6	obj	_	_
+6	ngeru	ngeru	ADJ	ADJ	_	4	obl:arg	_	highlight=green|span=2
+7	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: sab_chibergis-ud-test.conllu · this verb has L=0, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = kle chieni , despues kle chke gude naskoni , kle chieni , kle chke gude , entonces kle bage sukekre tambien alla iani , kle chi ai sukekre , kle blide sukekre .
+1	kle	kle	AUX	AUX	_	2	aux	_	_
+2	chieni	chieni	VERB	VERB	_	0	root	_	_
+3	,	,	PUNCT	PUNCT	_	2	punct	_	_
+4	despues	despues	ADV	ADV	_	6	advmod	_	_
+5	kle	kle	AUX	AUX	_	6	aux	_	_
+6	chke	chke	VERB	VERB	_	2	conj	_	_
+7	gude	gude	ADV	ADV	_	6	obl:lmod	_	_
+8	naskoni	naskoni	ADV	ADV	_	6	advmod	_	_
+9	,	,	PUNCT	PUNCT	_	2	punct	_	_
+10	kle	kle	AUX	AUX	_	11	aux	_	_
+11	chieni	chieni	VERB	VERB	_	2	conj	_	_
+12	,	,	PUNCT	PUNCT	_	2	punct	_	_
+13	kle	kle	AUX	AUX	_	14	aux	_	_
+14	chke	chke	VERB	VERB	_	2	conj	_	_
+15	gude	gude	ADV	ADV	_	14	obl:lmod	_	_
+16	,	,	PUNCT	PUNCT	_	2	punct	_	_
+17	entonces	entonces	ADV	ADV	_	19	advmod	_	_
+18	kle	kle	AUX	AUX	_	19	aux	_	_
+19	bage	bage	VERB	VERB	_	2	conj	_	_
+20	sukekre	sukekre	ADV	ADV	_	19	obl:lmod	_	_
+21	tambien	tambien	ADV	ADV	_	20	advmod	_	_
+22	alla	alla	ADV	ADV	_	19	obl:lmod	_	_
+23	iani	iani	ADV	ADV	_	22	reparandum	_	_
+24	,	,	PUNCT	PUNCT	_	2	punct	_	_
+25	kle	kle	AUX	AUX	_	26	cop	_	_
+26	chi	chi	NOUN	NOUN	_	2	conj	_	_
+27	ai	ai	ADV	ADV	_	26	advmod	_	_
+28	sukekre	sukekre	ADV	ADV	_	26	advmod	_	_
+29	,	,	PUNCT	PUNCT	_	2	punct	_	_
+30	kle	kle	AUX	AUX	_	31	aux	_	_
+31	blide	blide	VERB	VERB	_	2	conj	_	highlight=red
+32	sukekre	sukekre	ADV	ADV	_	31	obl:lmod	_	highlight=green|span=1
+33	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: sab_chibergis-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = de ai cha kle bligda tke hania tke bla tke i tke doia ske .
+1	de	de	ADP	ADP	_	6	discourse	_	_
+2	ai	ai	ADV	ADV	_	1	compound	_	_
+3	cha	cha	PRON	PRON	_	6	nsubj	_	_
+4	kle	kle	AUX	AUX	_	6	aux	_	_
+5	bligda	bligda	NOUN	NOUN	_	6	obj	_	_
+6	tke	tke	VERB	VERB	_	0	root	_	_
+7	hania	hania	NOUN	NOUN	_	8	obj	_	_
+8	tke	tke	VERB	VERB	_	6	conj	_	_
+9	bla	bla	NOUN	NOUN	_	10	obj	_	_
+10	tke	tke	VERB	VERB	_	6	conj	_	_
+11	i	i	NOUN	NOUN	_	12	obj	_	highlight=green|span=1
+12	tke	tke	VERB	VERB	_	6	conj	_	highlight=red
+13	doia	doia	NOUN	NOUN	_	6	obl:arg	_	_
+14	ske	ske	ADP	ADP	_	13	case	_	_
+15	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: sab_chibergis-ud-test.conllu · this verb has L=1, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ama gitire tiene che kiro che daba hokeda bagedale .
+1	ama	ama	ADV	ADV	_	9	discourse	_	_
+2	gitire	gitire	ADV	ADV	_	9	advmod	_	_
+3	tiene	tiene	AUX	AUX	_	9	aux	_	_
+4	che	che	PRON	PRON	_	5	nmod:poss	_	_
+5	kiro	kiro	NOUN	NOUN	_	9	nsubj	_	_
+6	che	che	PRON	PRON	_	7	nmod:poss	_	_
+7	daba	daba	NOUN	NOUN	_	8	nsubj	_	highlight=green|span=2
+8	hokeda	hokeda	VERB	VERB	_	5	acl:relcl	_	highlight=red
+9	bagedale	bagedale	VERB	VERB	_	0	root	_	_
+10	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: sab_chibergis-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = kle cheke plato glike .
+1	kle	kle	AUX	AUX	_	2	aux	_	_
+2	cheke	cheke	VERB	VERB	_	0	root	_	_
+3	plato	plato	NOUN	NOUN	_	4	obj	_	highlight=green|span=1
+4	glike	glike	VERB	VERB	_	2	advcl	_	highlight=red
+5	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: sab_chibergis-ud-test.conllu · this verb has L=1, R=0 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = che enusuli Flore trake .
+1	che	che	PRON	PRON	_	2	nmod:poss	_	_
+2	enusuli	enusuli	NOUN	NOUN	_	4	obj	_	highlight=green|span=3
+3	Flore	Flore	PROPN	PROPN	_	2	flat	_	_
+4	trake	trake	VERB	VERB	_	0	root	_	highlight=red
+5	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: sab_chibergis-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = de ai cha kle bligda tke hania tke bla tke i tke doia ske .
+1	de	de	ADP	ADP	_	6	discourse	_	_
+2	ai	ai	ADV	ADV	_	1	compound	_	_
+3	cha	cha	PRON	PRON	_	6	nsubj	_	_
+4	kle	kle	AUX	AUX	_	6	aux	_	_
+5	bligda	bligda	NOUN	NOUN	_	6	obj	_	_
+6	tke	tke	VERB	VERB	_	0	root	_	_
+7	hania	hania	NOUN	NOUN	_	8	obj	_	_
+8	tke	tke	VERB	VERB	_	6	conj	_	_
+9	bla	bla	NOUN	NOUN	_	10	obj	_	highlight=green|span=1
+10	tke	tke	VERB	VERB	_	6	conj	_	highlight=red
+11	i	i	NOUN	NOUN	_	12	obj	_	_
+12	tke	tke	VERB	VERB	_	6	conj	_	_
+13	doia	doia	NOUN	NOUN	_	6	obl:arg	_	_
+14	ske	ske	ADP	ADP	_	13	case	_	_
+15	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: sab_chibergis-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ama hula chiu .
+1	ama	ama	ADV	ADV	_	3	discourse	_	_
+2	hula	hula	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=1
+3	chiu	chiu	VERB	VERB	_	0	root	_	highlight=red
+4	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: sab_chibergis-ud-test.conllu · this verb has L=1, R=0 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = nienunga o mas enusulia hoke chke ko dike .
+1	nienunga	nienunga	NOUN	NOUN	_	5	nsubj	_	highlight=green|span=4
+2	o	o	X	X	_	4	cc	_	_
+3	mas	mas	ADV	ADV	_	4	advmod	_	_
+4	enusulia	enusulia	NOUN	NOUN	_	1	conj	_	_
+5	hoke	hoke	VERB	VERB	_	0	root	_	highlight=red
+6	chke	chke	VERB	VERB	_	5	compound:svc	_	_
+7	ko	ko	NOUN	NOUN	_	6	obl:arg	_	_
+8	dike	dike	ADP	ADP	_	7	case	_	_
+9	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: sab_chibergis-ud-test.conllu · this verb has L=1, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = enusuli Flore skiu .
+1	enusuli	enusuli	NOUN	NOUN	_	3	obj	_	highlight=green|span=2
+2	Flore	Flore	PROPN	PROPN	_	1	nmod	_	_
+3	skiu	skiu	VERB	VERB	_	0	root	_	highlight=red
+4	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: sab_chibergis-ud-test.conllu · this verb has L=0, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = hoke ble ke , y hoke chi ka ke .
+1	hoke	hoke	VERB	VERB	_	0	root	_	highlight=red
+2	ble	ble	NOUN	NOUN	_	1	obl:arg	_	highlight=green|span=2
+3	ke	ke	ADP	ADP	_	2	case	_	_
+4	,	,	PUNCT	PUNCT	_	1	punct	_	_
+5	y	y	X	X	_	6	cc	_	_
+6	hoke	hoke	VERB	VERB	_	1	conj	_	_
+7	chi	chi	NOUN	NOUN	_	8	nmod:poss	_	_
+8	ka	ka	NOUN	NOUN	_	6	obl:arg	_	_
+9	ke	ke	ADP	ADP	_	8	case	_	_
+10	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: sab_chibergis-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = che chkenga hula chiu .
+1	che	che	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	chkenga	chkenga	VERB	VERB	_	4	obl:lmod	_	highlight=red
+3	hula	hula	NOUN	NOUN	_	4	nsubj	_	_
+4	chiu	chiu	VERB	VERB	_	0	root	_	_
+5	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: sab_chibergis-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = koi gweda , chi ute ke koi giti , koi huke , koi dodade .
+1	koi	koi	NOUN	NOUN	_	2	obj	_	_
+2	gweda	gweda	VERB	VERB	_	0	root	_	_
+3	,	,	PUNCT	PUNCT	_	2	punct	_	_
+4	chi	chi	NOUN	NOUN	_	2	obl:arg	_	_
+5	ute	ute	ADJ	ADJ	_	4	amod	_	_
+6	ke	ke	ADP	ADP	_	4	case	_	_
+7	koi	koi	NOUN	NOUN	_	2	obl:arg	_	_
+8	giti	giti	ADP	ADP	_	7	case	_	_
+9	,	,	PUNCT	PUNCT	_	2	punct	_	_
+10	koi	koi	NOUN	NOUN	_	11	obj	_	highlight=green|span=1
+11	huke	huke	VERB	VERB	_	2	conj	_	highlight=red
+12	,	,	PUNCT	PUNCT	_	2	punct	_	_
+13	koi	koi	NOUN	NOUN	_	14	obj	_	_
+14	dodade	dodade	VERB	VERB	_	2	conj	_	_
+15	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: sab_chibergis-ud-test.conllu · this verb has L=1, R=0 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = die hi ke me gna gute , cho me gna gute , samla me gna gute , hasta chui apa ke .
+1	die	die	NOUN	NOUN	_	6	obj	_	highlight=green|span=3
+2	hi	hi	NOUN	NOUN	_	1	nmod	_	_
+3	ke	ke	ADP	ADP	_	2	case	_	_
+4	me	me	AUX	AUX	_	6	aux	_	_
+5	gna	gna	AUX	AUX	_	6	aux	_	_
+6	gute	gute	VERB	VERB	_	0	root	_	highlight=red
+7	,	,	PUNCT	PUNCT	_	6	punct	_	_
+8	cho	cho	NOUN	NOUN	_	11	obj	_	_
+9	me	me	AUX	AUX	_	11	aux	_	_
+10	gna	gna	AUX	AUX	_	11	aux	_	_
+11	gute	gute	VERB	VERB	_	6	conj	_	_
+12	,	,	PUNCT	PUNCT	_	6	punct	_	_
+13	samla	samla	NOUN	NOUN	_	16	obj	_	_
+14	me	me	AUX	AUX	_	16	aux	_	_
+15	gna	gna	AUX	AUX	_	16	aux	_	_
+16	gute	gute	VERB	VERB	_	6	conj	_	_
+17	,	,	PUNCT	PUNCT	_	16	punct	_	_
+18	hasta	hasta	ADP	ADP	_	16	obl:tmod	_	_
+19	chui	chui	NOUN	NOUN	_	18	compound	_	_
+20	apa	apa	NUM	NUM	_	19	nmod	_	_
+21	ke	ke	ADP	ADP	_	19	case	_	_
+22	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: sab_chibergis-ud-test.conllu · this verb has L=0, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = si hay arroz cha arroz lie .
+1	si	si	SCONJ	SCONJ	_	2	mark	_	_
+2	hay	hay	VERB	VERB	_	6	advcl	_	highlight=red
+3	arroz	arroz	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+4	cha	cha	PRON	PRON	_	6	nsubj	_	_
+5	arroz	arroz	NOUN	NOUN	_	6	obj	_	_
+6	lie	lie	VERB	VERB	_	0	root	_	_
+7	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: sab_chibergis-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = koi be hokeda .
+1	koi	koi	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=1
+2	be	be	AUX	AUX	_	3	aux	_	_
+3	hokeda	hokeda	VERB	VERB	_	0	root	_	highlight=red
+4	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

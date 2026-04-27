@@ -1,0 +1,196 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Karo — MAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Karo examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Karo <small style="color:#999;font-weight:normal">(arr)</small> — MAL<sub>2</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>2</b> dependents in total (left + right combined).</p><p><b>MAL<sub>2</sub> = 1.316</b> &nbsp; <span style="color:#666">(132 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over all dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: arr_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = aʔti toat macaʔɨt wĩ nãt toʔwa
+1	aʔti	aʔti	VERB	VERB	_	0	root	_	_
+2	toat	toat	PRON	PRON	_	4	nmod	_	highlight=green|span=1
+3	macaʔɨt	macaʔɨt	NOUN	NOUN	_	4	obj	_	highlight=green|span=1
+4	wĩ	wĩ	VERB	VERB	_	1	dep	_	highlight=red
+5	nãt	nãt	SCONJ	SCONJ	_	4	mark	_	_
+6	toʔwa	toʔwa	AUX	AUX	_	4	aux	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: arr_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = taykir iʔwirup toba
+1	taykir	taykir	PART	PART	_	3	advmod	_	highlight=green|span=1
+2	iʔwirup	iʔwirup	NOUN	NOUN	_	3	obj	_	highlight=green|span=1
+3	toba	toba	VERB	VERB	_	0	root	_	highlight=red"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: arr_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = toto ibetõ mɨy mãm ŋán
+1	toto	toto	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+2	ibetõ	ibetõ	VERB	VERB	_	0	root	_	highlight=red
+3	mɨy	mɨy	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+4	mãm	mãm	PART	PART	_	2	discourse	_	_
+5	ŋán	ŋán	PART	PART	_	2	dep	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: arr_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = õn mãygãra toy
+1	õn	õn	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+2	mãygãra	mãygãra	NOUN	NOUN	_	3	obj	_	highlight=green|span=1
+3	toy	toy	VERB	VERB	_	0	root	_	highlight=red"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: arr_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = [at toat macaʔɨt wĩn nãt] totia
+1	[at	[at	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+2	toat	toat	PRON	PRON	_	3	nmod	_	_
+3	macaʔɨt	macaʔɨt	NOUN	NOUN	_	4	obj	_	highlight=green|span=2
+4	wĩn	wĩn	VERB	VERB	_	0	root	_	highlight=red
+5	nãt]	nãt]	SCONJ	SCONJ	_	4	mark	_	_
+6	totia	totia	VERB	VERB	_	4	dep	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: arr_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ameko cú yaʔwan nyat iʔke
+1	ameko	ameko	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=2
+2	cú	cú	ADJ	ADJ	_	1	amod	_	_
+3	yaʔwan	yaʔwan	VERB	VERB	_	0	root	_	highlight=red
+4	nyat	nyat	PART	PART	_	3	mark	_	_
+5	iʔke	iʔke	PART	PART	_	3	advmod	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: arr_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = õn wat awe rabitẽy
+1	õn	õn	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+2	wat	wat	PRON	PRON	_	3	nmod	_	_
+3	awe	awe	NOUN	NOUN	_	4	obj	_	highlight=green|span=2
+4	rabitẽy	rabitẽy	VERB	VERB	_	0	root	_	highlight=red"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: arr_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = péŋ aʔwĩn tágɨh mã
+1	péŋ	péŋ	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+2	aʔwĩn	aʔwĩn	VERB	VERB	_	0	root	_	highlight=red
+3	tágɨh	tágɨh	NOUN	NOUN	_	2	obl	_	highlight=green|span=2
+4	mã	mã	ADP	ADP	_	3	case	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: arr_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = kɨganapət ahyə at etop
+1	kɨganapət	kɨganapət	ADV	ADV	_	4	advmod	_	highlight=green|span=2
+2	ahyə	ahyə	PART	PART	_	1	discourse	_	_
+3	at	at	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+4	etop	etop	VERB	VERB	_	0	root	_	highlight=red"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: arr_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ŋa otoy iʔke [okera kanãp]
+1	ŋa	ŋa	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	otoy	otoy	VERB	VERB	_	0	root	_	highlight=red
+3	iʔke	iʔke	PART	PART	_	2	advmod	_	highlight=green|span=1
+4	[okera	[okera	VERB	VERB	_	2	dep	_	_
+5	kanãp]	kanãp]	SCONJ	SCONJ	_	4	mark	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: arr_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = õn ip ʔɨy okõna
+1	õn	õn	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+2	ip	ip	NOUN	NOUN	_	3	obj	_	highlight=green|span=1
+3	ʔɨy	ʔɨy	VERB	VERB	_	0	root	_	highlight=red
+4	okõna	okõna	ADP	ADP	_	3	mark	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: arr_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = maʔpəy icɨ téy
+1	maʔpəy	maʔpəy	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=1
+2	icɨ	icɨ	NOUN	NOUN	_	3	obj	_	highlight=green|span=1
+3	téy	téy	VERB	VERB	_	0	root	_	highlight=red"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: arr_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = wat awe iyõm capét
+1	wat	wat	PRON	PRON	_	2	nmod	_	_
+2	awe	awe	NOUN	NOUN	_	4	nsubj	_	highlight=green|span=2
+3	iyõm	iyõm	NOUN	NOUN	_	4	obj	_	highlight=green|span=1
+4	capét	capét	VERB	VERB	_	0	root	_	highlight=red"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: arr_tudet-ud-test.conllu · this verb has L=0, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = onaká yakóy wenwen kanãp cúrem
+1	onaká	onaká	NOUN	NOUN	_	2	obj	_	_
+2	yakóy	yakóy	VERB	VERB	_	0	root	_	_
+3	wenwen	wenwen	VERB	VERB	_	2	xcomp	_	highlight=red
+4	kanãp	kanãp	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+5	cúrem	cúrem	ADV	ADV	_	3	advmod	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: arr_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = õn wat owẽ raken
+1	õn	õn	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+2	wat	wat	PRON	PRON	_	3	nmod	_	_
+3	owẽ	owẽ	NOUN	NOUN	_	4	obj	_	highlight=green|span=2
+4	raken	raken	VERB	VERB	_	0	root	_	highlight=red"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: arr_tudet-ud-test.conllu · this verb has L=0, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = owakán matet wat iyõm pihmãm
+1	owakán	owakán	VERB	VERB	_	0	root	_	highlight=red
+2	matet	matet	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+3	wat	wat	PRON	PRON	_	4	nmod	_	_
+4	iyõm	iyõm	NOUN	NOUN	_	1	obl	_	highlight=green|span=3
+5	pihmãm	pihmãm	ADP	ADP	_	4	case	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: arr_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = wat owẽ ŋa kət yat iʔke menə
+1	wat	wat	PRON	PRON	_	2	nmod	_	_
+2	owẽ	owẽ	NOUN	NOUN	_	4	nsubj	_	highlight=green|span=3
+3	ŋa	ŋa	PRON	PRON	_	2	clf	_	_
+4	kət	kət	VERB	VERB	_	0	root	_	highlight=red
+5	yat	yat	PART	PART	_	4	mark	_	_
+6	iʔke	iʔke	PART	PART	_	4	advmod	_	highlight=green|span=1
+7	menə	menə	PART	PART	_	4	mark	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: arr_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = naʔwəy yaʔi maʔɨp ʔay
+1	naʔwəy	naʔwəy	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+2	yaʔi	yaʔi	VERB	VERB	_	0	root	_	highlight=red
+3	maʔɨp	maʔɨp	NOUN	NOUN	_	2	obl	_	highlight=green|span=2
+4	ʔay	ʔay	ADP	ADP	_	3	case	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: arr_tudet-ud-test.conllu · this verb has L=0, R=2 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = tokera iʔke maʔwɨt cú gay
+1	tokera	tokera	VERB	VERB	_	0	root	_	highlight=red
+2	iʔke	iʔke	PART	PART	_	1	advmod	_	highlight=green|span=1
+3	maʔwɨt	maʔwɨt	NOUN	NOUN	_	1	nsubj	_	highlight=green|span=2
+4	cú	cú	ADJ	ADJ	_	3	amod	_	_
+5	gay	gay	AUX	AUX	_	1	aux	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: arr_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ŋa toat owẽ ragahmõm nãn
+1	ŋa	ŋa	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+2	toat	toat	PRON	PRON	_	3	nmod	_	_
+3	owẽ	owẽ	NOUN	NOUN	_	4	obj	_	highlight=green|span=2
+4	ragahmõm	ragahmõm	VERB	VERB	_	0	root	_	highlight=red
+5	nãn	nãn	AUX	AUX	_	4	cop	_	_"></reactive-dep-tree>
+</div>
+</body></html>

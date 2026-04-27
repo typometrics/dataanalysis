@@ -1,0 +1,460 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Livvi — LMAL_1</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Livvi examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Livvi <small style="color:#999;font-weight:normal">(olo)</small> — LMAL<sub>1</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>1</b> left dependents (right side may be anything).</p><p><b>LMAL<sub>1</sub> = 1.505</b> &nbsp; <span style="color:#666">(107 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>left</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: olo_kkpp-ud-test.conllu · this verb has L=1, R=3 (mean span = 1.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = &quot; Nu , gu on muga dielot , läkkäättös otamo vellat ääre &quot; .
+1	&quot;	&quot;	PUNCT	PUNCT	_	5	punct	_	_
+2	Nu	Nu	INTJ	INTJ	_	5	discourse	_	_
+3	,	,	PUNCT	PUNCT	_	5	punct	_	_
+4	gu	gu	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+5	on	on	VERB	VERB	_	0	root	_	highlight=red
+6	muga	muga	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+7	dielot	dielot	NOUN	NOUN	_	5	nsubj	_	highlight=green|span=1
+8	,	,	PUNCT	PUNCT	_	5	punct	_	_
+9	läkkäättös	läkkäättös	NOUN	NOUN	_	10	obl	_	_
+10	otamo	otamo	VERB	VERB	_	5	acl:relcl	_	highlight=green|span=4
+11	vellat	vellat	NOUN	NOUN	_	10	obj	_	_
+12	ääre	ääre	ADV	ADV	_	10	advmod	_	_
+13	&quot;	&quot;	PUNCT	PUNCT	_	5	punct	_	_
+14	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: olo_kkpp-ud-test.conllu · this verb has L=1, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Tämän häi kyzyi enzi dai tossu pään , a vojennoit sanottih : &quot; Tädä saaraa emmogo kuulluh , emmogo teidänyh &quot; .
+1	Tämän	Tämän	PRON	PRON	_	3	obj	_	_
+2	häi	häi	PRON	PRON	_	3	nsubj	_	_
+3	kyzyi	kyzyi	VERB	VERB	_	0	root	_	_
+4	enzi	enzi	ADV	ADV	_	3	advmod	_	_
+5	dai	dai	CCONJ	CCONJ	_	6	cc	_	_
+6	tossu	tossu	ADV	ADV	_	3	advmod	_	_
+7	pään	pään	VERB	VERB	_	3	conj	_	_
+8	,	,	PUNCT	PUNCT	_	11	punct	_	_
+9	a	a	CCONJ	CCONJ	_	10	cc	_	_
+10	vojennoit	vojennoit	NOUN	NOUN	_	11	nsubj	_	_
+11	sanottih	sanottih	VERB	VERB	_	3	conj	_	_
+12	:	:	PUNCT	PUNCT	_	17	punct	_	_
+13	&quot;	&quot;	PUNCT	PUNCT	_	17	punct	_	_
+14	Tädä	Tädä	PRON	PRON	_	15	det	_	_
+15	saaraa	saaraa	NOUN	NOUN	_	17	obj	_	highlight=green|span=2
+16	emmogo	emmogo	AUX	AUX	_	17	aux	_	_
+17	kuulluh	kuulluh	VERB	VERB	_	11	parataxis	_	highlight=red
+18	,	,	PUNCT	PUNCT	_	20	punct	_	_
+19	emmogo	emmogo	AUX	AUX	_	20	aux	_	_
+20	teidänyh	teidänyh	VERB	VERB	_	17	conj	_	_
+21	&quot;	&quot;	PUNCT	PUNCT	_	17	punct	_	_
+22	.	.	PUNCT	PUNCT	_	17	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: olo_kkpp-ud-test.conllu · this verb has L=1, R=3 (mean span = 5.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Festivualin hantuzis pietäh kaksi kilbua nuorih niškoi : Moja Karelija -videos’užietoin kilbu da Karelija – eto mi -karjalan , vepsän da suomen kieldy maltajien kilbu .
+1	Festivualin	Festivualin	NOUN	NOUN	_	3	obl	_	highlight=green|span=2
+2	hantuzis	hantuzis	ADP	ADP	_	1	case	_	_
+3	pietäh	pietäh	VERB	VERB	_	0	root	_	highlight=red
+4	kaksi	kaksi	NUM	NUM	_	5	nummod	_	_
+5	kilbua	kilbua	NOUN	NOUN	_	3	obj	_	highlight=green|span=2
+6	nuorih	nuorih	NOUN	NOUN	_	7	amod	_	_
+7	niškoi	niškoi	NOUN	NOUN	_	3	obl	_	highlight=green|span=2
+8	:	:	PUNCT	PUNCT	_	9	punct	_	_
+9	Moja	Moja	PROPN	PROPN	_	5	parataxis	_	highlight=green|span=16
+10	Karelija	Karelija	PROPN	PROPN	_	9	flat:name	_	_
+11	-videos’užietoin	-videos’užietoin	NOUN	NOUN	_	12	nmod:poss	_	_
+12	kilbu	kilbu	NOUN	NOUN	_	9	nmod	_	_
+13	da	da	CCONJ	CCONJ	_	14	cc	_	_
+14	Karelija	Karelija	X	X	_	18	compound:nn	_	_
+15	–	–	X	X	_	14	flat:foreign	_	_
+16	eto	eto	X	X	_	14	flat:foreign	_	_
+17	mi	mi	X	X	_	14	flat:foreign	_	_
+18	-karjalan	-karjalan	NOUN	NOUN	_	23	nmod:poss	_	_
+19	,	,	PUNCT	PUNCT	_	20	punct	_	_
+20	vepsän	vepsän	NOUN	NOUN	_	18	conj	_	_
+21	da	da	CCONJ	CCONJ	_	22	cc	_	_
+22	suomen	suomen	NOUN	NOUN	_	18	conj	_	_
+23	kieldy	kieldy	NOUN	NOUN	_	24	nmod	_	_
+24	maltajien	maltajien	NOUN	NOUN	_	25	nmod:poss	_	_
+25	kilbu	kilbu	NOUN	NOUN	_	9	conj	_	_
+26	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: olo_kkpp-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Toine päivy tuli , tožo saari työndää saldatat saaraa kuundelemah , a bobuli-briha tuloo sanomah .
+1	Toine	Toine	ADJ	ADJ	_	2	amod	_	_
+2	päivy	päivy	NOUN	NOUN	_	3	nsubj	_	_
+3	tuli	tuli	VERB	VERB	_	0	root	_	_
+4	,	,	PUNCT	PUNCT	_	7	punct	_	_
+5	tožo	tožo	ADV	ADV	_	7	advmod	_	_
+6	saari	saari	NOUN	NOUN	_	7	nsubj	_	_
+7	työndää	työndää	VERB	VERB	_	3	parataxis	_	_
+8	saldatat	saldatat	NOUN	NOUN	_	3	obj	_	_
+9	saaraa	saaraa	NOUN	NOUN	_	10	obj	_	highlight=green|span=1
+10	kuundelemah	kuundelemah	VERB	VERB	_	7	advcl	_	highlight=red
+11	,	,	PUNCT	PUNCT	_	14	punct	_	_
+12	a	a	CCONJ	CCONJ	_	13	cc	_	_
+13	bobuli-briha	bobuli-briha	NOUN	NOUN	_	14	nsubj	_	_
+14	tuloo	tuloo	VERB	VERB	_	7	conj	_	_
+15	sanomah	sanomah	VERB	VERB	_	14	xcomp	_	_
+16	.	.	PUNCT	PUNCT	_	14	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: olo_kkpp-ud-test.conllu · this verb has L=1, R=3 (mean span = 6.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = “ Tverinkarjalazien ystävien ” piämies 2010-2014 Tapio Mustonen sanoi Lihoslavl’an konferensies ” Karjalazet 400 vuottu Tverin mual ” , ku Karjalua koskijoi kielitiijollizii tutkimuksii rodieu ainos vai enämbi Suomes da Ven’al .
+1	“	“	PUNCT	PUNCT	_	3	punct	_	_
+2	Tverinkarjalazien	Tverinkarjalazien	ADJ	ADJ	_	3	amod	_	_
+3	ystävien	ystävien	NOUN	NOUN	_	5	nmod:poss	_	_
+4	”	”	PUNCT	PUNCT	_	3	punct	_	_
+5	piämies	piämies	NOUN	NOUN	_	9	nsubj	_	highlight=green|span=6
+6	2010-2014	2010-2014	NUM	NUM	_	5	nummod	_	_
+7	Tapio	Tapio	PROPN	PROPN	_	5	appos	_	_
+8	Mustonen	Mustonen	PROPN	PROPN	_	7	flat:name	_	_
+9	sanoi	sanoi	VERB	VERB	_	0	root	_	highlight=red
+10	Lihoslavl’an	Lihoslavl’an	PROPN	PROPN	_	11	nmod:poss	_	_
+11	konferensies	konferensies	NOUN	NOUN	_	9	obl	_	highlight=green|span=6
+12	”	”	PUNCT	PUNCT	_	13	punct	_	_
+13	Karjalazet	Karjalazet	ADJ	ADJ	_	11	appos	_	highlight=green|span=5
+14	400	400	NUM	NUM	_	15	nummod	_	_
+15	vuottu	vuottu	NOUN	NOUN	_	13	obl	_	_
+16	Tverin	Tverin	PROPN	PROPN	_	17	nmod:poss	_	_
+17	mual	mual	NOUN	NOUN	_	13	obl	_	_
+18	”	”	PUNCT	PUNCT	_	13	punct	_	_
+19	,	,	PUNCT	PUNCT	_	25	punct	_	_
+20	ku	ku	SCONJ	SCONJ	_	25	mark	_	_
+21	Karjalua	Karjalua	NOUN	NOUN	_	22	obj	_	_
+22	koskijoi	koskijoi	ADJ	ADJ	_	24	amod	_	_
+23	kielitiijollizii	kielitiijollizii	ADJ	ADJ	_	24	amod	_	_
+24	tutkimuksii	tutkimuksii	NOUN	NOUN	_	29	obj	_	_
+25	rodieu	rodieu	VERB	VERB	_	11	conj	_	highlight=green|span=7
+26	ainos	ainos	ADV	ADV	_	25	advmod	_	_
+27	vai	vai	CCONJ	CCONJ	_	28	cc	_	_
+28	enämbi	enämbi	ADV	ADV	_	26	conj	_	_
+29	Suomes	Suomes	PROPN	PROPN	_	25	obl	_	_
+30	da	da	CCONJ	CCONJ	_	31	cc	_	_
+31	Ven’al	Ven’al	PROPN	PROPN	_	29	conj	_	_
+32	.	.	PUNCT	PUNCT	_	25	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: olo_kkpp-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = A vojennoit vastatah : &quot; Tiezimö d’o dai kuulimo , dai näimö &quot; .
+1	A	A	INTJ	INTJ	_	3	discourse	_	_
+2	vojennoit	vojennoit	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=1
+3	vastatah	vastatah	VERB	VERB	_	0	root	_	highlight=red
+4	:	:	PUNCT	PUNCT	_	6	punct	_	_
+5	&quot;	&quot;	PUNCT	PUNCT	_	6	punct	_	_
+6	Tiezimö	Tiezimö	VERB	VERB	_	3	parataxis	_	_
+7	d’o	d’o	ADV	ADV	_	6	advmod	_	_
+8	dai	dai	CCONJ	CCONJ	_	9	cc	_	_
+9	kuulimo	kuulimo	VERB	VERB	_	6	conj	_	_
+10	,	,	PUNCT	PUNCT	_	12	punct	_	_
+11	dai	dai	CCONJ	CCONJ	_	12	cc	_	_
+12	näimö	näimö	VERB	VERB	_	6	conj	_	_
+13	&quot;	&quot;	PUNCT	PUNCT	_	3	punct	_	_
+14	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: olo_kkpp-ud-test.conllu · this verb has L=1, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = – Matkustamizen piätavoittehennu on se , ku matkustajat eletäh ainos perehis , muga hyö tuttavutah tverinkarjalazien elaigah , sanou Mustonen .
+1	–	–	PUNCT	PUNCT	_	3	punct	_	_
+2	Matkustamizen	Matkustamizen	NOUN	NOUN	_	3	nmod:poss	_	_
+3	piätavoittehennu	piätavoittehennu	NOUN	NOUN	_	0	root	_	_
+4	on	on	AUX	AUX	_	3	cop	_	_
+5	se	se	PRON	PRON	_	3	nsubj:cop	_	_
+6	,	,	PUNCT	PUNCT	_	9	punct	_	_
+7	ku	ku	SCONJ	SCONJ	_	9	mark	_	_
+8	matkustajat	matkustajat	NOUN	NOUN	_	9	nsubj	_	highlight=green|span=1
+9	eletäh	eletäh	VERB	VERB	_	3	acl:relcl	_	highlight=red
+10	ainos	ainos	ADV	ADV	_	9	advmod	_	highlight=green|span=1
+11	perehis	perehis	NOUN	NOUN	_	9	obl	_	highlight=green|span=1
+12	,	,	PUNCT	PUNCT	_	15	punct	_	_
+13	muga	muga	ADV	ADV	_	15	advmod	_	_
+14	hyö	hyö	PRON	PRON	_	15	nsubj	_	_
+15	tuttavutah	tuttavutah	VERB	VERB	_	9	conj	_	_
+16	tverinkarjalazien	tverinkarjalazien	NOUN	NOUN	_	17	nmod:poss	_	_
+17	elaigah	elaigah	NOUN	NOUN	_	15	obl	_	_
+18	,	,	PUNCT	PUNCT	_	19	punct	_	_
+19	sanou	sanou	VERB	VERB	_	3	parataxis	_	_
+20	Mustonen	Mustonen	PROPN	PROPN	_	19	nsubj	_	_
+21	.	.	PUNCT	PUNCT	_	19	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: olo_kkpp-ud-test.conllu · this verb has L=1, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Gostii vastattih Tuuksen kyläs , Koveris da Kotkatjärvel .
+1	Gostii	Gostii	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+2	vastattih	vastattih	VERB	VERB	_	0	root	_	highlight=red
+3	Tuuksen	Tuuksen	PROPN	PROPN	_	4	nmod:poss	_	_
+4	kyläs	kyläs	NOUN	NOUN	_	2	obl	_	highlight=green|span=5
+5	,	,	PUNCT	PUNCT	_	6	punct	_	_
+6	Koveris	Koveris	PROPN	PROPN	_	4	conj	_	_
+7	da	da	CCONJ	CCONJ	_	8	cc	_	_
+8	Kotkatjärvel	Kotkatjärvel	PROPN	PROPN	_	4	conj	_	_
+9	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: olo_kkpp-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Bobuli-briha sanoo saaraa
+1	Bobuli-briha	Bobuli-briha	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+2	sanoo	sanoo	VERB	VERB	_	0	root	_	highlight=red
+3	saaraa	saaraa	NOUN	NOUN	_	2	obj	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: olo_kkpp-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Polku menöö saarilloo , saari kyzyy : &quot; Midäbo bobuli saneli ? &quot;
+1	Polku	Polku	NOUN	NOUN	_	2	nsubj	_	_
+2	menöö	menöö	VERB	VERB	_	0	root	_	_
+3	saarilloo	saarilloo	NOUN	NOUN	_	2	obl	_	_
+4	,	,	PUNCT	PUNCT	_	6	punct	_	_
+5	saari	saari	NOUN	NOUN	_	6	nsubj	_	highlight=green|span=1
+6	kyzyy	kyzyy	VERB	VERB	_	2	parataxis	_	highlight=red
+7	:	:	PUNCT	PUNCT	_	11	punct	_	_
+8	&quot;	&quot;	PUNCT	PUNCT	_	11	punct	_	_
+9	Midäbo	Midäbo	PRON	PRON	_	11	obj	_	_
+10	bobuli	bobuli	NOUN	NOUN	_	11	nsubj	_	_
+11	saneli	saneli	VERB	VERB	_	6	parataxis	_	_
+12	?	?	PUNCT	PUNCT	_	11	punct	_	_
+13	&quot;	&quot;	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: olo_kkpp-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Sit oli häkki – seičče virstaa oli sarvet piduhuttu , paimoi istui sarvel , toine toizel ; torvittih , ga toine toizen ei kuulluh torvindaa .
+1	Sit	Sit	ADV	ADV	_	2	advmod	_	_
+2	oli	oli	VERB	VERB	_	0	root	_	_
+3	häkki	häkki	NOUN	NOUN	_	2	nsubj	_	_
+4	–	–	PUNCT	PUNCT	_	9	punct	_	_
+5	seičče	seičče	NUM	NUM	_	6	nummod	_	_
+6	virstaa	virstaa	NOUN	NOUN	_	9	nsubj:cop	_	_
+7	oli	oli	AUX	AUX	_	8	cop	_	_
+8	sarvet	sarvet	NOUN	NOUN	_	9	obj	_	_
+9	piduhuttu	piduhuttu	NOUN	NOUN	_	2	advcl	_	_
+10	,	,	PUNCT	PUNCT	_	12	punct	_	_
+11	paimoi	paimoi	NOUN	NOUN	_	12	nsubj	_	highlight=green|span=1
+12	istui	istui	VERB	VERB	_	7	conj	_	highlight=red
+13	sarvel	sarvel	NOUN	NOUN	_	12	obl	_	highlight=green|span=1
+14	,	,	PUNCT	PUNCT	_	15	punct	_	_
+15	toine	toine	PRON	PRON	_	12	conj	_	_
+16	toizel	toizel	PRON	PRON	_	15	orphan	_	_
+17	;	;	PUNCT	PUNCT	_	18	punct	_	_
+18	torvittih	torvittih	VERB	VERB	_	12	conj	_	_
+19	,	,	PUNCT	PUNCT	_	24	punct	_	_
+20	ga	ga	SCONJ	SCONJ	_	24	mark	_	_
+21	toine	toine	PRON	PRON	_	24	nsubj	_	_
+22	toizen	toizen	PRON	PRON	_	24	obl	_	_
+23	ei	ei	AUX	AUX	_	24	aux	_	_
+24	kuulluh	kuulluh	VERB	VERB	_	18	acl:relcl	_	_
+25	torvindaa	torvindaa	NOUN	NOUN	_	24	obj	_	_
+26	.	.	PUNCT	PUNCT	_	24	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: olo_kkpp-ud-test.conllu · this verb has L=1, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Mägriän kyläh lähtöy Petroskoin valdivonyliopiston Toive-ansambli , Kuittizes ezittyy &quot; Kajahuš &quot; , Kuujärves ozuttau spektaklii Čičiliušku-t y ttiteatr u .
+1	Mägriän	Mägriän	PROPN	PROPN	_	2	nmod:poss	_	_
+2	kyläh	kyläh	NOUN	NOUN	_	3	obl	_	_
+3	lähtöy	lähtöy	VERB	VERB	_	0	root	_	_
+4	Petroskoin	Petroskoin	PROPN	PROPN	_	5	nmod:poss	_	_
+5	valdivonyliopiston	valdivonyliopiston	NOUN	NOUN	_	6	nmod:poss	_	_
+6	Toive-ansambli	Toive-ansambli	NOUN	NOUN	_	3	nsubj	_	_
+7	,	,	PUNCT	PUNCT	_	9	punct	_	_
+8	Kuittizes	Kuittizes	PROPN	PROPN	_	11	obl	_	_
+9	ezittyy	ezittyy	VERB	VERB	_	3	conj	_	_
+10	&quot;	&quot;	PUNCT	PUNCT	_	11	punct	_	_
+11	Kajahuš	Kajahuš	PROPN	PROPN	_	9	nsubj	_	_
+12	&quot;	&quot;	PUNCT	PUNCT	_	11	punct	_	_
+13	,	,	PUNCT	PUNCT	_	15	punct	_	_
+14	Kuujärves	Kuujärves	PROPN	PROPN	_	15	obl	_	highlight=green|span=1
+15	ozuttau	ozuttau	VERB	VERB	_	3	conj	_	highlight=red
+16	spektaklii	spektaklii	NOUN	NOUN	_	15	obj	_	highlight=green|span=1
+17	Čičiliušku-t	Čičiliušku-t	NOUN	NOUN	_	15	nsubj	_	highlight=green|span=4
+18	y	y	X	X	_	17	goeswith	_	_
+19	ttiteatr	ttiteatr	X	X	_	17	goeswith	_	_
+20	u	u	X	X	_	17	goeswith	_	_
+21	.	.	PUNCT	PUNCT	_	15	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: olo_kkpp-ud-test.conllu · this verb has L=1, R=1 (mean span = 3.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = “ Tverin Karjalas olen hyväs mieles , kui omas kodikyläs ”
+1	“	“	PUNCT	PUNCT	_	4	punct	_	_
+2	Tverin	Tverin	PROPN	PROPN	_	3	nmod:poss	_	_
+3	Karjalas	Karjalas	PROPN	PROPN	_	4	obl	_	highlight=green|span=2
+4	olen	olen	VERB	VERB	_	0	root	_	highlight=red
+5	hyväs	hyväs	ADJ	ADJ	_	6	amod	_	_
+6	mieles	mieles	NOUN	NOUN	_	4	obl	_	highlight=green|span=5
+7	,	,	PUNCT	PUNCT	_	10	punct	_	_
+8	kui	kui	ADV	ADV	_	10	orphan	_	_
+9	omas	omas	ADJ	ADJ	_	10	amod	_	_
+10	kodikyläs	kodikyläs	NOUN	NOUN	_	6	acl	_	_
+11	”	”	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: olo_kkpp-ud-test.conllu · this verb has L=1, R=2 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Murginan jälles kai matkuniekat lähtiettih Kotkatjärvele , sigäläzes kul’tuurutalois ezityttih jo kaksi joukkuo .
+1	Murginan	Murginan	NOUN	NOUN	_	5	obl	_	_
+2	jälles	jälles	ADV	ADV	_	1	case	_	_
+3	kai	kai	PRON	PRON	_	4	nmod:poss	_	_
+4	matkuniekat	matkuniekat	NOUN	NOUN	_	5	nsubj	_	_
+5	lähtiettih	lähtiettih	VERB	VERB	_	0	root	_	_
+6	Kotkatjärvele	Kotkatjärvele	PROPN	PROPN	_	5	obl	_	_
+7	,	,	PUNCT	PUNCT	_	5	punct	_	_
+8	sigäläzes	sigäläzes	ADJ	ADJ	_	9	amod	_	_
+9	kul’tuurutalois	kul’tuurutalois	NOUN	NOUN	_	10	obl	_	highlight=green|span=2
+10	ezityttih	ezityttih	VERB	VERB	_	5	parataxis	_	highlight=red
+11	jo	jo	ADV	ADV	_	10	advmod	_	highlight=green|span=1
+12	kaksi	kaksi	NUM	NUM	_	13	nummod	_	_
+13	joukkuo	joukkuo	NOUN	NOUN	_	10	nsubj	_	highlight=green|span=2
+14	.	.	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: olo_kkpp-ud-test.conllu · this verb has L=1, R=2 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Tieduo tverinkarjalazis levitetäh fotokuvaozutteluloin da tiedopidoloin avul Suomen eri puolis .
+1	Tieduo	Tieduo	NOUN	NOUN	_	3	obj	_	highlight=green|span=2
+2	tverinkarjalazis	tverinkarjalazis	NOUN	NOUN	_	1	nmod	_	_
+3	levitetäh	levitetäh	VERB	VERB	_	0	root	_	highlight=red
+4	fotokuvaozutteluloin	fotokuvaozutteluloin	NOUN	NOUN	_	3	obl	_	highlight=green|span=4
+5	da	da	CCONJ	CCONJ	_	6	cc	_	_
+6	tiedopidoloin	tiedopidoloin	NOUN	NOUN	_	4	conj	_	_
+7	avul	avul	ADP	ADP	_	4	case	_	_
+8	Suomen	Suomen	PROPN	PROPN	_	10	nmod:poss	_	_
+9	eri	eri	ADJ	ADJ	_	10	amod	_	_
+10	puolis	puolis	NOUN	NOUN	_	3	obl	_	highlight=green|span=3
+11	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: olo_kkpp-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Vojennoit sanottih : &quot; Ga sidä samastu &quot; .
+1	Vojennoit	Vojennoit	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+2	sanottih	sanottih	VERB	VERB	_	0	root	_	highlight=red
+3	:	:	PUNCT	PUNCT	_	2	punct	_	_
+4	&quot;	&quot;	PUNCT	PUNCT	_	2	punct	_	_
+5	Ga	Ga	INTJ	INTJ	_	7	discourse	_	_
+6	sidä	sidä	PRON	PRON	_	7	orphan	_	_
+7	samastu	samastu	ADJ	ADJ	_	2	parataxis	_	_
+8	&quot;	&quot;	PUNCT	PUNCT	_	7	punct	_	_
+9	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: olo_kkpp-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Matkah yhtyigi Periodika-julguamo , festivualil sai ostua kniigua , lehtie da žurnualua kanzallizil kielil , saigi tilata Oma Mua -lehti .
+1	Matkah	Matkah	NOUN	NOUN	_	2	obl	_	highlight=green|span=1
+2	yhtyigi	yhtyigi	VERB	VERB	_	0	root	_	highlight=red
+3	Periodika-julguamo	Periodika-julguamo	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+4	,	,	PUNCT	PUNCT	_	2	punct	_	_
+5	festivualil	festivualil	NOUN	NOUN	_	8	obl	_	_
+6	sai	sai	VERB	VERB	_	2	conj	_	_
+7	ostua	ostua	VERB	VERB	_	6	ccomp	_	_
+8	kniigua	kniigua	NOUN	NOUN	_	7	obj	_	_
+9	,	,	PUNCT	PUNCT	_	10	punct	_	_
+10	lehtie	lehtie	NOUN	NOUN	_	8	conj	_	_
+11	da	da	CCONJ	CCONJ	_	14	cc	_	_
+12	žurnualua	žurnualua	NOUN	NOUN	_	8	conj	_	_
+13	kanzallizil	kanzallizil	ADJ	ADJ	_	16	amod	_	_
+14	kielil	kielil	NOUN	NOUN	_	7	obl	_	_
+15	,	,	PUNCT	PUNCT	_	16	punct	_	_
+16	saigi	saigi	VERB	VERB	_	6	conj	_	_
+17	tilata	tilata	VERB	VERB	_	16	ccomp	_	_
+18	Oma	Oma	ADJ	ADJ	_	17	obj	_	_
+19	Mua	Mua	NOUN	NOUN	_	18	flat:name	_	_
+20	-lehti	-lehti	NOUN	NOUN	_	18	compound	_	_
+21	.	.	PUNCT	PUNCT	_	17	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: olo_kkpp-ud-test.conllu · this verb has L=1, R=4 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Matkah yhtyigi Periodika-julguamo , festivualil sai ostua kniigua , lehtie da žurnualua kanzallizil kielil , saigi tilata Oma Mua -lehti .
+1	Matkah	Matkah	NOUN	NOUN	_	2	obl	_	_
+2	yhtyigi	yhtyigi	VERB	VERB	_	0	root	_	_
+3	Periodika-julguamo	Periodika-julguamo	NOUN	NOUN	_	2	nsubj	_	_
+4	,	,	PUNCT	PUNCT	_	2	punct	_	_
+5	festivualil	festivualil	NOUN	NOUN	_	8	obl	_	highlight=green|span=1
+6	sai	sai	VERB	VERB	_	2	conj	_	_
+7	ostua	ostua	VERB	VERB	_	6	ccomp	_	highlight=red
+8	kniigua	kniigua	NOUN	NOUN	_	7	obj	_	highlight=green|span=1
+9	,	,	PUNCT	PUNCT	_	10	punct	_	_
+10	lehtie	lehtie	NOUN	NOUN	_	8	conj	_	highlight=green|span=1
+11	da	da	CCONJ	CCONJ	_	14	cc	_	highlight=green|span=1
+12	žurnualua	žurnualua	NOUN	NOUN	_	8	conj	_	highlight=green|span=1
+13	kanzallizil	kanzallizil	ADJ	ADJ	_	16	amod	_	_
+14	kielil	kielil	NOUN	NOUN	_	7	obl	_	_
+15	,	,	PUNCT	PUNCT	_	16	punct	_	_
+16	saigi	saigi	VERB	VERB	_	6	conj	_	_
+17	tilata	tilata	VERB	VERB	_	16	ccomp	_	_
+18	Oma	Oma	ADJ	ADJ	_	17	obj	_	_
+19	Mua	Mua	NOUN	NOUN	_	18	flat:name	_	_
+20	-lehti	-lehti	NOUN	NOUN	_	18	compound	_	_
+21	.	.	PUNCT	PUNCT	_	17	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: olo_kkpp-ud-test.conllu · this verb has L=1, R=1 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Mägriän kyläh lähtöy Petroskoin valdivonyliopiston Toive-ansambli , Kuittizes ezittyy &quot; Kajahuš &quot; , Kuujärves ozuttau spektaklii Čičiliušku-t y ttiteatr u .
+1	Mägriän	Mägriän	PROPN	PROPN	_	2	nmod:poss	_	_
+2	kyläh	kyläh	NOUN	NOUN	_	3	obl	_	highlight=green|span=2
+3	lähtöy	lähtöy	VERB	VERB	_	0	root	_	highlight=red
+4	Petroskoin	Petroskoin	PROPN	PROPN	_	5	nmod:poss	_	_
+5	valdivonyliopiston	valdivonyliopiston	NOUN	NOUN	_	6	nmod:poss	_	_
+6	Toive-ansambli	Toive-ansambli	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=3
+7	,	,	PUNCT	PUNCT	_	9	punct	_	_
+8	Kuittizes	Kuittizes	PROPN	PROPN	_	11	obl	_	_
+9	ezittyy	ezittyy	VERB	VERB	_	3	conj	_	_
+10	&quot;	&quot;	PUNCT	PUNCT	_	11	punct	_	_
+11	Kajahuš	Kajahuš	PROPN	PROPN	_	9	nsubj	_	_
+12	&quot;	&quot;	PUNCT	PUNCT	_	11	punct	_	_
+13	,	,	PUNCT	PUNCT	_	15	punct	_	_
+14	Kuujärves	Kuujärves	PROPN	PROPN	_	15	obl	_	_
+15	ozuttau	ozuttau	VERB	VERB	_	3	conj	_	_
+16	spektaklii	spektaklii	NOUN	NOUN	_	15	obj	_	_
+17	Čičiliušku-t	Čičiliušku-t	NOUN	NOUN	_	15	nsubj	_	_
+18	y	y	X	X	_	17	goeswith	_	_
+19	ttiteatr	ttiteatr	X	X	_	17	goeswith	_	_
+20	u	u	X	X	_	17	goeswith	_	_
+21	.	.	PUNCT	PUNCT	_	15	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: olo_kkpp-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Häi saneloo : &quot; Konzu minun taatto oli bohattu , kolme virstaa oli kodi piduhuttu , a virstaa levevytty ; kezäkse kraassi koin mustal kraaskal , a talvekse valgiel .
+1	Häi	Häi	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	saneloo	saneloo	VERB	VERB	_	0	root	_	highlight=red
+3	:	:	PUNCT	PUNCT	_	9	punct	_	_
+4	&quot;	&quot;	PUNCT	PUNCT	_	9	punct	_	_
+5	Konzu	Konzu	SCONJ	SCONJ	_	9	mark	_	_
+6	minun	minun	PRON	PRON	_	7	nmod:poss	_	_
+7	taatto	taatto	NOUN	NOUN	_	9	nsubj:cop	_	_
+8	oli	oli	AUX	AUX	_	9	cop	_	_
+9	bohattu	bohattu	ADJ	ADJ	_	2	parataxis	_	_
+10	,	,	PUNCT	PUNCT	_	15	punct	_	_
+11	kolme	kolme	NUM	NUM	_	12	nummod	_	_
+12	virstaa	virstaa	NOUN	NOUN	_	15	obj	_	_
+13	oli	oli	AUX	AUX	_	14	cop	_	_
+14	kodi	kodi	NOUN	NOUN	_	15	nsubj:cop	_	_
+15	piduhuttu	piduhuttu	NOUN	NOUN	_	9	parataxis	_	_
+16	,	,	PUNCT	PUNCT	_	19	punct	_	_
+17	a	a	CCONJ	CCONJ	_	18	cc	_	_
+18	virstaa	virstaa	NOUN	NOUN	_	19	orphan	_	_
+19	levevytty	levevytty	NOUN	NOUN	_	15	conj	_	_
+20	;	;	PUNCT	PUNCT	_	22	punct	_	_
+21	kezäkse	kezäkse	NOUN	NOUN	_	22	obl	_	_
+22	kraassi	kraassi	VERB	VERB	_	15	parataxis	_	_
+23	koin	koin	NOUN	NOUN	_	22	obj	_	_
+24	mustal	mustal	ADJ	ADJ	_	25	amod	_	_
+25	kraaskal	kraaskal	NOUN	NOUN	_	22	obl	_	_
+26	,	,	PUNCT	PUNCT	_	25	punct	_	_
+27	a	a	CCONJ	CCONJ	_	28	cc	_	_
+28	talvekse	talvekse	NOUN	NOUN	_	29	orphan	_	_
+29	valgiel	valgiel	ADJ	ADJ	_	24	conj	_	_
+30	.	.	PUNCT	PUNCT	_	22	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

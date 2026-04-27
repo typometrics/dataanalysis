@@ -1,0 +1,686 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Naija — MAL_5</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Naija examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Naija <small style="color:#999;font-weight:normal">(pcm)</small> — MAL<sub>5</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>5</b> dependents in total (left + right combined).</p><p><b>MAL<sub>5</sub> = 3.293</b> &nbsp; <span style="color:#666">(257 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over all dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: pcm_nsc-ud-train.conllu · this verb has L=2, R=3 (mean span = 2.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = # so when I finish school < I con get work for radio station # by first experience //
+1	#	#	PUNCT	PUNCT	_	10	punct	_	_
+2	so	so	ADV	ADV	_	10	discourse	_	_
+3	when	when	ADV	ADV	_	10	advmod	_	highlight=green|span=4
+4	I	I	PRON	PRON	_	5	nsubj	_	_
+5	finish	finish	VERB	VERB	_	3	ccomp	_	_
+6	school	school	NOUN	NOUN	_	5	obj	_	_
+7	<	<	PUNCT	PUNCT	_	3	punct	_	_
+8	I	I	PRON	PRON	_	10	nsubj	_	highlight=green|span=1
+9	con	con	AUX	AUX	_	10	aux	_	_
+10	get	get	VERB	VERB	_	0	root	_	highlight=red
+11	work	work	NOUN	NOUN	_	10	obj	_	highlight=green|span=1
+12	for	for	ADP	ADP	_	14	case	_	_
+13	radio	radio	NOUN	NOUN	_	14	compound	_	_
+14	station	station	NOUN	NOUN	_	10	obl:arg	_	highlight=green|span=3
+15	#	#	PUNCT	PUNCT	_	18	punct	_	_
+16	by	by	ADP	ADP	_	18	case	_	_
+17	first	first	ADJ	ADJ	_	18	amod	_	_
+18	experience	experience	NOUN	NOUN	_	10	obl:mod	_	highlight=green|span=3
+19	//	//	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: pcm_nsc-ud-train.conllu · this verb has L=3, R=2 (mean span = 3.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = when time go reach < # wey I go # climb up # dey go < # I no just see my guy again //
+1	when	when	ADV	ADV	_	21	advmod	_	highlight=green|span=11
+2	time	time	NOUN	NOUN	_	4	nsubj	_	_
+3	go	go	AUX	AUX	_	4	aux	_	_
+4	reach	reach	VERB	VERB	_	1	ccomp	_	_
+5	<	<	PUNCT	PUNCT	_	11	punct	_	_
+6	#	#	PUNCT	PUNCT	_	11	punct	_	_
+7	wey	wey	SCONJ	SCONJ	_	11	mark	_	_
+8	I	I	PRON	PRON	_	11	nsubj	_	_
+9	go	go	AUX	AUX	_	11	aux	_	_
+10	#	#	PUNCT	PUNCT	_	11	punct	_	_
+11	climb	climb	VERB	VERB	_	2	acl:relcl	_	_
+12	up	up	ADP	ADP	_	11	compound:prt	_	_
+13	#	#	PUNCT	PUNCT	_	15	punct	_	_
+14	dey	dey	AUX	AUX	_	15	aux	_	_
+15	go	go	VERB	VERB	_	11	compound:svc	_	_
+16	<	<	PUNCT	PUNCT	_	1	punct	_	_
+17	#	#	PUNCT	PUNCT	_	1	punct	_	_
+18	I	I	PRON	PRON	_	21	nsubj	_	highlight=green|span=1
+19	no	no	AUX	AUX	_	21	aux	_	_
+20	just	just	ADV	ADV	_	21	advmod	_	highlight=green|span=1
+21	see	see	VERB	VERB	_	0	root	_	highlight=red
+22	my	my	PRON	PRON	_	23	nmod:poss	_	_
+23	guy	guy	NOUN	NOUN	_	21	obj	_	highlight=green|span=2
+24	again	again	ADV	ADV	_	21	advmod	_	highlight=green|span=1
+25	//	//	PUNCT	PUNCT	_	21	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: pcm_nsc-ud-train.conllu · this verb has L=3, R=2 (mean span = 3.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = # for one interview with { di project leader |a Warner Fortwiter } < im dey yarn sey [ Nigeria < dem go still benefit o from sey dem wan switch to renew build energy from electricity generation ] //
+1	#	#	PUNCT	PUNCT	_	17	punct	_	_
+2	for	for	ADP	ADP	_	4	case	_	_
+3	one	one	DET	DET	_	4	det	_	_
+4	interview	interview	NOUN	NOUN	_	17	obl:mod	_	_
+5	with	with	ADP	ADP	_	9	case	_	_
+6	{	{	PUNCT	PUNCT	_	9	punct	_	_
+7	di	di	DET	DET	_	9	det	_	_
+8	project	project	NOUN	NOUN	_	9	compound	_	_
+9	leader	leader	NOUN	NOUN	_	4	nmod	_	_
+10	|a	|a	PUNCT	PUNCT	_	11	punct	_	_
+11	Warner	Warner	PROPN	PROPN	_	9	appos	_	_
+12	Fortwiter	Fortwiter	PROPN	PROPN	_	11	flat	_	_
+13	}	}	PUNCT	PUNCT	_	9	punct	_	_
+14	<	<	PUNCT	PUNCT	_	4	punct	_	_
+15	im	im	PRON	PRON	_	17	nsubj	_	_
+16	dey	dey	AUX	AUX	_	17	aux	_	_
+17	yarn	yarn	VERB	VERB	_	0	root	_	_
+18	sey	sey	SCONJ	SCONJ	_	25	mark	_	_
+19	[	[	PUNCT	PUNCT	_	25	punct	_	_
+20	Nigeria	Nigeria	PROPN	PROPN	_	25	dislocated	_	highlight=green|span=1
+21	<	<	PUNCT	PUNCT	_	20	punct	_	_
+22	dem	dem	PRON	PRON	_	25	nsubj	_	highlight=green|span=1
+23	go	go	AUX	AUX	_	25	aux	_	_
+24	still	still	ADV	ADV	_	25	advmod	_	highlight=green|span=1
+25	benefit	benefit	VERB	VERB	_	17	ccomp	_	highlight=red
+26	o	o	PART	PART	_	25	advmod	_	highlight=green|span=1
+27	from	from	ADP	ADP	_	30	mark	_	_
+28	sey	sey	SCONJ	SCONJ	_	27	fixed	_	_
+29	dem	dem	PRON	PRON	_	30	nsubj	_	_
+30	wan	wan	VERB	VERB	_	25	ccomp	_	highlight=green|span=12
+31	switch	switch	VERB	VERB	_	30	xcomp	_	_
+32	to	to	ADP	ADP	_	33	mark	_	_
+33	renew	renew	VERB	VERB	_	31	ccomp	_	_
+34	build	build	VERB	VERB	_	31	conj	_	_
+35	energy	energy	NOUN	NOUN	_	34	obj	_	_
+36	from	from	ADP	ADP	_	38	case	_	_
+37	electricity	electricity	NOUN	NOUN	_	38	compound	_	_
+38	generation	generation	NOUN	NOUN	_	34	obl:arg	_	_
+39	]	]	PUNCT	PUNCT	_	25	punct	_	_
+40	//	//	PUNCT	PUNCT	_	17	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: pcm_nsc-ud-train.conllu · this verb has L=3, R=2 (mean span = 1.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = # men < # as dem be so ehn < we dey call dem # predators //
+1	#	#	PUNCT	PUNCT	_	13	punct	_	_
+2	men	men	NOUN	NOUN	_	13	dislocated	_	highlight=green|span=1
+3	<	<	PUNCT	PUNCT	_	2	punct	_	_
+4	#	#	PUNCT	PUNCT	_	2	punct	_	_
+5	as	as	ADP	ADP	_	7	mark	_	_
+6	dem	dem	PRON	PRON	_	7	nsubj	_	_
+7	be	be	VERB	VERB	_	13	advcl	_	highlight=green|span=4
+8	so	so	ADV	ADV	_	7	advmod	_	_
+9	ehn	ehn	INTJ	INTJ	_	13	discourse	_	_
+10	<	<	PUNCT	PUNCT	_	9	punct	_	_
+11	we	we	PRON	PRON	_	13	nsubj	_	highlight=green|span=1
+12	dey	dey	AUX	AUX	_	13	aux	_	_
+13	call	call	VERB	VERB	_	0	root	_	highlight=red
+14	dem	dem	PRON	PRON	_	13	obj	_	highlight=green|span=1
+15	#	#	PUNCT	PUNCT	_	16	punct	_	_
+16	predators	predators	NOUN	NOUN	_	13	xcomp	_	highlight=green|span=1
+17	//	//	PUNCT	PUNCT	_	13	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: pcm_nsc-ud-train.conllu · this verb has L=2, R=3 (mean span = 1.80)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = you < I know you for dis campus { tay |r tay } //
+1	you	you	PRON	PRON	_	4	dislocated	_	highlight=green|span=1
+2	<	<	PUNCT	PUNCT	_	1	punct	_	_
+3	I	I	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+4	know	know	VERB	VERB	_	0	root	_	highlight=red
+5	you	you	PRON	PRON	_	4	obj	_	highlight=green|span=1
+6	for	for	ADP	ADP	_	8	case	_	_
+7	dis	dis	DET	DET	_	8	det	_	_
+8	campus	campus	NOUN	NOUN	_	4	obl:mod	_	highlight=green|span=3
+9	{	{	PUNCT	PUNCT	_	10	punct	_	_
+10	tay	tay	VERB	VERB	_	4	advmod	_	highlight=green|span=3
+11	|r	|r	X	X	_	10	fixed	_	_
+12	tay	tay	VERB	VERB	_	10	fixed	_	_
+13	}	}	PUNCT	PUNCT	_	10	punct	_	_
+14	//	//	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: pcm_nsc-ud-train.conllu · this verb has L=3, R=2 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = # di next time wey { me |c and di guy } meet < di next year < # di boy see am sey [ power don jam power ] //
+1	#	#	PUNCT	PUNCT	_	22	punct	_	_
+2	di	di	DET	DET	_	4	det	_	_
+3	next	next	ADJ	ADJ	_	4	amod	_	_
+4	time	time	NOUN	NOUN	_	22	obl:mod	_	highlight=green|span=9
+5	wey	wey	SCONJ	SCONJ	_	13	mark	_	_
+6	{	{	PUNCT	PUNCT	_	7	punct	_	_
+7	me	me	PRON	PRON	_	13	nsubj	_	_
+8	|c	|c	PUNCT	PUNCT	_	11	punct	_	_
+9	and	and	CCONJ	CCONJ	_	11	cc	_	_
+10	di	di	DET	DET	_	11	det	_	_
+11	guy	guy	NOUN	NOUN	_	7	conj	_	_
+12	}	}	PUNCT	PUNCT	_	7	punct	_	_
+13	meet	meet	VERB	VERB	_	4	acl:relcl	_	_
+14	<	<	PUNCT	PUNCT	_	4	punct	_	_
+15	di	di	DET	DET	_	17	det	_	_
+16	next	next	ADJ	ADJ	_	17	amod	_	_
+17	year	year	NOUN	NOUN	_	22	obl:mod	_	highlight=green|span=3
+18	<	<	PUNCT	PUNCT	_	17	punct	_	_
+19	#	#	PUNCT	PUNCT	_	17	punct	_	_
+20	di	di	DET	DET	_	21	det	_	_
+21	boy	boy	NOUN	NOUN	_	22	nsubj	_	highlight=green|span=2
+22	see	see	VERB	VERB	_	0	root	_	highlight=red
+23	am	am	PRON	PRON	_	22	obj	_	highlight=green|span=1
+24	sey	sey	SCONJ	SCONJ	_	28	mark	_	_
+25	[	[	PUNCT	PUNCT	_	28	punct	_	_
+26	power	power	NOUN	NOUN	_	28	nsubj	_	_
+27	don	don	AUX	AUX	_	28	aux	_	_
+28	jam	jam	VERB	VERB	_	22	ccomp	_	highlight=green|span=5
+29	power	power	NOUN	NOUN	_	28	obj	_	_
+30	]	]	PUNCT	PUNCT	_	28	punct	_	_
+31	//	//	PUNCT	PUNCT	_	22	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: pcm_nsc-ud-train.conllu · this verb has L=3, R=2 (mean span = 13.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = and infact < and all dis one so < sey biko < sey make de borrow dem money { to use ehm to upgrade their situation |c to use take package all di things wey be sey de go use take eh make sure sey [ dis rice wey be sey de dey farm so < so di thing go dey { { very |r very } well |c { very |r very } good } # so dat de go dey fit to produce food # for we obodo people ] } //
+1	and	and	CCONJ	CCONJ	_	16	discourse	_	_
+2	infact	infact	ADV	ADV	_	16	advmod	_	highlight=green|span=1
+3	<	<	PUNCT	PUNCT	_	2	punct	_	_
+4	and	and	CCONJ	CCONJ	_	16	discourse	_	_
+5	all	all	DET	DET	_	7	det	_	_
+6	dis	dis	DET	DET	_	7	det	_	_
+7	one	one	NOUN	NOUN	_	16	dislocated	_	highlight=green|span=4
+8	so	so	ADV	ADV	_	7	advmod	_	_
+9	<	<	PUNCT	PUNCT	_	7	punct	_	_
+10	sey	sey	SCONJ	SCONJ	_	16	discourse	_	_
+11	biko	biko	ADV	ADV	_	16	discourse	_	_
+12	<	<	PUNCT	PUNCT	_	16	punct	_	_
+13	sey	sey	SCONJ	SCONJ	_	16	discourse	_	_
+14	make	make	AUX	AUX	_	16	aux	_	_
+15	de	de	PRON	PRON	_	16	nsubj	_	highlight=green|span=1
+16	borrow	borrow	VERB	VERB	_	0	root	_	highlight=red
+17	dem	dem	PRON	PRON	_	16	iobj	_	highlight=green|span=1
+18	money	money	NOUN	NOUN	_	16	obj	_	highlight=green|span=59
+19	{	{	PUNCT	PUNCT	_	21	punct	_	_
+20	to	to	ADP	ADP	_	21	mark	_	_
+21	use	use	VERB	VERB	_	18	acl	_	_
+22	ehm	ehm	INTJ	INTJ	_	24	discourse	_	_
+23	to	to	ADP	ADP	_	24	mark	_	_
+24	upgrade	upgrade	VERB	VERB	_	21	advcl	_	_
+25	their	their	PRON	PRON	_	26	nmod:poss	_	_
+26	situation	situation	NOUN	NOUN	_	24	obj	_	_
+27	|c	|c	PUNCT	PUNCT	_	29	punct	_	_
+28	to	to	ADP	ADP	_	29	mark	_	_
+29	use	use	VERB	VERB	_	21	conj	_	_
+30	take	take	SCONJ	SCONJ	_	31	mark	_	_
+31	package	package	VERB	VERB	_	29	advcl	_	_
+32	all	all	DET	DET	_	34	det	_	_
+33	di	di	DET	DET	_	34	det	_	_
+34	things	things	NOUN	NOUN	_	31	obj	_	_
+35	wey	wey	SCONJ	SCONJ	_	40	mark	_	_
+36	be	be	VERB	VERB	_	35	fixed	_	_
+37	sey	sey	SCONJ	SCONJ	_	35	fixed	_	_
+38	de	de	PRON	PRON	_	40	nsubj	_	_
+39	go	go	AUX	AUX	_	40	aux	_	_
+40	use	use	VERB	VERB	_	34	acl:relcl	_	_
+41	take	take	SCONJ	SCONJ	_	43	mark	_	_
+42	eh	eh	INTJ	INTJ	_	43	discourse	_	_
+43	make	make	VERB	VERB	_	40	advcl	_	_
+44	sure	sure	ADJ	ADJ	_	43	xcomp	_	_
+45	sey	sey	SCONJ	SCONJ	_	61	mark	_	_
+46	[	[	PUNCT	PUNCT	_	61	punct	_	_
+47	dis	dis	DET	DET	_	48	det	_	_
+48	rice	rice	NOUN	NOUN	_	61	dislocated	_	_
+49	wey	wey	SCONJ	SCONJ	_	54	mark	_	_
+50	be	be	VERB	VERB	_	49	fixed	_	_
+51	sey	sey	SCONJ	SCONJ	_	49	fixed	_	_
+52	de	de	PRON	PRON	_	54	nsubj	_	_
+53	dey	dey	AUX	AUX	_	54	aux	_	_
+54	farm	farm	VERB	VERB	_	48	acl:relcl	_	_
+55	so	so	ADV	ADV	_	54	advmod	_	_
+56	<	<	PUNCT	PUNCT	_	48	punct	_	_
+57	so	so	ADV	ADV	_	61	discourse	_	_
+58	di	di	DET	DET	_	59	det	_	_
+59	thing	thing	NOUN	NOUN	_	61	nsubj	_	_
+60	go	go	AUX	AUX	_	61	aux	_	_
+61	dey	dey	VERB	VERB	_	44	ccomp	_	_
+62	{	{	PUNCT	PUNCT	_	68	punct	_	_
+63	{	{	PUNCT	PUNCT	_	64	punct	_	_
+64	very	very	ADV	ADV	_	68	advmod	_	_
+65	|r	|r	PUNCT	PUNCT	_	66	punct	_	_
+66	very	very	ADV	ADV	_	64	compound:redup	_	_
+67	}	}	PUNCT	PUNCT	_	64	punct	_	_
+68	well	well	ADV	ADV	_	61	xcomp	_	_
+69	|c	|c	PUNCT	PUNCT	_	75	punct	_	_
+70	{	{	PUNCT	PUNCT	_	71	punct	_	_
+71	very	very	ADV	ADV	_	75	advmod	_	_
+72	|r	|r	PUNCT	PUNCT	_	73	punct	_	_
+73	very	very	ADV	ADV	_	71	compound:redup	_	_
+74	}	}	PUNCT	PUNCT	_	71	punct	_	_
+75	good	good	ADJ	ADJ	_	68	conj	_	_
+76	}	}	PUNCT	PUNCT	_	68	punct	_	_
+77	#	#	PUNCT	PUNCT	_	82	punct	_	_
+78	so	so	SCONJ	SCONJ	_	82	mark	_	_
+79	dat	dat	SCONJ	SCONJ	_	78	fixed	_	_
+80	de	de	PRON	PRON	_	82	nsubj	_	_
+81	go	go	AUX	AUX	_	82	aux	_	_
+82	dey	dey	VERB	VERB	_	61	advcl	_	_
+83	fit	fit	ADJ	ADJ	_	82	xcomp	_	_
+84	to	to	ADP	ADP	_	85	mark	_	_
+85	produce	produce	VERB	VERB	_	83	ccomp	_	_
+86	food	food	NOUN	NOUN	_	85	obj	_	_
+87	#	#	PUNCT	PUNCT	_	91	punct	_	_
+88	for	for	ADP	ADP	_	91	case	_	_
+89	we	we	PRON	PRON	_	91	nmod:poss	_	_
+90	obodo	obodo	NOUN	NOUN	_	91	compound	_	_
+91	people	people	NOUN	NOUN	_	85	obl:arg	_	_
+92	]	]	PUNCT	PUNCT	_	61	punct	_	_
+93	}	}	PUNCT	PUNCT	_	21	punct	_	_
+94	//	//	PUNCT	PUNCT	_	16	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: pcm_nsc-ud-dev.conllu · this verb has L=3, R=2 (mean span = 3.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = # sey # as far as # di place weh me I dey go good < # meh me I dey careful for dere //
+1	#	#	PUNCT	PUNCT	_	21	punct	_	_
+2	sey	sey	SCONJ	SCONJ	_	21	discourse	_	_
+3	#	#	PUNCT	PUNCT	_	2	punct	_	_
+4	as	as	ADP	ADP	_	15	mark	_	_
+5	far	far	ADV	ADV	_	4	fixed	_	_
+6	as	as	ADP	ADP	_	4	fixed	_	_
+7	#	#	PUNCT	PUNCT	_	15	punct	_	_
+8	di	di	DET	DET	_	9	det	_	_
+9	place	place	NOUN	NOUN	_	15	nsubj	_	_
+10	weh	weh	SCONJ	SCONJ	_	14	mark	_	_
+11	me	me	PRON	PRON	_	14	dislocated	_	_
+12	I	I	PRON	PRON	_	14	nsubj	_	_
+13	dey	dey	AUX	AUX	_	14	aux	_	_
+14	go	go	VERB	VERB	_	9	acl:relcl	_	_
+15	good	good	ADJ	ADJ	_	21	advcl	_	highlight=green|span=11
+16	<	<	PUNCT	PUNCT	_	15	punct	_	_
+17	#	#	PUNCT	PUNCT	_	15	punct	_	_
+18	meh	meh	AUX	AUX	_	21	aux	_	_
+19	me	me	PRON	PRON	_	21	dislocated	_	highlight=green|span=1
+20	I	I	PRON	PRON	_	21	nsubj	_	highlight=green|span=1
+21	dey	dey	VERB	VERB	_	0	root	_	highlight=red
+22	careful	careful	ADJ	ADJ	_	21	xcomp	_	highlight=green|span=1
+23	for	for	ADP	ADP	_	24	case	_	_
+24	dere	dere	ADV	ADV	_	21	obl:arg	_	highlight=green|span=2
+25	//	//	PUNCT	PUNCT	_	21	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: pcm_nsc-ud-dev.conllu · this verb has L=4, R=1 (mean span = 3.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = # after I work wey di woman dey pay me my money < # I come from dere finish my junior WAEC //
+1	#	#	PUNCT	PUNCT	_	19	punct	_	_
+2	after	after	ADP	ADP	_	4	mark	_	_
+3	I	I	PRON	PRON	_	4	nsubj	_	_
+4	work	work	VERB	VERB	_	19	advcl	_	highlight=green|span=3
+5	wey	wey	SCONJ	SCONJ	_	9	mark	_	_
+6	di	di	DET	DET	_	7	det	_	_
+7	woman	woman	NOUN	NOUN	_	9	nsubj	_	_
+8	dey	dey	AUX	AUX	_	9	aux	_	_
+9	pay	pay	VERB	VERB	_	19	advcl	_	highlight=green|span=8
+10	me	me	PRON	PRON	_	9	iobj	_	_
+11	my	my	PRON	PRON	_	12	nmod:poss	_	_
+12	money	money	NOUN	NOUN	_	9	obj	_	_
+13	<	<	PUNCT	PUNCT	_	9	punct	_	_
+14	#	#	PUNCT	PUNCT	_	9	punct	_	_
+15	I	I	PRON	PRON	_	19	nsubj	_	highlight=green|span=1
+16	come	come	AUX	AUX	_	19	aux	_	_
+17	from	from	ADP	ADP	_	18	case	_	_
+18	dere	dere	ADV	ADV	_	19	advmod	_	highlight=green|span=2
+19	finish	finish	VERB	VERB	_	0	root	_	highlight=red
+20	my	my	PRON	PRON	_	22	nmod	_	_
+21	junior	junior	ADJ	ADJ	_	22	amod	_	_
+22	WAEC	WAEC	PROPN	PROPN	_	19	obj	_	highlight=green|span=3
+23	//	//	PUNCT	PUNCT	_	19	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: pcm_nsc-ud-train.conllu · this verb has L=3, R=2 (mean span = 1.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = # actually < we no dey too speak Pidgin English like dat //
+1	#	#	PUNCT	PUNCT	_	8	punct	_	_
+2	actually	actually	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+3	<	<	PUNCT	PUNCT	_	2	punct	_	_
+4	we	we	PRON	PRON	_	8	nsubj	_	highlight=green|span=1
+5	no	no	AUX	AUX	_	8	aux	_	_
+6	dey	dey	AUX	AUX	_	8	aux	_	_
+7	too	too	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+8	speak	speak	VERB	VERB	_	0	root	_	highlight=red
+9	Pidgin	Pidgin	PROPN	PROPN	_	10	compound	_	_
+10	English	English	PROPN	PROPN	_	8	obj	_	highlight=green|span=2
+11	like	like	ADP	ADP	_	12	case	_	_
+12	dat	dat	PRON	PRON	_	8	obl:mod	_	highlight=green|span=2
+13	//	//	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: pcm_nsc-ud-dev.conllu · this verb has L=3, R=2 (mean span = 6.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = # and all dis division of eh { Nigeria |c Biafra of a ting } < mtschew I no dey # kuku like am because # if you check am sey # [ { for Ea~ || for East } < # { people no || # de no || # no } any infrastructure ] //
+1	#	#	PUNCT	PUNCT	_	23	punct	_	_
+2	and	and	CCONJ	CCONJ	_	23	discourse	_	_
+3	all	all	DET	DET	_	5	det	_	_
+4	dis	dis	DET	DET	_	5	det	_	_
+5	division	division	NOUN	NOUN	_	23	dislocated	_	highlight=green|span=10
+6	of	of	ADP	ADP	_	9	case	_	_
+7	eh	eh	INTJ	INTJ	_	9	discourse	_	_
+8	{	{	PUNCT	PUNCT	_	9	punct	_	_
+9	Nigeria	Nigeria	PROPN	PROPN	_	5	nmod	_	_
+10	|c	|c	PUNCT	PUNCT	_	11	punct	_	_
+11	Biafra	Biafra	PROPN	PROPN	_	9	conj	_	_
+12	of	of	ADP	ADP	_	14	case	_	_
+13	a	a	DET	DET	_	14	det	_	_
+14	ting	ting	NOUN	NOUN	_	11	nmod	_	_
+15	}	}	PUNCT	PUNCT	_	9	punct	_	_
+16	<	<	PUNCT	PUNCT	_	5	punct	_	_
+17	mtschew	mtschew	INTJ	INTJ	_	23	discourse	_	_
+18	I	I	PRON	PRON	_	23	nsubj	_	highlight=green|span=1
+19	no	no	AUX	AUX	_	23	aux	_	_
+20	dey	dey	AUX	AUX	_	23	aux	_	_
+21	#	#	PUNCT	PUNCT	_	23	punct	_	_
+22	kuku	kuku	ADV	ADV	_	23	advmod	_	highlight=green|span=1
+23	like	like	VERB	VERB	_	0	root	_	highlight=red
+24	am	am	PRON	PRON	_	23	obj	_	highlight=green|span=1
+25	because	because	SCONJ	SCONJ	_	52	mark	_	_
+26	#	#	PUNCT	PUNCT	_	52	punct	_	_
+27	if	if	SCONJ	SCONJ	_	29	mark	_	_
+28	you	you	PRON	PRON	_	29	nsubj	_	_
+29	check	check	VERB	VERB	_	45	advcl	_	_
+30	am	am	PRON	PRON	_	29	obj	_	_
+31	sey	sey	SCONJ	SCONJ	_	45	discourse	_	_
+32	#	#	PUNCT	PUNCT	_	31	punct	_	_
+33	[	[	PUNCT	PUNCT	_	45	punct	_	_
+34	{	{	PUNCT	PUNCT	_	39	punct	_	_
+35	for	for	ADP	ADP	_	36	case	_	_
+36	Ea~	Ea~	X	X	_	39	reparandum	_	_
+37	||	||	PUNCT	PUNCT	_	36	punct	_	_
+38	for	for	ADP	ADP	_	39	case	_	_
+39	East	East	PROPN	PROPN	_	45	obl:mod	_	_
+40	}	}	PUNCT	PUNCT	_	39	punct	_	_
+41	<	<	PUNCT	PUNCT	_	39	punct	_	_
+42	#	#	PUNCT	PUNCT	_	39	punct	_	_
+43	{	{	PUNCT	PUNCT	_	45	punct	_	_
+44	people	people	NOUN	NOUN	_	45	nsubj	_	_
+45	no	no	AUX	AUX	_	52	reparandum	_	_
+46	||	||	PUNCT	PUNCT	_	45	punct	_	_
+47	#	#	PUNCT	PUNCT	_	45	punct	_	_
+48	de	de	PRON	PRON	_	49	nsubj	_	_
+49	no	no	AUX	AUX	_	52	reparandum	_	_
+50	||	||	PUNCT	PUNCT	_	49	punct	_	_
+51	#	#	PUNCT	PUNCT	_	49	punct	_	_
+52	no	no	PART	PART	_	23	advcl	_	highlight=green|span=17
+53	}	}	PUNCT	PUNCT	_	52	punct	_	_
+54	any	any	DET	DET	_	55	det	_	_
+55	infrastructure	infrastructure	NOUN	NOUN	_	52	xcomp	_	_
+56	]	]	PUNCT	PUNCT	_	52	punct	_	_
+57	//	//	PUNCT	PUNCT	_	23	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: pcm_nsc-ud-train.conllu · this verb has L=2, R=3 (mean span = 3.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = even if I go Lagos < heat no dey gree me stay # because I don dey use to dis town //
+1	even	even	ADV	ADV	_	4	advmod	_	_
+2	if	if	SCONJ	SCONJ	_	4	mark	_	_
+3	I	I	PRON	PRON	_	4	nsubj	_	_
+4	go	go	VERB	VERB	_	10	advcl	_	highlight=green|span=5
+5	Lagos	Lagos	PROPN	PROPN	_	4	obl:arg	_	_
+6	<	<	PUNCT	PUNCT	_	4	punct	_	_
+7	heat	heat	NOUN	NOUN	_	10	nsubj	_	highlight=green|span=1
+8	no	no	AUX	AUX	_	10	aux	_	_
+9	dey	dey	AUX	AUX	_	10	aux	_	_
+10	gree	gree	VERB	VERB	_	0	root	_	highlight=red
+11	me	me	PRON	PRON	_	10	obj	_	highlight=green|span=1
+12	stay	stay	VERB	VERB	_	10	xcomp	_	highlight=green|span=1
+13	#	#	PUNCT	PUNCT	_	18	punct	_	_
+14	because	because	SCONJ	SCONJ	_	18	mark	_	_
+15	I	I	PRON	PRON	_	18	nsubj	_	_
+16	don	don	AUX	AUX	_	18	aux	_	_
+17	dey	dey	AUX	AUX	_	18	aux	_	_
+18	use	use	VERB	VERB	_	10	advcl	_	highlight=green|span=8
+19	to	to	ADP	ADP	_	21	case	_	_
+20	dis	dis	DET	DET	_	21	det	_	_
+21	town	town	NOUN	NOUN	_	18	obl:arg	_	_
+22	//	//	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: pcm_nsc-ud-train.conllu · this verb has L=3, R=2 (mean span = 2.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = # e fit be sey [ because of nearness to # di raw materials < # e build am for dat side ] //
+1	#	#	PUNCT	PUNCT	_	18	punct	_	_
+2	e	e	PRON	PRON	_	18	nsubj:outer	_	highlight=green|span=1
+3	fit	fit	AUX	AUX	_	18	aux	_	_
+4	be	be	AUX	AUX	_	18	cop	_	_
+5	sey	sey	SCONJ	SCONJ	_	18	mark	_	_
+6	[	[	PUNCT	PUNCT	_	18	punct	_	_
+7	because	because	SCONJ	SCONJ	_	9	case	_	_
+8	of	of	ADP	ADP	_	7	fixed	_	_
+9	nearness	nearness	NOUN	NOUN	_	18	obl:mod	_	highlight=green|span=7
+10	to	to	ADP	ADP	_	14	case	_	_
+11	#	#	PUNCT	PUNCT	_	14	punct	_	_
+12	di	di	DET	DET	_	14	det	_	_
+13	raw	raw	ADJ	ADJ	_	14	amod	_	_
+14	materials	materials	NOUN	NOUN	_	9	nmod	_	_
+15	<	<	PUNCT	PUNCT	_	9	punct	_	_
+16	#	#	PUNCT	PUNCT	_	9	punct	_	_
+17	e	e	PRON	PRON	_	18	nsubj	_	highlight=green|span=1
+18	build	build	VERB	VERB	_	0	root	_	highlight=red
+19	am	am	PRON	PRON	_	18	obj	_	highlight=green|span=1
+20	for	for	ADP	ADP	_	22	case	_	_
+21	dat	dat	DET	DET	_	22	det	_	_
+22	side	side	NOUN	NOUN	_	18	obl:arg	_	highlight=green|span=3
+23	]	]	PUNCT	PUNCT	_	18	punct	_	_
+24	//	//	PUNCT	PUNCT	_	18	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: pcm_nsc-ud-train.conllu · this verb has L=3, R=2 (mean span = 3.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = # so di next day when in di night of it < # di girl con put sleeping medicine for di # king drink //
+1	#	#	PUNCT	PUNCT	_	17	punct	_	_
+2	so	so	ADV	ADV	_	17	discourse	_	_
+3	di	di	DET	DET	_	5	det	_	_
+4	next	next	ADJ	ADJ	_	5	amod	_	_
+5	day	day	NOUN	NOUN	_	17	obl:mod	_	highlight=green|span=3
+6	when	when	ADV	ADV	_	17	advmod	_	highlight=green|span=6
+7	in	in	ADP	ADP	_	9	case	_	_
+8	di	di	DET	DET	_	9	det	_	_
+9	night	night	NOUN	NOUN	_	6	obj	_	_
+10	of	of	ADP	ADP	_	11	case	_	_
+11	it	it	PRON	PRON	_	9	nmod	_	_
+12	<	<	PUNCT	PUNCT	_	6	punct	_	_
+13	#	#	PUNCT	PUNCT	_	17	punct	_	_
+14	di	di	DET	DET	_	15	det	_	_
+15	girl	girl	NOUN	NOUN	_	17	nsubj	_	highlight=green|span=2
+16	con	con	AUX	AUX	_	17	aux	_	_
+17	put	put	VERB	VERB	_	0	root	_	highlight=red
+18	sleeping	sleeping	VERB	VERB	_	19	compound	_	_
+19	medicine	medicine	NOUN	NOUN	_	17	obj	_	highlight=green|span=2
+20	for	for	ADP	ADP	_	24	case	_	_
+21	di	di	DET	DET	_	24	det	_	_
+22	#	#	PUNCT	PUNCT	_	21	punct	_	_
+23	king	king	NOUN	NOUN	_	24	nmod	_	_
+24	drink	drink	NOUN	NOUN	_	17	obl:arg	_	highlight=green|span=4
+25	//	//	PUNCT	PUNCT	_	17	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: pcm_nsc-ud-train.conllu · this verb has L=4, R=1 (mean span = 2.80)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = # for inside barrack here < in di morning < if I wake up < # I go bath my pikin //= # I go put food for fire //
+1	#	#	PUNCT	PUNCT	_	19	punct	_	_
+2	for	for	ADP	ADP	_	4	case	_	_
+3	inside	inside	ADP	ADP	_	2	fixed	_	_
+4	barrack	barrack	NOUN	NOUN	_	19	obl:mod	_	highlight=green|span=4
+5	here	here	ADV	ADV	_	4	advmod	_	_
+6	<	<	PUNCT	PUNCT	_	4	punct	_	_
+7	in	in	ADP	ADP	_	9	case	_	_
+8	di	di	DET	DET	_	9	det	_	_
+9	morning	morning	NOUN	NOUN	_	19	obl:mod	_	highlight=green|span=3
+10	<	<	PUNCT	PUNCT	_	9	punct	_	_
+11	if	if	SCONJ	SCONJ	_	13	mark	_	_
+12	I	I	PRON	PRON	_	13	nsubj	_	_
+13	wake	wake	VERB	VERB	_	19	advcl	_	highlight=green|span=4
+14	up	up	ADP	ADP	_	13	compound:prt	_	_
+15	<	<	PUNCT	PUNCT	_	13	punct	_	_
+16	#	#	PUNCT	PUNCT	_	13	punct	_	_
+17	I	I	PRON	PRON	_	19	nsubj	_	highlight=green|span=1
+18	go	go	AUX	AUX	_	19	aux	_	_
+19	bath	bath	VERB	VERB	_	0	root	_	highlight=red
+20	my	my	PRON	PRON	_	21	nmod:poss	_	_
+21	pikin	pikin	NOUN	NOUN	_	19	obj	_	highlight=green|span=2
+22	//=	//=	PUNCT	PUNCT	_	26	punct	_	_
+23	#	#	PUNCT	PUNCT	_	26	punct	_	_
+24	I	I	PRON	PRON	_	26	nsubj	_	_
+25	go	go	AUX	AUX	_	26	aux	_	_
+26	put	put	VERB	VERB	_	19	parataxis:conj	_	_
+27	food	food	NOUN	NOUN	_	26	obj	_	_
+28	for	for	ADP	ADP	_	29	case	_	_
+29	fire	fire	NOUN	NOUN	_	26	obl:arg	_	_
+30	//	//	PUNCT	PUNCT	_	19	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: pcm_nsc-ud-train.conllu · this verb has L=3, R=2 (mean span = 3.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = based on { one |c or two } issue < I just # free di place because of { finance |c and some oder tings } //
+1	based	based	VERB	VERB	_	9	case	_	_
+2	on	on	ADP	ADP	_	1	fixed	_	_
+3	{	{	PUNCT	PUNCT	_	4	punct	_	_
+4	one	one	NUM	NUM	_	9	nummod	_	_
+5	|c	|c	PUNCT	PUNCT	_	7	punct	_	_
+6	or	or	CCONJ	CCONJ	_	7	cc	_	_
+7	two	two	NUM	NUM	_	4	conj	_	_
+8	}	}	PUNCT	PUNCT	_	4	punct	_	_
+9	issue	issue	NOUN	NOUN	_	14	obl:mod	_	highlight=green|span=6
+10	<	<	PUNCT	PUNCT	_	9	punct	_	_
+11	I	I	PRON	PRON	_	14	nsubj	_	highlight=green|span=1
+12	just	just	ADV	ADV	_	14	advmod	_	highlight=green|span=1
+13	#	#	PUNCT	PUNCT	_	12	punct	_	_
+14	free	free	VERB	VERB	_	0	root	_	highlight=red
+15	di	di	DET	DET	_	16	det	_	_
+16	place	place	NOUN	NOUN	_	14	obj	_	highlight=green|span=2
+17	because	because	SCONJ	SCONJ	_	20	case	_	_
+18	of	of	ADP	ADP	_	17	fixed	_	_
+19	{	{	PUNCT	PUNCT	_	20	punct	_	_
+20	finance	finance	NOUN	NOUN	_	14	obl:mod	_	highlight=green|span=7
+21	|c	|c	PUNCT	PUNCT	_	25	punct	_	_
+22	and	and	CCONJ	CCONJ	_	25	cc	_	_
+23	some	some	DET	DET	_	25	det	_	_
+24	oder	oder	ADJ	ADJ	_	25	amod	_	_
+25	tings	tings	NOUN	NOUN	_	20	conj	_	_
+26	}	}	PUNCT	PUNCT	_	20	punct	_	_
+27	//	//	PUNCT	PUNCT	_	14	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: pcm_nsc-ud-train.conllu · this verb has L=3, R=2 (mean span = 2.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = early morning for Jos < you go see people for joint dey chop masa # like di way wey for anoder place < maybe dem go dey chop # { ewa |c or something else } like dat //
+1	early	early	ADJ	ADJ	_	2	amod	_	_
+2	morning	morning	NOUN	NOUN	_	8	obl:mod	_	_
+3	for	for	ADP	ADP	_	4	case	_	_
+4	Jos	Jos	PROPN	PROPN	_	8	obl:mod	_	_
+5	<	<	PUNCT	PUNCT	_	4	punct	_	_
+6	you	you	PRON	PRON	_	8	nsubj	_	_
+7	go	go	AUX	AUX	_	8	aux	_	_
+8	see	see	VERB	VERB	_	0	root	_	_
+9	people	people	NOUN	NOUN	_	8	obj	_	_
+10	for	for	ADP	ADP	_	11	case	_	_
+11	joint	joint	NOUN	NOUN	_	8	obl:arg	_	_
+12	dey	dey	AUX	AUX	_	13	aux	_	_
+13	chop	chop	VERB	VERB	_	8	xcomp	_	_
+14	masa	masa	NOUN	NOUN	_	13	obj	_	_
+15	#	#	PUNCT	PUNCT	_	18	punct	_	_
+16	like	like	ADP	ADP	_	18	case	_	_
+17	di	di	DET	DET	_	18	det	_	_
+18	way	way	NOUN	NOUN	_	13	obl:mod	_	_
+19	wey	wey	SCONJ	SCONJ	_	28	mark	_	_
+20	for	for	ADP	ADP	_	22	case	_	_
+21	anoder	anoder	DET	DET	_	22	det	_	_
+22	place	place	NOUN	NOUN	_	28	obl:mod	_	highlight=green|span=3
+23	<	<	PUNCT	PUNCT	_	22	punct	_	_
+24	maybe	maybe	ADV	ADV	_	28	advmod	_	highlight=green|span=1
+25	dem	dem	PRON	PRON	_	28	nsubj	_	highlight=green|span=1
+26	go	go	AUX	AUX	_	28	aux	_	_
+27	dey	dey	AUX	AUX	_	28	aux	_	_
+28	chop	chop	VERB	VERB	_	18	acl:relcl	_	highlight=red
+29	#	#	PUNCT	PUNCT	_	31	punct	_	_
+30	{	{	PUNCT	PUNCT	_	31	punct	_	_
+31	ewa	ewa	NOUN	NOUN	_	28	obj	_	highlight=green|span=4
+32	|c	|c	PUNCT	PUNCT	_	34	punct	_	_
+33	or	or	CCONJ	CCONJ	_	34	cc	_	_
+34	something	something	PRON	PRON	_	31	conj	_	_
+35	else	else	ADJ	ADJ	_	34	amod	_	_
+36	}	}	PUNCT	PUNCT	_	31	punct	_	_
+37	like	like	ADP	ADP	_	38	case	_	_
+38	dat	dat	PRON	PRON	_	28	obl:mod	_	highlight=green|span=2
+39	//	//	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: pcm_nsc-ud-train.conllu · this verb has L=3, R=2 (mean span = 1.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = # ten o'clock < I still dey kitchen dey cook //
+1	#	#	PUNCT	PUNCT	_	7	punct	_	_
+2	ten	ten	NUM	NUM	_	7	nummod	_	highlight=green|span=2
+3	o'clock	o'clock	ADV	ADV	_	2	advmod	_	_
+4	<	<	PUNCT	PUNCT	_	2	punct	_	_
+5	I	I	PRON	PRON	_	7	nsubj	_	highlight=green|span=1
+6	still	still	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+7	dey	dey	VERB	VERB	_	0	root	_	highlight=red
+8	kitchen	kitchen	NOUN	NOUN	_	7	xcomp	_	highlight=green|span=1
+9	dey	dey	AUX	AUX	_	10	aux	_	_
+10	cook	cook	VERB	VERB	_	7	advcl	_	highlight=green|span=2
+11	//	//	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: pcm_nsc-ud-train.conllu · this verb has L=2, R=3 (mean span = 2.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = # den once is twelve o'clock < remember by di grace of God < # Dr Sam go join us inside studio > # a gyneacologist //
+1	#	#	PUNCT	PUNCT	_	8	punct	_	_
+2	den	den	ADV	ADV	_	3	advmod	_	_
+3	once	once	ADV	ADV	_	8	advmod	_	_
+4	is	is	AUX	AUX	_	5	cop	_	_
+5	twelve	twelve	NUM	NUM	_	3	ccomp	_	_
+6	o'clock	o'clock	ADV	ADV	_	5	advmod	_	_
+7	<	<	PUNCT	PUNCT	_	3	punct	_	_
+8	remember	remember	VERB	VERB	_	0	root	_	_
+9	by	by	ADP	ADP	_	11	case	_	_
+10	di	di	DET	DET	_	11	det	_	_
+11	grace	grace	NOUN	NOUN	_	19	obl:mod	_	highlight=green|span=5
+12	of	of	ADP	ADP	_	13	case	_	_
+13	God	God	PROPN	PROPN	_	11	nmod	_	_
+14	<	<	PUNCT	PUNCT	_	11	punct	_	_
+15	#	#	PUNCT	PUNCT	_	11	punct	_	_
+16	Dr	Dr	NOUN	NOUN	_	19	nsubj	_	highlight=green|span=2
+17	Sam	Sam	PROPN	PROPN	_	16	flat	_	_
+18	go	go	AUX	AUX	_	19	aux	_	_
+19	join	join	VERB	VERB	_	8	ccomp	_	highlight=red
+20	us	us	PRON	PRON	_	19	obj	_	highlight=green|span=1
+21	inside	inside	ADP	ADP	_	22	case	_	_
+22	studio	studio	NOUN	NOUN	_	19	obl:arg	_	highlight=green|span=2
+23	>	>	PUNCT	PUNCT	_	26	punct	_	_
+24	#	#	PUNCT	PUNCT	_	26	punct	_	_
+25	a	a	DET	DET	_	26	det	_	_
+26	gyneacologist	gyneacologist	NOUN	NOUN	_	19	dislocated	_	highlight=green|span=2
+27	//	//	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: pcm_nsc-ud-train.conllu · this verb has L=1, R=4 (mean span = 2.80)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = # so I work for Warri for radio station as a presenter for about eh two years //
+1	#	#	PUNCT	PUNCT	_	4	punct	_	_
+2	so	so	ADV	ADV	_	4	discourse	_	_
+3	I	I	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+4	work	work	VERB	VERB	_	0	root	_	highlight=red
+5	for	for	ADP	ADP	_	6	case	_	_
+6	Warri	Warri	PROPN	PROPN	_	4	obl:mod	_	highlight=green|span=2
+7	for	for	ADP	ADP	_	9	case	_	_
+8	radio	radio	NOUN	NOUN	_	9	compound	_	_
+9	station	station	NOUN	NOUN	_	4	obl:mod	_	highlight=green|span=3
+10	as	as	ADP	ADP	_	12	case	_	_
+11	a	a	DET	DET	_	12	det	_	_
+12	presenter	presenter	NOUN	NOUN	_	4	obl:mod	_	highlight=green|span=3
+13	for	for	ADP	ADP	_	17	case	_	_
+14	about	about	ADP	ADP	_	16	dep	_	_
+15	eh	eh	INTJ	INTJ	_	14	discourse	_	_
+16	two	two	NUM	NUM	_	17	nummod	_	_
+17	years	years	NOUN	NOUN	_	4	obl:mod	_	highlight=green|span=5
+18	//	//	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

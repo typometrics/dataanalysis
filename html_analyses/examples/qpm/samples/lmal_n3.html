@@ -1,0 +1,508 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Pomak — LMAL_3</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Pomak examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Pomak <small style="color:#999;font-weight:normal">(qpm)</small> — LMAL<sub>3</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>3</b> left dependents (right side may be anything).</p><p><b>LMAL<sub>3</sub> = 1.591</b> &nbsp; <span style="color:#666">(225 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>left</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: qpm_philotis-ud-dev.conllu · this verb has L=3, R=0 (mean span = 3.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Móčil je da prekára na nášasek hüküméte 9 kišǽh ad Siría alá go fátiho
+1	Móčil	Móčil	VERB	VERB	_	0	root	_	_
+2	je	je	AUX	AUX	_	1	aux	_	_
+3	da	da	AUX	AUX	_	4	aux	_	_
+4	prekára	prekára	VERB	VERB	_	14	ccomp	_	highlight=green|span=5
+5	na	na	ADP	ADP	_	7	case	_	_
+6	nášasek	nášasek	DET	DET	_	7	det	_	_
+7	hüküméte	hüküméte	NOUN	NOUN	_	4	iobj	_	_
+8	9	9	NUM	NUM	_	9	nummod	_	_
+9	kišǽh	kišǽh	NOUN	NOUN	_	14	nsubj	_	highlight=green|span=4
+10	ad	ad	ADP	ADP	_	11	case	_	_
+11	Siría	Siría	PROPN	PROPN	_	9	nmod	_	_
+12	alá	alá	CCONJ	CCONJ	_	14	cc	_	_
+13	go	go	PRON	PRON	_	14	obj	_	highlight=green|span=1
+14	fátiho	fátiho	VERB	VERB	_	1	ccomp	_	highlight=red"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: qpm_philotis-ud-train.conllu · this verb has L=3, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ad kaknása stánava faf sonunǧúso mésecy faf nášasek hüküméte , mlózi stánaho i nabího na drúgy hüküméteve za da nájdot annó rábato i pó húbavok žyvóta i žíne so éšte ne nabívali , čúdet só da go stóret óti kákna sí víkot i tíje , itúj néma da vídet bǽla déne .
+1	Ad	Ad	ADP	ADP	_	3	mark	_	_
+2	kaknása	kaknása	PRON	PRON	_	3	obj	_	_
+3	stánava	stánava	VERB	VERB	_	12	acl:relcl	_	_
+4	faf	faf	ADP	ADP	_	6	case	_	_
+5	sonunǧúso	sonunǧúso	ADJ	ADJ	_	6	amod	_	_
+6	mésecy	mésecy	NOUN	NOUN	_	3	obl:tmod	_	_
+7	faf	faf	ADP	ADP	_	9	case	_	_
+8	nášasek	nášasek	DET	DET	_	9	det	_	_
+9	hüküméte	hüküméte	NOUN	NOUN	_	3	obl:tmod	_	_
+10	,	,	PUNCT	PUNCT	_	12	punct	_	_
+11	mlózi	mlózi	DET	DET	_	12	nsubj	_	_
+12	stánaho	stánaho	VERB	VERB	_	0	root	_	_
+13	i	i	CCONJ	CCONJ	_	14	cc	_	_
+14	nabího	nabího	VERB	VERB	_	12	conj	_	_
+15	na	na	ADP	ADP	_	17	case	_	_
+16	drúgy	drúgy	DET	DET	_	17	det	_	_
+17	hüküméteve	hüküméteve	NOUN	NOUN	_	14	obl:lmod	_	_
+18	za	za	SCONJ	SCONJ	_	20	mark	_	_
+19	da	da	PART	PART	_	18	fixed	_	_
+20	nájdot	nájdot	VERB	VERB	_	14	advcl	_	_
+21	annó	annó	DET	DET	_	22	det	_	_
+22	rábato	rábato	NOUN	NOUN	_	20	obj	_	_
+23	i	i	CCONJ	CCONJ	_	26	cc	_	_
+24	pó	pó	ADV	ADV	_	25	advmod	_	_
+25	húbavok	húbavok	ADJ	ADJ	_	26	amod	_	_
+26	žyvóta	žyvóta	NOUN	NOUN	_	22	conj	_	_
+27	i	i	CCONJ	CCONJ	_	34	cc	_	_
+28	žíne	žíne	DET	DET	_	32	nsubj	_	highlight=green|span=1
+29	so	so	AUX	AUX	_	32	aux	_	_
+30	éšte	éšte	ADV	ADV	_	32	advmod:emph	_	highlight=green|span=1
+31	ne	ne	PART	PART	_	32	advmod	_	highlight=green|span=1
+32	nabívali	nabívali	VERB	VERB	_	34	csubj	_	highlight=red
+33	,	,	PUNCT	PUNCT	_	32	punct	_	_
+34	čúdet	čúdet	VERB	VERB	_	14	conj	_	_
+35	só	só	PRON	PRON	_	34	expl	_	_
+36	da	da	AUX	AUX	_	38	aux	_	_
+37	go	go	PRON	PRON	_	38	obj	_	_
+38	stóret	stóret	VERB	VERB	_	34	advcl	_	_
+39	óti	óti	SCONJ	SCONJ	_	42	mark	_	_
+40	kákna	kákna	ADV	ADV	_	42	advmod	_	_
+41	sí	sí	PRON	PRON	_	42	expl	_	_
+42	víkot	víkot	VERB	VERB	_	38	advcl	_	_
+43	i	i	CCONJ	CCONJ	_	44	cc	_	_
+44	tíje	tíje	PRON	PRON	_	42	nsubj	_	_
+45	,	,	PUNCT	PUNCT	_	34	punct	_	_
+46	itúj	itúj	ADV	ADV	_	49	advmod	_	_
+47	néma	néma	PART	PART	_	34	conj	_	_
+48	da	da	AUX	AUX	_	49	aux	_	_
+49	vídet	vídet	VERB	VERB	_	47	csubj	_	_
+50	bǽla	bǽla	ADJ	ADJ	_	51	amod	_	_
+51	déne	déne	NOUN	NOUN	_	49	obj	_	_
+52	.	.	PUNCT	PUNCT	_	12	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: qpm_philotis-ud-train.conllu · this verb has L=3, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Čínnali so na vrisǽne i stáryjen só je čúdil kak gi Azraíl zíma dušýne .
+1	Čínnali	Čínnali	VERB	VERB	_	0	root	_	_
+2	so	so	AUX	AUX	_	1	aux	_	_
+3	na	na	ADP	ADP	_	4	case	_	_
+4	vrisǽne	vrisǽne	NOUN	NOUN	_	1	obl:lmod	_	_
+5	i	i	CCONJ	CCONJ	_	9	cc	_	_
+6	stáryjen	stáryjen	ADJ	ADJ	_	9	nsubj	_	_
+7	só	só	PRON	PRON	_	9	expl	_	_
+8	je	je	AUX	AUX	_	9	aux	_	_
+9	čúdil	čúdil	VERB	VERB	_	1	conj	_	_
+10	kak	kak	ADV	ADV	_	13	advmod	_	highlight=green|span=1
+11	gi	gi	PRON	PRON	_	13	obl	_	highlight=green|span=1
+12	Azraíl	Azraíl	PROPN	PROPN	_	13	nsubj	_	highlight=green|span=1
+13	zíma	zíma	VERB	VERB	_	9	ccomp	_	highlight=red
+14	dušýne	dušýne	NOUN	NOUN	_	13	obj	_	highlight=green|span=1
+15	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: qpm_philotis-ud-train.conllu · this verb has L=3, R=1 (mean span = 3.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Bir vakýt bir zemán je Hamdí - star nó kaná právil samýj pri annók gǿle .
+1	Bir	Bir	DET	DET	_	11	advmod	_	highlight=green|span=5
+2	vakýt	vakýt	NOUN	NOUN	_	1	fixed	_	_
+3	bir	bir	DET	DET	_	1	fixed	_	_
+4	zemán	zemán	NOUN	NOUN	_	1	fixed	_	_
+5	je	je	AUX	AUX	_	1	fixed	_	_
+6	Hamdí	Hamdí	PROPN	PROPN	_	11	nsubj	_	highlight=green|span=2
+7	-	-	PUNCT	PUNCT	_	6	punct	_	_
+8	star	star	ADJ	ADJ	_	6	compound	_	_
+9	nó	nó	PART	PART	_	10	advmod	_	_
+10	kaná	kaná	PRON	PRON	_	11	obj	_	highlight=green|span=2
+11	právil	právil	VERB	VERB	_	0	root	_	highlight=red
+12	samýj	samýj	VERB	VERB	_	11	xcomp	_	highlight=green|span=4
+13	pri	pri	ADP	ADP	_	15	case	_	_
+14	annók	annók	DET	DET	_	15	det	_	_
+15	gǿle	gǿle	NOUN	NOUN	_	12	obl	_	_
+16	.	.	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: qpm_philotis-ud-train.conllu · this verb has L=3, R=1 (mean span = 1.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Móse dóštere sí samý izbírot kópeløta .
+1	Móse	Móse	DET	DET	_	2	det	_	_
+2	dóštere	dóštere	NOUN	NOUN	_	5	nsubj	_	highlight=green|span=2
+3	sí	sí	PRON	PRON	_	5	expl	_	highlight=green|span=1
+4	samý	samý	DET	DET	_	2	det	_	highlight=green|span=1
+5	izbírot	izbírot	VERB	VERB	_	0	root	_	highlight=red
+6	kópeløta	kópeløta	NOUN	NOUN	_	5	obj	_	highlight=green|span=1
+7	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: qpm_philotis-ud-train.conllu · this verb has L=3, R=0 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Inagáne so birdén dǽdovyne Isénovy óči svétnaly .
+1	Inagáne	Inagáne	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+2	so	so	AUX	AUX	_	7	aux	_	_
+3	birdén	birdén	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+4	dǽdovyne	dǽdovyne	ADJ	ADJ	_	6	amod	_	_
+5	Isénovy	Isénovy	ADJ	ADJ	_	6	amod	_	_
+6	óči	óči	NOUN	NOUN	_	7	nsubj	_	highlight=green|span=3
+7	svétnaly	svétnaly	VERB	VERB	_	0	root	_	highlight=red
+8	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: qpm_philotis-ud-train.conllu · this verb has L=3, R=1 (mean span = 1.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = « Májka réče da ma sņómite ut magáreso » i drúgine gu sa sņóli ut magáreno .
+1	«	«	PUNCT	PUNCT	_	3	punct	_	_
+2	Májka	Májka	NOUN	NOUN	_	3	nsubj	_	_
+3	réče	réče	VERB	VERB	_	0	root	_	_
+4	da	da	AUX	AUX	_	6	aux	_	_
+5	ma	ma	PRON	PRON	_	6	obj	_	_
+6	sņómite	sņómite	VERB	VERB	_	3	ccomp	_	_
+7	ut	ut	ADP	ADP	_	8	case	_	_
+8	magáreso	magáreso	NOUN	NOUN	_	6	obl	_	_
+9	»	»	PUNCT	PUNCT	_	6	punct	_	_
+10	i	i	CCONJ	CCONJ	_	14	cc	_	_
+11	drúgine	drúgine	DET	DET	_	14	nsubj	_	highlight=green|span=1
+12	gu	gu	PRON	PRON	_	14	obl	_	highlight=green|span=1
+13	sa	sa	PRON	PRON	_	14	expl	_	highlight=green|span=1
+14	sņóli	sņóli	VERB	VERB	_	6	conj	_	highlight=red
+15	ut	ut	ADP	ADP	_	16	case	_	_
+16	magáreno	magáreno	NOUN	NOUN	_	14	obl	_	highlight=green|span=2
+17	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: qpm_philotis-ud-dev.conllu · this verb has L=3, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = I kákna je byl razsardén , le gi je sazrǽl , izǽl gi je vritsǽh pa sas annó lápnavaņe .
+1	I	I	CCONJ	CCONJ	_	10	cc	_	_
+2	kákna	kákna	ADV	ADV	_	5	advmod	_	_
+3	je	je	AUX	AUX	_	5	aux	_	_
+4	byl	byl	AUX	AUX	_	5	aux	_	_
+5	razsardén	razsardén	VERB	VERB	_	10	advcl	_	highlight=green|span=4
+6	,	,	PUNCT	PUNCT	_	5	punct	_	_
+7	le	le	ADV	ADV	_	10	advmod	_	highlight=green|span=1
+8	gi	gi	PRON	PRON	_	10	obj	_	highlight=green|span=1
+9	je	je	AUX	AUX	_	10	aux	_	_
+10	sazrǽl	sazrǽl	VERB	VERB	_	0	root	_	highlight=red
+11	,	,	PUNCT	PUNCT	_	12	punct	_	_
+12	izǽl	izǽl	VERB	VERB	_	10	conj	_	_
+13	gi	gi	PRON	PRON	_	12	obj	_	_
+14	je	je	AUX	AUX	_	12	aux	_	_
+15	vritsǽh	vritsǽh	DET	DET	_	12	det	_	_
+16	pa	pa	ADP	ADP	_	19	case	_	_
+17	sas	sas	ADP	ADP	_	19	case	_	_
+18	annó	annó	NUM	NUM	_	19	nummod	_	_
+19	lápnavaņe	lápnavaņe	NOUN	NOUN	_	15	nmod	_	_
+20	.	.	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: qpm_philotis-ud-train.conllu · this verb has L=3, R=1 (mean span = 3.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = I inýj vasiļázovana dašterǽ só je ažónila na annók čulǽka sas glávo jálnys i ní kakvó snágo , alá só je ní kugá ne plákala za to i vlæl jí je faf sórce , atkák je býlo inazí tójnyjen kysmét .
+1	I	I	CCONJ	CCONJ	_	7	cc	_	_
+2	inýj	inýj	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+3	vasiļázovana	vasiļázovana	ADJ	ADJ	_	4	amod	_	_
+4	dašterǽ	dašterǽ	NOUN	NOUN	_	7	nsubj	_	highlight=green|span=2
+5	só	só	PRON	PRON	_	7	expl:impers	_	highlight=green|span=1
+6	je	je	AUX	AUX	_	7	aux	_	_
+7	ažónila	ažónila	VERB	VERB	_	0	root	_	highlight=red
+8	na	na	ADP	ADP	_	10	case	_	_
+9	annók	annók	DET	DET	_	10	det	_	_
+10	čulǽka	čulǽka	NOUN	NOUN	_	7	obl	_	highlight=green|span=10
+11	sas	sas	ADP	ADP	_	12	case	_	_
+12	glávo	glávo	NOUN	NOUN	_	10	obl:lmod	_	_
+13	jálnys	jálnys	ADV	ADV	_	12	advmod:emph	_	_
+14	i	i	CCONJ	CCONJ	_	17	cc	_	_
+15	ní	ní	PART	PART	_	16	advmod	_	_
+16	kakvó	kakvó	DET	DET	_	17	det	_	_
+17	snágo	snágo	NOUN	NOUN	_	12	conj	_	_
+18	,	,	PUNCT	PUNCT	_	7	punct	_	_
+19	alá	alá	CCONJ	CCONJ	_	25	cc	_	_
+20	só	só	PRON	PRON	_	25	expl	_	_
+21	je	je	AUX	AUX	_	25	aux	_	_
+22	ní	ní	PART	PART	_	23	advmod	_	_
+23	kugá	kugá	ADV	ADV	_	25	advmod	_	_
+24	ne	ne	PART	PART	_	25	advmod	_	_
+25	plákala	plákala	VERB	VERB	_	7	conj	_	_
+26	za	za	ADP	ADP	_	25	advmod	_	_
+27	to	to	PRON	PRON	_	26	fixed	_	_
+28	i	i	CCONJ	CCONJ	_	29	cc	_	_
+29	vlæl	vlæl	VERB	VERB	_	25	conj	_	_
+30	jí	jí	PRON	PRON	_	29	iobj	_	_
+31	je	je	AUX	AUX	_	29	aux	_	_
+32	faf	faf	ADP	ADP	_	33	case	_	_
+33	sórce	sórce	NOUN	NOUN	_	29	obl	_	_
+34	,	,	PUNCT	PUNCT	_	29	punct	_	_
+35	atkák	atkák	SCONJ	SCONJ	_	37	mark	_	_
+36	je	je	AUX	AUX	_	37	aux	_	_
+37	býlo	býlo	AUX	AUX	_	29	advcl	_	_
+38	inazí	inazí	DET	DET	_	40	det	_	_
+39	tójnyjen	tójnyjen	DET	DET	_	40	det	_	_
+40	kysmét	kysmét	NOUN	NOUN	_	37	xcomp	_	_
+41	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: qpm_philotis-ud-test.conllu · this verb has L=3, R=1 (mean span = 1.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = « Ja som vasiļáz faf gradínoso , ní kutrí mó na móža nadvijé » .
+1	«	«	PUNCT	PUNCT	_	4	punct	_	_
+2	Ja	Ja	PRON	PRON	_	4	nsubj	_	_
+3	som	som	AUX	AUX	_	4	aux	_	_
+4	vasiļáz	vasiļáz	NOUN	NOUN	_	0	root	_	_
+5	faf	faf	ADP	ADP	_	6	case	_	_
+6	gradínoso	gradínoso	NOUN	NOUN	_	4	obl:arg	_	_
+7	,	,	PUNCT	PUNCT	_	4	punct	_	_
+8	ní	ní	PART	PART	_	9	advmod	_	_
+9	kutrí	kutrí	DET	DET	_	12	obj	_	highlight=green|span=2
+10	mó	mó	PRON	PRON	_	12	obj	_	highlight=green|span=1
+11	na	na	PART	PART	_	12	advmod	_	highlight=green|span=1
+12	móža	móža	VERB	VERB	_	4	conj	_	highlight=red
+13	nadvijé	nadvijé	VERB	VERB	_	12	xcomp	_	highlight=green|span=1
+14	»	»	PUNCT	PUNCT	_	4	punct	_	_
+15	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: qpm_philotis-ud-dev.conllu · this verb has L=3, R=1 (mean span = 1.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Dáli mú so annók sáza i toj go je le fátil faf rakýne zøl je da cónka i da pajé :
+1	Dáli	Dáli	VERB	VERB	_	0	root	_	_
+2	mú	mú	PRON	PRON	_	1	iobj	_	_
+3	so	so	AUX	AUX	_	1	aux	_	_
+4	annók	annók	DET	DET	_	5	det	_	_
+5	sáza	sáza	NOUN	NOUN	_	1	obj	_	_
+6	i	i	CCONJ	CCONJ	_	11	cc	_	_
+7	toj	toj	PRON	PRON	_	11	nsubj	_	highlight=green|span=1
+8	go	go	PRON	PRON	_	11	obj	_	highlight=green|span=1
+9	je	je	AUX	AUX	_	11	aux	_	_
+10	le	le	ADV	ADV	_	11	advmod	_	highlight=green|span=1
+11	fátil	fátil	VERB	VERB	_	1	conj	_	highlight=red
+12	faf	faf	ADP	ADP	_	13	case	_	_
+13	rakýne	rakýne	NOUN	NOUN	_	11	obl	_	highlight=green|span=2
+14	zøl	zøl	VERB	VERB	_	11	conj	_	_
+15	je	je	AUX	AUX	_	14	aux	_	_
+16	da	da	AUX	AUX	_	17	aux	_	_
+17	cónka	cónka	VERB	VERB	_	14	xcomp	_	_
+18	i	i	CCONJ	CCONJ	_	20	cc	_	_
+19	da	da	AUX	AUX	_	20	aux	_	_
+20	pajé	pajé	VERB	VERB	_	17	conj	_	_
+21	:	:	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: qpm_philotis-ud-dev.conllu · this verb has L=3, R=0 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Dvamína móske ad annó sélo izvón Kavála abijískava ad Ǧumágün nasám astinomíjena alá na móžot éšte da gi nájdot .
+1	Dvamína	Dvamína	NUM	NUM	_	8	nummod	_	highlight=green|span=1
+2	móske	móske	ADJ	ADJ	_	8	amod	_	highlight=green|span=1
+3	ad	ad	ADP	ADP	_	5	case	_	_
+4	annó	annó	DET	DET	_	5	det	_	_
+5	sélo	sélo	NOUN	NOUN	_	8	obl	_	highlight=green|span=5
+6	izvón	izvón	ADP	ADP	_	7	case	_	_
+7	Kavála	Kavála	PROPN	PROPN	_	5	nmod	_	_
+8	abijískava	abijískava	VERB	VERB	_	0	root	_	highlight=red
+9	ad	ad	ADP	ADP	_	10	case	_	_
+10	Ǧumágün	Ǧumágün	PROPN	PROPN	_	15	nsubj	_	_
+11	nasám	nasám	ADV	ADV	_	12	advmod	_	_
+12	astinomíjena	astinomíjena	NOUN	NOUN	_	15	dep	_	_
+13	alá	alá	CCONJ	CCONJ	_	15	cc	_	_
+14	na	na	PART	PART	_	15	advmod	_	_
+15	móžot	móžot	VERB	VERB	_	8	conj	_	_
+16	éšte	éšte	ADV	ADV	_	19	advmod	_	_
+17	da	da	AUX	AUX	_	19	aux	_	_
+18	gi	gi	PRON	PRON	_	19	obj	_	_
+19	nájdot	nájdot	VERB	VERB	_	15	ccomp	_	_
+20	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: qpm_philotis-ud-train.conllu · this verb has L=3, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Tja mí pák réče : « Otíde ennóto dve da praj » .
+1	Tja	Tja	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+2	mí	mí	PRON	PRON	_	4	iobj	_	highlight=green|span=1
+3	pák	pák	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+4	réče	réče	VERB	VERB	_	0	root	_	highlight=red
+5	:	:	PUNCT	PUNCT	_	4	punct	_	_
+6	«	«	PUNCT	PUNCT	_	7	punct	_	_
+7	Otíde	Otíde	VERB	VERB	_	4	ccomp	_	highlight=green|span=5
+8	ennóto	ennóto	NUM	NUM	_	11	advmod	_	_
+9	dve	dve	NUM	NUM	_	8	fixed	_	_
+10	da	da	AUX	AUX	_	11	aux	_	_
+11	praj	praj	VERB	VERB	_	7	xcomp	_	_
+12	»	»	PUNCT	PUNCT	_	7	punct	_	_
+13	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: qpm_philotis-ud-dev.conllu · this verb has L=3, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Enés : Mólem tí só ! Nemój mú kazavá ! Strah mó je !
+1	Enés	Enés	PROPN	PROPN	_	9	nsubj	_	highlight=green|span=1
+2	:	:	PUNCT	PUNCT	_	3	punct	_	_
+3	Mólem	Mólem	VERB	VERB	_	9	advcl	_	highlight=green|span=3
+4	tí	tí	PRON	PRON	_	3	iobj	_	_
+5	só	só	PRON	PRON	_	3	expl	_	_
+6	!	!	PUNCT	PUNCT	_	3	punct	_	_
+7	Nemój	Nemój	PART	PART	_	9	dep	_	_
+8	mú	mú	PRON	PRON	_	9	iobj	_	highlight=green|span=1
+9	kazavá	kazavá	VERB	VERB	_	0	root	_	highlight=red
+10	!	!	PUNCT	PUNCT	_	9	punct	_	_
+11	Strah	Strah	NOUN	NOUN	_	9	obj	_	highlight=green|span=3
+12	mó	mó	PRON	PRON	_	11	obj	_	_
+13	je	je	AUX	AUX	_	11	aux	_	_
+14	!	!	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: qpm_philotis-ud-test.conllu · this verb has L=3, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Inazí še stánava i faf Tórnik , ad altydá sabályjin da altydá akšámlyjin še je pák póten zatvóren za da zaftásot ergátene da davóršot rábatono .
+1	Inazí	Inazí	DET	DET	_	3	nsubj	_	_
+2	še	še	AUX	AUX	_	3	aux	_	_
+3	stánava	stánava	VERB	VERB	_	0	root	_	_
+4	i	i	CCONJ	CCONJ	_	6	cc	_	_
+5	faf	faf	ADP	ADP	_	6	case	_	_
+6	Tórnik	Tórnik	PROPN	PROPN	_	3	obl	_	_
+7	,	,	PUNCT	PUNCT	_	3	punct	_	_
+8	ad	ad	ADP	ADP	_	9	case	_	_
+9	altydá	altydá	ADV	ADV	_	3	obl:tmod	_	_
+10	sabályjin	sabályjin	ADV	ADV	_	9	advmod	_	_
+11	da	da	ADP	ADP	_	12	case	_	_
+12	altydá	altydá	ADV	ADV	_	9	nmod:tmod	_	_
+13	akšámlyjin	akšámlyjin	ADV	ADV	_	18	advmod	_	highlight=green|span=1
+14	še	še	AUX	AUX	_	18	aux	_	_
+15	je	je	AUX	AUX	_	18	aux	_	_
+16	pák	pák	ADV	ADV	_	18	advmod	_	highlight=green|span=1
+17	póten	póten	NOUN	NOUN	_	18	nsubj	_	highlight=green|span=1
+18	zatvóren	zatvóren	VERB	VERB	_	3	conj	_	highlight=red
+19	za	za	SCONJ	SCONJ	_	21	mark	_	_
+20	da	da	AUX	AUX	_	19	fixed	_	_
+21	zaftásot	zaftásot	VERB	VERB	_	18	conj	_	_
+22	ergátene	ergátene	NOUN	NOUN	_	24	nsubj	_	_
+23	da	da	AUX	AUX	_	24	aux	_	_
+24	davóršot	davóršot	VERB	VERB	_	21	advcl	_	_
+25	rábatono	rábatono	NOUN	NOUN	_	24	obj	_	_
+26	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: qpm_philotis-ud-dev.conllu · this verb has L=3, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = – Za kaná mí gi nósiš hajvánese faf kóštoso ?
+1	–	–	PUNCT	PUNCT	_	6	punct	_	_
+2	Za	Za	ADP	ADP	_	6	case	_	_
+3	kaná	kaná	PRON	PRON	_	6	obj	_	highlight=green|span=1
+4	mí	mí	PRON	PRON	_	6	iobj	_	highlight=green|span=1
+5	gi	gi	PRON	PRON	_	6	obj	_	highlight=green|span=1
+6	nósiš	nósiš	VERB	VERB	_	0	root	_	highlight=red
+7	hajvánese	hajvánese	NOUN	NOUN	_	6	nsubj	_	highlight=green|span=3
+8	faf	faf	ADP	ADP	_	9	case	_	_
+9	kóštoso	kóštoso	NOUN	NOUN	_	7	nmod	_	_
+10	?	?	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: qpm_philotis-ud-dev.conllu · this verb has L=3, R=2 (mean span = 1.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = At ‘ tagáne altóneno mómiče só pajevǽva naštése na nebóno , cǽlo düņóso agíra i abijískava sí sas ačíne mǽstono kadéna só je rádalo .
+1	At	At	ADP	ADP	_	7	case	_	_
+2	‘	‘	PUNCT	PUNCT	_	7	punct	_	_
+3	tagáne	tagáne	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+4	altóneno	altóneno	ADJ	ADJ	_	5	amod	_	_
+5	mómiče	mómiče	NOUN	NOUN	_	7	nsubj	_	highlight=green|span=2
+6	só	só	PRON	PRON	_	7	expl	_	highlight=green|span=1
+7	pajevǽva	pajevǽva	VERB	VERB	_	0	root	_	highlight=red
+8	naštése	naštése	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+9	na	na	ADP	ADP	_	10	case	_	_
+10	nebóno	nebóno	NOUN	NOUN	_	7	iobj	_	highlight=green|span=2
+11	,	,	PUNCT	PUNCT	_	14	punct	_	_
+12	cǽlo	cǽlo	ADJ	ADJ	_	13	amod	_	_
+13	düņóso	düņóso	NOUN	NOUN	_	14	obj	_	_
+14	agíra	agíra	VERB	VERB	_	7	conj	_	_
+15	i	i	CCONJ	CCONJ	_	16	cc	_	_
+16	abijískava	abijískava	VERB	VERB	_	7	conj	_	_
+17	sí	sí	PRON	PRON	_	16	expl	_	_
+18	sas	sas	ADP	ADP	_	19	case	_	_
+19	ačíne	ačíne	NOUN	NOUN	_	16	obl	_	_
+20	mǽstono	mǽstono	NOUN	NOUN	_	24	obj	_	_
+21	kadéna	kadéna	ADV	ADV	_	24	advmod	_	_
+22	só	só	PRON	PRON	_	24	expl	_	_
+23	je	je	AUX	AUX	_	24	aux	_	_
+24	rádalo	rádalo	VERB	VERB	_	19	acl	_	_
+25	.	.	PUNCT	PUNCT	_	24	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: qpm_philotis-ud-train.conllu · this verb has L=3, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = I tja só je bábičkana sétila kanáta je stánalo i zafáteva da pláče i víka :
+1	I	I	CCONJ	CCONJ	_	6	cc	_	_
+2	tja	tja	PRON	PRON	_	6	nsubj	_	highlight=green|span=1
+3	só	só	PRON	PRON	_	6	expl	_	highlight=green|span=1
+4	je	je	AUX	AUX	_	6	aux	_	_
+5	bábičkana	bábičkana	NOUN	NOUN	_	2	appos	_	highlight=green|span=1
+6	sétila	sétila	VERB	VERB	_	0	root	_	highlight=red
+7	kanáta	kanáta	PRON	PRON	_	9	obj	_	_
+8	je	je	AUX	AUX	_	9	aux	_	_
+9	stánalo	stánalo	VERB	VERB	_	6	ccomp	_	highlight=green|span=3
+10	i	i	CCONJ	CCONJ	_	11	cc	_	_
+11	zafáteva	zafáteva	VERB	VERB	_	6	conj	_	_
+12	da	da	AUX	AUX	_	13	aux	_	_
+13	pláče	pláče	VERB	VERB	_	11	xcomp	_	_
+14	i	i	CCONJ	CCONJ	_	15	cc	_	_
+15	víka	víka	VERB	VERB	_	11	conj	_	_
+16	:	:	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: qpm_philotis-ud-train.conllu · this verb has L=3, R=2 (mean span = 2.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = I has , le kákna jí je kázal čulǽkon , kadéna so abihódely to pa panajírene tri kóneta so krilǽly na nebóno i slédily gi so sas tri kámatnišičky kópeløta jáhnaty na to .
+1	I	I	CCONJ	CCONJ	_	2	cc	_	_
+2	has	has	ADV	ADV	_	13	advmod	_	highlight=green|span=2
+3	,	,	PUNCT	PUNCT	_	2	punct	_	_
+4	le	le	ADV	ADV	_	8	advmod	_	_
+5	kákna	kákna	ADV	ADV	_	8	mark	_	_
+6	jí	jí	PRON	PRON	_	8	iobj	_	_
+7	je	je	AUX	AUX	_	8	aux	_	_
+8	kázal	kázal	VERB	VERB	_	13	advcl	_	highlight=green|span=6
+9	čulǽkon	čulǽkon	NOUN	NOUN	_	8	nsubj	_	_
+10	,	,	PUNCT	PUNCT	_	8	punct	_	_
+11	kadéna	kadéna	ADV	ADV	_	13	advmod	_	highlight=green|span=1
+12	so	so	AUX	AUX	_	13	aux	_	_
+13	abihódely	abihódely	VERB	VERB	_	20	advcl	_	highlight=red
+14	to	to	PRON	PRON	_	13	nsubj	_	highlight=green|span=1
+15	pa	pa	ADP	ADP	_	16	case	_	_
+16	panajírene	panajírene	NOUN	NOUN	_	13	obl	_	highlight=green|span=2
+17	tri	tri	NUM	NUM	_	18	nummod	_	_
+18	kóneta	kóneta	NOUN	NOUN	_	20	nsubj	_	_
+19	so	so	AUX	AUX	_	20	aux	_	_
+20	krilǽly	krilǽly	VERB	VERB	_	0	root	_	_
+21	na	na	ADP	ADP	_	22	case	_	_
+22	nebóno	nebóno	NOUN	NOUN	_	20	obl:lmod	_	_
+23	i	i	CCONJ	CCONJ	_	24	cc	_	_
+24	slédily	slédily	VERB	VERB	_	20	conj	_	_
+25	gi	gi	PRON	PRON	_	24	obj	_	_
+26	so	so	AUX	AUX	_	24	aux	_	_
+27	sas	sas	ADP	ADP	_	29	case	_	_
+28	tri	tri	NUM	NUM	_	29	nummod	_	_
+29	kámatnišičky	kámatnišičky	ADJ	ADJ	_	31	obj	_	_
+30	kópeløta	kópeløta	NOUN	NOUN	_	24	nsubj	_	_
+31	jáhnaty	jáhnaty	VERB	VERB	_	30	amod	_	_
+32	na	na	ADP	ADP	_	33	case	_	_
+33	to	to	PRON	PRON	_	31	obl	_	_
+34	.	.	PUNCT	PUNCT	_	20	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: qpm_philotis-ud-train.conllu · this verb has L=3, R=1 (mean span = 1.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Čulǽkon mú je reklól óti je ne toj , azám mú je toj kázal kakná abiískava i óti .
+1	Čulǽkon	Čulǽkon	NOUN	NOUN	_	4	nsubj	_	_
+2	mú	mú	PRON	PRON	_	4	iobj	_	_
+3	je	je	AUX	AUX	_	4	aux	_	_
+4	reklól	reklól	VERB	VERB	_	0	root	_	_
+5	óti	óti	SCONJ	SCONJ	_	8	mark	_	_
+6	je	je	AUX	AUX	_	8	aux	_	_
+7	ne	ne	PART	PART	_	8	advmod	_	_
+8	toj	toj	PRON	PRON	_	4	ccomp	_	_
+9	,	,	PUNCT	PUNCT	_	4	punct	_	_
+10	azám	azám	ADV	ADV	_	14	advmod	_	highlight=green|span=1
+11	mú	mú	PRON	PRON	_	14	iobj	_	highlight=green|span=1
+12	je	je	AUX	AUX	_	14	aux	_	_
+13	toj	toj	PRON	PRON	_	14	nsubj	_	highlight=green|span=1
+14	kázal	kázal	VERB	VERB	_	4	conj	_	highlight=red
+15	kakná	kakná	PRON	PRON	_	16	obj	_	_
+16	abiískava	abiískava	VERB	VERB	_	14	xcomp	_	highlight=green|span=4
+17	i	i	CCONJ	CCONJ	_	18	cc	_	_
+18	óti	óti	PART	PART	_	16	advcl	_	_
+19	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

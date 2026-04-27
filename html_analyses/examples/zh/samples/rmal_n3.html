@@ -1,0 +1,716 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Chinese — RMAL_3</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Chinese examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Chinese <small style="color:#999;font-weight:normal">(zh)</small> — RMAL<sub>3</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>3</b> right dependents (left side may be anything).</p><p><b>RMAL<sub>3</sub> = 2.686</b> &nbsp; <span style="color:#666">(51 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>right</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: zh_pud-ud-test.conllu · this verb has L=0, R=3 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 警方 表示 ， 她 把 兒子 安德烈 的 臉 按進 客廳 的 床墊 裡 殺死 了 他 ， 之後 又 試圖 用 同樣 的 方式 殺死 女兒 安吉爾 。
+1	警方	警方	NOUN	NOUN	_	2	nsubj	_	_
+2	表示	表示	VERB	VERB	_	0	root	_	_
+3	，	，	PUNCT	PUNCT	_	21	punct	_	_
+4	她	她	PRON	PRON	_	21	nsubj	_	_
+5	把	把	VERB	VERB	_	15	advcl	_	highlight=red
+6	兒子	兒子	NOUN	NOUN	_	9	nmod	_	_
+7	安德烈	安德烈	PROPN	PROPN	_	6	appos	_	_
+8	的	的	PART	PART	_	6	case	_	_
+9	臉	臉	NOUN	NOUN	_	5	obj	_	highlight=green|span=4
+10	按進	按進	VERB	VERB	_	5	xcomp	_	highlight=green|span=1
+11	客廳	客廳	NOUN	NOUN	_	13	nmod	_	_
+12	的	的	PART	PART	_	11	case	_	_
+13	床墊	床墊	NOUN	NOUN	_	5	obj	_	highlight=green|span=4
+14	裡	裡	ADP	ADP	_	13	case:loc	_	_
+15	殺死	殺死	VERB	VERB	_	21	dep	_	_
+16	了	了	AUX	AUX	_	15	aux	_	_
+17	他	他	PRON	PRON	_	15	obj	_	_
+18	，	，	PUNCT	PUNCT	_	15	punct	_	_
+19	之後	之後	NOUN	NOUN	_	21	obl:tmod	_	_
+20	又	又	ADV	ADV	_	21	advmod	_	_
+21	試圖	試圖	VERB	VERB	_	2	ccomp	_	_
+22	用	用	VERB	VERB	_	26	advcl	_	_
+23	同樣	同樣	ADJ	ADJ	_	25	nmod	_	_
+24	的	的	PART	PART	_	23	case	_	_
+25	方式	方式	NOUN	NOUN	_	22	obj	_	_
+26	殺死	殺死	VERB	VERB	_	21	xcomp	_	_
+27	女兒	女兒	NOUN	NOUN	_	26	obj	_	_
+28	安吉爾	安吉爾	PROPN	PROPN	_	27	appos	_	_
+29	。	。	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: zh_hk-ud-test.conllu · this verb has L=3, R=3 (mean span = 4.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 不過 ， 我 想 對 大家 說 ， 鑒於 梁君彥 議員 已經 一而再、再而三 地 提供 資料 ， 並 在 公開 場合 作出 澄清 ， 議員 大 可 自行 決定 稍後 會 否 投票 支持 他 。
+1	不過	不過	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+2	，	，	PUNCT	PUNCT	_	1	punct	_	_
+3	我	我	PRON	PRON	_	7	nsubj	_	highlight=green|span=1
+4	想	想	AUX	AUX	_	7	aux	_	_
+5	對	對	ADP	ADP	_	6	case	_	_
+6	大家	大家	PRON	PRON	_	7	obl	_	highlight=green|span=2
+7	說	說	VERB	VERB	_	0	root	_	highlight=red
+8	，	，	PUNCT	PUNCT	_	29	punct	_	_
+9	鑒於	鑒於	ADP	ADP	_	15	mark	_	_
+10	梁君彥	梁君彥	PROPN	PROPN	_	15	nsubj	_	_
+11	議員	議員	NOUN	NOUN	_	10	flat	_	_
+12	已經	已經	ADV	ADV	_	15	advmod	_	_
+13	一而再、再而三	一而再、再而三	ADV	ADV	_	15	advmod	_	_
+14	地	地	PART	PART	_	15	mark	_	_
+15	提供	提供	VERB	VERB	_	29	advcl	_	highlight=green|span=14
+16	資料	資料	NOUN	NOUN	_	15	obj	_	_
+17	，	，	PUNCT	PUNCT	_	22	punct	_	_
+18	並	並	CCONJ	CCONJ	_	22	cc	_	_
+19	在	在	ADP	ADP	_	21	case	_	_
+20	公開	公開	ADJ	ADJ	_	21	amod	_	_
+21	場合	場合	NOUN	NOUN	_	22	obl	_	_
+22	作出	作出	VERB	VERB	_	15	conj	_	_
+23	澄清	澄清	NOUN	NOUN	_	22	obj	_	_
+24	，	，	PUNCT	PUNCT	_	15	punct	_	_
+25	議員	議員	NOUN	NOUN	_	29	nsubj	_	highlight=green|span=1
+26	大	大	ADJ	ADJ	_	28	advmod	_	_
+27	可	可	AUX	AUX	_	29	aux	_	_
+28	自行	自行	ADV	ADV	_	29	advmod	_	_
+29	決定	決定	VERB	VERB	_	7	ccomp	_	highlight=green|span=9
+30	稍後	稍後	ADV	ADV	_	33	advmod	_	_
+31	會	會	AUX	AUX	_	33	aux	_	_
+32	否	否	ADV	ADV	_	33	advmod	_	_
+33	投票	投票	VERB	VERB	_	29	ccomp	_	_
+34	支持	支持	VERB	VERB	_	33	conj	_	_
+35	他	他	PRON	PRON	_	34	obj	_	_
+36	。	。	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: zh_cfl-ud-test.conllu · this verb has L=2, R=3 (mean span = 3.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 对 韩人 来 说 很 喜欢 吃 五花肉 和 烧酒 ， 还有 吃 肉 后 应该 点 凉面 。
+1	对	对	ADP	ADP	_	4	case	_	_
+2	韩人	韩人	NOUN	NOUN	_	4	obl	_	_
+3	来	来	SCONJ	SCONJ	_	4	mark	_	_
+4	说	说	VERB	VERB	_	6	advcl	_	highlight=green|span=4
+5	很	很	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+6	喜欢	喜欢	VERB	VERB	_	0	root	_	highlight=red
+7	吃	吃	VERB	VERB	_	6	xcomp	_	highlight=green|span=1
+8	五花肉	五花肉	NOUN	NOUN	_	6	obj	_	highlight=green|span=3
+9	和	和	CCONJ	CCONJ	_	10	cc	_	_
+10	烧酒	烧酒	NOUN	NOUN	_	8	conj	_	_
+11	，	，	PUNCT	PUNCT	_	17	punct	_	_
+12	还有	还有	CCONJ	CCONJ	_	17	cc	_	_
+13	吃	吃	VERB	VERB	_	17	advcl	_	_
+14	肉	肉	NOUN	NOUN	_	13	obj	_	_
+15	后	后	ADP	ADP	_	13	mark	_	_
+16	应该	应该	AUX	AUX	_	17	aux	_	_
+17	点	点	VERB	VERB	_	7	conj	_	highlight=green|span=7
+18	凉面	凉面	NOUN	NOUN	_	17	obj	_	_
+19	。	。	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: zh_pud-ud-test.conllu · this verb has L=3, R=3 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 做 Miami Bass 音樂 的 人 對 扭 屁股 的 藝術 並 無 興趣 - 他們 最 關心 的 事 。
+1	做	做	VERB	VERB	_	6	acl:relcl	_	_
+2	Miami	Miami	X	X	_	4	compound	_	_
+3	Bass	Bass	X	X	_	2	flat	_	_
+4	音樂	音樂	NOUN	NOUN	_	1	obj	_	_
+5	的	的	PART	PART	_	1	mark:rel	_	_
+6	人	人	NOUN	NOUN	_	13	nsubj	_	highlight=green|span=6
+7	對	對	ADP	ADP	_	11	case	_	_
+8	扭	扭	VERB	VERB	_	11	acl:relcl	_	_
+9	屁股	屁股	NOUN	NOUN	_	8	obj	_	_
+10	的	的	PART	PART	_	8	mark:rel	_	_
+11	藝術	藝術	NOUN	NOUN	_	13	obl	_	highlight=green|span=5
+12	並	並	ADV	ADV	_	13	advmod	_	highlight=green|span=1
+13	無	無	VERB	VERB	_	0	root	_	highlight=red
+14	興趣	興趣	NOUN	NOUN	_	13	obj	_	highlight=green|span=1
+15	-	-	PUNCT	PUNCT	_	18	punct	_	_
+16	他們	他們	PRON	PRON	_	18	nsubj	_	_
+17	最	最	ADV	ADV	_	18	advmod	_	_
+18	關心	關心	VERB	VERB	_	13	acl:relcl	_	highlight=green|span=4
+19	的	的	PART	PART	_	18	mark:rel	_	_
+20	事	事	NOUN	NOUN	_	13	appos	_	highlight=green|span=1
+21	。	。	PUNCT	PUNCT	_	13	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: zh_gsd-ud-dev.conllu · this verb has L=2, R=3 (mean span = 6.80)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 上述 款項 可 維持 本 優惠 4 個 月 ， 另加 2012 年 優惠 餘額 可 維持 優惠 再 多 5 個 月 ， 共 可 維持 優惠 9 個 月 ， 至 2014 年 3 月 31 日 。
+1	上述	上述	NOUN	NOUN	_	2	nmod	_	_
+2	款項	款項	NOUN	NOUN	_	4	nsubj	_	_
+3	可	可	AUX	AUX	_	4	aux	_	_
+4	維持	維持	VERB	VERB	_	11	csubj	_	_
+5	本	本	DET	DET	_	6	det	_	_
+6	優惠	優惠	NOUN	NOUN	_	4	obj	_	_
+7	4	4	NUM	NUM	_	9	nummod	_	_
+8	個	個	NOUN	NOUN	_	7	clf	_	_
+9	月	月	NOUN	NOUN	_	4	nmod:tmod	_	_
+10	，	，	PUNCT	PUNCT	_	4	punct	_	_
+11	另加	另加	VERB	VERB	_	27	csubj	_	highlight=green|span=22
+12	2012	2012	NUM	NUM	_	15	nummod	_	_
+13	年	年	NOUN	NOUN	_	12	clf	_	_
+14	優惠	優惠	NOUN	NOUN	_	15	nmod	_	_
+15	餘額	餘額	NOUN	NOUN	_	17	nsubj	_	_
+16	可	可	AUX	AUX	_	17	aux	_	_
+17	維持	維持	VERB	VERB	_	11	ccomp	_	_
+18	優惠	優惠	NOUN	NOUN	_	17	obj	_	_
+19	再	再	ADV	ADV	_	20	advmod	_	_
+20	多	多	ADJ	ADJ	_	23	amod	_	_
+21	5	5	NUM	NUM	_	23	nummod	_	_
+22	個	個	NOUN	NOUN	_	21	clf	_	_
+23	月	月	NOUN	NOUN	_	17	nmod:tmod	_	_
+24	，	，	PUNCT	PUNCT	_	11	punct	_	_
+25	共	共	ADV	ADV	_	27	advmod	_	highlight=green|span=1
+26	可	可	AUX	AUX	_	27	aux	_	_
+27	維持	維持	VERB	VERB	_	0	root	_	highlight=red
+28	優惠	優惠	NOUN	NOUN	_	27	obj	_	highlight=green|span=1
+29	9	9	NUM	NUM	_	31	nummod	_	_
+30	個	個	NOUN	NOUN	_	29	clf	_	_
+31	月	月	NOUN	NOUN	_	27	nmod:tmod	_	highlight=green|span=3
+32	，	，	PUNCT	PUNCT	_	39	punct	_	_
+33	至	至	ADP	ADP	_	39	case	_	_
+34	2014	2014	NUM	NUM	_	39	nummod	_	_
+35	年	年	NOUN	NOUN	_	34	clf	_	_
+36	3	3	NUM	NUM	_	39	nummod	_	_
+37	月	月	NOUN	NOUN	_	36	clf	_	_
+38	31	31	NUM	NUM	_	39	nummod	_	_
+39	日	日	NOUN	NOUN	_	27	obl	_	highlight=green|span=7
+40	。	。	PUNCT	PUNCT	_	27	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: zh_gsdsimp-ud-dev.conllu · this verb has L=2, R=3 (mean span = 6.80)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 上述 款项 可 维持 本 优惠 4 个 月 ， 另加 2012 年 优惠 余额 可 维持 优惠 再 多 5 个 月 ， 共 可 维持 优惠 9 个 月 ， 至 2014 年 3 月 31 日 。
+1	上述	上述	NOUN	NOUN	_	2	nmod	_	_
+2	款项	款项	NOUN	NOUN	_	4	nsubj	_	_
+3	可	可	AUX	AUX	_	4	aux	_	_
+4	维持	维持	VERB	VERB	_	11	csubj	_	_
+5	本	本	DET	DET	_	6	det	_	_
+6	优惠	优惠	NOUN	NOUN	_	4	obj	_	_
+7	4	4	NUM	NUM	_	9	nummod	_	_
+8	个	个	NOUN	NOUN	_	7	clf	_	_
+9	月	月	NOUN	NOUN	_	4	nmod:tmod	_	_
+10	，	，	PUNCT	PUNCT	_	4	punct	_	_
+11	另加	另加	VERB	VERB	_	27	csubj	_	highlight=green|span=22
+12	2012	2012	NUM	NUM	_	15	nummod	_	_
+13	年	年	NOUN	NOUN	_	12	clf	_	_
+14	优惠	优惠	NOUN	NOUN	_	15	nmod	_	_
+15	余额	余额	NOUN	NOUN	_	17	nsubj	_	_
+16	可	可	AUX	AUX	_	17	aux	_	_
+17	维持	维持	VERB	VERB	_	11	ccomp	_	_
+18	优惠	优惠	NOUN	NOUN	_	17	obj	_	_
+19	再	再	ADV	ADV	_	20	advmod	_	_
+20	多	多	ADJ	ADJ	_	23	amod	_	_
+21	5	5	NUM	NUM	_	23	nummod	_	_
+22	个	个	NOUN	NOUN	_	21	clf	_	_
+23	月	月	NOUN	NOUN	_	17	nmod:tmod	_	_
+24	，	，	PUNCT	PUNCT	_	11	punct	_	_
+25	共	共	ADV	ADV	_	27	advmod	_	highlight=green|span=1
+26	可	可	AUX	AUX	_	27	aux	_	_
+27	维持	维持	VERB	VERB	_	0	root	_	highlight=red
+28	优惠	优惠	NOUN	NOUN	_	27	obj	_	highlight=green|span=1
+29	9	9	NUM	NUM	_	31	nummod	_	_
+30	个	个	NOUN	NOUN	_	29	clf	_	_
+31	月	月	NOUN	NOUN	_	27	nmod:tmod	_	highlight=green|span=3
+32	，	，	PUNCT	PUNCT	_	39	punct	_	_
+33	至	至	ADP	ADP	_	39	case	_	_
+34	2014	2014	NUM	NUM	_	39	nummod	_	_
+35	年	年	NOUN	NOUN	_	34	clf	_	_
+36	3	3	NUM	NUM	_	39	nummod	_	_
+37	月	月	NOUN	NOUN	_	36	clf	_	_
+38	31	31	NUM	NUM	_	39	nummod	_	_
+39	日	日	NOUN	NOUN	_	27	obl	_	highlight=green|span=7
+40	。	。	PUNCT	PUNCT	_	27	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: zh_gsd-ud-test.conllu · this verb has L=0, R=3 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 唯一 出現 的 人類 角色 ， 也是 養育 大嘴鳥 的 人 ， 角色 原型 是 凡爾納 的 小說 環遊 世界 八十 天 中 名 為 「 萬 事 通 」 的 助手 。
+1	唯一	唯一	ADJ	ADJ	_	5	amod	_	_
+2	出現	出現	VERB	VERB	_	5	acl:relcl	_	_
+3	的	的	SCONJ	SCONJ	_	2	mark:rel	_	_
+4	人類	人類	NOUN	NOUN	_	5	nmod	_	_
+5	角色	角色	NOUN	NOUN	_	11	nsubj	_	_
+6	，	，	PUNCT	PUNCT	_	5	punct	_	_
+7	也是	也是	AUX	AUX	_	11	cop	_	_
+8	養育	養育	VERB	VERB	_	11	acl:relcl	_	_
+9	大嘴鳥	大嘴鳥	NOUN	NOUN	_	8	obj	_	_
+10	的	的	SCONJ	SCONJ	_	8	mark:rel	_	_
+11	人	人	NOUN	NOUN	_	0	root	_	_
+12	，	，	PUNCT	PUNCT	_	32	punct	_	_
+13	角色	角色	NOUN	NOUN	_	14	nmod	_	_
+14	原型	原型	NOUN	NOUN	_	32	nsubj	_	_
+15	是	是	AUX	AUX	_	32	cop	_	_
+16	凡爾納	凡爾納	PROPN	PROPN	_	18	nmod	_	_
+17	的	的	PART	PART	_	16	case	_	_
+18	小說	小說	NOUN	NOUN	_	25	obl	_	_
+19	環遊	環遊	VERB	VERB	_	18	appos	_	highlight=red
+20	世界	世界	NOUN	NOUN	_	19	obj	_	highlight=green|span=1
+21	八十	八十	NUM	NUM	_	22	nummod	_	_
+22	天	天	NOUN	NOUN	_	19	nmod:tmod	_	highlight=green|span=2
+23	中	中	ADP	ADP	_	19	advcl	_	highlight=green|span=1
+24	名	名	NOUN	NOUN	_	25	nsubj	_	_
+25	為	為	VERB	VERB	_	32	acl:relcl	_	_
+26	「	「	PUNCT	PUNCT	_	29	punct	_	_
+27	萬	萬	NUM	NUM	_	28	nummod	_	_
+28	事	事	NOUN	NOUN	_	29	nsubj	_	_
+29	通	通	VERB	VERB	_	25	ccomp	_	_
+30	」	」	PUNCT	PUNCT	_	29	punct	_	_
+31	的	的	SCONJ	SCONJ	_	25	mark:rel	_	_
+32	助手	助手	NOUN	NOUN	_	11	parataxis	_	_
+33	。	。	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: zh_hk-ud-test.conllu · this verb has L=1, R=3 (mean span = 3.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 我 希望 在 你 身旁 的 議員 可以 返回 座位 ， 因為 我們 感到 很 騷擾 。
+1	我	我	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	希望	希望	VERB	VERB	_	0	root	_	highlight=red
+3	在	在	ADP	ADP	_	4	case	_	_
+4	你	你	PRON	PRON	_	5	nmod	_	_
+5	身旁	身旁	NOUN	NOUN	_	7	nmod	_	_
+6	的	的	PART	PART	_	5	case	_	_
+7	議員	議員	NOUN	NOUN	_	2	obj	_	highlight=green|span=5
+8	可以	可以	AUX	AUX	_	9	aux	_	_
+9	返回	返回	VERB	VERB	_	2	ccomp	_	highlight=green|span=3
+10	座位	座位	NOUN	NOUN	_	9	obj	_	_
+11	，	，	PUNCT	PUNCT	_	14	punct	_	_
+12	因為	因為	ADP	ADP	_	14	mark	_	_
+13	我們	我們	PRON	PRON	_	14	nsubj	_	_
+14	感到	感到	VERB	VERB	_	2	advcl	_	highlight=green|span=5
+15	很	很	ADV	ADV	_	16	advmod	_	_
+16	騷擾	騷擾	VERB	VERB	_	14	xcomp	_	_
+17	。	。	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: zh_pud-ud-test.conllu · this verb has L=4, R=3 (mean span = 1.86)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 我 喜歡 把玩 ， 一直 在 尋找 對 的 靈感 ， 因為 當 我 為 對 的 靈感 創作 一 個 系列 時 ， 我 覺得 非常 有趣 。
+1	我	我	PRON	PRON	_	7	nsubj	_	highlight=green|span=1
+2	喜歡	喜歡	VERB	VERB	_	7	advcl	_	highlight=green|span=2
+3	把玩	把玩	VERB	VERB	_	2	xcomp	_	_
+4	，	，	PUNCT	PUNCT	_	2	punct	_	_
+5	一直	一直	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+6	在	在	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+7	尋找	尋找	VERB	VERB	_	0	root	_	highlight=red
+8	對	對	ADJ	ADJ	_	10	amod	_	_
+9	的	的	PART	PART	_	8	mark:rel	_	_
+10	靈感	靈感	NOUN	NOUN	_	7	obj	_	highlight=green|span=3
+11	，	，	PUNCT	PUNCT	_	26	punct	_	_
+12	因為	因為	ADP	ADP	_	26	mark	_	highlight=green|span=1
+13	當	當	ADP	ADP	_	19	mark	_	_
+14	我	我	PRON	PRON	_	19	nsubj	_	_
+15	為	為	ADP	ADP	_	18	case	_	_
+16	對	對	ADJ	ADJ	_	18	amod	_	_
+17	的	的	PART	PART	_	16	mark:rel	_	_
+18	靈感	靈感	NOUN	NOUN	_	19	obl	_	_
+19	創作	創作	VERB	VERB	_	28	xcomp	_	_
+20	一	一	NUM	NUM	_	21	nummod	_	_
+21	個	個	NOUN	NOUN	_	22	clf	_	_
+22	系列	系列	NOUN	NOUN	_	19	obj	_	_
+23	時	時	ADP	ADP	_	19	mark	_	_
+24	，	，	PUNCT	PUNCT	_	19	punct	_	_
+25	我	我	PRON	PRON	_	26	nsubj	_	_
+26	覺得	覺得	VERB	VERB	_	7	xcomp	_	highlight=green|span=4
+27	非常	非常	ADV	ADV	_	26	advmod	_	_
+28	有趣	有趣	ADJ	ADJ	_	26	xcomp	_	_
+29	。	。	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: zh_gsd-ud-dev.conllu · this verb has L=1, R=3 (mean span = 2.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 2011 年 1 月 8 日 ， 她 在 亞利桑那 州 圖森 市 的 Safeway 超級 市場 外 舉辦 「 國會 就 在 你 的 街角 」 （ Congress on Your Corner ） 活動 時 遭 槍手 擊中 頭部 受 重 傷 ， 當時 被 槍手 擊中 的 另外 還 有 18 人 。
+1	2011	2011	NUM	NUM	_	6	nummod	_	_
+2	年	年	NOUN	NOUN	_	1	clf	_	_
+3	1	1	NUM	NUM	_	6	nummod	_	_
+4	月	月	NOUN	NOUN	_	3	clf	_	_
+5	8	8	NUM	NUM	_	6	nummod	_	_
+6	日	日	NOUN	NOUN	_	36	nmod:tmod	_	_
+7	，	，	PUNCT	PUNCT	_	6	punct	_	_
+8	她	她	PRON	PRON	_	36	nsubj	_	_
+9	在	在	VERB	VERB	_	19	advcl	_	_
+10	亞利桑那	亞利桑那	PROPN	PROPN	_	11	compound	_	_
+11	州	州	PART	PART	_	13	nmod	_	_
+12	圖森	圖森	PROPN	PROPN	_	13	compound	_	_
+13	市	市	PART	PART	_	17	nmod	_	_
+14	的	的	PART	PART	_	13	case	_	_
+15	Safeway	Safeway	X	X	_	17	nmod	_	_
+16	超級	超級	ADJ	ADJ	_	17	amod	_	_
+17	市場	市場	NOUN	NOUN	_	9	obj	_	_
+18	外	外	NOUN	NOUN	_	17	acl	_	_
+19	舉辦	舉辦	VERB	VERB	_	36	advcl	_	_
+20	「	「	PUNCT	PUNCT	_	23	punct	_	_
+21	國會	國會	NOUN	NOUN	_	23	nsubj	_	highlight=green|span=1
+22	就	就	SCONJ	SCONJ	_	23	mark	_	_
+23	在	在	VERB	VERB	_	19	obj	_	highlight=red
+24	你	你	PRON	PRON	_	26	det	_	_
+25	的	的	PART	PART	_	24	case	_	_
+26	街角	街角	NOUN	NOUN	_	23	obj	_	highlight=green|span=3
+27	」	」	PUNCT	PUNCT	_	23	punct	_	_
+28	（	（	PUNCT	PUNCT	_	29	punct	_	_
+29	Congress	Congress	X	X	_	23	appos	_	highlight=green|span=4
+30	on	on	X	X	_	29	flat:foreign	_	_
+31	Your	Your	X	X	_	29	flat:foreign	_	_
+32	Corner	Corner	X	X	_	29	flat:foreign	_	_
+33	）	）	PUNCT	PUNCT	_	29	punct	_	_
+34	活動	活動	NOUN	NOUN	_	23	appos	_	highlight=green|span=1
+35	時	時	ADP	ADP	_	19	mark	_	_
+36	遭	遭	VERB	VERB	_	0	root	_	_
+37	槍手	槍手	NOUN	NOUN	_	38	nsubj	_	_
+38	擊中	擊中	VERB	VERB	_	36	ccomp	_	_
+39	頭部	頭部	NOUN	NOUN	_	40	nsubj	_	_
+40	受	受	VERB	VERB	_	36	parataxis	_	_
+41	重	重	ADP	ADP	_	42	case	_	_
+42	傷	傷	NOUN	NOUN	_	40	obj	_	_
+43	，	，	PUNCT	PUNCT	_	51	punct	_	_
+44	當時	當時	NOUN	NOUN	_	47	nmod:tmod	_	_
+45	被	被	AUX	AUX	_	47	aux:pass	_	_
+46	槍手	槍手	NOUN	NOUN	_	47	nsubj	_	_
+47	擊中	擊中	VERB	VERB	_	51	csubj	_	_
+48	的	的	SCONJ	SCONJ	_	47	mark:rel	_	_
+49	另外	另外	ADV	ADV	_	51	advmod	_	_
+50	還	還	SCONJ	SCONJ	_	51	mark	_	_
+51	有	有	VERB	VERB	_	36	parataxis	_	_
+52	18	18	NUM	NUM	_	53	nummod	_	_
+53	人	人	NOUN	NOUN	_	51	obj	_	_
+54	。	。	PUNCT	PUNCT	_	36	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: zh_gsd-ud-train.conllu · this verb has L=0, R=3 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 在 香港 ， 部分 的士 司機 曾經 採用 慢駛 至 立法 會 、 繞 立法 會 響號 等 方式 抗議 停車 熄匙 首讀 。
+1	在	在	VERB	VERB	_	20	advcl	_	_
+2	香港	香港	PROPN	PROPN	_	1	obj	_	_
+3	，	，	PUNCT	PUNCT	_	1	punct	_	_
+4	部分	部分	NOUN	NOUN	_	6	nmod	_	_
+5	的士	的士	NOUN	NOUN	_	6	nmod	_	_
+6	司機	司機	NOUN	NOUN	_	20	nsubj	_	_
+7	曾經	曾經	ADV	ADV	_	8	advmod	_	_
+8	採用	採用	VERB	VERB	_	20	advcl	_	_
+9	慢駛	慢駛	VERB	VERB	_	8	obj	_	highlight=red
+10	至	至	VERB	VERB	_	9	mark	_	_
+11	立法	立法	VERB	VERB	_	12	compound	_	_
+12	會	會	PART	PART	_	9	obj	_	highlight=green|span=2
+13	、	、	PUNCT	PUNCT	_	17	punct	_	_
+14	繞	繞	ADP	ADP	_	16	case	_	_
+15	立法	立法	VERB	VERB	_	16	compound	_	_
+16	會	會	PART	PART	_	17	obl	_	_
+17	響號	響號	VERB	VERB	_	9	conj	_	_
+18	等	等	NOUN	NOUN	_	9	obl	_	highlight=green|span=1
+19	方式	方式	NOUN	NOUN	_	9	appos	_	highlight=green|span=1
+20	抗議	抗議	VERB	VERB	_	0	root	_	_
+21	停車	停車	VERB	VERB	_	22	advcl	_	_
+22	熄匙	熄匙	VERB	VERB	_	23	amod	_	_
+23	首讀	首讀	NOUN	NOUN	_	20	obj	_	_
+24	。	。	PUNCT	PUNCT	_	20	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: zh_gsdsimp-ud-train.conllu · this verb has L=0, R=3 (mean span = 6.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 请 特别 注意 ， 这 方程 式 看 起来 简易 精致 ， 然而 ， 隐藏 在 使用 方面 有 很大 的 问题 。
+1	请	请	VERB	VERB	_	0	root	_	highlight=red
+2	特别	特别	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+3	注意	注意	VERB	VERB	_	1	xcomp	_	highlight=green|span=1
+4	，	，	PUNCT	PUNCT	_	19	punct	_	_
+5	这	这	DET	DET	_	7	det	_	_
+6	方程	方程	NOUN	NOUN	_	7	compound	_	_
+7	式	式	PART	PART	_	8	nsubj	_	_
+8	看	看	VERB	VERB	_	19	advcl	_	_
+9	起来	起来	VERB	VERB	_	8	mark	_	_
+10	简易	简易	ADJ	ADJ	_	8	advcl	_	_
+11	精致	精致	ADJ	ADJ	_	8	xcomp	_	_
+12	，	，	PUNCT	PUNCT	_	8	punct	_	_
+13	然而	然而	SCONJ	SCONJ	_	19	mark	_	_
+14	，	，	PUNCT	PUNCT	_	13	punct	_	_
+15	隐藏	隐藏	VERB	VERB	_	19	advcl	_	_
+16	在	在	ADP	ADP	_	18	case	_	_
+17	使用	使用	NOUN	NOUN	_	18	nmod	_	_
+18	方面	方面	NOUN	NOUN	_	19	obl	_	_
+19	有	有	VERB	VERB	_	1	ccomp	_	highlight=green|span=16
+20	很大	很大	ADJ	ADJ	_	22	amod	_	_
+21	的	的	SCONJ	SCONJ	_	20	mark:rel	_	_
+22	问题	问题	NOUN	NOUN	_	19	obj	_	_
+23	。	。	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: zh_gsd-ud-train.conllu · this verb has L=1, R=3 (mean span = 2.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 由於 當時 毛 澤東 已經 病重 ， 開口 很 不 方便 ， 因 此 他 一般 會 在 紙條 上 寫下 要 說 的 內容 。
+1	由於	由於	ADP	ADP	_	6	case	_	_
+2	當時	當時	NOUN	NOUN	_	6	nmod:tmod	_	_
+3	毛	毛	PROPN	PROPN	_	6	nsubj	_	_
+4	澤東	澤東	PROPN	PROPN	_	3	flat:name	_	_
+5	已經	已經	ADV	ADV	_	6	advmod	_	_
+6	病重	病重	VERB	VERB	_	8	ccomp	_	highlight=green|span=6
+7	，	，	PUNCT	PUNCT	_	6	punct	_	_
+8	開口	開口	VERB	VERB	_	0	root	_	highlight=red
+9	很	很	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+10	不	不	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+11	方便	方便	ADJ	ADJ	_	8	xcomp	_	highlight=green|span=1
+12	，	，	PUNCT	PUNCT	_	21	punct	_	_
+13	因	因	ADP	ADP	_	14	case	_	_
+14	此	此	PRON	PRON	_	21	obl	_	_
+15	他	他	PRON	PRON	_	21	nsubj	_	_
+16	一般	一般	ADV	ADV	_	21	advmod	_	_
+17	會	會	AUX	AUX	_	21	aux	_	_
+18	在	在	ADP	ADP	_	19	case	_	_
+19	紙條	紙條	NOUN	NOUN	_	21	obl	_	_
+20	上	上	NOUN	NOUN	_	19	acl	_	_
+21	寫下	寫下	VERB	VERB	_	8	parataxis	_	_
+22	要	要	AUX	AUX	_	23	aux	_	_
+23	說	說	VERB	VERB	_	25	acl:relcl	_	_
+24	的	的	SCONJ	SCONJ	_	23	mark:rel	_	_
+25	內容	內容	NOUN	NOUN	_	21	obj	_	_
+26	。	。	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: zh_gsdsimp-ud-dev.conllu · this verb has L=1, R=3 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 可是 ， 吕卫伦 接任 会长 的 时候 ， 正 值 英国 文化 协会 的 低潮 ， 在 1960 年代 ， 由于 政府 削减 资助 等 原因 ， 协会 被 迫 先后 结束 在 缅甸 、 斐济 、 加勒比 海 和 非洲 及 中东 部份 地区 的 工作 ， 并 将 协会 的 服务 对象 逐步 缩窄 至 西 欧 地区 ， 工作 性质 也 限制 到 只有 艺术 、 科学 和 科技 领域 的 交流 层面 ， 使 协会 的 规模 不断 萎缩 。
+1	可是	可是	SCONJ	SCONJ	_	10	mark	_	_
+2	，	，	PUNCT	PUNCT	_	1	punct	_	_
+3	吕卫伦	吕卫伦	PROPN	PROPN	_	4	nsubj	_	_
+4	接任	接任	VERB	VERB	_	7	acl:relcl	_	_
+5	会长	会长	NOUN	NOUN	_	4	obj	_	_
+6	的	的	SCONJ	SCONJ	_	4	mark:rel	_	_
+7	时候	时候	NOUN	NOUN	_	10	nmod:tmod	_	_
+8	，	，	PUNCT	PUNCT	_	7	punct	_	_
+9	正	正	ADV	ADV	_	10	advmod	_	_
+10	值	值	VERB	VERB	_	0	root	_	_
+11	英国	英国	PROPN	PROPN	_	13	nmod	_	_
+12	文化	文化	NOUN	NOUN	_	13	nmod	_	_
+13	协会	协会	NOUN	NOUN	_	15	nmod	_	_
+14	的	的	PART	PART	_	13	case	_	_
+15	低潮	低潮	NOUN	NOUN	_	10	obj	_	_
+16	，	，	PUNCT	PUNCT	_	78	punct	_	_
+17	在	在	ADP	ADP	_	19	case	_	_
+18	1960	1960	NUM	NUM	_	19	nummod	_	_
+19	年代	年代	NOUN	NOUN	_	65	obl	_	_
+20	，	，	PUNCT	PUNCT	_	19	punct	_	_
+21	由于	由于	ADP	ADP	_	23	case	_	_
+22	政府	政府	NOUN	NOUN	_	23	nsubj	_	highlight=green|span=1
+23	削减	削减	VERB	VERB	_	65	obl	_	highlight=red
+24	资助	资助	NOUN	NOUN	_	23	obj	_	highlight=green|span=1
+25	等	等	NOUN	NOUN	_	23	obl	_	highlight=green|span=1
+26	原因	原因	NOUN	NOUN	_	23	appos	_	highlight=green|span=1
+27	，	，	PUNCT	PUNCT	_	23	punct	_	_
+28	协会	协会	NOUN	NOUN	_	30	nsubj:pass	_	_
+29	被	被	AUX	AUX	_	30	aux:pass	_	_
+30	迫	迫	VERB	VERB	_	65	advcl	_	_
+31	先后	先后	ADV	ADV	_	32	advmod	_	_
+32	结束	结束	VERB	VERB	_	30	xcomp	_	_
+33	在	在	VERB	VERB	_	47	acl:relcl	_	_
+34	缅甸	缅甸	PROPN	PROPN	_	33	obj	_	_
+35	、	、	PUNCT	PUNCT	_	36	punct	_	_
+36	斐济	斐济	PROPN	PROPN	_	34	conj	_	_
+37	、	、	PUNCT	PUNCT	_	39	punct	_	_
+38	加勒比	加勒比	PROPN	PROPN	_	39	compound	_	_
+39	海	海	PART	PART	_	34	conj	_	_
+40	和	和	CCONJ	CCONJ	_	41	cc	_	_
+41	非洲	非洲	PROPN	PROPN	_	34	conj	_	_
+42	及	及	CCONJ	CCONJ	_	45	cc	_	_
+43	中东	中东	PROPN	PROPN	_	45	nmod	_	_
+44	部份	部份	NOUN	NOUN	_	45	nmod	_	_
+45	地区	地区	NOUN	NOUN	_	34	conj	_	_
+46	的	的	SCONJ	SCONJ	_	33	mark:rel	_	_
+47	工作	工作	NOUN	NOUN	_	32	obj	_	_
+48	，	，	PUNCT	PUNCT	_	30	punct	_	_
+49	并	并	SCONJ	SCONJ	_	56	mark	_	_
+50	将	将	ADP	ADP	_	54	case	_	_
+51	协会	协会	NOUN	NOUN	_	54	nmod	_	_
+52	的	的	PART	PART	_	51	case	_	_
+53	服务	服务	NOUN	NOUN	_	54	nmod	_	_
+54	对象	对象	NOUN	NOUN	_	56	obl:patient	_	_
+55	逐步	逐步	ADV	ADV	_	56	advmod	_	_
+56	缩窄	缩窄	VERB	VERB	_	65	advcl	_	_
+57	至	至	VERB	VERB	_	56	mark	_	_
+58	西	西	NOUN	NOUN	_	60	nmod	_	_
+59	欧	欧	PROPN	PROPN	_	60	nmod	_	_
+60	地区	地区	NOUN	NOUN	_	56	obj	_	_
+61	，	，	PUNCT	PUNCT	_	56	punct	_	_
+62	工作	工作	NOUN	NOUN	_	63	nmod	_	_
+63	性质	性质	NOUN	NOUN	_	65	nsubj	_	_
+64	也	也	SCONJ	SCONJ	_	65	mark	_	_
+65	限制	限制	VERB	VERB	_	78	csubj	_	_
+66	到	到	VERB	VERB	_	65	mark	_	_
+67	只有	只有	VERB	VERB	_	76	acl:relcl	_	_
+68	艺术	艺术	NOUN	NOUN	_	73	nmod	_	_
+69	、	、	PUNCT	PUNCT	_	70	punct	_	_
+70	科学	科学	NOUN	NOUN	_	68	conj	_	_
+71	和	和	CCONJ	CCONJ	_	72	cc	_	_
+72	科技	科技	NOUN	NOUN	_	68	conj	_	_
+73	领域	领域	NOUN	NOUN	_	67	obj	_	_
+74	的	的	SCONJ	SCONJ	_	67	mark:rel	_	_
+75	交流	交流	NOUN	NOUN	_	76	nmod	_	_
+76	层面	层面	NOUN	NOUN	_	65	obj	_	_
+77	，	，	PUNCT	PUNCT	_	65	punct	_	_
+78	使	使	VERB	VERB	_	10	parataxis	_	_
+79	协会	协会	NOUN	NOUN	_	81	nmod	_	_
+80	的	的	PART	PART	_	79	case	_	_
+81	规模	规模	NOUN	NOUN	_	83	nsubj	_	_
+82	不断	不断	ADV	ADV	_	83	advmod	_	_
+83	萎缩	萎缩	VERB	VERB	_	78	ccomp	_	_
+84	。	。	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: zh_hk-ud-test.conllu · this verb has L=1, R=3 (mean span = 2.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 還 要 感謝 你 試圖 安排 我們 到 會議廳 外 聆聽 梁君彥 議員 的 解釋 。
+1	還	還	ADV	ADV	_	3	advmod	_	_
+2	要	要	AUX	AUX	_	3	aux	_	_
+3	感謝	感謝	VERB	VERB	_	0	root	_	_
+4	你	你	PRON	PRON	_	5	nsubj	_	highlight=green|span=1
+5	試圖	試圖	VERB	VERB	_	3	ccomp	_	highlight=red
+6	安排	安排	VERB	VERB	_	5	xcomp	_	highlight=green|span=1
+7	我們	我們	PRON	PRON	_	5	obj	_	highlight=green|span=1
+8	到	到	ADP	ADP	_	9	case	_	_
+9	會議廳	會議廳	NOUN	NOUN	_	11	obl	_	_
+10	外	外	NOUN	NOUN	_	9	case:loc	_	_
+11	聆聽	聆聽	VERB	VERB	_	6	xcomp	_	highlight=green|span=8
+12	梁君彥	梁君彥	PROPN	PROPN	_	15	nmod	_	_
+13	議員	議員	NOUN	NOUN	_	12	flat	_	_
+14	的	的	PART	PART	_	12	case	_	_
+15	解釋	解釋	NOUN	NOUN	_	11	obj	_	_
+16	。	。	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: zh_gsdsimp-ud-train.conllu · this verb has L=1, R=3 (mean span = 2.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 由于 当时 毛 泽东 已经 病重 ， 开口 很 不 方便 ， 因 此 他 一般 会 在 纸条 上 写下 要 说 的 内容 。
+1	由于	由于	ADP	ADP	_	6	case	_	_
+2	当时	当时	NOUN	NOUN	_	6	nmod:tmod	_	_
+3	毛	毛	PROPN	PROPN	_	6	nsubj	_	_
+4	泽东	泽东	PROPN	PROPN	_	3	flat:name	_	_
+5	已经	已经	ADV	ADV	_	6	advmod	_	_
+6	病重	病重	VERB	VERB	_	8	ccomp	_	highlight=green|span=6
+7	，	，	PUNCT	PUNCT	_	6	punct	_	_
+8	开口	开口	VERB	VERB	_	0	root	_	highlight=red
+9	很	很	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+10	不	不	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+11	方便	方便	ADJ	ADJ	_	8	xcomp	_	highlight=green|span=1
+12	，	，	PUNCT	PUNCT	_	21	punct	_	_
+13	因	因	ADP	ADP	_	14	case	_	_
+14	此	此	PRON	PRON	_	21	obl	_	_
+15	他	他	PRON	PRON	_	21	nsubj	_	_
+16	一般	一般	ADV	ADV	_	21	advmod	_	_
+17	会	会	AUX	AUX	_	21	aux	_	_
+18	在	在	ADP	ADP	_	19	case	_	_
+19	纸条	纸条	NOUN	NOUN	_	21	obl	_	_
+20	上	上	NOUN	NOUN	_	19	acl	_	_
+21	写下	写下	VERB	VERB	_	8	parataxis	_	_
+22	要	要	AUX	AUX	_	23	aux	_	_
+23	说	说	VERB	VERB	_	25	acl:relcl	_	_
+24	的	的	SCONJ	SCONJ	_	23	mark:rel	_	_
+25	内容	内容	NOUN	NOUN	_	21	obj	_	_
+26	。	。	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: zh_beginner-ud-test.conllu · this verb has L=2, R=3 (mean span = 1.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 我 先 问 一下 老板 再 说 。
+1	我	我	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+2	先	先	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+3	问	问	VERB	VERB	_	0	root	_	highlight=red
+4	一下	一下	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+5	老板	老板	NOUN	NOUN	_	3	obj	_	highlight=green|span=1
+6	再	再	CCONJ	CCONJ	_	7	cc	_	_
+7	说	说	VERB	VERB	_	3	advcl	_	highlight=green|span=2
+8	。	。	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: zh_gsdsimp-ud-dev.conllu · this verb has L=1, R=3 (mean span = 2.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 2011 年 1 月 8 日 ， 她 在 亚利桑那 州 图森 市 的 Safeway 超级 市场 外 举办 “ 国会 就 在 你 的 街角 ” （ Congress on Your Corner ） 活动 时 遭 枪手 击中 头部 受 重 伤 ， 当时 被 枪手 击中 的 另外 还 有 18 人 。
+1	2011	2011	NUM	NUM	_	6	nummod	_	_
+2	年	年	NOUN	NOUN	_	1	clf	_	_
+3	1	1	NUM	NUM	_	6	nummod	_	_
+4	月	月	NOUN	NOUN	_	3	clf	_	_
+5	8	8	NUM	NUM	_	6	nummod	_	_
+6	日	日	NOUN	NOUN	_	36	nmod:tmod	_	_
+7	，	，	PUNCT	PUNCT	_	6	punct	_	_
+8	她	她	PRON	PRON	_	36	nsubj	_	_
+9	在	在	VERB	VERB	_	19	advcl	_	_
+10	亚利桑那	亚利桑那	PROPN	PROPN	_	11	compound	_	_
+11	州	州	PART	PART	_	13	nmod	_	_
+12	图森	图森	PROPN	PROPN	_	13	compound	_	_
+13	市	市	PART	PART	_	17	nmod	_	_
+14	的	的	PART	PART	_	13	case	_	_
+15	Safeway	Safeway	X	X	_	17	nmod	_	_
+16	超级	超级	ADJ	ADJ	_	17	amod	_	_
+17	市场	市场	NOUN	NOUN	_	9	obj	_	_
+18	外	外	NOUN	NOUN	_	17	acl	_	_
+19	举办	举办	VERB	VERB	_	36	advcl	_	_
+20	“	“	PUNCT	PUNCT	_	23	punct	_	_
+21	国会	国会	NOUN	NOUN	_	23	nsubj	_	highlight=green|span=1
+22	就	就	SCONJ	SCONJ	_	23	mark	_	_
+23	在	在	VERB	VERB	_	19	obj	_	highlight=red
+24	你	你	PRON	PRON	_	26	det	_	_
+25	的	的	PART	PART	_	24	case	_	_
+26	街角	街角	NOUN	NOUN	_	23	obj	_	highlight=green|span=3
+27	”	”	PUNCT	PUNCT	_	23	punct	_	_
+28	（	（	PUNCT	PUNCT	_	29	punct	_	_
+29	Congress	Congress	X	X	_	23	appos	_	highlight=green|span=4
+30	on	on	X	X	_	29	flat:foreign	_	_
+31	Your	Your	X	X	_	29	flat:foreign	_	_
+32	Corner	Corner	X	X	_	29	flat:foreign	_	_
+33	）	）	PUNCT	PUNCT	_	29	punct	_	_
+34	活动	活动	NOUN	NOUN	_	23	appos	_	highlight=green|span=1
+35	时	时	ADP	ADP	_	19	mark	_	_
+36	遭	遭	VERB	VERB	_	0	root	_	_
+37	枪手	枪手	NOUN	NOUN	_	38	nsubj	_	_
+38	击中	击中	VERB	VERB	_	36	ccomp	_	_
+39	头部	头部	NOUN	NOUN	_	40	nsubj	_	_
+40	受	受	VERB	VERB	_	36	parataxis	_	_
+41	重	重	ADP	ADP	_	42	case	_	_
+42	伤	伤	NOUN	NOUN	_	40	obj	_	_
+43	，	，	PUNCT	PUNCT	_	51	punct	_	_
+44	当时	当时	NOUN	NOUN	_	47	nmod:tmod	_	_
+45	被	被	AUX	AUX	_	47	aux:pass	_	_
+46	枪手	枪手	NOUN	NOUN	_	47	nsubj	_	_
+47	击中	击中	VERB	VERB	_	51	csubj	_	_
+48	的	的	SCONJ	SCONJ	_	47	mark:rel	_	_
+49	另外	另外	ADV	ADV	_	51	advmod	_	_
+50	还	还	SCONJ	SCONJ	_	51	mark	_	_
+51	有	有	VERB	VERB	_	36	parataxis	_	_
+52	18	18	NUM	NUM	_	53	nummod	_	_
+53	人	人	NOUN	NOUN	_	51	obj	_	_
+54	。	。	PUNCT	PUNCT	_	36	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: zh_hk-ud-test.conllu · this verb has L=0, R=3 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 幫 別人 打工 幾 年 了 。
+1	幫	幫	VERB	VERB	_	0	root	_	highlight=red
+2	別人	別人	PRON	PRON	_	1	obj	_	highlight=green|span=1
+3	打工	打工	VERB	VERB	_	1	xcomp	_	highlight=green|span=1
+4	幾	幾	DET	DET	_	5	det	_	_
+5	年	年	NOUN	NOUN	_	1	obl	_	highlight=green|span=2
+6	了	了	PART	PART	_	1	discourse:sp	_	_
+7	。	。	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: zh_hk-ud-test.conllu · this verb has L=1, R=3 (mean span = 1.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 但 我 不 是 那 種 人 ， 我 就 是 愛 出去 玩 的 性格 ， 不 愛 做 家務 、 帶 小孩 。
+1	但	但	CCONJ	CCONJ	_	7	cc	_	_
+2	我	我	PRON	PRON	_	7	nsubj	_	_
+3	不	不	ADV	ADV	_	7	advmod	_	_
+4	是	是	AUX	AUX	_	7	cop	_	_
+5	那	那	DET	DET	_	7	det	_	_
+6	種	種	NOUN	NOUN	_	5	clf	_	_
+7	人	人	NOUN	NOUN	_	0	root	_	_
+8	，	，	PUNCT	PUNCT	_	16	punct	_	_
+9	我	我	PRON	PRON	_	16	nsubj	_	_
+10	就	就	ADV	ADV	_	16	advmod	_	_
+11	是	是	AUX	AUX	_	16	cop	_	_
+12	愛	愛	VERB	VERB	_	16	acl	_	_
+13	出去	出去	VERB	VERB	_	12	xcomp	_	_
+14	玩	玩	VERB	VERB	_	13	conj	_	_
+15	的	的	PART	PART	_	12	mark:rel	_	_
+16	性格	性格	NOUN	NOUN	_	7	conj	_	_
+17	，	，	PUNCT	PUNCT	_	19	punct	_	_
+18	不	不	ADV	ADV	_	19	advmod	_	highlight=green|span=1
+19	愛	愛	VERB	VERB	_	16	parataxis	_	highlight=red
+20	做	做	VERB	VERB	_	19	xcomp	_	highlight=green|span=1
+21	家務	家務	NOUN	NOUN	_	19	obj	_	highlight=green|span=1
+22	、	、	PUNCT	PUNCT	_	23	punct	_	_
+23	帶	帶	VERB	VERB	_	20	conj	_	highlight=green|span=2
+24	小孩	小孩	NOUN	NOUN	_	23	obj	_	_
+25	。	。	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

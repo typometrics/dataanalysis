@@ -1,0 +1,492 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Kurmanji — RMAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Kurmanji examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Kurmanji <small style="color:#999;font-weight:normal">(kmr)</small> — RMAL<sub>2</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>2</b> right dependents (left side may be anything).</p><p><b>RMAL<sub>2</sub> = 4.181</b> &nbsp; <span style="color:#666">(36 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>right</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: kmr_kurmanji-ud-train.conllu · this verb has L=0, R=2 (mean span = 3.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ji ber ku dema dîl dikeve destê îngilîzan ji aliyê serbazekî îngilîz ve bi şûrê , ji ser - çavê xwe tê birîndar kirin û cîhê birînê her dimîne .
+1	Ji	Ji	ADP	ADP	_	24	mark	_	_
+2	ber	ber	ADP	ADP	_	1	fixed	_	_
+3	ku	ku	SCONJ	SCONJ	_	24	cc	_	_
+4	dema	dema	SCONJ	SCONJ	_	6	mark	_	_
+5	dîl	dîl	NOUN	NOUN	_	6	compound:lvc	_	_
+6	dikeve	dikeve	VERB	VERB	_	24	advcl	_	highlight=red
+7	destê	destê	NOUN	NOUN	_	6	obl:dat	_	highlight=green|span=2
+8	îngilîzan	îngilîzan	NOUN	NOUN	_	7	nmod:poss	_	_
+9	ji	ji	ADP	ADP	_	10	case	_	_
+10	aliyê	aliyê	NOUN	NOUN	_	6	nmod	_	highlight=green|span=5
+11	serbazekî	serbazekî	NOUN	NOUN	_	10	nmod:poss	_	_
+12	îngilîz	îngilîz	NOUN	NOUN	_	11	nmod:poss	_	_
+13	ve	ve	ADP	ADP	_	10	case	_	_
+14	bi	bi	ADP	ADP	_	15	case	_	_
+15	şûrê	şûrê	NOUN	NOUN	_	24	nmod	_	_
+16	,	,	PUNCT	PUNCT	_	15	punct	_	_
+17	ji	ji	ADP	ADP	_	18	case	_	_
+18	ser	ser	NOUN	NOUN	_	24	nmod	_	_
+19	-	-	PUNCT	PUNCT	_	20	punct	_	_
+20	çavê	çavê	NOUN	NOUN	_	18	conj	_	_
+21	xwe	xwe	PRON	PRON	_	20	nmod:poss	_	_
+22	tê	tê	AUX	AUX	_	24	aux	_	_
+23	birîndar	birîndar	ADJ	ADJ	_	24	xcomp	_	_
+24	kirin	kirin	VERB	VERB	_	0	root	_	_
+25	û	û	CCONJ	CCONJ	_	29	cc	_	_
+26	cîhê	cîhê	NOUN	NOUN	_	29	nsubj	_	_
+27	birînê	birînê	NOUN	NOUN	_	26	nmod:poss	_	_
+28	her	her	ADV	ADV	_	29	advmod	_	_
+29	dimîne	dimîne	VERB	VERB	_	24	conj	_	_
+30	.	.	PUNCT	PUNCT	_	24	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: kmr_kurmanji-ud-test.conllu · this verb has L=3, R=2 (mean span = 2.80)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Lê niho tu tiştê wan ne maye ; ji çend donim erd û qesrekê pê _ ve .
+1	Lê	Lê	CCONJ	CCONJ	_	7	cc	_	_
+2	niho	niho	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+3	tu	tu	DET	DET	_	4	det	_	_
+4	tiştê	tiştê	NOUN	NOUN	_	7	nsubj	_	highlight=green|span=3
+5	wan	wan	PRON	PRON	_	4	nmod:poss	_	_
+6	ne	ne	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+7	maye	maye	VERB	VERB	_	0	root	_	highlight=red
+8	;	;	PUNCT	PUNCT	_	11	punct	_	_
+9	ji	ji	ADP	ADP	_	11	case	_	_
+10	çend	çend	DET	DET	_	11	det	_	_
+11	donim	donim	NOUN	NOUN	_	7	nmod	_	highlight=green|span=6
+12	erd	erd	NOUN	NOUN	_	11	nmod	_	_
+13	û	û	CCONJ	CCONJ	_	14	cc	_	_
+14	qesrekê	qesrekê	NOUN	NOUN	_	11	conj	_	_
+15	pê	pê	ADP	ADP	_	16	case	_	_
+16	_	_	PRON	PRON	_	7	nmod	_	highlight=green|span=3
+17	ve	ve	ADP	ADP	_	16	case	_	_
+18	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: kmr_kurmanji-ud-test.conllu · this verb has L=4, R=2 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Li heyva insanê nêzîkê sed hezar kurd berê xwe didin vî gundî ji bo seyranê .
+1	Li	Li	ADP	ADP	_	2	case	_	_
+2	heyva	heyva	NOUN	NOUN	_	10	nmod	_	highlight=green|span=3
+3	insanê	insanê	NOUN	NOUN	_	2	nmod:poss	_	_
+4	nêzîkê	nêzîkê	NOUN	NOUN	_	10	nsubj	_	highlight=green|span=4
+5	sed	sed	NUM	NUM	_	7	nummod	_	_
+6	hezar	hezar	NUM	NUM	_	5	flat	_	_
+7	kurd	kurd	NOUN	NOUN	_	4	nmod:poss	_	_
+8	berê	berê	ADV	ADV	_	10	advmod	_	highlight=green|span=1
+9	xwe	xwe	PRON	PRON	_	10	obj	_	highlight=green|span=1
+10	didin	didin	VERB	VERB	_	0	root	_	highlight=red
+11	vî	vî	DET	DET	_	12	det	_	_
+12	gundî	gundî	NOUN	NOUN	_	10	obl:dat	_	highlight=green|span=2
+13	ji	ji	ADP	ADP	_	15	case	_	_
+14	bo	bo	ADP	ADP	_	13	fixed	_	_
+15	seyranê	seyranê	NOUN	NOUN	_	10	nmod	_	highlight=green|span=3
+16	.	.	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: kmr_kurmanji-ud-test.conllu · this verb has L=2, R=2 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Roja dîtir Holmes gote min : Bêşik te her tişt seh kirine .
+1	Roja	Roja	NOUN	NOUN	_	4	nmod	_	highlight=green|span=2
+2	dîtir	dîtir	ADJ	ADJ	_	1	amod	_	_
+3	Holmes	Holmes	PROPN	PROPN	_	4	nsubj	_	highlight=green|span=1
+4	gote	gote	VERB	VERB	_	0	root	_	highlight=red
+5	min	min	PRON	PRON	_	4	obl:dat	_	highlight=green|span=1
+6	:	:	PUNCT	PUNCT	_	12	punct	_	_
+7	Bêşik	Bêşik	ADV	ADV	_	12	advmod	_	_
+8	te	te	PRON	PRON	_	12	nsubj	_	_
+9	her	her	DET	DET	_	10	det	_	_
+10	tişt	tişt	NOUN	NOUN	_	12	obj	_	_
+11	seh	seh	NOUN	NOUN	_	12	compound:lvc	_	_
+12	kirine	kirine	VERB	VERB	_	4	ccomp	_	highlight=green|span=6
+13	.	.	PUNCT	PUNCT	_	12	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: kmr_kurmanji-ud-test.conllu · this verb has L=2, R=2 (mean span = 3.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Meriv bi gelemperî kare bibêje ku jimarên fermî yên azerî û yên kurdan li hev nayên .
+1	Meriv	Meriv	NOUN	NOUN	_	4	nsubj	_	highlight=green|span=1
+2	bi	bi	ADP	ADP	_	3	case	_	_
+3	gelemperî	gelemperî	NOUN	NOUN	_	4	nmod	_	highlight=green|span=2
+4	kare	kare	VERB	VERB	_	0	root	_	highlight=red
+5	bibêje	bibêje	VERB	VERB	_	4	ccomp	_	highlight=green|span=2
+6	ku	ku	SCONJ	SCONJ	_	16	mark	_	_
+7	jimarên	jimarên	NOUN	NOUN	_	16	nsubj	_	_
+8	fermî	fermî	ADJ	ADJ	_	7	amod	_	_
+9	yên	yên	ADP	ADP	_	7	case	_	_
+10	azerî	azerî	NOUN	NOUN	_	7	nmod:poss	_	_
+11	û	û	CCONJ	CCONJ	_	13	cc	_	_
+12	yên	yên	ADP	ADP	_	7	case	_	_
+13	kurdan	kurdan	NOUN	NOUN	_	7	nmod:poss	_	_
+14	li	li	ADP	ADP	_	15	case	_	_
+15	hev	hev	PRON	PRON	_	16	nmod	_	_
+16	nayên	nayên	VERB	VERB	_	5	ccomp	_	highlight=green|span=9
+17	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: kmr_kurmanji-ud-test.conllu · this verb has L=1, R=2 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Holmes ştexaliya wê birî û jê _ pirsî : Tu ji xwe ewle yî ko te dengekî fîkandinê û yê zencîrê bihîst ?
+1	Holmes	Holmes	PROPN	PROPN	_	4	nsubj	_	_
+2	ştexaliya	ştexaliya	NOUN	NOUN	_	4	obj	_	_
+3	wê	wê	PRON	PRON	_	2	nmod:poss	_	_
+4	birî	birî	VERB	VERB	_	0	root	_	_
+5	û	û	CCONJ	CCONJ	_	8	cc	_	_
+6	jê	jê	ADP	ADP	_	7	case	_	_
+7	_	_	PRON	PRON	_	8	nmod	_	highlight=green|span=3
+8	pirsî	pirsî	VERB	VERB	_	4	conj	_	highlight=red
+9	:	:	PUNCT	PUNCT	_	13	punct	_	_
+10	Tu	Tu	PRON	PRON	_	13	nsubj	_	_
+11	ji	ji	ADP	ADP	_	12	case	_	_
+12	xwe	xwe	PRON	PRON	_	13	nmod	_	_
+13	ewle	ewle	ADJ	ADJ	_	8	ccomp	_	_
+14	yî	yî	AUX	AUX	_	13	cop	_	_
+15	ko	ko	SCONJ	SCONJ	_	22	mark	_	_
+16	te	te	PRON	PRON	_	22	nsubj	_	_
+17	dengekî	dengekî	NOUN	NOUN	_	22	obj	_	_
+18	fîkandinê	fîkandinê	NOUN	NOUN	_	7	nmod:poss	_	highlight=green|span=1
+19	û	û	CCONJ	CCONJ	_	21	cc	_	_
+20	yê	yê	ADP	ADP	_	17	case	_	_
+21	zencîrê	zencîrê	NOUN	NOUN	_	18	conj	_	_
+22	bihîst	bihîst	VERB	VERB	_	13	ccomp	_	highlight=green|span=3
+23	?	?	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: kmr_kurmanji-ud-test.conllu · this verb has L=1, R=2 (mean span = 3.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Wextê ko wî jî xwe karî nivistinê kir çira xwe bidî ber pencerê û bi wî awayi elam bidî me ko Dr. Rweylot xwe kişandiye oda xwe .
+1	Wextê	Wextê	NOUN	NOUN	_	7	mark	_	_
+2	ko	ko	SCONJ	SCONJ	_	1	fixed	_	_
+3	wî	wî	PRON	PRON	_	8	nsubj	_	_
+4	jî	jî	PART	PART	_	8	advmod	_	_
+5	xwe	xwe	PRON	PRON	_	8	nmod	_	_
+6	karî	karî	NOUN	NOUN	_	8	obj	_	_
+7	nivistinê	nivistinê	NOUN	NOUN	_	8	nmod:poss	_	_
+8	kir	kir	VERB	VERB	_	19	advcl	_	_
+9	çira	çira	NOUN	NOUN	_	11	obj	_	_
+10	xwe	xwe	PRON	PRON	_	9	nmod:poss	_	_
+11	bidî	bidî	VERB	VERB	_	0	root	_	_
+12	ber	ber	ADP	ADP	_	13	case	_	_
+13	pencerê	pencerê	NOUN	NOUN	_	11	nmod	_	_
+14	û	û	CCONJ	CCONJ	_	19	cc	_	_
+15	bi	bi	ADP	ADP	_	17	case	_	_
+16	wî	wî	DET	DET	_	17	det	_	_
+17	awayi	awayi	NOUN	NOUN	_	19	nmod	_	highlight=green|span=3
+18	elam	elam	NOUN	NOUN	_	19	compound:lvc	_	_
+19	bidî	bidî	VERB	VERB	_	11	conj	_	highlight=red
+20	me	me	PRON	PRON	_	19	obl:dat	_	highlight=green|span=1
+21	ko	ko	SCONJ	SCONJ	_	25	mark	_	_
+22	Dr.	Dr.	NOUN	NOUN	_	25	nsubj	_	_
+23	Rweylot	Rweylot	PROPN	PROPN	_	22	flat	_	_
+24	xwe	xwe	PRON	PRON	_	25	obj	_	_
+25	kişandiye	kişandiye	VERB	VERB	_	19	ccomp	_	highlight=green|span=7
+26	oda	oda	NOUN	NOUN	_	25	obl:dat	_	_
+27	xwe	xwe	PRON	PRON	_	26	nmod:poss	_	_
+28	.	.	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: kmr_kurmanji-ud-test.conllu · this verb has L=3, R=2 (mean span = 1.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ewropayî xwarinên rojhilata navîn pirranî dikin para ereban an jî îdia dikin ku ji ewropayiyan belav bûne .
+1	Ewropayî	Ewropayî	NOUN	NOUN	_	6	nsubj	_	highlight=green|span=1
+2	xwarinên	xwarinên	NOUN	NOUN	_	6	obj	_	highlight=green|span=3
+3	rojhilata	rojhilata	NOUN	NOUN	_	2	nmod:poss	_	_
+4	navîn	navîn	ADJ	ADJ	_	3	amod	_	_
+5	pirranî	pirranî	NOUN	NOUN	_	6	nmod	_	highlight=green|span=1
+6	dikin	dikin	VERB	VERB	_	0	root	_	highlight=red
+7	para	para	NOUN	NOUN	_	6	nmod	_	highlight=green|span=1
+8	ereban	ereban	NOUN	NOUN	_	6	nmod:poss	_	highlight=green|span=1
+9	an	an	CCONJ	CCONJ	_	12	cc	_	_
+10	jî	jî	PART	PART	_	12	advmod	_	_
+11	îdia	îdia	NOUN	NOUN	_	12	obj	_	_
+12	dikin	dikin	VERB	VERB	_	6	conj	_	_
+13	ku	ku	SCONJ	SCONJ	_	16	mark	_	_
+14	ji	ji	ADP	ADP	_	15	case	_	_
+15	ewropayiyan	ewropayiyan	NOUN	NOUN	_	16	nmod	_	_
+16	belav	belav	ADJ	ADJ	_	12	ccomp	_	_
+17	bûne	bûne	AUX	AUX	_	16	cop	_	_
+18	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: kmr_kurmanji-ud-test.conllu · this verb has L=1, R=2 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Holmes gote min : Ev marekî teqanan e .
+1	Holmes	Holmes	PROPN	PROPN	_	2	nsubj	_	highlight=green|span=1
+2	gote	gote	VERB	VERB	_	0	root	_	highlight=red
+3	min	min	PRON	PRON	_	2	obl:dat	_	highlight=green|span=1
+4	:	:	PUNCT	PUNCT	_	6	punct	_	_
+5	Ev	Ev	PRON	PRON	_	6	nsubj	_	_
+6	marekî	marekî	NOUN	NOUN	_	2	ccomp	_	highlight=green|span=3
+7	teqanan	teqanan	NOUN	NOUN	_	6	nmod:poss	_	_
+8	e	e	AUX	AUX	_	5	cop	_	_
+9	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: kmr_kurmanji-ud-test.conllu · this verb has L=1, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Holmes , gote min : Çi mirovekî zirav e .
+1	Holmes	Holmes	PROPN	PROPN	_	3	nsubj	_	highlight=green|span=1
+2	,	,	PUNCT	PUNCT	_	1	punct	_	_
+3	gote	gote	VERB	VERB	_	0	root	_	highlight=red
+4	min	min	PRON	PRON	_	3	obl:dat	_	highlight=green|span=1
+5	:	:	PUNCT	PUNCT	_	7	punct	_	_
+6	Çi	Çi	DET	DET	_	7	det	_	_
+7	mirovekî	mirovekî	NOUN	NOUN	_	3	ccomp	_	highlight=green|span=4
+8	zirav	zirav	NOUN	NOUN	_	7	nmod:poss	_	_
+9	e	e	AUX	AUX	_	7	cop	_	_
+10	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: kmr_kurmanji-ud-test.conllu · this verb has L=1, R=2 (mean span = 2.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Holmes gote hevalê xwe Wetsin : Min wesiyetnama jinikê dît .
+1	Holmes	Holmes	PROPN	PROPN	_	2	nsubj	_	highlight=green|span=1
+2	gote	gote	VERB	VERB	_	0	root	_	highlight=red
+3	hevalê	hevalê	NOUN	NOUN	_	2	obl:dat	_	highlight=green|span=3
+4	xwe	xwe	PRON	PRON	_	3	nmod:poss	_	_
+5	Wetsin	Wetsin	PROPN	PROPN	_	3	appos	_	_
+6	:	:	PUNCT	PUNCT	_	10	punct	_	_
+7	Min	Min	PRON	PRON	_	10	nsubj	_	_
+8	wesiyetnama	wesiyetnama	NOUN	NOUN	_	10	obj	_	_
+9	jinikê	jinikê	NOUN	NOUN	_	8	nmod:poss	_	_
+10	dît	dît	VERB	VERB	_	2	ccomp	_	highlight=green|span=4
+11	.	.	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: kmr_kurmanji-ud-test.conllu · this verb has L=1, R=2 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Min gote Holmes : Te dît ? ...
+1	Min	Min	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	gote	gote	VERB	VERB	_	0	root	_	highlight=red
+3	Holmes	Holmes	PROPN	PROPN	_	2	obl:dat	_	highlight=green|span=1
+4	:	:	PUNCT	PUNCT	_	6	punct	_	_
+5	Te	Te	PRON	PRON	_	6	nsubj	_	_
+6	dît	dît	VERB	VERB	_	2	ccomp	_	highlight=green|span=2
+7	?	?	PUNCT	PUNCT	_	6	punct	_	_
+8	...	...	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: kmr_kurmanji-ud-test.conllu · this verb has L=1, R=2 (mean span = 3.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Stonêrê gava em dîtin ber bi me ve hat û bi ken gote me : Ez bê sabir li hêviya we bûm .
+1	Stonêrê	Stonêrê	PROPN	PROPN	_	9	nsubj	_	_
+2	gava	gava	SCONJ	SCONJ	_	4	mark	_	_
+3	em	em	PRON	PRON	_	4	obj	_	_
+4	dîtin	dîtin	VERB	VERB	_	9	advcl	_	_
+5	ber	ber	ADP	ADP	_	7	case	_	_
+6	bi	bi	ADP	ADP	_	7	case	_	_
+7	me	me	PRON	PRON	_	9	nmod	_	_
+8	ve	ve	ADP	ADP	_	7	case	_	_
+9	hat	hat	VERB	VERB	_	0	root	_	_
+10	û	û	CCONJ	CCONJ	_	13	cc	_	_
+11	bi	bi	ADP	ADP	_	12	case	_	_
+12	ken	ken	NOUN	NOUN	_	13	nmod	_	highlight=green|span=2
+13	gote	gote	VERB	VERB	_	9	conj	_	highlight=red
+14	me	me	PRON	PRON	_	13	obl:dat	_	highlight=green|span=1
+15	:	:	PUNCT	PUNCT	_	20	punct	_	_
+16	Ez	Ez	PRON	PRON	_	20	nsubj	_	_
+17	bê	bê	ADP	ADP	_	18	case	_	_
+18	sabir	sabir	NOUN	NOUN	_	20	nmod	_	_
+19	li	li	ADP	ADP	_	20	case	_	_
+20	hêviya	hêviya	NOUN	NOUN	_	13	ccomp	_	highlight=green|span=7
+21	we	we	PRON	PRON	_	20	nmod:poss	_	_
+22	bûm	bûm	AUX	AUX	_	20	cop	_	_
+23	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: kmr_kurmanji-ud-test.conllu · this verb has L=0, R=2 (mean span = 7.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Holmes : Divêt em lezê bidin xwe û odeyên ko te wesfê wan dane me divêt em bibînin .
+1	Holmes	Holmes	PROPN	PROPN	_	0	root	_	_
+2	:	:	PUNCT	PUNCT	_	3	punct	_	_
+3	Divêt	Divêt	VERB	VERB	_	1	parataxis	_	highlight=red
+4	em	em	PRON	PRON	_	6	nsubj	_	_
+5	lezê	lezê	NOUN	NOUN	_	6	compound:lvc	_	_
+6	bidin	bidin	VERB	VERB	_	3	ccomp	_	highlight=green|span=11
+7	xwe	xwe	PRON	PRON	_	6	obj	_	_
+8	û	û	CCONJ	CCONJ	_	16	cc	_	_
+9	odeyên	odeyên	NOUN	NOUN	_	18	obj	_	_
+10	ko	ko	SCONJ	SCONJ	_	14	mark	_	_
+11	te	te	PRON	PRON	_	14	nsubj	_	_
+12	wesfê	wesfê	NOUN	NOUN	_	14	obj	_	_
+13	wan	wan	PRON	PRON	_	12	nmod:poss	_	_
+14	dane	dane	VERB	VERB	_	9	acl	_	_
+15	me	me	PRON	PRON	_	14	nmod	_	_
+16	divêt	divêt	VERB	VERB	_	6	conj	_	highlight=green|span=3
+17	em	em	PRON	PRON	_	18	nsubj	_	_
+18	bibînin	bibînin	VERB	VERB	_	16	ccomp	_	_
+19	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: kmr_kurmanji-ud-test.conllu · this verb has L=1, R=2 (mean span = 4.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Heçî Hêlên ; piştî ko wê jî qerara xwe da ko bizewice zirbavê wê di oda wê de hin tamîrat behane kirin û ew anî oda xweha wê da ko bikare di qulê re mar berde ser wê .
+1	Heçî	Heçî	ADV	ADV	_	10	advmod	_	_
+2	Hêlên	Hêlên	PROPN	PROPN	_	10	dislocated	_	_
+3	;	;	PUNCT	PUNCT	_	2	punct	_	_
+4	piştî	piştî	ADP	ADP	_	10	mark	_	_
+5	ko	ko	SCONJ	SCONJ	_	4	fixed	_	_
+6	wê	wê	PRON	PRON	_	10	nsubj	_	_
+7	jî	jî	PART	PART	_	10	advmod	_	_
+8	qerara	qerara	NOUN	NOUN	_	10	compound:lvc	_	_
+9	xwe	xwe	PRON	PRON	_	8	nmod:poss	_	_
+10	da	da	VERB	VERB	_	22	advcl	_	_
+11	ko	ko	SCONJ	SCONJ	_	12	mark	_	_
+12	bizewice	bizewice	VERB	VERB	_	10	ccomp	_	_
+13	zirbavê	zirbavê	NOUN	NOUN	_	22	nsubj	_	_
+14	wê	wê	PRON	PRON	_	13	nmod:poss	_	_
+15	di	di	ADP	ADP	_	16	case	_	_
+16	oda	oda	NOUN	NOUN	_	20	nmod	_	_
+17	wê	wê	PRON	PRON	_	16	nmod:poss	_	_
+18	de	de	ADP	ADP	_	16	case	_	_
+19	hin	hin	DET	DET	_	20	det	_	_
+20	tamîrat	tamîrat	NOUN	NOUN	_	22	obj	_	_
+21	behane	behane	NOUN	NOUN	_	22	compound:lvc	_	_
+22	kirin	kirin	VERB	VERB	_	0	root	_	_
+23	û	û	CCONJ	CCONJ	_	25	cc	_	_
+24	ew	ew	PRON	PRON	_	25	obj	_	highlight=green|span=1
+25	anî	anî	VERB	VERB	_	22	conj	_	highlight=red
+26	oda	oda	NOUN	NOUN	_	25	obl:dat	_	highlight=green|span=3
+27	xweha	xweha	NOUN	NOUN	_	26	nmod:poss	_	_
+28	wê	wê	PRON	PRON	_	27	nmod:poss	_	_
+29	da	da	SCONJ	SCONJ	_	31	mark	_	_
+30	ko	ko	SCONJ	SCONJ	_	29	fixed	_	_
+31	bikare	bikare	VERB	VERB	_	25	advcl	_	highlight=green|span=10
+32	di	di	ADP	ADP	_	33	case	_	_
+33	qulê	qulê	NOUN	NOUN	_	36	nmod	_	_
+34	re	re	ADP	ADP	_	33	case	_	_
+35	mar	mar	NOUN	NOUN	_	36	obj	_	_
+36	berde	berde	VERB	VERB	_	31	ccomp	_	_
+37	ser	ser	ADP	ADP	_	38	case	_	_
+38	wê	wê	PRON	PRON	_	36	nmod	_	_
+39	.	.	PUNCT	PUNCT	_	22	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: kmr_kurmanji-ud-test.conllu · this verb has L=3, R=2 (mean span = 1.80)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ji bo van çalakiyan ew di 1964 hat şandine Tirkiye sirgûnê .
+1	Ji	Ji	ADP	ADP	_	4	case	_	_
+2	bo	bo	ADP	ADP	_	1	fixed	_	_
+3	van	van	DET	DET	_	4	det	_	_
+4	çalakiyan	çalakiyan	NOUN	NOUN	_	9	nmod	_	highlight=green|span=4
+5	ew	ew	PRON	PRON	_	9	nsubj	_	highlight=green|span=1
+6	di	di	ADP	ADP	_	7	case	_	_
+7	1964	1964	NUM	NUM	_	9	nmod	_	highlight=green|span=2
+8	hat	hat	AUX	AUX	_	9	aux	_	_
+9	şandine	şandine	VERB	VERB	_	0	root	_	highlight=red
+10	Tirkiye	Tirkiye	PROPN	PROPN	_	9	obl:dat	_	highlight=green|span=1
+11	sirgûnê	sirgûnê	NOUN	NOUN	_	9	nmod	_	highlight=green|span=1
+12	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: kmr_kurmanji-ud-test.conllu · this verb has L=1, R=2 (mean span = 5.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Holmes gote Stonêrê : Niho min ji te divêt tu herî oda xwe , penceran bigirî û bidî ber , Stonêrê welê kir .
+1	Holmes	Holmes	PROPN	PROPN	_	2	nsubj	_	highlight=green|span=1
+2	gote	gote	VERB	VERB	_	0	root	_	highlight=red
+3	Stonêrê	Stonêrê	PROPN	PROPN	_	2	obl:dat	_	highlight=green|span=1
+4	:	:	PUNCT	PUNCT	_	9	punct	_	_
+5	Niho	Niho	ADV	ADV	_	9	advmod	_	_
+6	min	min	PRON	PRON	_	9	nmod	_	_
+7	ji	ji	ADP	ADP	_	8	case	_	_
+8	te	te	PRON	PRON	_	9	nmod	_	_
+9	divêt	divêt	VERB	VERB	_	2	ccomp	_	highlight=green|span=14
+10	tu	tu	PRON	PRON	_	11	nsubj	_	_
+11	herî	herî	VERB	VERB	_	9	ccomp	_	_
+12	oda	oda	NOUN	NOUN	_	11	obl:dat	_	_
+13	xwe	xwe	PRON	PRON	_	12	nmod:poss	_	_
+14	,	,	PUNCT	PUNCT	_	16	punct	_	_
+15	penceran	penceran	NOUN	NOUN	_	16	obj	_	_
+16	bigirî	bigirî	VERB	VERB	_	11	conj	_	_
+17	û	û	CCONJ	CCONJ	_	19	cc	_	_
+18	bidî	bidî	VERB	VERB	_	11	conj	_	_
+19	ber	ber	ADP	ADP	_	18	compound:lvc	_	_
+20	,	,	PUNCT	PUNCT	_	23	punct	_	_
+21	Stonêrê	Stonêrê	PROPN	PROPN	_	23	nsubj	_	_
+22	welê	welê	ADV	ADV	_	23	advmod	_	_
+23	kir	kir	VERB	VERB	_	2	conj	_	_
+24	.	.	PUNCT	PUNCT	_	23	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: kmr_kurmanji-ud-test.conllu · this verb has L=1, R=2 (mean span = 3.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Holmes pencerê girt , çira danî ser masê , nîzingî li min kir û hêdîka gote min : dengekî piçûk îşê me tev de xerab dike .
+1	Holmes	Holmes	PROPN	PROPN	_	3	nsubj	_	_
+2	pencerê	pencerê	NOUN	NOUN	_	3	obj	_	_
+3	girt	girt	VERB	VERB	_	0	root	_	_
+4	,	,	PUNCT	PUNCT	_	6	punct	_	_
+5	çira	çira	NOUN	NOUN	_	6	obj	_	_
+6	danî	danî	VERB	VERB	_	3	conj	_	_
+7	ser	ser	NOUN	NOUN	_	8	case	_	_
+8	masê	masê	NOUN	NOUN	_	6	nmod	_	_
+9	,	,	PUNCT	PUNCT	_	13	punct	_	_
+10	nîzingî	nîzingî	NOUN	NOUN	_	13	compound:lvc	_	_
+11	li	li	ADP	ADP	_	12	case	_	_
+12	min	min	PRON	PRON	_	13	nmod	_	_
+13	kir	kir	VERB	VERB	_	3	conj	_	_
+14	û	û	CCONJ	CCONJ	_	13	cc	_	_
+15	hêdîka	hêdîka	ADV	ADV	_	16	advmod	_	highlight=green|span=1
+16	gote	gote	VERB	VERB	_	3	conj	_	highlight=red
+17	min	min	PRON	PRON	_	16	obl:dat	_	highlight=green|span=1
+18	:	:	PUNCT	PUNCT	_	26	punct	_	_
+19	dengekî	dengekî	NOUN	NOUN	_	26	nsubj	_	_
+20	piçûk	piçûk	ADJ	ADJ	_	19	amod	_	_
+21	îşê	îşê	NOUN	NOUN	_	26	obj	_	_
+22	me	me	PRON	PRON	_	21	nmod:poss	_	_
+23	tev	tev	ADV	ADV	_	26	advmod	_	_
+24	de	de	ADP	ADP	_	23	fixed	_	_
+25	xerab	xerab	ADJ	ADJ	_	26	compound:lvc	_	_
+26	dike	dike	VERB	VERB	_	16	ccomp	_	highlight=green|span=8
+27	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: kmr_kurmanji-ud-test.conllu · this verb has L=1, R=2 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Lê şîrê ko di vî misînî diçe nakeve serê min ko têra wî bike .
+1	Lê	Lê	CCONJ	CCONJ	_	7	cc	_	_
+2	şîrê	şîrê	NOUN	NOUN	_	8	nsubj	_	highlight=green|span=6
+3	ko	ko	SCONJ	SCONJ	_	7	mark	_	_
+4	di	di	ADP	ADP	_	6	case	_	_
+5	vî	vî	DET	DET	_	6	det	_	_
+6	misînî	misînî	NOUN	NOUN	_	7	nmod	_	_
+7	diçe	diçe	VERB	VERB	_	2	acl	_	_
+8	nakeve	nakeve	VERB	VERB	_	0	root	_	highlight=red
+9	serê	serê	NOUN	NOUN	_	8	nmod	_	highlight=green|span=2
+10	min	min	PRON	PRON	_	9	nmod:poss	_	_
+11	ko	ko	SCONJ	SCONJ	_	14	mark	_	_
+12	têra	têra	NOUN	NOUN	_	14	compound:lvc	_	_
+13	wî	wî	PRON	PRON	_	12	nmod:poss	_	_
+14	bike	bike	VERB	VERB	_	8	advcl	_	highlight=green|span=4
+15	.	.	PUNCT	PUNCT	_	14	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: kmr_kurmanji-ud-test.conllu · this verb has L=0, R=2 (mean span = 5.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Wextê îşê xwe temam kir , şelîtek bi destî ve rabû û gote haziran : Ev şelît , zolek çerm e , pê _ seyan girêdidin .
+1	Wextê	Wextê	SCONJ	SCONJ	_	5	mark	_	_
+2	îşê	îşê	NOUN	NOUN	_	5	obj	_	_
+3	xwe	xwe	PRON	PRON	_	2	nmod:poss	_	_
+4	temam	temam	ADJ	ADJ	_	5	compound:lvc	_	_
+5	kir	kir	VERB	VERB	_	11	advcl	_	_
+6	,	,	PUNCT	PUNCT	_	5	punct	_	_
+7	şelîtek	şelîtek	NOUN	NOUN	_	9	nsubj	_	_
+8	bi	bi	ADP	ADP	_	9	case	_	_
+9	destî	destî	NOUN	NOUN	_	11	acl	_	_
+10	ve	ve	ADP	ADP	_	9	case	_	_
+11	rabû	rabû	VERB	VERB	_	0	root	_	_
+12	û	û	CCONJ	CCONJ	_	13	cc	_	_
+13	gote	gote	VERB	VERB	_	11	conj	_	highlight=red
+14	haziran	haziran	NOUN	NOUN	_	13	obl:dat	_	highlight=green|span=1
+15	:	:	PUNCT	PUNCT	_	17	punct	_	_
+16	Ev	Ev	DET	DET	_	17	det	_	_
+17	şelît	şelît	NOUN	NOUN	_	19	nsubj	_	_
+18	,	,	PUNCT	PUNCT	_	17	punct	_	_
+19	zolek	zolek	NOUN	NOUN	_	13	ccomp	_	highlight=green|span=9
+20	çerm	çerm	NOUN	NOUN	_	19	nmod	_	_
+21	e	e	AUX	AUX	_	19	cop	_	_
+22	,	,	PUNCT	PUNCT	_	26	punct	_	_
+23	pê	pê	ADP	ADP	_	24	case	_	_
+24	_	_	PRON	PRON	_	26	nmod	_	_
+25	seyan	seyan	NOUN	NOUN	_	26	obj	_	_
+26	girêdidin	girêdidin	VERB	VERB	_	19	conj	_	_
+27	.	.	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

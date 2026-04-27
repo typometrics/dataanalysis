@@ -1,0 +1,288 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Guajajára — MAL_3</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Guajajára examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Guajajára <small style="color:#999;font-weight:normal">(gub)</small> — MAL<sub>3</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>3</b> dependents in total (left + right combined).</p><p><b>MAL<sub>3</sub> = 1.543</b> &nbsp; <span style="color:#666">(123 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over all dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: gub_tudet-ud-test.conllu · this verb has L=0, R=3 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Uzuhez katu taz ahu kara aʔe .
+1	Uzuhez	Uzuhez	VERB	VERB	_	0	root	_	highlight=red
+2	katu	katu	NOUN	NOUN	_	1	obl	_	highlight=green|span=1
+3	taz	taz	NOUN	NOUN	_	1	obl:subj	_	highlight=green|span=2
+4	ahu	ahu	NOUN	NOUN	_	3	nmod	_	_
+5	kara	kara	NOUN	NOUN	_	1	obj	_	highlight=green|span=1
+6	aʔe	aʔe	PRON	PRON	_	1	discourse	_	_
+7	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: gub_tudet-ud-test.conllu · this verb has L=1, R=2 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Zuze ukwaw kwaxi remiʔu aʔe .
+1	Zuze	Zuze	PROPN	PROPN	_	2	obl:subj	_	highlight=green|span=1
+2	ukwaw	ukwaw	VERB	VERB	_	0	root	_	highlight=red
+3	kwaxi	kwaxi	NOUN	NOUN	_	4	nmod	_	_
+4	remiʔu	remiʔu	NOUN	NOUN	_	2	obj	_	highlight=green|span=2
+5	aʔe	aʔe	PRON	PRON	_	1	discourse	_	highlight=green|span=1
+6	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: gub_tudet-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = — Taʔe ipɨpor xe zo tur kwez xe , iʔi zekaipo zakare izupe aʔe no .
+1	—	—	PUNCT	PUNCT	_	6	punct	_	_
+2	Taʔe	Taʔe	CCONJ	CCONJ	_	6	cc	_	_
+3	ipɨpor	ipɨpor	NOUN	NOUN	_	6	obl:subj	_	highlight=green|span=1
+4	xe	xe	ADV	ADV	_	6	advmod	_	highlight=green|span=2
+5	zo	zo	PART	PART	_	4	discourse	_	_
+6	tur	tur	VERB	VERB	_	10	ccomp	_	highlight=red
+7	kwez	kwez	PART	PART	_	3	discourse	_	highlight=green|span=1
+8	xe	xe	PART	PART	_	6	discourse	_	_
+9	,	,	PUNCT	PUNCT	_	6	punct	_	_
+10	iʔi	iʔi	NOUN	NOUN	_	0	root	_	_
+11	zekaipo	zekaipo	ADV	ADV	_	10	advmod	_	_
+12	zakare	zakare	NOUN	NOUN	_	10	nmod	_	_
+13	izupe	izupe	ADP	ADP	_	10	iobj	_	_
+14	aʔe	aʔe	PRON	PRON	_	10	discourse	_	_
+15	no	no	PART	PART	_	10	discourse	_	_
+16	.	.	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: gub_tudet-ud-test.conllu · this verb has L=1, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Kari ukwawewer kwaxi rehe uzekaiw paw aʔe .
+1	Kari	Kari	PROPN	PROPN	_	2	obl:subj	_	highlight=green|span=1
+2	ukwawewer	ukwawewer	VERB	VERB	_	0	root	_	highlight=red
+3	kwaxi	kwaxi	NOUN	NOUN	_	5	obl	_	_
+4	rehe	rehe	ADP	ADP	_	3	case	_	_
+5	uzekaiw	uzekaiw	NOUN	NOUN	_	2	obj	_	highlight=green|span=4
+6	paw	paw	ADV	ADV	_	5	advmod	_	_
+7	aʔe	aʔe	PRON	PRON	_	1	discourse	_	highlight=green|span=1
+8	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: gub_tudet-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Aʔe rupi zekaipo mozuhu mozuhu uzemupɨʔa hehe aʔe .
+1	Aʔe	Aʔe	PRON	PRON	_	6	discourse	_	_
+2	rupi	rupi	ADP	ADP	_	1	case	_	_
+3	zekaipo	zekaipo	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+4	mozuhu	mozuhu	NOUN	NOUN	_	6	obl:subj	_	highlight=green|span=2
+5	mozuhu	mozuhu	NOUN	NOUN	_	4	nmod	_	_
+6	uzemupɨʔa	uzemupɨʔa	VERB	VERB	_	0	root	_	highlight=red
+7	hehe	hehe	ADP	ADP	_	6	obl	_	highlight=green|span=1
+8	aʔe	aʔe	PRON	PRON	_	6	discourse	_	_
+9	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: gub_tudet-ud-test.conllu · this verb has L=0, R=3 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Wenuneʔoneʔo zekaipo kwarer mozuhu mozuhu .
+1	Wenuneʔoneʔo	Wenuneʔoneʔo	VERB	VERB	_	0	root	_	highlight=red
+2	zekaipo	zekaipo	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+3	kwarer	kwarer	NOUN	NOUN	_	1	obj	_	highlight=green|span=1
+4	mozuhu	mozuhu	NOUN	NOUN	_	1	obj	_	highlight=green|span=2
+5	mozuhu	mozuhu	NOUN	NOUN	_	4	nmod	_	_
+6	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: gub_tudet-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Newioraw pupe rakwez azur ihe tɨ iʔi zekwehe zuʔi apitawpe
+1	Newioraw	Newioraw	NOUN	NOUN	_	4	obl	_	highlight=green|span=2
+2	pupe	pupe	ADP	ADP	_	1	case	_	_
+3	rakwez	rakwez	PART	PART	_	4	advmod	_	highlight=green|span=1
+4	azur	azur	VERB	VERB	_	7	ccomp	_	highlight=red
+5	ihe	ihe	PRON	PRON	_	4	obl:subj	_	highlight=green|span=1
+6	tɨ	tɨ	PART	PART	_	4	discourse	_	_
+7	iʔi	iʔi	NOUN	NOUN	_	0	root	_	_
+8	zekwehe	zekwehe	ADV	ADV	_	7	advmod	_	_
+9	zuʔi	zuʔi	NOUN	NOUN	_	7	nmod	_	_
+10	apitawpe	apitawpe	NOUN	NOUN	_	7	obl	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: gub_tudet-ud-test.conllu · this verb has L=0, R=3 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Umeʔegatu zekaipo awara amogwer wapɨpor rehe .
+1	Umeʔegatu	Umeʔegatu	VERB	VERB	_	0	root	_	highlight=red
+2	zekaipo	zekaipo	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+3	awara	awara	NOUN	NOUN	_	1	obl:subj	_	highlight=green|span=1
+4	amogwer	amogwer	PRON	PRON	_	5	nmod	_	_
+5	wapɨpor	wapɨpor	NOUN	NOUN	_	1	obl	_	highlight=green|span=3
+6	rehe	rehe	ADP	ADP	_	5	case	_	_
+7	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: gub_tudet-ud-test.conllu · this verb has L=0, R=3 (mean span = 2.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Oho zekaipo zawar uhu aʔe kurɨ , ɨwate ɨwɨra rupi aʔe kurɨ .
+1	Oho	Oho	VERB	VERB	_	0	root	_	highlight=red
+2	zekaipo	zekaipo	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+3	zawar	zawar	NOUN	NOUN	_	1	obl:subj	_	highlight=green|span=2
+4	uhu	uhu	NOUN	NOUN	_	3	nmod	_	_
+5	aʔe	aʔe	PRON	PRON	_	1	discourse	_	_
+6	kurɨ	kurɨ	PART	PART	_	1	discourse	_	_
+7	,	,	PUNCT	PUNCT	_	1	punct	_	_
+8	ɨwate	ɨwate	NOUN	NOUN	_	9	nmod	_	_
+9	ɨwɨra	ɨwɨra	NOUN	NOUN	_	1	obl	_	highlight=green|span=5
+10	rupi	rupi	ADP	ADP	_	9	case	_	_
+11	aʔe	aʔe	PRON	PRON	_	9	discourse	_	_
+12	kurɨ	kurɨ	PART	PART	_	9	discourse	_	_
+13	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: gub_tudet-ud-test.conllu · this verb has L=1, R=2 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Sérgio wexak Pedro tapiʔir haro mehe
+1	Sérgio	Sérgio	PROPN	PROPN	_	2	obl:subj	_	highlight=green|span=1
+2	wexak	wexak	VERB	VERB	_	0	root	_	highlight=red
+3	Pedro	Pedro	PROPN	PROPN	_	2	obj	_	highlight=green|span=1
+4	tapiʔir	tapiʔir	NOUN	NOUN	_	5	obj	_	_
+5	haro	haro	NOUN	NOUN	_	2	obl	_	highlight=green|span=3
+6	mehe	mehe	ADP	ADP	_	5	case	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: gub_tudet-ud-test.conllu · this verb has L=0, R=3 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Xe aʔe zo zekaipo umeʔe aʔe kwarer waikwer upi , wexak zekaipo ɨrɨ hu waikwer upi aʔe kurɨ .
+1	Xe	Xe	PART	PART	_	2	discourse	_	_
+2	aʔe	aʔe	PRON	PRON	_	5	obl:subj	_	_
+3	zo	zo	PART	PART	_	1	dep	_	_
+4	zekaipo	zekaipo	ADV	ADV	_	2	advmod	_	_
+5	umeʔe	umeʔe	VERB	VERB	_	0	root	_	_
+6	aʔe	aʔe	DET	DET	_	7	det	_	_
+7	kwarer	kwarer	NOUN	NOUN	_	5	obl:subj	_	_
+8	waikwer	waikwer	NOUN	NOUN	_	5	obl	_	_
+9	upi	upi	NOUN	NOUN	_	8	case	_	_
+10	,	,	PUNCT	PUNCT	_	5	punct	_	_
+11	wexak	wexak	VERB	VERB	_	5	conj	_	highlight=red
+12	zekaipo	zekaipo	ADV	ADV	_	11	advmod	_	highlight=green|span=1
+13	ɨrɨ	ɨrɨ	NOUN	NOUN	_	11	obj	_	highlight=green|span=2
+14	hu	hu	NOUN	NOUN	_	13	nmod	_	_
+15	waikwer	waikwer	NOUN	NOUN	_	11	obl	_	highlight=green|span=2
+16	upi	upi	NOUN	NOUN	_	15	case	_	_
+17	aʔe	aʔe	PRON	PRON	_	11	discourse	_	_
+18	kurɨ	kurɨ	PART	PART	_	11	discourse	_	_
+19	.	.	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: gub_tudet-ud-test.conllu · this verb has L=0, R=3 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Oho hoko iko ɨrɨhupe ipira pɨhɨkpa .
+1	Oho	Oho	VERB	VERB	_	0	root	_	highlight=red
+2	hoko	hoko	NOUN	NOUN	_	1	obl:subj	_	highlight=green|span=1
+3	iko	iko	AUX	AUX	_	1	aux	_	_
+4	ɨrɨhupe	ɨrɨhupe	NOUN	NOUN	_	1	obl	_	highlight=green|span=1
+5	ipira	ipira	NOUN	NOUN	_	6	obj	_	_
+6	pɨhɨkpa	pɨhɨkpa	VERB	VERB	_	1	advcl	_	highlight=green|span=2
+7	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: gub_tudet-ud-test.conllu · this verb has L=0, R=3 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = uhez kuza kwaharer huwa aʔe
+1	uhez	uhez	VERB	VERB	_	0	root	_	highlight=red
+2	kuza	kuza	NOUN	NOUN	_	1	obl:subj	_	highlight=green|span=1
+3	kwaharer	kwaharer	NOUN	NOUN	_	4	nmod	_	_
+4	huwa	huwa	NOUN	NOUN	_	1	obj	_	highlight=green|span=2
+5	aʔe	aʔe	PRON	PRON	_	2	discourse	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: gub_tudet-ud-test.conllu · this verb has L=1, R=2 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Naʔe Zuze aʔe nehe kurɨ , ohoputar tawpe muhag ipiaromo aʔe nehe kurɨ .
+1	Naʔe	Naʔe	CCONJ	CCONJ	_	7	cc	_	_
+2	Zuze	Zuze	PROPN	PROPN	_	7	obl:subj	_	highlight=green|span=4
+3	aʔe	aʔe	PRON	PRON	_	2	discourse	_	_
+4	nehe	nehe	PART	PART	_	2	discourse	_	_
+5	kurɨ	kurɨ	PART	PART	_	2	discourse	_	_
+6	,	,	PUNCT	PUNCT	_	2	punct	_	_
+7	ohoputar	ohoputar	VERB	VERB	_	0	root	_	highlight=red
+8	tawpe	tawpe	NOUN	NOUN	_	7	obl	_	highlight=green|span=1
+9	muhag	muhag	NOUN	NOUN	_	7	obl	_	highlight=green|span=2
+10	ipiaromo	ipiaromo	ADP	ADP	_	9	case	_	_
+11	aʔe	aʔe	PRON	PRON	_	7	discourse	_	_
+12	nehe	nehe	PART	PART	_	7	discourse	_	_
+13	kurɨ	kurɨ	PART	PART	_	7	discourse	_	_
+14	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: gub_tudet-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Aʔe rupi hezeʔeg amonokar peme , iʔi zekaipo miar wanupe .
+1	Aʔe	Aʔe	PRON	PRON	_	4	obl	_	highlight=green|span=2
+2	rupi	rupi	ADP	ADP	_	1	case	_	_
+3	hezeʔeg	hezeʔeg	NOUN	NOUN	_	4	obl:subj	_	highlight=green|span=1
+4	amonokar	amonokar	VERB	VERB	_	7	ccomp	_	highlight=red
+5	peme	peme	ADP	ADP	_	4	obl	_	highlight=green|span=1
+6	,	,	PUNCT	PUNCT	_	4	punct	_	_
+7	iʔi	iʔi	NOUN	NOUN	_	0	root	_	_
+8	zekaipo	zekaipo	ADV	ADV	_	7	advmod	_	_
+9	miar	miar	NOUN	NOUN	_	7	iobj	_	_
+10	wanupe	wanupe	ADP	ADP	_	9	case	_	_
+11	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: gub_tudet-ud-test.conllu · this verb has L=0, R=3 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Uzewɨr zekaipo zakare oho ipɨpor hekarpa aʔe no .
+1	Uzewɨr	Uzewɨr	VERB	VERB	_	0	root	_	highlight=red
+2	zekaipo	zekaipo	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+3	zakare	zakare	NOUN	NOUN	_	1	obl:subj	_	highlight=green|span=1
+4	oho	oho	AUX	AUX	_	1	aux	_	_
+5	ipɨpor	ipɨpor	NOUN	NOUN	_	6	obj	_	_
+6	hekarpa	hekarpa	VERB	VERB	_	1	advcl	_	highlight=green|span=2
+7	aʔe	aʔe	PRON	PRON	_	1	discourse	_	_
+8	no	no	PART	PART	_	1	discourse	_	_
+9	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: gub_tudet-ud-test.conllu · this verb has L=1, R=2 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Aʔepe ukazikazim zekaipo iko aʔepehar wanuwi .
+1	Aʔepe	Aʔepe	PRON	PRON	_	2	obl	_	highlight=green|span=1
+2	ukazikazim	ukazikazim	VERB	VERB	_	0	root	_	highlight=red
+3	zekaipo	zekaipo	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+4	iko	iko	AUX	AUX	_	2	aux	_	_
+5	aʔepehar	aʔepehar	NOUN	NOUN	_	2	obl	_	highlight=green|span=2
+6	wanuwi	wanuwi	ADP	ADP	_	5	case	_	_
+7	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: gub_tudet-ud-test.conllu · this verb has L=0, R=3 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Aexak xapat ikatuahɨmaʔe tawpe ihe , iʔi izupe .
+1	Aexak	Aexak	VERB	VERB	_	7	ccomp	_	highlight=red
+2	xapat	xapat	NOUN	NOUN	_	3	nmod	_	_
+3	ikatuahɨmaʔe	ikatuahɨmaʔe	NOUN	NOUN	_	1	obj	_	highlight=green|span=2
+4	tawpe	tawpe	NOUN	NOUN	_	1	obl	_	highlight=green|span=1
+5	ihe	ihe	PRON	PRON	_	1	obl:subj	_	highlight=green|span=1
+6	,	,	PUNCT	PUNCT	_	1	punct	_	_
+7	iʔi	iʔi	NOUN	NOUN	_	0	root	_	_
+8	izupe	izupe	ADP	ADP	_	7	iobj	_	_
+9	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: gub_tudet-ud-test.conllu · this verb has L=0, R=3 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Uimur zekaipo ihɨ izupe
+1	Uimur	Uimur	VERB	VERB	_	0	root	_	highlight=red
+2	zekaipo	zekaipo	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+3	ihɨ	ihɨ	NOUN	NOUN	_	1	obl:subj	_	highlight=green|span=1
+4	izupe	izupe	ADP	ADP	_	1	iobj	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: gub_tudet-ud-test.conllu · this verb has L=0, R=3 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Upɨhɨk xu hemɨhar iho mehe , upɨhɨk katu aʔe .
+1	Upɨhɨk	Upɨhɨk	VERB	VERB	_	0	root	_	highlight=red
+2	xu	xu	NOUN	NOUN	_	1	obl:subj	_	highlight=green|span=1
+3	hemɨhar	hemɨhar	NOUN	NOUN	_	1	obj	_	highlight=green|span=1
+4	iho	iho	NOUN	NOUN	_	1	obl	_	highlight=green|span=2
+5	mehe	mehe	ADP	ADP	_	4	case	_	_
+6	,	,	PUNCT	PUNCT	_	1	punct	_	_
+7	upɨhɨk	upɨhɨk	VERB	VERB	_	1	conj	_	_
+8	katu	katu	NOUN	NOUN	_	7	obl	_	_
+9	aʔe	aʔe	PRON	PRON	_	7	discourse	_	_
+10	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

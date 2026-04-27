@@ -1,0 +1,562 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Persian — RMAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Persian examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Persian <small style="color:#999;font-weight:normal">(fa)</small> — RMAL<sub>2</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>2</b> right dependents (left side may be anything).</p><p><b>RMAL<sub>2</sub> = 7.506</b> &nbsp; <span style="color:#666">(416 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>right</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: fa_seraji-ud-dev.conllu · this verb has L=1, R=2 (mean span = 6.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = معاون حقوقی و مجلس وزارت پست و تلگراف و تلفن اعلام کرد : با مصوبه اخیر مجلس موانع قانونی برای سرمایه‌گذاری کلان بخش خصوصی در مخابرات برداشته شده است .
+1	معاون	معاون	NOUN	NOUN	_	12	nsubj	_	highlight=green|span=10
+2	حقوقی	حقوقی	ADJ	ADJ	_	1	amod	_	_
+3	و	و	CCONJ	CCONJ	_	4	cc	_	_
+4	مجلس	مجلس	NOUN	NOUN	_	1	conj	_	_
+5	وزارت	وزارت	NOUN	NOUN	_	4	nmod:poss	_	_
+6	پست	پست	NOUN	NOUN	_	5	nmod:poss	_	_
+7	و	و	CCONJ	CCONJ	_	8	cc	_	_
+8	تلگراف	تلگراف	NOUN	NOUN	_	6	conj	_	_
+9	و	و	CCONJ	CCONJ	_	10	cc	_	_
+10	تلفن	تلفن	NOUN	NOUN	_	8	conj	_	_
+11	اعلام	اعلام	NOUN	NOUN	_	12	compound:lvc	_	_
+12	کرد	کرد	VERB	VERB	_	0	root	_	highlight=red
+13	:	:	PUNCT	PUNCT	_	27	punct	_	_
+14	با	با	ADP	ADP	_	15	case	_	_
+15	مصوبه	مصوبه	NOUN	NOUN	_	27	obl	_	highlight=green|span=4
+16	اخیر	اخیر	ADJ	ADJ	_	15	amod	_	_
+17	مجلس	مجلس	NOUN	NOUN	_	15	nmod:poss	_	_
+18	موانع	موانع	NOUN	NOUN	_	27	nsubj:pass	_	_
+19	قانونی	قانونی	ADJ	ADJ	_	18	amod	_	_
+20	برای	برای	ADP	ADP	_	21	case	_	_
+21	سرمایه‌گذاری	سرمایه‌گذاری	NOUN	NOUN	_	15	nmod	_	_
+22	کلان	کلان	ADJ	ADJ	_	21	amod	_	_
+23	بخش	بخش	NOUN	NOUN	_	21	nmod:poss	_	_
+24	خصوصی	خصوصی	ADJ	ADJ	_	23	amod	_	_
+25	در	در	ADP	ADP	_	26	case	_	_
+26	مخابرات	مخابرات	NOUN	NOUN	_	21	nmod	_	_
+27	برداشته	برداشته	VERB	VERB	_	12	ccomp	_	highlight=green|span=5
+28	شده	شده	AUX	AUX	_	27	aux:pass	_	_
+29	است	است	AUX	AUX	_	27	aux	_	_
+30	.	.	PUNCT	PUNCT	_	12	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: fa_seraji-ud-train.conllu · this verb has L=3, R=2 (mean span = 4.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = گمان می‌کند آنچه را او ارزش و اعتبار می‌داند ، حقیقتاً با‌ارزش و معتبر است و آنچه را که او هیچ می‌انگارد ارزش و اعتباری ندارد .
+1	گمان	گمان	NOUN	NOUN	_	2	compound:lvc	_	_
+2	می‌کند	می‌کند	VERB	VERB	_	0	root	_	_
+3	آنچه	آنچه	PRON	PRON	_	6	nsubj	_	highlight=green|span=2
+4	را	را	PART	PART	_	3	case	_	_
+5	او	او	PRON	PRON	_	9	nsubj	_	highlight=green|span=1
+6	ارزش	ارزش	NOUN	NOUN	_	9	xcomp	_	highlight=green|span=3
+7	و	و	CCONJ	CCONJ	_	8	cc	_	_
+8	اعتبار	اعتبار	NOUN	NOUN	_	6	conj	_	_
+9	می‌داند	می‌داند	VERB	VERB	_	2	ccomp	_	highlight=red
+10	،	،	PUNCT	PUNCT	_	12	punct	_	_
+11	حقیقتاً	حقیقتاً	ADV	ADV	_	12	advmod	_	_
+12	با‌ارزش	با‌ارزش	ADJ	ADJ	_	9	ccomp	_	highlight=green|span=7
+13	و	و	CCONJ	CCONJ	_	14	cc	_	_
+14	معتبر	معتبر	ADJ	ADJ	_	12	conj	_	_
+15	است	است	AUX	AUX	_	12	cop	_	_
+16	و	و	CCONJ	CCONJ	_	22	cc	_	_
+17	آنچه	آنچه	PRON	PRON	_	21	nsubj	_	_
+18	را	را	PART	PART	_	17	case	_	_
+19	که	که	SCONJ	SCONJ	_	21	dep	_	_
+20	او	او	PRON	PRON	_	22	nsubj	_	_
+21	هیچ	هیچ	ADV	ADV	_	22	xcomp	_	_
+22	می‌انگارد	می‌انگارد	VERB	VERB	_	12	conj	_	highlight=green|span=8
+23	ارزش	ارزش	NOUN	NOUN	_	26	obj	_	_
+24	و	و	CCONJ	CCONJ	_	25	cc	_	_
+25	اعتباری	اعتباری	NOUN	NOUN	_	23	conj	_	_
+26	ندارد	ندارد	VERB	VERB	_	22	ccomp	_	_
+27	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: fa_perdt-ud-train.conllu · this verb has L=1, R=2 (mean span = 4.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = اصلاً نمی‌توانستم بپذیرم که سکته کرده‌ام چون طبق تعریف اطرافیان حالات سکته را نداشتم .
+1	اصلاً	اصلاً	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+2	نمی‌توانستم	نمی‌توانستم	VERB	VERB	_	0	root	_	highlight=red
+3	بپذیرم	بپذیرم	VERB	VERB	_	2	ccomp	_	highlight=green|span=4
+4	که	که	SCONJ	SCONJ	_	6	mark	_	_
+5	سکته	سکته	NOUN	NOUN	_	6	compound:lvc	_	_
+6	کرده‌ام	کرده‌ام	VERB	VERB	_	3	ccomp	_	_
+7	چون	چون	SCONJ	SCONJ	_	14	mark	_	_
+8	طبق	طبق	ADP	ADP	_	9	case	_	_
+9	تعریف	تعریف	NOUN	NOUN	_	14	obl	_	_
+10	اطرافیان	اطرافیان	NOUN	NOUN	_	9	nmod	_	_
+11	حالات	حالات	NOUN	NOUN	_	14	obj	_	_
+12	سکته	سکته	NOUN	NOUN	_	11	nmod	_	_
+13	را	را	ADP	ADP	_	11	case	_	_
+14	نداشتم	نداشتم	VERB	VERB	_	2	advcl	_	highlight=green|span=8
+15	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: fa_perdt-ud-train.conllu · this verb has L=3, R=2 (mean span = 3.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = از این پس نام تو یعقوب خوانده نشود بلکه اسرائیل ، زیرا که با خدا و با انسان مجاهده کردی .
+1	از	از	ADP	ADP	_	3	case	_	_
+2	این	این	DET	DET	_	3	det	_	_
+3	پس	پس	NOUN	NOUN	_	8	obl	_	highlight=green|span=3
+4	نام	نام	NOUN	NOUN	_	8	nsubj:pass	_	highlight=green|span=2
+5	تو	تو	PRON	PRON	_	4	nmod	_	_
+6	یعقوب	یعقوب	PROPN	PROPN	_	7	xcomp	_	_
+7	خوانده	خوانده	VERB	VERB	_	8	xcomp	_	highlight=green|span=2
+8	نشود	نشود	VERB	VERB	_	0	root	_	highlight=red
+9	بلکه	بلکه	ADV	ADV	_	8	advmod	_	highlight=green|span=2
+10	اسرائیل	اسرائیل	PROPN	PROPN	_	9	obl	_	_
+11	،	،	PUNCT	PUNCT	_	20	punct	_	_
+12	زیرا	زیرا	SCONJ	SCONJ	_	20	mark	_	_
+13	که	که	SCONJ	SCONJ	_	20	obl	_	_
+14	با	با	ADP	ADP	_	15	case	_	_
+15	خدا	خدا	NOUN	NOUN	_	20	obl:arg	_	_
+16	و	و	CCONJ	CCONJ	_	15	case	_	_
+17	با	با	ADP	ADP	_	18	case	_	_
+18	انسان	انسان	NOUN	NOUN	_	15	nmod	_	_
+19	مجاهده	مجاهده	NOUN	NOUN	_	20	compound:lvc	_	_
+20	کردی	کردی	VERB	VERB	_	8	advcl	_	highlight=green|span=9
+21	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: fa_perdt-ud-train.conllu · this verb has L=1, R=2 (mean span = 4.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = بدان اگر روزی خواستی م را بیازمایی به جای اسماعیل معصوم جان م را تحفه خواهم کرد .
+1	بدان	بدان	VERB	VERB	_	0	root	_	_
+2	اگر	اگر	SCONJ	SCONJ	_	4	mark	_	_
+3	روزی	روزی	NOUN	NOUN	_	4	obl	_	highlight=green|span=1
+4	خواستی	خواستی	VERB	VERB	_	1	advcl	_	highlight=red
+5	م	م	PRON	PRON	_	7	obj	_	_
+6	را	را	ADP	ADP	_	5	case	_	_
+7	بیازمایی	بیازمایی	VERB	VERB	_	4	ccomp	_	highlight=green|span=3
+8	به	به	ADP	ADP	_	9	case	_	_
+9	جای	جای	NOUN	NOUN	_	17	obl	_	_
+10	اسماعیل	اسماعیل	PROPN	PROPN	_	9	nmod	_	_
+11	معصوم	معصوم	ADJ	ADJ	_	10	amod	_	_
+12	جان	جان	NOUN	NOUN	_	17	obj	_	_
+13	م	م	PRON	PRON	_	12	nmod	_	_
+14	را	را	ADP	ADP	_	12	case	_	_
+15	تحفه	تحفه	NOUN	NOUN	_	17	compound:lvc	_	_
+16	خواهم	خواهم	AUX	AUX	_	17	aux	_	_
+17	کرد	کرد	VERB	VERB	_	4	ccomp	_	highlight=green|span=10
+18	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: fa_seraji-ud-test.conllu · this verb has L=1, R=2 (mean span = 5.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ما امید داریم که به کمک فرد‌فرد ایرانی ، از دور و نزدیک ، این سرای یادگار بر پا گردد ، و مرکزی قرار گیرد برای شناساندن ایران ، آن گونه که شایستهٔ گذشتهٔ پربار و خصایص امروزی ش باشد .
+1	ما	ما	PRON	PRON	_	3	nsubj	_	_
+2	امید	امید	NOUN	NOUN	_	3	compound:lvc	_	_
+3	داریم	داریم	VERB	VERB	_	0	root	_	_
+4	که	که	SCONJ	SCONJ	_	20	mark	_	_
+5	به	به	ADP	ADP	_	6	case	_	_
+6	کمک	کمک	NOUN	NOUN	_	20	obl	_	_
+7	فرد‌فرد	فرد‌فرد	NOUN	NOUN	_	6	nmod:poss	_	_
+8	ایرانی	ایرانی	ADJ	ADJ	_	7	amod	_	_
+9	،	،	PUNCT	PUNCT	_	6	punct	_	_
+10	از	از	ADP	ADP	_	11	case	_	_
+11	دور	دور	ADV	ADV	_	20	advcl	_	_
+12	و	و	CCONJ	CCONJ	_	13	cc	_	_
+13	نزدیک	نزدیک	ADV	ADV	_	11	conj	_	_
+14	،	،	PUNCT	PUNCT	_	11	punct	_	_
+15	این	این	DET	DET	_	16	det	_	_
+16	سرای	سرای	NOUN	NOUN	_	20	nsubj	_	_
+17	یادگار	یادگار	NOUN	NOUN	_	16	nmod:poss	_	_
+18	بر	بر	ADP	ADP	_	19	case	_	_
+19	پا	پا	NOUN	NOUN	_	20	compound:lvc	_	_
+20	گردد	گردد	VERB	VERB	_	3	ccomp	_	_
+21	،	،	PUNCT	PUNCT	_	25	punct	_	_
+22	و	و	CCONJ	CCONJ	_	25	cc	_	_
+23	مرکزی	مرکزی	NOUN	NOUN	_	25	obj	_	highlight=green|span=1
+24	قرار	قرار	NOUN	NOUN	_	25	compound:lvc	_	_
+25	گیرد	گیرد	VERB	VERB	_	20	conj	_	highlight=red
+26	برای	برای	ADP	ADP	_	27	case	_	_
+27	شناساندن	شناساندن	NOUN	NOUN	_	25	obl	_	highlight=green|span=3
+28	ایران	ایران	NOUN	NOUN	_	27	nmod:poss	_	_
+29	،	،	PUNCT	PUNCT	_	31	punct	_	_
+30	آن	آن	DET	DET	_	31	det	_	_
+31	گونه	گونه	NOUN	NOUN	_	25	obl	_	highlight=green|span=11
+32	که	که	SCONJ	SCONJ	_	33	mark	_	_
+33	شایستهٔ	شایستهٔ	ADJ	ADJ	_	31	acl:relcl	_	_
+34	گذشتهٔ	گذشتهٔ	NOUN	NOUN	_	33	nmod:poss	_	_
+35	پربار	پربار	ADJ	ADJ	_	34	amod	_	_
+36	و	و	CCONJ	CCONJ	_	37	cc	_	_
+37	خصایص	خصایص	NOUN	NOUN	_	34	conj	_	_
+38	امروزی	امروزی	ADJ	ADJ	_	37	amod	_	_
+39	ش	ش	PRON	PRON	_	34	nmod:poss	_	_
+40	باشد	باشد	AUX	AUX	_	33	cop	_	_
+41	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: fa_perdt-ud-train.conllu · this verb has L=2, R=2 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = این هم دیگر شده بود قوز بالای قوز ، یک بند حرف می‌زد .
+1	این	این	PRON	PRON	_	4	nsubj	_	highlight=green|span=2
+2	هم	هم	ADV	ADV	_	1	dep	_	_
+3	دیگر	دیگر	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+4	شده	شده	VERB	VERB	_	0	root	_	highlight=red
+5	بود	بود	AUX	AUX	_	4	aux	_	_
+6	قوز	قوز	NOUN	NOUN	_	4	xcomp	_	highlight=green|span=3
+7	بالای	بالای	ADP	ADP	_	8	case	_	_
+8	قوز	قوز	NOUN	NOUN	_	6	amod	_	_
+9	،	،	PUNCT	PUNCT	_	13	punct	_	_
+10	یک	یک	NUM	NUM	_	11	nummod	_	_
+11	بند	بند	NOUN	NOUN	_	13	obl	_	_
+12	حرف	حرف	NOUN	NOUN	_	13	compound:lvc	_	_
+13	می‌زد	می‌زد	VERB	VERB	_	4	advcl	_	highlight=green|span=4
+14	.	.	PUNCT	PUNCT	_	13	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: fa_seraji-ud-train.conllu · this verb has L=1, R=2 (mean span = 11.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = عوامل تأثیرگذار در میزان نیاز تغذیه‌ای افراد به مواد مغذی عبارتند از : - سن نوزاد ، بالغ ، سالمند ، به طور مثال میزان پروتئین مورد نیاز به ازای هر کیلوگرم وزن بدن در نوزادان بیشتر از بالغین است .
+1	عوامل	عوامل	NOUN	NOUN	_	11	nsubj	_	highlight=green|span=10
+2	تأثیرگذار	تأثیرگذار	ADJ	ADJ	_	1	amod	_	_
+3	در	در	ADP	ADP	_	4	case	_	_
+4	میزان	میزان	NOUN	NOUN	_	2	nmod	_	_
+5	نیاز	نیاز	NOUN	NOUN	_	4	nmod:poss	_	_
+6	تغذیه‌ای	تغذیه‌ای	ADJ	ADJ	_	5	amod	_	_
+7	افراد	افراد	NOUN	NOUN	_	5	nmod:poss	_	_
+8	به	به	ADP	ADP	_	9	case	_	_
+9	مواد	مواد	NOUN	NOUN	_	5	nmod	_	_
+10	مغذی	مغذی	ADJ	ADJ	_	9	amod	_	_
+11	عبارتند	عبارتند	VERB	VERB	_	0	root	_	highlight=red
+12	از	از	ADP	ADP	_	15	case	_	_
+13	:	:	PUNCT	PUNCT	_	12	punct	_	_
+14	-	-	PUNCT	PUNCT	_	12	punct	_	_
+15	سن	سن	NOUN	NOUN	_	11	obl	_	highlight=green|span=5
+16	نوزاد	نوزاد	NOUN	NOUN	_	15	nmod:poss	_	_
+17	،	،	PUNCT	PUNCT	_	18	punct	_	_
+18	بالغ	بالغ	NOUN	NOUN	_	16	appos	_	_
+19	،	،	PUNCT	PUNCT	_	20	punct	_	_
+20	سالمند	سالمند	NOUN	NOUN	_	18	conj	_	_
+21	،	،	PUNCT	PUNCT	_	37	punct	_	_
+22	به	به	ADP	ADP	_	23	case	_	_
+23	طور	طور	NOUN	NOUN	_	37	nmod	_	_
+24	مثال	مثال	NOUN	NOUN	_	23	nmod:poss	_	_
+25	میزان	میزان	NOUN	NOUN	_	37	nsubj	_	_
+26	پروتئین	پروتئین	NOUN	NOUN	_	25	flat	_	_
+27	مورد	مورد	ADP	ADP	_	28	case	_	_
+28	نیاز	نیاز	NOUN	NOUN	_	26	nmod	_	_
+29	به	به	ADP	ADP	_	30	case	_	_
+30	ازای	ازای	NOUN	NOUN	_	28	nmod	_	_
+31	هر	هر	DET	DET	_	32	det	_	_
+32	کیلوگرم	کیلوگرم	NOUN	NOUN	_	30	nmod:poss	_	_
+33	وزن	وزن	NOUN	NOUN	_	32	nmod:poss	_	_
+34	بدن	بدن	NOUN	NOUN	_	33	nmod:poss	_	_
+35	در	در	ADP	ADP	_	36	case	_	_
+36	نوزادان	نوزادان	NOUN	NOUN	_	34	nmod	_	_
+37	بیشتر	بیشتر	ADJ	ADJ	_	11	ccomp	_	highlight=green|span=19
+38	از	از	ADP	ADP	_	39	case	_	_
+39	بالغین	بالغین	NOUN	NOUN	_	37	nmod	_	_
+40	است	است	AUX	AUX	_	37	cop	_	_
+41	.	.	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: fa_perdt-ud-train.conllu · this verb has L=1, R=2 (mean span = 4.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = در زمان غیبت کبری به کسی « منتظر » گفته می‌شود و کسی می‌تواند زندگی کند که منتظر باشد ، منتظر شهادت ، منتظر ظهور امام زمان ( عج ) .
+1	در	در	ADP	ADP	_	2	case	_	_
+2	زمان	زمان	NOUN	NOUN	_	11	obl	_	_
+3	غیبت	غیبت	NOUN	NOUN	_	2	nmod	_	_
+4	کبری	کبری	ADJ	ADJ	_	3	amod	_	_
+5	به	به	ADP	ADP	_	6	case	_	_
+6	کسی	کسی	NOUN	NOUN	_	11	obl:arg	_	_
+7	«	«	PUNCT	PUNCT	_	8	punct	_	_
+8	منتظر	منتظر	ADJ	ADJ	_	10	xcomp	_	_
+9	»	»	PUNCT	PUNCT	_	8	punct	_	_
+10	گفته	گفته	VERB	VERB	_	11	xcomp	_	_
+11	می‌شود	می‌شود	VERB	VERB	_	0	root	_	_
+12	و	و	CCONJ	CCONJ	_	14	cc	_	_
+13	کسی	کسی	NOUN	NOUN	_	14	nsubj	_	highlight=green|span=1
+14	می‌تواند	می‌تواند	VERB	VERB	_	10	conj	_	highlight=red
+15	زندگی	زندگی	NOUN	NOUN	_	16	compound:lvc	_	_
+16	کند	کند	VERB	VERB	_	14	ccomp	_	highlight=green|span=2
+17	که	که	SCONJ	SCONJ	_	18	mark	_	_
+18	منتظر	منتظر	ADJ	ADJ	_	13	acl	_	highlight=green|span=10
+19	باشد	باشد	AUX	AUX	_	18	cop	_	_
+20	،	،	PUNCT	PUNCT	_	21	punct	_	_
+21	منتظر	منتظر	ADJ	ADJ	_	18	appos	_	_
+22	شهادت	شهادت	NOUN	NOUN	_	21	obl:arg	_	_
+23	،	،	PUNCT	PUNCT	_	24	punct	_	_
+24	منتظر	منتظر	ADJ	ADJ	_	18	appos	_	_
+25	ظهور	ظهور	NOUN	NOUN	_	24	obl:arg	_	_
+26	امام	امام	PROPN	PROPN	_	25	nmod	_	_
+27	زمان	زمان	PROPN	PROPN	_	26	flat:name	_	_
+28	(	(	PUNCT	PUNCT	_	29	punct	_	_
+29	عج	عج	NOUN	NOUN	_	26	nmod	_	_
+30	)	)	PUNCT	PUNCT	_	29	punct	_	_
+31	.	.	PUNCT	PUNCT	_	29	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: fa_perdt-ud-train.conllu · this verb has L=3, R=2 (mean span = 5.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = اگر ماهی را روی ذغال کباب می‌کنید فلس ماهی را لازم نیست جدا کنید اما اگر آن را در فر کباب می‌کنید فلس ماهی را جدا نمایید .
+1	اگر	اگر	SCONJ	SCONJ	_	7	mark	_	_
+2	ماهی	ماهی	NOUN	NOUN	_	7	obj	_	_
+3	را	را	ADP	ADP	_	2	case	_	_
+4	روی	روی	ADP	ADP	_	5	case	_	_
+5	ذغال	ذغال	NOUN	NOUN	_	7	obl	_	_
+6	کباب	کباب	NOUN	NOUN	_	7	compound:lvc	_	_
+7	می‌کنید	می‌کنید	VERB	VERB	_	12	advcl	_	highlight=green|span=7
+8	فلس	فلس	NOUN	NOUN	_	14	obj	_	highlight=green|span=3
+9	ماهی	ماهی	NOUN	NOUN	_	8	nmod	_	_
+10	را	را	ADP	ADP	_	8	case	_	_
+11	لازم	لازم	ADJ	ADJ	_	12	xcomp	_	highlight=green|span=1
+12	نیست	نیست	VERB	VERB	_	0	root	_	highlight=red
+13	جدا	جدا	ADJ	ADJ	_	14	xcomp	_	_
+14	کنید	کنید	VERB	VERB	_	12	csubj	_	highlight=green|span=2
+15	اما	اما	CCONJ	CCONJ	_	27	cc	_	_
+16	اگر	اگر	SCONJ	SCONJ	_	22	mark	_	_
+17	آن	آن	PRON	PRON	_	22	obj	_	_
+18	را	را	ADP	ADP	_	17	case	_	_
+19	در	در	ADP	ADP	_	20	case	_	_
+20	فر	فر	NOUN	NOUN	_	22	obl	_	_
+21	کباب	کباب	NOUN	NOUN	_	22	compound:lvc	_	_
+22	می‌کنید	می‌کنید	VERB	VERB	_	27	advcl	_	_
+23	فلس	فلس	NOUN	NOUN	_	27	obj	_	_
+24	ماهی	ماهی	NOUN	NOUN	_	23	nmod	_	_
+25	را	را	ADP	ADP	_	23	case	_	_
+26	جدا	جدا	ADJ	ADJ	_	27	xcomp	_	_
+27	نمایید	نمایید	VERB	VERB	_	11	conj	_	highlight=green|span=13
+28	.	.	PUNCT	PUNCT	_	27	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: fa_perdt-ud-train.conllu · this verb has L=1, R=2 (mean span = 5.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = مرد می‌خواست برود که دست ش را گرفتم و سوگند ش دادم تا خود را معرفی کند .
+1	مرد	مرد	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+2	می‌خواست	می‌خواست	VERB	VERB	_	0	root	_	highlight=red
+3	برود	برود	VERB	VERB	_	2	ccomp	_	highlight=green|span=1
+4	که	که	SCONJ	SCONJ	_	2	advcl	_	highlight=green|span=14
+5	دست	دست	NOUN	NOUN	_	8	obj	_	_
+6	ش	ش	PRON	PRON	_	5	nmod	_	_
+7	را	را	ADP	ADP	_	5	case	_	_
+8	گرفتم	گرفتم	VERB	VERB	_	4	advcl	_	_
+9	و	و	CCONJ	CCONJ	_	12	cc	_	_
+10	سوگند	سوگند	NOUN	NOUN	_	12	compound:lvc	_	_
+11	ش	ش	PRON	PRON	_	12	obj	_	_
+12	دادم	دادم	VERB	VERB	_	8	conj	_	_
+13	تا	تا	SCONJ	SCONJ	_	17	mark	_	_
+14	خود	خود	PRON	PRON	_	17	obj	_	_
+15	را	را	ADP	ADP	_	14	case	_	_
+16	معرفی	معرفی	NOUN	NOUN	_	17	compound:lvc	_	_
+17	کند	کند	VERB	VERB	_	12	advcl	_	_
+18	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: fa_perdt-ud-train.conllu · this verb has L=1, R=2 (mean span = 4.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = از قیافه‌ اش می‌شد خواند که این پیشنهاد برای ش اهمیت چندانی نداشته است .
+1	از	از	ADP	ADP	_	2	case	_	_
+2	قیافه‌	قیافه‌	NOUN	NOUN	_	4	obl:arg	_	highlight=green|span=3
+3	اش	اش	PRON	PRON	_	2	nmod	_	_
+4	می‌شد	می‌شد	VERB	VERB	_	0	root	_	highlight=red
+5	خواند	خواند	VERB	VERB	_	4	xcomp	_	highlight=green|span=1
+6	که	که	SCONJ	SCONJ	_	13	mark	_	_
+7	این	این	DET	DET	_	8	det	_	_
+8	پیشنهاد	پیشنهاد	NOUN	NOUN	_	13	nsubj	_	_
+9	برای	برای	ADP	ADP	_	10	case	_	_
+10	ش	ش	PRON	PRON	_	11	nmod	_	_
+11	اهمیت	اهمیت	NOUN	NOUN	_	13	obj	_	_
+12	چندانی	چندانی	ADJ	ADJ	_	11	amod	_	_
+13	نداشته	نداشته	VERB	VERB	_	4	ccomp	_	highlight=green|span=9
+14	است	است	AUX	AUX	_	13	aux	_	_
+15	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: fa_perdt-ud-train.conllu · this verb has L=1, R=2 (mean span = 10.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = وی اضافه کرد : طی 10 ماه گذشته یک میلیون و 355 هزار و 658 تن کالا از طریق بنادر استان ترانزیت شد که یک درصد در مقایسه با مدت مشابه سال قبل افزایش نشان می‌دهد .
+1	وی	وی	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+2	اضافه	اضافه	NOUN	NOUN	_	3	compound:lvc	_	_
+3	کرد	کرد	VERB	VERB	_	0	root	_	highlight=red
+4	:	:	PUNCT	PUNCT	_	23	punct	_	_
+5	طی	طی	ADP	ADP	_	7	case	_	_
+6	10	10	NUM	NUM	_	7	nummod	_	_
+7	ماه	ماه	NOUN	NOUN	_	23	obl	_	_
+8	گذشته	گذشته	ADJ	ADJ	_	7	amod	_	_
+9	یک	یک	NUM	NUM	_	16	nummod	_	_
+10	میلیون	میلیون	NUM	NUM	_	9	flat:num	_	_
+11	و	و	CCONJ	CCONJ	_	12	cc	_	_
+12	355	355	NUM	NUM	_	9	flat:num	_	_
+13	هزار	هزار	NUM	NUM	_	9	flat:num	_	_
+14	و	و	CCONJ	CCONJ	_	15	cc	_	_
+15	658	658	NOUN	NOUN	_	13	conj	_	_
+16	تن	تن	NOUN	NOUN	_	23	nsubj	_	_
+17	کالا	کالا	NOUN	NOUN	_	16	nmod	_	_
+18	از	از	ADP	ADP	_	19	case	_	_
+19	طریق	طریق	NOUN	NOUN	_	23	obl	_	_
+20	بنادر	بنادر	NOUN	NOUN	_	19	nmod	_	_
+21	استان	استان	NOUN	NOUN	_	20	nmod	_	_
+22	ترانزیت	ترانزیت	NOUN	NOUN	_	23	compound:lvc	_	_
+23	شد	شد	VERB	VERB	_	3	ccomp	_	highlight=green|span=20
+24	که	که	SCONJ	SCONJ	_	36	mark	_	_
+25	یک	یک	NUM	NUM	_	26	nummod	_	_
+26	درصد	درصد	NOUN	NOUN	_	36	obj	_	_
+27	در	در	ADP	ADP	_	28	case	_	_
+28	مقایسه	مقایسه	NOUN	NOUN	_	36	obl	_	_
+29	با	با	ADP	ADP	_	30	case	_	_
+30	مدت	مدت	NOUN	NOUN	_	28	nmod	_	_
+31	مشابه	مشابه	ADJ	ADJ	_	30	amod	_	_
+32	سال	سال	NOUN	NOUN	_	31	obl:arg	_	_
+33	قبل	قبل	ADJ	ADJ	_	32	amod	_	_
+34	افزایش	افزایش	NOUN	NOUN	_	26	nmod	_	_
+35	نشان	نشان	NOUN	NOUN	_	36	compound:lvc	_	_
+36	می‌دهد	می‌دهد	VERB	VERB	_	23	advcl	_	highlight=green|span=11
+37	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: fa_perdt-ud-train.conllu · this verb has L=2, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = مسعود شعاری در تبریز غلغله کرد و حافظ در دیار فرنگ .
+1	مسعود	مسعود	PROPN	PROPN	_	6	nsubj	_	highlight=green|span=2
+2	شعاری	شعاری	PROPN	PROPN	_	1	flat:name	_	_
+3	در	در	ADP	ADP	_	4	case	_	_
+4	تبریز	تبریز	PROPN	PROPN	_	6	obl	_	highlight=green|span=2
+5	غلغله	غلغله	NOUN	NOUN	_	6	compound:lvc	_	_
+6	کرد	کرد	VERB	VERB	_	0	root	_	highlight=red
+7	و	و	CCONJ	CCONJ	_	6	dep	_	_
+8	حافظ	حافظ	PROPN	PROPN	_	1	conj	_	highlight=green|span=1
+9	در	در	ADP	ADP	_	10	case	_	_
+10	دیار	دیار	NOUN	NOUN	_	6	obl	_	highlight=green|span=3
+11	فرنگ	فرنگ	ADJ	ADJ	_	10	amod	_	_
+12	.	.	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: fa_seraji-ud-train.conllu · this verb has L=1, R=2 (mean span = 6.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = روزنامه بیان مصاحبه‌ای دارد با میر حسین موسوی که در آن نخست‌وزیر سابق نقطه نظرهای خود را پیرامون مسائل روز بازگو می‌کند .
+1	روزنامه	روزنامه	NOUN	NOUN	_	4	nsubj	_	highlight=green|span=2
+2	بیان	بیان	NOUN	NOUN	_	1	nmod:poss	_	_
+3	مصاحبه‌ای	مصاحبه‌ای	NOUN	NOUN	_	4	compound:lvc	_	_
+4	دارد	دارد	VERB	VERB	_	0	root	_	highlight=red
+5	با	با	ADP	ADP	_	6	case	_	_
+6	میر	میر	NOUN	NOUN	_	4	obl	_	highlight=green|span=4
+7	حسین	حسین	NOUN	NOUN	_	6	flat	_	_
+8	موسوی	موسوی	NOUN	NOUN	_	7	flat	_	_
+9	که	که	SCONJ	SCONJ	_	22	mark	_	_
+10	در	در	ADP	ADP	_	11	case	_	_
+11	آن	آن	PRON	PRON	_	22	obl	_	_
+12	نخست‌وزیر	نخست‌وزیر	NOUN	NOUN	_	22	nsubj	_	_
+13	سابق	سابق	ADJ	ADJ	_	12	amod	_	_
+14	نقطه	نقطه	NOUN	NOUN	_	22	obj	_	_
+15	نظرهای	نظرهای	NOUN	NOUN	_	14	nmod:poss	_	_
+16	خود	خود	PRON	PRON	_	15	nmod:poss	_	_
+17	را	را	PART	PART	_	14	case	_	_
+18	پیرامون	پیرامون	ADP	ADP	_	19	case	_	_
+19	مسائل	مسائل	NOUN	NOUN	_	22	obl	_	_
+20	روز	روز	ADJ	ADJ	_	19	amod	_	_
+21	بازگو	بازگو	NOUN	NOUN	_	22	compound:lvc	_	_
+22	می‌کند	می‌کند	VERB	VERB	_	4	acl:relcl	_	highlight=green|span=14
+23	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: fa_perdt-ud-train.conllu · this verb has L=0, R=2 (mean span = 4.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = درد می‌کند گلو یم از بس شیهه‌های سرکش م را فروخورده‌ام .
+1	درد	درد	NOUN	NOUN	_	2	compound:lvc	_	_
+2	می‌کند	می‌کند	VERB	VERB	_	0	root	_	highlight=red
+3	گلو	گلو	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=2
+4	یم	یم	PRON	PRON	_	3	nmod	_	_
+5	از	از	ADP	ADP	_	6	case	_	_
+6	بس	بس	NOUN	NOUN	_	2	obl	_	highlight=green|span=7
+7	شیهه‌های	شیهه‌های	NOUN	NOUN	_	11	obj	_	_
+8	سرکش	سرکش	ADJ	ADJ	_	7	amod	_	_
+9	م	م	PRON	PRON	_	7	nmod	_	_
+10	را	را	ADP	ADP	_	7	case	_	_
+11	فروخورده‌ام	فروخورده‌ام	VERB	VERB	_	6	acl	_	_
+12	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: fa_perdt-ud-train.conllu · this verb has L=2, R=2 (mean span = 4.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = قدرتی بر وجود ش سلطه می‌کند به نام « ایمان » که به حکم این قدرت آن مصالح اجتماعی را اجرا می‌کند .
+1	قدرتی	قدرتی	NOUN	NOUN	_	6	nsubj	_	highlight=green|span=1
+2	بر	بر	ADP	ADP	_	3	case	_	_
+3	وجود	وجود	NOUN	NOUN	_	6	obl:arg	_	highlight=green|span=3
+4	ش	ش	PRON	PRON	_	3	nmod	_	_
+5	سلطه	سلطه	NOUN	NOUN	_	6	compound:lvc	_	_
+6	می‌کند	می‌کند	VERB	VERB	_	0	root	_	highlight=red
+7	به	به	ADP	ADP	_	8	case	_	_
+8	نام	نام	NOUN	NOUN	_	1	nmod	_	highlight=green|span=3
+9	«	«	PUNCT	PUNCT	_	10	punct	_	_
+10	ایمان	ایمان	NOUN	NOUN	_	8	nmod	_	_
+11	»	»	PUNCT	PUNCT	_	10	punct	_	_
+12	که	که	SCONJ	SCONJ	_	22	mark	_	_
+13	به	به	ADP	ADP	_	14	case	_	_
+14	حکم	حکم	NOUN	NOUN	_	22	obl	_	_
+15	این	این	DET	DET	_	16	det	_	_
+16	قدرت	قدرت	NOUN	NOUN	_	14	nmod	_	_
+17	آن	آن	DET	DET	_	18	det	_	_
+18	مصالح	مصالح	NOUN	NOUN	_	22	obj	_	_
+19	اجتماعی	اجتماعی	ADJ	ADJ	_	18	amod	_	_
+20	را	را	ADP	ADP	_	18	case	_	_
+21	اجرا	اجرا	NOUN	NOUN	_	22	compound:lvc	_	_
+22	می‌کند	می‌کند	VERB	VERB	_	1	acl	_	highlight=green|span=11
+23	.	.	PUNCT	PUNCT	_	22	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: fa_perdt-ud-train.conllu · this verb has L=0, R=2 (mean span = 7.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = برخیز برو به خانه که زن تو مرد شده است و با تو مجامعت خواهد کرد .
+1	برخیز	برخیز	VERB	VERB	_	0	root	_	_
+2	برو	برو	VERB	VERB	_	1	conj	_	highlight=red
+3	به	به	ADP	ADP	_	4	case	_	_
+4	خانه	خانه	NOUN	NOUN	_	2	obl:arg	_	highlight=green|span=2
+5	که	که	SCONJ	SCONJ	_	2	advcl	_	highlight=green|span=12
+6	زن	زن	NOUN	NOUN	_	9	nsubj	_	_
+7	تو	تو	PRON	PRON	_	6	nmod	_	_
+8	مرد	مرد	NOUN	NOUN	_	9	xcomp	_	_
+9	شده	شده	VERB	VERB	_	5	advcl	_	_
+10	است	است	AUX	AUX	_	9	aux	_	_
+11	و	و	CCONJ	CCONJ	_	16	cc	_	_
+12	با	با	ADP	ADP	_	13	case	_	_
+13	تو	تو	PRON	PRON	_	16	obl:arg	_	_
+14	مجامعت	مجامعت	NOUN	NOUN	_	16	compound:lvc	_	_
+15	خواهد	خواهد	AUX	AUX	_	16	aux	_	_
+16	کرد	کرد	VERB	VERB	_	9	conj	_	_
+17	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: fa_perdt-ud-dev.conllu · this verb has L=2, R=2 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = اول جیب‌های ش را گشت ، بعد روی کارتن‌ها و زمین را .
+1	اول	اول	NOUN	NOUN	_	5	obl	_	highlight=green|span=1
+2	جیب‌های	جیب‌های	NOUN	NOUN	_	5	obj	_	highlight=green|span=3
+3	ش	ش	PRON	PRON	_	2	nmod	_	_
+4	را	را	ADP	ADP	_	2	case	_	_
+5	گشت	گشت	VERB	VERB	_	0	root	_	highlight=red
+6	،	،	PUNCT	PUNCT	_	7	punct	_	_
+7	بعد	بعد	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+8	روی	روی	NOUN	NOUN	_	5	obj	_	highlight=green|span=5
+9	کارتن‌ها	کارتن‌ها	NOUN	NOUN	_	8	nmod	_	_
+10	و	و	CCONJ	CCONJ	_	11	cc	_	_
+11	زمین	زمین	NOUN	NOUN	_	9	conj	_	_
+12	را	را	ADP	ADP	_	8	case	_	_
+13	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: fa_perdt-ud-train.conllu · this verb has L=1, R=2 (mean span = 6.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = هیچ بنده‌ای نیست که خشمی را فروخورد مگر آن که خداوند عزوجل در دنیا و آخرت بر عزت او بیفزاید .
+1	هیچ	هیچ	DET	DET	_	2	det	_	_
+2	بنده‌ای	بنده‌ای	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=2
+3	نیست	نیست	VERB	VERB	_	0	root	_	highlight=red
+4	که	که	SCONJ	SCONJ	_	7	mark	_	_
+5	خشمی	خشمی	PROPN	PROPN	_	7	obj	_	_
+6	را	را	ADP	ADP	_	5	case	_	_
+7	فروخورد	فروخورد	VERB	VERB	_	2	acl	_	highlight=green|span=4
+8	مگر	مگر	ADP	ADP	_	9	case	_	_
+9	آن	آن	PRON	PRON	_	3	advcl	_	highlight=green|span=13
+10	که	که	SCONJ	SCONJ	_	20	mark	_	_
+11	خداوند	خداوند	NOUN	NOUN	_	20	nsubj	_	_
+12	عزوجل	عزوجل	ADJ	ADJ	_	11	amod	_	_
+13	در	در	ADP	ADP	_	14	case	_	_
+14	دنیا	دنیا	NOUN	NOUN	_	20	obl	_	_
+15	و	و	CCONJ	CCONJ	_	16	cc	_	_
+16	آخرت	آخرت	NOUN	NOUN	_	14	conj	_	_
+17	بر	بر	ADP	ADP	_	18	case	_	_
+18	عزت	عزت	NOUN	NOUN	_	20	obl:arg	_	_
+19	او	او	PRON	PRON	_	18	nmod	_	_
+20	بیفزاید	بیفزاید	VERB	VERB	_	9	acl	_	_
+21	.	.	PUNCT	PUNCT	_	20	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

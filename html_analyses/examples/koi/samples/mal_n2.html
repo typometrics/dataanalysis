@@ -1,0 +1,313 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Komi-Permyak — MAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Komi-Permyak examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Komi-Permyak <small style="color:#999;font-weight:normal">(koi)</small> — MAL<sub>2</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>2</b> dependents in total (left + right combined).</p><p><b>MAL<sub>2</sub> = 1.578</b> &nbsp; <span style="color:#666">(67 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over all dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: koi_uh-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Дядя Митя видзӧтіс , кыдз пиньӧвтчисӧ менам аннэзӧ , и шынняліс довольнӧя .
+1	Дядя	Дядя	NOUN	NOUN	_	3	nsubj	_	_
+2	Митя	Митя	NOUN	NOUN	_	1	flat:name	_	_
+3	видзӧтіс	видзӧтіс	VERB	VERB	_	0	root	_	_
+4	,	,	PUNCT	PUNCT	_	6	punct	_	_
+5	кыдз	кыдз	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+6	пиньӧвтчисӧ	пиньӧвтчисӧ	VERB	VERB	_	3	advcl	_	highlight=red
+7	менам	менам	PRON	PRON	_	8	nmod:poss	_	_
+8	аннэзӧ	аннэзӧ	NOUN	NOUN	_	6	nsubj	_	highlight=green|span=2
+9	,	,	PUNCT	PUNCT	_	11	punct	_	_
+10	и	и	CCONJ	CCONJ	_	11	cc	_	_
+11	шынняліс	шынняліс	VERB	VERB	_	3	conj	_	_
+12	довольнӧя	довольнӧя	ADV	ADV	_	11	advmod	_	_
+13	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: koi_uh-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Бабö арйис деревняын .
+1	Бабö	Бабö	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+2	арйис	арйис	VERB	VERB	_	0	root	_	highlight=red
+3	деревняын	деревняын	NOUN	NOUN	_	2	obl	_	highlight=green|span=1
+4	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: koi_uh-ud-test.conllu · this verb has L=0, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Чулаліс эшӧ джын час мымда .
+1	Чулаліс	Чулаліс	VERB	VERB	_	0	root	_	highlight=red
+2	эшӧ	эшӧ	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+3	джын	джын	NOUN	NOUN	_	4	nmod	_	_
+4	час	час	NOUN	NOUN	_	1	obl	_	highlight=green|span=3
+5	мымда	мымда	ADP	ADP	_	4	case	_	_
+6	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: koi_uh-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Абызсö местасис он вöрзьöт .
+1	Абызсö	Абызсö	NOUN	NOUN	_	4	obj	_	highlight=green|span=1
+2	местасис	местасис	NOUN	NOUN	_	4	obl	_	highlight=green|span=1
+3	он	он	AUX	AUX	_	4	aux	_	_
+4	вöрзьöт	вöрзьöт	VERB	VERB	_	0	root	_	highlight=red
+5	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: koi_uh-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Петя ёртасьö Машакöт .
+1	Петя	Петя	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+2	ёртасьö	ёртасьö	VERB	VERB	_	0	root	_	highlight=red
+3	Машакöт	Машакöт	NOUN	NOUN	_	2	obl	_	highlight=green|span=1
+4	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: koi_uh-ud-test.conllu · this verb has L=0, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Кагаыс — зоночка , чужӧма витӧдз ни .
+1	Кагаыс	Кагаыс	NOUN	NOUN	_	3	nsubj	_	_
+2	—	—	PUNCT	PUNCT	_	3	punct	_	_
+3	зоночка	зоночка	NOUN	NOUN	_	0	root	_	_
+4	,	,	PUNCT	PUNCT	_	5	punct	_	_
+5	чужӧма	чужӧма	VERB	VERB	_	3	conj	_	highlight=red
+6	витӧдз	витӧдз	ADJ	ADJ	_	5	nsubj	_	highlight=green|span=1
+7	ни	ни	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+8	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: koi_uh-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = — Мый татӧн оз гленитчы ?
+1	—	—	PUNCT	PUNCT	_	5	punct	_	_
+2	Мый	Мый	PRON	PRON	_	5	nsubj	_	highlight=green|span=1
+3	татӧн	татӧн	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+4	оз	оз	AUX	AUX	_	5	aux	_	_
+5	гленитчы	гленитчы	VERB	VERB	_	0	root	_	highlight=red
+6	?	?	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: koi_uh-ud-test.conllu · this verb has L=0, R=2 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Висьтала тай , бур олан ӧтикӧ эг адззыв .
+1	Висьтала	Висьтала	VERB	VERB	_	0	root	_	highlight=red
+2	тай	тай	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+3	,	,	PUNCT	PUNCT	_	8	punct	_	_
+4	бур	бур	ADJ	ADJ	_	5	amod	_	_
+5	олан	олан	NOUN	NOUN	_	8	obj	_	_
+6	ӧтикӧ	ӧтикӧ	ADV	ADV	_	8	advmod	_	_
+7	эг	эг	AUX	AUX	_	8	aux	_	_
+8	адззыв	адззыв	VERB	VERB	_	1	ccomp	_	highlight=green|span=5
+9	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: koi_uh-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = — Неужели тэ веритан , что быльнӧй морт васис петас ? — юалі ме , ольпасьӧс лӧсьӧтікӧ .
+1	—	—	PUNCT	PUNCT	_	4	punct	_	_
+2	Неужели	Неужели	ADV	ADV	_	4	advmod	_	_
+3	тэ	тэ	PRON	PRON	_	4	nsubj	_	_
+4	веритан	веритан	VERB	VERB	_	0	root	_	_
+5	,	,	PUNCT	PUNCT	_	10	punct	_	_
+6	что	что	SCONJ	SCONJ	_	10	mark	_	_
+7	быльнӧй	быльнӧй	ADJ	ADJ	_	8	amod	_	_
+8	морт	морт	NOUN	NOUN	_	10	nsubj	_	highlight=green|span=2
+9	васис	васис	NOUN	NOUN	_	10	obl	_	highlight=green|span=1
+10	петас	петас	VERB	VERB	_	4	ccomp	_	highlight=red
+11	?	?	PUNCT	PUNCT	_	4	punct	_	_
+12	—	—	PUNCT	PUNCT	_	13	punct	_	_
+13	юалі	юалі	VERB	VERB	_	4	parataxis	_	_
+14	ме	ме	PRON	PRON	_	13	nsubj	_	_
+15	,	,	PUNCT	PUNCT	_	17	punct	_	_
+16	ольпасьӧс	ольпасьӧс	NOUN	NOUN	_	17	obj	_	_
+17	лӧсьӧтікӧ	лӧсьӧтікӧ	VERB	VERB	_	13	advcl	_	_
+18	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: koi_uh-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Петя мунö Маша бöрсянь .
+1	Петя	Петя	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+2	мунö	мунö	VERB	VERB	_	0	root	_	highlight=red
+3	Маша	Маша	NOUN	NOUN	_	2	obl	_	highlight=green|span=2
+4	бöрсянь	бöрсянь	ADP	ADP	_	3	case	_	_
+5	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: koi_uh-ud-train.conllu · this verb has L=1, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Сія быдмис Парижын , Франция юркарын .
+1	Сія	Сія	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	быдмис	быдмис	VERB	VERB	_	0	root	_	highlight=red
+3	Парижын	Парижын	PROPN	PROPN	_	2	obl	_	highlight=green|span=3
+4	,	,	PUNCT	PUNCT	_	6	punct	_	_
+5	Франция	Франция	PROPN	PROPN	_	6	nmod	_	_
+6	юркарын	юркарын	NOUN	NOUN	_	3	appos	_	_
+7	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: koi_uh-ud-test.conllu · this verb has L=1, R=1 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Мӧдыс пукаліс сё сідз жӧ юрсӧ сайӧвтӧмӧн , мыйкӧ шушкис гусьӧник , дзик ас кежас , сэсся ыш ловзисис .
+1	Мӧдыс	Мӧдыс	PRON	PRON	_	2	nsubj	_	_
+2	пукаліс	пукаліс	VERB	VERB	_	0	root	_	_
+3	сё	сё	ADV	ADV	_	2	advmod	_	_
+4	сідз	сідз	ADV	ADV	_	2	advmod	_	_
+5	жӧ	жӧ	PART	PART	_	4	discourse	_	_
+6	юрсӧ	юрсӧ	NOUN	NOUN	_	7	obj	_	_
+7	сайӧвтӧмӧн	сайӧвтӧмӧн	VERB	VERB	_	2	advcl	_	_
+8	,	,	PUNCT	PUNCT	_	10	punct	_	_
+9	мыйкӧ	мыйкӧ	PRON	PRON	_	10	obj	_	highlight=green|span=1
+10	шушкис	шушкис	VERB	VERB	_	2	conj	_	highlight=red
+11	гусьӧник	гусьӧник	ADV	ADV	_	10	advmod	_	highlight=green|span=4
+12	,	,	PUNCT	PUNCT	_	14	punct	_	_
+13	дзик	дзик	ADV	ADV	_	14	advmod:deg	_	_
+14	ас	ас	PRON	PRON	_	11	appos	_	_
+15	кежас	кежас	ADP	ADP	_	14	case	_	_
+16	,	,	PUNCT	PUNCT	_	14	punct	_	_
+17	сэсся	сэсся	ADV	ADV	_	19	advmod	_	_
+18	ыш	ыш	INTJ	INTJ	_	19	compound:prt	_	_
+19	ловзисис	ловзисис	VERB	VERB	_	2	conj	_	_
+20	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: koi_uh-ud-train.conllu · this verb has L=1, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Нія озӧ тӧдӧ , кин этӧ гижис .
+1	Нія	Нія	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+2	озӧ	озӧ	AUX	AUX	_	3	aux	_	_
+3	тӧдӧ	тӧдӧ	VERB	VERB	_	0	root	_	highlight=red
+4	,	,	PUNCT	PUNCT	_	7	punct	_	_
+5	кин	кин	PRON	PRON	_	7	nsubj	_	_
+6	этӧ	этӧ	PRON	PRON	_	7	obj	_	_
+7	гижис	гижис	VERB	VERB	_	3	ccomp	_	highlight=green|span=3
+8	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: koi_uh-ud-test.conllu · this verb has L=1, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Веськытланьын , кытӧн тыдалӧны шутёммез и видзоккез , пыдын лог дорын сулалӧны куим пӧліньтчӧм керку , кынымкӧ сарай и крышави муӧ пырӧм важ баня .
+1	Веськытланьын	Веськытланьын	ADV	ADV	_	12	advmod	_	_
+2	,	,	PUNCT	PUNCT	_	4	punct	_	_
+3	кытӧн	кытӧн	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+4	тыдалӧны	тыдалӧны	VERB	VERB	_	1	advcl	_	highlight=red
+5	шутёммез	шутёммез	NOUN	NOUN	_	4	nsubj	_	highlight=green|span=3
+6	и	и	CCONJ	CCONJ	_	7	cc	_	_
+7	видзоккез	видзоккез	NOUN	NOUN	_	5	conj	_	_
+8	,	,	PUNCT	PUNCT	_	4	punct	_	_
+9	пыдын	пыдын	ADV	ADV	_	12	advmod	_	_
+10	лог	лог	NOUN	NOUN	_	11	nmod	_	_
+11	дорын	дорын	NOUN	NOUN	_	12	obl	_	_
+12	сулалӧны	сулалӧны	VERB	VERB	_	0	root	_	_
+13	куим	куим	NUM	NUM	_	15	nummod	_	_
+14	пӧліньтчӧм	пӧліньтчӧм	VERB	VERB	_	15	acl	_	_
+15	керку	керку	NOUN	NOUN	_	12	nsubj	_	_
+16	,	,	PUNCT	PUNCT	_	18	punct	_	_
+17	кынымкӧ	кынымкӧ	ADV	ADV	_	18	advmod	_	_
+18	сарай	сарай	NOUN	NOUN	_	15	conj	_	_
+19	и	и	CCONJ	CCONJ	_	24	cc	_	_
+20	крышави	крышави	NOUN	NOUN	_	21	nmod	_	_
+21	муӧ	муӧ	NOUN	NOUN	_	22	obl	_	_
+22	пырӧм	пырӧм	VERB	VERB	_	24	acl:relcl	_	_
+23	важ	важ	ADJ	ADJ	_	24	amod	_	_
+24	баня	баня	NOUN	NOUN	_	15	conj	_	_
+25	.	.	PUNCT	PUNCT	_	12	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: koi_uh-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Петя адззис ключчез .
+1	Петя	Петя	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+2	адззис	адззис	VERB	VERB	_	0	root	_	highlight=red
+3	ключчез	ключчез	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
+4	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: koi_uh-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ми вуджим Гырка логсӧ , сибӧтчим дорись керкуокыс дынӧ .
+1	Ми	Ми	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	вуджим	вуджим	VERB	VERB	_	0	root	_	highlight=red
+3	Гырка	Гырка	NOUN	NOUN	_	4	nmod	_	_
+4	логсӧ	логсӧ	NOUN	NOUN	_	2	obj	_	highlight=green|span=2
+5	,	,	PUNCT	PUNCT	_	6	punct	_	_
+6	сибӧтчим	сибӧтчим	VERB	VERB	_	2	conj	_	_
+7	дорись	дорись	NOUN	NOUN	_	8	nmod	_	_
+8	керкуокыс	керкуокыс	NOUN	NOUN	_	6	obl	_	_
+9	дынӧ	дынӧ	ADP	ADP	_	8	case	_	_
+10	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: koi_uh-ud-test.conllu · this verb has L=1, R=1 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = — Мый нӧ дыр эн лок ? — инькасӧ ас бердас жмитікӧ юаліс сія .
+1	—	—	PUNCT	PUNCT	_	6	punct	_	_
+2	Мый	Мый	PRON	PRON	_	6	obl	_	_
+3	нӧ	нӧ	PART	PART	_	2	discourse	_	_
+4	дыр	дыр	ADV	ADV	_	6	advmod	_	_
+5	эн	эн	AUX	AUX	_	6	aux	_	_
+6	лок	лок	VERB	VERB	_	0	root	_	_
+7	?	?	PUNCT	PUNCT	_	6	punct	_	_
+8	—	—	PUNCT	PUNCT	_	13	punct	_	_
+9	инькасӧ	инькасӧ	NOUN	NOUN	_	12	obj	_	_
+10	ас	ас	PRON	PRON	_	12	obl	_	_
+11	бердас	бердас	ADP	ADP	_	10	case	_	_
+12	жмитікӧ	жмитікӧ	VERB	VERB	_	13	advcl	_	highlight=green|span=4
+13	юаліс	юаліс	VERB	VERB	_	6	parataxis	_	highlight=red
+14	сія	сія	PRON	PRON	_	13	nsubj	_	highlight=green|span=1
+15	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: koi_uh-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Сія эз мун удж вылö , тшöктісö а .
+1	Сія	Сія	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+2	эз	эз	AUX	AUX	_	3	aux	_	_
+3	мун	мун	VERB	VERB	_	0	root	_	highlight=red
+4	удж	удж	NOUN	NOUN	_	3	obl	_	highlight=green|span=2
+5	вылö	вылö	ADP	ADP	_	4	case	_	_
+6	,	,	PUNCT	PUNCT	_	7	punct	_	_
+7	тшöктісö	тшöктісö	VERB	VERB	_	3	parataxis	_	_
+8	а	а	PART	PART	_	7	discourse	_	_
+9	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: koi_uh-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Талун , кӧр пантасим ю дорас , сія медперво кыскис бадь кусттэз коласісь ыджыт лагун и нюжӧтіс меным .
+1	Талун	Талун	ADV	ADV	_	10	advmod	_	_
+2	,	,	PUNCT	PUNCT	_	3	punct	_	_
+3	кӧр	кӧр	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+4	пантасим	пантасим	VERB	VERB	_	1	advcl	_	highlight=red
+5	ю	ю	NOUN	NOUN	_	6	nmod	_	_
+6	дорас	дорас	NOUN	NOUN	_	4	obl	_	highlight=green|span=2
+7	,	,	PUNCT	PUNCT	_	8	punct	_	_
+8	сія	сія	PRON	PRON	_	10	nsubj	_	_
+9	медперво	медперво	ADV	ADV	_	10	advmod	_	_
+10	кыскис	кыскис	VERB	VERB	_	0	root	_	_
+11	бадь	бадь	NOUN	NOUN	_	12	nmod	_	_
+12	кусттэз	кусттэз	NOUN	NOUN	_	13	nmod	_	_
+13	коласісь	коласісь	NOUN	NOUN	_	10	obl	_	_
+14	ыджыт	ыджыт	ADJ	ADJ	_	15	amod	_	_
+15	лагун	лагун	NOUN	NOUN	_	10	obj	_	_
+16	и	и	CCONJ	CCONJ	_	17	cc	_	_
+17	нюжӧтіс	нюжӧтіс	VERB	VERB	_	10	conj	_	_
+18	меным	меным	PRON	PRON	_	17	obl	_	_
+19	.	.	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: koi_uh-ud-test.conllu · this verb has L=1, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Дядя Митя видзӧтіс , кыдз пиньӧвтчисӧ менам аннэзӧ , и шынняліс довольнӧя .
+1	Дядя	Дядя	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=2
+2	Митя	Митя	NOUN	NOUN	_	1	flat:name	_	_
+3	видзӧтіс	видзӧтіс	VERB	VERB	_	0	root	_	highlight=red
+4	,	,	PUNCT	PUNCT	_	6	punct	_	_
+5	кыдз	кыдз	ADV	ADV	_	6	advmod	_	_
+6	пиньӧвтчисӧ	пиньӧвтчисӧ	VERB	VERB	_	3	advcl	_	highlight=green|span=4
+7	менам	менам	PRON	PRON	_	8	nmod:poss	_	_
+8	аннэзӧ	аннэзӧ	NOUN	NOUN	_	6	nsubj	_	_
+9	,	,	PUNCT	PUNCT	_	11	punct	_	_
+10	и	и	CCONJ	CCONJ	_	11	cc	_	_
+11	шынняліс	шынняліс	VERB	VERB	_	3	conj	_	_
+12	довольнӧя	довольнӧя	ADV	ADV	_	11	advmod	_	_
+13	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

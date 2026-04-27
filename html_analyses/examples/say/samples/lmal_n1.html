@@ -1,0 +1,466 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Zaar — LMAL_1</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Zaar examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Zaar <small style="color:#999;font-weight:normal">(say)</small> — LMAL<sub>1</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>1</b> left dependents (right side may be anything).</p><p><b>LMAL<sub>1</sub> = 2.246</b> &nbsp; <span style="color:#666">(813 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>left</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: say_autogramm-ud-train.conllu · this verb has L=1, R=2 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Yéːsu máː wò man su ʃí ɗa tu ɓurúk ngə́tn yóːɗan kə̀tàyáː fi mə́n láːpkə́nètn mə́n á ɗə̂ɣn kə̀tàyáː fî nə́ myâːn mə́n //
+1	Yéːsu	Yéːsu	PROPN	PROPN	_	4	dislocated	_	_
+2	máː	máː	PART	PART	_	1	discourse	_	_
+3	wò	wò	AUX	AUX	_	4	aux	_	_
+4	man	man	VERB	VERB	_	0	root	_	_
+5	su	su	VERB	VERB	_	4	compound	_	_
+6	ʃí	ʃí	PRON	PRON	_	5	obj	_	_
+7	ɗa	ɗa	ADV	ADV	_	5	advmod	_	_
+8	tu	tu	SCONJ	SCONJ	_	20	mark	_	_
+9	ɓurúk	ɓurúk	DET	DET	_	10	det	_	_
+10	ngə́tn	ngə́tn	NOUN	NOUN	_	20	dislocated	_	_
+11	yóːɗan	yóːɗan	PRON	PRON	_	13	obj	_	highlight=green|span=1
+12	kə̀tàyáː	kə̀tàyáː	AUX	AUX	_	13	aux	_	_
+13	fi	fi	VERB	VERB	_	10	acl:relcl	_	highlight=red
+14	mə́n	mə́n	NOUN	NOUN	_	13	iobj	_	highlight=green|span=2
+15	láːpkə́nètn	láːpkə́nètn	VERB	VERB	_	14	compound	_	_
+16	mə́n	mə́n	PART	PART	_	13	compound:prt	_	_
+17	á	á	ADP	ADP	_	18	mark	_	_
+18	ɗə̂ɣn	ɗə̂ɣn	VERB	VERB	_	13	advcl	_	highlight=green|span=2
+19	kə̀tàyáː	kə̀tàyáː	AUX	AUX	_	20	aux	_	_
+20	fî	fî	VERB	VERB	_	5	advcl	_	_
+21	nə́	nə́	ADP	ADP	_	20	dep	_	_
+22	myâːn	myâːn	PRON	PRON	_	21	dep	_	_
+23	mə́n	mə́n	PART	PART	_	20	compound:prt	_	_
+24	//	//	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: say_autogramm-ud-train.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = myáː mbút mə kə́ːm mə nda kúʧi ŋ́ oː //
+1	myáː	myáː	AUX	AUX	_	2	aux	_	_
+2	mbút	mbút	VERB	VERB	_	4	advcl	_	highlight=green|span=2
+3	mə	mə	AUX	AUX	_	4	aux	_	_
+4	kə́ːm	kə́ːm	VERB	VERB	_	0	root	_	highlight=red
+5	mə	mə	AUX	AUX	_	6	aux	_	_
+6	nda	nda	VERB	VERB	_	4	conj	_	_
+7	kúʧi	kúʧi	NOUN	NOUN	_	6	obj	_	_
+8	ŋ́	ŋ́	PART	PART	_	4	advmod	_	highlight=green|span=1
+9	oː	oː	PART	PART	_	4	discourse	_	_
+10	//	//	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: say_autogramm-ud-train.conllu · this verb has L=1, R=1 (mean span = 4.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = tsə́tngə̂n zaːr á ɗə̂ɣn yi ɣá gìp tàːs kə̀ Tʃóɣnvòn //
+1	tsə́tngə̂n	tsə́tngə̂n	VERB	VERB	_	5	nsubj	_	highlight=green|span=4
+2	zaːr	zaːr	NOUN	NOUN	_	1	obj	_	_
+3	á	á	ADP	ADP	_	4	mark	_	_
+4	ɗə̂ɣn	ɗə̂ɣn	VERB	VERB	_	1	acl	_	_
+5	yi	yi	VERB	VERB	_	0	root	_	highlight=red
+6	ɣá	ɣá	ADP	ADP	_	8	case	_	_
+7	gìp	gìp	ADP	ADP	_	8	case	_	_
+8	tàːs	tàːs	NOUN	NOUN	_	5	xcomp	_	highlight=green|span=5
+9	kə̀	kə̀	ADP	ADP	_	10	case	_	_
+10	Tʃóɣnvòn	Tʃóɣnvòn	PROPN	PROPN	_	8	nmod	_	_
+11	//	//	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: say_autogramm-ud-train.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = kúmá yi fi || tə́ fî mbəllə́ hŋ́ //+ wàːtò maráɣə̂n məːrí guɗi //
+1	kúmá	kúmá	PART	PART	_	3	discourse	_	_
+2	yi	yi	AUX	AUX	_	3	aux	_	_
+3	fi	fi	VERB	VERB	_	6	reparandum	_	_
+4	||	||	PUNCT	PUNCT	_	3	punct	_	_
+5	tə́	tə́	AUX	AUX	_	6	aux	_	_
+6	fî	fî	VERB	VERB	_	0	root	_	_
+7	mbəllə́	mbəllə́	NOUN	NOUN	_	6	obj	_	_
+8	hŋ́	hŋ́	PART	PART	_	11	advmod	_	highlight=green|span=1
+9	//+	//+	PUNCT	PUNCT	_	11	punct	_	_
+10	wàːtò	wàːtò	SCONJ	SCONJ	_	11	discourse	_	_
+11	maráɣə̂n	maráɣə̂n	VERB	VERB	_	6	dislocated	_	highlight=red
+12	məːrí	məːrí	NOUN	NOUN	_	11	obj	_	highlight=green|span=2
+13	guɗi	guɗi	NOUN	NOUN	_	12	compound	_	_
+14	//	//	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: say_autogramm-ud-test.conllu · this verb has L=1, R=2 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ɗan á tûlíː ɗi séy á yél gòs zaːr tə́ lûkfyàːlí ʧiɣá gə̀mgə̀n vìː sálla //
+1	ɗan	ɗan	SCONJ	SCONJ	_	3	mark	_	_
+2	á	á	AUX	AUX	_	3	aux	_	_
+3	tûlíː	tûlíː	VERB	VERB	_	7	advcl	_	highlight=green|span=4
+4	ɗi	ɗi	PART	PART	_	3	compound:prt	_	_
+5	séy	séy	SCONJ	SCONJ	_	7	dep	_	_
+6	á	á	AUX	AUX	_	7	aux	_	_
+7	yél	yél	VERB	VERB	_	0	root	_	highlight=red
+8	gòs	gòs	PRON	PRON	_	7	obl	_	highlight=green|span=1
+9	zaːr	zaːr	NOUN	NOUN	_	13	nsubj	_	_
+10	tə́	tə́	ADP	ADP	_	11	case	_	_
+11	lûkfyàːlí	lûkfyàːlí	NOUN	NOUN	_	9	nmod	_	_
+12	ʧiɣá	ʧiɣá	AUX	AUX	_	13	aux	_	_
+13	gə̀mgə̀n	gə̀mgə̀n	VERB	VERB	_	7	ccomp	_	highlight=green|span=7
+14	vìː	vìː	NOUN	NOUN	_	13	obj	_	_
+15	sálla	sálla	NOUN	NOUN	_	14	compound	_	_
+16	//	//	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: say_autogramm-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ʃíːkèːnáŋ káwây < tòː gə̀ɗì də̌ːr tə́ ngâp dàtə̂pm //
+1	ʃíːkèːnáŋ	ʃíːkèːnáŋ	INTJ	INTJ	_	8	discourse	_	_
+2	káwây	káwây	ADV	ADV	_	1	advmod	_	_
+3	<	<	PUNCT	PUNCT	_	1	punct	_	_
+4	tòː	tòː	PART	PART	_	8	discourse	_	_
+5	gə̀ɗì	gə̀ɗì	NOUN	NOUN	_	8	dislocated	_	highlight=green|span=2
+6	də̌ːr	də̌ːr	NOUN	NOUN	_	5	compound	_	_
+7	tə́	tə́	AUX	AUX	_	8	aux	_	_
+8	ngâp	ngâp	VERB	VERB	_	0	root	_	highlight=red
+9	dàtə̂pm	dàtə̂pm	NOUN	NOUN	_	8	obj	_	highlight=green|span=1
+10	//	//	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: say_autogramm-ud-test.conllu · this verb has L=1, R=1 (mean span = 5.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = batú kaːyáwôpíː máː ɗan mə̀tàyáː wû tu má ɗìːɓíː kóː < kə yél wuriː ?//
+1	batú	batú	NOUN	NOUN	_	13	dislocated	_	highlight=green|span=10
+2	kaːyáwôpíː	kaːyáwôpíː	NOUN	NOUN	_	1	nmod:poss	_	_
+3	máː	máː	PART	PART	_	2	discourse	_	_
+4	ɗan	ɗan	SCONJ	SCONJ	_	6	mark	_	_
+5	mə̀tàyáː	mə̀tàyáː	AUX	AUX	_	6	aux	_	_
+6	wû	wû	VERB	VERB	_	2	acl:relcl	_	_
+7	tu	tu	SCONJ	SCONJ	_	9	mark	_	_
+8	má	má	AUX	AUX	_	9	aux	_	_
+9	ɗìːɓíː	ɗìːɓíː	VERB	VERB	_	6	ccomp	_	_
+10	kóː	kóː	PART	PART	_	1	discourse	_	_
+11	<	<	PUNCT	PUNCT	_	1	punct	_	_
+12	kə	kə	AUX	AUX	_	13	aux	_	_
+13	yél	yél	VERB	VERB	_	0	root	_	highlight=red
+14	wuriː	wuriː	ADV	ADV	_	13	advmod	_	highlight=green|span=1
+15	?//	?//	PUNCT	PUNCT	_	13	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: say_autogramm-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = á wûl tu dóːlêː séː myàː ɬə́ nə́ Púsduŋ //
+1	á	á	AUX	AUX	_	2	aux	_	_
+2	wûl	wûl	VERB	VERB	_	0	root	_	_
+3	tu	tu	SCONJ	SCONJ	_	7	mark	_	_
+4	dóːlêː	dóːlêː	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+5	séː	séː	SCONJ	SCONJ	_	7	mark	_	_
+6	myàː	myàː	AUX	AUX	_	7	aux	_	_
+7	ɬə́	ɬə́	VERB	VERB	_	2	ccomp	_	highlight=red
+8	nə́	nə́	ADP	ADP	_	9	case	_	_
+9	Púsduŋ	Púsduŋ	PROPN	PROPN	_	7	obl:arg	_	highlight=green|span=2
+10	//	//	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: say_autogramm-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = sə́ŋwaːrí yáː mə̂s < tá yâːn ʧi tə́ də̀n ɗan || ɗan || hár ɗan ŋaː ndúːri ɣáy < tá gìː tə̀ ɗân //
+1	sə́ŋwaːrí	sə́ŋwaːrí	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=1
+2	yáː	yáː	AUX	AUX	_	3	aux	_	_
+3	mə̂s	mə̂s	VERB	VERB	_	21	advcl	_	highlight=red
+4	<	<	PUNCT	PUNCT	_	3	punct	_	_
+5	tá	tá	ADV	ADV	_	21	advmod	_	_
+6	yâːn	yâːn	SCONJ	SCONJ	_	9	mark	_	_
+7	ʧi	ʧi	AUX	AUX	_	9	cop	_	_
+8	tə́	tə́	ADP	ADP	_	9	case	_	_
+9	də̀n	də̀n	NOUN	NOUN	_	21	advcl	_	_
+10	ɗan	ɗan	ADP	ADP	_	17	reparandum	_	_
+11	||	||	PUNCT	PUNCT	_	10	punct	_	_
+12	ɗan	ɗan	ADP	ADP	_	17	reparandum	_	_
+13	||	||	PUNCT	PUNCT	_	12	punct	_	_
+14	hár	hár	ADV	ADV	_	17	advmod	_	_
+15	ɗan	ɗan	ADP	ADP	_	17	case	_	_
+16	ŋaː	ŋaː	ADJ	ADJ	_	17	amod	_	_
+17	ndúːri	ndúːri	NOUN	NOUN	_	9	acl:relcl	_	_
+18	ɣáy	ɣáy	PRON	PRON	_	9	iobj	_	_
+19	<	<	PUNCT	PUNCT	_	9	punct	_	_
+20	tá	tá	AUX	AUX	_	21	aux	_	_
+21	gìː	gìː	VERB	VERB	_	0	root	_	_
+22	tə̀	tə̀	PRON	PRON	_	21	obj	_	_
+23	ɗân	ɗân	ADV	ADV	_	21	obl:arg	_	_
+24	//	//	PUNCT	PUNCT	_	21	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: say_autogramm-ud-train.conllu · this verb has L=1, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = àmá dzàŋ gíː ʧàː ɬə wûl vìː ɣə́ wàːrès < tòː wúʃi tə́ pôɣə́y //
+1	àmá	àmá	CCONJ	CCONJ	_	14	discourse	_	_
+2	dzàŋ	dzàŋ	NOUN	NOUN	_	5	obl	_	highlight=green|span=2
+3	gíː	gíː	DET	DET	_	2	det	_	_
+4	ʧàː	ʧàː	AUX	AUX	_	5	aux	_	_
+5	ɬə	ɬə	VERB	VERB	_	14	advcl	_	highlight=red
+6	wûl	wûl	VERB	VERB	_	5	compound	_	_
+7	vìː	vìː	NOUN	NOUN	_	6	obj	_	_
+8	ɣə́	ɣə́	ADP	ADP	_	9	case	_	_
+9	wàːrès	wàːrès	NOUN	NOUN	_	7	nmod	_	_
+10	<	<	PUNCT	PUNCT	_	5	punct	_	_
+11	tòː	tòː	PART	PART	_	14	discourse	_	_
+12	wúʃi	wúʃi	NOUN	NOUN	_	14	nsubj	_	_
+13	tə́	tə́	AUX	AUX	_	14	aux	_	_
+14	pôɣə́y	pôɣə́y	VERB	VERB	_	0	root	_	_
+15	//	//	PUNCT	PUNCT	_	14	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: say_autogramm-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = lə̂p ɬǎːy < á mbúɗíː mbə́ɬəŋ //
+1	lə̂p	lə̂p	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+2	ɬǎːy	ɬǎːy	VERB	VERB	_	5	advcl	_	highlight=red
+3	<	<	PUNCT	PUNCT	_	2	punct	_	_
+4	á	á	AUX	AUX	_	5	aux	_	_
+5	mbúɗíː	mbúɗíː	VERB	VERB	_	0	root	_	_
+6	mbə́ɬəŋ	mbə́ɬəŋ	NUM	NUM	_	5	obl	_	_
+7	//	//	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: say_autogramm-ud-test.conllu · this verb has L=1, R=3 (mean span = 2.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = tu ʒà òː < mə́ mbǔt gwàːm pûy ɣənín { nə́ || nə́ || nə́ || nə́ } ʒà ŋálɣə́nì //
+1	tu	tu	SCONJ	SCONJ	_	6	discourse	_	_
+2	ʒà	ʒà	NOUN	NOUN	_	6	dislocated	_	highlight=green|span=2
+3	òː	òː	PART	PART	_	2	advmod	_	_
+4	<	<	PUNCT	PUNCT	_	2	punct	_	_
+5	mə́	mə́	AUX	AUX	_	6	aux	_	_
+6	mbǔt	mbǔt	VERB	VERB	_	0	root	_	highlight=red
+7	gwàːm	gwàːm	PRON	PRON	_	6	obl	_	highlight=green|span=1
+8	pûy	pûy	ADV	ADV	_	6	advmod	_	highlight=green|span=2
+9	ɣənín	ɣənín	PART	PART	_	8	discourse	_	_
+10	{	{	PUNCT	PUNCT	_	20	punct	_	_
+11	nə́	nə́	ADP	ADP	_	20	reparandum	_	_
+12	||	||	PUNCT	PUNCT	_	11	punct	_	_
+13	nə́	nə́	ADP	ADP	_	20	reparandum	_	_
+14	||	||	PUNCT	PUNCT	_	13	punct	_	_
+15	nə́	nə́	ADP	ADP	_	20	reparandum	_	_
+16	||	||	PUNCT	PUNCT	_	15	punct	_	_
+17	nə́	nə́	ADP	ADP	_	20	case	_	_
+18	}	}	PUNCT	PUNCT	_	20	punct	_	_
+19	ʒà	ʒà	NOUN	NOUN	_	20	obj	_	_
+20	ŋálɣə́nì	ŋálɣə́nì	VERB	VERB	_	6	obl	_	highlight=green|span=6
+21	//	//	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: say_autogramm-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = kóːnúː < mə̀ ʧì náɣɗi //
+1	kóːnúː	kóːnúː	PRON	PRON	_	4	dislocated	_	highlight=green|span=1
+2	<	<	PUNCT	PUNCT	_	4	punct	_	_
+3	mə̀	mə̀	AUX	AUX	_	4	aux	_	_
+4	ʧì	ʧì	VERB	VERB	_	0	root	_	highlight=red
+5	náɣɗi	náɣɗi	NOUN	NOUN	_	4	obj	_	highlight=green|span=1
+6	//	//	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: say_autogramm-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = myáː ʃaː tə wût ɗan páːʧi làríː ɗeɓát tòː ma ɲomíː //
+1	myáː	myáː	AUX	AUX	_	2	aux	_	_
+2	ʃaː	ʃaː	VERB	VERB	_	11	advcl	_	_
+3	tə	tə	PRON	PRON	_	2	iobj	_	_
+4	wût	wût	NOUN	NOUN	_	2	obj	_	_
+5	ɗan	ɗan	SCONJ	SCONJ	_	7	mark	_	_
+6	páːʧi	páːʧi	NOUN	NOUN	_	7	nsubj	_	highlight=green|span=1
+7	làríː	làríː	VERB	VERB	_	11	advcl	_	highlight=red
+8	ɗeɓát	ɗeɓát	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+9	tòː	tòː	PART	PART	_	11	discourse	_	_
+10	ma	ma	AUX	AUX	_	11	aux	_	_
+11	ɲomíː	ɲomíː	VERB	VERB	_	0	root	_	_
+12	//	//	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: say_autogramm-ud-train.conllu · this verb has L=1, R=3 (mean span = 1.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = dzàn gíː < ɗan tə́ gə̀m á first eleven < ɗan ma mbwaː < ɗan tə́ gə̀m < èː Zəgì tu wéy bàː wò mbwaː bôːl hŋ́ oː sábòːtu yâːn tə́ gàː tə̀ gòs ká bénʧi |c kúmá myâːn < èː séː tə́ || tə́ gə̀m gáy oː //
+1	dzàn	dzàn	NOUN	NOUN	_	21	obl	_	_
+2	gíː	gíː	DET	DET	_	1	det	_	_
+3	<	<	PUNCT	PUNCT	_	1	punct	_	_
+4	ɗan	ɗan	SCONJ	SCONJ	_	6	mark	_	_
+5	tə́	tə́	AUX	AUX	_	6	aux	_	_
+6	gə̀m	gə̀m	VERB	VERB	_	21	advcl	_	_
+7	á	á	ADP	ADP	_	8	case	_	_
+8	first	first	NUM	NUM	_	6	obl	_	_
+9	eleven	eleven	NUM	NUM	_	8	flat	_	_
+10	<	<	PUNCT	PUNCT	_	6	punct	_	_
+11	ɗan	ɗan	SCONJ	SCONJ	_	13	mark	_	_
+12	ma	ma	AUX	AUX	_	13	aux	_	_
+13	mbwaː	mbwaː	VERB	VERB	_	21	advcl	_	_
+14	<	<	PUNCT	PUNCT	_	13	punct	_	_
+15	ɗan	ɗan	SCONJ	SCONJ	_	17	mark	_	_
+16	tə́	tə́	AUX	AUX	_	17	aux	_	_
+17	gə̀m	gə̀m	VERB	VERB	_	21	advcl	_	_
+18	<	<	PUNCT	PUNCT	_	17	punct	_	_
+19	èː	èː	INTJ	INTJ	_	21	discourse	_	_
+20	Zəgì	Zəgì	PROPN	PROPN	_	21	nsubj	_	_
+21	tu	tu	SCONJ	SCONJ	_	0	root	_	_
+22	wéy	wéy	SCONJ	SCONJ	_	25	mark	_	_
+23	bàː	bàː	PART	PART	_	25	advmod	_	_
+24	wò	wò	AUX	AUX	_	25	aux	_	_
+25	mbwaː	mbwaː	VERB	VERB	_	21	ccomp	_	_
+26	bôːl	bôːl	NOUN	NOUN	_	25	obj	_	_
+27	hŋ́	hŋ́	PART	PART	_	25	advmod	_	_
+28	oː	oː	PART	PART	_	25	advmod	_	_
+29	sábòːtu	sábòːtu	SCONJ	SCONJ	_	32	mark	_	_
+30	yâːn	yâːn	PRON	PRON	_	32	dislocated	_	highlight=green|span=1
+31	tə́	tə́	AUX	AUX	_	32	aux	_	_
+32	gàː	gàː	VERB	VERB	_	25	advcl	_	highlight=red
+33	tə̀	tə̀	PRON	PRON	_	32	obj	_	highlight=green|span=1
+34	gòs	gòs	PRON	PRON	_	32	obl	_	highlight=green|span=1
+35	ká	ká	ADP	ADP	_	36	case	_	_
+36	bénʧi	bénʧi	NOUN	NOUN	_	32	obl:arg	_	highlight=green|span=2
+37	|c	|c	PUNCT	PUNCT	_	46	punct	_	_
+38	kúmá	kúmá	CCONJ	CCONJ	_	43	cc	_	_
+39	myâːn	myâːn	PRON	PRON	_	43	dislocated	_	_
+40	<	<	PUNCT	PUNCT	_	39	punct	_	_
+41	èː	èː	INTJ	INTJ	_	43	discourse	_	_
+42	séː	séː	ADV	ADV	_	43	advmod	_	_
+43	tə́	tə́	AUX	AUX	_	46	reparandum	_	_
+44	||	||	PUNCT	PUNCT	_	43	punct	_	_
+45	tə́	tə́	AUX	AUX	_	46	aux	_	_
+46	gə̀m	gə̀m	VERB	VERB	_	32	conj	_	_
+47	gáy	gáy	PRON	PRON	_	46	iobj	_	_
+48	oː	oː	PART	PART	_	43	advmod	_	_
+49	//	//	PUNCT	PUNCT	_	21	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: say_autogramm-ud-train.conllu · this verb has L=1, R=1 (mean span = 5.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ʧáː ʧet gín tu ɗan kə̀tà yi kóː káː taɓá kə́ fî maːndə àː ɬə̀ ɗù gón |c kóː àː ngèr gǎːmwôs ɗi á gìp də̀n maːndə́ ɣə́ də̀n ʧiɣə́y tu ká mán fî kóː wuɣn gáy tə́ gaːmi kóː kə́ fî ngə́rwón gáy tə́ teː ɮǐːwôs gón aː ?//
+1	ʧáː	ʧáː	AUX	AUX	_	2	aux	_	_
+2	ʧet	ʧet	VERB	VERB	_	0	root	_	_
+3	gín	gín	PRON	PRON	_	2	obj	_	_
+4	tu	tu	SCONJ	SCONJ	_	10	mark	_	_
+5	ɗan	ɗan	SCONJ	SCONJ	_	7	mark	_	_
+6	kə̀tà	kə̀tà	AUX	AUX	_	7	aux	_	_
+7	yi	yi	VERB	VERB	_	10	advcl	_	highlight=green|span=3
+8	kóː	kóː	CCONJ	CCONJ	_	10	cc:preconj	_	_
+9	káː	káː	AUX	AUX	_	10	aux	_	_
+10	taɓá	taɓá	VERB	VERB	_	3	acl:relcl	_	highlight=red
+11	kə́	kə́	AUX	AUX	_	12	aux	_	_
+12	fî	fî	VERB	VERB	_	10	ccomp	_	highlight=green|span=7
+13	maːndə	maːndə	NOUN	NOUN	_	12	obj	_	_
+14	àː	àː	AUX	AUX	_	15	aux	_	_
+15	ɬə̀	ɬə̀	VERB	VERB	_	12	parataxis	_	_
+16	ɗù	ɗù	VERB	VERB	_	15	compound	_	_
+17	gón	gón	PRON	PRON	_	16	obj	_	_
+18	|c	|c	PUNCT	PUNCT	_	21	punct	_	_
+19	kóː	kóː	CCONJ	CCONJ	_	21	cc	_	_
+20	àː	àː	AUX	AUX	_	21	aux	_	_
+21	ngèr	ngèr	VERB	VERB	_	10	conj	_	_
+22	gǎːmwôs	gǎːmwôs	NOUN	NOUN	_	21	obj	_	_
+23	ɗi	ɗi	PART	PART	_	21	compound:prt	_	_
+24	á	á	ADP	ADP	_	27	case	_	_
+25	gìp	gìp	ADP	ADP	_	24	fixed	_	_
+26	də̀n	də̀n	NOUN	NOUN	_	27	reparandum	_	_
+27	maːndə́	maːndə́	NOUN	NOUN	_	21	obl	_	_
+28	ɣə́	ɣə́	ADP	ADP	_	29	case	_	_
+29	də̀n	də̀n	NOUN	NOUN	_	27	nmod	_	_
+30	ʧiɣə́y	ʧiɣə́y	ADV	ADV	_	21	advmod	_	_
+31	tu	tu	SCONJ	SCONJ	_	33	mark	_	_
+32	ká	ká	AUX	AUX	_	33	aux	_	_
+33	mán	mán	VERB	VERB	_	10	conj	_	_
+34	fî	fî	VERB	VERB	_	33	compound	_	_
+35	kóː	kóː	CCONJ	CCONJ	_	36	cc:preconj	_	_
+36	wuɣn	wuɣn	NOUN	NOUN	_	34	obj	_	_
+37	gáy	gáy	PRON	PRON	_	34	iobj	_	_
+38	tə́	tə́	ADP	ADP	_	39	case	_	_
+39	gaːmi	gaːmi	NOUN	NOUN	_	34	obl:arg	_	_
+40	kóː	kóː	CCONJ	CCONJ	_	42	cc	_	_
+41	kə́	kə́	AUX	AUX	_	42	aux	_	_
+42	fî	fî	VERB	VERB	_	33	conj	_	_
+43	ngə́rwón	ngə́rwón	NOUN	NOUN	_	42	obj	_	_
+44	gáy	gáy	PRON	PRON	_	42	iobj	_	_
+45	tə́	tə́	ADP	ADP	_	47	case	_	_
+46	teː	teː	ADP	ADP	_	47	case	_	_
+47	ɮǐːwôs	ɮǐːwôs	NOUN	NOUN	_	42	obl:arg	_	_
+48	gón	gón	DET	DET	_	47	det	_	_
+49	aː	aː	PART	PART	_	2	advmod	_	_
+50	?//	?//	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: say_autogramm-ud-train.conllu · this verb has L=1, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = gyáː mə́n yóːɗan ʧǎː ʧâː gwàːsə̀ŋ lûː < tôː tə́ ɗîːp gyáː lûː nə́ durɣə́ m̀ː pólɣə̂n lə̌pm Zaːr //
+1	gyáː	gyáː	DET	DET	_	2	det	_	_
+2	mə́n	mə́n	NOUN	NOUN	_	11	dislocated	_	_
+3	yóːɗan	yóːɗan	PRON	PRON	_	5	nsubj	_	highlight=green|span=1
+4	ʧǎː	ʧǎː	AUX	AUX	_	5	aux	_	_
+5	ʧâː	ʧâː	VERB	VERB	_	2	acl:relcl	_	highlight=red
+6	gwàːsə̀ŋ	gwàːsə̀ŋ	PRON	PRON	_	5	obl	_	highlight=green|span=1
+7	lûː	lûː	NOUN	NOUN	_	5	obj	_	highlight=green|span=1
+8	<	<	PUNCT	PUNCT	_	2	punct	_	_
+9	tôː	tôː	PART	PART	_	11	discourse	_	_
+10	tə́	tə́	AUX	AUX	_	11	aux	_	_
+11	ɗîːp	ɗîːp	VERB	VERB	_	0	root	_	_
+12	gyáː	gyáː	DET	DET	_	13	det	_	_
+13	lûː	lûː	NOUN	NOUN	_	11	obj	_	_
+14	nə́	nə́	ADP	ADP	_	17	case	_	_
+15	durɣə́	durɣə́	ADP	ADP	_	14	fixed	_	_
+16	m̀ː	m̀ː	INTJ	INTJ	_	17	discourse	_	_
+17	pólɣə̂n	pólɣə̂n	VERB	VERB	_	11	obl	_	_
+18	lə̌pm	lə̌pm	NOUN	NOUN	_	17	obj	_	_
+19	Zaːr	Zaːr	PROPN	PROPN	_	18	compound	_	_
+20	//	//	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: say_autogramm-ud-test.conllu · this verb has L=1, R=1 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = séy á ʃín tə̀ ʃín wàzíːri ɗi //
+1	séy	séy	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+2	á	á	AUX	AUX	_	3	aux	_	_
+3	ʃín	ʃín	VERB	VERB	_	0	root	_	highlight=red
+4	tə̀	tə̀	AUX	AUX	_	5	aux	_	_
+5	ʃín	ʃín	VERB	VERB	_	3	advcl	_	highlight=green|span=4
+6	wàzíːri	wàzíːri	NOUN	NOUN	_	5	obj	_	_
+7	ɗi	ɗi	PART	PART	_	5	compound:prt	_	_
+8	//	//	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: say_autogramm-ud-test.conllu · this verb has L=1, R=2 (mean span = 2.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = yâːn nə ŋaː gə̀t < wò som gə nə́ wút bàɬkə̀nì //
+1	yâːn	yâːn	SCONJ	SCONJ	_	3	mark	_	_
+2	nə	nə	AUX	AUX	_	3	cop	_	_
+3	ŋaː	ŋaː	NOUN	NOUN	_	7	advcl	_	highlight=green|span=4
+4	gə̀t	gə̀t	NOUN	NOUN	_	3	compound	_	_
+5	<	<	PUNCT	PUNCT	_	3	punct	_	_
+6	wò	wò	AUX	AUX	_	7	aux	_	_
+7	som	som	VERB	VERB	_	0	root	_	highlight=red
+8	gə	gə	PRON	PRON	_	7	obj	_	highlight=green|span=1
+9	nə́	nə́	ADP	ADP	_	11	case	_	_
+10	wút	wút	NOUN	NOUN	_	11	obj	_	_
+11	bàɬkə̀nì	bàɬkə̀nì	VERB	VERB	_	7	obl:arg	_	highlight=green|span=3
+12	//	//	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: say_autogramm-ud-test.conllu · this verb has L=1, R=2 (mean span = 8.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = yáːn gùŋ wùl gə̀ɗiwòʃíː tu múri gíː ɗan á mbîː tə ɬə́n kuríː máː á fî ɗantu bàː nə yáːni hŋ́ dón gín ʧi tə́ bubzə̀ŋ //
+1	yáːn	yáːn	PRON	PRON	_	3	nsubj	_	highlight=green|span=2
+2	gùŋ	gùŋ	NOUN	NOUN	_	1	appos	_	_
+3	wùl	wùl	VERB	VERB	_	0	root	_	highlight=red
+4	gə̀ɗiwòʃíː	gə̀ɗiwòʃíː	NOUN	NOUN	_	3	iobj	_	highlight=green|span=1
+5	tu	tu	SCONJ	SCONJ	_	16	mark	_	_
+6	múri	múri	NOUN	NOUN	_	16	dislocated	_	_
+7	gíː	gíː	DET	DET	_	6	det	_	_
+8	ɗan	ɗan	SCONJ	SCONJ	_	10	mark	_	_
+9	á	á	AUX	AUX	_	10	aux	_	_
+10	mbîː	mbîː	VERB	VERB	_	6	acl:relcl	_	_
+11	tə	tə	PRON	PRON	_	10	obj	_	_
+12	ɬə́n	ɬə́n	VERB	VERB	_	10	compound	_	_
+13	kuríː	kuríː	VERB	VERB	_	12	compound	_	_
+14	máː	máː	PART	PART	_	6	discourse	_	_
+15	á	á	AUX	AUX	_	16	aux	_	_
+16	fî	fî	VERB	VERB	_	3	ccomp	_	highlight=green|span=22
+17	ɗantu	ɗantu	ADP	ADP	_	20	mark	_	_
+18	bàː	bàː	PART	PART	_	20	advmod	_	_
+19	nə	nə	AUX	AUX	_	20	cop	_	_
+20	yáːni	yáːni	PRON	PRON	_	16	ccomp	_	_
+21	hŋ́	hŋ́	PART	PART	_	20	advmod	_	_
+22	dón	dón	SCONJ	SCONJ	_	26	mark	_	_
+23	gín	gín	PRON	PRON	_	26	nsubj	_	_
+24	ʧi	ʧi	AUX	AUX	_	26	cop	_	_
+25	tə́	tə́	ADP	ADP	_	26	case	_	_
+26	bubzə̀ŋ	bubzə̀ŋ	NOUN	NOUN	_	20	advcl	_	_
+27	//	//	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

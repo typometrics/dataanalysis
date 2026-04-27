@@ -1,0 +1,641 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Latin — RMAL_3</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Latin examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Latin <small style="color:#999;font-weight:normal">(la)</small> — RMAL<sub>3</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>3</b> right dependents (left side may be anything).</p><p><b>RMAL<sub>3</sub> = 4.599</b> &nbsp; <span style="color:#666">(4,674 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>right</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: la_ittb-ud-train.conllu · this verb has L=0, R=3 (mean span = 2.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = legitur enim et christus eo plenus fuisse , et etiam apostoli .
+1	legitur	legitur	VERB	VERB	_	0	root	_	highlight=red
+2	enim	enim	PART	PART	_	1	discourse	_	_
+3	et	et	CCONJ	CCONJ	_	4	advmod:emph	_	_
+4	christus	christus	ADJ	ADJ	_	1	nsubj:pass	_	highlight=green|span=2
+5	eo	eo	PRON	PRON	_	6	obl	_	_
+6	plenus	plenus	ADJ	ADJ	_	1	xcomp	_	highlight=green|span=3
+7	fuisse	fuisse	AUX	AUX	_	6	cop	_	_
+8	,	,	PUNCT	PUNCT	_	6	punct	_	_
+9	et	et	CCONJ	CCONJ	_	11	cc	_	_
+10	etiam	etiam	ADV	ADV	_	11	advmod:emph	_	_
+11	apostoli	apostoli	NOUN	NOUN	_	4	conj	_	highlight=green|span=3
+12	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: la_proiel-ud-test.conllu · this verb has L=0, R=3 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = pater Abraham miserere mei et mitte Lazarum ut intinguat extremum digiti sui in aqua ut refrigeret linguam meam quia crucior in hac flamma
+1	pater	pater	NOUN	NOUN	_	3	vocative	_	_
+2	Abraham	Abraham	PROPN	PROPN	_	1	appos	_	_
+3	miserere	miserere	VERB	VERB	_	0	root	_	_
+4	mei	mei	PRON	PRON	_	3	obl:arg	_	_
+5	et	et	CCONJ	CCONJ	_	6	cc	_	_
+6	mitte	mitte	VERB	VERB	_	3	conj	_	_
+7	Lazarum	Lazarum	PROPN	PROPN	_	6	obj	_	_
+8	ut	ut	SCONJ	SCONJ	_	9	mark	_	_
+9	intinguat	intinguat	VERB	VERB	_	6	advcl	_	highlight=red
+10	extremum	extremum	NOUN	NOUN	_	9	obj	_	highlight=green|span=3
+11	digiti	digiti	NOUN	NOUN	_	10	nmod	_	_
+12	sui	sui	DET	DET	_	11	det	_	_
+13	in	in	ADP	ADP	_	14	case	_	_
+14	aqua	aqua	NOUN	NOUN	_	9	obl	_	highlight=green|span=2
+15	ut	ut	SCONJ	SCONJ	_	16	mark	_	_
+16	refrigeret	refrigeret	VERB	VERB	_	9	advcl	_	highlight=green|span=4
+17	linguam	linguam	NOUN	NOUN	_	16	obj	_	_
+18	meam	meam	DET	DET	_	17	det	_	_
+19	quia	quia	SCONJ	SCONJ	_	20	mark	_	_
+20	crucior	crucior	VERB	VERB	_	6	advcl	_	_
+21	in	in	ADP	ADP	_	23	case	_	_
+22	hac	hac	DET	DET	_	23	det	_	_
+23	flamma	flamma	NOUN	NOUN	_	20	obl	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: la_llct-ud-train.conllu · this verb has L=0, R=3 (mean span = 8.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = et si nos vobis sic non adimpleverimus et non conservaverimus sicut supra legitur aut si suprascripta ecclesia sancti Fridiani vel rebus ad eam pertenentes ante suprascripto constituto relaxare aut periorare quesierimus , spondeo ego qui supra Iohanni clericus cum meis heredes conponere tibi Berengarius episcopus vel ad successoribus tuis penam , argentum soledos centum , quia taliter inter nos convenit .
+1	et	et	CCONJ	CCONJ	_	7	cc	_	_
+2	si	si	SCONJ	SCONJ	_	7	mark	_	_
+3	nos	nos	PRON	PRON	_	7	nsubj	_	_
+4	vobis	vobis	PRON	PRON	_	7	obl:arg	_	_
+5	sic	sic	ADV	ADV	_	7	advmod	_	_
+6	non	non	PART	PART	_	7	advmod:neg	_	_
+7	adimpleverimus	adimpleverimus	VERB	VERB	_	0	root	_	_
+8	et	et	CCONJ	CCONJ	_	10	cc	_	_
+9	non	non	PART	PART	_	10	advmod:neg	_	_
+10	conservaverimus	conservaverimus	VERB	VERB	_	7	conj	_	_
+11	sicut	sicut	SCONJ	SCONJ	_	13	mark	_	_
+12	supra	supra	ADV	ADV	_	13	advmod	_	_
+13	legitur	legitur	VERB	VERB	_	7	advcl:cmp	_	_
+14	aut	aut	CCONJ	CCONJ	_	31	cc	_	_
+15	si	si	SCONJ	SCONJ	_	31	mark	_	_
+16	suprascripta	suprascripta	DET	DET	_	17	det	_	_
+17	ecclesia	ecclesia	NOUN	NOUN	_	28	obj	_	_
+18	sancti	sancti	ADJ	ADJ	_	19	amod	_	_
+19	Fridiani	Fridiani	PROPN	PROPN	_	17	nmod	_	_
+20	vel	vel	CCONJ	CCONJ	_	21	cc	_	_
+21	rebus	rebus	NOUN	NOUN	_	17	conj	_	_
+22	ad	ad	ADP	ADP	_	23	case	_	_
+23	eam	eam	PRON	PRON	_	24	obl	_	_
+24	pertenentes	pertenentes	VERB	VERB	_	21	acl	_	_
+25	ante	ante	ADP	ADP	_	27	case	_	_
+26	suprascripto	suprascripto	DET	DET	_	27	det	_	_
+27	constituto	constituto	NOUN	NOUN	_	24	obl	_	_
+28	relaxare	relaxare	VERB	VERB	_	31	xcomp	_	_
+29	aut	aut	CCONJ	CCONJ	_	30	cc	_	_
+30	periorare	periorare	VERB	VERB	_	28	conj	_	_
+31	quesierimus	quesierimus	VERB	VERB	_	7	conj	_	_
+32	,	,	PUNCT	PUNCT	_	33	punct	_	_
+33	spondeo	spondeo	VERB	VERB	_	7	conj	_	highlight=red
+34	ego	ego	PRON	PRON	_	37	det	_	_
+35	qui	qui	DET	DET	_	37	det	_	_
+36	supra	supra	ADV	ADV	_	35	fixed	_	_
+37	Iohanni	Iohanni	PROPN	PROPN	_	33	nsubj	_	highlight=green|span=5
+38	clericus	clericus	NOUN	NOUN	_	37	appos	_	_
+39	cum	cum	ADP	ADP	_	41	case	_	_
+40	meis	meis	DET	DET	_	41	det	_	_
+41	heredes	heredes	NOUN	NOUN	_	33	obl	_	highlight=green|span=3
+42	conponere	conponere	VERB	VERB	_	33	xcomp	_	highlight=green|span=17
+43	tibi	tibi	PRON	PRON	_	44	det	_	_
+44	Berengarius	Berengarius	PROPN	PROPN	_	42	obl:arg	_	_
+45	episcopus	episcopus	NOUN	NOUN	_	44	appos	_	_
+46	vel	vel	CCONJ	CCONJ	_	48	cc	_	_
+47	ad	ad	ADP	ADP	_	48	case	_	_
+48	successoribus	successoribus	NOUN	NOUN	_	44	conj	_	_
+49	tuis	tuis	DET	DET	_	48	det	_	_
+50	penam	penam	NOUN	NOUN	_	42	obj	_	_
+51	,	,	PUNCT	PUNCT	_	53	punct	_	_
+52	argentum	argentum	NOUN	NOUN	_	53	nmod	_	_
+53	soledos	soledos	NOUN	NOUN	_	42	dislocated:obj	_	_
+54	centum	centum	NUM	NUM	_	53	nummod	_	_
+55	,	,	PUNCT	PUNCT	_	60	punct	_	_
+56	quia	quia	SCONJ	SCONJ	_	60	mark	_	_
+57	taliter	taliter	ADV	ADV	_	60	advmod	_	_
+58	inter	inter	ADP	ADP	_	59	case	_	_
+59	nos	nos	PRON	PRON	_	60	obl	_	_
+60	convenit	convenit	VERB	VERB	_	42	advcl	_	_
+61	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: la_circse-ud-test.conllu · this verb has L=1, R=3 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = natum potes seruare tu solus mihi eripere nec tu maximum euasi metum miserum haut potes me facere felicem potes
+1	natum	natum	NOUN	NOUN	_	3	obj	_	highlight=green|span=1
+2	potes	potes	VERB	VERB	_	0	root	_	highlight=red
+3	seruare	seruare	VERB	VERB	_	2	xcomp	_	highlight=green|span=1
+4	tu	tu	PRON	PRON	_	2	nsubj	_	highlight=green|span=2
+5	solus	solus	DET	DET	_	4	det	_	_
+6	mihi	mihi	PRON	PRON	_	7	obl:arg	_	_
+7	eripere	eripere	VERB	VERB	_	3	conj	_	highlight=green|span=4
+8	nec	nec	CCONJ	CCONJ	_	9	cc	_	_
+9	tu	tu	PRON	PRON	_	7	orphan	_	_
+10	maximum	maximum	ADJ	ADJ	_	12	amod	_	_
+11	euasi	euasi	VERB	VERB	_	2	conj	_	_
+12	metum	metum	NOUN	NOUN	_	11	obj	_	_
+13	miserum	miserum	ADJ	ADJ	_	17	xcomp	_	_
+14	haut	haut	PART	PART	_	15	advmod:neg	_	_
+15	potes	potes	VERB	VERB	_	2	conj	_	_
+16	me	me	PRON	PRON	_	17	obj	_	_
+17	facere	facere	VERB	VERB	_	15	xcomp	_	_
+18	felicem	felicem	ADJ	ADJ	_	19	orphan	_	_
+19	potes	potes	VERB	VERB	_	15	conj	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: la_ittb-ud-train.conllu · this verb has L=3, R=3 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = in uia autem generationis dispositiones ad formam praecedunt formam in materia , quamuis sint posteriores in essendo .
+1	in	in	ADP	ADP	_	2	case	_	_
+2	uia	uia	NOUN	NOUN	_	8	obl	_	highlight=green|span=2
+3	autem	autem	PART	PART	_	8	discourse	_	_
+4	generationis	generationis	NOUN	NOUN	_	2	nmod	_	highlight=green|span=1
+5	dispositiones	dispositiones	NOUN	NOUN	_	8	nsubj	_	highlight=green|span=3
+6	ad	ad	ADP	ADP	_	7	case	_	_
+7	formam	formam	NOUN	NOUN	_	5	nmod	_	_
+8	praecedunt	praecedunt	VERB	VERB	_	0	root	_	highlight=red
+9	formam	formam	NOUN	NOUN	_	8	obj	_	highlight=green|span=1
+10	in	in	ADP	ADP	_	11	case	_	_
+11	materia	materia	NOUN	NOUN	_	8	obl	_	highlight=green|span=2
+12	,	,	PUNCT	PUNCT	_	15	punct	_	_
+13	quamuis	quamuis	SCONJ	SCONJ	_	15	mark	_	_
+14	sint	sint	AUX	AUX	_	15	cop	_	_
+15	posteriores	posteriores	ADJ	ADJ	_	8	advcl	_	highlight=green|span=5
+16	in	in	ADP	ADP	_	17	mark	_	_
+17	essendo	essendo	AUX	AUX	_	15	advcl	_	_
+18	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: la_llct-ud-dev.conllu · this verb has L=0, R=3 (mean span = 7.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = et si a nos vobis hec omnia qualiter superius legitur per singulos annos sic non fuerint adinpleta et conservata , aut si suprascriptas ecclesias sancti Geminiani et sancte Marie seu casis et capannis adque rebus quas mihi dedisti relaxsaverimus , vel si per nos pegioratis fuerint dum vitam suprascripti Arifusi abbas fuerit , spondeo ego qui supra Petrus , una cum meis heredes , conponere tibi qui supra Gherardus episcopus , vel ad successoribus tuis , penam , argentum soledos quinquaginta .
+1	et	et	CCONJ	CCONJ	_	17	cc	_	_
+2	si	si	SCONJ	SCONJ	_	17	mark	_	_
+3	a	a	ADP	ADP	_	4	case	_	_
+4	nos	nos	PRON	PRON	_	17	obl:arg	_	_
+5	vobis	vobis	PRON	PRON	_	17	obl:arg	_	_
+6	hec	hec	DET	DET	_	7	det	_	_
+7	omnia	omnia	DET	DET	_	17	nsubj:pass	_	_
+8	qualiter	qualiter	SCONJ	SCONJ	_	10	mark	_	_
+9	superius	superius	ADV	ADV	_	10	advmod	_	_
+10	legitur	legitur	VERB	VERB	_	17	advcl	_	_
+11	per	per	ADP	ADP	_	13	case	_	_
+12	singulos	singulos	ADJ	ADJ	_	13	amod	_	_
+13	annos	annos	NOUN	NOUN	_	17	obl	_	_
+14	sic	sic	ADV	ADV	_	17	advmod	_	_
+15	non	non	PART	PART	_	17	advmod:neg	_	_
+16	fuerint	fuerint	AUX	AUX	_	17	aux:pass	_	_
+17	adinpleta	adinpleta	VERB	VERB	_	0	root	_	_
+18	et	et	CCONJ	CCONJ	_	19	cc	_	_
+19	conservata	conservata	VERB	VERB	_	17	conj	_	_
+20	,	,	PUNCT	PUNCT	_	21	punct	_	_
+21	aut	aut	CCONJ	CCONJ	_	39	cc	_	_
+22	si	si	SCONJ	SCONJ	_	39	mark	_	_
+23	suprascriptas	suprascriptas	DET	DET	_	24	det	_	_
+24	ecclesias	ecclesias	NOUN	NOUN	_	39	obj	_	_
+25	sancti	sancti	ADJ	ADJ	_	26	amod	_	_
+26	Geminiani	Geminiani	PROPN	PROPN	_	24	nmod	_	_
+27	et	et	CCONJ	CCONJ	_	29	cc	_	_
+28	sancte	sancte	ADJ	ADJ	_	29	amod	_	_
+29	Marie	Marie	PROPN	PROPN	_	26	conj	_	_
+30	seu	seu	CCONJ	CCONJ	_	31	cc	_	_
+31	casis	casis	NOUN	NOUN	_	24	conj	_	_
+32	et	et	CCONJ	CCONJ	_	33	cc	_	_
+33	capannis	capannis	NOUN	NOUN	_	31	conj	_	_
+34	adque	adque	CCONJ	CCONJ	_	35	cc	_	_
+35	rebus	rebus	NOUN	NOUN	_	31	conj	_	_
+36	quas	quas	PRON	PRON	_	38	obj	_	_
+37	mihi	mihi	PRON	PRON	_	38	obl:arg	_	_
+38	dedisti	dedisti	VERB	VERB	_	31	acl:relcl	_	_
+39	relaxsaverimus	relaxsaverimus	VERB	VERB	_	17	advcl	_	_
+40	,	,	PUNCT	PUNCT	_	45	punct	_	_
+41	vel	vel	CCONJ	CCONJ	_	45	cc	_	_
+42	si	si	SCONJ	SCONJ	_	45	mark	_	_
+43	per	per	ADP	ADP	_	44	case	_	_
+44	nos	nos	PRON	PRON	_	45	obl	_	_
+45	pegioratis	pegioratis	VERB	VERB	_	17	conj	_	_
+46	fuerint	fuerint	AUX	AUX	_	45	aux:pass	_	_
+47	dum	dum	SCONJ	SCONJ	_	52	mark	_	_
+48	vitam	vitam	NOUN	NOUN	_	52	nsubj	_	_
+49	suprascripti	suprascripti	DET	DET	_	50	det	_	_
+50	Arifusi	Arifusi	PROPN	PROPN	_	48	nmod	_	_
+51	abbas	abbas	NOUN	NOUN	_	50	appos	_	_
+52	fuerit	fuerit	AUX	AUX	_	45	advcl	_	_
+53	,	,	PUNCT	PUNCT	_	54	punct	_	_
+54	spondeo	spondeo	VERB	VERB	_	17	conj	_	highlight=red
+55	ego	ego	PRON	PRON	_	58	det	_	_
+56	qui	qui	DET	DET	_	58	det	_	_
+57	supra	supra	ADV	ADV	_	56	fixed	_	_
+58	Petrus	Petrus	PROPN	PROPN	_	54	nsubj	_	highlight=green|span=4
+59	,	,	PUNCT	PUNCT	_	63	punct	_	_
+60	una	una	ADV	ADV	_	63	case	_	_
+61	cum	cum	ADP	ADP	_	60	fixed	_	_
+62	meis	meis	DET	DET	_	63	det	_	_
+63	heredes	heredes	NOUN	NOUN	_	54	obl	_	highlight=green|span=4
+64	,	,	PUNCT	PUNCT	_	65	punct	_	_
+65	conponere	conponere	VERB	VERB	_	54	xcomp	_	highlight=green|span=14
+66	tibi	tibi	PRON	PRON	_	69	det	_	_
+67	qui	qui	DET	DET	_	69	det	_	_
+68	supra	supra	ADV	ADV	_	67	fixed	_	_
+69	Gherardus	Gherardus	PROPN	PROPN	_	65	obl:arg	_	_
+70	episcopus	episcopus	NOUN	NOUN	_	69	appos	_	_
+71	,	,	PUNCT	PUNCT	_	74	punct	_	_
+72	vel	vel	CCONJ	CCONJ	_	74	cc	_	_
+73	ad	ad	ADP	ADP	_	74	case	_	_
+74	successoribus	successoribus	NOUN	NOUN	_	69	conj	_	_
+75	tuis	tuis	DET	DET	_	74	det	_	_
+76	,	,	PUNCT	PUNCT	_	77	punct	_	_
+77	penam	penam	NOUN	NOUN	_	65	obj	_	_
+78	,	,	PUNCT	PUNCT	_	80	punct	_	_
+79	argentum	argentum	NOUN	NOUN	_	80	nmod	_	_
+80	soledos	soledos	NOUN	NOUN	_	65	dislocated:obj	_	_
+81	quinquaginta	quinquaginta	NUM	NUM	_	80	nummod	_	_
+82	.	.	PUNCT	PUNCT	_	17	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: la_proiel-ud-train.conllu · this verb has L=1, R=3 (mean span = 3.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Quod si scrobes fieri placeat faciemus tribus pedibus altas duobus semis latas tribus longas
+1	Quod	Quod	ADV	ADV	_	5	advmod	_	_
+2	si	si	SCONJ	SCONJ	_	5	mark	_	_
+3	scrobes	scrobes	NOUN	NOUN	_	4	nsubj:pass	_	_
+4	fieri	fieri	VERB	VERB	_	5	ccomp	_	_
+5	placeat	placeat	VERB	VERB	_	6	advcl	_	highlight=green|span=5
+6	faciemus	faciemus	VERB	VERB	_	0	root	_	highlight=red
+7	tribus	tribus	NUM	NUM	_	8	nummod	_	_
+8	pedibus	pedibus	NOUN	NOUN	_	9	obl	_	_
+9	altas	altas	ADJ	ADJ	_	6	advmod	_	highlight=green|span=3
+10	duobus	duobus	NUM	NUM	_	12	obl	_	_
+11	semis	semis	NOUN	NOUN	_	10	nmod	_	_
+12	latas	latas	ADJ	ADJ	_	6	advmod	_	highlight=green|span=3
+13	tribus	tribus	NUM	NUM	_	14	obl	_	_
+14	longas	longas	ADJ	ADJ	_	6	advmod	_	highlight=green|span=2"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: la_circse-ud-train.conllu · this verb has L=0, R=3 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = carpitur leto tuus ille Bacche miles extremos comes usque ad Indos ausus Eois equitare campis figere et mundo tua signa primo cinnami siluis Arabas beatos uidit et uersos equites sagittis terga fallacis metuenda Parthi litus intrauit pelagi rubentis promit hinc ortus aperit que lucem Phoebus et flamma propiore nudos inficit Indos
+1	carpitur	carpitur	VERB	VERB	_	0	root	_	_
+2	leto	leto	NOUN	NOUN	_	1	obl	_	_
+3	tuus	tuus	DET	DET	_	6	det	_	_
+4	ille	ille	DET	DET	_	6	det	_	_
+5	Bacche	Bacche	PROPN	PROPN	_	1	vocative	_	_
+6	miles	miles	NOUN	NOUN	_	1	nsubj:pass	_	_
+7	extremos	extremos	ADJ	ADJ	_	11	amod	_	_
+8	comes	comes	NOUN	NOUN	_	6	appos	_	_
+9	usque	usque	ADV	ADV	_	11	advmod	_	_
+10	ad	ad	ADP	ADP	_	11	case	_	_
+11	Indos	Indos	PROPN	PROPN	_	8	obl:lmod	_	_
+12	ausus	ausus	VERB	VERB	_	8	acl	_	_
+13	Eois	Eois	ADJ	ADJ	_	15	amod	_	_
+14	equitare	equitare	VERB	VERB	_	12	xcomp	_	_
+15	campis	campis	NOUN	NOUN	_	14	obl:lmod	_	_
+16	figere	figere	VERB	VERB	_	14	conj	_	highlight=red
+17	et	et	CCONJ	CCONJ	_	16	cc	_	_
+18	mundo	mundo	NOUN	NOUN	_	16	obl	_	highlight=green|span=1
+19	tua	tua	DET	DET	_	20	det	_	_
+20	signa	signa	NOUN	NOUN	_	16	obj	_	highlight=green|span=2
+21	primo	primo	ADJ	ADJ	_	18	amod	_	highlight=green|span=1
+22	cinnami	cinnami	NOUN	NOUN	_	23	nmod	_	_
+23	siluis	siluis	NOUN	NOUN	_	25	obl	_	_
+24	Arabas	Arabas	PROPN	PROPN	_	26	obj	_	_
+25	beatos	beatos	ADJ	ADJ	_	24	amod	_	_
+26	uidit	uidit	VERB	VERB	_	1	conj	_	_
+27	et	et	CCONJ	CCONJ	_	29	cc	_	_
+28	uersos	uersos	VERB	VERB	_	29	acl	_	_
+29	equites	equites	NOUN	NOUN	_	24	conj	_	_
+30	sagittis	sagittis	NOUN	NOUN	_	33	obl	_	_
+31	terga	terga	NOUN	NOUN	_	28	obj	_	_
+32	fallacis	fallacis	ADJ	ADJ	_	34	amod	_	_
+33	metuenda	metuenda	VERB	VERB	_	31	acl	_	_
+34	Parthi	Parthi	ADJ	ADJ	_	29	nmod	_	_
+35	litus	litus	NOUN	NOUN	_	36	obj	_	_
+36	intrauit	intrauit	VERB	VERB	_	26	conj	_	_
+37	pelagi	pelagi	NOUN	NOUN	_	35	nmod	_	_
+38	rubentis	rubentis	ADJ	ADJ	_	37	amod	_	_
+39	promit	promit	VERB	VERB	_	35	acl:relcl	_	_
+40	hinc	hinc	ADV	ADV	_	39	advmod:lmod	_	_
+41	ortus	ortus	NOUN	NOUN	_	39	obj	_	_
+42	aperit	aperit	VERB	VERB	_	39	conj	_	_
+43	que	que	CCONJ	CCONJ	_	42	cc	_	_
+44	lucem	lucem	NOUN	NOUN	_	42	obj	_	_
+45	Phoebus	Phoebus	PROPN	PROPN	_	39	nsubj	_	_
+46	et	et	CCONJ	CCONJ	_	50	cc	_	_
+47	flamma	flamma	NOUN	NOUN	_	50	obl	_	_
+48	propiore	propiore	ADJ	ADJ	_	47	amod	_	_
+49	nudos	nudos	ADJ	ADJ	_	51	amod	_	_
+50	inficit	inficit	VERB	VERB	_	39	conj	_	_
+51	Indos	Indos	PROPN	PROPN	_	50	obj	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: la_ittb-ud-dev.conllu · this verb has L=1, R=3 (mean span = 4.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = non autem dicitur lapis , quamuis lapides fecerit , quia in nomine lapidis intelligitur modus determinatus essendi , secundum quem lapis a deo distinguitur .
+1	non	non	PART	PART	_	3	advmod:neg	_	highlight=green|span=1
+2	autem	autem	PART	PART	_	3	discourse	_	_
+3	dicitur	dicitur	VERB	VERB	_	0	root	_	highlight=red
+4	lapis	lapis	NOUN	NOUN	_	3	xcomp	_	highlight=green|span=1
+5	,	,	PUNCT	PUNCT	_	8	punct	_	_
+6	quamuis	quamuis	SCONJ	SCONJ	_	8	mark	_	_
+7	lapides	lapides	NOUN	NOUN	_	8	obj	_	_
+8	fecerit	fecerit	VERB	VERB	_	3	advcl	_	highlight=green|span=3
+9	,	,	PUNCT	PUNCT	_	14	punct	_	_
+10	quia	quia	SCONJ	SCONJ	_	14	mark	_	_
+11	in	in	ADP	ADP	_	12	case	_	_
+12	nomine	nomine	NOUN	NOUN	_	14	obl	_	_
+13	lapidis	lapidis	NOUN	NOUN	_	12	nmod	_	_
+14	intelligitur	intelligitur	VERB	VERB	_	3	advcl	_	highlight=green|span=14
+15	modus	modus	NOUN	NOUN	_	14	nsubj:pass	_	_
+16	determinatus	determinatus	VERB	VERB	_	15	acl	_	_
+17	essendi	essendi	AUX	AUX	_	15	acl	_	_
+18	,	,	PUNCT	PUNCT	_	24	punct	_	_
+19	secundum	secundum	ADP	ADP	_	20	case	_	_
+20	quem	quem	PRON	PRON	_	24	obl	_	_
+21	lapis	lapis	NOUN	NOUN	_	24	nsubj:pass	_	_
+22	a	a	ADP	ADP	_	23	case	_	_
+23	deo	deo	NOUN	NOUN	_	24	obl:agent	_	_
+24	distinguitur	distinguitur	VERB	VERB	_	15	acl:relcl	_	_
+25	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: la_proiel-ud-train.conllu · this verb has L=2, R=3 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = quos et vocavit nos non solum ex Iudaeis sed etiam ex gentibus sicut in Osee dicit
+1	quos	quos	PRON	PRON	_	3	xcomp	_	highlight=green|span=1
+2	et	et	ADV	ADV	_	4	discourse	_	highlight=green|span=1
+3	vocavit	vocavit	VERB	VERB	_	0	root	_	highlight=red
+4	nos	nos	PRON	PRON	_	3	obj	_	highlight=green|span=1
+5	non	non	ADV	ADV	_	6	advmod	_	_
+6	solum	solum	ADV	ADV	_	8	amod	_	_
+7	ex	ex	ADP	ADP	_	8	case	_	_
+8	Iudaeis	Iudaeis	NOUN	NOUN	_	3	obl	_	highlight=green|span=8
+9	sed	sed	CCONJ	CCONJ	_	12	cc	_	_
+10	etiam	etiam	ADV	ADV	_	12	discourse	_	_
+11	ex	ex	ADP	ADP	_	12	case	_	_
+12	gentibus	gentibus	NOUN	NOUN	_	8	conj	_	_
+13	sicut	sicut	ADV	ADV	_	16	mark	_	_
+14	in	in	ADP	ADP	_	15	case	_	_
+15	Osee	Osee	PROPN	PROPN	_	16	obl	_	_
+16	dicit	dicit	VERB	VERB	_	3	advcl:cmp	_	highlight=green|span=4"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: la_ittb-ud-train.conllu · this verb has L=0, R=3 (mean span = 3.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = sed quia contingit aliquod impedimentum circa uitam corporalem , ex quo res uiua infirmatur , per accidens necessarium est quartum , quod est sanatio rei uiuentis aegrotae .
+1	sed	sed	CCONJ	CCONJ	_	18	cc	_	_
+2	quia	quia	SCONJ	SCONJ	_	3	mark	_	_
+3	contingit	contingit	VERB	VERB	_	18	advcl	_	highlight=red
+4	aliquod	aliquod	DET	DET	_	5	det	_	_
+5	impedimentum	impedimentum	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=2
+6	circa	circa	ADP	ADP	_	7	case	_	_
+7	uitam	uitam	NOUN	NOUN	_	3	obl	_	highlight=green|span=3
+8	corporalem	corporalem	ADJ	ADJ	_	7	amod	_	_
+9	,	,	PUNCT	PUNCT	_	7	punct	_	_
+10	ex	ex	ADP	ADP	_	11	case	_	_
+11	quo	quo	PRON	PRON	_	14	obl	_	_
+12	res	res	NOUN	NOUN	_	14	nsubj:pass	_	_
+13	uiua	uiua	ADJ	ADJ	_	12	amod	_	_
+14	infirmatur	infirmatur	VERB	VERB	_	5	acl:relcl	_	highlight=green|span=5
+15	,	,	PUNCT	PUNCT	_	3	punct	_	_
+16	per	per	ADP	ADP	_	17	case	_	_
+17	accidens	accidens	NOUN	NOUN	_	18	obl	_	_
+18	necessarium	necessarium	ADJ	ADJ	_	0	root	_	_
+19	est	est	AUX	AUX	_	18	cop	_	_
+20	quartum	quartum	ADJ	ADJ	_	18	nsubj	_	_
+21	,	,	PUNCT	PUNCT	_	22	punct	_	_
+22	quod	quod	PRON	PRON	_	20	acl:relcl	_	_
+23	est	est	AUX	AUX	_	22	cop	_	_
+24	sanatio	sanatio	NOUN	NOUN	_	22	nsubj	_	_
+25	rei	rei	NOUN	NOUN	_	24	nmod	_	_
+26	uiuentis	uiuentis	VERB	VERB	_	25	acl	_	_
+27	aegrotae	aegrotae	ADJ	ADJ	_	25	amod	_	_
+28	.	.	PUNCT	PUNCT	_	18	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: la_circse-ud-test.conllu · this verb has L=0, R=3 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = uidimus patriam ruentem nocte funesta cum Dardana tecta Dorici raperetis ignes
+1	uidimus	uidimus	VERB	VERB	_	0	root	_	highlight=red
+2	patriam	patriam	NOUN	NOUN	_	1	obj	_	highlight=green|span=4
+3	ruentem	ruentem	VERB	VERB	_	2	acl	_	_
+4	nocte	nocte	NOUN	NOUN	_	3	obl:tmod	_	_
+5	funesta	funesta	ADJ	ADJ	_	4	amod	_	_
+6	cum	cum	SCONJ	SCONJ	_	10	mark	_	highlight=green|span=1
+7	Dardana	Dardana	ADJ	ADJ	_	8	amod	_	_
+8	tecta	tecta	NOUN	NOUN	_	10	obj	_	_
+9	Dorici	Dorici	ADJ	ADJ	_	11	amod	_	_
+10	raperetis	raperetis	VERB	VERB	_	1	advcl	_	highlight=green|span=4
+11	ignes	ignes	NOUN	NOUN	_	10	vocative	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: la_proiel-ud-train.conllu · this verb has L=0, R=3 (mean span = 3.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = contendite intrare per angustam portam quia multi dico vobis quaerunt intrare et non poterunt
+1	contendite	contendite	VERB	VERB	_	0	root	_	highlight=red
+2	intrare	intrare	VERB	VERB	_	1	xcomp	_	highlight=green|span=4
+3	per	per	ADP	ADP	_	5	case	_	_
+4	angustam	angustam	ADJ	ADJ	_	5	amod	_	_
+5	portam	portam	NOUN	NOUN	_	2	obl	_	_
+6	quia	quia	SCONJ	SCONJ	_	10	mark	_	highlight=green|span=1
+7	multi	multi	ADJ	ADJ	_	10	nsubj	_	_
+8	dico	dico	VERB	VERB	_	1	parataxis	_	_
+9	vobis	vobis	PRON	PRON	_	8	obl:arg	_	_
+10	quaerunt	quaerunt	VERB	VERB	_	1	advcl	_	highlight=green|span=6
+11	intrare	intrare	VERB	VERB	_	10	xcomp	_	_
+12	et	et	CCONJ	CCONJ	_	14	cc	_	_
+13	non	non	ADV	ADV	_	14	advmod	_	_
+14	poterunt	poterunt	VERB	VERB	_	10	conj	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: la_ittb-ud-train.conllu · this verb has L=1, R=3 (mean span = 2.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = exiui , inquit , a patre , et ueni in mundum , ioan. 16-28 .
+1	exiui	exiui	VERB	VERB	_	3	ccomp	_	highlight=green|span=1
+2	,	,	PUNCT	PUNCT	_	1	punct	_	_
+3	inquit	inquit	VERB	VERB	_	0	root	_	highlight=red
+4	,	,	PUNCT	PUNCT	_	6	punct	_	_
+5	a	a	ADP	ADP	_	6	case	_	_
+6	patre	patre	NOUN	NOUN	_	1	obl:arg	_	highlight=green|span=2
+7	,	,	PUNCT	PUNCT	_	6	punct	_	_
+8	et	et	CCONJ	CCONJ	_	9	cc	_	_
+9	ueni	ueni	VERB	VERB	_	1	conj	_	highlight=green|span=4
+10	in	in	ADP	ADP	_	11	case	_	_
+11	mundum	mundum	NOUN	NOUN	_	9	obl:arg	_	_
+12	,	,	PUNCT	PUNCT	_	13	punct	_	_
+13	ioan.	ioan.	PROPN	PROPN	_	3	obl	_	highlight=green|span=2
+14	16-28	16-28	NUM	NUM	_	13	nummod	_	_
+15	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: la_ittb-ud-train.conllu · this verb has L=1, R=3 (mean span = 3.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = si intelligitur per terram materia informis , sic oportet exponi receptibilitas materiae quodammodo esse similis receptibilitati loci , inquantum in una materia manente succedunt sibi diuersae formae , sicut in uno loco diuersa corpora ;
+1	si	si	SCONJ	SCONJ	_	2	mark	_	_
+2	intelligitur	intelligitur	VERB	VERB	_	9	advcl	_	_
+3	per	per	ADP	ADP	_	4	case	_	_
+4	terram	terram	NOUN	NOUN	_	2	obl	_	_
+5	materia	materia	NOUN	NOUN	_	2	nsubj:pass	_	_
+6	informis	informis	ADJ	ADJ	_	5	amod	_	_
+7	,	,	PUNCT	PUNCT	_	2	punct	_	_
+8	sic	sic	ADV	ADV	_	10	advmod	_	_
+9	oportet	oportet	VERB	VERB	_	0	root	_	_
+10	exponi	exponi	VERB	VERB	_	9	csubj	_	_
+11	receptibilitas	receptibilitas	NOUN	NOUN	_	15	nsubj	_	_
+12	materiae	materiae	NOUN	NOUN	_	11	nmod	_	_
+13	quodammodo	quodammodo	ADV	ADV	_	15	advmod	_	_
+14	esse	esse	AUX	AUX	_	15	cop	_	_
+15	similis	similis	ADJ	ADJ	_	10	csubj:pass	_	_
+16	receptibilitati	receptibilitati	NOUN	NOUN	_	15	nmod	_	_
+17	loci	loci	NOUN	NOUN	_	16	nmod	_	_
+18	,	,	PUNCT	PUNCT	_	24	punct	_	_
+19	inquantum	inquantum	SCONJ	SCONJ	_	24	mark	_	_
+20	in	in	ADP	ADP	_	22	case	_	_
+21	una	una	DET	DET	_	22	det	_	_
+22	materia	materia	NOUN	NOUN	_	24	obl	_	highlight=green|span=4
+23	manente	manente	VERB	VERB	_	22	acl	_	_
+24	succedunt	succedunt	VERB	VERB	_	15	advcl	_	highlight=red
+25	sibi	sibi	PRON	PRON	_	24	obl:arg	_	highlight=green|span=1
+26	diuersae	diuersae	ADJ	ADJ	_	27	amod	_	_
+27	formae	formae	NOUN	NOUN	_	24	nsubj	_	highlight=green|span=2
+28	,	,	PUNCT	PUNCT	_	34	punct	_	_
+29	sicut	sicut	SCONJ	SCONJ	_	34	mark	_	_
+30	in	in	ADP	ADP	_	32	case	_	_
+31	uno	uno	DET	DET	_	32	det	_	_
+32	loco	loco	NOUN	NOUN	_	34	orphan	_	_
+33	diuersa	diuersa	ADJ	ADJ	_	34	amod	_	_
+34	corpora	corpora	NOUN	NOUN	_	24	advcl	_	highlight=green|span=6
+35	;	;	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: la_proiel-ud-train.conllu · this verb has L=0, R=3 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = et congregata est ad eum turba multa ita ut in navem ascendens sederet in mari et omnis turba circa mare super terram erat
+1	et	et	CCONJ	CCONJ	_	2	cc	_	_
+2	congregata	congregata	VERB	VERB	_	0	root	_	highlight=red
+3	est	est	AUX	AUX	_	2	aux:pass	_	_
+4	ad	ad	ADP	ADP	_	5	case	_	_
+5	eum	eum	PRON	PRON	_	2	obl	_	highlight=green|span=2
+6	turba	turba	NOUN	NOUN	_	2	nsubj:pass	_	highlight=green|span=2
+7	multa	multa	ADJ	ADJ	_	6	amod	_	_
+8	ita	ita	ADV	ADV	_	2	advmod	_	highlight=green|span=8
+9	ut	ut	SCONJ	SCONJ	_	13	mark	_	_
+10	in	in	ADP	ADP	_	11	case	_	_
+11	navem	navem	NOUN	NOUN	_	12	obl	_	_
+12	ascendens	ascendens	VERB	VERB	_	13	advcl	_	_
+13	sederet	sederet	VERB	VERB	_	8	advcl	_	_
+14	in	in	ADP	ADP	_	15	case	_	_
+15	mari	mari	NOUN	NOUN	_	13	obl	_	_
+16	et	et	CCONJ	CCONJ	_	20	cc	_	_
+17	omnis	omnis	DET	DET	_	18	det	_	_
+18	turba	turba	NOUN	NOUN	_	20	nsubj	_	_
+19	circa	circa	ADP	ADP	_	20	case	_	_
+20	mare	mare	NOUN	NOUN	_	2	conj	_	_
+21	super	super	ADP	ADP	_	22	case	_	_
+22	terram	terram	NOUN	NOUN	_	20	appos	_	_
+23	erat	erat	AUX	AUX	_	20	cop	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: la_ittb-ud-train.conllu · this verb has L=1, R=3 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ad tertium dicendum , quod non solum debet significari temporalium abiectio , sed etiam regalis dignitas in forma coronae ;
+1	ad	ad	ADP	ADP	_	2	case	_	_
+2	tertium	tertium	NOUN	NOUN	_	3	advcl	_	highlight=green|span=2
+3	dicendum	dicendum	VERB	VERB	_	0	root	_	highlight=red
+4	,	,	PUNCT	PUNCT	_	8	punct	_	_
+5	quod	quod	SCONJ	SCONJ	_	8	mark	_	highlight=green|span=1
+6	non	non	PART	PART	_	7	advmod:neg	_	_
+7	solum	solum	ADV	ADV	_	11	advmod	_	_
+8	debet	debet	VERB	VERB	_	3	csubj:pass	_	highlight=green|span=4
+9	significari	significari	VERB	VERB	_	8	xcomp	_	_
+10	temporalium	temporalium	ADJ	ADJ	_	11	nmod	_	_
+11	abiectio	abiectio	NOUN	NOUN	_	8	nsubj	_	_
+12	,	,	PUNCT	PUNCT	_	16	punct	_	_
+13	sed	sed	CCONJ	CCONJ	_	16	cc	_	_
+14	etiam	etiam	ADV	ADV	_	16	advmod:emph	_	_
+15	regalis	regalis	ADJ	ADJ	_	16	amod	_	_
+16	dignitas	dignitas	NOUN	NOUN	_	11	conj	_	_
+17	in	in	ADP	ADP	_	18	case	_	_
+18	forma	forma	NOUN	NOUN	_	8	obl	_	highlight=green|span=3
+19	coronae	coronae	NOUN	NOUN	_	18	nmod	_	_
+20	;	;	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: la_ittb-ud-train.conllu · this verb has L=1, R=3 (mean span = 3.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = non potest autem ens in potentia consequi quod sit actu nisi per uirtutem alicuius existentis in actu .
+1	non	non	PART	PART	_	2	advmod:neg	_	highlight=green|span=1
+2	potest	potest	VERB	VERB	_	0	root	_	highlight=red
+3	autem	autem	PART	PART	_	2	discourse	_	_
+4	ens	ens	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=3
+5	in	in	ADP	ADP	_	6	case	_	_
+6	potentia	potentia	NOUN	NOUN	_	4	nmod	_	_
+7	consequi	consequi	VERB	VERB	_	2	xcomp	_	highlight=green|span=4
+8	quod	quod	SCONJ	SCONJ	_	9	mark	_	_
+9	sit	sit	AUX	AUX	_	7	ccomp	_	_
+10	actu	actu	NOUN	NOUN	_	9	obl	_	_
+11	nisi	nisi	SCONJ	SCONJ	_	13	mark	_	_
+12	per	per	ADP	ADP	_	13	case	_	_
+13	uirtutem	uirtutem	NOUN	NOUN	_	2	advcl	_	highlight=green|span=7
+14	alicuius	alicuius	PRON	PRON	_	13	nmod	_	_
+15	existentis	existentis	VERB	VERB	_	14	acl	_	_
+16	in	in	ADP	ADP	_	17	case	_	_
+17	actu	actu	NOUN	NOUN	_	15	obl	_	_
+18	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: la_proiel-ud-train.conllu · this verb has L=1, R=3 (mean span = 6.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Quam multa passus est Ulixes in illo errore diuturno cum et mulieribus si Circe et Calypso mulieres appellandae sunt inserviret et in omni sermone omnibus affabilem esse se vellet
+1	Quam	Quam	ADV	ADV	_	2	advmod	_	_
+2	multa	multa	ADJ	ADJ	_	3	obj	_	highlight=green|span=2
+3	passus	passus	VERB	VERB	_	0	root	_	highlight=red
+4	est	est	AUX	AUX	_	3	aux	_	_
+5	Ulixes	Ulixes	PROPN	PROPN	_	3	nsubj	_	highlight=green|span=1
+6	in	in	ADP	ADP	_	8	case	_	_
+7	illo	illo	DET	DET	_	8	det	_	_
+8	errore	errore	NOUN	NOUN	_	3	obl	_	highlight=green|span=4
+9	diuturno	diuturno	ADJ	ADJ	_	8	amod	_	_
+10	cum	cum	SCONJ	SCONJ	_	20	mark	_	_
+11	et	et	CCONJ	CCONJ	_	20	cc	_	_
+12	mulieribus	mulieribus	NOUN	NOUN	_	20	obl:arg	_	_
+13	si	si	SCONJ	SCONJ	_	18	mark	_	_
+14	Circe	Circe	PROPN	PROPN	_	18	nsubj	_	_
+15	et	et	CCONJ	CCONJ	_	16	cc	_	_
+16	Calypso	Calypso	PROPN	PROPN	_	14	conj	_	_
+17	mulieres	mulieres	NOUN	NOUN	_	18	xcomp	_	_
+18	appellandae	appellandae	VERB	VERB	_	20	advcl	_	_
+19	sunt	sunt	AUX	AUX	_	18	cop	_	_
+20	inserviret	inserviret	VERB	VERB	_	3	advcl	_	highlight=green|span=20
+21	et	et	CCONJ	CCONJ	_	29	cc	_	_
+22	in	in	ADP	ADP	_	24	case	_	_
+23	omni	omni	DET	DET	_	24	det	_	_
+24	sermone	sermone	NOUN	NOUN	_	26	obl	_	_
+25	omnibus	omnibus	ADJ	ADJ	_	26	advmod	_	_
+26	affabilem	affabilem	ADJ	ADJ	_	29	ccomp	_	_
+27	esse	esse	AUX	AUX	_	26	cop	_	_
+28	se	se	PRON	PRON	_	26	nsubj	_	_
+29	vellet	vellet	VERB	VERB	_	20	conj	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: la_proiel-ud-test.conllu · this verb has L=0, R=3 (mean span = 6.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = thesaurizate autem vobis thesauros in caelo ubi ne que erugo ne que tinea demolitur et ubi fures non effodiunt ne c furantur
+1	thesaurizate	thesaurizate	VERB	VERB	_	0	root	_	highlight=red
+2	autem	autem	ADV	ADV	_	1	discourse	_	_
+3	vobis	vobis	PRON	PRON	_	1	obl	_	highlight=green|span=1
+4	thesauros	thesauros	NOUN	NOUN	_	1	obj	_	highlight=green|span=1
+5	in	in	ADP	ADP	_	6	case	_	_
+6	caelo	caelo	NOUN	NOUN	_	1	obl	_	highlight=green|span=18
+7	ubi	ubi	ADV	ADV	_	14	advcl	_	_
+8	ne	ne	ADV	ADV	_	10	advmod	_	_
+9	que	que	CCONJ	CCONJ	_	10	cc	_	_
+10	erugo	erugo	NOUN	NOUN	_	14	nsubj	_	_
+11	ne	ne	ADV	ADV	_	13	advmod	_	_
+12	que	que	CCONJ	CCONJ	_	13	cc	_	_
+13	tinea	tinea	NOUN	NOUN	_	10	conj	_	_
+14	demolitur	demolitur	VERB	VERB	_	6	acl	_	_
+15	et	et	CCONJ	CCONJ	_	19	cc	_	_
+16	ubi	ubi	ADV	ADV	_	19	advcl	_	_
+17	fures	fures	NOUN	NOUN	_	19	nsubj	_	_
+18	non	non	ADV	ADV	_	19	advmod	_	_
+19	effodiunt	effodiunt	VERB	VERB	_	14	conj	_	_
+20	ne	ne	ADV	ADV	_	22	advmod	_	_
+21	c	c	CCONJ	CCONJ	_	22	cc	_	_
+22	furantur	furantur	VERB	VERB	_	19	conj	_	_"></reactive-dep-tree>
+</div>
+</body></html>

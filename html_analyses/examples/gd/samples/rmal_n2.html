@@ -1,0 +1,563 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Gaelic — RMAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Gaelic examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Gaelic <small style="color:#999;font-weight:normal">(gd)</small> — RMAL<sub>2</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>2</b> right dependents (left side may be anything).</p><p><b>RMAL<sub>2</sub> = 4.908</b> &nbsp; <span style="color:#666">(4,277 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>right</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: gd_arcosg-ud-train.conllu · this verb has L=0, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Seo mar a bha , is dh'fhalbh Màiri air a turas .
+1	Seo	Seo	PRON	PRON	_	0	root	_	_
+2	mar	mar	SCONJ	SCONJ	_	4	mark	_	_
+3	a	a	PART	PART	_	4	mark:prt	_	_
+4	bha	bha	VERB	VERB	_	1	csubj:cleft	_	_
+5	,	,	PUNCT	PUNCT	_	1	punct	_	_
+6	is	is	CCONJ	CCONJ	_	7	cc	_	_
+7	dh'fhalbh	dh'fhalbh	VERB	VERB	_	1	conj	_	highlight=red
+8	Màiri	Màiri	PROPN	PROPN	_	7	nsubj	_	highlight=green|span=1
+9	air	air	ADP	ADP	_	11	case	_	_
+10	a	a	DET	DET	_	11	nmod:poss	_	_
+11	turas	turas	NOUN	NOUN	_	7	obl	_	highlight=green|span=3
+12	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: gd_arcosg-ud-train.conllu · this verb has L=0, R=2 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = tha iad a' dèanamh tòrr de iad feumaidh [?] an-dràsd
+1	tha	tha	VERB	VERB	_	0	root	_	highlight=red
+2	iad	iad	PRON	PRON	_	1	nsubj	_	highlight=green|span=1
+3	a'	a'	PART	PART	_	4	case	_	_
+4	dèanamh	dèanamh	NOUN	NOUN	_	1	xcomp:pred	_	highlight=green|span=5
+5	tòrr	tòrr	NOUN	NOUN	_	4	obj	_	_
+6	de	de	ADP	ADP	_	7	case	_	_
+7	iad	iad	PRON	PRON	_	4	obl	_	_
+8	feumaidh	feumaidh	VERB	VERB	_	1	parataxis	_	_
+9	[?]	[?]	X	X	_	8	nsubj	_	_
+10	an-dràsd	an-dràsd	ADV	ADV	_	8	advmod	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: gd_arcosg-ud-dev.conllu · this verb has L=0, R=2 (mean span = 11.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Thuirt CalMac nach biodh e comasach aiseag a thadhladh ann am Beàrnaraigh a chur air adhart eadar ceann a deas na Hearadh agus Uibhist a Tuath .
+1	Thuirt	Thuirt	VERB	VERB	_	0	root	_	_
+2	CalMac	CalMac	PROPN	PROPN	_	1	nsubj	_	_
+3	nach	nach	PART	PART	_	4	mark:prt	_	_
+4	biodh	biodh	VERB	VERB	_	1	ccomp	_	highlight=red
+5	e	e	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+6	comasach	comasach	ADJ	ADJ	_	4	xcomp:pred	_	highlight=green|span=21
+7	aiseag	aiseag	NOUN	NOUN	_	14	obj	_	_
+8	a	a	PART	PART	_	9	nsubj	_	_
+9	thadhladh	thadhladh	VERB	VERB	_	7	acl:relcl	_	_
+10	ann	ann	ADP	ADP	_	12	case	_	_
+11	am	am	ADP	ADP	_	10	fixed	_	_
+12	Beàrnaraigh	Beàrnaraigh	PROPN	PROPN	_	9	obl	_	_
+13	a	a	PART	PART	_	14	mark:prt	_	_
+14	chur	chur	NOUN	NOUN	_	6	xcomp	_	_
+15	air	air	ADP	ADP	_	16	case	_	_
+16	adhart	adhart	NOUN	NOUN	_	14	obl	_	_
+17	eadar	eadar	ADP	ADP	_	18	case	_	_
+18	ceann	ceann	NOUN	NOUN	_	14	obl	_	_
+19	a	a	ADJ	ADJ	_	18	amod	_	_
+20	deas	deas	ADJ	ADJ	_	19	fixed	_	_
+21	na	na	DET	DET	_	22	det	_	_
+22	Hearadh	Hearadh	PROPN	PROPN	_	18	nmod	_	_
+23	agus	agus	CCONJ	CCONJ	_	24	cc	_	_
+24	Uibhist	Uibhist	PROPN	PROPN	_	18	conj	_	_
+25	a	a	ADJ	ADJ	_	24	amod	_	_
+26	Tuath	Tuath	ADJ	ADJ	_	25	fixed	_	_
+27	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: gd_arcosg-ud-train.conllu · this verb has L=1, R=2 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Thathas air a bhith rannsachadh tro an oidhche anns an Turc feuch an d' thàinig an còrr beò às a' chrith-thalmhainn a bhuail air an dùthaich an-dè .
+1	Thathas	Thathas	VERB	VERB	_	0	root	_	_
+2	air	air	PART	PART	_	4	case	_	_
+3	a	a	PART	PART	_	4	mark:prt	_	_
+4	bhith	bhith	NOUN	NOUN	_	1	xcomp:pred	_	_
+5	rannsachadh	rannsachadh	NOUN	NOUN	_	4	xcomp:pred	_	_
+6	tro	tro	ADP	ADP	_	8	case	_	_
+7	an	an	DET	DET	_	8	det	_	_
+8	oidhche	oidhche	NOUN	NOUN	_	5	obl	_	_
+9	anns	anns	ADP	ADP	_	11	case	_	_
+10	an	an	ADP	ADP	_	9	fixed	_	_
+11	Turc	Turc	PROPN	PROPN	_	5	obl	_	_
+12	feuch	feuch	VERB	VERB	_	5	xcomp	_	_
+13	an	an	PART	PART	_	15	mark:prt	_	_
+14	d'	d'	PART	PART	_	15	mark:prt	_	_
+15	thàinig	thàinig	VERB	VERB	_	12	ccomp	_	_
+16	an	an	DET	DET	_	17	det	_	_
+17	còrr	còrr	NOUN	NOUN	_	15	nsubj	_	_
+18	beò	beò	ADJ	ADJ	_	14	advmod	_	_
+19	às	às	ADP	ADP	_	21	case	_	_
+20	a'	a'	DET	DET	_	21	det	_	_
+21	chrith-thalmhainn	chrith-thalmhainn	NOUN	NOUN	_	15	obl	_	_
+22	a	a	PART	PART	_	23	nsubj	_	highlight=green|span=1
+23	bhuail	bhuail	VERB	VERB	_	21	acl:relcl	_	highlight=red
+24	air	air	ADP	ADP	_	26	case	_	_
+25	an	an	DET	DET	_	26	det	_	_
+26	dùthaich	dùthaich	NOUN	NOUN	_	23	obl	_	highlight=green|span=3
+27	an-dè	an-dè	ADV	ADV	_	23	advmod	_	highlight=green|span=1
+28	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: gd_arcosg-ud-train.conllu · this verb has L=0, R=2 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ach bidh rùm aig ceann shìos an taighe
+1	ach	ach	CCONJ	CCONJ	_	2	cc	_	_
+2	bidh	bidh	VERB	VERB	_	0	root	_	highlight=red
+3	rùm	rùm	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+4	aig	aig	ADP	ADP	_	5	case	_	_
+5	ceann	ceann	NOUN	NOUN	_	2	xcomp:pred	_	highlight=green|span=5
+6	shìos	shìos	ADJ	ADJ	_	5	amod	_	_
+7	an	an	DET	DET	_	8	det	_	_
+8	taighe	taighe	NOUN	NOUN	_	5	nmod	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: gd_arcosg-ud-train.conllu · this verb has L=0, R=2 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = feumaidh iad an aire a thoirt nach leig iad le iad seasamh air ais beagan
+1	feumaidh	feumaidh	VERB	VERB	_	0	root	_	highlight=red
+2	iad	iad	PRON	PRON	_	1	nsubj	_	highlight=green|span=1
+3	an	an	DET	DET	_	4	det	_	_
+4	aire	aire	NOUN	NOUN	_	6	obj	_	_
+5	a	a	PART	PART	_	6	mark:prt	_	_
+6	thoirt	thoirt	NOUN	NOUN	_	1	xcomp:pred	_	highlight=green|span=4
+7	nach	nach	PART	PART	_	8	mark:prt	_	_
+8	leig	leig	VERB	VERB	_	4	acl	_	_
+9	iad	iad	PRON	PRON	_	8	nsubj	_	_
+10	le	le	ADP	ADP	_	11	case	_	_
+11	iad	iad	PRON	PRON	_	8	obl	_	_
+12	seasamh	seasamh	NOUN	NOUN	_	8	xcomp:pred	_	_
+13	air	air	ADP	ADP	_	14	case	_	_
+14	ais	ais	NOUN	NOUN	_	12	obl	_	_
+15	beagan	beagan	NOUN	NOUN	_	12	obl:unmarked	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: gd_arcosg-ud-train.conllu · this verb has L=0, R=2 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = bha iad a' ràdh gu robh e cho math
+1	bha	bha	VERB	VERB	_	0	root	_	highlight=red
+2	iad	iad	PRON	PRON	_	1	nsubj	_	highlight=green|span=1
+3	a'	a'	PART	PART	_	4	case	_	_
+4	ràdh	ràdh	NOUN	NOUN	_	1	xcomp:pred	_	highlight=green|span=7
+5	gu	gu	PART	PART	_	6	mark:prt	_	_
+6	robh	robh	VERB	VERB	_	4	ccomp	_	_
+7	e	e	PRON	PRON	_	6	nsubj	_	_
+8	cho	cho	ADV	ADV	_	9	advmod	_	_
+9	math	math	ADJ	ADJ	_	6	xcomp:pred	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: gd_arcosg-ud-train.conllu · this verb has L=0, R=2 (mean span = 5.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Chaidh barrachd dhaoine a mharbhadh anns an iasgach a bhòn-uiridh seach gnìomhachas sam bith eile - agus tha comataidh [?] [?] a-nise a' faighneachd a bheil ceangal eadar sin agus gu bheil a' mhòr-chuid a bhàtaichean còrr is fichead bliadhna a dh'aois .
+1	Chaidh	Chaidh	AUX	AUX	_	5	aux:pass	_	_
+2	barrachd	barrachd	NOUN	NOUN	_	5	nsubj:pass	_	_
+3	dhaoine	dhaoine	NOUN	NOUN	_	2	nmod	_	_
+4	a	a	PART	PART	_	5	mark:prt	_	_
+5	mharbhadh	mharbhadh	NOUN	NOUN	_	0	root	_	_
+6	anns	anns	ADP	ADP	_	8	case	_	_
+7	an	an	ADP	ADP	_	6	fixed	_	_
+8	iasgach	iasgach	NOUN	NOUN	_	5	obl	_	_
+9	a	a	ADV	ADV	_	5	advmod	_	_
+10	bhòn-uiridh	bhòn-uiridh	ADV	ADV	_	9	fixed	_	_
+11	seach	seach	ADP	ADP	_	12	case	_	_
+12	gnìomhachas	gnìomhachas	NOUN	NOUN	_	5	obl	_	_
+13	sam	sam	ADJ	ADJ	_	12	amod	_	_
+14	bith	bith	ADJ	ADJ	_	13	fixed	_	_
+15	eile	eile	ADJ	ADJ	_	12	amod	_	_
+16	-	-	PUNCT	PUNCT	_	18	punct	_	_
+17	agus	agus	CCONJ	CCONJ	_	18	cc	_	_
+18	tha	tha	VERB	VERB	_	5	conj	_	_
+19	comataidh	comataidh	NOUN	NOUN	_	18	nsubj	_	_
+20	[?]	[?]	X	X	_	18	dep	_	_
+21	[?]	[?]	X	X	_	18	dep	_	_
+22	a-nise	a-nise	ADV	ADV	_	18	advmod	_	_
+23	a'	a'	PART	PART	_	24	case	_	_
+24	faighneachd	faighneachd	NOUN	NOUN	_	18	xcomp:pred	_	_
+25	a	a	PART	PART	_	26	mark:prt	_	_
+26	bheil	bheil	VERB	VERB	_	24	advcl	_	_
+27	ceangal	ceangal	NOUN	NOUN	_	26	nsubj	_	_
+28	eadar	eadar	ADP	ADP	_	29	case	_	_
+29	sin	sin	PRON	PRON	_	26	xcomp:pred	_	_
+30	agus	agus	CCONJ	CCONJ	_	32	cc	_	_
+31	gu	gu	PART	PART	_	32	mark:prt	_	_
+32	bheil	bheil	VERB	VERB	_	29	conj	_	highlight=red
+33	a'	a'	DET	DET	_	34	det	_	_
+34	mhòr-chuid	mhòr-chuid	NOUN	NOUN	_	32	nsubj	_	highlight=green|span=4
+35	a	a	ADP	ADP	_	36	case	_	_
+36	bhàtaichean	bhàtaichean	NOUN	NOUN	_	34	nmod	_	_
+37	còrr	còrr	NOUN	NOUN	_	32	xcomp:pred	_	highlight=green|span=6
+38	is	is	CCONJ	CCONJ	_	40	cc	_	_
+39	fichead	fichead	NUM	NUM	_	40	nummod	_	_
+40	bliadhna	bliadhna	NOUN	NOUN	_	37	conj	_	_
+41	a	a	ADP	ADP	_	42	case	_	_
+42	dh'aois	dh'aois	NOUN	NOUN	_	40	nmod	_	_
+43	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: gd_arcosg-ud-train.conllu · this verb has L=0, R=2 (mean span = 5.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = dhèanadh e an gnothach mur 'eil iad an e ach cola-deug
+1	dhèanadh	dhèanadh	VERB	VERB	_	0	root	_	highlight=red
+2	e	e	PRON	PRON	_	1	nsubj	_	highlight=green|span=1
+3	an	an	DET	DET	_	4	det	_	_
+4	gnothach	gnothach	NOUN	NOUN	_	1	obj	_	highlight=green|span=9
+5	mur	mur	SCONJ	SCONJ	_	6	mark	_	_
+6	'eil	'eil	VERB	VERB	_	4	advcl	_	_
+7	iad	iad	PRON	PRON	_	6	nsubj	_	_
+8	an	an	ADP	ADP	_	9	case	_	_
+9	e	e	PRON	PRON	_	6	xcomp:pred	_	_
+10	ach	ach	ADP	ADP	_	11	case	_	_
+11	cola-deug	cola-deug	NOUN	NOUN	_	6	obl	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: gd_arcosg-ud-train.conllu · this verb has L=1, R=2 (mean span = 3.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Tha e coltach gur e fear de iad seo , cha do thog mi an t-ainm aig e , ach is e a sgrìobh an t-òran a choisinn an Eurovision Song Contest do Sandaidh Nic Gille Sheathanaich , “ Puppet on a String &quot; .
+1	Tha	Tha	VERB	VERB	_	0	root	_	_
+2	e	e	PRON	PRON	_	1	nsubj	_	_
+3	coltach	coltach	ADJ	ADJ	_	1	xcomp:pred	_	_
+4	gur	gur	AUX	AUX	_	5	cop	_	_
+5	e	e	PRON	PRON	_	3	ccomp	_	_
+6	fear	fear	NOUN	NOUN	_	5	nsubj	_	_
+7	de	de	ADP	ADP	_	8	case	_	_
+8	iad	iad	PRON	PRON	_	5	nmod	_	_
+9	seo	seo	DET	DET	_	8	det	_	_
+10	,	,	PUNCT	PUNCT	_	5	punct	_	_
+11	cha	cha	PART	PART	_	13	mark:prt	_	_
+12	do	do	PART	PART	_	13	mark:prt	_	_
+13	thog	thog	VERB	VERB	_	5	conj	_	_
+14	mi	mi	PRON	PRON	_	13	nsubj	_	_
+15	an	an	DET	DET	_	16	det	_	_
+16	t-ainm	t-ainm	NOUN	NOUN	_	13	obj	_	_
+17	aig	aig	ADP	ADP	_	18	case	_	_
+18	e	e	PRON	PRON	_	16	nmod	_	_
+19	,	,	PUNCT	PUNCT	_	13	punct	_	_
+20	ach	ach	CCONJ	CCONJ	_	22	cc	_	_
+21	is	is	AUX	AUX	_	22	cop	_	_
+22	e	e	PRON	PRON	_	5	conj	_	_
+23	a	a	PART	PART	_	24	nsubj	_	_
+24	sgrìobh	sgrìobh	VERB	VERB	_	22	csubj:cleft	_	_
+25	an	an	DET	DET	_	26	det	_	_
+26	t-òran	t-òran	NOUN	NOUN	_	24	obj	_	_
+27	a	a	PART	PART	_	28	nsubj	_	highlight=green|span=1
+28	choisinn	choisinn	VERB	VERB	_	26	acl:relcl	_	highlight=red
+29	an	an	DET	DET	_	30	det	_	_
+30	Eurovision	Eurovision	X	X	_	28	obj	_	highlight=green|span=4
+31	Song	Song	X	X	_	30	flat:foreign	_	_
+32	Contest	Contest	X	X	_	30	flat:foreign	_	_
+33	do	do	ADP	ADP	_	34	case	_	_
+34	Sandaidh	Sandaidh	PROPN	PROPN	_	28	obl	_	highlight=green|span=5
+35	Nic	Nic	PART	PART	_	34	flat:name	_	_
+36	Gille	Gille	PROPN	PROPN	_	34	flat:name	_	_
+37	Sheathanaich	Sheathanaich	PROPN	PROPN	_	34	flat:name	_	_
+38	,	,	PUNCT	PUNCT	_	40	punct	_	_
+39	“	“	PUNCT	PUNCT	_	40	punct	_	_
+40	Puppet	Puppet	X	X	_	26	appos	_	_
+41	on	on	X	X	_	40	flat:foreign	_	_
+42	a	a	X	X	_	40	flat:foreign	_	_
+43	String	String	X	X	_	40	flat:foreign	_	_
+44	&quot;	&quot;	PUNCT	PUNCT	_	40	punct	_	_
+45	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: gd_arcosg-ud-train.conllu · this verb has L=0, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = “ Cuir d' ainm ri seo . &quot;
+1	“	“	PUNCT	PUNCT	_	2	punct	_	_
+2	Cuir	Cuir	VERB	VERB	_	0	root	_	highlight=red
+3	d'	d'	DET	DET	_	4	nmod:poss	_	_
+4	ainm	ainm	NOUN	NOUN	_	2	obj	_	highlight=green|span=2
+5	ri	ri	ADP	ADP	_	6	case	_	_
+6	seo	seo	PRON	PRON	_	2	obl	_	highlight=green|span=2
+7	.	.	PUNCT	PUNCT	_	2	punct	_	_
+8	&quot;	&quot;	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: gd_arcosg-ud-train.conllu · this verb has L=0, R=2 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Chaidh àireamh cinn-chuspair nam bàrd an teircead , agus thàinig aonchruth air iad .
+1	Chaidh	Chaidh	VERB	VERB	_	0	root	_	highlight=red
+2	àireamh	àireamh	NOUN	NOUN	_	1	nsubj	_	highlight=green|span=4
+3	cinn-chuspair	cinn-chuspair	NOUN	NOUN	_	2	nmod:unmarked	_	_
+4	nam	nam	DET	DET	_	5	det	_	_
+5	bàrd	bàrd	NOUN	NOUN	_	2	nmod	_	_
+6	an	an	ADP	ADP	_	7	case	_	_
+7	teircead	teircead	NOUN	NOUN	_	1	obl	_	highlight=green|span=2
+8	,	,	PUNCT	PUNCT	_	10	punct	_	_
+9	agus	agus	CCONJ	CCONJ	_	10	cc	_	_
+10	thàinig	thàinig	VERB	VERB	_	1	conj	_	_
+11	aonchruth	aonchruth	NOUN	NOUN	_	10	nsubj	_	_
+12	air	air	ADP	ADP	_	13	case	_	_
+13	iad	iad	PRON	PRON	_	10	obl	_	_
+14	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: gd_arcosg-ud-train.conllu · this verb has L=0, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Gheall e gun dèanadh e siod agus an oidhche mus robh e 'fàgail a mhàthar chaidh e null a choimhead air an t-seann bhoirionnach : bha i dlùth do iad co-dhiubh .
+1	Gheall	Gheall	VERB	VERB	_	0	root	_	_
+2	e	e	PRON	PRON	_	1	nsubj	_	_
+3	gun	gun	PART	PART	_	4	mark:prt	_	_
+4	dèanadh	dèanadh	VERB	VERB	_	1	ccomp	_	highlight=red
+5	e	e	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+6	siod	siod	PRON	PRON	_	4	obj	_	highlight=green|span=1
+7	agus	agus	CCONJ	CCONJ	_	16	cc	_	_
+8	an	an	DET	DET	_	9	det	_	_
+9	oidhche	oidhche	NOUN	NOUN	_	16	obl:unmarked	_	_
+10	mus	mus	SCONJ	SCONJ	_	11	mark	_	_
+11	robh	robh	VERB	VERB	_	9	advcl	_	_
+12	e	e	PRON	PRON	_	11	nsubj	_	_
+13	'fàgail	'fàgail	NOUN	NOUN	_	11	xcomp:pred	_	_
+14	a	a	DET	DET	_	13	nmod:poss	_	_
+15	mhàthar	mhàthar	NOUN	NOUN	_	13	obj	_	_
+16	chaidh	chaidh	VERB	VERB	_	1	conj	_	_
+17	e	e	PRON	PRON	_	16	nsubj	_	_
+18	null	null	ADV	ADV	_	16	advmod	_	_
+19	a	a	PART	PART	_	20	mark:prt	_	_
+20	choimhead	choimhead	NOUN	NOUN	_	16	xcomp	_	_
+21	air	air	ADP	ADP	_	24	case	_	_
+22	an	an	DET	DET	_	24	det	_	_
+23	t-seann	t-seann	ADJ	ADJ	_	24	amod	_	_
+24	bhoirionnach	bhoirionnach	NOUN	NOUN	_	20	obl	_	_
+25	:	:	PUNCT	PUNCT	_	26	punct	_	_
+26	bha	bha	VERB	VERB	_	16	parataxis	_	_
+27	i	i	PRON	PRON	_	26	nsubj	_	_
+28	dlùth	dlùth	ADJ	ADJ	_	26	xcomp:pred	_	_
+29	do	do	ADP	ADP	_	30	case	_	_
+30	iad	iad	PRON	PRON	_	28	obl	_	_
+31	co-dhiubh	co-dhiubh	ADV	ADV	_	26	advmod	_	_
+32	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: gd_arcosg-ud-train.conllu · this verb has L=1, R=2 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ge-tà , chan eil a h-uile càil a’ coimhead buileach cho dòigheil .
+1	Ge-tà	Ge-tà	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+2	,	,	PUNCT	PUNCT	_	4	punct	_	_
+3	chan	chan	PART	PART	_	4	mark:prt	_	_
+4	eil	eil	VERB	VERB	_	0	root	_	highlight=red
+5	a	a	DET	DET	_	7	det	_	_
+6	h-uile	h-uile	DET	DET	_	5	fixed	_	_
+7	càil	càil	NOUN	NOUN	_	4	nsubj	_	highlight=green|span=3
+8	a’	a’	PART	PART	_	9	case	_	_
+9	coimhead	coimhead	NOUN	NOUN	_	4	xcomp:pred	_	highlight=green|span=5
+10	buileach	buileach	ADV	ADV	_	12	advmod	_	_
+11	cho	cho	ADV	ADV	_	12	advmod	_	_
+12	dòigheil	dòigheil	ADJ	ADJ	_	9	xcomp:pred	_	_
+13	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: gd_arcosg-ud-dev.conllu · this verb has L=1, R=2 (mean span = 4.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Tha na h-obraichean ud a' toirt fianais do sinn air mar a bha féin-mhisneachd an e a-measg nan Gàidheal anns na 1970an a tha 's mathaid air traoghadh beagan ré an dà dheicheid a chaidh seachad .
+1	Tha	Tha	VERB	VERB	_	0	root	_	_
+2	na	na	DET	DET	_	3	det	_	_
+3	h-obraichean	h-obraichean	NOUN	NOUN	_	1	nsubj	_	_
+4	ud	ud	DET	DET	_	3	det	_	_
+5	a'	a'	PART	PART	_	6	case	_	_
+6	toirt	toirt	NOUN	NOUN	_	1	xcomp:pred	_	_
+7	fianais	fianais	NOUN	NOUN	_	6	obj	_	_
+8	do	do	ADP	ADP	_	9	case	_	_
+9	sinn	sinn	PRON	PRON	_	6	obl	_	_
+10	air	air	ADP	ADP	_	11	case	_	_
+11	mar	mar	NOUN	NOUN	_	7	nmod	_	_
+12	a	a	PART	PART	_	13	advmod	_	_
+13	bha	bha	VERB	VERB	_	11	acl:relcl	_	_
+14	féin-mhisneachd	féin-mhisneachd	NOUN	NOUN	_	13	nsubj	_	_
+15	an	an	ADP	ADP	_	16	case	_	_
+16	e	e	PRON	PRON	_	13	xcomp:pred	_	_
+17	a-measg	a-measg	ADP	ADP	_	19	case	_	_
+18	nan	nan	DET	DET	_	19	det	_	_
+19	Gàidheal	Gàidheal	PROPN	PROPN	_	13	obl	_	_
+20	anns	anns	ADP	ADP	_	22	case	_	_
+21	na	na	DET	DET	_	22	det	_	_
+22	1970an	1970an	NUM	NUM	_	13	obl	_	_
+23	a	a	PART	PART	_	24	nsubj	_	highlight=green|span=1
+24	tha	tha	VERB	VERB	_	14	acl:relcl	_	highlight=red
+25	's	's	AUX	AUX	_	26	cop	_	_
+26	mathaid	mathaid	NOUN	NOUN	_	24	advcl	_	highlight=green|span=2
+27	air	air	PART	PART	_	28	case	_	_
+28	traoghadh	traoghadh	NOUN	NOUN	_	24	xcomp:pred	_	highlight=green|span=10
+29	beagan	beagan	NOUN	NOUN	_	28	obj	_	_
+30	ré	ré	NOUN	NOUN	_	29	nmod:unmarked	_	_
+31	an	an	DET	DET	_	33	det	_	_
+32	dà	dà	NUM	NUM	_	33	nummod	_	_
+33	dheicheid	dheicheid	NOUN	NOUN	_	30	nmod	_	_
+34	a	a	PART	PART	_	35	nsubj	_	_
+35	chaidh	chaidh	VERB	VERB	_	28	acl:relcl	_	_
+36	seachad	seachad	ADV	ADV	_	35	advmod	_	_
+37	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: gd_arcosg-ud-test.conllu · this verb has L=0, R=2 (mean span = 4.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = chan eil feum aig duine aig sibh air taic airson an tug-of-war ach tha an latha a-nise tha an latha tòrr nas fhearr na bha e fiù 's bho chionn dà uair a thìde nach eil Aonghais ?
+1	chan	chan	PART	PART	_	2	mark:prt	_	_
+2	eil	eil	VERB	VERB	_	0	root	_	_
+3	feum	feum	NOUN	NOUN	_	2	nsubj	_	_
+4	aig	aig	ADP	ADP	_	5	case	_	_
+5	duine	duine	NOUN	NOUN	_	2	xcomp:pred	_	_
+6	aig	aig	ADP	ADP	_	7	case	_	_
+7	sibh	sibh	PRON	PRON	_	5	nmod	_	_
+8	air	air	ADP	ADP	_	9	case	_	_
+9	taic	taic	NOUN	NOUN	_	2	obl	_	_
+10	airson	airson	ADP	ADP	_	12	case	_	_
+11	an	an	DET	DET	_	12	det	_	_
+12	tug-of-war	tug-of-war	NOUN	NOUN	_	9	nmod	_	_
+13	ach	ach	CCONJ	CCONJ	_	18	cc	_	_
+14	tha	tha	VERB	VERB	_	18	reparandum	_	_
+15	an	an	DET	DET	_	16	det	_	_
+16	latha	latha	NOUN	NOUN	_	14	nsubj	_	_
+17	a-nise	a-nise	ADV	ADV	_	14	xcomp:pred	_	_
+18	tha	tha	VERB	VERB	_	2	conj	_	highlight=red
+19	an	an	DET	DET	_	20	det	_	_
+20	latha	latha	NOUN	NOUN	_	18	nsubj	_	highlight=green|span=2
+21	tòrr	tòrr	NOUN	NOUN	_	23	obl:unmarked	_	_
+22	nas	nas	PART	PART	_	23	mark:prt	_	_
+23	fhearr	fhearr	ADJ	ADJ	_	18	xcomp:pred	_	highlight=green|span=7
+24	na	na	ADP	ADP	_	25	case	_	_
+25	bha	bha	VERB	VERB	_	23	advcl:relcl	_	_
+26	e	e	PRON	PRON	_	25	nsubj	_	_
+27	fiù	fiù	ADV	ADV	_	25	xcomp:pred	_	_
+28	's	's	CCONJ	CCONJ	_	36	cc	_	_
+29	bho	bho	ADP	ADP	_	32	case	_	_
+30	chionn	chionn	ADP	ADP	_	29	fixed	_	_
+31	dà	dà	NUM	NUM	_	32	nummod	_	_
+32	uair	uair	NOUN	NOUN	_	25	conj	_	_
+33	a	a	ADP	ADP	_	34	case	_	_
+34	thìde	thìde	NOUN	NOUN	_	32	nmod	_	_
+35	nach	nach	PART	PART	_	36	mark:prt	_	_
+36	eil	eil	VERB	VERB	_	18	parataxis	_	_
+37	Aonghais	Aonghais	PROPN	PROPN	_	36	vocative	_	_
+38	?	?	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: gd_arcosg-ud-dev.conllu · this verb has L=1, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ann an rannsachadh a rinn a’ Chomhairle ann an 1991 thàinig e am follais gun robh 40 teaghlach anns a’ cheud gun chàr , agus cho-dhùin na comhairlichean gun robh e cudromach gum biodh busaichean a’ ruith gu cunbhalach air feadh nan eilean agus eadar gach baile .
+1	Ann	Ann	ADP	ADP	_	3	case	_	_
+2	an	an	ADP	ADP	_	1	fixed	_	_
+3	rannsachadh	rannsachadh	NOUN	NOUN	_	11	obl	_	_
+4	a	a	PART	PART	_	5	obj	_	highlight=green|span=1
+5	rinn	rinn	VERB	VERB	_	3	acl:relcl	_	highlight=red
+6	a’	a’	DET	DET	_	7	det	_	_
+7	Chomhairle	Chomhairle	NOUN	NOUN	_	5	nsubj	_	highlight=green|span=2
+8	ann	ann	ADP	ADP	_	10	case	_	_
+9	an	an	ADP	ADP	_	8	fixed	_	_
+10	1991	1991	NUM	NUM	_	5	obl	_	highlight=green|span=3
+11	thàinig	thàinig	VERB	VERB	_	0	root	_	_
+12	e	e	PRON	PRON	_	11	nsubj	_	_
+13	am	am	ADP	ADP	_	14	case	_	_
+14	follais	follais	NOUN	NOUN	_	11	obl	_	_
+15	gun	gun	PART	PART	_	16	mark:prt	_	_
+16	robh	robh	VERB	VERB	_	14	ccomp	_	_
+17	40	40	NUM	NUM	_	18	nummod	_	_
+18	teaghlach	teaghlach	NOUN	NOUN	_	16	nsubj	_	_
+19	anns	anns	ADP	ADP	_	21	case	_	_
+20	a’	a’	DET	DET	_	21	det	_	_
+21	cheud	cheud	NOUN	NOUN	_	18	nmod	_	_
+22	gun	gun	ADP	ADP	_	23	case	_	_
+23	chàr	chàr	NOUN	NOUN	_	16	xcomp:pred	_	_
+24	,	,	PUNCT	PUNCT	_	26	punct	_	_
+25	agus	agus	CCONJ	CCONJ	_	26	cc	_	_
+26	cho-dhùin	cho-dhùin	VERB	VERB	_	11	conj	_	_
+27	na	na	DET	DET	_	28	det	_	_
+28	comhairlichean	comhairlichean	NOUN	NOUN	_	26	nsubj	_	_
+29	gun	gun	PART	PART	_	30	mark:prt	_	_
+30	robh	robh	VERB	VERB	_	26	ccomp	_	_
+31	e	e	PRON	PRON	_	30	nsubj	_	_
+32	cudromach	cudromach	ADJ	ADJ	_	30	xcomp:pred	_	_
+33	gum	gum	PART	PART	_	34	mark:prt	_	_
+34	biodh	biodh	VERB	VERB	_	32	ccomp	_	_
+35	busaichean	busaichean	NOUN	NOUN	_	34	nsubj	_	_
+36	a’	a’	PART	PART	_	37	case	_	_
+37	ruith	ruith	NOUN	NOUN	_	34	xcomp:pred	_	_
+38	gu	gu	PART	PART	_	37	mark:prt	_	_
+39	cunbhalach	cunbhalach	ADV	ADV	_	37	advmod	_	_
+40	air	air	ADP	ADP	_	41	case	_	_
+41	feadh	feadh	NOUN	NOUN	_	37	obl	_	_
+42	nan	nan	DET	DET	_	43	det	_	_
+43	eilean	eilean	NOUN	NOUN	_	41	nmod	_	_
+44	agus	agus	CCONJ	CCONJ	_	47	cc	_	_
+45	eadar	eadar	ADP	ADP	_	47	case	_	_
+46	gach	gach	DET	DET	_	47	det	_	_
+47	baile	baile	NOUN	NOUN	_	41	conj	_	_
+48	.	.	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: gd_arcosg-ud-train.conllu · this verb has L=0, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = gu robh a’ bhochdainn an e
+1	gu	gu	PART	PART	_	2	mark:prt	_	_
+2	robh	robh	VERB	VERB	_	0	root	_	highlight=red
+3	a’	a’	DET	DET	_	4	det	_	_
+4	bhochdainn	bhochdainn	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=2
+5	an	an	ADP	ADP	_	6	case	_	_
+6	e	e	PRON	PRON	_	2	xcomp:pred	_	highlight=green|span=2"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: gd_arcosg-ud-train.conllu · this verb has L=0, R=2 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Rinn Mairead òraid a’ moladh Phinochet ’s mar bha e an a bhata-làidir do Bhreatann ri linn Cogadh nam Falclands .
+1	Rinn	Rinn	VERB	VERB	_	0	root	_	highlight=red
+2	Mairead	Mairead	PROPN	PROPN	_	1	nsubj	_	highlight=green|span=1
+3	òraid	òraid	NOUN	NOUN	_	1	obj	_	highlight=green|span=4
+4	a’	a’	PART	PART	_	5	case	_	_
+5	moladh	moladh	NOUN	NOUN	_	3	xcomp	_	_
+6	Phinochet	Phinochet	PROPN	PROPN	_	5	obj	_	_
+7	’s	’s	CCONJ	CCONJ	_	9	cc	_	_
+8	mar	mar	SCONJ	SCONJ	_	9	mark	_	_
+9	bha	bha	VERB	VERB	_	1	conj	_	_
+10	e	e	PRON	PRON	_	9	nsubj	_	_
+11	an	an	ADP	ADP	_	13	case	_	_
+12	a	a	PRON	PRON	_	13	nmod:poss	_	_
+13	bhata-làidir	bhata-làidir	NOUN	NOUN	_	9	xcomp:pred	_	_
+14	do	do	ADP	ADP	_	15	case	_	_
+15	Bhreatann	Bhreatann	PROPN	PROPN	_	13	nmod	_	_
+16	ri	ri	ADP	ADP	_	17	case	_	_
+17	linn	linn	NOUN	NOUN	_	9	obl	_	_
+18	Cogadh	Cogadh	NOUN	NOUN	_	17	nmod:unmarked	_	_
+19	nam	nam	DET	DET	_	20	det	_	_
+20	Falclands	Falclands	PROPN	PROPN	_	18	nmod	_	_
+21	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: gd_arcosg-ud-test.conllu · this verb has L=0, R=2 (mean span = 8.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Tha na poilis a tha rannsachadh murt Thomas Marshal , ag ràdh gu bheil iad airson faighinn a mach an robh caraid dìomhair aig a’ bhalach , gun fhiosda do a theaghlach .
+1	Tha	Tha	VERB	VERB	_	0	root	_	_
+2	na	na	DET	DET	_	3	det	_	_
+3	poilis	poilis	NOUN	NOUN	_	1	nsubj	_	_
+4	a	a	PART	PART	_	5	nsubj	_	_
+5	tha	tha	VERB	VERB	_	3	acl:relcl	_	_
+6	rannsachadh	rannsachadh	NOUN	NOUN	_	5	xcomp:pred	_	_
+7	murt	murt	NOUN	NOUN	_	6	obj	_	_
+8	Thomas	Thomas	PROPN	PROPN	_	7	nmod:unmarked	_	_
+9	Marshal	Marshal	PROPN	PROPN	_	8	flat:name	_	_
+10	,	,	PUNCT	PUNCT	_	12	punct	_	_
+11	ag	ag	PART	PART	_	12	case	_	_
+12	ràdh	ràdh	NOUN	NOUN	_	1	xcomp:pred	_	_
+13	gu	gu	PART	PART	_	14	mark:prt	_	_
+14	bheil	bheil	VERB	VERB	_	12	ccomp	_	highlight=red
+15	iad	iad	PRON	PRON	_	14	nsubj	_	highlight=green|span=1
+16	airson	airson	ADP	ADP	_	17	case	_	_
+17	faighinn	faighinn	NOUN	NOUN	_	14	xcomp:pred	_	highlight=green|span=16
+18	a	a	ADV	ADV	_	17	advmod	_	_
+19	mach	mach	ADV	ADV	_	18	fixed	_	_
+20	an	an	PART	PART	_	21	mark:prt	_	_
+21	robh	robh	VERB	VERB	_	17	ccomp	_	_
+22	caraid	caraid	NOUN	NOUN	_	21	nsubj	_	_
+23	dìomhair	dìomhair	ADJ	ADJ	_	22	amod	_	_
+24	aig	aig	ADP	ADP	_	26	case	_	_
+25	a’	a’	DET	DET	_	26	det	_	_
+26	bhalach	bhalach	NOUN	NOUN	_	21	xcomp:pred	_	_
+27	,	,	PUNCT	PUNCT	_	29	punct	_	_
+28	gun	gun	ADP	ADP	_	29	case	_	_
+29	fhiosda	fhiosda	NOUN	NOUN	_	21	obl	_	_
+30	do	do	ADP	ADP	_	32	case	_	_
+31	a	a	PRON	PRON	_	32	nmod:poss	_	_
+32	theaghlach	theaghlach	NOUN	NOUN	_	29	nmod	_	_
+33	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

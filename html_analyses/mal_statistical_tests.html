@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Statistical Tests — UDW26</title>
+
+
+<style>
+body { font-family: Arial, sans-serif; max-width: 1500px; margin: 0 auto; padding: 20px; color: #222; }
+h1 { color: #333; }
+h2 { color: #555; margin-top: 30px; }
+h3 { color: #666; margin-top: 20px; }
+a { color: #1976d2; }
+table { border-collapse: collapse; width: 100%; margin-bottom: 30px; }
+th, td { border: 1px solid #ddd; padding: 6px 8px; text-align: center; font-size: 12px; }
+th { background-color: #4CAF50; color: white; position: sticky; top: 44px; z-index: 5; }
+th.mal-col { background-color: #2196F3; }
+th.score-col { background-color: #FF9800; }
+th.effect-col { background-color: #9C27B0; }
+th.conform-col { background-color: #00BCD4; }
+th.group-col { background-color: #607D8B; }
+th.vo-col { background-color: #795548; }
+.lang-name { text-align: left; font-weight: bold; white-space: nowrap; }
+.mal-cell { background-color: #e3f2fd; }
+.mal-cell-lowcount { background-color: #f5f5f5; color: #999; font-style: italic; }
+.score-cell { font-weight: bold; }
+.score-cell-lowcount { color: #bbb; font-style: italic; }
+.score-positive { background-color: #c8e6c9; }
+.score-negative { background-color: #ffcdd2; }
+.score-neutral  { background-color: #fff9c4; }
+.compliance-cell { font-weight: bold; }     /* no color background */
+.vo-cell { font-weight: bold; font-size: 11px; }
+.vo-high { background-color: #c8e6c9; }
+.vo-low  { background-color: #ffcdd2; }
+.vo-mid  { background-color: #fff9c4; }
+.na-cell { color: #999; }
+.group-cell { font-size: 11px; color: #555; white-space: nowrap; }
+tr:nth-child(even) { background-color: #f9f9f9; }
+tr:hover { background-color: #f1f1f1; }
+tr:target { background-color: #fff59d !important; outline: 2px solid #fbc02d; }
+.info-box { background: #f0f0f0; padding: 15px; border-radius: 5px; margin: 10px 0 20px 0; }
+.paper-table { max-width: 720px; margin: 10px 0 18px 0; }
+.paper-table table { width: auto; min-width: 320px; }
+.paper-table th { background: #607D8B; }
+.paper-table td.row-anti  { background: #f4cccc; }
+.paper-table td.row-gray  { background: #fff2cc; }
+.paper-table td.row-mal   { background: #d9ead3; }
+.paper-table td.row-total { background: #d9d9d9; font-weight: bold; }
+.paper-table td.row-high  { background: #d9ead3; }
+.paper-table td.row-mid   { background: #fff2cc; }
+.paper-table td.row-low   { background: #f4cccc; }
+.paper-table td.tot-col   { color: #38761D; font-weight: bold; }
+.paper-table caption { caption-side: top; font-weight: bold; padding: 6px 0;
+                       text-align: left; color: #333; font-size: 14px;
+                       min-height: 2.6em; line-height: 1.3em;
+                       display: table-caption; }
+.highlight-box { background: #e8f5e9; border-left: 4px solid #2e7d32;
+                 padding: 12px 16px; margin: 18px 0; border-radius: 4px; }
+.highlight-box h3 { margin-top: 0; color: #2e7d32; }
+.highlight-box ul { margin: 6px 0 0 0; padding-left: 22px; }
+.highlight-box li { margin: 3px 0; font-size: 14px; }
+.paper-link { color: #1976d2; text-decoration: none; font-weight: bold; }
+.paper-link:hover { text-decoration: underline; }
+.explanation { background: #fff3e0; padding: 15px; border-left: 4px solid #ff9800; margin: 20px 0; }
+.chart-container { margin: 30px 0; background: white; padding: 20px; border-radius: 8px;
+                   box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+canvas { max-width: 100%; }
+.nav-top { background: #333; color: white; padding: 0; margin: -20px -20px 20px -20px;
+           border-radius: 0 0 6px 6px; position: sticky; top: 0; z-index: 100; }
+.nav-top > ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; }
+.nav-top > ul > li { position: relative; }
+.nav-top > ul > li > a, .nav-top > ul > li > span {
+    display: block; color: #fff; padding: 10px 16px; text-decoration: none; cursor: pointer; }
+.nav-top > ul > li:hover > a, .nav-top > ul > li:hover > span { background: #555; }
+.nav-top a:hover { text-decoration: underline; }
+.nav-top .crumb-current > a, .nav-top .crumb-current > span { color: #ffeb3b; font-weight: bold; }
+.nav-top .has-sub > span::after { content: ' ▾'; font-size: 10px; }
+.nav-top ul ul { display: none; position: absolute; top: 100%; left: 0; min-width: 240px;
+                 background: #444; list-style: none; margin: 0; padding: 4px 0; z-index: 200;
+                 box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+.nav-top ul li:hover > ul { display: block; }
+.nav-top ul ul li a { display: block; padding: 8px 16px; color: #fff; text-decoration: none;
+                      font-size: 14px; white-space: nowrap; }
+.nav-top ul ul li a:hover { background: #1976d2; text-decoration: none; }
+.nav-top ul ul li.crumb-current a { color: #ffeb3b; font-weight: bold; }
+.nav-top .nav-spacer { flex: 1; }
+.nav-top .nav-github { padding: 10px 16px; color: #fff; text-decoration: none; opacity: 0.85; }
+.nav-top .nav-github:hover { opacity: 1; text-decoration: underline; }
+
+/* Log-log popup modal */
+.loglog-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.7); z-index: 1000; }
+.loglog-modal-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                        background: white; padding: 30px; border-radius: 10px; max-width: 720px;
+                        width: 90%; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+.loglog-modal-close { position: absolute; top: 10px; right: 15px; font-size: 28px; cursor: pointer;
+                      color: #666; }
+.loglog-modal-close:hover { color: #000; }
+.loglog-modal-stats { background: #f5f5f5; padding: 10px 15px; border-radius: 5px; margin-top: 15px;
+                      font-size: 14px; }
+.loglog-modal-stats span { margin-right: 20px; }
+</style>
+</head>
+<body>
+<nav class="nav-top"><ul><li><a href="index.html">Home</a></li><li class="has-sub"><span><a href="mal_effect.html" style="color:inherit;text-decoration:none;">MAL Effect</a></span><ul><li><a href="mal_effect.html">Summary table</a></li><li><a href="mal_effect_mal.html">More on MAL effect</a></li><li><a href="mal_effect_lmal.html">More on LMAL effect</a></li><li><a href="mal_effect_rmal.html">More on RMAL effect</a></li></ul></li><li class="has-sub"><span><a href="mal_compliance.html" style="color:inherit;text-decoration:none;">MAL Compliance</a></span><ul><li><a href="mal_compliance.html">Index</a></li><li><a href="mal_compliance_summary.html">Summary across directions</a></li><li><a href="mal_compliance_mal.html">MAL per-language details</a></li><li><a href="mal_compliance_lmal.html">LMAL per-language details</a></li><li><a href="mal_compliance_rmal.html">RMAL per-language details</a></li></ul></li><li class="crumb-current has-sub"><span><a href="mal_paper_figures.html" style="color:inherit;text-decoration:none;">Paper Figures</a></span><ul><li><a href="mal_paper_figures.html">Featured per-language plots</a></li><li class="crumb-current"><a href="mal_statistical_tests.html">Fisher's exact tests (§5.1)</a></li><li><a href="mal_typological_maps.html">Typology dashboard</a></li></ul></li><li class="has-sub"><span><a href="mal_explorer.html" style="color:inherit;text-decoration:none;">Explorer</a></span><ul><li><a href="mal_explorer.html">Interactive table (filters + slider)</a></li><li><a href="mal_directional_histograms.html">VO/OV/NDO histograms</a></li><li><a href="mal_data_coverage.html">Data coverage by n</a></li></ul></li><li><a href="examples/index.html">Examples</a></li><li><a href="mal_notebook_plots_and_commentary.html">Commentary</a></li><li class="nav-spacer"></li><li><a class="nav-github" href="https://github.com/typometrics/UDW26-Menzerath" target="_blank" rel="noopener">GitHub ↗</a></li></ul></nav><h1>Fisher's exact tests for the contrasts cited in paper §5.1</h1><div class="info-box"><p><strong>Pegah Faghiri, Kim Gerdes, Sylvain Kahane</strong> (2026). <em>Verifying the Menzerath-Altmann law in the verbal domain in 180 languages.</em> UDW26 @ LREC 2026.</p><p>Two-sided Fisher’s exact test, computed live from the current data. Significance markers: *** p&lt;0.001, ** p&lt;0.01, * p&lt;0.05, n.s. otherwise. Numbers may differ slightly from the paper if the underlying treebank counts have changed.</p></div><table id="fisherTable" style="max-width:1100px;"><thead><tr><th style="text-align:left;">Contrast</th><th style="text-align:left;">Counts</th><th>Odds ratio</th><th>p-value</th><th>Sig.</th><th style="text-align:left;">Paper reference</th></tr></thead><tbody><tr><td style="text-align:left;font-weight:bold;">MAL · NDO vs VO · "gray zone"</td><td style="text-align:left;">NDO 13/21 (62%) vs VO 26/72 (36%)</td><td data-value="2.875">2.88</td><td data-value="0.045496">0.0455</td><td style="color:#c62828;font-weight:bold;">*</td><td style="text-align:left;font-size:12px;color:#555;">§5.1 (footnote: 65% vs 36%, p<0.05)</td></tr><tr><td style="text-align:left;font-weight:bold;">MAL · NDO vs VO · "MAL preference"</td><td style="text-align:left;">NDO 6/21 (29%) vs VO 40/72 (56%)</td><td data-value="0.32">0.32</td><td data-value="0.045986">0.0460</td><td style="color:#c62828;font-weight:bold;">*</td><td style="text-align:left;font-size:12px;color:#555;">§5.1 (footnote: 25% vs 56%, p<0.05)</td></tr><tr><td style="text-align:left;font-weight:bold;">LMAL · VO vs OV · "Anti-LMAL"</td><td style="text-align:left;">VO 23/67 (34%) vs OV 4/38 (11%)</td><td data-value="4.443181818181818">4.44</td><td data-value="0.009816">0.0098</td><td style="color:#c62828;font-weight:bold;">**</td><td style="text-align:left;font-size:12px;color:#555;">§5.1 (paper: 34% vs 11%, p<0.01)</td></tr><tr><td style="text-align:left;font-weight:bold;">RMAL · VO vs OV · "RMAL preference"</td><td style="text-align:left;">VO 61/73 (84%) vs OV 9/15 (60%)</td><td data-value="3.388888888888889">3.39</td><td data-value="0.072124">0.0721</td><td style="color:#888;font-weight:bold;">n.s.</td><td style="text-align:left;font-size:12px;color:#555;">§5.1 (paper: 83% vs 63%)</td></tr><tr><td style="text-align:left;font-weight:bold;">LMAL · OV vs VO · "LMAL preference"</td><td style="text-align:left;">OV 15/38 (39%) vs VO 19/67 (28%)</td><td data-value="1.6475972540045767">1.65</td><td data-value="0.281158">0.2812</td><td style="color:#888;font-weight:bold;">n.s.</td><td style="text-align:left;font-size:12px;color:#555;">§5.1 (paper: 39% vs 29%)</td></tr><tr><td style="text-align:left;font-weight:bold;">RMAL · VO vs OV · "Anti-RMAL"</td><td style="text-align:left;">VO 3/73 (4%) vs OV 2/15 (13%)</td><td data-value="0.2785714285714286">0.28</td><td data-value="0.199842">0.1998</td><td style="color:#888;font-weight:bold;">n.s.</td><td style="text-align:left;font-size:12px;color:#555;">§5.1 (paper: 3% vs 13%)</td></tr></tbody></table>
+<button type="button" onclick="downloadTableCSV('fisherTable', 'mal_fisher_tests.csv')"
+        style="margin:6px 0;padding:6px 12px;background:#1976d2;color:white;
+               border:none;border-radius:4px;cursor:pointer;font-size:13px;">
+    ⬇ Download CSV
+</button>
+<script>
+if (typeof downloadTableCSV === 'undefined') {
+window.downloadTableCSV = function(tableId, filename) {
+    const table = document.getElementById(tableId);
+    if (!table) return;
+    const rows = [];
+    table.querySelectorAll('tr').forEach(tr => {
+        const cells = [];
+        tr.querySelectorAll('th,td').forEach(c => {
+            // Prefer the data-value attribute (raw numeric) over rendered text.
+            let v = c.getAttribute('data-value');
+            if (v === null || v === '') v = c.innerText.replace(/\s+/g, ' ').trim();
+            // CSV-quote
+            if (/[",\n]/.test(v)) v = '"' + v.replace(/"/g, '""') + '"';
+            cells.push(v);
+        });
+        rows.push(cells.join(','));
+    });
+    const blob = new Blob([rows.join('\n')], {type: 'text/csv;charset=utf-8'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+};
+}
+</script>
+</body></html>

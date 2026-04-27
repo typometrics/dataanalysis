@@ -1,0 +1,356 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Pesh — RMAL_1</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Pesh examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Pesh <small style="color:#999;font-weight:normal">(pay)</small> — RMAL<sub>1</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>1</b> right dependents (left side may be anything).</p><p><b>RMAL<sub>1</sub> = 2.635</b> &nbsp; <span style="color:#666">(211 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>right</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: pay_chibergis-ud-test.conllu · this verb has L=0, R=1 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = nãeri tVerwa ke tes San.Esteban maskwa =ken
+1	nãeri	nãeri	VERB	VERB	_	0	root	_	highlight=red
+2	tVerwa	tVerwa	VERB	VERB	_	1	parataxis	_	_
+3	ke	ke	ADV	ADV	_	2	obl:tmod	_	_
+4	tes	tes	X	X	_	6	nsubj	_	_
+5	San.Esteban	San.Esteban	PROPN	PROPN	_	4	reparandum	_	_
+6	maskwa	maskwa	VERB	VERB	_	1	ccomp	_	highlight=green|span=4
+7	=ken	=ken	SCONJ	SCONJ	_	6	mark	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: pay_chibergis-ud-test.conllu · this verb has L=1, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ʃokwa teʔ teweherwa yara apiʃtera ### , mm
+1	ʃokwa	ʃokwa	NOUN	NOUN	_	3	obl:arg	_	highlight=green|span=1
+2	teʔ	teʔ	VERB	VERB	_	3	compound:svc	_	_
+3	teweherwa	teweherwa	VERB	VERB	_	0	root	_	highlight=red
+4	yara	yara	NOUN	NOUN	_	5	obl:arg	_	_
+5	apiʃtera	apiʃtera	NOUN	NOUN	_	3	obl:mod	_	highlight=green|span=3
+6	###	###	X	X	_	5	dep	_	_
+7	,	,	PUNCT	PUNCT	_	5	punct	_	_
+8	mm	mm	INTJ	INTJ	_	3	discourse	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: pay_chibergis-ud-test.conllu · this verb has L=1, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ãma nã kiskertVi tVeri ʃaʔ ani teʔ ʃã nãapi =hã as =na tʃaiwa =na
+1	ãma	ãma	PART	PART	_	3	discourse	_	_
+2	nã	nã	VERB	VERB	_	3	compound:svc	_	_
+3	kiskertVi	kiskertVi	VERB	VERB	_	0	root	_	_
+4	tVeri	tVeri	VERB	VERB	_	3	parataxis	_	_
+5	ʃaʔ	ʃaʔ	NOUN	NOUN	_	9	obl:tmod	_	highlight=green|span=2
+6	ani	ani	NOUN	NOUN	_	5	nmod	_	_
+7	teʔ	teʔ	VERB	VERB	_	8	compound:svc	_	_
+8	ʃã	ʃã	VERB	VERB	_	9	compound:svc	_	_
+9	nãapi	nãapi	VERB	VERB	_	4	ccomp	_	highlight=red
+10	=hã	=hã	PART	PART	_	9	discourse	_	_
+11	as	as	NUM	NUM	_	13	nsubj	_	_
+12	=na	=na	DET	DET	_	11	det	_	_
+13	tʃaiwa	tʃaiwa	VERB	VERB	_	9	advcl	_	highlight=green|span=4
+14	=na	=na	PART	PART	_	13	discourse	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: pay_chibergis-ud-test.conllu · this verb has L=1, R=1 (mean span = 5.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = toʔ =kan naeruri , tro cazar iʃkerpi =ro , ã niʔ , aye porkerpi =ro , pẽh kara =yo , pẽh kara =yo , ã =ma =ha .
+1	toʔ	toʔ	PRON	PRON	_	3	obl:lmod	_	_
+2	=kan	=kan	ADP	ADP	_	1	case	_	_
+3	naeruri	naeruri	VERB	VERB	_	0	root	_	_
+4	,	,	PUNCT	PUNCT	_	3	punct	_	_
+5	tro	tro	X	X	_	7	compound:lvc	_	_
+6	cazar	cazar	VERB	VERB	_	5	reparandum	_	_
+7	iʃkerpi	iʃkerpi	VERB	VERB	_	3	advcl	_	_
+8	=ro	=ro	PART	PART	_	7	mark	_	_
+9	,	,	PUNCT	PUNCT	_	7	punct	_	_
+10	ã	ã	PRON	PRON	_	7	discourse	_	_
+11	niʔ	niʔ	PART	PART	_	10	case	_	_
+12	,	,	PUNCT	PUNCT	_	10	punct	_	_
+13	aye	aye	NOUN	NOUN	_	14	obj	_	highlight=green|span=1
+14	porkerpi	porkerpi	VERB	VERB	_	3	advcl	_	highlight=red
+15	=ro	=ro	PART	PART	_	14	mark	_	_
+16	,	,	PUNCT	PUNCT	_	14	punct	_	_
+17	pẽh	pẽh	NOUN	NOUN	_	14	obl:mod	_	highlight=green|span=9
+18	kara	kara	NOUN	NOUN	_	17	nmod	_	_
+19	=yo	=yo	ADP	ADP	_	17	case	_	_
+20	,	,	PUNCT	PUNCT	_	17	punct	_	_
+21	pẽh	pẽh	NOUN	NOUN	_	17	discourse	_	_
+22	kara	kara	NOUN	NOUN	_	21	nmod	_	_
+23	=yo	=yo	ADP	ADP	_	21	case	_	_
+24	,	,	PUNCT	PUNCT	_	21	punct	_	_
+25	ã	ã	PRON	PRON	_	21	discourse	_	_
+26	=ma	=ma	PART	PART	_	25	case	_	_
+27	=ha	=ha	PART	PART	_	25	discourse	_	_
+28	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: pay_chibergis-ud-test.conllu · this verb has L=2, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ã ʃa teʔkerui =yã ɲĩhã pataĩ tawa ʃere kaʃaneri naerwa =ma
+1	ã	ã	PRON	PRON	_	9	dislocated	_	highlight=green|span=5
+2	ʃa	ʃa	VERB	VERB	_	3	advcl	_	_
+3	teʔkerui	teʔkerui	VERB	VERB	_	1	acl:relcl	_	_
+4	=yã	=yã	SCONJ	SCONJ	_	3	mark	_	_
+5	ɲĩhã	ɲĩhã	ADV	ADV	_	3	discourse	_	_
+6	pataĩ	pataĩ	NOUN	NOUN	_	9	nsubj	_	highlight=green|span=2
+7	tawa	tawa	PRON	PRON	_	6	nmod	_	_
+8	ʃere	ʃere	VERB	VERB	_	9	compound	_	_
+9	kaʃaneri	kaʃaneri	VERB	VERB	_	0	root	_	highlight=red
+10	naerwa	naerwa	VERB	VERB	_	9	obl:tmod	_	highlight=green|span=2
+11	=ma	=ma	SCONJ	SCONJ	_	10	mark	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: pay_chibergis-ud-test.conllu · this verb has L=0, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ĩ =kan =ras tVkerti porpa wa porpa wa .
+1	ĩ	ĩ	PRON	PRON	_	4	obl:mod	_	_
+2	=kan	=kan	PART	PART	_	1	case	_	_
+3	=ras	=ras	PART	PART	_	1	case	_	_
+4	tVkerti	tVkerti	VERB	VERB	_	0	root	_	_
+5	porpa	porpa	VERB	VERB	_	7	reparandum	_	_
+6	wa	wa	ADV	ADV	_	5	advmod	_	_
+7	porpa	porpa	VERB	VERB	_	4	dep	_	highlight=red
+8	wa	wa	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+9	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: pay_chibergis-ud-test.conllu · this verb has L=1, R=1 (mean span = 4.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ates =ya nã peʔkawa ama , am , apastVpi =ra =hã , pia tʃawa isi tVki .
+1	ates	ates	ADV	ADV	_	4	obl:lmod	_	highlight=green|span=2
+2	=ya	=ya	ADP	ADP	_	1	case	_	_
+3	nã	nã	VERB	VERB	_	4	compound:svc	_	_
+4	peʔkawa	peʔkawa	VERB	VERB	_	16	ccomp	_	highlight=red
+5	ama	ama	PART	PART	_	4	discourse	_	_
+6	,	,	PUNCT	PUNCT	_	5	punct	_	_
+7	am	am	INTJ	INTJ	_	9	discourse	_	_
+8	,	,	PUNCT	PUNCT	_	7	punct	_	_
+9	apastVpi	apastVpi	VERB	VERB	_	4	advcl	_	highlight=green|span=7
+10	=ra	=ra	SCONJ	SCONJ	_	9	mark	_	_
+11	=hã	=hã	PART	PART	_	9	advmod	_	_
+12	,	,	PUNCT	PUNCT	_	11	punct	_	_
+13	pia	pia	NOUN	NOUN	_	9	obl:lmod	_	_
+14	tʃawa	tʃawa	VERB	VERB	_	13	acl:relcl	_	_
+15	isi	isi	NOUN	NOUN	_	14	nsubj	_	_
+16	tVki	tVki	VERB	VERB	_	0	root	_	_
+17	.	.	PUNCT	PUNCT	_	16	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: pay_chibergis-ud-test.conllu · this verb has L=0, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ʃauri =ras =kan , ã =yã , peʃwakwa teʔkeruri to , peʃwako =ma to =yã tʃahu tVkeri , to wareka tVkerwa , to itʃa awah .
+1	ʃauri	ʃauri	VERB	VERB	_	9	advcl	_	highlight=red
+2	=ras	=ras	SCONJ	SCONJ	_	1	mark	_	_
+3	=kan	=kan	PART	PART	_	1	mark	_	_
+4	,	,	PUNCT	PUNCT	_	1	punct	_	_
+5	ã	ã	PRON	PRON	_	1	obl:lmod	_	highlight=green|span=2
+6	=yã	=yã	ADP	ADP	_	5	case	_	_
+7	,	,	PUNCT	PUNCT	_	5	punct	_	_
+8	peʃwakwa	peʃwakwa	NOUN	NOUN	_	9	nsubj	_	_
+9	teʔkeruri	teʔkeruri	VERB	VERB	_	0	root	_	_
+10	to	to	PART	PART	_	9	discourse	_	_
+11	,	,	PUNCT	PUNCT	_	10	punct	_	_
+12	peʃwako	peʃwako	NOUN	NOUN	_	17	nsubj:outer	_	_
+13	=ma	=ma	PART	PART	_	12	case	_	_
+14	to	to	PRON	PRON	_	17	nsubj	_	_
+15	=yã	=yã	ADP	ADP	_	14	case	_	_
+16	tʃahu	tʃahu	NOUN	NOUN	_	17	xcomp	_	_
+17	tVkeri	tVkeri	VERB	VERB	_	9	dep	_	_
+18	,	,	PUNCT	PUNCT	_	17	punct	_	_
+19	to	to	PRON	PRON	_	21	obj	_	_
+20	wareka	wareka	NOUN	NOUN	_	21	xcomp	_	_
+21	tVkerwa	tVkerwa	VERB	VERB	_	17	conj	_	_
+22	,	,	PUNCT	PUNCT	_	21	punct	_	_
+23	to	to	PRON	PRON	_	24	det	_	_
+24	itʃa	itʃa	NOUN	NOUN	_	17	conj	_	_
+25	awah	awah	PART	PART	_	24	advmod	_	_
+26	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: pay_chibergis-ud-test.conllu · this verb has L=1, R=1 (mean span = 3.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = mas akastok mas akastok =pe ʃereeri ata =ma teweh tapehi
+1	mas	mas	VERB	VERB	_	2	compound	_	_
+2	akastok	akastok	VERB	VERB	_	6	advcl	_	highlight=green|span=5
+3	mas	mas	VERB	VERB	_	4	compound	_	_
+4	akastok	akastok	VERB	VERB	_	2	reparandum	_	_
+5	=pe	=pe	PART	PART	_	4	advmod	_	_
+6	ʃereeri	ʃereeri	VERB	VERB	_	0	root	_	highlight=red
+7	ata	ata	NOUN	NOUN	_	6	obl:lmod	_	highlight=green|span=2
+8	=ma	=ma	PART	PART	_	7	case	_	_
+9	teweh	teweh	VERB	VERB	_	10	compound:svc	_	_
+10	tapehi	tapehi	VERB	VERB	_	6	conj	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: pay_chibergis-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = taroʔki teʃ teʔkeri ke .
+1	taroʔki	taroʔki	VERB	VERB	_	0	root	_	_
+2	teʃ	teʃ	VERB	VERB	_	3	obl:tmod	_	highlight=green|span=1
+3	teʔkeri	teʔkeri	VERB	VERB	_	1	parataxis	_	highlight=red
+4	ke	ke	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+5	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: pay_chibergis-ud-test.conllu · this verb has L=0, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = pipabertVpi =hã , tVkerwa =na .
+1	pipabertVpi	pipabertVpi	VERB	VERB	_	4	dep	_	highlight=red
+2	=hã	=hã	PART	PART	_	1	advmod	_	highlight=green|span=1
+3	,	,	PUNCT	PUNCT	_	2	punct	_	_
+4	tVkerwa	tVkerwa	VERB	VERB	_	0	root	_	_
+5	=na	=na	PART	PART	_	4	mark	_	_
+6	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: pay_chibergis-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = eka yẽhteriʔ ĩ =kan =na sa tis sukuhuh =wa nauh =wa sa aka =pe ã =ma =hã ĩ =kan aʃairwa =pe
+1	eka	eka	PRON	PRON	_	2	nsubj	_	_
+2	yẽhteriʔ	yẽhteriʔ	VERB	VERB	_	0	root	_	_
+3	ĩ	ĩ	PRON	PRON	_	2	obl:mod	_	_
+4	=kan	=kan	PART	PART	_	3	case	_	_
+5	=na	=na	PART	PART	_	2	discourse	_	_
+6	sa	sa	NOUN	NOUN	_	8	obj	_	highlight=green|span=2
+7	tis	tis	NOUN	NOUN	_	6	nmod	_	_
+8	sukuhuh	sukuhuh	VERB	VERB	_	2	ccomp	_	highlight=red
+9	=wa	=wa	PRON	PRON	_	8	obl:mod	_	highlight=green|span=1
+10	nauh	nauh	VERB	VERB	_	8	conj	_	_
+11	=wa	=wa	PRON	PRON	_	10	obl:mod	_	_
+12	sa	sa	NOUN	NOUN	_	10	orphan	_	_
+13	aka	aka	NOUN	NOUN	_	12	nmod	_	_
+14	=pe	=pe	PART	PART	_	13	advmod	_	_
+15	ã	ã	PRON	PRON	_	12	discourse	_	_
+16	=ma	=ma	PART	PART	_	15	case	_	_
+17	=hã	=hã	PART	PART	_	15	discourse	_	_
+18	ĩ	ĩ	PRON	PRON	_	12	nmod	_	_
+19	=kan	=kan	PART	PART	_	18	case	_	_
+20	aʃairwa	aʃairwa	VERB	VERB	_	18	acl:relcl	_	_
+21	=pe	=pe	PART	PART	_	20	advmod	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: pay_chibergis-ud-test.conllu · this verb has L=1, R=1 (mean span = 3.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ã =yã ã =ra paspa , pa =ma ke aka =ri =ras teʔkuh tarwarkuh .
+1	ã	ã	PRON	PRON	_	5	discourse	_	_
+2	=yã	=yã	ADP	ADP	_	1	case	_	_
+3	ã	ã	PRON	PRON	_	1	compound	_	_
+4	=ra	=ra	PART	PART	_	3	case	_	_
+5	paspa	paspa	VERB	VERB	_	0	root	_	_
+6	,	,	PUNCT	PUNCT	_	5	punct	_	_
+7	pa	pa	PRON	PRON	_	10	nsubj	_	_
+8	=ma	=ma	PART	PART	_	7	case	_	_
+9	ke	ke	ADV	ADV	_	10	advmod	_	_
+10	aka	aka	NOUN	NOUN	_	13	advcl	_	highlight=green|span=6
+11	=ri	=ri	AUX	AUX	_	10	cop	_	_
+12	=ras	=ras	SCONJ	SCONJ	_	10	mark	_	_
+13	teʔkuh	teʔkuh	VERB	VERB	_	5	parataxis	_	highlight=red
+14	tarwarkuh	tarwarkuh	VERB	VERB	_	13	advcl	_	highlight=green|span=1
+15	.	.	PUNCT	PUNCT	_	13	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: pay_chibergis-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = tʃipok ĩ yãhawa =mã weʃkerpi =hã as pok krih =ma weʃkertVpi =hã
+1	tʃipok	tʃipok	NOUN	NOUN	_	5	obl:tmod	_	_
+2	ĩ	ĩ	PRON	PRON	_	3	det	_	_
+3	yãhawa	yãhawa	VERB	VERB	_	5	dislocated	_	_
+4	=mã	=mã	SCONJ	SCONJ	_	3	case	_	_
+5	weʃkerpi	weʃkerpi	VERB	VERB	_	0	root	_	_
+6	=hã	=hã	PART	PART	_	5	advmod	_	_
+7	as	as	NUM	NUM	_	5	dislocated	_	_
+8	pok	pok	NUM	NUM	_	7	compound	_	_
+9	krih	krih	NOUN	NOUN	_	11	nsubj	_	highlight=green|span=2
+10	=ma	=ma	ADP	ADP	_	9	case	_	_
+11	weʃkertVpi	weʃkertVpi	VERB	VERB	_	5	parataxis	_	highlight=red
+12	=hã	=hã	PART	PART	_	11	advmod	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: pay_chibergis-ud-test.conllu · this verb has L=2, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ĩ =kan ĩyãh yas kaawa ã =yo auʔtʃahawa tʃawa ĩketa =ma
+1	ĩ	ĩ	PRON	PRON	_	2	dep	_	_
+2	=kan	=kan	PART	PART	_	5	advmod	_	highlight=green|span=2
+3	ĩyãh	ĩyãh	X	X	_	5	obj	_	highlight=green|span=2
+4	yas	yas	ADV	ADV	_	3	reparandum	_	_
+5	kaawa	kaawa	VERB	VERB	_	0	root	_	highlight=red
+6	ã	ã	PRON	PRON	_	5	obl:arg	_	highlight=green|span=2
+7	=yo	=yo	ADP	ADP	_	6	case	_	_
+8	auʔtʃahawa	auʔtʃahawa	VERB	VERB	_	5	parataxis	_	_
+9	tʃawa	tʃawa	AUX	AUX	_	8	aux	_	_
+10	ĩketa	ĩketa	NOUN	NOUN	_	8	obl:tmod	_	_
+11	=ma	=ma	PART	PART	_	10	case	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: pay_chibergis-ud-test.conllu · this verb has L=0, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = aaa , warku ẽketa , pa =ma ĩ =yã , pisukuhawa , piãpa =hã .
+1	aaa	aaa	INTJ	INTJ	_	3	discourse	_	_
+2	,	,	PUNCT	PUNCT	_	1	punct	_	_
+3	warku	warku	NOUN	NOUN	_	0	root	_	_
+4	ẽketa	ẽketa	NOUN	NOUN	_	3	obl:tmod	_	_
+5	,	,	PUNCT	PUNCT	_	4	punct	_	_
+6	pa	pa	PRON	PRON	_	3	nsubj	_	_
+7	=ma	=ma	PART	PART	_	6	case	_	_
+8	ĩ	ĩ	PRON	PRON	_	11	obl:lmod	_	_
+9	=yã	=yã	ADP	ADP	_	8	case	_	_
+10	,	,	PUNCT	PUNCT	_	8	punct	_	_
+11	pisukuhawa	pisukuhawa	VERB	VERB	_	3	conj	_	_
+12	,	,	PUNCT	PUNCT	_	11	punct	_	_
+13	piãpa	piãpa	VERB	VERB	_	3	conj	_	highlight=red
+14	=hã	=hã	PART	PART	_	13	advmod	_	highlight=green|span=1
+15	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: pay_chibergis-ud-test.conllu · this verb has L=3, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ã =ken =ro , ĩkata =ma , peʃwakwa =ma ʃẽ ʃaertVwa ke .
+1	ã	ã	PRON	PRON	_	11	discourse	_	_
+2	=ken	=ken	PART	PART	_	1	case	_	_
+3	=ro	=ro	PART	PART	_	1	case	_	_
+4	,	,	PUNCT	PUNCT	_	1	punct	_	_
+5	ĩkata	ĩkata	NOUN	NOUN	_	11	obl:tmod	_	highlight=green|span=2
+6	=ma	=ma	PART	PART	_	5	case	_	_
+7	,	,	PUNCT	PUNCT	_	5	punct	_	_
+8	peʃwakwa	peʃwakwa	NOUN	NOUN	_	11	nsubj	_	highlight=green|span=2
+9	=ma	=ma	PART	PART	_	8	case	_	_
+10	ʃẽ	ʃẽ	NOUN	NOUN	_	11	xcomp	_	highlight=green|span=1
+11	ʃaertVwa	ʃaertVwa	VERB	VERB	_	0	root	_	highlight=red
+12	ke	ke	ADV	ADV	_	11	advmod	_	highlight=green|span=1
+13	.	.	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: pay_chibergis-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ĩka warki teʔ boni tas =yo kapaʃki tʃai =wi
+1	ĩka	ĩka	CCONJ	CCONJ	_	4	discourse	_	_
+2	warki	warki	VERB	VERB	_	4	advcl	_	_
+3	teʔ	teʔ	VERB	VERB	_	4	compound:svc	_	_
+4	boni	boni	VERB	VERB	_	0	root	_	_
+5	tas	tas	PRON	PRON	_	7	obl:arg	_	highlight=green|span=2
+6	=yo	=yo	ADP	ADP	_	5	case	_	_
+7	kapaʃki	kapaʃki	VERB	VERB	_	4	conj	_	highlight=red
+8	tʃai	tʃai	AUX	AUX	_	7	aux	_	_
+9	=wi	=wi	PART	PART	_	7	advmod	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: pay_chibergis-ud-test.conllu · this verb has L=0, R=1 (mean span = 5.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ãma atuhwa iʃwa ama tukuluk kluk kluk kluk ea
+1	ãma	ãma	PART	PART	_	2	discourse	_	_
+2	atuhwa	atuhwa	VERB	VERB	_	0	root	_	_
+3	iʃwa	iʃwa	VERB	VERB	_	2	advcl	_	highlight=red
+4	ama	ama	PART	PART	_	3	discourse	_	_
+5	tukuluk	tukuluk	ADV	ADV	_	3	advmod	_	highlight=green|span=5
+6	kluk	kluk	ADV	ADV	_	5	conj	_	_
+7	kluk	kluk	ADV	ADV	_	5	conj	_	_
+8	kluk	kluk	ADV	ADV	_	5	conj	_	_
+9	ea	ea	INTJ	INTJ	_	8	discourse	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: pay_chibergis-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = to nẽʔ peʔki awa .
+1	to	to	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+2	nẽʔ	nẽʔ	VERB	VERB	_	3	compound:svc	_	_
+3	peʔki	peʔki	VERB	VERB	_	0	root	_	highlight=red
+4	awa	awa	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+5	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

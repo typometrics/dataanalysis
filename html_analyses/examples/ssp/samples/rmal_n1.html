@@ -1,0 +1,192 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>SpanishSign — RMAL_1</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to SpanishSign examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>SpanishSign <small style="color:#999;font-weight:normal">(ssp)</small> — RMAL<sub>1</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>1</b> right dependents (left side may be anything).</p><p><b>RMAL<sub>1</sub> = 1.524</b> &nbsp; <span style="color:#666">(105 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>right</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: ssp_lse-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = INDX:primero ENCANTAR JUGAR(CT)
+1	INDX:primero	INDX:primero	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	ENCANTAR	ENCANTAR	VERB	VERB	_	0	root	_	highlight=red
+3	JUGAR(CT)	JUGAR(CT)	VERB	VERB	_	2	xcomp	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: ssp_lse-ud-test.conllu · this verb has L=2, R=1 (mean span = 2.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = cl.e(1):PERSONA-desplazarse MUJER SEÑOR cl.e(1):PERSONA-desplazarse cl.e(1):PERSONA ANTIFAZ(L)(1M) ANTIFAZ(1M) ROBAR DINERO
+1	cl.e(1):PERSONA-desplazarse	cl.e(1):PERSONA-desplazarse	VERB	VERB	_	2	acl	_	_
+2	MUJER	MUJER	NOUN	NOUN	_	8	iobj	_	highlight=green|span=2
+3	SEÑOR	SEÑOR	NOUN	NOUN	_	8	nsubj	_	highlight=green|span=5
+4	cl.e(1):PERSONA-desplazarse	cl.e(1):PERSONA-desplazarse	VERB	VERB	_	3	acl	_	_
+5	cl.e(1):PERSONA	cl.e(1):PERSONA	NOUN	NOUN	_	3	appos	_	_
+6	ANTIFAZ(L)(1M)	ANTIFAZ(L)(1M)	NOUN	NOUN	_	5	appos	_	_
+7	ANTIFAZ(1M)	ANTIFAZ(1M)	NOUN	NOUN	_	6	appos	_	_
+8	ROBAR	ROBAR	VERB	VERB	_	0	root	_	highlight=red
+9	DINERO	DINERO	NOUN	NOUN	_	8	obj	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: ssp_lse-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = PERSONA HOMBRE PIEDRA ARROJAR cl.d(1):ventana VENTANA ARROJAR GRIETA
+1	PERSONA	PERSONA	NOUN	NOUN	_	4	nsubj	_	highlight=green|span=2
+2	HOMBRE	HOMBRE	NOUN	NOUN	_	1	appos	_	_
+3	PIEDRA	PIEDRA	NOUN	NOUN	_	4	obj	_	highlight=green|span=1
+4	ARROJAR	ARROJAR	VERB	VERB	_	0	root	_	highlight=red
+5	cl.d(1):ventana	cl.d(1):ventana	NOUN	NOUN	_	4	obj	_	highlight=green|span=2
+6	VENTANA	VENTANA	NOUN	NOUN	_	5	appos	_	_
+7	ARROJAR	ARROJAR	VERB	VERB	_	4	compound:vsc	_	_
+8	GRIETA	GRIETA	VERB	VERB	_	4	compound:svc	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: ssp_lse-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = CESTO TRES CESTO TRES
+1	CESTO	CESTO	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=2
+2	TRES	TRES	NUM	NUM	_	1	nummod	_	_
+3	CESTO	CESTO	VERB	VERB	_	0	root	_	highlight=red
+4	TRES	TRES	NUM	NUM	_	1	nummod	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: ssp_lse-ud-test.conllu · this verb has L=1, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = HOMBRE GRUPO SEGUIR.MASA GRUPO MUJER
+1	HOMBRE	HOMBRE	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=2
+2	GRUPO	GRUPO	NOUN	NOUN	_	1	appos	_	_
+3	SEGUIR.MASA	SEGUIR.MASA	VERB	VERB	_	0	root	_	highlight=red
+4	GRUPO	GRUPO	NOUN	NOUN	_	3	obj	_	highlight=green|span=2
+5	MUJER	MUJER	NOUN	NOUN	_	4	appos	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: ssp_lse-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = HOMBRE SEGUIR.MASA MUJER BUSCAR(2Msu)
+1	HOMBRE	HOMBRE	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+2	SEGUIR.MASA	SEGUIR.MASA	VERB	VERB	_	0	root	_	highlight=red
+3	MUJER	MUJER	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
+4	BUSCAR(2Msu)	BUSCAR(2Msu)	VERB	VERB	_	2	compound:svc	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: ssp_lse-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = INDX ARREGLAR LISTO
+1	INDX	INDX	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	ARREGLAR	ARREGLAR	VERB	VERB	_	0	root	_	highlight=red
+3	LISTO	LISTO	ADV	ADV	_	2	advmod	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: ssp_lse-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = INDX.LOC UNO cl.m(5d):coger-fruta[MI] NO
+1	INDX.LOC	INDX.LOC	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+2	UNO	UNO	NUM	NUM	_	3	obj	_	highlight=green|span=1
+3	cl.m(5d):coger-fruta[MI]	cl.m(5d):coger-fruta[MI]	VERB	VERB	_	0	root	_	highlight=red
+4	NO	NO	ADV	ADV	_	3	advmod	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: ssp_lse-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = CASI cl.e:CASA LISTO
+1	CASI	CASI	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+2	cl.e:CASA	cl.e:CASA	VERB	VERB	_	0	root	_	highlight=red
+3	LISTO	LISTO	ADV	ADV	_	2	advmod	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: ssp_lse-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = INDX.PRO:1sg TRABAJAR HORA CONSTRUIR
+1	INDX.PRO:1sg	INDX.PRO:1sg	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	TRABAJAR	TRABAJAR	VERB	VERB	_	0	root	_	highlight=red
+3	HORA	HORA	NOUN	NOUN	_	2	obl	_	highlight=green|span=1
+4	CONSTRUIR	CONSTRUIR	VERB	VERB	_	2	compound:svc	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: ssp_lse-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = MADRE PENSAR(2Msu) PERSONA MUJER
+1	MADRE	MADRE	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+2	PENSAR(2Msu)	PENSAR(2Msu)	VERB	VERB	_	0	root	_	highlight=red
+3	PERSONA	PERSONA	NOUN	NOUN	_	2	obj	_	highlight=green|span=2
+4	MUJER	MUJER	NOUN	NOUN	_	3	appos	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: ssp_lse-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = LOS-DOS CÓMO CONTINUAR CONTACTO
+1	LOS-DOS	LOS-DOS	NUM	NUM	_	3	nsubj	_	highlight=green|span=1
+2	CÓMO	CÓMO	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+3	CONTINUAR	CONTINUAR	VERB	VERB	_	0	root	_	highlight=red
+4	CONTACTO	CONTACTO	VERB	VERB	_	3	xcomp	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: ssp_lse-ud-test.conllu · this verb has L=0, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = RESPIRAR DOBLE
+1	RESPIRAR	RESPIRAR	VERB	VERB	_	0	root	_	highlight=red
+2	DOBLE	DOBLE	ADV	ADV	_	1	advmod	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: ssp_lse-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = MUJER PERSONA PENSAR(2Msu) MADRE
+1	MUJER	MUJER	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=2
+2	PERSONA	PERSONA	NOUN	NOUN	_	1	appos	_	_
+3	PENSAR(2Msu)	PENSAR(2Msu)	VERB	VERB	_	0	root	_	highlight=red
+4	MADRE	MADRE	NOUN	NOUN	_	3	obj	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: ssp_lse-ud-test.conllu · this verb has L=3, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = INDX.PRO:1sg INDX.PRO:3pl INDX.PRO:1sg DECIR NADA
+1	INDX.PRO:1sg	INDX.PRO:1sg	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+2	INDX.PRO:3pl	INDX.PRO:3pl	PRON	PRON	_	4	iobj	_	highlight=green|span=1
+3	INDX.PRO:1sg	INDX.PRO:1sg	PRON	PRON	_	1	compound:redup	_	highlight=green|span=1
+4	DECIR	DECIR	VERB	VERB	_	0	root	_	highlight=red
+5	NADA	NADA	NOUN	NOUN	_	4	obj	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: ssp_lse-ud-test.conllu · this verb has L=0, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = COGER cl.m(5d):examinar-fruta PURO
+1	COGER	COGER	VERB	VERB	_	0	root	_	_
+2	cl.m(5d):examinar-fruta	cl.m(5d):examinar-fruta	VERB	VERB	_	1	compound:svc	_	highlight=red
+3	PURO	PURO	ADJ	ADJ	_	2	xcomp	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: ssp_lse-ud-test.conllu · this verb has L=0, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = cl.c(1):PATAS-correr OBJETIVO IR MADERA CASA
+1	cl.c(1):PATAS-correr	cl.c(1):PATAS-correr	VERB	VERB	_	0	root	_	_
+2	OBJETIVO	OBJETIVO	SCONJ	SCONJ	_	3	mark	_	_
+3	IR	IR	VERB	VERB	_	1	advcl	_	highlight=red
+4	MADERA	MADERA	NOUN	NOUN	_	5	nmod	_	_
+5	CASA	CASA	NOUN	NOUN	_	3	obl	_	highlight=green|span=2"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: ssp_lse-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = MONO QUERER PLÁTANO
+1	MONO	MONO	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+2	QUERER	QUERER	VERB	VERB	_	0	root	_	highlight=red
+3	PLÁTANO	PLÁTANO	NOUN	NOUN	_	2	obj	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: ssp_lse-ud-test.conllu · this verb has L=1, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = HOMBRE PERSONA cl.m(Xc):sostener-palo cl.m(Xc):golpear+con-palo MUJER PERSONA
+1	HOMBRE	HOMBRE	NOUN	NOUN	_	4	nsubj	_	highlight=green|span=2
+2	PERSONA	PERSONA	NOUN	NOUN	_	1	appos	_	_
+3	cl.m(Xc):sostener-palo	cl.m(Xc):sostener-palo	VERB	VERB	_	4	compound:svc	_	_
+4	cl.m(Xc):golpear+con-palo	cl.m(Xc):golpear+con-palo	VERB	VERB	_	0	root	_	highlight=red
+5	MUJER	MUJER	NOUN	NOUN	_	4	obj	_	highlight=green|span=2
+6	PERSONA	PERSONA	NOUN	NOUN	_	5	appos	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: ssp_lse-ud-test.conllu · this verb has L=0, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = MIRAR HABER CASA MADERA
+1	MIRAR	MIRAR	VERB	VERB	_	2	compound:svc	_	_
+2	HABER	HABER	VERB	VERB	_	0	root	_	highlight=red
+3	CASA	CASA	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=2
+4	MADERA	MADERA	NOUN	NOUN	_	3	nmod	_	_"></reactive-dep-tree>
+</div>
+</body></html>

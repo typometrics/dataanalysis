@@ -1,0 +1,650 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Russian — RMAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Russian examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Russian <small style="color:#999;font-weight:normal">(ru)</small> — RMAL<sub>2</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>2</b> right dependents (left side may be anything).</p><p><b>RMAL<sub>2</sub> = 3.643</b> &nbsp; <span style="color:#666">(66,992 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>right</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: ru_taiga-ud-train.conllu · this verb has L=0, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = -- Эх , жаль ! -- качнул головой Никита , -- классный был Терминатор !
+1	--	--	PUNCT	PUNCT	_	4	punct	_	_
+2	Эх	Эх	INTJ	INTJ	_	4	discourse	_	_
+3	,	,	PUNCT	PUNCT	_	2	punct	_	_
+4	жаль	жаль	VERB	VERB	_	0	root	_	_
+5	!	!	PUNCT	PUNCT	_	4	punct	_	_
+6	--	--	PUNCT	PUNCT	_	7	punct	_	_
+7	качнул	качнул	VERB	VERB	_	4	parataxis	_	highlight=red
+8	головой	головой	NOUN	NOUN	_	7	obj	_	highlight=green|span=1
+9	Никита	Никита	PROPN	PROPN	_	7	nsubj	_	highlight=green|span=1
+10	,	,	PUNCT	PUNCT	_	12	punct	_	_
+11	--	--	PUNCT	PUNCT	_	12	punct	_	_
+12	классный	классный	ADJ	ADJ	_	4	conj	_	_
+13	был	был	AUX	AUX	_	12	cop	_	_
+14	Терминатор	Терминатор	PROPN	PROPN	_	12	nsubj	_	_
+15	!	!	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: ru_syntagrus-ud-train.conllu · this verb has L=0, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Все чаще - сначала наши друзья , потом посторонние - просили прихватить гусей и для них .
+1	Все	Все	PART	PART	_	2	advmod	_	_
+2	чаще	чаще	ADV	ADV	_	11	advmod	_	_
+3	-	-	PUNCT	PUNCT	_	2	punct	_	_
+4	сначала	сначала	ADV	ADV	_	6	advmod	_	_
+5	наши	наши	DET	DET	_	6	det	_	_
+6	друзья	друзья	NOUN	NOUN	_	11	nsubj	_	_
+7	,	,	PUNCT	PUNCT	_	9	punct	_	_
+8	потом	потом	ADV	ADV	_	9	advmod	_	_
+9	посторонние	посторонние	NOUN	NOUN	_	6	conj	_	_
+10	-	-	PUNCT	PUNCT	_	6	punct	_	_
+11	просили	просили	VERB	VERB	_	0	root	_	_
+12	прихватить	прихватить	VERB	VERB	_	11	xcomp	_	highlight=red
+13	гусей	гусей	NOUN	NOUN	_	12	obj	_	highlight=green|span=1
+14	и	и	PART	PART	_	16	advmod	_	_
+15	для	для	ADP	ADP	_	16	case	_	_
+16	них	них	PRON	PRON	_	12	obl	_	highlight=green|span=3
+17	.	.	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: ru_taiga-ud-train.conllu · this verb has L=1, R=2 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = -- Он очень важный , мамочка , -- рассуждала девочка , -- швейцар называл его « ваше превосходительство » .
+1	--	--	PUNCT	PUNCT	_	4	punct	_	_
+2	Он	Он	PRON	PRON	_	4	nsubj	_	_
+3	очень	очень	ADV	ADV	_	4	advmod	_	_
+4	важный	важный	ADJ	ADJ	_	0	root	_	_
+5	,	,	PUNCT	PUNCT	_	6	punct	_	_
+6	мамочка	мамочка	NOUN	NOUN	_	4	vocative	_	_
+7	,	,	PUNCT	PUNCT	_	9	punct	_	_
+8	--	--	PUNCT	PUNCT	_	9	punct	_	_
+9	рассуждала	рассуждала	VERB	VERB	_	4	parataxis	_	_
+10	девочка	девочка	NOUN	NOUN	_	9	nsubj	_	_
+11	,	,	PUNCT	PUNCT	_	14	punct	_	_
+12	--	--	PUNCT	PUNCT	_	14	punct	_	_
+13	швейцар	швейцар	NOUN	NOUN	_	14	nsubj	_	highlight=green|span=1
+14	называл	называл	VERB	VERB	_	4	conj	_	highlight=red
+15	его	его	PRON	PRON	_	14	obj	_	highlight=green|span=1
+16	«	«	PUNCT	PUNCT	_	18	punct	_	_
+17	ваше	ваше	DET	DET	_	18	det	_	_
+18	превосходительство	превосходительство	NOUN	NOUN	_	14	xcomp	_	highlight=green|span=2
+19	»	»	PUNCT	PUNCT	_	18	punct	_	_
+20	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: ru_taiga-ud-train.conllu · this verb has L=0, R=2 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Она имела привычку чесать языком , когда ела свекольный бульон ; из ее рта вылетал поток отборных словечек , и все это без малейшего выражения на лице .
+1	Она	Она	PRON	PRON	_	2	nsubj	_	_
+2	имела	имела	VERB	VERB	_	0	root	_	_
+3	привычку	привычку	NOUN	NOUN	_	2	obj	_	_
+4	чесать	чесать	VERB	VERB	_	3	acl	_	highlight=red
+5	языком	языком	NOUN	NOUN	_	4	obj	_	highlight=green|span=1
+6	,	,	PUNCT	PUNCT	_	8	punct	_	_
+7	когда	когда	SCONJ	SCONJ	_	8	mark	_	_
+8	ела	ела	VERB	VERB	_	4	advcl	_	highlight=green|span=4
+9	свекольный	свекольный	ADJ	ADJ	_	10	amod	_	_
+10	бульон	бульон	NOUN	NOUN	_	8	obj	_	_
+11	;	;	PUNCT	PUNCT	_	15	punct	_	_
+12	из	из	ADP	ADP	_	14	case	_	_
+13	ее	ее	DET	DET	_	14	det	_	_
+14	рта	рта	NOUN	NOUN	_	15	obl	_	_
+15	вылетал	вылетал	VERB	VERB	_	2	conj	_	_
+16	поток	поток	NOUN	NOUN	_	15	nsubj	_	_
+17	отборных	отборных	ADJ	ADJ	_	18	amod	_	_
+18	словечек	словечек	NOUN	NOUN	_	16	nmod	_	_
+19	,	,	PUNCT	PUNCT	_	25	punct	_	_
+20	и	и	CCONJ	CCONJ	_	25	cc	_	_
+21	все	все	DET	DET	_	22	det	_	_
+22	это	это	PRON	PRON	_	25	nsubj	_	_
+23	без	без	ADP	ADP	_	25	case	_	_
+24	малейшего	малейшего	ADJ	ADJ	_	25	amod	_	_
+25	выражения	выражения	NOUN	NOUN	_	2	conj	_	_
+26	на	на	ADP	ADP	_	27	case	_	_
+27	лице	лице	NOUN	NOUN	_	25	nmod	_	_
+28	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: ru_taiga-ud-train.conllu · this verb has L=1, R=2 (mean span = 8.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Вот и судите теперь , можно ли уподоблять деятельность языковеда работе кабинетного затворника или полезной , но одинокой должности смотрителя маяка на маленьком острове в далеком море .
+1	Вот	Вот	PART	PART	_	2	advmod	_	_
+2	и	и	PART	PART	_	3	advmod	_	highlight=green|span=2
+3	судите	судите	VERB	VERB	_	0	root	_	highlight=red
+4	теперь	теперь	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+5	,	,	PUNCT	PUNCT	_	6	punct	_	_
+6	можно	можно	VERB	VERB	_	3	ccomp	_	highlight=green|span=21
+7	ли	ли	PART	PART	_	6	advmod	_	_
+8	уподоблять	уподоблять	VERB	VERB	_	6	csubj	_	_
+9	деятельность	деятельность	NOUN	NOUN	_	8	obj	_	_
+10	языковеда	языковеда	NOUN	NOUN	_	9	nmod	_	_
+11	работе	работе	NOUN	NOUN	_	8	iobj	_	_
+12	кабинетного	кабинетного	ADJ	ADJ	_	13	amod	_	_
+13	затворника	затворника	NOUN	NOUN	_	11	nmod	_	_
+14	или	или	CCONJ	CCONJ	_	19	cc	_	_
+15	полезной	полезной	ADJ	ADJ	_	19	amod	_	_
+16	,	,	PUNCT	PUNCT	_	18	punct	_	_
+17	но	но	CCONJ	CCONJ	_	18	cc	_	_
+18	одинокой	одинокой	ADJ	ADJ	_	15	conj	_	_
+19	должности	должности	NOUN	NOUN	_	11	conj	_	_
+20	смотрителя	смотрителя	NOUN	NOUN	_	19	nmod	_	_
+21	маяка	маяка	NOUN	NOUN	_	20	nmod	_	_
+22	на	на	ADP	ADP	_	24	case	_	_
+23	маленьком	маленьком	ADJ	ADJ	_	24	amod	_	_
+24	острове	острове	NOUN	NOUN	_	19	nmod	_	_
+25	в	в	ADP	ADP	_	27	case	_	_
+26	далеком	далеком	ADJ	ADJ	_	27	amod	_	_
+27	море	море	NOUN	NOUN	_	24	nmod	_	_
+28	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: ru_syntagrus-ud-train.conllu · this verb has L=1, R=2 (mean span = 5.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Сегодня , когда вконец запутавшиеся в идеологических соснах взрослые пытаются с помощью унифицированного учебника истории наставить на путь истинный подрастающее поколение , им самим не мешало бы разобраться во многих травмирующих проблемах нашего прошлого .
+1	Сегодня	Сегодня	ADV	ADV	_	26	advmod	_	_
+2	,	,	PUNCT	PUNCT	_	10	punct	_	_
+3	когда	когда	SCONJ	SCONJ	_	10	mark	_	_
+4	вконец	вконец	ADV	ADV	_	5	advmod	_	_
+5	запутавшиеся	запутавшиеся	VERB	VERB	_	9	acl	_	_
+6	в	в	ADP	ADP	_	8	case	_	_
+7	идеологических	идеологических	ADJ	ADJ	_	8	amod	_	_
+8	соснах	соснах	NOUN	NOUN	_	5	obl	_	_
+9	взрослые	взрослые	NOUN	NOUN	_	10	nsubj	_	highlight=green|span=6
+10	пытаются	пытаются	VERB	VERB	_	26	advcl	_	highlight=red
+11	с	с	ADP	ADP	_	14	case	_	_
+12	помощью	помощью	NOUN	NOUN	_	11	fixed	_	_
+13	унифицированного	унифицированного	ADJ	ADJ	_	14	amod	_	_
+14	учебника	учебника	NOUN	NOUN	_	10	obl	_	highlight=green|span=5
+15	истории	истории	NOUN	NOUN	_	14	nmod	_	_
+16	наставить	наставить	VERB	VERB	_	10	xcomp	_	highlight=green|span=6
+17	на	на	ADP	ADP	_	18	case	_	_
+18	путь	путь	NOUN	NOUN	_	16	obl	_	_
+19	истинный	истинный	ADJ	ADJ	_	18	amod	_	_
+20	подрастающее	подрастающее	VERB	VERB	_	21	amod	_	_
+21	поколение	поколение	NOUN	NOUN	_	16	obj	_	_
+22	,	,	PUNCT	PUNCT	_	10	punct	_	_
+23	им	им	PRON	PRON	_	26	iobj	_	_
+24	самим	самим	DET	DET	_	23	det	_	_
+25	не	не	PART	PART	_	26	advmod	_	_
+26	мешало	мешало	VERB	VERB	_	0	root	_	_
+27	бы	бы	AUX	AUX	_	26	aux	_	_
+28	разобраться	разобраться	VERB	VERB	_	26	csubj	_	_
+29	во	во	ADP	ADP	_	32	case	_	_
+30	многих	многих	DET	DET	_	32	det	_	_
+31	травмирующих	травмирующих	VERB	VERB	_	32	amod	_	_
+32	проблемах	проблемах	NOUN	NOUN	_	28	obl	_	_
+33	нашего	нашего	DET	DET	_	34	det	_	_
+34	прошлого	прошлого	NOUN	NOUN	_	32	nmod	_	_
+35	.	.	PUNCT	PUNCT	_	26	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: ru_taiga-ud-train.conllu · this verb has L=1, R=2 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = -- Витенька , у вас же в школе нет бассейна , -- мама разлила чай по чашкам и теперь , глядя на меня , наливала заварку в сахарницу .
+1	--	--	PUNCT	PUNCT	_	9	punct	_	_
+2	Витенька	Витенька	PROPN	PROPN	_	9	vocative	_	_
+3	,	,	PUNCT	PUNCT	_	2	punct	_	_
+4	у	у	ADP	ADP	_	5	case	_	_
+5	вас	вас	PRON	PRON	_	9	obl	_	_
+6	же	же	PART	PART	_	5	advmod	_	_
+7	в	в	ADP	ADP	_	8	case	_	_
+8	школе	школе	NOUN	NOUN	_	9	obl	_	_
+9	нет	нет	VERB	VERB	_	0	root	_	_
+10	бассейна	бассейна	NOUN	NOUN	_	9	nsubj	_	_
+11	,	,	PUNCT	PUNCT	_	14	punct	_	_
+12	--	--	PUNCT	PUNCT	_	14	punct	_	_
+13	мама	мама	NOUN	NOUN	_	14	nsubj	_	highlight=green|span=1
+14	разлила	разлила	VERB	VERB	_	9	parataxis	_	highlight=red
+15	чай	чай	NOUN	NOUN	_	14	obj	_	highlight=green|span=1
+16	по	по	ADP	ADP	_	17	case	_	_
+17	чашкам	чашкам	NOUN	NOUN	_	14	obl	_	highlight=green|span=2
+18	и	и	CCONJ	CCONJ	_	25	cc	_	_
+19	теперь	теперь	ADV	ADV	_	25	advmod	_	_
+20	,	,	PUNCT	PUNCT	_	21	punct	_	_
+21	глядя	глядя	VERB	VERB	_	25	advcl	_	_
+22	на	на	ADP	ADP	_	23	case	_	_
+23	меня	меня	PRON	PRON	_	21	obl	_	_
+24	,	,	PUNCT	PUNCT	_	21	punct	_	_
+25	наливала	наливала	VERB	VERB	_	14	conj	_	_
+26	заварку	заварку	NOUN	NOUN	_	25	obj	_	_
+27	в	в	ADP	ADP	_	28	case	_	_
+28	сахарницу	сахарницу	NOUN	NOUN	_	25	obl	_	_
+29	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: ru_taiga-ud-train.conllu · this verb has L=0, R=2 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Н. В. Гоголь в « Повести о том , как поссорился Иван Иванович с Иваном Никифоровичем » писал : « Весьма могло быть , что сии достойные люди на другой же бы день помирились , если бы особенное происшествие в доме Ивана Никифоровича не уничтожило всякую надежду и не подлило масла в готовый погаснуть огонь вражды » .
+1	Н.	Н.	PROPN	PROPN	_	18	nsubj	_	_
+2	В.	В.	PROPN	PROPN	_	1	flat:name	_	_
+3	Гоголь	Гоголь	PROPN	PROPN	_	1	flat:name	_	_
+4	в	в	ADP	ADP	_	6	case	_	_
+5	«	«	PUNCT	PUNCT	_	6	punct	_	_
+6	Повести	Повести	NOUN	NOUN	_	18	obl	_	_
+7	о	о	ADP	ADP	_	8	case	_	_
+8	том	том	PRON	PRON	_	6	nmod	_	_
+9	,	,	PUNCT	PUNCT	_	11	punct	_	_
+10	как	как	SCONJ	SCONJ	_	11	mark	_	_
+11	поссорился	поссорился	VERB	VERB	_	8	acl	_	highlight=red
+12	Иван	Иван	PROPN	PROPN	_	11	nsubj	_	highlight=green|span=2
+13	Иванович	Иванович	PROPN	PROPN	_	12	flat:name	_	_
+14	с	с	ADP	ADP	_	15	case	_	_
+15	Иваном	Иваном	PROPN	PROPN	_	11	obl	_	highlight=green|span=3
+16	Никифоровичем	Никифоровичем	PROPN	PROPN	_	15	flat:name	_	_
+17	»	»	PUNCT	PUNCT	_	6	punct	_	_
+18	писал	писал	VERB	VERB	_	0	root	_	_
+19	:	:	PUNCT	PUNCT	_	22	punct	_	_
+20	«	«	PUNCT	PUNCT	_	22	punct	_	_
+21	Весьма	Весьма	ADV	ADV	_	22	advmod	_	_
+22	могло	могло	VERB	VERB	_	18	parataxis	_	_
+23	быть	быть	VERB	VERB	_	22	xcomp	_	_
+24	,	,	PUNCT	PUNCT	_	34	punct	_	_
+25	что	что	SCONJ	SCONJ	_	34	mark	_	_
+26	сии	сии	DET	DET	_	28	det	_	_
+27	достойные	достойные	ADJ	ADJ	_	28	amod	_	_
+28	люди	люди	NOUN	NOUN	_	34	nsubj	_	_
+29	на	на	ADP	ADP	_	33	case	_	_
+30	другой	другой	DET	DET	_	33	det	_	_
+31	же	же	PART	PART	_	33	advmod	_	_
+32	бы	бы	AUX	AUX	_	34	aux	_	_
+33	день	день	NOUN	NOUN	_	34	obl:tmod	_	_
+34	помирились	помирились	VERB	VERB	_	22	ccomp	_	_
+35	,	,	PUNCT	PUNCT	_	45	punct	_	_
+36	если	если	SCONJ	SCONJ	_	45	mark	_	_
+37	бы	бы	AUX	AUX	_	45	aux	_	_
+38	особенное	особенное	ADJ	ADJ	_	39	amod	_	_
+39	происшествие	происшествие	NOUN	NOUN	_	45	nsubj	_	_
+40	в	в	ADP	ADP	_	41	case	_	_
+41	доме	доме	NOUN	NOUN	_	39	nmod	_	_
+42	Ивана	Ивана	PROPN	PROPN	_	41	nmod	_	_
+43	Никифоровича	Никифоровича	PROPN	PROPN	_	42	flat:name	_	_
+44	не	не	PART	PART	_	45	advmod	_	_
+45	уничтожило	уничтожило	VERB	VERB	_	34	advcl	_	_
+46	всякую	всякую	DET	DET	_	47	det	_	_
+47	надежду	надежду	NOUN	NOUN	_	45	obj	_	_
+48	и	и	CCONJ	CCONJ	_	50	cc	_	_
+49	не	не	PART	PART	_	50	advmod	_	_
+50	подлило	подлило	VERB	VERB	_	45	conj	_	_
+51	масла	масла	NOUN	NOUN	_	50	obj	_	_
+52	в	в	ADP	ADP	_	55	case	_	_
+53	готовый	готовый	ADJ	ADJ	_	55	acl	_	_
+54	погаснуть	погаснуть	VERB	VERB	_	53	xcomp	_	_
+55	огонь	огонь	NOUN	NOUN	_	50	obl	_	_
+56	вражды	вражды	NOUN	NOUN	_	55	nmod	_	_
+57	»	»	PUNCT	PUNCT	_	22	punct	_	_
+58	.	.	PUNCT	PUNCT	_	18	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: ru_syntagrus-ud-train.conllu · this verb has L=0, R=2 (mean span = 5.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Мэр Москвы Юрий Лужков дал поручение руководителю городского комплекса имущественно - земельных отношений Владимиру Силкину : &quot; Нужно пересмотреть политику по предоставлению помещений для малого бизнеса и увеличить масштабы предоставления нежилых помещений в аренду , увеличив их площади в разы &quot; .
+1	Мэр	Мэр	NOUN	NOUN	_	5	nsubj	_	_
+2	Москвы	Москвы	PROPN	PROPN	_	1	nmod	_	_
+3	Юрий	Юрий	PROPN	PROPN	_	1	appos	_	_
+4	Лужков	Лужков	PROPN	PROPN	_	3	flat:name	_	_
+5	дал	дал	VERB	VERB	_	0	root	_	_
+6	поручение	поручение	NOUN	NOUN	_	5	obj	_	_
+7	руководителю	руководителю	NOUN	NOUN	_	5	iobj	_	_
+8	городского	городского	ADJ	ADJ	_	9	amod	_	_
+9	комплекса	комплекса	NOUN	NOUN	_	7	nmod	_	_
+10	имущественно	имущественно	ADJ	ADJ	_	12	compound	_	_
+11	-	-	PUNCT	PUNCT	_	10	punct	_	_
+12	земельных	земельных	ADJ	ADJ	_	13	amod	_	_
+13	отношений	отношений	NOUN	NOUN	_	9	nmod	_	_
+14	Владимиру	Владимиру	PROPN	PROPN	_	7	appos	_	_
+15	Силкину	Силкину	PROPN	PROPN	_	14	flat:name	_	_
+16	:	:	PUNCT	PUNCT	_	18	punct	_	_
+17	&quot;	&quot;	PUNCT	PUNCT	_	18	punct	_	_
+18	Нужно	Нужно	ADJ	ADJ	_	5	parataxis	_	_
+19	пересмотреть	пересмотреть	VERB	VERB	_	18	csubj	_	_
+20	политику	политику	NOUN	NOUN	_	19	obj	_	_
+21	по	по	ADP	ADP	_	22	case	_	_
+22	предоставлению	предоставлению	NOUN	NOUN	_	20	nmod	_	_
+23	помещений	помещений	NOUN	NOUN	_	22	nmod	_	_
+24	для	для	ADP	ADP	_	26	case	_	_
+25	малого	малого	ADJ	ADJ	_	26	amod	_	_
+26	бизнеса	бизнеса	NOUN	NOUN	_	23	nmod	_	_
+27	и	и	CCONJ	CCONJ	_	28	cc	_	_
+28	увеличить	увеличить	VERB	VERB	_	19	conj	_	highlight=red
+29	масштабы	масштабы	NOUN	NOUN	_	28	obj	_	highlight=green|span=6
+30	предоставления	предоставления	NOUN	NOUN	_	29	nmod	_	_
+31	нежилых	нежилых	ADJ	ADJ	_	32	amod	_	_
+32	помещений	помещений	NOUN	NOUN	_	30	nmod	_	_
+33	в	в	ADP	ADP	_	34	case	_	_
+34	аренду	аренду	NOUN	NOUN	_	30	nmod	_	_
+35	,	,	PUNCT	PUNCT	_	36	punct	_	_
+36	увеличив	увеличив	VERB	VERB	_	28	advcl	_	highlight=green|span=5
+37	их	их	DET	DET	_	38	det	_	_
+38	площади	площади	NOUN	NOUN	_	36	obj	_	_
+39	в	в	ADP	ADP	_	40	case	_	_
+40	разы	разы	NOUN	NOUN	_	36	obl	_	_
+41	&quot;	&quot;	PUNCT	PUNCT	_	18	punct	_	_
+42	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: ru_taiga-ud-train.conllu · this verb has L=1, R=2 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = На эту странность обратил внимание А. С. Пушкин .
+1	На	На	ADP	ADP	_	3	case	_	_
+2	эту	эту	DET	DET	_	3	det	_	_
+3	странность	странность	NOUN	NOUN	_	4	obl	_	highlight=green|span=3
+4	обратил	обратил	VERB	VERB	_	0	root	_	highlight=red
+5	внимание	внимание	NOUN	NOUN	_	4	obj	_	highlight=green|span=1
+6	А.	А.	PROPN	PROPN	_	4	nsubj	_	highlight=green|span=3
+7	С.	С.	PROPN	PROPN	_	6	flat:name	_	_
+8	Пушкин	Пушкин	PROPN	PROPN	_	6	flat:name	_	_
+9	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: ru_taiga-ud-train.conllu · this verb has L=2, R=2 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Вокруг меня танцевали , пели , грызли орехи , а я , забыв обо всём на свете , перечитывала под ёлкой любимую сказку .
+1	Вокруг	Вокруг	ADP	ADP	_	2	case	_	_
+2	меня	меня	PRON	PRON	_	3	obl	_	_
+3	танцевали	танцевали	VERB	VERB	_	0	root	_	_
+4	,	,	PUNCT	PUNCT	_	5	punct	_	_
+5	пели	пели	VERB	VERB	_	3	conj	_	_
+6	,	,	PUNCT	PUNCT	_	7	punct	_	_
+7	грызли	грызли	VERB	VERB	_	3	conj	_	_
+8	орехи	орехи	NOUN	NOUN	_	7	obj	_	_
+9	,	,	PUNCT	PUNCT	_	19	punct	_	_
+10	а	а	CCONJ	CCONJ	_	19	cc	_	_
+11	я	я	PRON	PRON	_	19	nsubj	_	highlight=green|span=1
+12	,	,	PUNCT	PUNCT	_	13	punct	_	_
+13	забыв	забыв	VERB	VERB	_	19	advcl	_	highlight=green|span=5
+14	обо	обо	ADP	ADP	_	15	case	_	_
+15	всём	всём	PRON	PRON	_	13	obl	_	_
+16	на	на	ADP	ADP	_	17	case	_	_
+17	свете	свете	NOUN	NOUN	_	15	nmod	_	_
+18	,	,	PUNCT	PUNCT	_	13	punct	_	_
+19	перечитывала	перечитывала	VERB	VERB	_	3	conj	_	highlight=red
+20	под	под	ADP	ADP	_	21	case	_	_
+21	ёлкой	ёлкой	NOUN	NOUN	_	19	obl	_	highlight=green|span=2
+22	любимую	любимую	ADJ	ADJ	_	23	amod	_	_
+23	сказку	сказку	NOUN	NOUN	_	19	obj	_	highlight=green|span=2
+24	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: ru_taiga-ud-train.conllu · this verb has L=1, R=2 (mean span = 3.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Наконец , не выдержав более , она порывисто вскочила на пол и , как была , в одной рубашонке , упала на колени с горячей молитвой .
+1	Наконец	Наконец	ADV	ADV	_	9	parataxis:discourse	_	_
+2	,	,	PUNCT	PUNCT	_	1	punct	_	_
+3	не	не	PART	PART	_	4	advmod	_	_
+4	выдержав	выдержав	VERB	VERB	_	9	advcl	_	_
+5	более	более	ADV	ADV	_	4	advmod	_	_
+6	,	,	PUNCT	PUNCT	_	4	punct	_	_
+7	она	она	PRON	PRON	_	9	nsubj	_	_
+8	порывисто	порывисто	ADV	ADV	_	9	advmod	_	_
+9	вскочила	вскочила	VERB	VERB	_	0	root	_	_
+10	на	на	ADP	ADP	_	11	case	_	_
+11	пол	пол	NOUN	NOUN	_	9	obl	_	_
+12	и	и	CCONJ	CCONJ	_	21	cc	_	_
+13	,	,	PUNCT	PUNCT	_	14	punct	_	_
+14	как	как	ADV	ADV	_	21	advcl	_	highlight=green|span=5
+15	была	была	AUX	AUX	_	19	cop	_	_
+16	,	,	PUNCT	PUNCT	_	19	punct	_	_
+17	в	в	ADP	ADP	_	19	case	_	_
+18	одной	одной	NUM	NUM	_	19	nummod	_	_
+19	рубашонке	рубашонке	NOUN	NOUN	_	14	parataxis	_	_
+20	,	,	PUNCT	PUNCT	_	19	punct	_	_
+21	упала	упала	VERB	VERB	_	9	conj	_	highlight=red
+22	на	на	ADP	ADP	_	23	case	_	_
+23	колени	колени	NOUN	NOUN	_	21	obl	_	highlight=green|span=2
+24	с	с	ADP	ADP	_	26	case	_	_
+25	горячей	горячей	ADJ	ADJ	_	26	amod	_	_
+26	молитвой	молитвой	NOUN	NOUN	_	21	obl	_	highlight=green|span=3
+27	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: ru_taiga-ud-train.conllu · this verb has L=2, R=2 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Мясо моллюсков -- вкусное лакомство , а створки раковин -- красивые украшения , И праздничность результата человек перенес в танце на весь труд в целом .
+1	Мясо	Мясо	NOUN	NOUN	_	5	nsubj	_	_
+2	моллюсков	моллюсков	NOUN	NOUN	_	1	nmod	_	_
+3	--	--	PUNCT	PUNCT	_	1	punct	_	_
+4	вкусное	вкусное	ADJ	ADJ	_	5	amod	_	_
+5	лакомство	лакомство	NOUN	NOUN	_	0	root	_	_
+6	,	,	PUNCT	PUNCT	_	12	punct	_	_
+7	а	а	CCONJ	CCONJ	_	12	cc	_	_
+8	створки	створки	NOUN	NOUN	_	12	nsubj	_	_
+9	раковин	раковин	NOUN	NOUN	_	8	nmod	_	_
+10	--	--	PUNCT	PUNCT	_	12	punct	_	_
+11	красивые	красивые	ADJ	ADJ	_	12	amod	_	_
+12	украшения	украшения	NOUN	NOUN	_	5	conj	_	_
+13	,	,	PUNCT	PUNCT	_	18	punct	_	_
+14	И	И	CCONJ	CCONJ	_	18	cc	_	_
+15	праздничность	праздничность	NOUN	NOUN	_	18	obj	_	highlight=green|span=2
+16	результата	результата	NOUN	NOUN	_	15	nmod	_	_
+17	человек	человек	NOUN	NOUN	_	18	nsubj	_	highlight=green|span=1
+18	перенес	перенес	VERB	VERB	_	5	conj	_	highlight=red
+19	в	в	ADP	ADP	_	20	case	_	_
+20	танце	танце	NOUN	NOUN	_	18	obl	_	highlight=green|span=2
+21	на	на	ADP	ADP	_	23	case	_	_
+22	весь	весь	DET	DET	_	23	det	_	_
+23	труд	труд	NOUN	NOUN	_	18	obl	_	highlight=green|span=5
+24	в	в	ADP	ADP	_	25	case	_	_
+25	целом	целом	NOUN	NOUN	_	23	nmod	_	_
+26	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: ru_syntagrus-ud-train.conllu · this verb has L=0, R=2 (mean span = 7.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Вузы должны провести болезненную селекцию своего состава , заместив тех преподавателей , которые читают по чужим учебникам , молодыми исследователями .
+1	Вузы	Вузы	NOUN	NOUN	_	2	nsubj	_	_
+2	должны	должны	ADJ	ADJ	_	0	root	_	_
+3	провести	провести	VERB	VERB	_	2	xcomp	_	highlight=red
+4	болезненную	болезненную	ADJ	ADJ	_	5	amod	_	_
+5	селекцию	селекцию	NOUN	NOUN	_	3	obj	_	highlight=green|span=4
+6	своего	своего	DET	DET	_	7	det	_	_
+7	состава	состава	NOUN	NOUN	_	5	nmod	_	_
+8	,	,	PUNCT	PUNCT	_	9	punct	_	_
+9	заместив	заместив	VERB	VERB	_	3	advcl	_	highlight=green|span=10
+10	тех	тех	DET	DET	_	11	det	_	_
+11	преподавателей	преподавателей	NOUN	NOUN	_	9	obj	_	_
+12	,	,	PUNCT	PUNCT	_	14	punct	_	_
+13	которые	которые	DET	DET	_	14	nsubj	_	_
+14	читают	читают	VERB	VERB	_	11	acl:relcl	_	_
+15	по	по	ADP	ADP	_	17	case	_	_
+16	чужим	чужим	ADJ	ADJ	_	17	amod	_	_
+17	учебникам	учебникам	NOUN	NOUN	_	14	obl	_	_
+18	,	,	PUNCT	PUNCT	_	20	punct	_	_
+19	молодыми	молодыми	ADJ	ADJ	_	20	amod	_	_
+20	исследователями	исследователями	NOUN	NOUN	_	9	iobj	_	_
+21	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: ru_syntagrus-ud-train.conllu · this verb has L=0, R=2 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Каждый стремился извлечь максимальные преимущества из монополии географического местоположения .
+1	Каждый	Каждый	DET	DET	_	2	nsubj	_	_
+2	стремился	стремился	VERB	VERB	_	0	root	_	_
+3	извлечь	извлечь	VERB	VERB	_	2	xcomp	_	highlight=red
+4	максимальные	максимальные	ADJ	ADJ	_	5	amod	_	_
+5	преимущества	преимущества	NOUN	NOUN	_	3	obj	_	highlight=green|span=2
+6	из	из	ADP	ADP	_	7	case	_	_
+7	монополии	монополии	NOUN	NOUN	_	3	obl	_	highlight=green|span=4
+8	географического	географического	ADJ	ADJ	_	9	amod	_	_
+9	местоположения	местоположения	NOUN	NOUN	_	7	nmod	_	_
+10	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: ru_syntagrus-ud-test.conllu · this verb has L=0, R=2 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = В 1962 году команда Лотус ( одна из ведущих команд Формулы - 1 в 60-е и 70-е годы ) впервые использовала в конструкции автомобилей монокок , заимствовав такую конструкцию из авиационной промышленности .
+1	В	В	ADP	ADP	_	3	case	_	_
+2	1962	1962	ADJ	ADJ	_	3	amod	_	_
+3	году	году	NOUN	NOUN	_	21	obl:tmod	_	_
+4	команда	команда	NOUN	NOUN	_	21	nsubj	_	_
+5	Лотус	Лотус	PROPN	PROPN	_	4	appos	_	_
+6	(	(	PUNCT	PUNCT	_	7	punct	_	_
+7	одна	одна	NUM	NUM	_	4	parataxis	_	_
+8	из	из	ADP	ADP	_	10	case	_	_
+9	ведущих	ведущих	ADJ	ADJ	_	10	amod	_	_
+10	команд	команд	NOUN	NOUN	_	7	nmod	_	_
+11	Формулы	Формулы	PROPN	PROPN	_	10	nmod	_	_
+12	-	-	PUNCT	PUNCT	_	13	punct	_	_
+13	1	1	NUM	NUM	_	11	appos	_	_
+14	в	в	ADP	ADP	_	18	case	_	_
+15	60-е	60-е	ADJ	ADJ	_	18	amod	_	_
+16	и	и	CCONJ	CCONJ	_	17	cc	_	_
+17	70-е	70-е	ADJ	ADJ	_	15	conj	_	_
+18	годы	годы	NOUN	NOUN	_	10	nmod	_	_
+19	)	)	PUNCT	PUNCT	_	7	punct	_	_
+20	впервые	впервые	ADV	ADV	_	21	advmod	_	_
+21	использовала	использовала	VERB	VERB	_	0	root	_	_
+22	в	в	ADP	ADP	_	23	case	_	_
+23	конструкции	конструкции	NOUN	NOUN	_	21	obl	_	_
+24	автомобилей	автомобилей	NOUN	NOUN	_	23	nmod	_	_
+25	монокок	монокок	NOUN	NOUN	_	21	obj	_	_
+26	,	,	PUNCT	PUNCT	_	27	punct	_	_
+27	заимствовав	заимствовав	VERB	VERB	_	21	advcl	_	highlight=red
+28	такую	такую	DET	DET	_	29	det	_	_
+29	конструкцию	конструкцию	NOUN	NOUN	_	27	obj	_	highlight=green|span=2
+30	из	из	ADP	ADP	_	32	case	_	_
+31	авиационной	авиационной	ADJ	ADJ	_	32	amod	_	_
+32	промышленности	промышленности	NOUN	NOUN	_	27	obl	_	highlight=green|span=3
+33	.	.	PUNCT	PUNCT	_	21	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: ru_pud-ud-test.conllu · this verb has L=2, R=2 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = « Иногда я посещаю выставки научных работ в Нортгемптонском университете , чтобы найти новые таланты » , — говорит он .
+1	«	«	PUNCT	PUNCT	_	4	punct	_	_
+2	Иногда	Иногда	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+3	я	я	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+4	посещаю	посещаю	VERB	VERB	_	0	root	_	highlight=red
+5	выставки	выставки	NOUN	NOUN	_	4	obj	_	highlight=green|span=6
+6	научных	научных	ADJ	ADJ	_	7	amod	_	_
+7	работ	работ	NOUN	NOUN	_	5	nmod	_	_
+8	в	в	ADP	ADP	_	10	case	_	_
+9	Нортгемптонском	Нортгемптонском	ADJ	ADJ	_	10	amod	_	_
+10	университете	университете	NOUN	NOUN	_	7	nmod	_	_
+11	,	,	PUNCT	PUNCT	_	13	punct	_	_
+12	чтобы	чтобы	SCONJ	SCONJ	_	13	mark	_	_
+13	найти	найти	VERB	VERB	_	4	advcl	_	highlight=green|span=4
+14	новые	новые	ADJ	ADJ	_	15	amod	_	_
+15	таланты	таланты	NOUN	NOUN	_	13	obj	_	_
+16	»	»	PUNCT	PUNCT	_	4	punct	_	_
+17	,	,	PUNCT	PUNCT	_	19	punct	_	_
+18	—	—	PUNCT	PUNCT	_	19	punct	_	_
+19	говорит	говорит	VERB	VERB	_	4	parataxis	_	_
+20	он	он	PRON	PRON	_	19	nsubj	_	_
+21	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: ru_syntagrus-ud-train.conllu · this verb has L=1, R=2 (mean span = 2.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Заметив эти смешные хвостики , Семен Еремеевич вспомнил , что недавно держал в руках и эту анкету и автобиографию , а вспомнив документы , вспомнил и лицо робкой , худенькой женщины и неприятную историю , связанную с ее делом .
+1	Заметив	Заметив	VERB	VERB	_	8	advcl	_	_
+2	эти	эти	DET	DET	_	4	det	_	_
+3	смешные	смешные	ADJ	ADJ	_	4	amod	_	_
+4	хвостики	хвостики	NOUN	NOUN	_	1	obj	_	_
+5	,	,	PUNCT	PUNCT	_	1	punct	_	_
+6	Семен	Семен	PROPN	PROPN	_	8	nsubj	_	_
+7	Еремеевич	Еремеевич	PROPN	PROPN	_	6	flat:name	_	_
+8	вспомнил	вспомнил	VERB	VERB	_	0	root	_	_
+9	,	,	PUNCT	PUNCT	_	12	punct	_	_
+10	что	что	SCONJ	SCONJ	_	12	mark	_	_
+11	недавно	недавно	ADV	ADV	_	12	advmod	_	highlight=green|span=1
+12	держал	держал	VERB	VERB	_	8	ccomp	_	highlight=red
+13	в	в	ADP	ADP	_	14	case	_	_
+14	руках	руках	NOUN	NOUN	_	12	obl	_	highlight=green|span=2
+15	и	и	CCONJ	CCONJ	_	17	cc	_	_
+16	эту	эту	DET	DET	_	17	det	_	_
+17	анкету	анкету	NOUN	NOUN	_	12	obj	_	highlight=green|span=5
+18	и	и	CCONJ	CCONJ	_	19	cc	_	_
+19	автобиографию	автобиографию	NOUN	NOUN	_	17	conj	_	_
+20	,	,	PUNCT	PUNCT	_	25	punct	_	_
+21	а	а	CCONJ	CCONJ	_	25	cc	_	_
+22	вспомнив	вспомнив	VERB	VERB	_	25	advcl	_	_
+23	документы	документы	NOUN	NOUN	_	22	obj	_	_
+24	,	,	PUNCT	PUNCT	_	22	punct	_	_
+25	вспомнил	вспомнил	VERB	VERB	_	8	conj	_	_
+26	и	и	CCONJ	CCONJ	_	27	cc	_	_
+27	лицо	лицо	NOUN	NOUN	_	25	obj	_	_
+28	робкой	робкой	ADJ	ADJ	_	31	amod	_	_
+29	,	,	PUNCT	PUNCT	_	30	punct	_	_
+30	худенькой	худенькой	ADJ	ADJ	_	28	conj	_	_
+31	женщины	женщины	NOUN	NOUN	_	27	nmod	_	_
+32	и	и	CCONJ	CCONJ	_	34	cc	_	_
+33	неприятную	неприятную	ADJ	ADJ	_	34	amod	_	_
+34	историю	историю	NOUN	NOUN	_	27	conj	_	_
+35	,	,	PUNCT	PUNCT	_	36	punct	_	_
+36	связанную	связанную	VERB	VERB	_	34	acl	_	_
+37	с	с	ADP	ADP	_	39	case	_	_
+38	ее	ее	DET	DET	_	39	det	_	_
+39	делом	делом	NOUN	NOUN	_	36	obl	_	_
+40	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: ru_taiga-ud-train.conllu · this verb has L=1, R=2 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = -- Петербург ! -- еще раз выкрикнул за моей спиной знакомый голос и , обращаясь ко мне , добавил : -- Вот и приехали , барышня .
+1	--	--	PUNCT	PUNCT	_	2	punct	_	_
+2	Петербург	Петербург	PROPN	PROPN	_	0	root	_	_
+3	!	!	PUNCT	PUNCT	_	2	punct	_	_
+4	--	--	PUNCT	PUNCT	_	7	punct	_	_
+5	еще	еще	ADV	ADV	_	6	advmod	_	_
+6	раз	раз	NOUN	NOUN	_	7	obl:tmod	_	highlight=green|span=2
+7	выкрикнул	выкрикнул	VERB	VERB	_	2	parataxis	_	highlight=red
+8	за	за	ADP	ADP	_	10	case	_	_
+9	моей	моей	DET	DET	_	10	det	_	_
+10	спиной	спиной	NOUN	NOUN	_	7	obl	_	highlight=green|span=3
+11	знакомый	знакомый	ADJ	ADJ	_	12	amod	_	_
+12	голос	голос	NOUN	NOUN	_	7	nsubj	_	highlight=green|span=2
+13	и	и	CCONJ	CCONJ	_	19	cc	_	_
+14	,	,	PUNCT	PUNCT	_	15	punct	_	_
+15	обращаясь	обращаясь	VERB	VERB	_	19	advcl	_	_
+16	ко	ко	ADP	ADP	_	17	case	_	_
+17	мне	мне	PRON	PRON	_	15	obl	_	_
+18	,	,	PUNCT	PUNCT	_	15	punct	_	_
+19	добавил	добавил	VERB	VERB	_	7	conj	_	_
+20	:	:	PUNCT	PUNCT	_	24	punct	_	_
+21	--	--	PUNCT	PUNCT	_	24	punct	_	_
+22	Вот	Вот	PART	PART	_	24	advmod	_	_
+23	и	и	PART	PART	_	24	advmod	_	_
+24	приехали	приехали	VERB	VERB	_	19	parataxis	_	_
+25	,	,	PUNCT	PUNCT	_	26	punct	_	_
+26	барышня	барышня	NOUN	NOUN	_	24	vocative	_	_
+27	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: ru_syntagrus-ud-train.conllu · this verb has L=2, R=2 (mean span = 1.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Я креплюсь , но это выражение добродетельного терпения меня все-таки подтачивает , и я по дороге перестраиваюсь и делаю вид , что про серьезное я начал говорить нарочно , чтобы потом было еще смешней .
+1	Я	Я	PRON	PRON	_	2	nsubj	_	_
+2	креплюсь	креплюсь	VERB	VERB	_	0	root	_	_
+3	,	,	PUNCT	PUNCT	_	11	punct	_	_
+4	но	но	CCONJ	CCONJ	_	11	cc	_	_
+5	это	это	DET	DET	_	6	det	_	_
+6	выражение	выражение	NOUN	NOUN	_	11	nsubj	_	_
+7	добродетельного	добродетельного	ADJ	ADJ	_	8	amod	_	_
+8	терпения	терпения	NOUN	NOUN	_	6	nmod	_	_
+9	меня	меня	PRON	PRON	_	11	obj	_	_
+10	все-таки	все-таки	PART	PART	_	11	advmod	_	_
+11	подтачивает	подтачивает	VERB	VERB	_	2	conj	_	_
+12	,	,	PUNCT	PUNCT	_	17	punct	_	_
+13	и	и	CCONJ	CCONJ	_	17	cc	_	_
+14	я	я	PRON	PRON	_	17	nsubj	_	_
+15	по	по	ADP	ADP	_	16	case	_	_
+16	дороге	дороге	NOUN	NOUN	_	17	obl	_	_
+17	перестраиваюсь	перестраиваюсь	VERB	VERB	_	2	conj	_	_
+18	и	и	CCONJ	CCONJ	_	19	cc	_	_
+19	делаю	делаю	VERB	VERB	_	2	conj	_	_
+20	вид	вид	NOUN	NOUN	_	19	obj	_	_
+21	,	,	PUNCT	PUNCT	_	26	punct	_	_
+22	что	что	SCONJ	SCONJ	_	26	mark	_	_
+23	про	про	ADP	ADP	_	24	case	_	_
+24	серьезное	серьезное	ADJ	ADJ	_	27	obl	_	highlight=green|span=2
+25	я	я	PRON	PRON	_	26	nsubj	_	highlight=green|span=1
+26	начал	начал	VERB	VERB	_	19	ccomp	_	highlight=red
+27	говорить	говорить	VERB	VERB	_	26	xcomp	_	highlight=green|span=1
+28	нарочно	нарочно	ADV	ADV	_	26	advmod	_	highlight=green|span=1
+29	,	,	PUNCT	PUNCT	_	34	punct	_	_
+30	чтобы	чтобы	SCONJ	SCONJ	_	34	mark	_	_
+31	потом	потом	ADV	ADV	_	34	advmod	_	_
+32	было	было	AUX	AUX	_	34	cop	_	_
+33	еще	еще	PART	PART	_	34	advmod	_	_
+34	смешней	смешней	ADJ	ADJ	_	26	advcl	_	_
+35	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

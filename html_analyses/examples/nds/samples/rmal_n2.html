@@ -1,0 +1,756 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>LowSaxon — RMAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to LowSaxon examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>LowSaxon <small style="color:#999;font-weight:normal">(nds)</small> — RMAL<sub>2</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>2</b> right dependents (left side may be anything).</p><p><b>RMAL<sub>2</sub> = 3.695</b> &nbsp; <span style="color:#666">(423 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>right</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: nds_lsdc-ud-train.conllu · this verb has L=1, R=2 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Eyn disk spealt vlytig kaarte .
+1	Eyn	Eyn	DET	DET	_	2	det	_	_
+2	disk	disk	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=2
+3	spealt	spealt	VERB	VERB	_	0	root	_	highlight=red
+4	vlytig	vlytig	ADJ	ADJ	_	3	advmod	_	highlight=green|span=1
+5	kaarte	kaarte	NOUN	NOUN	_	3	obj	_	highlight=green|span=1
+6	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: nds_lsdc-ud-train.conllu · this verb has L=2, R=2 (mean span = 3.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Wo see nu in dat teåterspil koame , do segt uns möller Pölz : „ Na , goden åvend , allers ! “
+1	Wo	Wo	SCONJ	SCONJ	_	7	mark	_	_
+2	see	see	PRON	PRON	_	7	nsubj	_	_
+3	nu	nu	ADV	ADV	_	7	advmod	_	_
+4	in	in	ADP	ADP	_	6	case	_	_
+5	dat	dat	DET	DET	_	6	det	_	_
+6	teåterspil	teåterspil	NOUN	NOUN	_	7	obl	_	_
+7	koame	koame	VERB	VERB	_	10	advcl	_	highlight=green|span=7
+8	,	,	PUNCT	PUNCT	_	7	punct	_	_
+9	do	do	ADV	ADV	_	10	advmod	_	highlight=green|span=1
+10	segt	segt	VERB	VERB	_	0	root	_	highlight=red
+11	uns	uns	DET	DET	_	12	det	_	_
+12	möller	möller	NOUN	NOUN	_	10	nsubj	_	highlight=green|span=3
+13	Pölz	Pölz	PROPN	PROPN	_	12	flat	_	_
+14	:	:	PUNCT	PUNCT	_	12	punct	_	_
+15	„	„	PUNCT	PUNCT	_	19	punct	_	_
+16	Na	Na	INTJ	INTJ	_	19	discourse	_	_
+17	,	,	PUNCT	PUNCT	_	19	punct	_	_
+18	goden	goden	ADJ	ADJ	_	19	amod	_	_
+19	åvend	åvend	NOUN	NOUN	_	10	ccomp	_	highlight=green|span=4
+20	,	,	PUNCT	PUNCT	_	19	punct	_	_
+21	allers	allers	PRON	PRON	_	19	vocative	_	_
+22	!	!	PUNCT	PUNCT	_	19	punct	_	_
+23	“	“	PUNCT	PUNCT	_	19	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: nds_lsdc-ud-train.conllu · this verb has L=1, R=2 (mean span = 4.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Nu dücht my , dat olle leyden in düäser tyd niks giagen dee herlikheid sent , dee uus todacht is .
+1	Nu	Nu	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+2	dücht	dücht	VERB	VERB	_	0	root	_	highlight=red
+3	my	my	PRON	PRON	_	2	iobj	_	highlight=green|span=1
+4	,	,	PUNCT	PUNCT	_	2	punct	_	_
+5	dat	dat	SCONJ	SCONJ	_	11	mark	_	_
+6	olle	olle	DET	DET	_	7	det	_	_
+7	leyden	leyden	NOUN	NOUN	_	11	nsubj	_	_
+8	in	in	ADP	ADP	_	10	case	_	_
+9	düäser	düäser	DET	DET	_	10	det	_	_
+10	tyd	tyd	NOUN	NOUN	_	7	nmod	_	_
+11	niks	niks	PRON	PRON	_	2	csubj	_	highlight=green|span=11
+12	giagen	giagen	ADP	ADP	_	14	case	_	_
+13	dee	dee	DET	DET	_	14	det	_	_
+14	herlikheid	herlikheid	NOUN	NOUN	_	11	obl	_	_
+15	sent	sent	AUX	AUX	_	11	cop	_	_
+16	,	,	PUNCT	PUNCT	_	19	punct	_	_
+17	dee	dee	PRON	PRON	_	19	nmod	_	_
+18	uus	uus	PRON	PRON	_	19	list	_	_
+19	todacht	todacht	VERB	VERB	_	14	acl:relcl	_	_
+20	is	is	AUX	AUX	_	19	acl:relcl	_	_
+21	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: nds_lsdc-ud-train.conllu · this verb has L=1, R=2 (mean span = 3.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Dat gung öäver de heidlou nå den gruwliken galgenbarg to , dee my al by dage en skuderen maak , wän ik em van wyden vöärby mus , dat gung lyköäver nå den Ecksey to un dat Ruge Moor .
+1	Dat	Dat	PRON	PRON	_	2	nsubj	_	_
+2	gung	gung	VERB	VERB	_	0	root	_	_
+3	öäver	öäver	ADP	ADP	_	5	case	_	_
+4	de	de	DET	DET	_	5	det	_	_
+5	heidlou	heidlou	NOUN	NOUN	_	2	obl	_	_
+6	nå	nå	ADP	ADP	_	9	case	_	_
+7	den	den	DET	DET	_	9	det	_	_
+8	gruwliken	gruwliken	ADJ	ADJ	_	9	amod	_	_
+9	galgenbarg	galgenbarg	NOUN	NOUN	_	2	obl	_	_
+10	to	to	ADP	ADP	_	9	case	_	_
+11	,	,	PUNCT	PUNCT	_	10	punct	_	_
+12	dee	dee	PRON	PRON	_	19	nsubj	_	_
+13	my	my	PRON	PRON	_	19	iobj	_	_
+14	al	al	ADV	ADV	_	19	advmod	_	_
+15	by	by	ADP	ADP	_	16	case	_	_
+16	dage	dage	NOUN	NOUN	_	19	obl	_	_
+17	en	en	DET	DET	_	18	det	_	_
+18	skuderen	skuderen	NOUN	NOUN	_	19	obj	_	_
+19	maak	maak	VERB	VERB	_	9	acl:relcl	_	_
+20	,	,	PUNCT	PUNCT	_	27	punct	_	_
+21	wän	wän	SCONJ	SCONJ	_	27	mark	_	_
+22	ik	ik	PRON	PRON	_	27	nsubj	_	_
+23	em	em	PRON	PRON	_	27	obj	_	_
+24	van	van	ADP	ADP	_	25	case	_	_
+25	wyden	wyden	ADJ	ADJ	_	27	obl	_	_
+26	vöärby	vöärby	ADV	ADV	_	27	advmod	_	_
+27	mus	mus	VERB	VERB	_	19	advcl	_	_
+28	,	,	PUNCT	PUNCT	_	30	punct	_	_
+29	dat	dat	PRON	PRON	_	30	nsubj	_	highlight=green|span=1
+30	gung	gung	VERB	VERB	_	2	parataxis	_	highlight=red
+31	lyköäver	lyköäver	ADV	ADV	_	30	advmod	_	highlight=green|span=1
+32	nå	nå	ADP	ADP	_	34	case	_	_
+33	den	den	DET	DET	_	34	det	_	_
+34	Ecksey	Ecksey	PROPN	PROPN	_	30	obl	_	highlight=green|span=8
+35	to	to	ADP	ADP	_	34	case	_	_
+36	un	un	CCONJ	CCONJ	_	39	cc	_	_
+37	dat	dat	DET	DET	_	39	det	_	_
+38	Ruge	Ruge	ADJ	ADJ	_	39	amod	_	_
+39	Moor	Moor	NOUN	NOUN	_	34	conj	_	_
+40	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: nds_lsdc-ud-train.conllu · this verb has L=0, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Sou ouk by den minsken , in 't ölder veyl de fosfor un word tolest alle , in de jöägd hadde man sik to höden , woor et to veal word sloog licht mål de bliks dårtwisken un sloog dat ganse leaven entwei .
+1	Sou	Sou	ADV	ADV	_	5	advmod	_	_
+2	ouk	ouk	ADV	ADV	_	5	advmod	_	_
+3	by	by	ADP	ADP	_	5	case	_	_
+4	den	den	DET	DET	_	5	det	_	_
+5	minsken	minsken	NOUN	NOUN	_	0	root	_	_
+6	,	,	PUNCT	PUNCT	_	10	punct	_	_
+7	in	in	ADP	ADP	_	9	case	_	_
+8	't	't	DET	DET	_	9	det	_	_
+9	ölder	ölder	NOUN	NOUN	_	10	obl	_	_
+10	veyl	veyl	VERB	VERB	_	5	parataxis	_	_
+11	de	de	DET	DET	_	12	det	_	_
+12	fosfor	fosfor	NOUN	NOUN	_	10	nsubj	_	_
+13	un	un	CCONJ	CCONJ	_	14	cc	_	_
+14	word	word	VERB	VERB	_	10	conj	_	highlight=red
+15	tolest	tolest	ADV	ADV	_	14	advmod	_	highlight=green|span=1
+16	alle	alle	ADJ	ADJ	_	14	xcomp	_	highlight=green|span=1
+17	,	,	PUNCT	PUNCT	_	21	punct	_	_
+18	in	in	ADP	ADP	_	20	case	_	_
+19	de	de	DET	DET	_	20	det	_	_
+20	jöägd	jöägd	NOUN	NOUN	_	21	obl	_	_
+21	hadde	hadde	VERB	VERB	_	10	parataxis	_	_
+22	man	man	PRON	PRON	_	21	nsubj	_	_
+23	sik	sik	PRON	PRON	_	21	obj	_	_
+24	to	to	PART	PART	_	25	mark	_	_
+25	höden	höden	VERB	VERB	_	21	xcomp	_	_
+26	,	,	PUNCT	PUNCT	_	31	punct	_	_
+27	woor	woor	ADV	ADV	_	31	advmod	_	_
+28	et	et	PRON	PRON	_	31	nsubj	_	_
+29	to	to	ADV	ADV	_	30	advmod	_	_
+30	veal	veal	ADJ	ADJ	_	31	xcomp	_	_
+31	word	word	VERB	VERB	_	32	advcl	_	_
+32	sloog	sloog	VERB	VERB	_	21	parataxis	_	_
+33	licht	licht	ADJ	ADJ	_	32	advmod	_	_
+34	mål	mål	ADV	ADV	_	32	advmod	_	_
+35	de	de	DET	DET	_	36	det	_	_
+36	bliks	bliks	NOUN	NOUN	_	32	nsubj	_	_
+37	dårtwisken	dårtwisken	ADV	ADV	_	32	advmod	_	_
+38	un	un	CCONJ	CCONJ	_	39	cc	_	_
+39	sloog	sloog	VERB	VERB	_	32	conj	_	_
+40	dat	dat	DET	DET	_	42	det	_	_
+41	ganse	ganse	ADJ	ADJ	_	42	amod	_	_
+42	leaven	leaven	NOUN	NOUN	_	39	obj	_	_
+43	entwei	entwei	ADV	ADV	_	39	xcomp	_	_
+44	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: nds_lsdc-ud-test.conllu · this verb has L=0, R=2 (mean span = 8.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Jy seaden , Jy weren my good - geavet my en bewys van un skenket my dissen buk , dee my seyre klook skynt un den ik wol midünder üm råd vrågen müchte .
+1	Jy	Jy	PRON	PRON	_	2	nsubj	_	_
+2	seaden	seaden	VERB	VERB	_	0	root	_	_
+3	,	,	PUNCT	PUNCT	_	7	punct	_	_
+4	Jy	Jy	PRON	PRON	_	7	nsubj	_	_
+5	weren	weren	AUX	AUX	_	7	cop	_	_
+6	my	my	PRON	PRON	_	7	obj	_	_
+7	good	good	ADJ	ADJ	_	2	parataxis	_	_
+8	-	-	PUNCT	PUNCT	_	9	punct	_	_
+9	geavet	geavet	VERB	VERB	_	2	parataxis	_	_
+10	my	my	PRON	PRON	_	9	iobj	_	_
+11	en	en	DET	DET	_	12	det	_	_
+12	bewys	bewys	NOUN	NOUN	_	9	obj	_	_
+13	van	van	ADV	ADV	_	9	advmod	_	_
+14	un	un	CCONJ	CCONJ	_	15	cc	_	_
+15	skenket	skenket	VERB	VERB	_	9	conj	_	highlight=red
+16	my	my	PRON	PRON	_	15	iobj	_	highlight=green|span=1
+17	dissen	dissen	DET	DET	_	18	det	_	_
+18	buk	buk	NOUN	NOUN	_	15	obj	_	highlight=green|span=16
+19	,	,	PUNCT	PUNCT	_	24	punct	_	_
+20	dee	dee	PRON	PRON	_	24	nsubj	_	_
+21	my	my	PRON	PRON	_	24	obj	_	_
+22	seyre	seyre	ADV	ADV	_	23	advmod	_	_
+23	klook	klook	ADJ	ADJ	_	24	xcomp	_	_
+24	skynt	skynt	VERB	VERB	_	18	acl	_	_
+25	un	un	CCONJ	CCONJ	_	32	cc	_	_
+26	den	den	PRON	PRON	_	32	obj	_	_
+27	ik	ik	PRON	PRON	_	32	nsubj	_	_
+28	wol	wol	ADV	ADV	_	32	advmod	_	_
+29	midünder	midünder	ADV	ADV	_	32	advmod	_	_
+30	üm	üm	ADP	ADP	_	31	case	_	_
+31	råd	råd	NOUN	NOUN	_	32	obl	_	_
+32	vrågen	vrågen	VERB	VERB	_	24	conj	_	_
+33	müchte	müchte	AUX	AUX	_	32	aux	_	_
+34	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: nds_lsdc-ud-test.conllu · this verb has L=1, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = – Nu kyk mål eyner – Alsou See sünt de ol Jahn ? « –
+1	–	–	PUNCT	PUNCT	_	3	punct	_	_
+2	Nu	Nu	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+3	kyk	kyk	VERB	VERB	_	0	root	_	highlight=red
+4	mål	mål	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+5	eyner	eyner	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+6	–	–	PUNCT	PUNCT	_	12	punct	_	_
+7	Alsou	Alsou	ADV	ADV	_	12	advmod	_	_
+8	See	See	PRON	PRON	_	12	nsubj	_	_
+9	sünt	sünt	AUX	AUX	_	12	cop	_	_
+10	de	de	DET	DET	_	12	det	_	_
+11	ol	ol	ADJ	ADJ	_	12	amod	_	_
+12	Jahn	Jahn	PROPN	PROPN	_	3	parataxis	_	_
+13	?	?	PUNCT	PUNCT	_	3	punct	_	_
+14	«	«	PUNCT	PUNCT	_	3	punct	_	_
+15	–	–	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: nds_lsdc-ud-train.conllu · this verb has L=2, R=2 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Do see bukke em pankoke un sperkel .
+1	Do	Do	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+2	see	see	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+3	bukke	bukke	VERB	VERB	_	0	root	_	highlight=red
+4	em	em	PRON	PRON	_	3	iobj	_	highlight=green|span=1
+5	pankoke	pankoke	NOUN	NOUN	_	3	obj	_	highlight=green|span=3
+6	un	un	CCONJ	CCONJ	_	7	cc	_	_
+7	sperkel	sperkel	NOUN	NOUN	_	5	conj	_	_
+8	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: nds_lsdc-ud-train.conllu · this verb has L=1, R=2 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Et häng in den sygen stuaven van tymian un lavendel ,
+1	Et	Et	PRON	PRON	_	2	expl	_	highlight=green|span=1
+2	häng	häng	VERB	VERB	_	0	root	_	highlight=red
+3	in	in	ADP	ADP	_	6	case	_	_
+4	den	den	DET	DET	_	6	det	_	_
+5	sygen	sygen	ADJ	ADJ	_	6	amod	_	_
+6	stuaven	stuaven	NOUN	NOUN	_	2	obl	_	highlight=green|span=4
+7	van	van	ADP	ADP	_	8	case	_	_
+8	tymian	tymian	NOUN	NOUN	_	2	obl	_	highlight=green|span=4
+9	un	un	CCONJ	CCONJ	_	10	cc	_	_
+10	lavendel	lavendel	NOUN	NOUN	_	8	conj	_	_
+11	,	,	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: nds_lsdc-ud-test.conllu · this verb has L=0, R=2 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = De gemeynen lüde hadden em swårens immer nåsegd , hee miat mid valske ealen un hädde ouk valsk måt un gewicht ; men se konnen em doch syn liaven nich ankuamen , un hee word eynen van de anseenliksten un de ryksten kråmers in de stad .
+1	De	De	DET	DET	_	3	det	_	_
+2	gemeynen	gemeynen	ADJ	ADJ	_	3	amod	_	_
+3	lüde	lüde	NOUN	NOUN	_	8	nsubj	_	_
+4	hadden	hadden	AUX	AUX	_	8	aux	_	_
+5	em	em	PRON	PRON	_	8	obj	_	_
+6	swårens	swårens	ADV	ADV	_	8	advmod	_	_
+7	immer	immer	ADV	ADV	_	8	advmod	_	_
+8	nåsegd	nåsegd	VERB	VERB	_	0	root	_	_
+9	,	,	PUNCT	PUNCT	_	11	punct	_	_
+10	hee	hee	PRON	PRON	_	11	nsubj	_	_
+11	miat	miat	VERB	VERB	_	8	ccomp	_	_
+12	mid	mid	ADP	ADP	_	14	case	_	_
+13	valske	valske	ADJ	ADJ	_	14	amod	_	_
+14	ealen	ealen	NOUN	NOUN	_	11	obl	_	_
+15	un	un	CCONJ	CCONJ	_	16	cc	_	_
+16	hädde	hädde	VERB	VERB	_	11	conj	_	highlight=red
+17	ouk	ouk	ADV	ADV	_	16	advmod	_	highlight=green|span=1
+18	valsk	valsk	ADJ	ADJ	_	19	amod	_	_
+19	måt	måt	NOUN	NOUN	_	16	obj	_	highlight=green|span=4
+20	un	un	CCONJ	CCONJ	_	21	cc	_	_
+21	gewicht	gewicht	NOUN	NOUN	_	19	conj	_	_
+22	;	;	PUNCT	PUNCT	_	31	punct	_	_
+23	men	men	CCONJ	CCONJ	_	31	cc	_	_
+24	se	se	PRON	PRON	_	31	nsubj	_	_
+25	konnen	konnen	AUX	AUX	_	31	aux	_	_
+26	em	em	PRON	PRON	_	31	obj	_	_
+27	doch	doch	ADV	ADV	_	31	advmod	_	_
+28	syn	syn	DET	DET	_	29	det:poss	_	_
+29	liaven	liaven	NOUN	NOUN	_	31	obl	_	_
+30	nich	nich	PART	PART	_	31	advmod	_	_
+31	ankuamen	ankuamen	VERB	VERB	_	8	conj	_	_
+32	,	,	PUNCT	PUNCT	_	34	punct	_	_
+33	un	un	CCONJ	CCONJ	_	34	cc	_	_
+34	hee	hee	PRON	PRON	_	35	nsubj	_	_
+35	word	word	VERB	VERB	_	31	conj	_	_
+36	eynen	eynen	NUM	NUM	_	35	xcomp	_	_
+37	van	van	ADP	ADP	_	43	case	_	_
+38	de	de	DET	DET	_	43	det	_	_
+39	anseenliksten	anseenliksten	ADJ	ADJ	_	43	amod	_	_
+40	un	un	CCONJ	CCONJ	_	42	cc	_	_
+41	de	de	DET	DET	_	43	det	_	_
+42	ryksten	ryksten	ADJ	ADJ	_	39	conj	_	_
+43	kråmers	kråmers	NOUN	NOUN	_	36	xcomp	_	_
+44	in	in	ADP	ADP	_	46	case	_	_
+45	de	de	DET	DET	_	46	det	_	_
+46	stad	stad	NOUN	NOUN	_	43	obl	_	_
+47	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: nds_lsdc-ud-test.conllu · this verb has L=0, R=2 (mean span = 14.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Jå now , party bint lakkertys , döärgåns halv seek , of see hebbet et in de rügge , sitten vul beklagelike pyne te knarpen , dat y gyn centen genoog te hüüs brenget en al sük gesanik meyr – de mynde hevt dår te 'n minste best slag van .
+1	Jå	Jå	INTJ	INTJ	_	6	discourse	_	_
+2	now	now	INTJ	INTJ	_	1	discourse	_	_
+3	,	,	PUNCT	PUNCT	_	6	punct	_	_
+4	party	party	NOUN	NOUN	_	6	nsubj	_	_
+5	bint	bint	AUX	AUX	_	6	cop	_	_
+6	lakkertys	lakkertys	NOUN	NOUN	_	0	root	_	_
+7	,	,	PUNCT	PUNCT	_	10	punct	_	_
+8	döärgåns	döärgåns	ADV	ADV	_	9	advmod	_	_
+9	halv	halv	ADJ	ADJ	_	10	amod	_	_
+10	seek	seek	ADJ	ADJ	_	6	conj	_	_
+11	,	,	PUNCT	PUNCT	_	14	punct	_	_
+12	of	of	CCONJ	CCONJ	_	14	cc	_	_
+13	see	see	PRON	PRON	_	14	nsubj	_	_
+14	hebbet	hebbet	VERB	VERB	_	6	conj	_	_
+15	et	et	PRON	PRON	_	14	obj	_	_
+16	in	in	ADP	ADP	_	18	case	_	_
+17	de	de	DET	DET	_	18	det	_	_
+18	rügge	rügge	NOUN	NOUN	_	14	obl	_	_
+19	,	,	PUNCT	PUNCT	_	20	punct	_	_
+20	sitten	sitten	VERB	VERB	_	14	conj	_	highlight=red
+21	vul	vul	ADJ	ADJ	_	20	amod	_	highlight=green|span=3
+22	beklagelike	beklagelike	ADJ	ADJ	_	23	amod	_	_
+23	pyne	pyne	NOUN	NOUN	_	21	nmod	_	_
+24	te	te	PART	PART	_	25	mark	_	_
+25	knarpen	knarpen	VERB	VERB	_	20	xcomp	_	highlight=green|span=25
+26	,	,	PUNCT	PUNCT	_	34	punct	_	_
+27	dat	dat	SCONJ	SCONJ	_	34	mark	_	_
+28	y	y	PRON	PRON	_	34	nsubj	_	_
+29	gyn	gyn	DET	DET	_	30	det	_	_
+30	centen	centen	NOUN	NOUN	_	34	obj	_	_
+31	genoog	genoog	ADV	ADV	_	30	advmod	_	_
+32	te	te	ADP	ADP	_	33	case	_	_
+33	hüüs	hüüs	NOUN	NOUN	_	34	obl	_	_
+34	brenget	brenget	VERB	VERB	_	25	ccomp	_	_
+35	en	en	CCONJ	CCONJ	_	38	cc	_	_
+36	al	al	DET	DET	_	38	nmod	_	_
+37	sük	sük	DET	DET	_	38	det	_	_
+38	gesanik	gesanik	NOUN	NOUN	_	34	obj	_	_
+39	meyr	meyr	ADV	ADV	_	38	advmod	_	_
+40	–	–	PUNCT	PUNCT	_	43	punct	_	_
+41	de	de	DET	DET	_	42	det	_	_
+42	mynde	mynde	PRON	PRON	_	43	nsubj	_	_
+43	hevt	hevt	VERB	VERB	_	34	conj	_	_
+44	dår	dår	ADV	ADV	_	43	advmod	_	_
+45	te	te	ADP	ADP	_	47	case	_	_
+46	'n	'n	DET	DET	_	47	det	_	_
+47	minste	minste	ADJ	ADJ	_	43	obl	_	_
+48	best	best	ADJ	ADJ	_	43	advmod	_	_
+49	slag	slag	NOUN	NOUN	_	43	obj	_	_
+50	van	van	ADP	ADP	_	44	case	_	_
+51	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: nds_lsdc-ud-train.conllu · this verb has L=0, R=2 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = »» Na , dän reisen See mid God , «« sead de olde , »» wen nich to råden is , den is nich to helpen , «« un rats draide de olde sik üm un vaat tanten Line under den arm un gung mid ear den Markusplats dale .
+1	»»	»»	PUNCT	PUNCT	_	5	punct	_	_
+2	Na	Na	INTJ	INTJ	_	5	discourse	_	_
+3	,	,	PUNCT	PUNCT	_	5	punct	_	_
+4	dän	dän	ADV	ADV	_	5	advmod	_	_
+5	reisen	reisen	VERB	VERB	_	11	ccomp	_	_
+6	See	See	PRON	PRON	_	5	nsubj	_	_
+7	mid	mid	ADP	ADP	_	8	case	_	_
+8	God	God	NOUN	NOUN	_	5	obl	_	_
+9	,	,	PUNCT	PUNCT	_	5	punct	_	_
+10	««	««	PUNCT	PUNCT	_	5	punct	_	_
+11	sead	sead	VERB	VERB	_	0	root	_	_
+12	de	de	DET	DET	_	13	det	_	_
+13	olde	olde	ADJ	ADJ	_	11	nsubj	_	_
+14	,	,	PUNCT	PUNCT	_	22	punct	_	_
+15	»»	»»	PUNCT	PUNCT	_	22	punct	_	_
+16	wen	wen	PRON	PRON	_	19	obj	_	_
+17	nich	nich	PART	PART	_	19	advmod	_	_
+18	to	to	PART	PART	_	19	mark	_	_
+19	råden	råden	VERB	VERB	_	22	acl	_	_
+20	is	is	AUX	AUX	_	19	cop	_	_
+21	,	,	PUNCT	PUNCT	_	19	punct	_	_
+22	den	den	PRON	PRON	_	26	obj	_	_
+23	is	is	AUX	AUX	_	26	cop	_	_
+24	nich	nich	PART	PART	_	26	advmod	_	_
+25	to	to	PART	PART	_	26	mark	_	_
+26	helpen	helpen	VERB	VERB	_	11	parataxis	_	_
+27	,	,	PUNCT	PUNCT	_	26	punct	_	_
+28	««	««	PUNCT	PUNCT	_	26	punct	_	_
+29	un	un	CCONJ	CCONJ	_	31	cc	_	_
+30	rats	rats	INTJ	INTJ	_	31	discourse	_	_
+31	draide	draide	VERB	VERB	_	11	conj	_	_
+32	de	de	DET	DET	_	33	det	_	_
+33	olde	olde	ADJ	ADJ	_	31	nsubj	_	_
+34	sik	sik	PRON	PRON	_	31	obj	_	_
+35	üm	üm	ADP	ADP	_	31	compound:prt	_	_
+36	un	un	CCONJ	CCONJ	_	37	cc	_	_
+37	vaat	vaat	VERB	VERB	_	31	conj	_	_
+38	tanten	tanten	NOUN	NOUN	_	37	obj	_	_
+39	Line	Line	PROPN	PROPN	_	38	flat	_	_
+40	under	under	ADP	ADP	_	42	case	_	_
+41	den	den	DET	DET	_	42	det	_	_
+42	arm	arm	NOUN	NOUN	_	37	obl	_	_
+43	un	un	CCONJ	CCONJ	_	44	cc	_	_
+44	gung	gung	VERB	VERB	_	31	conj	_	highlight=red
+45	mid	mid	ADP	ADP	_	46	case	_	_
+46	ear	ear	PRON	PRON	_	44	obl	_	highlight=green|span=2
+47	den	den	DET	DET	_	48	det	_	_
+48	Markusplats	Markusplats	NOUN	NOUN	_	44	obj	_	highlight=green|span=3
+49	dale	dale	ADP	ADP	_	48	case	_	_
+50	.	.	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: nds_lsdc-ud-train.conllu · this verb has L=2, R=2 (mean span = 5.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = - As düsse , nå synes öldesten broders doude , dat vörstendoom Zelle antrad , sou trokke syn broder Johann Friederich up dat hannoverske slot .
+1	-	-	PUNCT	PUNCT	_	17	punct	_	_
+2	As	As	SCONJ	SCONJ	_	14	mark	_	_
+3	düsse	düsse	DET	DET	_	14	det	_	_
+4	,	,	PUNCT	PUNCT	_	9	punct	_	_
+5	nå	nå	ADP	ADP	_	9	case	_	_
+6	synes	synes	DET	DET	_	8	det	_	_
+7	öldesten	öldesten	ADJ	ADJ	_	8	amod	_	_
+8	broders	broders	NOUN	NOUN	_	9	nmod	_	_
+9	doude	doude	NOUN	NOUN	_	14	obl	_	_
+10	,	,	PUNCT	PUNCT	_	9	punct	_	_
+11	dat	dat	DET	DET	_	12	det	_	_
+12	vörstendoom	vörstendoom	NOUN	NOUN	_	14	nsubj	_	_
+13	Zelle	Zelle	NOUN	NOUN	_	12	flat	_	_
+14	antrad	antrad	VERB	VERB	_	17	advcl	_	highlight=green|span=11
+15	,	,	PUNCT	PUNCT	_	14	punct	_	_
+16	sou	sou	ADV	ADV	_	17	advmod	_	highlight=green|span=1
+17	trokke	trokke	VERB	VERB	_	0	root	_	highlight=red
+18	syn	syn	DET	DET	_	19	det	_	_
+19	broder	broder	NOUN	NOUN	_	17	nsubj	_	highlight=green|span=4
+20	Johann	Johann	PROPN	PROPN	_	19	appos	_	_
+21	Friederich	Friederich	PROPN	PROPN	_	20	flat	_	_
+22	up	up	ADP	ADP	_	25	case	_	_
+23	dat	dat	DET	DET	_	25	det	_	_
+24	hannoverske	hannoverske	ADJ	ADJ	_	25	amod	_	_
+25	slot	slot	NOUN	NOUN	_	17	obl	_	highlight=green|span=4
+26	.	.	PUNCT	PUNCT	_	17	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: nds_lsdc-ud-train.conllu · this verb has L=3, R=2 (mean span = 5.80)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Hee hadde sik den grouten rune töymd , dee eyrst en beatjen mid em rümdans , aver bald in den sney un ünder synen meyster sinniger word – hee wüs en peard to halteren .
+1	Hee	Hee	PRON	PRON	_	7	nsubj	_	highlight=green|span=1
+2	hadde	hadde	AUX	AUX	_	7	aux	_	_
+3	sik	sik	PRON	PRON	_	7	obl:arg	_	highlight=green|span=1
+4	den	den	DET	DET	_	6	det	_	_
+5	grouten	grouten	ADJ	ADJ	_	6	amod	_	_
+6	rune	rune	NOUN	NOUN	_	7	obj	_	highlight=green|span=3
+7	töymd	töymd	VERB	VERB	_	0	root	_	highlight=red
+8	,	,	PUNCT	PUNCT	_	15	punct	_	_
+9	dee	dee	PRON	PRON	_	15	nsubj	_	_
+10	eyrst	eyrst	ADJ	ADJ	_	15	advmod	_	_
+11	en	en	DET	DET	_	12	det	_	_
+12	beatjen	beatjen	NOUN	NOUN	_	15	obl	_	_
+13	mid	mid	ADP	ADP	_	14	case	_	_
+14	em	em	PRON	PRON	_	15	obl	_	_
+15	rümdans	rümdans	VERB	VERB	_	6	acl:relcl	_	highlight=green|span=18
+16	,	,	PUNCT	PUNCT	_	27	punct	_	_
+17	aver	aver	CCONJ	CCONJ	_	27	cc	_	_
+18	bald	bald	ADV	ADV	_	27	advmod	_	_
+19	in	in	ADP	ADP	_	21	case	_	_
+20	den	den	DET	DET	_	21	det	_	_
+21	sney	sney	NOUN	NOUN	_	27	obl	_	_
+22	un	un	CCONJ	CCONJ	_	25	cc	_	_
+23	ünder	ünder	ADP	ADP	_	25	case	_	_
+24	synen	synen	DET	DET	_	25	det	_	_
+25	meyster	meyster	NOUN	NOUN	_	21	conj	_	_
+26	sinniger	sinniger	ADJ	ADJ	_	27	xcomp	_	_
+27	word	word	VERB	VERB	_	15	conj	_	_
+28	–	–	PUNCT	PUNCT	_	30	punct	_	_
+29	hee	hee	PRON	PRON	_	30	nsubj	_	_
+30	wüs	wüs	VERB	VERB	_	7	xcomp	_	highlight=green|span=6
+31	en	en	DET	DET	_	32	det	_	_
+32	peard	peard	NOUN	NOUN	_	30	obj	_	_
+33	to	to	PART	PART	_	34	mark	_	_
+34	halteren	halteren	VERB	VERB	_	30	xcomp	_	_
+35	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: nds_lsdc-ud-train.conllu · this verb has L=0, R=2 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = » Her konrektor , « sead Dürten un richtede sik öäver enden , keyk äver by syde weg , » ik vroie my , dat allens to 'm goden uutslån is , un ik vroie my , dat See gesund wedder hyr sünt , äver my drükt wat , un seggen möät ik et doch eynmål : ik möät van See voord trekken . « –
+1	»	»	PUNCT	PUNCT	_	2	punct	_	_
+2	Her	Her	NOUN	NOUN	_	6	ccomp	_	_
+3	konrektor	konrektor	NOUN	NOUN	_	2	flat	_	_
+4	,	,	PUNCT	PUNCT	_	2	punct	_	_
+5	«	«	PUNCT	PUNCT	_	2	punct	_	_
+6	sead	sead	VERB	VERB	_	0	root	_	_
+7	Dürten	Dürten	PROPN	PROPN	_	6	nsubj	_	_
+8	un	un	CCONJ	CCONJ	_	9	cc	_	_
+9	richtede	richtede	VERB	VERB	_	6	conj	_	_
+10	sik	sik	PRON	PRON	_	9	obj	_	_
+11	öäver	öäver	ADP	ADP	_	12	case	_	_
+12	enden	enden	NOUN	NOUN	_	9	obl	_	_
+13	,	,	PUNCT	PUNCT	_	6	punct	_	_
+14	keyk	keyk	VERB	VERB	_	6	conj	_	highlight=red
+15	äver	äver	ADV	ADV	_	14	advmod	_	highlight=green|span=1
+16	by	by	ADP	ADP	_	17	case	_	_
+17	syde	syde	NOUN	NOUN	_	14	obl	_	highlight=green|span=2
+18	weg	weg	ADV	ADV	_	14	compound:prt	_	_
+19	,	,	PUNCT	PUNCT	_	22	punct	_	_
+20	»	»	PUNCT	PUNCT	_	22	punct	_	_
+21	ik	ik	PRON	PRON	_	22	nsubj	_	_
+22	vroie	vroie	VERB	VERB	_	6	ccomp	_	_
+23	my	my	PRON	PRON	_	22	obj	_	_
+24	,	,	PUNCT	PUNCT	_	30	punct	_	_
+25	dat	dat	SCONJ	SCONJ	_	30	mark	_	_
+26	allens	allens	PRON	PRON	_	30	nsubj	_	_
+27	to	to	ADP	ADP	_	29	case	_	_
+28	'm	'm	DET	DET	_	29	det	_	_
+29	goden	goden	ADJ	ADJ	_	30	obl	_	_
+30	uutslån	uutslån	VERB	VERB	_	22	advcl	_	_
+31	is	is	AUX	AUX	_	30	aux	_	_
+32	,	,	PUNCT	PUNCT	_	35	punct	_	_
+33	un	un	CCONJ	CCONJ	_	35	cc	_	_
+34	ik	ik	PRON	PRON	_	35	nsubj	_	_
+35	vroie	vroie	VERB	VERB	_	22	conj	_	_
+36	my	my	PRON	PRON	_	35	obj	_	_
+37	,	,	PUNCT	PUNCT	_	40	punct	_	_
+38	dat	dat	SCONJ	SCONJ	_	40	mark	_	_
+39	See	See	PRON	PRON	_	40	nsubj	_	_
+40	gesund	gesund	ADJ	ADJ	_	35	advcl	_	_
+41	wedder	wedder	ADV	ADV	_	40	advmod	_	_
+42	hyr	hyr	ADV	ADV	_	40	advmod	_	_
+43	sünt	sünt	AUX	AUX	_	40	cop	_	_
+44	,	,	PUNCT	PUNCT	_	47	punct	_	_
+45	äver	äver	CCONJ	CCONJ	_	47	cc	_	_
+46	my	my	PRON	PRON	_	47	obj	_	_
+47	drükt	drükt	VERB	VERB	_	22	conj	_	_
+48	wat	wat	PRON	PRON	_	47	nsubj	_	_
+49	,	,	PUNCT	PUNCT	_	47	punct	_	_
+50	un	un	CCONJ	CCONJ	_	51	cc	_	_
+51	seggen	seggen	VERB	VERB	_	47	conj	_	_
+52	möät	möät	AUX	AUX	_	51	aux	_	_
+53	ik	ik	PRON	PRON	_	51	nsubj	_	_
+54	et	et	PRON	PRON	_	51	obj	_	_
+55	doch	doch	ADV	ADV	_	51	advmod	_	_
+56	eynmål	eynmål	ADV	ADV	_	51	advmod	_	_
+57	:	:	PUNCT	PUNCT	_	63	punct	_	_
+58	ik	ik	PRON	PRON	_	63	nsubj	_	_
+59	möät	möät	AUX	AUX	_	63	aux	_	_
+60	van	van	ADP	ADP	_	61	case	_	_
+61	See	See	PRON	PRON	_	63	obl	_	_
+62	voord	voord	ADV	ADV	_	61	advmod	_	_
+63	trekken	trekken	VERB	VERB	_	51	parataxis	_	_
+64	.	.	PUNCT	PUNCT	_	22	punct	_	_
+65	«	«	PUNCT	PUNCT	_	22	punct	_	_
+66	–	–	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: nds_lsdc-ud-train.conllu · this verb has L=1, R=2 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = »» Na , dän reisen See mid God , «« sead de olde , »» wen nich to råden is , den is nich to helpen , «« un rats draide de olde sik üm un vaat tanten Line under den arm un gung mid ear den Markusplats dale .
+1	»»	»»	PUNCT	PUNCT	_	5	punct	_	_
+2	Na	Na	INTJ	INTJ	_	5	discourse	_	_
+3	,	,	PUNCT	PUNCT	_	5	punct	_	_
+4	dän	dän	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+5	reisen	reisen	VERB	VERB	_	11	ccomp	_	highlight=red
+6	See	See	PRON	PRON	_	5	nsubj	_	highlight=green|span=1
+7	mid	mid	ADP	ADP	_	8	case	_	_
+8	God	God	NOUN	NOUN	_	5	obl	_	highlight=green|span=2
+9	,	,	PUNCT	PUNCT	_	5	punct	_	_
+10	««	««	PUNCT	PUNCT	_	5	punct	_	_
+11	sead	sead	VERB	VERB	_	0	root	_	_
+12	de	de	DET	DET	_	13	det	_	_
+13	olde	olde	ADJ	ADJ	_	11	nsubj	_	_
+14	,	,	PUNCT	PUNCT	_	22	punct	_	_
+15	»»	»»	PUNCT	PUNCT	_	22	punct	_	_
+16	wen	wen	PRON	PRON	_	19	obj	_	_
+17	nich	nich	PART	PART	_	19	advmod	_	_
+18	to	to	PART	PART	_	19	mark	_	_
+19	råden	råden	VERB	VERB	_	22	acl	_	_
+20	is	is	AUX	AUX	_	19	cop	_	_
+21	,	,	PUNCT	PUNCT	_	19	punct	_	_
+22	den	den	PRON	PRON	_	26	obj	_	_
+23	is	is	AUX	AUX	_	26	cop	_	_
+24	nich	nich	PART	PART	_	26	advmod	_	_
+25	to	to	PART	PART	_	26	mark	_	_
+26	helpen	helpen	VERB	VERB	_	11	parataxis	_	_
+27	,	,	PUNCT	PUNCT	_	26	punct	_	_
+28	««	««	PUNCT	PUNCT	_	26	punct	_	_
+29	un	un	CCONJ	CCONJ	_	31	cc	_	_
+30	rats	rats	INTJ	INTJ	_	31	discourse	_	_
+31	draide	draide	VERB	VERB	_	11	conj	_	_
+32	de	de	DET	DET	_	33	det	_	_
+33	olde	olde	ADJ	ADJ	_	31	nsubj	_	_
+34	sik	sik	PRON	PRON	_	31	obj	_	_
+35	üm	üm	ADP	ADP	_	31	compound:prt	_	_
+36	un	un	CCONJ	CCONJ	_	37	cc	_	_
+37	vaat	vaat	VERB	VERB	_	31	conj	_	_
+38	tanten	tanten	NOUN	NOUN	_	37	obj	_	_
+39	Line	Line	PROPN	PROPN	_	38	flat	_	_
+40	under	under	ADP	ADP	_	42	case	_	_
+41	den	den	DET	DET	_	42	det	_	_
+42	arm	arm	NOUN	NOUN	_	37	obl	_	_
+43	un	un	CCONJ	CCONJ	_	44	cc	_	_
+44	gung	gung	VERB	VERB	_	31	conj	_	_
+45	mid	mid	ADP	ADP	_	46	case	_	_
+46	ear	ear	PRON	PRON	_	44	obl	_	_
+47	den	den	DET	DET	_	48	det	_	_
+48	Markusplats	Markusplats	NOUN	NOUN	_	44	obj	_	_
+49	dale	dale	ADP	ADP	_	48	case	_	_
+50	.	.	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: nds_lsdc-ud-test.conllu · this verb has L=1, R=2 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ja ja , jüfvrouwe , sou gåt et in de weareld .
+1	Ja	Ja	INTJ	INTJ	_	7	discourse	_	_
+2	ja	ja	INTJ	INTJ	_	1	conj	_	_
+3	,	,	PUNCT	PUNCT	_	4	punct	_	_
+4	jüfvrouwe	jüfvrouwe	NOUN	NOUN	_	7	vocative	_	_
+5	,	,	PUNCT	PUNCT	_	4	punct	_	_
+6	sou	sou	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+7	gåt	gåt	VERB	VERB	_	0	root	_	highlight=red
+8	et	et	PRON	PRON	_	7	expl	_	highlight=green|span=1
+9	in	in	ADP	ADP	_	11	case	_	_
+10	de	de	DET	DET	_	11	det	_	_
+11	weareld	weareld	NOUN	NOUN	_	7	obl	_	highlight=green|span=3
+12	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: nds_lsdc-ud-test.conllu · this verb has L=0, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Hee tart dat wyv nå dat wandbedde , rit dat up un legt Maike rin .
+1	Hee	Hee	PRON	PRON	_	2	nsubj	_	_
+2	tart	tart	VERB	VERB	_	0	root	_	_
+3	dat	dat	DET	DET	_	4	det	_	_
+4	wyv	wyv	NOUN	NOUN	_	2	obj	_	_
+5	nå	nå	ADP	ADP	_	7	case	_	_
+6	dat	dat	DET	DET	_	7	det	_	_
+7	wandbedde	wandbedde	NOUN	NOUN	_	2	obl	_	_
+8	,	,	PUNCT	PUNCT	_	9	punct	_	_
+9	rit	rit	VERB	VERB	_	2	conj	_	_
+10	dat	dat	PRON	PRON	_	9	obj	_	_
+11	up	up	ADP	ADP	_	9	compound:prt	_	_
+12	un	un	CCONJ	CCONJ	_	13	cc	_	_
+13	legt	legt	VERB	VERB	_	2	conj	_	highlight=red
+14	Maike	Maike	PROPN	PROPN	_	13	obj	_	highlight=green|span=1
+15	rin	rin	ADV	ADV	_	13	advmod	_	highlight=green|span=1
+16	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: nds_lsdc-ud-train.conllu · this verb has L=1, R=2 (mean span = 5.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Küäning Salomo un syne gäste brächen en grouten houpen skåpe un rinder as offer , meyr as men tellen kon .
+1	Küäning	Küäning	NOUN	NOUN	_	6	nmod	_	highlight=green|span=5
+2	Salomo	Salomo	PROPN	PROPN	_	1	flat	_	_
+3	un	un	CCONJ	CCONJ	_	5	cc	_	_
+4	syne	syne	DET	DET	_	5	det	_	_
+5	gäste	gäste	NOUN	NOUN	_	1	conj	_	_
+6	brächen	brächen	VERB	VERB	_	0	root	_	highlight=red
+7	en	en	DET	DET	_	9	det	_	_
+8	grouten	grouten	ADJ	ADJ	_	9	amod	_	_
+9	houpen	houpen	NOUN	NOUN	_	6	obj	_	highlight=green|span=6
+10	skåpe	skåpe	NOUN	NOUN	_	9	nmod	_	_
+11	un	un	CCONJ	CCONJ	_	12	cc	_	_
+12	rinder	rinder	NOUN	NOUN	_	10	conj	_	_
+13	as	as	ADP	ADP	_	14	case	_	_
+14	offer	offer	NOUN	NOUN	_	6	conj	_	_
+15	,	,	PUNCT	PUNCT	_	16	punct	_	_
+16	meyr	meyr	ADJ	ADJ	_	6	dislocated	_	highlight=green|span=5
+17	as	as	SCONJ	SCONJ	_	19	mark	_	_
+18	men	men	PRON	PRON	_	19	nsubj	_	_
+19	tellen	tellen	VERB	VERB	_	16	advcl	_	_
+20	kon	kon	AUX	AUX	_	19	aux	_	_
+21	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: nds_lsdc-ud-train.conllu · this verb has L=1, R=2 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Düsse Johann Friederich was en braav man , uutbenoamen dat hee katolisk was ; do kreygen de paters de slotkerke in , un laesen dår de misse , dat gav en grout upseen in Hannover ; ek ging der sülvest mannigmål hen , as ek noch sou en jung bengel was , deyls , God mag my de sünde vorgeaven ! puur uut nyskyrigheid , deyls ouk , de sköyne musik an to höyren .
+1	Düsse	Düsse	DET	DET	_	2	det	_	_
+2	Johann	Johann	PROPN	PROPN	_	7	nsubj	_	_
+3	Friederich	Friederich	PROPN	PROPN	_	2	flat	_	_
+4	was	was	AUX	AUX	_	7	cop	_	_
+5	en	en	DET	DET	_	7	det	_	_
+6	braav	braav	ADJ	ADJ	_	7	amod	_	_
+7	man	man	NOUN	NOUN	_	0	root	_	_
+8	,	,	PUNCT	PUNCT	_	9	punct	_	_
+9	uutbenoamen	uutbenoamen	VERB	VERB	_	7	acl	_	_
+10	dat	dat	SCONJ	SCONJ	_	12	mark	_	_
+11	hee	hee	PRON	PRON	_	12	nsubj	_	_
+12	katolisk	katolisk	ADJ	ADJ	_	9	advcl	_	_
+13	was	was	AUX	AUX	_	12	cop	_	_
+14	;	;	PUNCT	PUNCT	_	9	punct	_	_
+15	do	do	ADV	ADV	_	16	advmod	_	highlight=green|span=1
+16	kreygen	kreygen	VERB	VERB	_	7	parataxis	_	highlight=red
+17	de	de	DET	DET	_	18	det	_	_
+18	paters	paters	NOUN	NOUN	_	16	nsubj	_	highlight=green|span=2
+19	de	de	DET	DET	_	20	det	_	_
+20	slotkerke	slotkerke	NOUN	NOUN	_	16	obj	_	highlight=green|span=2
+21	in	in	ADP	ADP	_	16	compound:prt	_	_
+22	,	,	PUNCT	PUNCT	_	24	punct	_	_
+23	un	un	CCONJ	CCONJ	_	24	cc	_	_
+24	laesen	laesen	VERB	VERB	_	16	conj	_	_
+25	dår	dår	ADV	ADV	_	24	advmod	_	_
+26	de	de	DET	DET	_	27	det	_	_
+27	misse	misse	NOUN	NOUN	_	24	obj	_	_
+28	,	,	PUNCT	PUNCT	_	30	punct	_	_
+29	dat	dat	PRON	PRON	_	30	nsubj	_	_
+30	gav	gav	VERB	VERB	_	16	parataxis	_	_
+31	en	en	DET	DET	_	33	det	_	_
+32	grout	grout	ADJ	ADJ	_	33	amod	_	_
+33	upseen	upseen	NOUN	NOUN	_	30	obj	_	_
+34	in	in	ADP	ADP	_	35	case	_	_
+35	Hannover	Hannover	PROPN	PROPN	_	30	obl	_	_
+36	;	;	PUNCT	PUNCT	_	30	punct	_	_
+37	ek	ek	PRON	PRON	_	38	nsubj	_	_
+38	ging	ging	VERB	VERB	_	30	conj	_	_
+39	der	der	ADV	ADV	_	38	advmod	_	_
+40	sülvest	sülvest	ADV	ADV	_	38	advmod	_	_
+41	mannigmål	mannigmål	ADV	ADV	_	38	advmod	_	_
+42	hen	hen	ADV	ADV	_	39	advmod	_	_
+43	,	,	PUNCT	PUNCT	_	50	punct	_	_
+44	as	as	SCONJ	SCONJ	_	50	mark	_	_
+45	ek	ek	PRON	PRON	_	50	nsubj	_	_
+46	noch	noch	ADV	ADV	_	50	advmod	_	_
+47	sou	sou	ADV	ADV	_	48	advmod	_	_
+48	en	en	DET	DET	_	50	det	_	_
+49	jung	jung	ADJ	ADJ	_	50	amod	_	_
+50	bengel	bengel	NOUN	NOUN	_	38	advcl	_	_
+51	was	was	AUX	AUX	_	50	cop	_	_
+52	,	,	PUNCT	PUNCT	_	50	punct	_	_
+53	deyls	deyls	ADV	ADV	_	64	cc	_	_
+54	,	,	PUNCT	PUNCT	_	60	punct	_	_
+55	God	God	NOUN	NOUN	_	60	nsubj	_	_
+56	mag	mag	AUX	AUX	_	60	aux	_	_
+57	my	my	PRON	PRON	_	60	iobj	_	_
+58	de	de	DET	DET	_	59	det	_	_
+59	sünde	sünde	NOUN	NOUN	_	60	obj	_	_
+60	vorgeaven	vorgeaven	VERB	VERB	_	64	parataxis	_	_
+61	!	!	PUNCT	PUNCT	_	60	punct	_	_
+62	puur	puur	ADJ	ADJ	_	64	advmod	_	_
+63	uut	uut	ADP	ADP	_	64	case	_	_
+64	nyskyrigheid	nyskyrigheid	NOUN	NOUN	_	38	obl	_	_
+65	,	,	PUNCT	PUNCT	_	64	punct	_	_
+66	deyls	deyls	ADV	ADV	_	74	cc	_	_
+67	ouk	ouk	ADV	ADV	_	74	advmod	_	_
+68	,	,	PUNCT	PUNCT	_	74	punct	_	_
+69	de	de	DET	DET	_	71	det	_	_
+70	sköyne	sköyne	ADJ	ADJ	_	71	amod	_	_
+71	musik	musik	NOUN	NOUN	_	74	obj	_	_
+72	an	an	ADP	ADP	_	74	compound:prt	_	_
+73	to	to	PART	PART	_	74	mark	_	_
+74	höyren	höyren	VERB	VERB	_	64	conj	_	_
+75	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

@@ -1,0 +1,619 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Czech — LMAL_1</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Czech examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Czech <small style="color:#999;font-weight:normal">(cs)</small> — LMAL<sub>1</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>1</b> left dependents (right side may be anything).</p><p><b>LMAL<sub>1</sub> = 3.247</b> &nbsp; <span style="color:#666">(147,321 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>left</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: cs_pdtc-ud-train.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Museli jsme je přenášet .
+1	Museli	Museli	VERB	VERB	_	0	root	_	_
+2	jsme	jsme	AUX	AUX	_	1	aux	_	_
+3	je	je	PRON	PRON	_	4	obj	_	highlight=green|span=1
+4	přenášet	přenášet	VERB	VERB	_	1	xcomp	_	highlight=red
+5	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: cs_pdtc-ud-train.conllu · this verb has L=1, R=2 (mean span = 3.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Izolaci mikroorganismů a ověření reakcí metanového kvašení provedl Barker r . 1936 .
+1	Izolaci	Izolaci	NOUN	NOUN	_	8	obj	_	highlight=green|span=7
+2	mikroorganismů	mikroorganismů	NOUN	NOUN	_	1	nmod	_	_
+3	a	a	CCONJ	CCONJ	_	4	cc	_	_
+4	ověření	ověření	NOUN	NOUN	_	1	conj	_	_
+5	reakcí	reakcí	NOUN	NOUN	_	4	nmod	_	_
+6	metanového	metanového	ADJ	ADJ	_	7	amod	_	_
+7	kvašení	kvašení	NOUN	NOUN	_	5	nmod	_	_
+8	provedl	provedl	VERB	VERB	_	0	root	_	highlight=red
+9	Barker	Barker	PROPN	PROPN	_	8	nsubj	_	highlight=green|span=1
+10	r	r	NOUN	NOUN	_	8	obl	_	highlight=green|span=2
+11	.	.	PUNCT	PUNCT	_	10	punct	_	_
+12	1936	1936	NUM	NUM	_	10	nummod	_	_
+13	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: cs_pdtc-ud-dev.conllu · this verb has L=1, R=1 (mean span = 11.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Pokud se nám nedaří , musíme si pomáhat buď čistou logikou , odtrženou od geometrického názoru , nebo nahlížením do nějakého modelu vytvořeného v eukleidovském geometrickém světě .
+1	Pokud	Pokud	SCONJ	SCONJ	_	4	mark	_	_
+2	se	se	PRON	PRON	_	4	expl:pv	_	_
+3	nám	nám	PRON	PRON	_	4	obl:arg	_	_
+4	nedaří	nedaří	VERB	VERB	_	6	advcl	_	highlight=green|span=4
+5	,	,	PUNCT	PUNCT	_	4	punct	_	_
+6	musíme	musíme	VERB	VERB	_	0	root	_	highlight=red
+7	si	si	PRON	PRON	_	8	obl:arg	_	_
+8	pomáhat	pomáhat	VERB	VERB	_	6	xcomp	_	highlight=green|span=19
+9	buď	buď	CCONJ	CCONJ	_	11	cc	_	_
+10	čistou	čistou	ADJ	ADJ	_	11	amod	_	_
+11	logikou	logikou	NOUN	NOUN	_	8	obl	_	_
+12	,	,	PUNCT	PUNCT	_	13	punct	_	_
+13	odtrženou	odtrženou	ADJ	ADJ	_	11	amod	_	_
+14	od	od	ADP	ADP	_	16	case	_	_
+15	geometrického	geometrického	ADJ	ADJ	_	16	amod	_	_
+16	názoru	názoru	NOUN	NOUN	_	13	obl:arg	_	_
+17	,	,	PUNCT	PUNCT	_	19	punct	_	_
+18	nebo	nebo	CCONJ	CCONJ	_	19	cc	_	_
+19	nahlížením	nahlížením	NOUN	NOUN	_	11	conj	_	_
+20	do	do	ADP	ADP	_	22	case	_	_
+21	nějakého	nějakého	DET	DET	_	22	det	_	_
+22	modelu	modelu	NOUN	NOUN	_	19	nmod	_	_
+23	vytvořeného	vytvořeného	ADJ	ADJ	_	22	amod	_	_
+24	v	v	ADP	ADP	_	27	case	_	_
+25	eukleidovském	eukleidovském	ADJ	ADJ	_	27	amod	_	_
+26	geometrickém	geometrickém	ADJ	ADJ	_	27	amod	_	_
+27	světě	světě	NOUN	NOUN	_	23	obl	_	_
+28	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: cs_pdtc-ud-test.conllu · this verb has L=1, R=1 (mean span = 7.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Pan Pierce řekl , že společnost Elcotel by měla návratem získat minimálně 10 dolarů čistého příjmu za jeden stroj za každý měsíc .
+1	Pan	Pan	NOUN	NOUN	_	3	nsubj	_	_
+2	Pierce	Pierce	PROPN	PROPN	_	1	flat	_	_
+3	řekl	řekl	VERB	VERB	_	0	root	_	_
+4	,	,	PUNCT	PUNCT	_	9	punct	_	_
+5	že	že	SCONJ	SCONJ	_	9	mark	_	_
+6	společnost	společnost	NOUN	NOUN	_	9	nsubj	_	highlight=green|span=2
+7	Elcotel	Elcotel	PROPN	PROPN	_	6	nmod	_	_
+8	by	by	AUX	AUX	_	9	aux	_	_
+9	měla	měla	VERB	VERB	_	3	ccomp	_	highlight=red
+10	návratem	návratem	NOUN	NOUN	_	11	obl	_	_
+11	získat	získat	VERB	VERB	_	9	xcomp	_	highlight=green|span=13
+12	minimálně	minimálně	ADV	ADV	_	13	advmod	_	_
+13	10	10	NUM	NUM	_	14	nummod:gov	_	_
+14	dolarů	dolarů	NOUN	NOUN	_	11	obj	_	_
+15	čistého	čistého	ADJ	ADJ	_	16	amod	_	_
+16	příjmu	příjmu	NOUN	NOUN	_	14	nmod	_	_
+17	za	za	ADP	ADP	_	19	case	_	_
+18	jeden	jeden	NUM	NUM	_	19	nummod	_	_
+19	stroj	stroj	NOUN	NOUN	_	13	nmod	_	_
+20	za	za	ADP	ADP	_	22	case	_	_
+21	každý	každý	DET	DET	_	22	det	_	_
+22	měsíc	měsíc	NOUN	NOUN	_	13	nmod	_	_
+23	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: cs_pdtc-ud-train.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Od té doby , co komunismus nevytváří protiváhu či antitezi umožňující našemu režimu definovat se jako menší zlo , jako polopravda vůči naprosté lži , a tím získávat na síle , stává se vnímavějším vůči vlastním nedostatkům , v nichž někteří zjišťují známky úpadku .
+1	Od	Od	ADP	ADP	_	3	case	_	_
+2	té	té	DET	DET	_	3	det	_	_
+3	doby	doby	NOUN	NOUN	_	32	obl	_	_
+4	,	,	PUNCT	PUNCT	_	7	punct	_	_
+5	co	co	SCONJ	SCONJ	_	7	mark	_	_
+6	komunismus	komunismus	NOUN	NOUN	_	7	nsubj	_	_
+7	nevytváří	nevytváří	VERB	VERB	_	3	acl	_	_
+8	protiváhu	protiváhu	NOUN	NOUN	_	7	obj	_	_
+9	či	či	CCONJ	CCONJ	_	10	cc	_	_
+10	antitezi	antitezi	NOUN	NOUN	_	8	conj	_	_
+11	umožňující	umožňující	ADJ	ADJ	_	10	amod	_	_
+12	našemu	našemu	DET	DET	_	13	det	_	_
+13	režimu	režimu	NOUN	NOUN	_	11	obl:arg	_	_
+14	definovat	definovat	VERB	VERB	_	11	xcomp	_	_
+15	se	se	PRON	PRON	_	14	obj	_	_
+16	jako	jako	SCONJ	SCONJ	_	18	mark	_	_
+17	menší	menší	ADJ	ADJ	_	18	amod	_	_
+18	zlo	zlo	NOUN	NOUN	_	14	advcl:pred	_	_
+19	,	,	PUNCT	PUNCT	_	21	punct	_	_
+20	jako	jako	SCONJ	SCONJ	_	21	mark	_	_
+21	polopravda	polopravda	NOUN	NOUN	_	18	conj	_	_
+22	vůči	vůči	ADP	ADP	_	24	case	_	_
+23	naprosté	naprosté	ADJ	ADJ	_	24	amod	_	_
+24	lži	lži	NOUN	NOUN	_	21	nmod	_	_
+25	,	,	PUNCT	PUNCT	_	28	punct	_	_
+26	a	a	CCONJ	CCONJ	_	28	cc	_	_
+27	tím	tím	DET	DET	_	28	obl	_	highlight=green|span=1
+28	získávat	získávat	VERB	VERB	_	14	conj	_	highlight=red
+29	na	na	ADP	ADP	_	30	case	_	_
+30	síle	síle	NOUN	NOUN	_	28	obl:arg	_	highlight=green|span=2
+31	,	,	PUNCT	PUNCT	_	7	punct	_	_
+32	stává	stává	VERB	VERB	_	0	root	_	_
+33	se	se	PRON	PRON	_	32	expl:pv	_	_
+34	vnímavějším	vnímavějším	ADJ	ADJ	_	32	obl:arg	_	_
+35	vůči	vůči	ADP	ADP	_	37	case	_	_
+36	vlastním	vlastním	ADJ	ADJ	_	37	amod	_	_
+37	nedostatkům	nedostatkům	NOUN	NOUN	_	34	obl	_	_
+38	,	,	PUNCT	PUNCT	_	42	punct	_	_
+39	v	v	ADP	ADP	_	40	case	_	_
+40	nichž	nichž	PRON	PRON	_	42	obl	_	_
+41	někteří	někteří	DET	DET	_	42	nsubj	_	_
+42	zjišťují	zjišťují	VERB	VERB	_	37	acl:relcl	_	_
+43	známky	známky	NOUN	NOUN	_	42	obj	_	_
+44	úpadku	úpadku	NOUN	NOUN	_	43	nmod	_	_
+45	.	.	PUNCT	PUNCT	_	32	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: cs_cac-ud-train.conllu · this verb has L=1, R=3 (mean span = 5.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Jenže jeden vypínač byl vadný , a protože opravář neměl nový a nechtěl odejít bez opravy , spojil jeden vypínač do zkratu , takže jeden přívod je trvale připojen k televizoru .
+1	Jenže	Jenže	SCONJ	SCONJ	_	5	cc	_	_
+2	jeden	jeden	NUM	NUM	_	3	nummod	_	_
+3	vypínač	vypínač	NOUN	NOUN	_	5	nsubj	_	_
+4	byl	byl	AUX	AUX	_	5	cop	_	_
+5	vadný	vadný	ADJ	ADJ	_	0	root	_	_
+6	,	,	PUNCT	PUNCT	_	18	punct	_	_
+7	a	a	CCONJ	CCONJ	_	18	cc	_	_
+8	protože	protože	SCONJ	SCONJ	_	10	mark	_	_
+9	opravář	opravář	NOUN	NOUN	_	10	nsubj	_	_
+10	neměl	neměl	VERB	VERB	_	18	advcl	_	highlight=green|span=9
+11	nový	nový	ADJ	ADJ	_	10	dep	_	_
+12	a	a	CCONJ	CCONJ	_	13	cc	_	_
+13	nechtěl	nechtěl	VERB	VERB	_	10	conj	_	_
+14	odejít	odejít	VERB	VERB	_	13	xcomp	_	_
+15	bez	bez	ADP	ADP	_	16	case	_	_
+16	opravy	opravy	NOUN	NOUN	_	14	obl	_	_
+17	,	,	PUNCT	PUNCT	_	10	punct	_	_
+18	spojil	spojil	VERB	VERB	_	5	conj	_	highlight=red
+19	jeden	jeden	NUM	NUM	_	20	nummod	_	_
+20	vypínač	vypínač	NOUN	NOUN	_	18	obj	_	highlight=green|span=2
+21	do	do	ADP	ADP	_	22	case	_	_
+22	zkratu	zkratu	NOUN	NOUN	_	18	obl	_	highlight=green|span=2
+23	,	,	PUNCT	PUNCT	_	29	punct	_	_
+24	takže	takže	SCONJ	SCONJ	_	29	mark	_	_
+25	jeden	jeden	NUM	NUM	_	26	nummod	_	_
+26	přívod	přívod	NOUN	NOUN	_	29	nsubj	_	_
+27	je	je	AUX	AUX	_	29	cop	_	_
+28	trvale	trvale	ADV	ADV	_	29	advmod	_	_
+29	připojen	připojen	ADJ	ADJ	_	18	advcl	_	highlight=green|span=8
+30	k	k	ADP	ADP	_	31	case	_	_
+31	televizoru	televizoru	NOUN	NOUN	_	29	obl	_	_
+32	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: cs_pdtc-ud-train.conllu · this verb has L=1, R=1 (mean span = 9.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = S ministerstvem práce a sociálních věcí jsme vypracovali společný materiál , ve kterém jsme se nezaměstnaností v těchto regionech podrobně zabývali .
+1	S	S	ADP	ADP	_	2	case	_	_
+2	ministerstvem	ministerstvem	NOUN	NOUN	_	8	obl	_	highlight=green|span=6
+3	práce	práce	NOUN	NOUN	_	2	nmod	_	_
+4	a	a	CCONJ	CCONJ	_	6	cc	_	_
+5	sociálních	sociálních	ADJ	ADJ	_	6	amod	_	_
+6	věcí	věcí	NOUN	NOUN	_	3	conj	_	_
+7	jsme	jsme	AUX	AUX	_	8	aux	_	_
+8	vypracovali	vypracovali	VERB	VERB	_	0	root	_	highlight=red
+9	společný	společný	ADJ	ADJ	_	10	amod	_	_
+10	materiál	materiál	NOUN	NOUN	_	8	obj	_	highlight=green|span=12
+11	,	,	PUNCT	PUNCT	_	21	punct	_	_
+12	ve	ve	ADP	ADP	_	13	case	_	_
+13	kterém	kterém	DET	DET	_	21	obl	_	_
+14	jsme	jsme	AUX	AUX	_	21	aux	_	_
+15	se	se	PRON	PRON	_	21	expl:pv	_	_
+16	nezaměstnaností	nezaměstnaností	NOUN	NOUN	_	21	obl:arg	_	_
+17	v	v	ADP	ADP	_	19	case	_	_
+18	těchto	těchto	DET	DET	_	19	det	_	_
+19	regionech	regionech	NOUN	NOUN	_	16	nmod	_	_
+20	podrobně	podrobně	ADV	ADV	_	21	advmod	_	_
+21	zabývali	zabývali	VERB	VERB	_	10	acl:relcl	_	_
+22	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: cs_cac-ud-train.conllu · this verb has L=1, R=1 (mean span = 4.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Větší část z celkové hodnoty získané ve zvelebovacích pracích patří na neinvestiční akce , a proto by bylo třeba , aby bychom se letos zaměřili v Akci * především na investiční akce a zvláště dokončili ty , u kterých máme dluh z minulého roku .
+1	Větší	Větší	ADJ	ADJ	_	2	amod	_	_
+2	část	část	NOUN	NOUN	_	10	nsubj	_	_
+3	z	z	ADP	ADP	_	5	case	_	_
+4	celkové	celkové	ADJ	ADJ	_	5	amod	_	_
+5	hodnoty	hodnoty	NOUN	NOUN	_	2	nmod	_	_
+6	získané	získané	ADJ	ADJ	_	5	amod	_	_
+7	ve	ve	ADP	ADP	_	9	case	_	_
+8	zvelebovacích	zvelebovacích	ADJ	ADJ	_	9	amod	_	_
+9	pracích	pracích	NOUN	NOUN	_	6	obl	_	_
+10	patří	patří	VERB	VERB	_	0	root	_	_
+11	na	na	ADP	ADP	_	13	case	_	_
+12	neinvestiční	neinvestiční	ADJ	ADJ	_	13	amod	_	_
+13	akce	akce	NOUN	NOUN	_	10	obl	_	_
+14	,	,	PUNCT	PUNCT	_	19	punct	_	_
+15	a	a	CCONJ	CCONJ	_	19	cc	_	_
+16	proto	proto	ADV	ADV	_	19	cc	_	_
+17	by	by	AUX	AUX	_	19	aux	_	_
+18	bylo	bylo	AUX	AUX	_	19	cop	_	_
+19	třeba	třeba	ADV	ADV	_	10	conj	_	_
+20	,	,	PUNCT	PUNCT	_	25	punct	_	_
+21	aby	aby	SCONJ	SCONJ	_	25	mark	_	_
+22	bychom	bychom	AUX	AUX	_	25	aux	_	_
+23	se	se	PRON	PRON	_	25	expl:pv	_	_
+24	letos	letos	ADV	ADV	_	25	advmod	_	_
+25	zaměřili	zaměřili	VERB	VERB	_	19	csubj	_	_
+26	v	v	ADP	ADP	_	27	case	_	_
+27	Akci	Akci	NOUN	NOUN	_	25	obl	_	_
+28	*	*	SYM	SYM	_	27	nmod	_	_
+29	především	především	ADV	ADV	_	32	advmod:emph	_	_
+30	na	na	ADP	ADP	_	32	case	_	_
+31	investiční	investiční	ADJ	ADJ	_	32	amod	_	_
+32	akce	akce	NOUN	NOUN	_	25	obl:arg	_	_
+33	a	a	CCONJ	CCONJ	_	35	cc	_	_
+34	zvláště	zvláště	ADV	ADV	_	35	advmod	_	highlight=green|span=1
+35	dokončili	dokončili	VERB	VERB	_	25	conj	_	highlight=red
+36	ty	ty	DET	DET	_	35	obj	_	highlight=green|span=8
+37	,	,	PUNCT	PUNCT	_	40	punct	_	_
+38	u	u	ADP	ADP	_	39	case	_	_
+39	kterých	kterých	DET	DET	_	40	obl	_	_
+40	máme	máme	VERB	VERB	_	36	acl:relcl	_	_
+41	dluh	dluh	NOUN	NOUN	_	40	obj	_	_
+42	z	z	ADP	ADP	_	44	case	_	_
+43	minulého	minulého	ADJ	ADJ	_	44	amod	_	_
+44	roku	roku	NOUN	NOUN	_	41	nmod	_	_
+45	.	.	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: cs_cac-ud-train.conllu · this verb has L=1, R=1 (mean span = 15.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Není třeba zvláště zdůrazňovat , že realizace této rychlosti již s sebou nese vážné problémy , a to jak z hlediska vhodnosti trati pro tuto rychlost , tak potřebného výkonu trakčního vozidla a konečně i energetické bilance .
+1	Není	Není	AUX	AUX	_	2	cop	_	_
+2	třeba	třeba	ADV	ADV	_	0	root	_	_
+3	zvláště	zvláště	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+4	zdůrazňovat	zdůrazňovat	VERB	VERB	_	2	csubj	_	highlight=red
+5	,	,	PUNCT	PUNCT	_	13	punct	_	_
+6	že	že	SCONJ	SCONJ	_	13	mark	_	_
+7	realizace	realizace	NOUN	NOUN	_	13	nsubj	_	_
+8	této	této	DET	DET	_	9	det	_	_
+9	rychlosti	rychlosti	NOUN	NOUN	_	7	nmod	_	_
+10	již	již	ADV	ADV	_	13	advmod	_	_
+11	s	s	ADP	ADP	_	12	case	_	_
+12	sebou	sebou	PRON	PRON	_	13	obl	_	_
+13	nese	nese	VERB	VERB	_	4	ccomp	_	highlight=green|span=30
+14	vážné	vážné	ADJ	ADJ	_	15	amod	_	_
+15	problémy	problémy	NOUN	NOUN	_	13	obj	_	_
+16	,	,	PUNCT	PUNCT	_	22	punct	_	_
+17	a	a	CCONJ	CCONJ	_	22	cc	_	_
+18	to	to	PART	PART	_	17	fixed	_	_
+19	jak	jak	ADV	ADV	_	22	cc	_	_
+20	z	z	ADP	ADP	_	22	case	_	_
+21	hlediska	hlediska	NOUN	NOUN	_	20	fixed	_	_
+22	vhodnosti	vhodnosti	NOUN	NOUN	_	15	nmod	_	_
+23	trati	trati	NOUN	NOUN	_	22	nmod	_	_
+24	pro	pro	ADP	ADP	_	26	case	_	_
+25	tuto	tuto	DET	DET	_	26	det	_	_
+26	rychlost	rychlost	NOUN	NOUN	_	23	nmod	_	_
+27	,	,	PUNCT	PUNCT	_	30	punct	_	_
+28	tak	tak	CCONJ	CCONJ	_	30	cc	_	_
+29	potřebného	potřebného	ADJ	ADJ	_	30	amod	_	_
+30	výkonu	výkonu	NOUN	NOUN	_	22	conj	_	_
+31	trakčního	trakčního	ADJ	ADJ	_	32	amod	_	_
+32	vozidla	vozidla	NOUN	NOUN	_	30	nmod	_	_
+33	a	a	CCONJ	CCONJ	_	37	cc	_	_
+34	konečně	konečně	ADV	ADV	_	37	cc	_	_
+35	i	i	CCONJ	CCONJ	_	37	cc	_	_
+36	energetické	energetické	ADJ	ADJ	_	37	amod	_	_
+37	bilance	bilance	NOUN	NOUN	_	22	conj	_	_
+38	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: cs_pdtc-ud-train.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Taky jezdíme vodu .
+1	Taky	Taky	PART	PART	_	2	advmod:emph	_	highlight=green|span=1
+2	jezdíme	jezdíme	VERB	VERB	_	0	root	_	highlight=red
+3	vodu	vodu	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
+4	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: cs_pdtc-ud-train.conllu · this verb has L=1, R=2 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Odchod LaBonteho následuje dva měsíce po rezignaci Marka Goldstona , hlavního viceprezidenta a marketingového ředitele , který setrval ve společnosti Reebok pouhých 11 měsíců .
+1	Odchod	Odchod	NOUN	NOUN	_	3	nsubj	_	_
+2	LaBonteho	LaBonteho	PROPN	PROPN	_	1	nmod	_	_
+3	následuje	následuje	VERB	VERB	_	0	root	_	_
+4	dva	dva	NUM	NUM	_	5	nummod	_	_
+5	měsíce	měsíce	NOUN	NOUN	_	3	obl	_	_
+6	po	po	ADP	ADP	_	7	case	_	_
+7	rezignaci	rezignaci	NOUN	NOUN	_	5	nmod	_	_
+8	Marka	Marka	PROPN	PROPN	_	7	nmod	_	_
+9	Goldstona	Goldstona	PROPN	PROPN	_	8	flat	_	_
+10	,	,	PUNCT	PUNCT	_	12	punct	_	_
+11	hlavního	hlavního	ADJ	ADJ	_	12	amod	_	_
+12	viceprezidenta	viceprezidenta	NOUN	NOUN	_	8	appos	_	_
+13	a	a	CCONJ	CCONJ	_	15	cc	_	_
+14	marketingového	marketingového	ADJ	ADJ	_	15	amod	_	_
+15	ředitele	ředitele	NOUN	NOUN	_	12	conj	_	_
+16	,	,	PUNCT	PUNCT	_	18	punct	_	_
+17	který	který	DET	DET	_	18	nsubj	_	highlight=green|span=1
+18	setrval	setrval	VERB	VERB	_	8	acl:relcl	_	highlight=red
+19	ve	ve	ADP	ADP	_	20	case	_	_
+20	společnosti	společnosti	NOUN	NOUN	_	18	obl	_	highlight=green|span=3
+21	Reebok	Reebok	PROPN	PROPN	_	20	nmod	_	_
+22	pouhých	pouhých	ADJ	ADJ	_	23	amod	_	_
+23	11	11	NUM	NUM	_	24	nummod:gov	_	_
+24	měsíců	měsíců	NOUN	NOUN	_	18	obl	_	highlight=green|span=3
+25	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: cs_pdtc-ud-train.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Například společnost Commonwealth BioVentures Inc . , podnik zabývající se rizikovým kapitálem , investovala minulý měsíc 600000 dolarů na rozjezd společnosti Amira Inc . v městě Worcester v Massachussets , která bude vyrábět léčiva .
+1	Například	Například	PART	PART	_	2	advmod:emph	_	_
+2	společnost	společnost	NOUN	NOUN	_	14	nsubj	_	_
+3	Commonwealth	Commonwealth	X	X	_	2	nmod	_	_
+4	BioVentures	BioVentures	X	X	_	3	flat	_	_
+5	Inc	Inc	X	X	_	3	flat	_	_
+6	.	.	PUNCT	PUNCT	_	3	punct	_	_
+7	,	,	PUNCT	PUNCT	_	8	punct	_	_
+8	podnik	podnik	NOUN	NOUN	_	2	appos	_	_
+9	zabývající	zabývající	ADJ	ADJ	_	8	amod	_	_
+10	se	se	PRON	PRON	_	9	expl:pv	_	_
+11	rizikovým	rizikovým	ADJ	ADJ	_	12	amod	_	_
+12	kapitálem	kapitálem	NOUN	NOUN	_	9	obl:arg	_	_
+13	,	,	PUNCT	PUNCT	_	8	punct	_	_
+14	investovala	investovala	VERB	VERB	_	0	root	_	_
+15	minulý	minulý	ADJ	ADJ	_	16	amod	_	_
+16	měsíc	měsíc	NOUN	NOUN	_	14	obl	_	_
+17	600000	600000	NUM	NUM	_	18	nummod:gov	_	_
+18	dolarů	dolarů	NOUN	NOUN	_	14	obj	_	_
+19	na	na	ADP	ADP	_	20	case	_	_
+20	rozjezd	rozjezd	NOUN	NOUN	_	14	obl	_	_
+21	společnosti	společnosti	NOUN	NOUN	_	20	nmod	_	_
+22	Amira	Amira	X	X	_	21	nmod	_	_
+23	Inc	Inc	X	X	_	22	flat	_	_
+24	.	.	PUNCT	PUNCT	_	22	punct	_	_
+25	v	v	ADP	ADP	_	26	case	_	_
+26	městě	městě	NOUN	NOUN	_	21	nmod	_	_
+27	Worcester	Worcester	PROPN	PROPN	_	26	nmod	_	_
+28	v	v	ADP	ADP	_	29	case	_	_
+29	Massachussets	Massachussets	PROPN	PROPN	_	26	nmod	_	_
+30	,	,	PUNCT	PUNCT	_	33	punct	_	_
+31	která	která	DET	DET	_	33	nsubj	_	highlight=green|span=1
+32	bude	bude	AUX	AUX	_	33	aux	_	_
+33	vyrábět	vyrábět	VERB	VERB	_	21	acl:relcl	_	highlight=red
+34	léčiva	léčiva	NOUN	NOUN	_	33	obj	_	highlight=green|span=1
+35	.	.	PUNCT	PUNCT	_	14	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: cs_pdtc-ud-test.conllu · this verb has L=1, R=0 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = &quot; Lidé dokonce křečkovali tašky , &quot; říká .
+1	&quot;	&quot;	PUNCT	PUNCT	_	2	punct	_	_
+2	Lidé	Lidé	NOUN	NOUN	_	4	nsubj	_	_
+3	dokonce	dokonce	ADV	ADV	_	4	advmod:emph	_	_
+4	křečkovali	křečkovali	VERB	VERB	_	8	ccomp	_	highlight=green|span=4
+5	tašky	tašky	NOUN	NOUN	_	4	obj	_	_
+6	,	,	PUNCT	PUNCT	_	5	punct	_	_
+7	&quot;	&quot;	PUNCT	PUNCT	_	5	punct	_	_
+8	říká	říká	VERB	VERB	_	0	root	_	highlight=red
+9	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: cs_cac-ud-train.conllu · this verb has L=1, R=4 (mean span = 6.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Turistika spojující odpočinek , sport a zábavu s poznáním a poučením o faktech a objektech společenského a politického významu bude mít v zájezdovém programu Čedoku doma i v zahraničí i v nadcházejících obdobích své významné místo .
+1	Turistika	Turistika	NOUN	NOUN	_	21	nsubj	_	highlight=green|span=18
+2	spojující	spojující	ADJ	ADJ	_	1	amod	_	_
+3	odpočinek	odpočinek	NOUN	NOUN	_	2	obj	_	_
+4	,	,	PUNCT	PUNCT	_	5	punct	_	_
+5	sport	sport	NOUN	NOUN	_	3	conj	_	_
+6	a	a	CCONJ	CCONJ	_	7	cc	_	_
+7	zábavu	zábavu	NOUN	NOUN	_	3	conj	_	_
+8	s	s	ADP	ADP	_	9	case	_	_
+9	poznáním	poznáním	NOUN	NOUN	_	2	obl:arg	_	_
+10	a	a	CCONJ	CCONJ	_	11	cc	_	_
+11	poučením	poučením	NOUN	NOUN	_	9	conj	_	_
+12	o	o	ADP	ADP	_	13	case	_	_
+13	faktech	faktech	NOUN	NOUN	_	11	nmod	_	_
+14	a	a	CCONJ	CCONJ	_	15	cc	_	_
+15	objektech	objektech	NOUN	NOUN	_	13	conj	_	_
+16	společenského	společenského	ADJ	ADJ	_	19	amod	_	_
+17	a	a	CCONJ	CCONJ	_	18	cc	_	_
+18	politického	politického	ADJ	ADJ	_	16	conj	_	_
+19	významu	významu	NOUN	NOUN	_	15	nmod	_	_
+20	bude	bude	AUX	AUX	_	21	aux	_	_
+21	mít	mít	VERB	VERB	_	0	root	_	highlight=red
+22	v	v	ADP	ADP	_	24	case	_	_
+23	zájezdovém	zájezdovém	ADJ	ADJ	_	24	amod	_	_
+24	programu	programu	NOUN	NOUN	_	21	obl	_	highlight=green|span=4
+25	Čedoku	Čedoku	PROPN	PROPN	_	24	nmod	_	_
+26	doma	doma	ADV	ADV	_	21	advmod	_	highlight=green|span=4
+27	i	i	CCONJ	CCONJ	_	29	cc	_	_
+28	v	v	ADP	ADP	_	29	case	_	_
+29	zahraničí	zahraničí	NOUN	NOUN	_	26	conj	_	_
+30	i	i	CCONJ	CCONJ	_	33	advmod:emph	_	_
+31	v	v	ADP	ADP	_	33	case	_	_
+32	nadcházejících	nadcházejících	ADJ	ADJ	_	33	amod	_	_
+33	obdobích	obdobích	NOUN	NOUN	_	21	obl	_	highlight=green|span=4
+34	své	své	DET	DET	_	36	det	_	_
+35	významné	významné	ADJ	ADJ	_	36	amod	_	_
+36	místo	místo	NOUN	NOUN	_	21	obj	_	highlight=green|span=3
+37	.	.	PUNCT	PUNCT	_	21	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: cs_pdtc-ud-train.conllu · this verb has L=1, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Představme si situaci , kdy by naše politické strany začaly žít prakticky pouze z toho , co získají od potenciálních sponzorů či dárců .
+1	Představme	Představme	VERB	VERB	_	0	root	_	_
+2	si	si	PRON	PRON	_	1	expl:pv	_	_
+3	situaci	situaci	NOUN	NOUN	_	1	obj	_	_
+4	,	,	PUNCT	PUNCT	_	10	punct	_	_
+5	kdy	kdy	ADV	ADV	_	10	advmod	_	_
+6	by	by	AUX	AUX	_	10	aux	_	_
+7	naše	naše	DET	DET	_	9	det	_	_
+8	politické	politické	ADJ	ADJ	_	9	amod	_	_
+9	strany	strany	NOUN	NOUN	_	10	nsubj	_	_
+10	začaly	začaly	VERB	VERB	_	3	acl:relcl	_	_
+11	žít	žít	VERB	VERB	_	10	xcomp	_	_
+12	prakticky	prakticky	ADV	ADV	_	15	advmod:emph	_	_
+13	pouze	pouze	PART	PART	_	15	advmod:emph	_	_
+14	z	z	ADP	ADP	_	15	case	_	_
+15	toho	toho	DET	DET	_	11	obl	_	_
+16	,	,	PUNCT	PUNCT	_	18	punct	_	_
+17	co	co	PRON	PRON	_	18	obj	_	highlight=green|span=1
+18	získají	získají	VERB	VERB	_	15	acl:relcl	_	highlight=red
+19	od	od	ADP	ADP	_	21	case	_	_
+20	potenciálních	potenciálních	ADJ	ADJ	_	21	amod	_	_
+21	sponzorů	sponzorů	NOUN	NOUN	_	18	obl:arg	_	highlight=green|span=5
+22	či	či	CCONJ	CCONJ	_	23	cc	_	_
+23	dárců	dárců	NOUN	NOUN	_	21	conj	_	_
+24	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: cs_pdtc-ud-train.conllu · this verb has L=1, R=3 (mean span = 7.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Komise pro cenné papíry a termínové obchody , vládní &quot; hlídací pes &quot; ustanovený po krachu v roce 1987 pro obnovení důvěry a pořádku na hongkongských trzích , měla podle očekávání minulý týden smlouvu podmínečně schválit .
+1	Komise	Komise	NOUN	NOUN	_	29	nsubj	_	highlight=green|span=24
+2	pro	pro	ADP	ADP	_	4	case	_	_
+3	cenné	cenné	ADJ	ADJ	_	4	amod	_	_
+4	papíry	papíry	NOUN	NOUN	_	1	nmod	_	_
+5	a	a	CCONJ	CCONJ	_	7	cc	_	_
+6	termínové	termínové	ADJ	ADJ	_	7	amod	_	_
+7	obchody	obchody	NOUN	NOUN	_	4	conj	_	_
+8	,	,	PUNCT	PUNCT	_	12	punct	_	_
+9	vládní	vládní	ADJ	ADJ	_	12	amod	_	_
+10	&quot;	&quot;	PUNCT	PUNCT	_	11	punct	_	_
+11	hlídací	hlídací	ADJ	ADJ	_	12	amod	_	_
+12	pes	pes	NOUN	NOUN	_	1	appos	_	_
+13	&quot;	&quot;	PUNCT	PUNCT	_	12	punct	_	_
+14	ustanovený	ustanovený	ADJ	ADJ	_	12	amod	_	_
+15	po	po	ADP	ADP	_	16	case	_	_
+16	krachu	krachu	NOUN	NOUN	_	14	obl	_	_
+17	v	v	ADP	ADP	_	18	case	_	_
+18	roce	roce	NOUN	NOUN	_	16	nmod	_	_
+19	1987	1987	NUM	NUM	_	18	nummod	_	_
+20	pro	pro	ADP	ADP	_	21	case	_	_
+21	obnovení	obnovení	NOUN	NOUN	_	14	obl	_	_
+22	důvěry	důvěry	NOUN	NOUN	_	21	nmod	_	_
+23	a	a	CCONJ	CCONJ	_	24	cc	_	_
+24	pořádku	pořádku	NOUN	NOUN	_	22	conj	_	_
+25	na	na	ADP	ADP	_	27	case	_	_
+26	hongkongských	hongkongských	ADJ	ADJ	_	27	amod	_	_
+27	trzích	trzích	NOUN	NOUN	_	22	nmod	_	_
+28	,	,	PUNCT	PUNCT	_	12	punct	_	_
+29	měla	měla	VERB	VERB	_	0	root	_	highlight=red
+30	podle	podle	ADP	ADP	_	31	case	_	_
+31	očekávání	očekávání	NOUN	NOUN	_	29	obl	_	highlight=green|span=2
+32	minulý	minulý	ADJ	ADJ	_	33	amod	_	_
+33	týden	týden	NOUN	NOUN	_	29	obl	_	highlight=green|span=2
+34	smlouvu	smlouvu	NOUN	NOUN	_	36	obj	_	_
+35	podmínečně	podmínečně	ADV	ADV	_	36	advmod	_	_
+36	schválit	schválit	VERB	VERB	_	29	xcomp	_	highlight=green|span=3
+37	.	.	PUNCT	PUNCT	_	29	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: cs_pdtc-ud-train.conllu · this verb has L=1, R=1 (mean span = 5.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Když svlékne tvídové sako , nemusí už dál říkat , že prožil válku ve Vietnamu , miluje snowboard nebo harleye . . .
+1	Když	Když	SCONJ	SCONJ	_	2	mark	_	_
+2	svlékne	svlékne	VERB	VERB	_	6	advcl	_	_
+3	tvídové	tvídové	ADJ	ADJ	_	4	amod	_	_
+4	sako	sako	NOUN	NOUN	_	2	obj	_	_
+5	,	,	PUNCT	PUNCT	_	2	punct	_	_
+6	nemusí	nemusí	VERB	VERB	_	0	root	_	_
+7	už	už	PART	PART	_	8	advmod:emph	_	_
+8	dál	dál	ADV	ADV	_	9	advmod	_	highlight=green|span=2
+9	říkat	říkat	VERB	VERB	_	6	xcomp	_	highlight=red
+10	,	,	PUNCT	PUNCT	_	12	punct	_	_
+11	že	že	SCONJ	SCONJ	_	12	mark	_	_
+12	prožil	prožil	VERB	VERB	_	9	ccomp	_	highlight=green|span=9
+13	válku	válku	NOUN	NOUN	_	12	obj	_	_
+14	ve	ve	ADP	ADP	_	15	case	_	_
+15	Vietnamu	Vietnamu	PROPN	PROPN	_	12	obl	_	_
+16	,	,	PUNCT	PUNCT	_	17	punct	_	_
+17	miluje	miluje	VERB	VERB	_	12	conj	_	_
+18	snowboard	snowboard	NOUN	NOUN	_	17	obj	_	_
+19	nebo	nebo	CCONJ	CCONJ	_	20	cc	_	_
+20	harleye	harleye	NOUN	NOUN	_	18	conj	_	_
+21	.	.	PUNCT	PUNCT	_	6	punct	_	_
+22	.	.	PUNCT	PUNCT	_	6	punct	_	_
+23	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: cs_pdtc-ud-train.conllu · this verb has L=1, R=1 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Vaše maminka pocházela z jaké rodiny ?
+1	Vaše	Vaše	DET	DET	_	2	det	_	_
+2	maminka	maminka	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=2
+3	pocházela	pocházela	VERB	VERB	_	0	root	_	highlight=red
+4	z	z	ADP	ADP	_	6	case	_	_
+5	jaké	jaké	DET	DET	_	6	det	_	_
+6	rodiny	rodiny	NOUN	NOUN	_	3	obl	_	highlight=green|span=3
+7	?	?	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: cs_cac-ud-train.conllu · this verb has L=1, R=1 (mean span = 5.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Leckdy tu dochází k potížím , kam zařadit binární slitiny , které mají zhruba # * každé složky .
+1	Leckdy	Leckdy	ADV	ADV	_	3	advmod	_	_
+2	tu	tu	ADV	ADV	_	3	advmod	_	_
+3	dochází	dochází	VERB	VERB	_	0	root	_	_
+4	k	k	ADP	ADP	_	5	case	_	_
+5	potížím	potížím	NOUN	NOUN	_	3	obl:arg	_	_
+6	,	,	PUNCT	PUNCT	_	8	punct	_	_
+7	kam	kam	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+8	zařadit	zařadit	VERB	VERB	_	5	acl:relcl	_	highlight=red
+9	binární	binární	ADJ	ADJ	_	10	amod	_	_
+10	slitiny	slitiny	NOUN	NOUN	_	8	obj	_	highlight=green|span=9
+11	,	,	PUNCT	PUNCT	_	13	punct	_	_
+12	které	které	DET	DET	_	13	nsubj	_	_
+13	mají	mají	VERB	VERB	_	10	acl:relcl	_	_
+14	zhruba	zhruba	ADV	ADV	_	15	advmod:emph	_	_
+15	#	#	NUM	NUM	_	13	obj	_	_
+16	*	*	SYM	SYM	_	15	nmod	_	_
+17	každé	každé	DET	DET	_	18	det	_	_
+18	složky	složky	NOUN	NOUN	_	16	nmod	_	_
+19	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: cs_pdtc-ud-train.conllu · this verb has L=1, R=1 (mean span = 4.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Pokroky ve výkonnosti letadlových paliv , kterých bylo během let dosaženo , způsobily , že přistání v Shannonu přestalo být pro většinu západních letek nezbytné , Aeroflot však stále létá nevýkonnými Iljušiny , které to z Moskvy do Managuy bez přestávky nezvládnou .
+1	Pokroky	Pokroky	NOUN	NOUN	_	13	nsubj	_	_
+2	ve	ve	ADP	ADP	_	3	case	_	_
+3	výkonnosti	výkonnosti	NOUN	NOUN	_	1	nmod	_	_
+4	letadlových	letadlových	ADJ	ADJ	_	5	amod	_	_
+5	paliv	paliv	NOUN	NOUN	_	3	nmod	_	_
+6	,	,	PUNCT	PUNCT	_	11	punct	_	_
+7	kterých	kterých	DET	DET	_	11	obl:arg	_	_
+8	bylo	bylo	AUX	AUX	_	11	aux:pass	_	_
+9	během	během	ADP	ADP	_	10	case	_	_
+10	let	let	NOUN	NOUN	_	11	obl	_	_
+11	dosaženo	dosaženo	ADJ	ADJ	_	1	acl:relcl	_	_
+12	,	,	PUNCT	PUNCT	_	11	punct	_	_
+13	způsobily	způsobily	VERB	VERB	_	0	root	_	_
+14	,	,	PUNCT	PUNCT	_	19	punct	_	_
+15	že	že	SCONJ	SCONJ	_	19	mark	_	_
+16	přistání	přistání	NOUN	NOUN	_	19	nsubj	_	highlight=green|span=3
+17	v	v	ADP	ADP	_	18	case	_	_
+18	Shannonu	Shannonu	PROPN	PROPN	_	16	nmod	_	_
+19	přestalo	přestalo	VERB	VERB	_	13	ccomp	_	highlight=red
+20	být	být	AUX	AUX	_	25	cop	_	_
+21	pro	pro	ADP	ADP	_	22	case	_	_
+22	většinu	většinu	NOUN	NOUN	_	25	obl	_	_
+23	západních	západních	ADJ	ADJ	_	24	amod	_	_
+24	letek	letek	NOUN	NOUN	_	22	nmod	_	_
+25	nezbytné	nezbytné	ADJ	ADJ	_	19	xcomp	_	highlight=green|span=6
+26	,	,	PUNCT	PUNCT	_	30	punct	_	_
+27	Aeroflot	Aeroflot	PROPN	PROPN	_	30	nsubj	_	_
+28	však	však	CCONJ	CCONJ	_	30	cc	_	_
+29	stále	stále	ADV	ADV	_	30	advmod	_	_
+30	létá	létá	VERB	VERB	_	13	conj	_	_
+31	nevýkonnými	nevýkonnými	ADJ	ADJ	_	32	amod	_	_
+32	Iljušiny	Iljušiny	PROPN	PROPN	_	30	obl	_	_
+33	,	,	PUNCT	PUNCT	_	42	punct	_	_
+34	které	které	DET	DET	_	42	nsubj	_	_
+35	to	to	DET	DET	_	42	obj	_	_
+36	z	z	ADP	ADP	_	37	case	_	_
+37	Moskvy	Moskvy	PROPN	PROPN	_	42	obl	_	_
+38	do	do	ADP	ADP	_	39	case	_	_
+39	Managuy	Managuy	PROPN	PROPN	_	42	obl	_	_
+40	bez	bez	ADP	ADP	_	41	case	_	_
+41	přestávky	přestávky	NOUN	NOUN	_	42	obl	_	_
+42	nezvládnou	nezvládnou	VERB	VERB	_	32	acl:relcl	_	_
+43	.	.	PUNCT	PUNCT	_	13	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

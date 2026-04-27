@@ -1,0 +1,520 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Beja — MAL_3</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Beja examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Beja <small style="color:#999;font-weight:normal">(bej)</small> — MAL<sub>3</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>3</b> dependents in total (left + right combined).</p><p><b>MAL<sub>3</sub> = 3.377</b> &nbsp; <span style="color:#666">(208 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over all dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: bej_autogramm-ud-test.conllu · this verb has L=2, R=1 (mean span = 5.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = bak atfarʔi =jaːt / gaw hiriwi diːtiːt / oː= rba reːwiːt / w= ʔiʃa han daːjiːni oː= rba beːti hiːreːreː ani /
+1	bak	bak	PART	PART	_	2	advmod	_	_
+2	atfarʔi	atfarʔi	VERB	VERB	_	6	dep:conj	_	_
+3	=jaːt	=jaːt	CCONJ	CCONJ	_	2	cc	_	_
+4	/	/	PUNCT	PUNCT	_	2	punct	_	_
+5	gaw	gaw	NOUN	NOUN	_	6	obj	_	_
+6	hiriwi	hiriwi	VERB	VERB	_	11	advcl	_	_
+7	diːtiːt	diːtiːt	AUX	AUX	_	6	aux	_	_
+8	/	/	PUNCT	PUNCT	_	6	punct	_	_
+9	oː=	oː=	DET	DET	_	10	det	_	_
+10	rba	rba	NOUN	NOUN	_	11	obj	_	_
+11	reːwiːt	reːwiːt	VERB	VERB	_	16	advcl	_	highlight=green|span=9
+12	/	/	PUNCT	PUNCT	_	11	punct	_	_
+13	w=	w=	DET	DET	_	14	det	_	_
+14	ʔiʃa	ʔiʃa	NOUN	NOUN	_	16	nsubj	_	highlight=green|span=3
+15	han	han	PART	PART	_	14	advmod	_	_
+16	daːjiːni	daːjiːni	VERB	VERB	_	21	ccomp	_	highlight=red
+17	oː=	oː=	DET	DET	_	18	det	_	_
+18	rba	rba	NOUN	NOUN	_	19	dep:comp	_	_
+19	beːti	beːti	ADP	ADP	_	20	obl:arg	_	_
+20	hiːreːreː	hiːreːreː	VERB	VERB	_	16	dislocated:mod	_	highlight=green|span=4
+21	ani	ani	VERB	VERB	_	0	root	_	_
+22	/	/	PUNCT	PUNCT	_	21	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: bej_autogramm-ud-test.conllu · this verb has L=3, R=0 (mean span = 7.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = agʷoːj =eːk / tiːd =hoːb // simaːsiwi =heːb iː =hoːk iːd =hoːb // i= nabi =i =t ʃiha akai / tiːd =eːb oː= doːr / miʃi jam imiːfirʔana =t / gʷʔeːti hoːj lʔatiːt tiːtram eːn //
+1	agʷoːj	agʷoːj	VERB	VERB	_	2	dep:comp	_	_
+2	=eːk	=eːk	SCONJ	SCONJ	_	4	dep:comp	_	_
+3	/	/	PUNCT	PUNCT	_	2	punct	_	_
+4	tiːd	tiːd	VERB	VERB	_	5	dep:comp	_	_
+5	=hoːb	=hoːb	SCONJ	SCONJ	_	11	dep	_	_
+6	//	//	PUNCT	PUNCT	_	5	punct	_	_
+7	simaːsiwi	simaːsiwi	VERB	VERB	_	11	ccomp	_	_
+8	=heːb	=heːb	PRON	PRON	_	7	obj	_	_
+9	iː	iː	PART	PART	_	10	advmod	_	_
+10	=hoːk	=hoːk	PRON	PRON	_	7	discourse	_	_
+11	iːd	iːd	VERB	VERB	_	12	dep:comp	_	_
+12	=hoːb	=hoːb	SCONJ	SCONJ	_	21	dep	_	_
+13	//	//	PUNCT	PUNCT	_	12	punct	_	_
+14	i=	i=	DET	DET	_	15	det	_	_
+15	nabi	nabi	NOUN	NOUN	_	16	dep:comp	_	_
+16	=i	=i	ADP	ADP	_	18	dep	_	_
+17	=t	=t	DET	DET	_	18	det	_	_
+18	ʃiha	ʃiha	NOUN	NOUN	_	19	xcomp	_	_
+19	akai	akai	VERB	VERB	_	21	ccomp	_	_
+20	/	/	PUNCT	PUNCT	_	19	punct	_	_
+21	tiːd	tiːd	VERB	VERB	_	22	dep:comp	_	_
+22	=eːb	=eːb	SCONJ	SCONJ	_	24	acl:relcl	_	_
+23	oː=	oː=	DET	DET	_	24	det	_	_
+24	doːr	doːr	NOUN	NOUN	_	28	obl:mod	_	highlight=green|span=20
+25	/	/	PUNCT	PUNCT	_	24	punct	_	_
+26	miʃi	miʃi	PART	PART	_	28	advmod	_	highlight=green|span=1
+27	jam	jam	NOUN	NOUN	_	28	obj	_	highlight=green|span=1
+28	imiːfirʔana	imiːfirʔana	VERB	VERB	_	31	dep:conj	_	highlight=red
+29	=t	=t	CCONJ	CCONJ	_	28	cc	_	_
+30	/	/	PUNCT	PUNCT	_	28	punct	_	_
+31	gʷʔeːti	gʷʔeːti	VERB	VERB	_	33	advcl	_	_
+32	hoːj	hoːj	ADP	ADP	_	33	obl:arg	_	_
+33	lʔatiːt	lʔatiːt	VERB	VERB	_	34	advcl	_	_
+34	tiːtram	tiːtram	VERB	VERB	_	0	root	_	_
+35	eːn	eːn	VERB	VERB	_	34	discourse	_	_
+36	//	//	PUNCT	PUNCT	_	34	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: bej_autogramm-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ʔamaːr =oːn baː= kʷaːsa / samaːr =oːn //
+1	ʔamaːr	ʔamaːr	NOUN	NOUN	_	4	obj	_	highlight=green|span=2
+2	=oːn	=oːn	PRON	PRON	_	1	nmod:poss	_	_
+3	baː=	baː=	PART	PART	_	4	advmod	_	highlight=green|span=1
+4	kʷaːsa	kʷaːsa	VERB	VERB	_	0	root	_	highlight=red
+5	/	/	PUNCT	PUNCT	_	4	punct	_	_
+6	samaːr	samaːr	NOUN	NOUN	_	4	dislocated:obj	_	highlight=green|span=2
+7	=oːn	=oːn	PRON	PRON	_	6	nmod:poss	_	_
+8	//	//	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: bej_autogramm-ud-test.conllu · this verb has L=3, R=0 (mean span = 9.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = oːt ti= tilʔi =t =iː ʃibibeː / oːt ti= tilʔi =t =iː ʃibibeː / doːrhan naː =t baː= ʃuːmaj / ʃibibeː / doːrhan naː =t baː= ʃuːmaj / aːn aːmas / mhaloː =t ʤhali ikatin =hoːb / w= haˈwaːd =i tarab =eːb uːn / i= ɖeːfa kaɖawiːni /
+1	oːt	oːt	DET	DET	_	3	det	_	_
+2	ti=	ti=	DET	DET	_	3	det	_	_
+3	tilʔi	tilʔi	NOUN	NOUN	_	5	dep:comp	_	_
+4	=t	=t	DET	DET	_	3	det	_	_
+5	=iː	=iː	ADP	ADP	_	6	obl:arg	_	_
+6	ʃibibeː	ʃibibeː	VERB	VERB	_	13	dep:redup	_	_
+7	/	/	PUNCT	PUNCT	_	6	punct	_	_
+8	oːt	oːt	DET	DET	_	10	det	_	_
+9	ti=	ti=	DET	DET	_	10	det	_	_
+10	tilʔi	tilʔi	NOUN	NOUN	_	12	dep:comp	_	_
+11	=t	=t	DET	DET	_	10	det	_	_
+12	=iː	=iː	ADP	ADP	_	13	obl:arg	_	_
+13	ʃibibeː	ʃibibeː	VERB	VERB	_	19	advcl	_	_
+14	/	/	PUNCT	PUNCT	_	13	punct	_	_
+15	doːrhan	doːrhan	ADV	ADV	_	19	advmod	_	_
+16	naː	naː	NOUN	NOUN	_	19	nsubj	_	_
+17	=t	=t	DET	DET	_	16	det	_	_
+18	baː=	baː=	PART	PART	_	19	advmod	_	_
+19	ʃuːmaj	ʃuːmaj	VERB	VERB	_	21	advcl	_	_
+20	/	/	PUNCT	PUNCT	_	19	punct	_	_
+21	ʃibibeː	ʃibibeː	VERB	VERB	_	27	advcl	_	_
+22	/	/	PUNCT	PUNCT	_	21	punct	_	_
+23	doːrhan	doːrhan	ADV	ADV	_	27	advmod	_	_
+24	naː	naː	NOUN	NOUN	_	27	nsubj	_	_
+25	=t	=t	DET	DET	_	24	det	_	_
+26	baː=	baː=	PART	PART	_	27	advmod	_	_
+27	ʃuːmaj	ʃuːmaj	VERB	VERB	_	35	advcl	_	highlight=green|span=23
+28	/	/	PUNCT	PUNCT	_	27	punct	_	_
+29	aːn	aːn	DET	DET	_	30	det	_	_
+30	aːmas	aːmas	NOUN	NOUN	_	35	nsubj	_	highlight=green|span=2
+31	/	/	PUNCT	PUNCT	_	30	punct	_	_
+32	mhaloː	mhaloː	NUM	NUM	_	34	nummod	_	_
+33	=t	=t	DET	DET	_	32	det	_	_
+34	ʤhali	ʤhali	NOUN	NOUN	_	35	xcomp	_	highlight=green|span=3
+35	ikatin	ikatin	VERB	VERB	_	36	dep:comp	_	highlight=red
+36	=hoːb	=hoːb	SCONJ	SCONJ	_	47	dep	_	_
+37	/	/	PUNCT	PUNCT	_	36	punct	_	_
+38	w=	w=	DET	DET	_	39	det	_	_
+39	haˈwaːd	haˈwaːd	NOUN	NOUN	_	40	dep:comp	_	_
+40	=i	=i	ADP	ADP	_	41	dep	_	_
+41	tarab	tarab	NOUN	NOUN	_	42	dep:comp	_	_
+42	=eːb	=eːb	ADP	ADP	_	47	obl:arg	_	_
+43	uːn	uːn	DET	DET	_	46	det	_	_
+44	/	/	PUNCT	PUNCT	_	43	punct	_	_
+45	i=	i=	DET	DET	_	46	det	_	_
+46	ɖeːfa	ɖeːfa	NOUN	NOUN	_	47	nsubj	_	_
+47	kaɖawiːni	kaɖawiːni	VERB	VERB	_	0	root	_	_
+48	/	/	PUNCT	PUNCT	_	47	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: bej_autogramm-ud-test.conllu · this verb has L=1, R=2 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = winneːt ʔareːji eːn / ʔakra reːr // mhaj koː =jeː j= ʔar =eː //
+1	winneːt	winneːt	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+2	ʔareːji	ʔareːji	VERB	VERB	_	0	root	_	highlight=red
+3	eːn	eːn	VERB	VERB	_	2	discourse	_	_
+4	/	/	PUNCT	PUNCT	_	2	punct	_	_
+5	ʔakra	ʔakra	VERB	VERB	_	6	acl	_	_
+6	reːr	reːr	NOUN	NOUN	_	2	dislocated:obj	_	highlight=green|span=2
+7	//	//	PUNCT	PUNCT	_	6	punct	_	_
+8	mhaj	mhaj	NUM	NUM	_	9	nummod	_	_
+9	koː	koː	ADJ	ADJ	_	12	amod	_	_
+10	=jeː	=jeː	PRON	PRON	_	9	nmod:poss	_	_
+11	j=	j=	DET	DET	_	12	det	_	_
+12	ʔar	ʔar	NOUN	NOUN	_	2	dislocated:obj	_	highlight=green|span=6
+13	=eː	=eː	PRON	PRON	_	12	nmod:poss	_	_
+14	//	//	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: bej_autogramm-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = aneːb t= hadʔaːjeː =t =i tingad / ʔakra ginʔ =iː / w= haˈwaːd // i= rizg =oːk hariwna / uː= mbʔi / ɖʔamaːna indi eːn //
+1	aneːb	aneːb	PRON	PRON	_	6	dislocated:obj	_	_
+2	t=	t=	DET	DET	_	3	det	_	_
+3	hadʔaːjeː	hadʔaːjeː	NOUN	NOUN	_	6	nsubj	_	_
+4	=t	=t	DET	DET	_	3	det	_	_
+5	=i	=i	PRON	PRON	_	3	nmod:poss	_	_
+6	tingad	tingad	VERB	VERB	_	23	dep:conj	_	_
+7	/	/	PUNCT	PUNCT	_	6	punct	_	_
+8	ʔakra	ʔakra	VERB	VERB	_	9	acl	_	_
+9	ginʔ	ginʔ	NOUN	NOUN	_	10	dep:comp	_	_
+10	=iː	=iː	ADP	ADP	_	18	obl:arg	_	highlight=green|span=3
+11	/	/	PUNCT	PUNCT	_	10	punct	_	_
+12	w=	w=	DET	DET	_	13	det	_	_
+13	haˈwaːd	haˈwaːd	NOUN	NOUN	_	18	obl:mod	_	highlight=green|span=2
+14	//	//	PUNCT	PUNCT	_	13	punct	_	_
+15	i=	i=	DET	DET	_	16	det	_	_
+16	rizg	rizg	NOUN	NOUN	_	18	obj	_	highlight=green|span=3
+17	=oːk	=oːk	PRON	PRON	_	16	nmod:poss	_	_
+18	hariwna	hariwna	VERB	VERB	_	23	dep:conj	_	highlight=red
+19	/	/	PUNCT	PUNCT	_	18	punct	_	_
+20	uː=	uː=	DET	DET	_	21	det	_	_
+21	mbʔi	mbʔi	NOUN	NOUN	_	23	obl:mod	_	_
+22	/	/	PUNCT	PUNCT	_	21	punct	_	_
+23	ɖʔamaːna	ɖʔamaːna	VERB	VERB	_	24	ccomp	_	_
+24	indi	indi	VERB	VERB	_	0	root	_	_
+25	eːn	eːn	VERB	VERB	_	24	discourse	_	_
+26	//	//	PUNCT	PUNCT	_	24	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: bej_autogramm-ud-test.conllu · this verb has L=2, R=1 (mean span = 2.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ʃakʷiːn =t dhaːj dannʔi eːn // eːn i= taktʔi =jeː =da //
+1	ʃakʷiːn	ʃakʷiːn	NOUN	NOUN	_	4	obj	_	highlight=green|span=2
+2	=t	=t	DET	DET	_	1	det	_	_
+3	dhaːj	dhaːj	ADP	ADP	_	4	obl:arg	_	highlight=green|span=1
+4	dannʔi	dannʔi	VERB	VERB	_	0	root	_	highlight=red
+5	eːn	eːn	VERB	VERB	_	4	discourse	_	_
+6	//	//	PUNCT	PUNCT	_	4	punct	_	_
+7	eːn	eːn	DET	DET	_	9	det	_	_
+8	i=	i=	DET	DET	_	9	det	_	_
+9	taktʔi	taktʔi	NOUN	NOUN	_	10	dep:comp	_	_
+10	=jeː	=jeː	ADP	ADP	_	11	dep:comp	_	_
+11	=da	=da	ADP	ADP	_	4	dislocated	_	highlight=green|span=5
+12	//	//	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: bej_autogramm-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = jhakseːtiːt / i= mbaːbaː =i dhaːj haːj ɖaːbiːni eːn //
+1	jhakseːtiːt	jhakseːtiːt	VERB	VERB	_	8	advcl	_	highlight=green|span=1
+2	/	/	PUNCT	PUNCT	_	1	punct	_	_
+3	i=	i=	DET	DET	_	4	det	_	_
+4	mbaːbaː	mbaːbaː	NOUN	NOUN	_	5	dep:comp	_	_
+5	=i	=i	ADP	ADP	_	6	dep:comp	_	_
+6	dhaːj	dhaːj	ADP	ADP	_	8	obl:arg	_	highlight=green|span=4
+7	haːj	haːj	ADP	ADP	_	8	obl:arg	_	highlight=green|span=1
+8	ɖaːbiːni	ɖaːbiːni	VERB	VERB	_	0	root	_	highlight=red
+9	eːn	eːn	VERB	VERB	_	8	discourse	_	_
+10	//	//	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: bej_autogramm-ud-test.conllu · this verb has L=3, R=0 (mean span = 3.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ani hoːj aniːn diːtiːt / toːt toː= na / toː= tji / ti= ʤoːharaaːji =t =i =da kʷanri =t // ontʔa / jʔija =t /
+1	ani	ani	PRON	PRON	_	3	nsubj	_	_
+2	hoːj	hoːj	ADP	ADP	_	3	obl:arg	_	_
+3	aniːn	aniːn	VERB	VERB	_	4	ccomp	_	_
+4	diːtiːt	diːtiːt	VERB	VERB	_	23	advcl	_	_
+5	/	/	PUNCT	PUNCT	_	4	punct	_	_
+6	toːt	toːt	DET	DET	_	8	det	_	_
+7	toː=	toː=	DET	DET	_	8	det	_	_
+8	na	na	NOUN	NOUN	_	18	dislocated:obj	_	highlight=green|span=3
+9	/	/	PUNCT	PUNCT	_	8	punct	_	_
+10	toː=	toː=	DET	DET	_	11	det	_	_
+11	tji	tji	NOUN	NOUN	_	18	dislocated:subj	_	highlight=green|span=2
+12	/	/	PUNCT	PUNCT	_	11	punct	_	_
+13	ti=	ti=	DET	DET	_	14	det	_	_
+14	ʤoːharaaːji	ʤoːharaaːji	NOUN	NOUN	_	16	dep:comp	_	_
+15	=t	=t	DET	DET	_	14	det	_	_
+16	=i	=i	ADP	ADP	_	17	dep:comp	_	_
+17	=da	=da	ADP	ADP	_	18	obl:arg	_	highlight=green|span=5
+18	kʷanri	kʷanri	VERB	VERB	_	23	dep:conj	_	highlight=red
+19	=t	=t	CCONJ	CCONJ	_	18	cc	_	_
+20	//	//	PUNCT	PUNCT	_	18	punct	_	_
+21	ontʔa	ontʔa	ADV	ADV	_	23	discourse	_	_
+22	/	/	PUNCT	PUNCT	_	21	punct	_	_
+23	jʔija	jʔija	VERB	VERB	_	0	root	_	_
+24	=t	=t	CCONJ	CCONJ	_	23	cc	_	_
+25	/	/	PUNCT	PUNCT	_	23	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: bej_autogramm-ud-test.conllu · this verb has L=3, R=0 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = aneːb i= ngirab dh =i jʔiːni / i= jam =eː gʷadaamani / jam hoː atɖajiːg /
+1	aneːb	aneːb	PRON	PRON	_	6	dislocated	_	highlight=green|span=1
+2	i=	i=	DET	DET	_	3	det	_	_
+3	ngirab	ngirab	NOUN	NOUN	_	6	nsubj	_	highlight=green|span=2
+4	dh	dh	ADP	ADP	_	6	obl:arg	_	highlight=green|span=2
+5	=i	=i	PRON	PRON	_	4	dep	_	_
+6	jʔiːni	jʔiːni	VERB	VERB	_	15	dep:conj	_	highlight=red
+7	/	/	PUNCT	PUNCT	_	6	punct	_	_
+8	i=	i=	DET	DET	_	9	det	_	_
+9	jam	jam	NOUN	NOUN	_	10	dep:comp	_	_
+10	=eː	=eː	ADP	ADP	_	11	obl:arg	_	_
+11	gʷadaamani	gʷadaamani	VERB	VERB	_	15	dep:conj	_	_
+12	/	/	PUNCT	PUNCT	_	11	punct	_	_
+13	jam	jam	NOUN	NOUN	_	15	obj	_	_
+14	hoː	hoː	PRON	PRON	_	15	iobj	_	_
+15	atɖajiːg	atɖajiːg	VERB	VERB	_	0	root	_	_
+16	/	/	PUNCT	PUNCT	_	15	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: bej_autogramm-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = uːn ani suːr abaːɖin han // tʔa w= ʔagja iːbɖan ka= adi =aj // eːn / i= mhallaga imbareː / karaːmaː =t =eːb dhaːj firʔa diːtiːt / sallamtini =heːb ini //
+1	uːn	uːn	DET	DET	_	2	det	_	_
+2	ani	ani	PRON	PRON	_	4	nsubj	_	highlight=green|span=2
+3	suːr	suːr	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+4	abaːɖin	abaːɖin	VERB	VERB	_	10	dep:conj	_	highlight=red
+5	han	han	PART	PART	_	4	advmod	_	highlight=green|span=1
+6	//	//	PUNCT	PUNCT	_	5	punct	_	_
+7	tʔa	tʔa	PART	PART	_	10	advmod	_	_
+8	w=	w=	DET	DET	_	9	det	_	_
+9	ʔagja	ʔagja	NOUN	NOUN	_	10	obl:mod	_	_
+10	iːbɖan	iːbɖan	VERB	VERB	_	13	dep:comp	_	_
+11	ka=	ka=	PART	PART	_	10	advmod	_	_
+12	adi	adi	AUX	AUX	_	10	aux	_	_
+13	=aj	=aj	SCONJ	SCONJ	_	25	dep	_	_
+14	//	//	PUNCT	PUNCT	_	13	punct	_	_
+15	eːn	eːn	DET	DET	_	18	det	_	_
+16	/	/	PUNCT	PUNCT	_	15	punct	_	_
+17	i=	i=	DET	DET	_	18	det	_	_
+18	mhallaga	mhallaga	NOUN	NOUN	_	25	obj	_	_
+19	imbareː	imbareː	PRON	PRON	_	18	discourse	_	_
+20	/	/	PUNCT	PUNCT	_	18	punct	_	_
+21	karaːmaː	karaːmaː	NOUN	NOUN	_	23	dep:comp	_	_
+22	=t	=t	DET	DET	_	21	det	_	_
+23	=eːb	=eːb	ADP	ADP	_	25	obl:arg	_	_
+24	dhaːj	dhaːj	ADP	ADP	_	25	obl:arg	_	_
+25	firʔa	firʔa	VERB	VERB	_	26	ccomp	_	_
+26	diːtiːt	diːtiːt	VERB	VERB	_	28	advcl	_	_
+27	/	/	PUNCT	PUNCT	_	26	punct	_	_
+28	sallamtini	sallamtini	VERB	VERB	_	30	ccomp	_	_
+29	=heːb	=heːb	PRON	PRON	_	28	obj	_	_
+30	ini	ini	VERB	VERB	_	0	root	_	_
+31	//	//	PUNCT	PUNCT	_	30	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: bej_autogramm-ud-test.conllu · this verb has L=3, R=0 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = oːn amsi umbaruːk / naːn tifirʔa indi eːn //
+1	oːn	oːn	DET	DET	_	2	discourse	_	_
+2	amsi	amsi	ADV	ADV	_	6	advmod	_	highlight=green|span=2
+3	umbaruːk	umbaruːk	PRON	PRON	_	6	nsubj	_	highlight=green|span=1
+4	/	/	PUNCT	PUNCT	_	3	punct	_	_
+5	naːn	naːn	PRON	PRON	_	6	obl:mod	_	highlight=green|span=1
+6	tifirʔa	tifirʔa	VERB	VERB	_	7	ccomp	_	highlight=red
+7	indi	indi	VERB	VERB	_	0	root	_	_
+8	eːn	eːn	VERB	VERB	_	7	discourse	_	_
+9	//	//	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: bej_autogramm-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ontʔa / iraːnaj aː= nda / kak iːwr =heːb ijadna ani =hoːb ? i= kaːm =i miʃi huːʃaːb ki= iki ini // winneːt huːʃjaː =ajt //
+1	ontʔa	ontʔa	PART	PART	_	5	discourse	_	_
+2	/	/	PUNCT	PUNCT	_	1	punct	_	_
+3	iraːnaj	iraːnaj	INTJ	INTJ	_	5	discourse	_	_
+4	aː=	aː=	DET	DET	_	5	det	_	_
+5	nda	nda	NOUN	NOUN	_	8	nsubj	_	_
+6	/	/	PUNCT	PUNCT	_	5	punct	_	_
+7	kak	kak	ADV	ADV	_	8	advmod	_	_
+8	iːwr	iːwr	VERB	VERB	_	11	ccomp	_	_
+9	=heːb	=heːb	PRON	PRON	_	8	obj	_	_
+10	ijadna	ijadna	AUX	AUX	_	8	aux	_	_
+11	ani	ani	VERB	VERB	_	12	dep:comp	_	_
+12	=hoːb	=hoːb	SCONJ	SCONJ	_	18	dep	_	_
+13	?	?	PUNCT	PUNCT	_	12	punct	_	_
+14	i=	i=	DET	DET	_	15	det	_	_
+15	kaːm	kaːm	NOUN	NOUN	_	18	nsubj	_	highlight=green|span=3
+16	=i	=i	PRON	PRON	_	15	nmod:poss	_	_
+17	miʃi	miʃi	PART	PART	_	18	advmod	_	highlight=green|span=1
+18	huːʃaːb	huːʃaːb	VERB	VERB	_	21	ccomp	_	highlight=red
+19	ki=	ki=	PART	PART	_	18	advmod	_	highlight=green|span=1
+20	iki	iki	AUX	AUX	_	18	aux	_	_
+21	ini	ini	VERB	VERB	_	0	root	_	_
+22	//	//	PUNCT	PUNCT	_	25	punct	_	_
+23	winneːt	winneːt	ADV	ADV	_	24	advmod	_	_
+24	huːʃjaː	huːʃjaː	VERB	VERB	_	25	dep:comp	_	_
+25	=ajt	=ajt	SCONJ	SCONJ	_	21	dislocated:mod	_	_
+26	//	//	PUNCT	PUNCT	_	21	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: bej_autogramm-ud-test.conllu · this verb has L=3, R=0 (mean span = 3.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ʔiːbaːbeː haːʃ =iːb igam# ## iganifna =eːb oː= doːr / jhaːm dhaːj jʔi =t /
+1	ʔiːbaːbeː	ʔiːbaːbeː	VERB	VERB	_	6	advcl	_	_
+2	haːʃ	haːʃ	NOUN	NOUN	_	3	dep:comp	_	_
+3	=iːb	=iːb	ADP	ADP	_	6	dep	_	_
+4	igam#	igam#	X	X	_	7	dep:comp	_	_
+5	##	##	PUNCT	PUNCT	_	4	punct	_	_
+6	iganifna	iganifna	VERB	VERB	_	4	reparandum	_	_
+7	=eːb	=eːb	SCONJ	SCONJ	_	9	acl:relcl	_	_
+8	oː=	oː=	DET	DET	_	9	det	_	_
+9	doːr	doːr	NOUN	NOUN	_	13	obl:mod	_	highlight=green|span=8
+10	/	/	PUNCT	PUNCT	_	9	punct	_	_
+11	jhaːm	jhaːm	NOUN	NOUN	_	13	nsubj	_	highlight=green|span=1
+12	dhaːj	dhaːj	ADP	ADP	_	13	obl:arg	_	highlight=green|span=1
+13	jʔi	jʔi	VERB	VERB	_	0	root	_	highlight=red
+14	=t	=t	CCONJ	CCONJ	_	13	cc	_	_
+15	/	/	PUNCT	PUNCT	_	13	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: bej_autogramm-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = rhistaː =hoːn oːn oː= tak / hinin ʃibi# ## ʃibiba dieː eːdna =aːt / ɖaːbeːti ijajna =aːt / tʔa areː / malia doːr / oː= jaːs =i =d hus aka ijadna eːn //
+1	rhistaː	rhistaː	VERB	VERB	_	8	ccomp	_	_
+2	=hoːn	=hoːn	PRON	PRON	_	1	obj	_	_
+3	oːn	oːn	DET	DET	_	5	det	_	_
+4	oː=	oː=	DET	DET	_	5	det	_	_
+5	tak	tak	NOUN	NOUN	_	1	reparandum	_	_
+6	/	/	PUNCT	PUNCT	_	1	punct	_	_
+7	hinin	hinin	PRON	PRON	_	10	nsubj	_	_
+8	ʃibi#	ʃibi#	X	X	_	12	advcl	_	_
+9	##	##	PUNCT	PUNCT	_	8	punct	_	_
+10	ʃibiba	ʃibiba	VERB	VERB	_	8	reparandum	_	_
+11	dieː	dieː	AUX	AUX	_	8	aux	_	_
+12	eːdna	eːdna	VERB	VERB	_	31	dep:conj	_	_
+13	=aːt	=aːt	CCONJ	CCONJ	_	12	cc	_	_
+14	/	/	PUNCT	PUNCT	_	12	punct	_	_
+15	ɖaːbeːti	ɖaːbeːti	VERB	VERB	_	31	dep:conj	_	_
+16	ijajna	ijajna	AUX	AUX	_	15	aux	_	_
+17	=aːt	=aːt	CCONJ	CCONJ	_	15	cc	_	_
+18	/	/	PUNCT	PUNCT	_	15	punct	_	_
+19	tʔa	tʔa	PART	PART	_	31	discourse	_	_
+20	areː	areː	CCONJ	CCONJ	_	31	cc	_	_
+21	/	/	PUNCT	PUNCT	_	31	punct	_	_
+22	malia	malia	ADJ	ADJ	_	23	amod	_	_
+23	doːr	doːr	NOUN	NOUN	_	31	obl:mod	_	highlight=green|span=2
+24	/	/	PUNCT	PUNCT	_	23	punct	_	_
+25	oː=	oː=	DET	DET	_	26	det	_	_
+26	jaːs	jaːs	NOUN	NOUN	_	27	dep:comp	_	_
+27	=i	=i	ADP	ADP	_	28	dep	_	_
+28	=d	=d	ADP	ADP	_	31	obl:arg	_	highlight=green|span=4
+29	hus	hus	NOUN	NOUN	_	30	xcomp	_	_
+30	aka	aka	VERB	VERB	_	31	ccomp	_	highlight=green|span=2
+31	ijadna	ijadna	VERB	VERB	_	0	root	_	highlight=red
+32	eːn	eːn	VERB	VERB	_	31	discourse	_	_
+33	//	//	PUNCT	PUNCT	_	31	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: bej_autogramm-ud-test.conllu · this verb has L=2, R=1 (mean span = 5.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ʔagar =t areː doːra =ji ʃagaaman =hoːb // ʔeːja =heːb ini / uːn i= raw =uːn i= gʷʔaʤi //
+1	ʔagar	ʔagar	VERB	VERB	_	6	dep:conj	_	_
+2	=t	=t	CCONJ	CCONJ	_	1	cc	_	_
+3	areː	areː	CCONJ	CCONJ	_	4	cc	_	_
+4	doːra	doːra	NOUN	NOUN	_	6	obj	_	_
+5	=ji	=ji	PRON	PRON	_	4	nmod:poss	_	_
+6	ʃagaaman	ʃagaaman	VERB	VERB	_	7	dep:comp	_	_
+7	=hoːb	=hoːb	SCONJ	SCONJ	_	9	dep	_	highlight=green|span=7
+8	//	//	PUNCT	PUNCT	_	7	punct	_	_
+9	ʔeːja	ʔeːja	VERB	VERB	_	11	ccomp	_	highlight=green|span=2
+10	=heːb	=heːb	PRON	PRON	_	9	obj	_	_
+11	ini	ini	VERB	VERB	_	0	root	_	highlight=red
+12	/	/	PUNCT	PUNCT	_	11	punct	_	_
+13	uːn	uːn	DET	DET	_	15	det	_	_
+14	i=	i=	DET	DET	_	15	det	_	_
+15	raw	raw	NOUN	NOUN	_	9	dislocated:subj	_	highlight=green|span=6
+16	=uːn	=uːn	PRON	PRON	_	15	nmod:poss	_	_
+17	i=	i=	DET	DET	_	18	det	_	_
+18	gʷʔaʤi	gʷʔaʤi	ADJ	ADJ	_	15	nmod	_	_
+19	//	//	PUNCT	PUNCT	_	15	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: bej_autogramm-ud-test.conllu · this verb has L=3, R=0 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ti= iːjʔaː naː =t hoːj tʔiʃa kʷiːkʷʔaːj ?
+1	ti=	ti=	DET	DET	_	2	det	_	_
+2	iːjʔaː	iːjʔaː	NOUN	NOUN	_	6	obj	_	highlight=green|span=2
+3	naː	naː	NOUN	NOUN	_	6	obl:mod	_	highlight=green|span=2
+4	=t	=t	DET	DET	_	3	det	_	_
+5	hoːj	hoːj	ADP	ADP	_	6	obl:arg	_	highlight=green|span=1
+6	tʔiʃa	tʔiʃa	VERB	VERB	_	0	root	_	highlight=red
+7	kʷiːkʷʔaːj	kʷiːkʷʔaːj	NOUN	NOUN	_	6	vocative	_	_
+8	?	?	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: bej_autogramm-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = oːt ti= takat / i= damaːn haːj imag =t oː= dhaj / maʤaʔaː =t ʔeːtan =eːb oː= doːr / ti= mʔari / inawna eːn //
+1	oːt	oːt	DET	DET	_	3	det	_	_
+2	ti=	ti=	DET	DET	_	3	det	_	_
+3	takat	takat	NOUN	NOUN	_	8	dislocated	_	highlight=green|span=3
+4	/	/	PUNCT	PUNCT	_	3	punct	_	_
+5	i=	i=	DET	DET	_	6	det	_	_
+6	damaːn	damaːn	NOUN	NOUN	_	8	nsubj	_	highlight=green|span=2
+7	haːj	haːj	ADP	ADP	_	8	obl:arg	_	highlight=green|span=1
+8	imag	imag	VERB	VERB	_	15	dep:conj	_	highlight=red
+9	=t	=t	CCONJ	CCONJ	_	8	cc	_	_
+10	oː=	oː=	DET	DET	_	11	det	_	_
+11	dhaj	dhaj	NOUN	NOUN	_	15	obj	_	_
+12	/	/	PUNCT	PUNCT	_	11	punct	_	_
+13	maʤaʔaː	maʤaʔaː	NOUN	NOUN	_	15	nsubj	_	_
+14	=t	=t	DET	DET	_	13	det	_	_
+15	ʔeːtan	ʔeːtan	VERB	VERB	_	16	dep:comp	_	_
+16	=eːb	=eːb	SCONJ	SCONJ	_	18	acl:relcl	_	_
+17	oː=	oː=	DET	DET	_	18	det	_	_
+18	doːr	doːr	NOUN	NOUN	_	23	obl:mod	_	_
+19	/	/	PUNCT	PUNCT	_	18	punct	_	_
+20	ti=	ti=	DET	DET	_	21	det	_	_
+21	mʔari	mʔari	NOUN	NOUN	_	23	obj	_	_
+22	/	/	PUNCT	PUNCT	_	21	punct	_	_
+23	inawna	inawna	VERB	VERB	_	0	root	_	_
+24	eːn	eːn	VERB	VERB	_	23	discourse	_	_
+25	//	//	PUNCT	PUNCT	_	23	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: bej_autogramm-ud-test.conllu · this verb has L=2, R=1 (mean span = 5.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = sikʷti fanrʔi =hoːb // areː oː= dwaːn =i rifkaːk ʈiːn =i / əəə / diwaːn / i= mhiːn =oː ingiːd =aːt i= bhar =iːb //
+1	sikʷti	sikʷti	VERB	VERB	_	2	advcl	_	_
+2	fanrʔi	fanrʔi	VERB	VERB	_	3	dep:comp	_	_
+3	=hoːb	=hoːb	SCONJ	SCONJ	_	20	dep	_	_
+4	//	//	PUNCT	PUNCT	_	3	punct	_	_
+5	areː	areː	CCONJ	CCONJ	_	7	cc	_	_
+6	oː=	oː=	DET	DET	_	7	det	_	_
+7	dwaːn	dwaːn	NOUN	NOUN	_	8	dep:comp	_	_
+8	=i	=i	ADP	ADP	_	9	dep	_	_
+9	rifkaːk	rifkaːk	NOUN	NOUN	_	10	nmod	_	_
+10	ʈiːn	ʈiːn	NOUN	NOUN	_	11	dep:comp	_	_
+11	=i	=i	ADP	ADP	_	15	reparandum	_	_
+12	/	/	PUNCT	PUNCT	_	11	punct	_	_
+13	əəə	əəə	INTJ	INTJ	_	15	reparandum	_	_
+14	/	/	PUNCT	PUNCT	_	13	punct	_	_
+15	diwaːn	diwaːn	NOUN	NOUN	_	20	obj	_	highlight=green|span=9
+16	/	/	PUNCT	PUNCT	_	15	punct	_	_
+17	i=	i=	DET	DET	_	18	det	_	_
+18	mhiːn	mhiːn	NOUN	NOUN	_	20	iobj	_	highlight=green|span=3
+19	=oː	=oː	PRON	PRON	_	18	nmod:poss	_	_
+20	ingiːd	ingiːd	VERB	VERB	_	0	root	_	highlight=red
+21	=aːt	=aːt	CCONJ	CCONJ	_	20	cc	_	_
+22	i=	i=	DET	DET	_	23	det	_	_
+23	bhar	bhar	NOUN	NOUN	_	24	dep:comp	_	_
+24	=iːb	=iːb	ADP	ADP	_	20	dislocated	_	highlight=green|span=3
+25	//	//	PUNCT	PUNCT	_	20	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: bej_autogramm-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ʔamaːr =oːn baː= kʷaːsa samaːr =oːn /
+1	ʔamaːr	ʔamaːr	NOUN	NOUN	_	4	obj	_	highlight=green|span=2
+2	=oːn	=oːn	PRON	PRON	_	1	nmod:poss	_	_
+3	baː=	baː=	PART	PART	_	4	advmod	_	highlight=green|span=1
+4	kʷaːsa	kʷaːsa	VERB	VERB	_	0	root	_	highlight=red
+5	samaːr	samaːr	NOUN	NOUN	_	4	dislocated:obj	_	highlight=green|span=2
+6	=oːn	=oːn	PRON	PRON	_	5	nmod:poss	_	_
+7	/	/	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

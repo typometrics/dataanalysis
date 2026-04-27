@@ -1,0 +1,594 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Bambara — RMAL_3</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Bambara examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Bambara <small style="color:#999;font-weight:normal">(bm)</small> — RMAL<sub>3</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>3</b> right dependents (left side may be anything).</p><p><b>RMAL<sub>3</sub> = 4.378</b> &nbsp; <span style="color:#666">(15 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>right</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 15 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: bm_crb-ud-test.conllu · this verb has L=1, R=3 (mean span = 3.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = a bɛ san caman bɔ bi , a kɔlɔsira Afiriki tilebinyanfan jamanaw kɔnɔ , ko yɛlɛma belebelew donna baloko jogow la an ka duw kɔnɔ , duguba ani togoda bɛɛ la .
+1	a	a	PRON	PRON	_	5	nsubj	_	_
+2	bɛ	bɛ	AUX	AUX	_	5	aux	_	_
+3	san	san	NOUN	NOUN	_	5	obj	_	_
+4	caman	caman	ADJ	ADJ	_	3	amod	_	_
+5	bɔ	bɔ	VERB	VERB	_	0	root	_	_
+6	bi	bi	ADV	ADV	_	5	obl	_	_
+7	,	,	PUNCT	PUNCT	_	9	punct	_	_
+8	a	a	PRON	PRON	_	9	nsubj	_	_
+9	kɔlɔsira	kɔlɔsira	VERB	VERB	_	5	parataxis	_	_
+10	Afiriki	Afiriki	PROPN	PROPN	_	11	nmod:poss	_	_
+11	tilebinyanfan	tilebinyanfan	NOUN	NOUN	_	12	nmod:poss	_	_
+12	jamanaw	jamanaw	NOUN	NOUN	_	9	obl	_	_
+13	kɔnɔ	kɔnɔ	ADP	ADP	_	12	case	_	_
+14	,	,	PUNCT	PUNCT	_	18	punct	_	_
+15	ko	ko	PART	PART	_	18	discourse	_	_
+16	yɛlɛma	yɛlɛma	NOUN	NOUN	_	18	nsubj	_	highlight=green|span=2
+17	belebelew	belebelew	ADJ	ADJ	_	16	amod	_	_
+18	donna	donna	VERB	VERB	_	9	ccomp	_	highlight=red
+19	baloko	baloko	NOUN	NOUN	_	20	nmod:poss	_	_
+20	jogow	jogow	NOUN	NOUN	_	18	obl	_	highlight=green|span=3
+21	la	la	ADP	ADP	_	20	case	_	_
+22	an	an	PRON	PRON	_	24	nmod:poss	_	_
+23	ka	ka	ADP	ADP	_	22	case	_	_
+24	duw	duw	NOUN	NOUN	_	18	obl	_	highlight=green|span=4
+25	kɔnɔ	kɔnɔ	ADP	ADP	_	24	case	_	_
+26	,	,	PUNCT	PUNCT	_	27	punct	_	_
+27	duguba	duguba	NOUN	NOUN	_	18	obl	_	highlight=green|span=5
+28	ani	ani	CCONJ	CCONJ	_	29	cc	_	_
+29	togoda	togoda	NOUN	NOUN	_	27	conj	_	_
+30	bɛɛ	bɛɛ	DET	DET	_	29	det	_	_
+31	la	la	ADP	ADP	_	29	case	_	_
+32	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: bm_crb-ud-test.conllu · this verb has L=1, R=3 (mean span = 3.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = an bɛ tigɛ a kan o cogo la , ko nɔgɔ bagama ma fiyɛ u la .
+1	an	an	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=1
+2	bɛ	bɛ	AUX	AUX	_	3	aux	_	_
+3	tigɛ	tigɛ	VERB	VERB	_	0	root	_	highlight=red
+4	a	a	PRON	PRON	_	3	obl	_	highlight=green|span=2
+5	kan	kan	ADP	ADP	_	4	case	_	_
+6	o	o	PRON	PRON	_	7	nmod:poss	_	_
+7	cogo	cogo	NOUN	NOUN	_	3	obl	_	highlight=green|span=3
+8	la	la	ADP	ADP	_	7	case	_	_
+9	,	,	PUNCT	PUNCT	_	14	punct	_	_
+10	ko	ko	PART	PART	_	14	discourse	_	_
+11	nɔgɔ	nɔgɔ	NOUN	NOUN	_	14	nsubj	_	_
+12	bagama	bagama	ADJ	ADJ	_	11	amod	_	_
+13	ma	ma	AUX	AUX	_	14	aux	_	_
+14	fiyɛ	fiyɛ	VERB	VERB	_	3	ccomp	_	highlight=green|span=7
+15	u	u	PROPN	PROPN	_	14	obl	_	_
+16	la	la	ADP	ADP	_	15	case	_	_
+17	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: bm_crb-ud-test.conllu · this verb has L=1, R=3 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ko ne wulila don dɔ sɔgɔma ka taa se kɔrɔnna morilu ma .
+1	ko	ko	PART	PART	_	3	discourse	_	_
+2	ne	ne	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+3	wulila	wulila	VERB	VERB	_	0	root	_	highlight=red
+4	don	don	NOUN	NOUN	_	3	obl	_	highlight=green|span=2
+5	dɔ	dɔ	DET	DET	_	4	det	_	_
+6	sɔgɔma	sɔgɔma	NOUN	NOUN	_	3	obl	_	highlight=green|span=1
+7	ka	ka	AUX	AUX	_	8	aux	_	_
+8	taa	taa	VERB	VERB	_	3	xcomp	_	highlight=green|span=6
+9	se	se	VERB	VERB	_	8	xcomp	_	_
+10	kɔrɔnna	kɔrɔnna	NOUN	NOUN	_	9	obl	_	_
+11	morilu	morilu	NOUN	NOUN	_	9	obl	_	_
+12	ma	ma	ADP	ADP	_	11	case	_	_
+13	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: bm_crb-ud-test.conllu · this verb has L=0, R=3 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = syèfan ye a yuguyugu ka bò ka na kè bèlèdennin kan poyi ! ka a ci .
+1	syèfan	syèfan	NOUN	NOUN	_	4	nsubj	_	_
+2	ye	ye	AUX	AUX	_	4	aux	_	_
+3	a	a	PRON	PRON	_	4	obj	_	_
+4	yuguyugu	yuguyugu	VERB	VERB	_	0	root	_	_
+5	ka	ka	AUX	AUX	_	6	aux	_	_
+6	bò	bò	VERB	VERB	_	4	xcomp	_	_
+7	ka	ka	AUX	AUX	_	8	aux	_	_
+8	na	na	VERB	VERB	_	6	xcomp	_	_
+9	kè	kè	VERB	VERB	_	8	xcomp	_	highlight=red
+10	bèlèdennin	bèlèdennin	NOUN	NOUN	_	9	obl	_	highlight=green|span=2
+11	kan	kan	ADP	ADP	_	10	case	_	_
+12	poyi	poyi	ADV	ADV	_	9	obl	_	highlight=green|span=1
+13	!	!	PUNCT	PUNCT	_	12	punct	_	_
+14	ka	ka	AUX	AUX	_	16	aux	_	_
+15	a	a	PRON	PRON	_	16	obj	_	_
+16	ci	ci	VERB	VERB	_	9	xcomp	_	highlight=green|span=3
+17	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: bm_crb-ud-test.conllu · this verb has L=1, R=3 (mean span = 3.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = a tora ten ka to ten ka to ten , fo dò ye u kòlòsi .
+1	a	a	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	tora	tora	VERB	VERB	_	0	root	_	highlight=red
+3	ten	ten	ADV	ADV	_	2	obl	_	highlight=green|span=1
+4	ka	ka	AUX	AUX	_	5	aux	_	_
+5	to	to	VERB	VERB	_	2	xcomp	_	highlight=green|span=6
+6	ten	ten	ADV	ADV	_	5	obl	_	_
+7	ka	ka	AUX	AUX	_	8	aux	_	_
+8	to	to	VERB	VERB	_	5	xcomp	_	_
+9	ten	ten	ADV	ADV	_	8	obl	_	_
+10	,	,	PUNCT	PUNCT	_	15	punct	_	_
+11	fo	fo	SCONJ	SCONJ	_	15	mark	_	_
+12	dò	dò	PRON	PRON	_	15	nsubj	_	_
+13	ye	ye	AUX	AUX	_	15	aux	_	_
+14	u	u	PRON	PRON	_	15	obj	_	_
+15	kòlòsi	kòlòsi	VERB	VERB	_	2	advcl	_	highlight=green|span=5
+16	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: bm_crb-ud-test.conllu · this verb has L=2, R=3 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ni a ye a bolo kè fu la dòròn ka ba kò ko , bolo tigèra .
+1	ni	ni	SCONJ	SCONJ	_	6	mark	_	_
+2	a	a	PRON	PRON	_	6	nsubj	_	highlight=green|span=1
+3	ye	ye	AUX	AUX	_	6	aux	_	_
+4	a	a	PRON	PRON	_	5	nmod:poss	_	_
+5	bolo	bolo	NOUN	NOUN	_	6	obj	_	highlight=green|span=2
+6	kè	kè	VERB	VERB	_	16	advcl	_	highlight=red
+7	fu	fu	NOUN	NOUN	_	6	obl	_	highlight=green|span=2
+8	la	la	ADP	ADP	_	7	case	_	_
+9	dòròn	dòròn	ADV	ADV	_	6	obl	_	highlight=green|span=1
+10	ka	ka	AUX	AUX	_	13	aux	_	_
+11	ba	ba	NOUN	NOUN	_	12	nmod:poss	_	_
+12	kò	kò	NOUN	NOUN	_	13	obj	_	_
+13	ko	ko	VERB	VERB	_	6	xcomp	_	highlight=green|span=4
+14	,	,	PUNCT	PUNCT	_	13	punct	_	_
+15	bolo	bolo	NOUN	NOUN	_	16	nsubj	_	_
+16	tigèra	tigèra	VERB	VERB	_	0	root	_	_
+17	.	.	PUNCT	PUNCT	_	16	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: bm_crb-ud-test.conllu · this verb has L=1, R=3 (mean span = 2.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = jinèmuso nin tagara ni a ye o la u ka jinèdugu la , a tagara dumuni di a ma , ka a bonyè kosèbè , ka a fò cènin ye ko ni cè nin bè a fè ka a furu ko ale bè Amadu Tara fè .
+1	jinèmuso	jinèmuso	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=2
+2	nin	nin	DET	DET	_	1	det	_	_
+3	tagara	tagara	VERB	VERB	_	0	root	_	highlight=red
+4	ni	ni	ADP	ADP	_	5	case	_	_
+5	a	a	PRON	PRON	_	3	obl	_	highlight=green|span=3
+6	ye	ye	ADP	ADP	_	5	case	_	_
+7	o	o	PRON	PRON	_	3	obl	_	highlight=green|span=2
+8	la	la	ADP	ADP	_	7	case	_	_
+9	u	u	PRON	PRON	_	11	nmod:poss	_	_
+10	ka	ka	ADP	ADP	_	9	case	_	_
+11	jinèdugu	jinèdugu	NOUN	NOUN	_	3	obl	_	highlight=green|span=4
+12	la	la	ADP	ADP	_	11	case	_	_
+13	,	,	PUNCT	PUNCT	_	15	punct	_	_
+14	a	a	PRON	PRON	_	15	nsubj	_	_
+15	tagara	tagara	VERB	VERB	_	3	parataxis	_	_
+16	dumuni	dumuni	NOUN	NOUN	_	17	obj	_	_
+17	di	di	VERB	VERB	_	15	xcomp	_	_
+18	a	a	PRON	PRON	_	17	obl	_	_
+19	ma	ma	ADP	ADP	_	18	case	_	_
+20	,	,	PUNCT	PUNCT	_	23	punct	_	_
+21	ka	ka	AUX	AUX	_	23	aux	_	_
+22	a	a	PRON	PRON	_	23	obj	_	_
+23	bonyè	bonyè	VERB	VERB	_	17	xcomp	_	_
+24	kosèbè	kosèbè	ADV	ADV	_	23	obl	_	_
+25	,	,	PUNCT	PUNCT	_	28	punct	_	_
+26	ka	ka	AUX	AUX	_	28	aux	_	_
+27	a	a	PRON	PRON	_	28	obj	_	_
+28	fò	fò	VERB	VERB	_	23	xcomp	_	_
+29	cènin	cènin	NOUN	NOUN	_	28	obl	_	_
+30	ye	ye	ADP	ADP	_	29	case	_	_
+31	ko	ko	PART	PART	_	35	discourse	_	_
+32	ni	ni	SCONJ	SCONJ	_	35	mark	_	_
+33	cè	cè	NOUN	NOUN	_	35	nsubj	_	_
+34	nin	nin	DET	DET	_	33	det	_	_
+35	bè	bè	VERB	VERB	_	43	advcl	_	_
+36	a	a	PRON	PRON	_	35	obl	_	_
+37	fè	fè	ADP	ADP	_	36	case	_	_
+38	ka	ka	AUX	AUX	_	40	aux	_	_
+39	a	a	PRON	PRON	_	40	obj	_	_
+40	furu	furu	VERB	VERB	_	35	xcomp	_	_
+41	ko	ko	PART	PART	_	43	discourse	_	_
+42	ale	ale	PRON	PRON	_	43	nsubj	_	_
+43	bè	bè	VERB	VERB	_	28	ccomp	_	_
+44	Amadu	Amadu	PROPN	PROPN	_	43	obl	_	_
+45	Tara	Tara	PROPN	PROPN	_	44	flat	_	_
+46	fè	fè	ADP	ADP	_	44	case	_	_
+47	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: bm_crb-ud-test.conllu · this verb has L=1, R=3 (mean span = 4.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = sani a ka segin ni a ye , a ye Amadu Tara ka fènkè , a taamana ni minw bèè ye , muru ni tama ninw bèè , a ye bèè minè Amadu Tara bolo ka o bila yen , ka tila ka kurakura di a ma minw nyògòn tè mògò si bolo nyumannyuman minw nyògòn ma deli ka ye fòlò .
+1	sani	sani	SCONJ	SCONJ	_	4	mark	_	_
+2	a	a	PRON	PRON	_	4	nsubj	_	_
+3	ka	ka	AUX	AUX	_	4	aux	_	_
+4	segin	segin	VERB	VERB	_	32	advcl	_	_
+5	ni	ni	ADP	ADP	_	6	case	_	_
+6	a	a	PRON	PRON	_	4	obl	_	_
+7	ye	ye	ADP	ADP	_	6	case	_	_
+8	,	,	PUNCT	PUNCT	_	4	punct	_	_
+9	a	a	PRON	PRON	_	14	nsubj	_	_
+10	ye	ye	AUX	AUX	_	14	aux	_	_
+11	Amadu	Amadu	PROPN	PROPN	_	14	nmod:poss	_	_
+12	Tara	Tara	PROPN	PROPN	_	11	flat	_	_
+13	ka	ka	ADP	ADP	_	11	case	_	_
+14	fènkè	fènkè	NOUN	NOUN	_	17	dislocated	_	_
+15	,	,	PUNCT	PUNCT	_	14	punct	_	_
+16	a	a	PRON	PRON	_	17	nsubj	_	_
+17	taamana	taamana	VERB	VERB	_	32	acl	_	_
+18	ni	ni	ADP	ADP	_	19	case	_	_
+19	minw	minw	PRON	PRON	_	17	obl	_	_
+20	bèè	bèè	DET	DET	_	19	det	_	_
+21	ye	ye	ADP	ADP	_	19	case	_	_
+22	,	,	PUNCT	PUNCT	_	23	punct	_	_
+23	muru	muru	NOUN	NOUN	_	17	dislocated	_	_
+24	ni	ni	ADP	ADP	_	25	case	_	_
+25	tama	tama	NOUN	NOUN	_	23	conj	_	_
+26	ninw	ninw	DET	DET	_	23	det	_	_
+27	bèè	bèè	DET	DET	_	23	det	_	_
+28	,	,	PUNCT	PUNCT	_	23	punct	_	_
+29	a	a	PRON	PRON	_	32	nsubj	_	_
+30	ye	ye	AUX	AUX	_	32	aux	_	_
+31	bèè	bèè	PRON	PRON	_	32	obj	_	_
+32	minè	minè	VERB	VERB	_	0	root	_	_
+33	Amadu	Amadu	PROPN	PROPN	_	32	obl	_	_
+34	Tara	Tara	PROPN	PROPN	_	33	flat	_	_
+35	bolo	bolo	ADP	ADP	_	33	case	_	_
+36	ka	ka	AUX	AUX	_	38	aux	_	_
+37	o	o	PRON	PRON	_	38	obj	_	_
+38	bila	bila	VERB	VERB	_	32	xcomp	_	_
+39	yen	yen	ADV	ADV	_	38	obl	_	_
+40	,	,	PUNCT	PUNCT	_	42	punct	_	_
+41	ka	ka	AUX	AUX	_	42	aux	_	_
+42	tila	tila	VERB	VERB	_	38	xcomp	_	_
+43	ka	ka	AUX	AUX	_	45	aux	_	_
+44	kurakura	kurakura	NOUN	NOUN	_	45	obj	_	highlight=green|span=1
+45	di	di	VERB	VERB	_	42	xcomp	_	highlight=red
+46	a	a	PRON	PRON	_	45	obl	_	highlight=green|span=2
+47	ma	ma	ADP	ADP	_	46	case	_	_
+48	minw	minw	PRON	PRON	_	49	nmod:poss	_	_
+49	nyògòn	nyògòn	NOUN	NOUN	_	50	nsubj	_	_
+50	tè	tè	VERB	VERB	_	45	acl	_	highlight=green|span=6
+51	mògò	mògò	NOUN	NOUN	_	50	obl	_	_
+52	si	si	DET	DET	_	51	det	_	_
+53	bolo	bolo	ADP	ADP	_	51	case	_	_
+54	nyumannyuman	nyumannyuman	NOUN	NOUN	_	55	nmod:poss	_	_
+55	minw	minw	PRON	PRON	_	56	nmod:poss	_	_
+56	nyògòn	nyògòn	NOUN	NOUN	_	58	nsubj	_	_
+57	ma	ma	AUX	AUX	_	58	aux	_	_
+58	deli	deli	VERB	VERB	_	45	acl	_	highlight=green|span=8
+59	ka	ka	AUX	AUX	_	60	aux	_	_
+60	ye	ye	VERB	VERB	_	58	xcomp	_	_
+61	fòlò	fòlò	ADV	ADV	_	60	obl	_	_
+62	.	.	PUNCT	PUNCT	_	32	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: bm_crb-ud-test.conllu · this verb has L=1, R=3 (mean span = 5.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = a tagara , a tagara fo a sera sirafarayòrò nin na , fo a sera sirafarayòrò nin na , a korokè ninw tagara sira min fè .
+1	a	a	PRON	PRON	_	2	nsubj	_	_
+2	tagara	tagara	VERB	VERB	_	0	root	_	_
+3	,	,	PUNCT	PUNCT	_	5	punct	_	_
+4	a	a	PRON	PRON	_	5	nsubj	_	highlight=green|span=1
+5	tagara	tagara	VERB	VERB	_	2	parataxis	_	highlight=red
+6	fo	fo	SCONJ	SCONJ	_	8	mark	_	_
+7	a	a	PRON	PRON	_	8	nsubj	_	_
+8	sera	sera	VERB	VERB	_	5	advcl	_	highlight=green|span=6
+9	sirafarayòrò	sirafarayòrò	NOUN	NOUN	_	8	obl	_	_
+10	nin	nin	DET	DET	_	9	det	_	_
+11	na	na	ADP	ADP	_	9	case	_	_
+12	,	,	PUNCT	PUNCT	_	15	punct	_	_
+13	fo	fo	SCONJ	SCONJ	_	15	mark	_	_
+14	a	a	PRON	PRON	_	15	nsubj	_	_
+15	sera	sera	VERB	VERB	_	5	advcl	_	highlight=green|span=6
+16	sirafarayòrò	sirafarayòrò	NOUN	NOUN	_	15	obl	_	_
+17	nin	nin	DET	DET	_	16	det	_	_
+18	na	na	ADP	ADP	_	16	case	_	_
+19	,	,	PUNCT	PUNCT	_	15	punct	_	_
+20	a	a	PRON	PRON	_	21	nmod:poss	_	_
+21	korokè	korokè	NOUN	NOUN	_	23	nsubj	_	_
+22	ninw	ninw	DET	DET	_	21	det	_	_
+23	tagara	tagara	VERB	VERB	_	5	acl	_	highlight=green|span=7
+24	sira	sira	NOUN	NOUN	_	23	obl	_	_
+25	min	min	DET	DET	_	24	det:rel	_	_
+26	fè	fè	ADP	ADP	_	24	case	_	_
+27	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: bm_crb-ud-test.conllu · this verb has L=1, R=3 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = u ye a lajigin kòlòn kònò dòròn , u bèè bolila ka taga ka a to ka a ka so siri jiri la yen ka taga .
+1	u	u	PRON	PRON	_	4	nsubj	_	_
+2	ye	ye	AUX	AUX	_	4	aux	_	_
+3	a	a	PRON	PRON	_	4	obj	_	_
+4	lajigin	lajigin	VERB	VERB	_	0	root	_	_
+5	kòlòn	kòlòn	NOUN	NOUN	_	4	obl	_	_
+6	kònò	kònò	ADP	ADP	_	5	case	_	_
+7	dòròn	dòròn	ADV	ADV	_	4	obl	_	_
+8	,	,	PUNCT	PUNCT	_	11	punct	_	_
+9	u	u	PRON	PRON	_	11	nsubj	_	_
+10	bèè	bèè	DET	DET	_	9	det	_	_
+11	bolila	bolila	VERB	VERB	_	4	parataxis	_	_
+12	ka	ka	AUX	AUX	_	13	aux	_	_
+13	taga	taga	VERB	VERB	_	11	xcomp	_	_
+14	ka	ka	AUX	AUX	_	16	aux	_	_
+15	a	a	PRON	PRON	_	16	obj	_	_
+16	to	to	VERB	VERB	_	13	xcomp	_	_
+17	ka	ka	AUX	AUX	_	21	aux	_	_
+18	a	a	PRON	PRON	_	20	nmod:poss	_	_
+19	ka	ka	ADP	ADP	_	18	case	_	_
+20	so	so	NOUN	NOUN	_	21	obj	_	highlight=green|span=3
+21	siri	siri	VERB	VERB	_	16	xcomp	_	highlight=red
+22	jiri	jiri	NOUN	NOUN	_	21	obl	_	highlight=green|span=2
+23	la	la	ADP	ADP	_	22	case	_	_
+24	yen	yen	ADV	ADV	_	21	obl	_	highlight=green|span=1
+25	ka	ka	AUX	AUX	_	26	aux	_	_
+26	taga	taga	VERB	VERB	_	21	xcomp	_	highlight=green|span=2
+27	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: bm_crb-ud-test.conllu · this verb has L=1, R=3 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Amadu Tara tora kòlòn kònò yen fo a bè nyini ka na sa sagagènna dòw tagara bò a kan kòlòn kònò .
+1	Amadu	Amadu	PROPN	PROPN	_	3	nsubj	_	highlight=green|span=2
+2	Tara	Tara	PROPN	PROPN	_	1	flat	_	_
+3	tora	tora	VERB	VERB	_	0	root	_	highlight=red
+4	kòlòn	kòlòn	NOUN	NOUN	_	3	obl	_	highlight=green|span=2
+5	kònò	kònò	ADP	ADP	_	4	case	_	_
+6	yen	yen	ADV	ADV	_	3	obl	_	highlight=green|span=1
+7	fo	fo	SCONJ	SCONJ	_	10	mark	_	_
+8	a	a	PRON	PRON	_	10	nsubj	_	_
+9	bè	bè	AUX	AUX	_	10	aux	_	_
+10	nyini	nyini	VERB	VERB	_	3	advcl	_	highlight=green|span=7
+11	ka	ka	AUX	AUX	_	12	aux	_	_
+12	na	na	VERB	VERB	_	10	xcomp	_	_
+13	sa	sa	VERB	VERB	_	12	xcomp	_	_
+14	sagagènna	sagagènna	NOUN	NOUN	_	16	nsubj	_	_
+15	dòw	dòw	DET	DET	_	14	det	_	_
+16	tagara	tagara	VERB	VERB	_	3	parataxis	_	_
+17	bò	bò	VERB	VERB	_	16	xcomp	_	_
+18	a	a	PRON	PRON	_	17	obl	_	_
+19	kan	kan	ADP	ADP	_	18	case	_	_
+20	kòlòn	kòlòn	NOUN	NOUN	_	17	obl	_	_
+21	kònò	kònò	ADP	ADP	_	20	case	_	_
+22	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: bm_crb-ud-test.conllu · this verb has L=1, R=3 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = a bè na minkè dòròn kungo kònò , a sera ka bugu dò ye yen dugutilama fè yen .
+1	a	a	PRON	PRON	_	3	nsubj	_	_
+2	bè	bè	AUX	AUX	_	3	aux	_	_
+3	na	na	VERB	VERB	_	10	advcl	_	_
+4	minkè	minkè	SCONJ	SCONJ	_	3	mark	_	_
+5	dòròn	dòròn	ADV	ADV	_	3	obl	_	_
+6	kungo	kungo	NOUN	NOUN	_	3	obl	_	_
+7	kònò	kònò	ADP	ADP	_	6	case	_	_
+8	,	,	PUNCT	PUNCT	_	3	punct	_	_
+9	a	a	PRON	PRON	_	10	nsubj	_	_
+10	sera	sera	VERB	VERB	_	0	root	_	_
+11	ka	ka	AUX	AUX	_	14	aux	_	_
+12	bugu	bugu	NOUN	NOUN	_	14	obj	_	highlight=green|span=2
+13	dò	dò	DET	DET	_	12	det	_	_
+14	ye	ye	VERB	VERB	_	10	xcomp	_	highlight=red
+15	yen	yen	ADV	ADV	_	14	obl	_	highlight=green|span=1
+16	dugutilama	dugutilama	NOUN	NOUN	_	14	obl	_	highlight=green|span=2
+17	fè	fè	ADP	ADP	_	16	case	_	_
+18	yen	yen	ADV	ADV	_	14	obl	_	highlight=green|span=1
+19	.	.	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: bm_crb-ud-test.conllu · this verb has L=0, R=3 (mean span = 3.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = jinèmuso nin nana dòròn , Amadu Tara kòròkè ninw bèè , Amadu Tara kòròkè seegin ninw bèè wulila ka jò jinèmuso nin kama sisan kòni , ko u bè na jinèmuso nin furu
+1	jinèmuso	jinèmuso	NOUN	NOUN	_	3	nsubj	_	_
+2	nin	nin	DET	DET	_	1	det	_	_
+3	nana	nana	VERB	VERB	_	18	advcl	_	_
+4	dòròn	dòròn	ADV	ADV	_	3	obl	_	_
+5	,	,	PUNCT	PUNCT	_	3	punct	_	_
+6	Amadu	Amadu	PROPN	PROPN	_	8	nmod:poss	_	_
+7	Tara	Tara	PROPN	PROPN	_	6	flat	_	_
+8	kòròkè	kòròkè	NOUN	NOUN	_	18	dislocated	_	_
+9	ninw	ninw	DET	DET	_	8	det	_	_
+10	bèè	bèè	DET	DET	_	8	det	_	_
+11	,	,	PUNCT	PUNCT	_	8	punct	_	_
+12	Amadu	Amadu	PROPN	PROPN	_	14	nmod:poss	_	_
+13	Tara	Tara	PROPN	PROPN	_	12	flat	_	_
+14	kòròkè	kòròkè	NOUN	NOUN	_	18	nsubj	_	_
+15	seegin	seegin	NUM	NUM	_	14	nummod	_	_
+16	ninw	ninw	DET	DET	_	14	det	_	_
+17	bèè	bèè	DET	DET	_	14	det	_	_
+18	wulila	wulila	VERB	VERB	_	0	root	_	_
+19	ka	ka	AUX	AUX	_	20	aux	_	_
+20	jò	jò	VERB	VERB	_	18	xcomp	_	highlight=red
+21	jinèmuso	jinèmuso	NOUN	NOUN	_	20	obl	_	highlight=green|span=3
+22	nin	nin	DET	DET	_	21	det	_	_
+23	kama	kama	ADP	ADP	_	21	case	_	_
+24	sisan	sisan	ADV	ADV	_	20	obl	_	highlight=green|span=1
+25	kòni	kòni	PART	PART	_	20	discourse	_	_
+26	,	,	PUNCT	PUNCT	_	33	punct	_	_
+27	ko	ko	PART	PART	_	33	discourse	_	_
+28	u	u	PRON	PRON	_	33	nsubj	_	_
+29	bè	bè	AUX	AUX	_	33	aux	_	_
+30	na	na	VERB	VERB	_	29	fixed	_	_
+31	jinèmuso	jinèmuso	NOUN	NOUN	_	33	obj	_	_
+32	nin	nin	DET	DET	_	31	det	_	_
+33	furu	furu	VERB	VERB	_	20	ccomp	_	highlight=green|span=7"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: bm_crb-ud-test.conllu · this verb has L=1, R=3 (mean span = 14.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = jinèmusonin fana tagara , ko a bè jamanatigi de nyini ko ka a ye , a tagara a fè yen ka a fò a ye ko ale ko ale furula dò de ma u ka jinèdugu yenninnò ko o tògò ye Amadu Tara , ko o tigi tun tagara fura nyini , ko ka na a di a fa de ma , ko a ye fura sòrò , ko a nana ko ale nana o tigi de nyini sisanninnò .
+1	jinèmusonin	jinèmusonin	NOUN	NOUN	_	3	nsubj	_	_
+2	fana	fana	PART	PART	_	1	discourse	_	_
+3	tagara	tagara	VERB	VERB	_	0	root	_	_
+4	,	,	PUNCT	PUNCT	_	10	punct	_	_
+5	ko	ko	PART	PART	_	10	discourse	_	_
+6	a	a	PRON	PRON	_	10	nsubj	_	_
+7	bè	bè	AUX	AUX	_	10	aux	_	_
+8	jamanatigi	jamanatigi	NOUN	NOUN	_	10	obj	_	_
+9	de	de	PART	PART	_	8	discourse	_	_
+10	nyini	nyini	VERB	VERB	_	3	ccomp	_	_
+11	ko	ko	PART	PART	_	14	discourse	_	_
+12	ka	ka	AUX	AUX	_	14	aux	_	_
+13	a	a	PRON	PRON	_	14	obj	_	_
+14	ye	ye	VERB	VERB	_	10	xcomp	_	_
+15	,	,	PUNCT	PUNCT	_	17	punct	_	_
+16	a	a	PRON	PRON	_	17	nsubj	_	highlight=green|span=1
+17	tagara	tagara	VERB	VERB	_	3	parataxis	_	highlight=red
+18	a	a	PRON	PRON	_	17	obl	_	highlight=green|span=2
+19	fè	fè	ADP	ADP	_	18	case	_	_
+20	yen	yen	ADV	ADV	_	17	obl	_	highlight=green|span=1
+21	ka	ka	AUX	AUX	_	23	aux	_	_
+22	a	a	PRON	PRON	_	23	obj	_	_
+23	fò	fò	VERB	VERB	_	17	xcomp	_	highlight=green|span=55
+24	a	a	PRON	PRON	_	23	obl	_	_
+25	ye	ye	ADP	ADP	_	24	case	_	_
+26	ko	ko	PART	PART	_	28	discourse	_	_
+27	ale	ale	PRON	PRON	_	28	nsubj	_	_
+28	ko	ko	VERB	VERB	_	23	ccomp	_	_
+29	ale	ale	PRON	PRON	_	30	nsubj	_	_
+30	furula	furula	VERB	VERB	_	28	ccomp	_	_
+31	dò	dò	NOUN	NOUN	_	30	obl	_	_
+32	de	de	PART	PART	_	31	discourse	_	_
+33	ma	ma	ADP	ADP	_	31	case	_	_
+34	u	u	PRON	PRON	_	36	nmod:poss	_	_
+35	ka	ka	ADP	ADP	_	34	case	_	_
+36	jinèdugu	jinèdugu	NOUN	NOUN	_	30	obl	_	_
+37	yenninnò	yenninnò	ADV	ADV	_	30	obl	_	_
+38	ko	ko	PART	PART	_	41	discourse	_	_
+39	o	o	PRON	PRON	_	40	nmod:poss	_	_
+40	tògò	tògò	NOUN	NOUN	_	41	nsubj	_	_
+41	ye	ye	VERB	VERB	_	30	parataxis	_	_
+42	Amadu	Amadu	PROPN	PROPN	_	41	obl	_	_
+43	Tara	Tara	PROPN	PROPN	_	42	flat	_	_
+44	,	,	PUNCT	PUNCT	_	49	punct	_	_
+45	ko	ko	PART	PART	_	49	discourse	_	_
+46	o	o	PRON	PRON	_	47	nmod:poss	_	_
+47	tigi	tigi	NOUN	NOUN	_	49	nsubj	_	_
+48	tun	tun	AUX	AUX	_	49	aux	_	_
+49	tagara	tagara	VERB	VERB	_	41	parataxis	_	_
+50	fura	fura	NOUN	NOUN	_	51	obj	_	_
+51	nyini	nyini	VERB	VERB	_	49	xcomp	_	_
+52	,	,	PUNCT	PUNCT	_	55	punct	_	_
+53	ko	ko	PART	PART	_	55	discourse	_	_
+54	ka	ka	AUX	AUX	_	55	aux	_	_
+55	na	na	VERB	VERB	_	51	xcomp	_	_
+56	a	a	PRON	PRON	_	57	obj	_	_
+57	di	di	VERB	VERB	_	55	xcomp	_	_
+58	a	a	PRON	PRON	_	59	nmod:poss	_	_
+59	fa	fa	NOUN	NOUN	_	57	obl	_	_
+60	de	de	PART	PART	_	59	discourse	_	_
+61	ma	ma	ADP	ADP	_	59	case	_	_
+62	,	,	PUNCT	PUNCT	_	67	punct	_	_
+63	ko	ko	PART	PART	_	67	discourse	_	_
+64	a	a	PRON	PRON	_	67	nsubj	_	_
+65	ye	ye	AUX	AUX	_	67	aux	_	_
+66	fura	fura	NOUN	NOUN	_	67	obj	_	_
+67	sòrò	sòrò	VERB	VERB	_	57	parataxis	_	_
+68	,	,	PUNCT	PUNCT	_	71	punct	_	_
+69	ko	ko	PART	PART	_	71	discourse	_	_
+70	a	a	PRON	PRON	_	71	nsubj	_	_
+71	nana	nana	VERB	VERB	_	67	parataxis	_	_
+72	ko	ko	PART	PART	_	74	discourse	_	_
+73	ale	ale	PRON	PRON	_	74	nsubj	_	_
+74	nana	nana	VERB	VERB	_	71	parataxis	_	_
+75	o	o	PRON	PRON	_	76	nmod:poss	_	_
+76	tigi	tigi	NOUN	NOUN	_	78	obj	_	_
+77	de	de	PART	PART	_	76	discourse	_	_
+78	nyini	nyini	VERB	VERB	_	74	xcomp	_	_
+79	sisanninnò	sisanninnò	NOUN	NOUN	_	78	obl	_	_
+80	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: bm_crb-ud-test.conllu · this verb has L=1, R=3 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = jinèmusonin fana tagara , ko a bè jamanatigi de nyini ko ka a ye , a tagara a fè yen ka a fò a ye ko ale ko ale furula dò de ma u ka jinèdugu yenninnò ko o tògò ye Amadu Tara , ko o tigi tun tagara fura nyini , ko ka na a di a fa de ma , ko a ye fura sòrò , ko a nana ko ale nana o tigi de nyini sisanninnò .
+1	jinèmusonin	jinèmusonin	NOUN	NOUN	_	3	nsubj	_	_
+2	fana	fana	PART	PART	_	1	discourse	_	_
+3	tagara	tagara	VERB	VERB	_	0	root	_	_
+4	,	,	PUNCT	PUNCT	_	10	punct	_	_
+5	ko	ko	PART	PART	_	10	discourse	_	_
+6	a	a	PRON	PRON	_	10	nsubj	_	_
+7	bè	bè	AUX	AUX	_	10	aux	_	_
+8	jamanatigi	jamanatigi	NOUN	NOUN	_	10	obj	_	_
+9	de	de	PART	PART	_	8	discourse	_	_
+10	nyini	nyini	VERB	VERB	_	3	ccomp	_	_
+11	ko	ko	PART	PART	_	14	discourse	_	_
+12	ka	ka	AUX	AUX	_	14	aux	_	_
+13	a	a	PRON	PRON	_	14	obj	_	_
+14	ye	ye	VERB	VERB	_	10	xcomp	_	_
+15	,	,	PUNCT	PUNCT	_	17	punct	_	_
+16	a	a	PRON	PRON	_	17	nsubj	_	_
+17	tagara	tagara	VERB	VERB	_	3	parataxis	_	_
+18	a	a	PRON	PRON	_	17	obl	_	_
+19	fè	fè	ADP	ADP	_	18	case	_	_
+20	yen	yen	ADV	ADV	_	17	obl	_	_
+21	ka	ka	AUX	AUX	_	23	aux	_	_
+22	a	a	PRON	PRON	_	23	obj	_	_
+23	fò	fò	VERB	VERB	_	17	xcomp	_	_
+24	a	a	PRON	PRON	_	23	obl	_	_
+25	ye	ye	ADP	ADP	_	24	case	_	_
+26	ko	ko	PART	PART	_	28	discourse	_	_
+27	ale	ale	PRON	PRON	_	28	nsubj	_	_
+28	ko	ko	VERB	VERB	_	23	ccomp	_	_
+29	ale	ale	PRON	PRON	_	30	nsubj	_	highlight=green|span=1
+30	furula	furula	VERB	VERB	_	28	ccomp	_	highlight=red
+31	dò	dò	NOUN	NOUN	_	30	obl	_	highlight=green|span=3
+32	de	de	PART	PART	_	31	discourse	_	_
+33	ma	ma	ADP	ADP	_	31	case	_	_
+34	u	u	PRON	PRON	_	36	nmod:poss	_	_
+35	ka	ka	ADP	ADP	_	34	case	_	_
+36	jinèdugu	jinèdugu	NOUN	NOUN	_	30	obl	_	highlight=green|span=3
+37	yenninnò	yenninnò	ADV	ADV	_	30	obl	_	highlight=green|span=1
+38	ko	ko	PART	PART	_	41	discourse	_	_
+39	o	o	PRON	PRON	_	40	nmod:poss	_	_
+40	tògò	tògò	NOUN	NOUN	_	41	nsubj	_	_
+41	ye	ye	VERB	VERB	_	30	parataxis	_	_
+42	Amadu	Amadu	PROPN	PROPN	_	41	obl	_	_
+43	Tara	Tara	PROPN	PROPN	_	42	flat	_	_
+44	,	,	PUNCT	PUNCT	_	49	punct	_	_
+45	ko	ko	PART	PART	_	49	discourse	_	_
+46	o	o	PRON	PRON	_	47	nmod:poss	_	_
+47	tigi	tigi	NOUN	NOUN	_	49	nsubj	_	_
+48	tun	tun	AUX	AUX	_	49	aux	_	_
+49	tagara	tagara	VERB	VERB	_	41	parataxis	_	_
+50	fura	fura	NOUN	NOUN	_	51	obj	_	_
+51	nyini	nyini	VERB	VERB	_	49	xcomp	_	_
+52	,	,	PUNCT	PUNCT	_	55	punct	_	_
+53	ko	ko	PART	PART	_	55	discourse	_	_
+54	ka	ka	AUX	AUX	_	55	aux	_	_
+55	na	na	VERB	VERB	_	51	xcomp	_	_
+56	a	a	PRON	PRON	_	57	obj	_	_
+57	di	di	VERB	VERB	_	55	xcomp	_	_
+58	a	a	PRON	PRON	_	59	nmod:poss	_	_
+59	fa	fa	NOUN	NOUN	_	57	obl	_	_
+60	de	de	PART	PART	_	59	discourse	_	_
+61	ma	ma	ADP	ADP	_	59	case	_	_
+62	,	,	PUNCT	PUNCT	_	67	punct	_	_
+63	ko	ko	PART	PART	_	67	discourse	_	_
+64	a	a	PRON	PRON	_	67	nsubj	_	_
+65	ye	ye	AUX	AUX	_	67	aux	_	_
+66	fura	fura	NOUN	NOUN	_	67	obj	_	_
+67	sòrò	sòrò	VERB	VERB	_	57	parataxis	_	_
+68	,	,	PUNCT	PUNCT	_	71	punct	_	_
+69	ko	ko	PART	PART	_	71	discourse	_	_
+70	a	a	PRON	PRON	_	71	nsubj	_	_
+71	nana	nana	VERB	VERB	_	67	parataxis	_	_
+72	ko	ko	PART	PART	_	74	discourse	_	_
+73	ale	ale	PRON	PRON	_	74	nsubj	_	_
+74	nana	nana	VERB	VERB	_	71	parataxis	_	_
+75	o	o	PRON	PRON	_	76	nmod:poss	_	_
+76	tigi	tigi	NOUN	NOUN	_	78	obj	_	_
+77	de	de	PART	PART	_	76	discourse	_	_
+78	nyini	nyini	VERB	VERB	_	74	xcomp	_	_
+79	sisanninnò	sisanninnò	NOUN	NOUN	_	78	obl	_	_
+80	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

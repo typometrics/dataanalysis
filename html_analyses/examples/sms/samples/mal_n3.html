@@ -1,0 +1,403 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>SkoltSami — MAL_3</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to SkoltSami examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>SkoltSami <small style="color:#999;font-weight:normal">(sms)</small> — MAL<sub>3</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>3</b> dependents in total (left + right combined).</p><p><b>MAL<sub>3</sub> = 1.532</b> &nbsp; <span style="color:#666">(60 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over all dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: sms_giellagas-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Di kaavân ǥu vaaʹldi de ton âʹtte šõʹddiǩ .
+1	Di	Di	CCONJ	CCONJ	_	4	cc	_	_
+2	kaavân	kaavân	NOUN	NOUN	_	4	xcomp	_	_
+3	ǥu	ǥu	SCONJ	SCONJ	_	4	mark	_	_
+4	vaaʹldi	vaaʹldi	VERB	VERB	_	8	advcl	_	highlight=green|span=4
+5	de	de	CCONJ	CCONJ	_	8	cc	_	_
+6	ton	ton	PRON	PRON	_	8	nsubj	_	highlight=green|span=1
+7	âʹtte	âʹtte	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+8	šõʹddiǩ	šõʹddiǩ	VERB	VERB	_	0	root	_	highlight=red
+9	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: sms_giellagas-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Čääʹccskääll pâi åårr tõʹst jiõŋ âʹlnn .
+1	Čääʹccskääll	Čääʹccskääll	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=1
+2	pâi	pâi	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+3	åårr	åårr	VERB	VERB	_	0	root	_	highlight=red
+4	tõʹst	tõʹst	ADV	ADV	_	5	advmod	_	_
+5	jiõŋ	jiõŋ	NOUN	NOUN	_	3	obl	_	highlight=green|span=3
+6	âʹlnn	âʹlnn	ADP	ADP	_	5	case	_	_
+7	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: sms_giellagas-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = A ceälkk : ” Mâiʹd ... Peʹll samai vuõrji miʹjjid da jeäʹp ni mäʹhtt vueiʹt .
+1	A	A	CCONJ	CCONJ	_	2	mark	_	_
+2	ceälkk	ceälkk	VERB	VERB	_	0	root	_	_
+3	:	:	PUNCT	PUNCT	_	9	punct	_	_
+4	”	”	PUNCT	PUNCT	_	9	punct	_	_
+5	Mâiʹd	Mâiʹd	PRON	PRON	_	9	reparandum	_	_
+6	...	...	PUNCT	PUNCT	_	9	punct	_	_
+7	Peʹll	Peʹll	NOUN	NOUN	_	9	nsubj	_	highlight=green|span=1
+8	samai	samai	ADV	ADV	_	9	advmod	_	highlight=green|span=1
+9	vuõrji	vuõrji	VERB	VERB	_	2	ccomp	_	highlight=red
+10	miʹjjid	miʹjjid	PRON	PRON	_	9	obl	_	highlight=green|span=1
+11	da	da	CCONJ	CCONJ	_	15	cc	_	_
+12	jeäʹp	jeäʹp	AUX	AUX	_	15	aux	_	_
+13	ni	ni	PART	PART	_	15	advmod	_	_
+14	mäʹhtt	mäʹhtt	SCONJ	SCONJ	_	13	fixed	_	_
+15	vueiʹt	vueiʹt	VERB	VERB	_	9	conj	_	_
+16	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: sms_giellagas-ud-test.conllu · this verb has L=3, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = De âʹpet nuʹt-i jälsteškuäʹtte , jälste , jälste .
+1	De	De	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+2	âʹpet	âʹpet	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+3	nuʹt-i	nuʹt-i	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+4	jälsteškuäʹtte	jälsteškuäʹtte	VERB	VERB	_	0	root	_	highlight=red
+5	,	,	PUNCT	PUNCT	_	6	punct	_	_
+6	jälste	jälste	VERB	VERB	_	4	conj	_	_
+7	,	,	PUNCT	PUNCT	_	8	punct	_	_
+8	jälste	jälste	VERB	VERB	_	4	conj	_	_
+9	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: sms_giellagas-ud-test.conllu · this verb has L=1, R=2 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Eʹpet tõt mõõni , mõõni , mõõni tõt villjâs di mõõni väʹst , tok-i mõõni koozz leežž tõt .
+1	Eʹpet	Eʹpet	ADV	ADV	_	3	advmod	_	_
+2	tõt	tõt	PRON	PRON	_	3	nsubj	_	_
+3	mõõni	mõõni	VERB	VERB	_	0	root	_	_
+4	,	,	PUNCT	PUNCT	_	5	punct	_	_
+5	mõõni	mõõni	VERB	VERB	_	3	conj	_	_
+6	,	,	PUNCT	PUNCT	_	7	punct	_	_
+7	mõõni	mõõni	VERB	VERB	_	3	conj	_	_
+8	tõt	tõt	PRON	PRON	_	9	det	_	_
+9	villjâs	villjâs	NOUN	NOUN	_	7	nsubj	_	_
+10	di	di	CCONJ	CCONJ	_	11	cc	_	_
+11	mõõni	mõõni	VERB	VERB	_	7	conj	_	_
+12	väʹst	väʹst	ADV	ADV	_	11	advmod	_	_
+13	,	,	PUNCT	PUNCT	_	15	punct	_	_
+14	tok-i	tok-i	ADV	ADV	_	15	advmod	_	highlight=green|span=1
+15	mõõni	mõõni	VERB	VERB	_	7	conj	_	highlight=red
+16	koozz	koozz	ADV	ADV	_	15	advmod	_	highlight=green|span=2
+17	leežž	leežž	VERB	VERB	_	16	fixed	_	_
+18	tõt	tõt	PRON	PRON	_	15	nsubj	_	highlight=green|span=1
+19	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: sms_giellagas-ud-train.conllu · this verb has L=1, R=2 (mean span = 2.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Nuʹtt kuâđđje vaʹlljeeǩâni Peter Smith diǥu še Mary Brown .
+1	Nuʹtt	Nuʹtt	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+2	kuâđđje	kuâđđje	VERB	VERB	_	0	root	_	highlight=red
+3	vaʹlljeeǩâni	vaʹlljeeǩâni	VERB	VERB	_	2	advcl	_	highlight=green|span=1
+4	Peter	Peter	PROPN	PROPN	_	2	nsubj	_	highlight=green|span=6
+5	Smith	Smith	PROPN	PROPN	_	4	flat:name	_	_
+6	diǥu	diǥu	SCONJ	SCONJ	_	9	mark	_	_
+7	še	še	ADV	ADV	_	9	advmod	_	_
+8	Mary	Mary	PROPN	PROPN	_	4	conj	_	_
+9	Brown	Brown	PROPN	PROPN	_	8	flat:name	_	_
+10	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: sms_giellagas-ud-test.conllu · this verb has L=3, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = De son âʹtte mõõni , kuälmad vuâra juʹn mõõni , mõõni de sami siõm heäppaž ââlǥaž ǩiʹcsti .
+1	De	De	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+2	son	son	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+3	âʹtte	âʹtte	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+4	mõõni	mõõni	VERB	VERB	_	0	root	_	highlight=red
+5	,	,	PUNCT	PUNCT	_	9	punct	_	_
+6	kuälmad	kuälmad	ADJ	ADJ	_	7	amod	_	_
+7	vuâra	vuâra	NOUN	NOUN	_	9	obl	_	_
+8	juʹn	juʹn	ADV	ADV	_	9	advmod	_	_
+9	mõõni	mõõni	VERB	VERB	_	4	conj	_	_
+10	,	,	PUNCT	PUNCT	_	11	punct	_	_
+11	mõõni	mõõni	VERB	VERB	_	4	conj	_	_
+12	de	de	CCONJ	CCONJ	_	17	cc	_	_
+13	sami	sami	ADV	ADV	_	14	advmod	_	_
+14	siõm	siõm	ADJ	ADJ	_	16	amod	_	_
+15	heäppaž	heäppaž	NOUN	NOUN	_	16	nmod	_	_
+16	ââlǥaž	ââlǥaž	NOUN	NOUN	_	17	nsubj	_	_
+17	ǩiʹcsti	ǩiʹcsti	VERB	VERB	_	4	conj	_	_
+18	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: sms_giellagas-ud-test.conllu · this verb has L=1, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ” Äʹn , äʹn äjjan äʹrbbaaušu ko viiǯǯžem ” , de vuäǯǯ son reäiʹj .
+1	”	”	PUNCT	PUNCT	_	5	punct	_	_
+2	Äʹn	Äʹn	PART	PART	_	5	discourse	_	_
+3	,	,	PUNCT	PUNCT	_	5	punct	_	_
+4	äʹn	äʹn	PART	PART	_	5	discourse	_	_
+5	äjjan	äjjan	VERB	VERB	_	0	root	_	_
+6	äʹrbbaaušu	äʹrbbaaušu	NOUN	NOUN	_	5	obj	_	_
+7	ko	ko	SCONJ	SCONJ	_	8	mark	_	_
+8	viiǯǯžem	viiǯǯžem	VERB	VERB	_	5	advcl	_	_
+9	”	”	PUNCT	PUNCT	_	5	punct	_	_
+10	,	,	PUNCT	PUNCT	_	12	punct	_	_
+11	de	de	ADV	ADV	_	12	advmod	_	highlight=green|span=1
+12	vuäǯǯ	vuäǯǯ	VERB	VERB	_	5	conj	_	highlight=red
+13	son	son	PRON	PRON	_	12	nsubj	_	highlight=green|span=1
+14	reäiʹj	reäiʹj	NOUN	NOUN	_	12	obj	_	highlight=green|span=1
+15	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: sms_giellagas-ud-train.conllu · this verb has L=1, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Son jälsti čõõđ ääiʹj Pariizzâst , Franskkjânnam vueiʹvvgåårdest .
+1	Son	Son	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	jälsti	jälsti	VERB	VERB	_	0	root	_	highlight=red
+3	čõõđ	čõõđ	ADP	ADP	_	4	case	_	_
+4	ääiʹj	ääiʹj	NOUN	NOUN	_	2	obl	_	highlight=green|span=2
+5	Pariizzâst	Pariizzâst	PROPN	PROPN	_	2	obl	_	highlight=green|span=3
+6	,	,	PUNCT	PUNCT	_	8	punct	_	_
+7	Franskkjânnam	Franskkjânnam	PROPN	PROPN	_	8	nmod:poss	_	_
+8	vueiʹvvgåårdest	vueiʹvvgåårdest	NOUN	NOUN	_	5	appos	_	_
+9	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: sms_giellagas-ud-test.conllu · this verb has L=3, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Näʹde son âʹtte puk oudd , di jiõčč tietenki tok kuättses mâânn , leša tõʹst ij šõõdd šiõǥǥ jieʹllem , puk ku väldd čeäkklee jällmõõžž .
+1	Näʹde	Näʹde	INTJ	INTJ	_	5	discourse	_	_
+2	son	son	PRON	PRON	_	5	nsubj	_	highlight=green|span=1
+3	âʹtte	âʹtte	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+4	puk	puk	PRON	PRON	_	5	obj	_	highlight=green|span=1
+5	oudd	oudd	VERB	VERB	_	0	root	_	highlight=red
+6	,	,	PUNCT	PUNCT	_	12	punct	_	_
+7	di	di	CCONJ	CCONJ	_	12	cc	_	_
+8	jiõčč	jiõčč	PRON	PRON	_	12	nsubj	_	_
+9	tietenki	tietenki	ADV	ADV	_	12	discourse	_	_
+10	tok	tok	ADV	ADV	_	12	advmod	_	_
+11	kuättses	kuättses	NOUN	NOUN	_	12	obl	_	_
+12	mâânn	mâânn	VERB	VERB	_	5	conj	_	_
+13	,	,	PUNCT	PUNCT	_	17	punct	_	_
+14	leša	leša	CCONJ	CCONJ	_	17	cc	_	_
+15	tõʹst	tõʹst	ADV	ADV	_	17	advmod	_	_
+16	ij	ij	AUX	AUX	_	17	aux	_	_
+17	šõõdd	šõõdd	VERB	VERB	_	12	conj	_	_
+18	šiõǥǥ	šiõǥǥ	ADJ	ADJ	_	19	amod	_	_
+19	jieʹllem	jieʹllem	NOUN	NOUN	_	17	nsubj	_	_
+20	,	,	PUNCT	PUNCT	_	23	punct	_	_
+21	puk	puk	PRON	PRON	_	23	nsubj	_	_
+22	ku	ku	SCONJ	SCONJ	_	23	mark	_	_
+23	väldd	väldd	VERB	VERB	_	17	advcl	_	_
+24	čeäkklee	čeäkklee	NOUN	NOUN	_	25	nmod:poss	_	_
+25	jällmõõžž	jällmõõžž	NOUN	NOUN	_	23	obj	_	_
+26	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: sms_giellagas-ud-test.conllu · this verb has L=3, R=0 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Leša mõõni de nääiʹt ǩiõđâs piiji , källsaž piiji , ceälkk : kulddâl mâka peeʹlljin tän suu ǩiõđ âʹlnn .
+1	Leša	Leša	SCONJ	SCONJ	_	2	mark	_	_
+2	mõõni	mõõni	VERB	VERB	_	6	advcl	_	highlight=green|span=2
+3	de	de	CCONJ	CCONJ	_	6	cc	_	_
+4	nääiʹt	nääiʹt	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+5	ǩiõđâs	ǩiõđâs	NOUN	NOUN	_	6	obj	_	highlight=green|span=1
+6	piiji	piiji	VERB	VERB	_	0	root	_	highlight=red
+7	,	,	PUNCT	PUNCT	_	9	punct	_	_
+8	källsaž	källsaž	NOUN	NOUN	_	9	nsubj	_	_
+9	piiji	piiji	VERB	VERB	_	6	conj	_	_
+10	,	,	PUNCT	PUNCT	_	11	punct	_	_
+11	ceälkk	ceälkk	VERB	VERB	_	6	conj	_	_
+12	:	:	PUNCT	PUNCT	_	13	punct	_	_
+13	kulddâl	kulddâl	VERB	VERB	_	11	parataxis	_	_
+14	mâka	mâka	ADV	ADV	_	13	advmod	_	_
+15	peeʹlljin	peeʹlljin	NOUN	NOUN	_	13	obl	_	_
+16	tän	tän	PRON	PRON	_	13	obj	_	_
+17	suu	suu	PRON	PRON	_	18	nmod:poss	_	_
+18	ǩiõđ	ǩiõđ	NOUN	NOUN	_	13	obl	_	_
+19	âʹlnn	âʹlnn	ADP	ADP	_	18	case	_	_
+20	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: sms_giellagas-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = No inn šõõddi , tuk âʹtte vuäđđje puk ... stäʹlmmstääll ... dõõk leʹjje , vuäđđje .
+1	No	No	INTJ	INTJ	_	3	discourse	_	_
+2	inn	inn	NOUN	NOUN	_	3	nsubj	_	_
+3	šõõddi	šõõddi	VERB	VERB	_	0	root	_	_
+4	,	,	PUNCT	PUNCT	_	7	punct	_	_
+5	tuk	tuk	PRON	PRON	_	7	nsubj	_	highlight=green|span=1
+6	âʹtte	âʹtte	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+7	vuäđđje	vuäđđje	VERB	VERB	_	3	conj	_	highlight=red
+8	puk	puk	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+9	...	...	PUNCT	PUNCT	_	7	punct	_	_
+10	stäʹlmmstääll	stäʹlmmstääll	NOUN	NOUN	_	15	nsubj	_	_
+11	...	...	PUNCT	PUNCT	_	12	punct	_	_
+12	dõõk	dõõk	PRON	PRON	_	13	nsubj	_	_
+13	leʹjje	leʹjje	VERB	VERB	_	15	reparandum	_	_
+14	,	,	PUNCT	PUNCT	_	13	punct	_	_
+15	vuäđđje	vuäđđje	VERB	VERB	_	3	conj	_	_
+16	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: sms_giellagas-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Na källsaž ceälkk : ” Muu ko kooʹddže ton jiõk õõlǥ käggõõttâd vuõʹste .
+1	Na	Na	INTJ	INTJ	_	3	discourse	_	_
+2	källsaž	källsaž	NOUN	NOUN	_	3	nsubj	_	_
+3	ceälkk	ceälkk	VERB	VERB	_	0	root	_	_
+4	:	:	PUNCT	PUNCT	_	12	punct	_	_
+5	”	”	PUNCT	PUNCT	_	12	punct	_	_
+6	Muu	Muu	PRON	PRON	_	8	obj	_	_
+7	ko	ko	SCONJ	SCONJ	_	8	mark	_	_
+8	kooʹddže	kooʹddže	VERB	VERB	_	12	advcl	_	highlight=green|span=3
+9	ton	ton	PRON	PRON	_	12	nsubj	_	highlight=green|span=1
+10	jiõk	jiõk	AUX	AUX	_	12	aux	_	_
+11	õõlǥ	õõlǥ	AUX	AUX	_	12	aux	_	_
+12	käggõõttâd	käggõõttâd	VERB	VERB	_	3	ccomp	_	highlight=red
+13	vuõʹste	vuõʹste	ADV	ADV	_	12	advmod	_	highlight=green|span=1
+14	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: sms_giellagas-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Muu ko kooʹddže de aaudže de tueʹllj piijže dõõzz-e kuäʹttnjälmma de näʹde ton õõk njuiʹǩǩeed pâʹjjel tõn tueʹllj õõk njuiʹǩǩeed , di jos piâzzžiǩ pâʹjjel tueʹllj de teʹl jiâ kååʹdd tuu . ”
+1	Muu	Muu	PRON	PRON	_	3	obj	_	_
+2	ko	ko	SCONJ	SCONJ	_	3	mark	_	_
+3	kooʹddže	kooʹddže	VERB	VERB	_	30	advcl	_	_
+4	de	de	CCONJ	CCONJ	_	5	cc	_	_
+5	aaudže	aaudže	VERB	VERB	_	3	conj	_	_
+6	de	de	CCONJ	CCONJ	_	8	cc	_	_
+7	tueʹllj	tueʹllj	NOUN	NOUN	_	8	obj	_	_
+8	piijže	piijže	VERB	VERB	_	3	conj	_	_
+9	dõõzz-e	dõõzz-e	ADV	ADV	_	8	advmod	_	_
+10	kuäʹttnjälmma	kuäʹttnjälmma	NOUN	NOUN	_	9	appos	_	_
+11	de	de	CCONJ	CCONJ	_	14	cc	_	_
+12	näʹde	näʹde	ADV	ADV	_	14	advmod	_	highlight=green|span=1
+13	ton	ton	PRON	PRON	_	14	nsubj	_	highlight=green|span=1
+14	õõk	õõk	VERB	VERB	_	3	conj	_	highlight=red
+15	njuiʹǩǩeed	njuiʹǩǩeed	VERB	VERB	_	14	xcomp	_	highlight=green|span=1
+16	pâʹjjel	pâʹjjel	ADP	ADP	_	18	case	_	_
+17	tõn	tõn	DET	DET	_	18	det	_	_
+18	tueʹllj	tueʹllj	NOUN	NOUN	_	20	obl	_	_
+19	õõk	õõk	AUX	AUX	_	20	aux	_	_
+20	njuiʹǩǩeed	njuiʹǩǩeed	VERB	VERB	_	14	conj	_	_
+21	,	,	PUNCT	PUNCT	_	24	punct	_	_
+22	di	di	CCONJ	CCONJ	_	24	cc	_	_
+23	jos	jos	SCONJ	SCONJ	_	24	mark	_	_
+24	piâzzžiǩ	piâzzžiǩ	VERB	VERB	_	3	conj	_	_
+25	pâʹjjel	pâʹjjel	ADP	ADP	_	26	case	_	_
+26	tueʹllj	tueʹllj	NOUN	NOUN	_	24	obl	_	_
+27	de	de	CCONJ	CCONJ	_	30	cc	_	_
+28	teʹl	teʹl	ADV	ADV	_	30	advmod	_	_
+29	jiâ	jiâ	AUX	AUX	_	30	aux	_	_
+30	kååʹdd	kååʹdd	VERB	VERB	_	0	root	_	_
+31	tuu	tuu	PRON	PRON	_	30	obj	_	_
+32	.	.	PUNCT	PUNCT	_	30	punct	_	_
+33	”	”	PUNCT	PUNCT	_	30	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: sms_giellagas-ud-test.conllu · this verb has L=1, R=2 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Mon leäm leämmaž määŋg vuâra tuõddrest .
+1	Mon	Mon	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+2	leäm	leäm	AUX	AUX	_	3	aux	_	_
+3	leämmaž	leämmaž	VERB	VERB	_	0	root	_	highlight=red
+4	määŋg	määŋg	DET	DET	_	5	det	_	_
+5	vuâra	vuâra	NOUN	NOUN	_	3	obl:tmod	_	highlight=green|span=2
+6	tuõddrest	tuõddrest	NOUN	NOUN	_	3	obl	_	highlight=green|span=1
+7	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: sms_giellagas-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ij , son väʹst vuâlgg viikkâd , väʹst jeäll viikkmen , puätt tõn reäiʹj mieʹldd .
+1	Ij	Ij	INTJ	INTJ	_	5	discourse	_	_
+2	,	,	PUNCT	PUNCT	_	1	punct	_	_
+3	son	son	PRON	PRON	_	5	nsubj	_	highlight=green|span=1
+4	väʹst	väʹst	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+5	vuâlgg	vuâlgg	VERB	VERB	_	0	root	_	highlight=red
+6	viikkâd	viikkâd	VERB	VERB	_	5	xcomp	_	highlight=green|span=1
+7	,	,	PUNCT	PUNCT	_	9	punct	_	_
+8	väʹst	väʹst	ADV	ADV	_	9	advmod	_	_
+9	jeäll	jeäll	VERB	VERB	_	5	conj	_	_
+10	viikkmen	viikkmen	VERB	VERB	_	9	xcomp	_	_
+11	,	,	PUNCT	PUNCT	_	12	punct	_	_
+12	puätt	puätt	VERB	VERB	_	5	conj	_	_
+13	tõn	tõn	PRON	PRON	_	14	det	_	_
+14	reäiʹj	reäiʹj	NOUN	NOUN	_	12	obl	_	_
+15	mieʹldd	mieʹldd	ADP	ADP	_	14	case	_	_
+16	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: sms_giellagas-ud-test.conllu · this verb has L=3, R=0 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Mii leežž nåkkam peästtõõǥǥid koozz-a čõõnõõđi , čõõnõõđi .
+1	Mii	Mii	PRON	PRON	_	6	nsubj	_	highlight=green|span=2
+2	leežž	leežž	VERB	VERB	_	1	fixed	_	_
+3	nåkkam	nåkkam	ADJ	ADJ	_	4	amod	_	_
+4	peästtõõǥǥid	peästtõõǥǥid	NOUN	NOUN	_	6	obj	_	highlight=green|span=2
+5	koozz-a	koozz-a	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+6	čõõnõõđi	čõõnõõđi	VERB	VERB	_	0	root	_	highlight=red
+7	,	,	PUNCT	PUNCT	_	8	punct	_	_
+8	čõõnõõđi	čõõnõõđi	VERB	VERB	_	6	conj	_	_
+9	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: sms_giellagas-ud-test.conllu · this verb has L=1, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Tõt-i vuejjli teâđast heäppšines , di niõđ tõn vaʹldde di teä vuejjle .
+1	Tõt-i	Tõt-i	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	vuejjli	vuejjli	VERB	VERB	_	0	root	_	highlight=red
+3	teâđast	teâđast	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+4	heäppšines	heäppšines	NOUN	NOUN	_	2	obl	_	highlight=green|span=1
+5	,	,	PUNCT	PUNCT	_	9	punct	_	_
+6	di	di	CCONJ	CCONJ	_	9	cc	_	_
+7	niõđ	niõđ	NOUN	NOUN	_	9	obj	_	_
+8	tõn	tõn	PRON	PRON	_	7	det	_	_
+9	vaʹldde	vaʹldde	VERB	VERB	_	2	conj	_	_
+10	di	di	CCONJ	CCONJ	_	12	cc	_	_
+11	teä	teä	ADV	ADV	_	12	advmod	_	_
+12	vuejjle	vuejjle	VERB	VERB	_	9	conj	_	_
+13	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: sms_giellagas-ud-test.conllu · this verb has L=1, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Vuejjle , vuõjju , vuõjju di bieʹss lij vuâmmšõõttâm ... suʹst iʹlla ni vueiʹvv , iʹlla ni njuuʹnn .
+1	Vuejjle	Vuejjle	VERB	VERB	_	0	root	_	_
+2	,	,	PUNCT	PUNCT	_	3	punct	_	_
+3	vuõjju	vuõjju	VERB	VERB	_	1	conj	_	_
+4	,	,	PUNCT	PUNCT	_	5	punct	_	_
+5	vuõjju	vuõjju	VERB	VERB	_	3	conj	_	_
+6	di	di	CCONJ	CCONJ	_	9	cc	_	_
+7	bieʹss	bieʹss	NOUN	NOUN	_	9	nsubj	_	_
+8	lij	lij	AUX	AUX	_	9	aux	_	_
+9	vuâmmšõõttâm	vuâmmšõõttâm	VERB	VERB	_	1	conj	_	_
+10	...	...	PUNCT	PUNCT	_	12	punct	_	_
+11	suʹst	suʹst	PRON	PRON	_	12	obl	_	highlight=green|span=1
+12	iʹlla	iʹlla	VERB	VERB	_	9	ccomp	_	highlight=red
+13	ni	ni	PART	PART	_	12	advmod	_	highlight=green|span=1
+14	vueiʹvv	vueiʹvv	NOUN	NOUN	_	12	nsubj	_	highlight=green|span=1
+15	,	,	PUNCT	PUNCT	_	16	punct	_	_
+16	iʹlla	iʹlla	VERB	VERB	_	12	conj	_	_
+17	ni	ni	PART	PART	_	16	advmod	_	_
+18	njuuʹnn	njuuʹnn	NOUN	NOUN	_	16	nsubj	_	_
+19	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: sms_giellagas-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Oummu liâ jååʹttmen di ǩeäzz ko son tätt čuäjtõõttâd de tõt-i vuâmmaš .
+1	Oummu	Oummu	NOUN	NOUN	_	3	nsubj	_	_
+2	liâ	liâ	AUX	AUX	_	3	aux	_	_
+3	jååʹttmen	jååʹttmen	VERB	VERB	_	0	root	_	_
+4	di	di	CCONJ	CCONJ	_	8	cc	_	_
+5	ǩeäzz	ǩeäzz	PRON	PRON	_	9	obl	_	highlight=green|span=1
+6	ko	ko	SCONJ	SCONJ	_	8	mark	_	_
+7	son	son	PRON	PRON	_	8	nsubj	_	highlight=green|span=1
+8	tätt	tätt	VERB	VERB	_	3	conj	_	highlight=red
+9	čuäjtõõttâd	čuäjtõõttâd	VERB	VERB	_	8	ccomp	_	highlight=green|span=1
+10	de	de	CCONJ	CCONJ	_	12	cc	_	_
+11	tõt-i	tõt-i	PRON	PRON	_	12	nsubj	_	_
+12	vuâmmaš	vuâmmaš	VERB	VERB	_	8	conj	_	_
+13	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

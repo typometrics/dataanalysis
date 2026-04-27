@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Paper Figures — UDW26</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body { font-family: Arial, sans-serif; max-width: 1500px; margin: 0 auto; padding: 20px; color: #222; }
+h1 { color: #333; }
+h2 { color: #555; margin-top: 30px; }
+h3 { color: #666; margin-top: 20px; }
+a { color: #1976d2; }
+table { border-collapse: collapse; width: 100%; margin-bottom: 30px; }
+th, td { border: 1px solid #ddd; padding: 6px 8px; text-align: center; font-size: 12px; }
+th { background-color: #4CAF50; color: white; position: sticky; top: 44px; z-index: 5; }
+th.mal-col { background-color: #2196F3; }
+th.score-col { background-color: #FF9800; }
+th.effect-col { background-color: #9C27B0; }
+th.conform-col { background-color: #00BCD4; }
+th.group-col { background-color: #607D8B; }
+th.vo-col { background-color: #795548; }
+.lang-name { text-align: left; font-weight: bold; white-space: nowrap; }
+.mal-cell { background-color: #e3f2fd; }
+.mal-cell-lowcount { background-color: #f5f5f5; color: #999; font-style: italic; }
+.score-cell { font-weight: bold; }
+.score-cell-lowcount { color: #bbb; font-style: italic; }
+.score-positive { background-color: #c8e6c9; }
+.score-negative { background-color: #ffcdd2; }
+.score-neutral  { background-color: #fff9c4; }
+.compliance-cell { font-weight: bold; }     /* no color background */
+.vo-cell { font-weight: bold; font-size: 11px; }
+.vo-high { background-color: #c8e6c9; }
+.vo-low  { background-color: #ffcdd2; }
+.vo-mid  { background-color: #fff9c4; }
+.na-cell { color: #999; }
+.group-cell { font-size: 11px; color: #555; white-space: nowrap; }
+tr:nth-child(even) { background-color: #f9f9f9; }
+tr:hover { background-color: #f1f1f1; }
+tr:target { background-color: #fff59d !important; outline: 2px solid #fbc02d; }
+.info-box { background: #f0f0f0; padding: 15px; border-radius: 5px; margin: 10px 0 20px 0; }
+.paper-table { max-width: 720px; margin: 10px 0 18px 0; }
+.paper-table table { width: auto; min-width: 320px; }
+.paper-table th { background: #607D8B; }
+.paper-table td.row-anti  { background: #f4cccc; }
+.paper-table td.row-gray  { background: #fff2cc; }
+.paper-table td.row-mal   { background: #d9ead3; }
+.paper-table td.row-total { background: #d9d9d9; font-weight: bold; }
+.paper-table td.row-high  { background: #d9ead3; }
+.paper-table td.row-mid   { background: #fff2cc; }
+.paper-table td.row-low   { background: #f4cccc; }
+.paper-table td.tot-col   { color: #38761D; font-weight: bold; }
+.paper-table caption { caption-side: top; font-weight: bold; padding: 6px 0;
+                       text-align: left; color: #333; font-size: 14px;
+                       min-height: 2.6em; line-height: 1.3em;
+                       display: table-caption; }
+.highlight-box { background: #e8f5e9; border-left: 4px solid #2e7d32;
+                 padding: 12px 16px; margin: 18px 0; border-radius: 4px; }
+.highlight-box h3 { margin-top: 0; color: #2e7d32; }
+.highlight-box ul { margin: 6px 0 0 0; padding-left: 22px; }
+.highlight-box li { margin: 3px 0; font-size: 14px; }
+.paper-link { color: #1976d2; text-decoration: none; font-weight: bold; }
+.paper-link:hover { text-decoration: underline; }
+.explanation { background: #fff3e0; padding: 15px; border-left: 4px solid #ff9800; margin: 20px 0; }
+.chart-container { margin: 30px 0; background: white; padding: 20px; border-radius: 8px;
+                   box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+canvas { max-width: 100%; }
+.nav-top { background: #333; color: white; padding: 0; margin: -20px -20px 20px -20px;
+           border-radius: 0 0 6px 6px; position: sticky; top: 0; z-index: 100; }
+.nav-top > ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; }
+.nav-top > ul > li { position: relative; }
+.nav-top > ul > li > a, .nav-top > ul > li > span {
+    display: block; color: #fff; padding: 10px 16px; text-decoration: none; cursor: pointer; }
+.nav-top > ul > li:hover > a, .nav-top > ul > li:hover > span { background: #555; }
+.nav-top a:hover { text-decoration: underline; }
+.nav-top .crumb-current > a, .nav-top .crumb-current > span { color: #ffeb3b; font-weight: bold; }
+.nav-top .has-sub > span::after { content: ' ▾'; font-size: 10px; }
+.nav-top ul ul { display: none; position: absolute; top: 100%; left: 0; min-width: 240px;
+                 background: #444; list-style: none; margin: 0; padding: 4px 0; z-index: 200;
+                 box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+.nav-top ul li:hover > ul { display: block; }
+.nav-top ul ul li a { display: block; padding: 8px 16px; color: #fff; text-decoration: none;
+                      font-size: 14px; white-space: nowrap; }
+.nav-top ul ul li a:hover { background: #1976d2; text-decoration: none; }
+.nav-top ul ul li.crumb-current a { color: #ffeb3b; font-weight: bold; }
+.nav-top .nav-spacer { flex: 1; }
+.nav-top .nav-github { padding: 10px 16px; color: #fff; text-decoration: none; opacity: 0.85; }
+.nav-top .nav-github:hover { opacity: 1; text-decoration: underline; }
+
+/* Log-log popup modal */
+.loglog-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.7); z-index: 1000; }
+.loglog-modal-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                        background: white; padding: 30px; border-radius: 10px; max-width: 720px;
+                        width: 90%; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+.loglog-modal-close { position: absolute; top: 10px; right: 15px; font-size: 28px; cursor: pointer;
+                      color: #666; }
+.loglog-modal-close:hover { color: #000; }
+.loglog-modal-stats { background: #f5f5f5; padding: 10px 15px; border-radius: 5px; margin-top: 15px;
+                      font-size: 14px; }
+.loglog-modal-stats span { margin-right: 20px; }
+</style>
+</head>
+<body>
+
+<div id="loglogModal" class="loglog-modal" onclick="if(event.target===this) closeLogLogModal();">
+<div class="loglog-modal-content">
+<span class="loglog-modal-close" onclick="closeLogLogModal()">&times;</span>
+<h3 id="loglogModalTitle" style="margin:0 0 15px 0;color:#333;">Log-Log Regression</h3>
+<canvas id="loglogModalChart" width="600" height="400"></canvas>
+<div class="loglog-modal-stats" id="loglogModalStats"></div>
+</div>
+</div>
+
+<script>
+let loglogChart = null;
+
+function _malEffectLabelJS(beta) {
+    if (beta > 0.1)  return {text: 'MAL',       color: '#2e7d32'};
+    if (beta < -0.1) return {text: 'Anti-MAL',  color: '#c62828'};
+    return                    {text: 'gray zone', color: '#9e9d24'};
+}
+
+function _nTickArray(nMax) {
+    const arr = [];
+    for (let n = 1; n <= nMax; n++) arr.push(n);
+    return arr;
+}
+
+function showLogLogPopup(jsonStr) {
+    const decoded = jsonStr.replace(/&quot;/g, '"');
+    const data = JSON.parse(decoded);
+    const modal = document.getElementById('loglogModal');
+    const title = document.getElementById('loglogModalTitle');
+    const stats = document.getElementById('loglogModalStats');
+    const canvas = document.getElementById('loglogModalChart');
+
+    const malLabel = data.mal_label || 'MAL';
+    title.textContent = data.lang_name + ' \u2014 ' + malLabel + ' Log-Log Regression (n\u2265' + data.start_n + ')';
+
+    const scatterData = data.points.map(p => ({x: p[0], y: p[1]}));
+    const regLineData = data.reg_line.map(p => ({x: p[0], y: p[1]}));
+
+    if (loglogChart) loglogChart.destroy();
+
+    // x-axis ticks: integer n values shown at log(n) positions
+    const nTicks = _nTickArray(data.n_axis_max || 7);
+    const tickPositions = nTicks.map(n => Math.log(n));
+
+    // Optional fixed scale
+    let xScale = {
+        type: 'linear',
+        title: {display: true, text: 'n \u2014 number of dependents', font: {size: 14}},
+        afterBuildTicks: function(axis) {
+            axis.ticks = tickPositions.map(v => ({value: v}));
+        },
+        ticks: {callback: v => 'n=' + Math.round(Math.exp(v))}
+    };
+    let yScale = {
+        title: {display: true, text: malLabel + '_n \u2014 mean constituent size', font: {size: 14}},
+        ticks: {callback: v => Math.exp(v).toFixed(2)}
+    };
+    if (data.fixed_bounds) {
+        xScale.min = data.fixed_bounds[0];
+        xScale.max = data.fixed_bounds[1];
+        yScale.min = data.fixed_bounds[2];
+        yScale.max = data.fixed_bounds[3];
+    }
+
+    loglogChart = new Chart(canvas.getContext('2d'), {
+        type: 'scatter',
+        data: {
+            datasets: [
+                {label: 'Data points', data: scatterData,
+                 backgroundColor: 'rgba(33,150,243,0.85)',
+                 borderColor: 'rgba(33,150,243,1)', pointRadius: 8, pointHoverRadius: 10},
+                {label: 'Regression line', data: regLineData, type: 'line',
+                 borderColor: 'rgba(244,67,54,1)', borderWidth: 2,
+                 fill: false, pointRadius: 0, tension: 0}
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {display: true, position: 'top'},
+                title: {display: false},
+                tooltip: {
+                    callbacks: {
+                        label: function(ctx) {
+                            const n = Math.exp(ctx.parsed.x);
+                            const mal = Math.exp(ctx.parsed.y);
+                            return ctx.dataset.label + ': n=' + n.toFixed(2)
+                                   + ', ' + malLabel + '_n=' + mal.toFixed(3);
+                        }
+                    }
+                }
+            },
+            scales: {x: xScale, y: yScale}
+        }
+    });
+
+    const beta = -data.slope;
+    const lab = _malEffectLabelJS(beta);
+    stats.innerHTML =
+        '<span><strong>Equation:</strong> log(' + malLabel + '_n) = '
+            + data.intercept.toFixed(3) + ' + (' + data.slope.toFixed(3) + ') \u00b7 log(n)</span>'
+        + '<span><strong style="color:' + lab.color + '">\u03b2 = ' + beta.toFixed(3)
+            + ' (' + lab.text + ')</strong></span>'
+        + '<span><strong>R\u00b2 = ' + data.r_squared.toFixed(3) + '</strong></span>'
+        + '<span><strong>n range:</strong> ' + Math.min(...data.n_values) + '\u2013'
+            + Math.max(...data.n_values) + ' (' + data.n_values.length + ' points)</span>';
+
+    modal.style.display = 'block';
+}
+
+function closeLogLogModal() {
+    document.getElementById('loglogModal').style.display = 'none';
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLogLogModal();
+});
+</script>
+<nav class="nav-top"><ul><li><a href="index.html">Home</a></li><li class="has-sub"><span><a href="mal_effect.html" style="color:inherit;text-decoration:none;">MAL Effect</a></span><ul><li><a href="mal_effect.html">Summary table</a></li><li><a href="mal_effect_mal.html">More on MAL effect</a></li><li><a href="mal_effect_lmal.html">More on LMAL effect</a></li><li><a href="mal_effect_rmal.html">More on RMAL effect</a></li></ul></li><li class="has-sub"><span><a href="mal_compliance.html" style="color:inherit;text-decoration:none;">MAL Compliance</a></span><ul><li><a href="mal_compliance.html">Index</a></li><li><a href="mal_compliance_summary.html">Summary across directions</a></li><li><a href="mal_compliance_mal.html">MAL per-language details</a></li><li><a href="mal_compliance_lmal.html">LMAL per-language details</a></li><li><a href="mal_compliance_rmal.html">RMAL per-language details</a></li></ul></li><li class="crumb-current has-sub"><span><a href="mal_paper_figures.html" style="color:inherit;text-decoration:none;">Paper Figures</a></span><ul><li class="crumb-current"><a href="mal_paper_figures.html">Featured per-language plots</a></li><li><a href="mal_statistical_tests.html">Fisher's exact tests (§5.1)</a></li><li><a href="mal_typological_maps.html">Typology dashboard</a></li></ul></li><li class="has-sub"><span><a href="mal_explorer.html" style="color:inherit;text-decoration:none;">Explorer</a></span><ul><li><a href="mal_explorer.html">Interactive table (filters + slider)</a></li><li><a href="mal_directional_histograms.html">VO/OV/NDO histograms</a></li><li><a href="mal_data_coverage.html">Data coverage by n</a></li></ul></li><li><a href="examples/index.html">Examples</a></li><li><a href="mal_notebook_plots_and_commentary.html">Commentary</a></li><li class="nav-spacer"></li><li><a class="nav-github" href="https://github.com/typometrics/UDW26-Menzerath" target="_blank" rel="noopener">GitHub ↗</a></li></ul></nav><style>.featured-plot { background:white; padding:16px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.08); margin:0; }.featured-plot h3 { margin:0 0 4px 0; color:#1976d2; font-size:14px; }.featured-plot.featured-missing { background:#fafafa; }.featured-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(440px,1fr)); gap:18px; }</style><h1>Featured per-language regressions (paper §4 and §5.3)</h1><div class="info-box"><p><strong>Pegah Faghiri, Kim Gerdes, Sylvain Kahane</strong> (2026). <em>Verifying the Menzerath-Altmann law in the verbal domain in 180 languages.</em> UDW26 @ LREC 2026.</p><p>Large-format reproductions of the per-language plots discussed in the paper. Each panel links to the corresponding row of the big table on <a href="mal_effect.html">MAL Effect</a>, where every other language can be browsed.</p></div><div class="featured-grid"><div class="featured-plot"><h3>Fig. German (§4) — typical MAL profile (β ≈ 0.18, R² ≈ 0.99)</h3><p style="margin:4px 0 8px 0;font-size:13px;"><strong>German</strong> · MAL · β = +0.171 <span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;">MAL</span></p><a href="mal_effect.html#lang-de" class="paper-link" style="font-size:12px;">→ jump to German’s row in the big table</a><div style="margin-top:6px;"><svg width="420" height="320" style="background:#e8f8f0;border-radius:3px;cursor:pointer;" onclick="showLogLogPopup('{&quot;lang_name&quot;: &quot;German&quot;, &quot;start_n&quot;: 1, &quot;mal_label&quot;: &quot;MAL&quot;, &quot;n_values&quot;: [1, 2, 3, 4, 5, 6, 7, 8], &quot;mal_values&quot;: [4.116744084772826, 4.123557617339778, 3.839261327371465, 3.531588416723783, 3.331899512018796, 3.155971636193155, 3.0420896261450854, 3.0467032967032965], &quot;slope&quot;: -0.17123118544584442, &quot;intercept&quot;: 1.4792611356558196, &quot;r_squared&quot;: 0.8916307045720456, &quot;points&quot;: [[0.0, 1.415062580246736], [0.6931471805599453, 1.416716290114661], [1.0986122886681096, 1.3452799854318842], [1.3862943611198906, 1.2617477461451847], [1.6094379124341003, 1.2035425653920766], [1.791759469228055, 1.1492964156787158], [1.9459101490553132, 1.1125446563041583], [2.0794415416798357, 1.1140601197136264]], &quot;reg_line&quot;: [[0.0, 1.4792611356558196], [2.0794415416798357, 1.1231958954086472]], &quot;fixed_bounds&quot;: [-0.17577796618689753, 2.373002543523117, -0.19440683393092484, 3.089062887364427], &quot;n_axis_max&quot;: 7}')"><line x1="35.9" y1="157.0" x2="365.5" y2="190.0" stroke="#27ae60" stroke-width="2" stroke-opacity="0.7"/><circle cx="35.9" cy="163.0" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="145.7" cy="162.8" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="210.0" cy="169.4" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="255.6" cy="177.2" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="291.0" cy="182.6" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="319.9" cy="187.6" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="344.3" cy="191.0" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="365.5" cy="190.9" r="3" fill="#3498db" stroke="white" stroke-width="1"/></svg></div></div><div class="featured-plot"><h3>Fig. Arabic — strong MAL bilateral</h3><p style="margin:4px 0 8px 0;font-size:13px;"><strong>Arabic</strong> · MAL · β = +0.158 <span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;">MAL</span></p><a href="mal_effect.html#lang-ar" class="paper-link" style="font-size:12px;">→ jump to Arabic’s row in the big table</a><div style="margin-top:6px;"><svg width="420" height="320" style="background:#e8f8f0;border-radius:3px;cursor:pointer;" onclick="showLogLogPopup('{&quot;lang_name&quot;: &quot;Arabic&quot;, &quot;start_n&quot;: 1, &quot;mal_label&quot;: &quot;MAL&quot;, &quot;n_values&quot;: [1, 2, 3, 4, 5, 6, 7], &quot;mal_values&quot;: [11.13167669369605, 7.989428100564536, 7.167628152299324, 7.331833954504562, 7.405698672911788, 7.79957805907173, 8.023686158401185], &quot;slope&quot;: -0.1584501987586287, &quot;intercept&quot;: 2.2770350490058915, &quot;r_squared&quot;: 0.5222422065226182, &quot;points&quot;: [[0.0, 2.4097948002753107], [0.6931471805599453, 2.078119180315876], [1.0986122886681096, 1.969574798252706], [1.3862943611198906, 1.9922256830358795], [1.6094379124341003, 2.0022497947762696], [1.791759469228055, 2.0540696372415552], [1.9459101490553132, 2.0823979370334382]], &quot;reg_line&quot;: [[0.0, 2.2770350490058915], [1.9459101490553132, 1.9687051991216444]], &quot;fixed_bounds&quot;: [-0.17577796618689753, 2.373002543523117, -0.19440683393092484, 3.089062887364427], &quot;n_axis_max&quot;: 7}')"><line x1="35.9" y1="83.2" x2="344.3" y2="111.7" stroke="#27ae60" stroke-width="2" stroke-opacity="0.7"/><circle cx="35.9" cy="70.9" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="145.7" cy="101.6" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="210.0" cy="111.6" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="255.6" cy="109.6" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="291.0" cy="108.6" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="319.9" cy="103.8" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="344.3" cy="101.2" r="3" fill="#3498db" stroke="white" stroke-width="1"/></svg></div></div><div class="featured-plot"><h3>Fig. Czech — IE benchmark</h3><p style="margin:4px 0 8px 0;font-size:13px;"><strong>Czech</strong> · MAL · β = +0.240 <span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;">MAL</span></p><a href="mal_effect.html#lang-cs" class="paper-link" style="font-size:12px;">→ jump to Czech’s row in the big table</a><div style="margin-top:6px;"><svg width="420" height="320" style="background:#e8f8f0;border-radius:3px;cursor:pointer;" onclick="showLogLogPopup('{&quot;lang_name&quot;: &quot;Czech&quot;, &quot;start_n&quot;: 1, &quot;mal_label&quot;: &quot;MAL&quot;, &quot;n_values&quot;: [1, 2, 3, 4, 5, 6, 7], &quot;mal_values&quot;: [4.907155590833973, 4.27150955939831, 3.529521774867141, 3.2782294382555106, 3.2350901646484886, 3.166961260863161, 3.231540930979133], &quot;slope&quot;: -0.23967727254938126, &quot;intercept&quot;: 1.5763147805772362, &quot;r_squared&quot;: 0.9301355039103851, &quot;points&quot;: [[0.0, 1.5906944645394543], [0.6931471805599453, 1.4519672915558346], [1.0986122886681096, 1.2611623872258142], [1.3862943611198906, 1.1873034712387542], [1.6094379124341003, 1.1740567991714095], [1.791759469228055, 1.1527725353576483], [1.9459101490553132, 1.1729590918882011]], &quot;reg_line&quot;: [[0.0, 1.5763147805772362], [1.9459101490553132, 1.1099243434254986]], &quot;fixed_bounds&quot;: [-0.17577796618689753, 2.373002543523117, -0.19440683393092484, 3.089062887364427], &quot;n_axis_max&quot;: 7}')"><line x1="35.9" y1="148.1" x2="344.3" y2="191.2" stroke="#27ae60" stroke-width="2" stroke-opacity="0.7"/><circle cx="35.9" cy="146.7" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="145.7" cy="159.6" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="210.0" cy="177.2" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="255.6" cy="184.1" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="291.0" cy="185.3" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="319.9" cy="187.3" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="344.3" cy="185.4" r="3" fill="#3498db" stroke="white" stroke-width="1"/></svg></div></div><div class="featured-plot"><h3>Fig. OldEastSlavic (§5.3) — Anti-MAL with growing effect</h3><p style="margin:4px 0 8px 0;font-size:13px;"><strong>OldEastSlavic</strong> · MAL · β = -0.255 <span style="background:#c62828;color:white;padding:2px 8px;border-radius:10px;font-size:11px;">Anti-MAL</span></p><a href="mal_effect.html#lang-orv" class="paper-link" style="font-size:12px;">→ jump to OldEastSlavic’s row in the big table</a><div style="margin-top:6px;"><svg width="420" height="320" style="background:#fdeaea;border-radius:3px;cursor:pointer;" onclick="showLogLogPopup('{&quot;lang_name&quot;: &quot;OldEastSlavic&quot;, &quot;start_n&quot;: 1, &quot;mal_label&quot;: &quot;MAL&quot;, &quot;n_values&quot;: [1, 2, 3, 4, 5, 6, 7, 8], &quot;mal_values&quot;: [2.66822598056855, 2.6751546882436936, 2.8241376091117023, 2.954354993817832, 3.2097643097643096, 3.658751493428913, 4.077266483516484, 4.717708333333333], &quot;slope&quot;: 0.2552305776480349, &quot;intercept&quot;: 0.8500443656682983, &quot;r_squared&quot;: 0.7292944162627717, &quot;points&quot;: [[0.0, 0.9814138248295288], [0.6931471805599453, 0.9840072060568513], [1.0986122886681096, 1.0382030468827919], [1.3862943611198906, 1.0832803508285644], [1.6094379124341003, 1.1661975106968328], [1.791759469228055, 1.2971219672039676], [1.9459101490553132, 1.4054267843492156], [2.0794415416798357, 1.551323159094332]], &quot;reg_line&quot;: [[0.0, 0.8500443656682983], [2.0794415416798357, 1.3807814315365632]], &quot;fixed_bounds&quot;: [-0.17577796618689753, 2.373002543523117, -0.19440683393092484, 3.089062887364427], &quot;n_axis_max&quot;: 7}')"><line x1="35.9" y1="215.3" x2="365.5" y2="166.2" stroke="#e74c3c" stroke-width="2" stroke-opacity="0.7"/><circle cx="35.9" cy="203.1" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="145.7" cy="202.9" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="210.0" cy="197.9" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="255.6" cy="193.7" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="291.0" cy="186.0" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="319.9" cy="173.9" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="344.3" cy="163.9" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="365.5" cy="150.4" r="3" fill="#3498db" stroke="white" stroke-width="1"/></svg></div></div><div class="featured-plot"><h3>Fig. Naija-L (§5.3) — most strongly Anti-LMAL, near-perfect power law</h3><p style="margin:4px 0 8px 0;font-size:13px;"><strong>Naija</strong> · Left MAL · β = -0.734 <span style="background:#c62828;color:white;padding:2px 8px;border-radius:10px;font-size:11px;">Anti-MAL</span></p><a href="mal_effect.html#lang-pcm" class="paper-link" style="font-size:12px;">→ jump to Naija’s row in the big table</a><div style="margin-top:6px;"><svg width="420" height="320" style="background:#fdeaea;border-radius:3px;cursor:pointer;" onclick="showLogLogPopup('{&quot;lang_name&quot;: &quot;Naija&quot;, &quot;start_n&quot;: 1, &quot;mal_label&quot;: &quot;Left MAL&quot;, &quot;n_values&quot;: [1, 2, 3, 4], &quot;mal_values&quot;: [1.2864510583431825, 2.484548825710754, 3.221183800623053, 3.4447115384615383], &quot;slope&quot;: 0.733510216022364, &quot;intercept&quot;: 0.3093581353504518, &quot;r_squared&quot;: 0.9624063413361948, &quot;points&quot;: [[0.0, 0.2518873095311331], [0.6931471805599453, 0.9100910839946298], [1.0986122886681096, 1.1697489319383585], [1.3862943611198906, 1.2368401675669085]], &quot;reg_line&quot;: [[0.0, 0.3093581353504518], [1.3862943611198906, 1.3262192116460878]], &quot;fixed_bounds&quot;: [-0.17577796618689753, 2.373002543523117, -0.19440683393092484, 3.089062887364427], &quot;n_axis_max&quot;: 7}')"><line x1="35.9" y1="265.4" x2="255.6" y2="171.2" stroke="#e74c3c" stroke-width="2" stroke-opacity="0.7"/><circle cx="35.9" cy="270.7" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="145.7" cy="209.7" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="210.0" cy="185.7" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="255.6" cy="179.5" r="3" fill="#3498db" stroke="white" stroke-width="1"/></svg></div></div><div class="featured-plot"><h3>Fig. Naija-R (§5.3) — gray-zone RMAL companion</h3><p style="margin:4px 0 8px 0;font-size:13px;"><strong>Naija</strong> · Right MAL · β = +0.133 <span style="background:#2e7d32;color:white;padding:2px 8px;border-radius:10px;font-size:11px;">MAL</span></p><a href="mal_effect.html#lang-pcm" class="paper-link" style="font-size:12px;">→ jump to Naija’s row in the big table</a><div style="margin-top:6px;"><svg width="420" height="320" style="background:#e8f8f0;border-radius:3px;cursor:pointer;" onclick="showLogLogPopup('{&quot;lang_name&quot;: &quot;Naija&quot;, &quot;start_n&quot;: 1, &quot;mal_label&quot;: &quot;Right MAL&quot;, &quot;n_values&quot;: [1, 2, 3], &quot;mal_values&quot;: [3.677900194426442, 3.3241545893719806, 3.182559087204564], &quot;slope&quot;: -0.13320346076784145, &quot;intercept&quot;: 1.2999705175523701, &quot;r_squared&quot;: 0.9942493789058469, &quot;points&quot;: [[0.0, 1.3023419899864426], [0.6931471805599453, 1.201215382943065], [1.0986122886681096, 1.157685617562875]], &quot;reg_line&quot;: [[0.0, 1.2999705175523701], [1.0986122886681096, 1.153631558659699]], &quot;fixed_bounds&quot;: [-0.17577796618689753, 2.373002543523117, -0.19440683393092484, 3.089062887364427], &quot;n_axis_max&quot;: 7}')"><line x1="35.9" y1="173.6" x2="210.0" y2="187.2" stroke="#27ae60" stroke-width="2" stroke-opacity="0.7"/><circle cx="35.9" cy="173.4" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="145.7" cy="182.8" r="3" fill="#3498db" stroke="white" stroke-width="1"/><circle cx="210.0" cy="186.8" r="3" fill="#3498db" stroke="white" stroke-width="1"/></svg></div></div></div><p style="margin-top:24px;"><a href="mal_statistical_tests.html" class="paper-link">Next → Fisher’s exact tests cited in §5.1</a></p></body></html>

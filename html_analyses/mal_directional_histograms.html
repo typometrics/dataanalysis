@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Directional histograms — UDW26</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body { font-family: Arial, sans-serif; max-width: 1500px; margin: 0 auto; padding: 20px; color: #222; }
+h1 { color: #333; }
+h2 { color: #555; margin-top: 30px; }
+h3 { color: #666; margin-top: 20px; }
+a { color: #1976d2; }
+table { border-collapse: collapse; width: 100%; margin-bottom: 30px; }
+th, td { border: 1px solid #ddd; padding: 6px 8px; text-align: center; font-size: 12px; }
+th { background-color: #4CAF50; color: white; position: sticky; top: 44px; z-index: 5; }
+th.mal-col { background-color: #2196F3; }
+th.score-col { background-color: #FF9800; }
+th.effect-col { background-color: #9C27B0; }
+th.conform-col { background-color: #00BCD4; }
+th.group-col { background-color: #607D8B; }
+th.vo-col { background-color: #795548; }
+.lang-name { text-align: left; font-weight: bold; white-space: nowrap; }
+.mal-cell { background-color: #e3f2fd; }
+.mal-cell-lowcount { background-color: #f5f5f5; color: #999; font-style: italic; }
+.score-cell { font-weight: bold; }
+.score-cell-lowcount { color: #bbb; font-style: italic; }
+.score-positive { background-color: #c8e6c9; }
+.score-negative { background-color: #ffcdd2; }
+.score-neutral  { background-color: #fff9c4; }
+.compliance-cell { font-weight: bold; }     /* no color background */
+.vo-cell { font-weight: bold; font-size: 11px; }
+.vo-high { background-color: #c8e6c9; }
+.vo-low  { background-color: #ffcdd2; }
+.vo-mid  { background-color: #fff9c4; }
+.na-cell { color: #999; }
+.group-cell { font-size: 11px; color: #555; white-space: nowrap; }
+tr:nth-child(even) { background-color: #f9f9f9; }
+tr:hover { background-color: #f1f1f1; }
+tr:target { background-color: #fff59d !important; outline: 2px solid #fbc02d; }
+.info-box { background: #f0f0f0; padding: 15px; border-radius: 5px; margin: 10px 0 20px 0; }
+.paper-table { max-width: 720px; margin: 10px 0 18px 0; }
+.paper-table table { width: auto; min-width: 320px; }
+.paper-table th { background: #607D8B; }
+.paper-table td.row-anti  { background: #f4cccc; }
+.paper-table td.row-gray  { background: #fff2cc; }
+.paper-table td.row-mal   { background: #d9ead3; }
+.paper-table td.row-total { background: #d9d9d9; font-weight: bold; }
+.paper-table td.row-high  { background: #d9ead3; }
+.paper-table td.row-mid   { background: #fff2cc; }
+.paper-table td.row-low   { background: #f4cccc; }
+.paper-table td.tot-col   { color: #38761D; font-weight: bold; }
+.paper-table caption { caption-side: top; font-weight: bold; padding: 6px 0;
+                       text-align: left; color: #333; font-size: 14px;
+                       min-height: 2.6em; line-height: 1.3em;
+                       display: table-caption; }
+.highlight-box { background: #e8f5e9; border-left: 4px solid #2e7d32;
+                 padding: 12px 16px; margin: 18px 0; border-radius: 4px; }
+.highlight-box h3 { margin-top: 0; color: #2e7d32; }
+.highlight-box ul { margin: 6px 0 0 0; padding-left: 22px; }
+.highlight-box li { margin: 3px 0; font-size: 14px; }
+.paper-link { color: #1976d2; text-decoration: none; font-weight: bold; }
+.paper-link:hover { text-decoration: underline; }
+.explanation { background: #fff3e0; padding: 15px; border-left: 4px solid #ff9800; margin: 20px 0; }
+.chart-container { margin: 30px 0; background: white; padding: 20px; border-radius: 8px;
+                   box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+canvas { max-width: 100%; }
+.nav-top { background: #333; color: white; padding: 0; margin: -20px -20px 20px -20px;
+           border-radius: 0 0 6px 6px; position: sticky; top: 0; z-index: 100; }
+.nav-top > ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; }
+.nav-top > ul > li { position: relative; }
+.nav-top > ul > li > a, .nav-top > ul > li > span {
+    display: block; color: #fff; padding: 10px 16px; text-decoration: none; cursor: pointer; }
+.nav-top > ul > li:hover > a, .nav-top > ul > li:hover > span { background: #555; }
+.nav-top a:hover { text-decoration: underline; }
+.nav-top .crumb-current > a, .nav-top .crumb-current > span { color: #ffeb3b; font-weight: bold; }
+.nav-top .has-sub > span::after { content: ' ▾'; font-size: 10px; }
+.nav-top ul ul { display: none; position: absolute; top: 100%; left: 0; min-width: 240px;
+                 background: #444; list-style: none; margin: 0; padding: 4px 0; z-index: 200;
+                 box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+.nav-top ul li:hover > ul { display: block; }
+.nav-top ul ul li a { display: block; padding: 8px 16px; color: #fff; text-decoration: none;
+                      font-size: 14px; white-space: nowrap; }
+.nav-top ul ul li a:hover { background: #1976d2; text-decoration: none; }
+.nav-top ul ul li.crumb-current a { color: #ffeb3b; font-weight: bold; }
+.nav-top .nav-spacer { flex: 1; }
+.nav-top .nav-github { padding: 10px 16px; color: #fff; text-decoration: none; opacity: 0.85; }
+.nav-top .nav-github:hover { opacity: 1; text-decoration: underline; }
+
+/* Log-log popup modal */
+.loglog-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.7); z-index: 1000; }
+.loglog-modal-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                        background: white; padding: 30px; border-radius: 10px; max-width: 720px;
+                        width: 90%; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+.loglog-modal-close { position: absolute; top: 10px; right: 15px; font-size: 28px; cursor: pointer;
+                      color: #666; }
+.loglog-modal-close:hover { color: #000; }
+.loglog-modal-stats { background: #f5f5f5; padding: 10px 15px; border-radius: 5px; margin-top: 15px;
+                      font-size: 14px; }
+.loglog-modal-stats span { margin-right: 20px; }
+</style>
+</head>
+<body>
+<nav class="nav-top"><ul><li><a href="index.html">Home</a></li><li class="has-sub"><span><a href="mal_effect.html" style="color:inherit;text-decoration:none;">MAL Effect</a></span><ul><li><a href="mal_effect.html">Summary table</a></li><li><a href="mal_effect_mal.html">More on MAL effect</a></li><li><a href="mal_effect_lmal.html">More on LMAL effect</a></li><li><a href="mal_effect_rmal.html">More on RMAL effect</a></li></ul></li><li class="has-sub"><span><a href="mal_compliance.html" style="color:inherit;text-decoration:none;">MAL Compliance</a></span><ul><li><a href="mal_compliance.html">Index</a></li><li><a href="mal_compliance_summary.html">Summary across directions</a></li><li><a href="mal_compliance_mal.html">MAL per-language details</a></li><li><a href="mal_compliance_lmal.html">LMAL per-language details</a></li><li><a href="mal_compliance_rmal.html">RMAL per-language details</a></li></ul></li><li class="has-sub"><span><a href="mal_paper_figures.html" style="color:inherit;text-decoration:none;">Paper Figures</a></span><ul><li><a href="mal_paper_figures.html">Featured per-language plots</a></li><li><a href="mal_statistical_tests.html">Fisher's exact tests (§5.1)</a></li><li><a href="mal_typological_maps.html">Typology dashboard</a></li></ul></li><li class="crumb-current has-sub"><span><a href="mal_explorer.html" style="color:inherit;text-decoration:none;">Explorer</a></span><ul><li><a href="mal_explorer.html">Interactive table (filters + slider)</a></li><li class="crumb-current"><a href="mal_directional_histograms.html">VO/OV/NDO histograms</a></li><li><a href="mal_data_coverage.html">Data coverage by n</a></li></ul></li><li><a href="examples/index.html">Examples</a></li><li><a href="mal_notebook_plots_and_commentary.html">Commentary</a></li><li class="nav-spacer"></li><li><a class="nav-github" href="https://github.com/typometrics/UDW26-Menzerath" target="_blank" rel="noopener">GitHub ↗</a></li></ul></nav><h1>β(1→max) distribution faceted by VO / OV / NDO</h1><div class="info-box"><p><strong>Pegah Faghiri, Kim Gerdes, Sylvain Kahane</strong> (2026). <em>Verifying the Menzerath-Altmann law in the verbal domain in 180 languages.</em> UDW26 @ LREC 2026.</p><p>This view splits the β histograms across the three VO/OV/NDO buckets, making the central contrast of the paper directly visible: <strong>VO languages cluster on the MAL side of RMAL</strong>, while <strong>OV languages cluster on the MAL side of LMAL</strong> (see paper §5.1).</p></div><div class="chart-container"><h3>MAL β(1→max) by syntactic type</h3><canvas id="hist_mal" height="120"></canvas></div><div class="chart-container"><h3>LMAL β(1→max) by syntactic type</h3><canvas id="hist_lmal" height="120"></canvas></div><div class="chart-container"><h3>RMAL β(1→max) by syntactic type</h3><canvas id="hist_rmal" height="120"></canvas></div>
+<script>
+const D = {"mal": {"VO": [-0.04509481730749221, 0.02932834450666525, 0.1584501987586287, 0.18133025186240787, 0.11870107982596595, 0.1722201328085341, -0.05222634461106831, 0.2550673478428903, -0.03945697528700071, 0.07491161633568177, -0.15092717934735767, 0.2677879202579437, 0.23967727254938126, 0.13123275534356185, 0.08063379591077205, 0.058573673589156015, -0.07598042914425497, 0.10694200361292422, 0.2543623064380687, 0.3907862200805142, 0.11392178646817598, -0.12003193884496187, 0.213156283971987, 0.08050589219175945, 0.1896713124881914, -0.1629963153207699, 0.19369691524567945, 0.22881384220651318, -0.03457035254559293, 0.10785226710680969, 0.04561955735856276, 0.14578603740519472, 0.2230252920814375, 0.04562505260166695, 0.10866720174630892, -0.06559153049850307, 0.1467822279613933, 0.12205852186354796, 0.2974758468250925, 0.11967848257611796, 0.06717038796430846, -0.24828687281950354, 0.02505395196086957, 0.02803610088887585, 0.21558388078213492, 0.21167709307381924, -0.12878016835350076, -0.04737897268673201, -0.20005849210674428, 0.13597838738028367, 0.04876991072156124, 0.1304866784170227, 0.09185345790087202, 0.11023124923057497, 0.3483966834536672, 0.16960705258283704, -0.0029169499615441363, 0.31525836911630367, 0.13678273439060717, 0.22985511722419327, 0.20546253253743732, 0.10643519134734379, 0.08681169704247164, 0.190709464911052, 0.4950379137178692, 0.014100412719645369, 0.629722954465227, 0.03801409537111907, 0.05871566025810372, 0.03831880757593353, 0.3407573007431439, 0.006377730432514374], "OV": [-0.07075590303499858, 0.1809758711294907, 0.05245245581437915, -0.0019859223809401065, 0.07445590945347921, -0.285823979534377, 0.061435307141761125, 0.3792834388716544, -0.040646382461724306, -0.008758041896385004, 0.13394149717170756, 0.15882469759512455, 0.21493998792962504, 0.09908214782378148, 0.12744594864267028, 0.025217771468165538, 0.05453237228078573, 0.05708659838379066, -0.0401066717973893, 0.12696121581752967, 0.14812727269029968, 0.12350542431145713, 0.10695400742492323, 0.13907048719149714, 0.06492110789726141, -0.014115415767883008, 0.10340626841825655, -0.017585802760278414, -0.0460724190699371, 0.35336462561053084, -0.07674602650578456, 0.09351642497526395, 0.1364199950821237, 0.04986631478093728, 0.14164917559353057, 0.02189319004169841, 0.13992213441262777, -0.13210737524227242], "NDO": [0.054066380126335634, 0.05625919021313528, 0.13413488631586987, -0.04674682054415339, 0.004860389652447025, 0.08684935122658487, -0.016169091781440728, 0.20772050498273043, 0.3306535999287471, 0.1489791054126554, 0.17123118544584442, 0.05218074428133996, -0.03650325938175611, -0.23471970118800103, 0.09798885017444212, -0.009176942904149879, -0.2552305776480349, 0.028954101666842223, 0.1005454124740466, -0.02917177546681193, -0.045178159399578505], "unknown": []}, "lmal": {"VO": [0.11594061810444654, -0.1291244738784615, -0.11819781420963756, 0.08515685480668032, 0.16616752878794153, -0.23758257259081908, 0.25104240422595475, -0.15101768658227477, 0.03937718388009544, -0.48568170447225517, 0.14532536183171219, 0.2226401153960194, 0.2614683455663327, -0.29678512413177166, -0.010072489023013753, 0.06406762472404647, 0.005789397944280323, 0.24180686361237974, -0.039175803150997876, -0.06546240329907703, -0.03583789269827601, -0.29380222615264895, -0.4005733970767004, 0.1965768245922209, 0.10424502120969814, -0.1723805512972845, -0.06897061623081695, -0.3133748669925551, 0.002710558068125851, -0.0046694739841687954, -0.0162257342164773, 0.05207962671034042, -0.07741651922908528, 0.1533358612108689, -0.06823517118762812, -0.288449350509536, 0.06435034827994922, -0.733510216022364, 0.13696443738898537, -0.004431772421313065, 0.1839063225164855, -0.15168051072470978, -0.16934482826268646, -0.17677343415649496, -0.4432179753639867, 0.11788936139832278, 0.10246111521633962, 0.13390310219849852, -0.11035561213378736, 0.07483470274056922, 0.23497598180435347, -0.05456198324423444, -0.07940677675035616, 0.23501744784456402, 0.058829467892205875, 0.2202816335249719, 0.09835494434539786, -0.22498857987762383, -0.04340547555863665, 0.500031140923519, -0.19843506260753654, -0.01633576507898997, 0.02839311952408144, -0.31686323521191234, -0.10162715076400196, -0.2098644116044725, -0.27833447700151537], "OV": [0.07270588555432811, 0.18657356883438003, 0.08629214962430054, 0.17025070605188608, 0.3021673944516608, -0.514567605639444, 0.18342316879424916, 0.4038766954328656, 0.09206698118457701, -0.05130348676049947, 0.22936856187209032, 0.19465821324172689, 0.1932764817191259, 0.026979826907818284, 0.2528821997920866, 0.021523633510769084, 0.06652681916281149, 0.07415545702844126, 0.0650143882445322, 0.12148748137329894, 0.15016745537181939, 0.09880318454589046, 0.09079873915528348, -0.12638679586452123, 0.028512873736120263, -0.08582583163696862, -0.044662883557728524, 0.03079922326524169, 0.054885251878059337, 0.3794793829365845, -0.13081377270850053, 0.08634697894108134, 0.13553462018544035, 0.13135566627490383, 0.047640897004853855, 0.043961863390976866, 0.162569204130822, -0.13207386729783252], "NDO": [-0.055918615618526235, -0.054878215368489296, 0.08929288716299437, 0.006539750542513044, -0.06826133394732246, 0.15110705577171585, -0.0018369467021386629, 0.17701016739550962, -0.03780499331062692, 0.19988707390375515, 0.07573057661435485, 0.010008150478659689, -0.13658743904168955, 0.13942381230411421, 0.0022502865095379476, -0.2092295443972323, -0.09890365707355513, 0.1267401822727616, -0.09616958024005401], "unknown": []}, "rmal": {"VO": [0.4748926645698575, 0.028647492112481406, 0.09623398189063134, 0.34393914928145763, 0.1997255224436199, 0.3263134156183072, 0.3936280298716106, 0.23618372093616774, 0.363424442433779, 0.5299990384663937, 0.011130375219142738, -0.034000287478705815, 0.34804510226728264, 0.4172923976492119, 0.31021392384268814, -0.20314324255080454, 0.18618006659578148, 0.019767183384879903, 0.38429143804119903, 0.31615394050874057, 0.5043667563714771, 0.3134455613507958, -0.12264014196050473, 0.32213204296056064, 0.17505287212284598, 0.2986443233045111, 0.07291934400960384, 0.3185604891527872, 0.42668647098479234, 0.21501333405019246, 0.3140799208060027, 0.14872839108292385, 0.22130436518777216, 0.21463416193105128, 0.2092333527606719, 0.2955276448782556, 0.5519639161493838, 0.37588225010401893, 0.16548818304054697, 0.40893630012103666, 0.3882728395027828, 0.15273964831776154, 0.13320346076784145, 0.09976718590806986, 0.19127417154498633, 0.1724142284635321, 0.3932917146699496, 0.3342785113239373, -0.08419502561702129, 0.14683782470016685, -0.007230922428097656, 0.2583342287470464, 0.19000351665591017, 0.16613360581801984, 0.2104699703141437, 0.31864976937925377, 0.23636651907310177, 0.3716996498418661, 0.36164220229724453, 0.3436202532355236, 0.415549314014061, 0.2572202391746187, 0.3488692090913413, 0.29585217351793947, 0.3159565472586364, 0.7167170631176915, 0.23867651420407965, 0.7047465123261242, -0.13404432658882812, 0.21860977697491746, 0.28646025606649017, 0.49468621329639, 0.3528933584860701], "OV": [0.5528324484494493, 1.0085424652234587, -0.003530018436454024, -0.1965743851356367, 0.11201573559007781, 0.09736801859599171, 1.0309306883131815, -0.370920749686911, -0.055104143669771746, 0.684233731065874, 0.4246571891516977, 0.8414040375275055, -0.057463179173664655, 0.4026543285074578, 0.7589264857923603], "NDO": [0.01125155503228873, 0.15161149398718995, 0.7516349220834845, 0.006552830929729327, 0.4873358340596575, 0.26875496179271796, 0.4481368641787428, 0.43732931805930275, 0.5350726155071142, 0.24181426424428817, 0.20126835179641578, -0.10112320286248097, 0.5130845663106667, -0.16092416753742378, 0.17086451016852208], "unknown": []}};
+const palette = {VO: 'rgba(46,125,50,0.75)', OV: 'rgba(198,40,40,0.75)',
+                  NDO: 'rgba(251,192,45,0.75)', unknown: 'rgba(189,189,189,0.6)'};
+function bin(values, lo, hi, n) {
+    const w = (hi - lo) / n;
+    const out = new Array(n).fill(0);
+    values.forEach(v => {
+        const i = Math.min(n - 1, Math.max(0, Math.floor((v - lo) / w)));
+        out[i]++;
+    });
+    return {counts: out, w, lo};
+}
+function makeChart(direction) {
+    const groups = D[direction];
+    const all = [].concat(groups.VO, groups.OV, groups.NDO, groups.unknown);
+    const lo = Math.min(...all) - 0.05, hi = Math.max(...all) + 0.05;
+    const n = 24;
+    const labels = [];
+    const w = (hi - lo) / n;
+    for (let i = 0; i < n; i++) labels.push((lo + i*w).toFixed(2));
+    const datasets = [];
+    for (const k of ['VO', 'OV', 'NDO']) {
+        const b = bin(groups[k], lo, hi, n);
+        datasets.push({label: k + ' (n=' + groups[k].length + ')',
+                        data: b.counts, backgroundColor: palette[k], stack: 's'});
+    }
+    new Chart(document.getElementById('hist_' + direction), {
+        type: 'bar', data: {labels, datasets},
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {position: 'top'},
+                tooltip: {callbacks: {title: ctx => 'β bin: ' + ctx[0].label}}
+            },
+            scales: {
+                x: {title: {display: true, text: 'β(1→max)'},
+                     stacked: true},
+                y: {title: {display: true, text: '# languages'},
+                     stacked: true, beginAtZero: true}
+            }
+        }
+    });
+}
+['mal','lmal','rmal'].forEach(makeChart);
+</script>
+</body></html>

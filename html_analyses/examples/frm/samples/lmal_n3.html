@@ -1,0 +1,901 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>MiddleFrench — LMAL_3</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to MiddleFrench examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>MiddleFrench <small style="color:#999;font-weight:normal">(frm)</small> — LMAL<sub>3</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>3</b> left dependents (right side may be anything).</p><p><b>LMAL<sub>3</sub> = 2.332</b> &nbsp; <span style="color:#666">(1,141 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>left</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: frm_profiterole-ud-train.conllu · this verb has L=3, R=3 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Si sachiés que Dieu ne le haussa pas si hault qu' il n' eust en soy de grans virtus .
+1	Si	Si	ADV	ADV	_	2	advmod	_	_
+2	sachiés	sachiés	VERB	VERB	_	0	root	_	_
+3	que	que	SCONJ	SCONJ	_	7	mark	_	_
+4	Dieu	Dieu	PROPN	PROPN	_	7	nsubj	_	highlight=green|span=1
+5	ne	ne	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+6	le	le	PRON	PRON	_	7	obj	_	highlight=green|span=1
+7	haussa	haussa	VERB	VERB	_	2	ccomp	_	highlight=red
+8	pas	pas	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+9	si	si	ADV	ADV	_	10	advmod	_	_
+10	hault	hault	ADV	ADV	_	7	advmod	_	highlight=green|span=2
+11	qu'	qu'	SCONJ	SCONJ	_	14	mark	_	_
+12	il	il	PRON	PRON	_	14	nsubj	_	_
+13	n'	n'	ADV	ADV	_	14	advmod	_	_
+14	eust	eust	VERB	VERB	_	7	advcl	_	highlight=green|span=9
+15	en	en	ADP	ADP	_	16	case	_	_
+16	soy	soy	PRON	PRON	_	14	obl	_	_
+17	de	de	ADP	ADP	_	19	case	_	_
+18	grans	grans	ADJ	ADJ	_	19	amod	_	_
+19	virtus	virtus	NOUN	NOUN	_	14	obj	_	_
+20	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: frm_profiterole-ud-train.conllu · this verb has L=3, R=2 (mean span = 11.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = et comme ce dit chevallier , en allant en voyage qu' il avoit neccessairement à faire , passa à saulf - conduit par certain païs moult destruit de guerre , où estoient plusieurs chasteaulx et forteresses de povre ediffice , entre lesquelz en y avoit deux , l' un nommé Luc et l' autre Verset , de longtemps contraires l' un à l' autre .
+1	et	et	CCONJ	CCONJ	_	18	cc:nc	_	_
+2	comme	comme	SCONJ	SCONJ	_	8	mark	_	highlight=green|span=1
+3	ce	ce	DET	DET	_	5	det	_	_
+4	dit	dit	VERB	VERB	_	5	acl	_	_
+5	chevallier	chevallier	NOUN	NOUN	_	18	nsubj	_	highlight=green|span=3
+6	,	,	PUNCT	PUNCT	_	5	punct	_	_
+7	en	en	ADP	ADP	_	8	case	_	_
+8	allant	allant	VERB	VERB	_	18	advcl	_	highlight=green|span=10
+9	en	en	ADP	ADP	_	10	case	_	_
+10	voyage	voyage	NOUN	NOUN	_	8	obl	_	_
+11	qu'	qu'	PRON	PRON	_	13	obj	_	_
+12	il	il	PRON	PRON	_	13	nsubj	_	_
+13	avoit	avoit	VERB	VERB	_	10	acl:relcl	_	_
+14	neccessairement	neccessairement	ADV	ADV	_	13	advmod	_	_
+15	à	à	ADP	ADP	_	16	mark	_	_
+16	faire	faire	VERB	VERB	_	13	xcomp	_	_
+17	,	,	PUNCT	PUNCT	_	18	punct	_	_
+18	passa	passa	VERB	VERB	_	0	root	_	highlight=red
+19	à	à	ADP	ADP	_	20	case	_	_
+20	saulf	saulf	ADJ	ADJ	_	22	amod	_	_
+21	-	-	PUNCT	PUNCT	_	22	punct	_	_
+22	conduit	conduit	NOUN	NOUN	_	18	obl	_	highlight=green|span=3
+23	par	par	ADP	ADP	_	25	case	_	_
+24	certain	certain	DET	DET	_	25	det	_	_
+25	païs	païs	NOUN	NOUN	_	18	obl	_	highlight=green|span=38
+26	moult	moult	ADV	ADV	_	27	advmod	_	_
+27	destruit	destruit	VERB	VERB	_	25	acl	_	_
+28	de	de	ADP	ADP	_	29	case	_	_
+29	guerre	guerre	NOUN	NOUN	_	27	obl	_	_
+30	,	,	PUNCT	PUNCT	_	25	punct	_	_
+31	où	où	PRON	PRON	_	32	obl	_	_
+32	estoient	estoient	VERB	VERB	_	25	acl:relcl	_	_
+33	plusieurs	plusieurs	DET	DET	_	34	det	_	_
+34	chasteaulx	chasteaulx	NOUN	NOUN	_	32	nsubj	_	_
+35	et	et	CCONJ	CCONJ	_	36	cc	_	_
+36	forteresses	forteresses	NOUN	NOUN	_	34	conj	_	_
+37	de	de	ADP	ADP	_	39	case	_	_
+38	povre	povre	ADJ	ADJ	_	39	amod	_	_
+39	ediffice	ediffice	NOUN	NOUN	_	36	nmod	_	_
+40	,	,	PUNCT	PUNCT	_	34	punct	_	_
+41	entre	entre	ADP	ADP	_	42	case	_	_
+42	lesquelz	lesquelz	PRON	PRON	_	45	obl	_	_
+43	en	en	ADV	ADV	_	45	obl:mod	_	_
+44	y	y	ADV	ADV	_	45	obl:mod	_	_
+45	avoit	avoit	VERB	VERB	_	34	acl:relcl	_	_
+46	deux	deux	PRON	PRON	_	45	obl	_	_
+47	,	,	PUNCT	PUNCT	_	49	punct	_	_
+48	l'	l'	DET	DET	_	49	det	_	_
+49	un	un	PRON	PRON	_	46	appos	_	_
+50	nommé	nommé	VERB	VERB	_	49	acl	_	_
+51	Luc	Luc	PROPN	PROPN	_	50	xcomp	_	_
+52	et	et	CCONJ	CCONJ	_	54	cc	_	_
+53	l'	l'	DET	DET	_	54	det	_	_
+54	autre	autre	PRON	PRON	_	51	conj	_	_
+55	Verset	Verset	PROPN	PROPN	_	54	orphan	_	_
+56	,	,	PUNCT	PUNCT	_	49	punct	_	_
+57	de	de	ADP	ADP	_	58	case	_	_
+58	longtemps	longtemps	ADV	ADV	_	59	advmod	_	_
+59	contraires	contraires	ADJ	ADJ	_	46	amod	_	_
+60	l'	l'	DET	DET	_	61	det	_	_
+61	un	un	PRON	PRON	_	59	obl	_	_
+62	à	à	ADP	ADP	_	64	case	_	_
+63	l'	l'	DET	DET	_	64	det	_	_
+64	autre	autre	PRON	PRON	_	59	obl	_	_
+65	.	.	PUNCT	PUNCT	_	18	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: frm_profiterole-ud-train.conllu · this verb has L=3, R=2 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = et puis , par ordre , je suyvray mon propos jusques à l' heure que je devins son serviteur ,
+1	et	et	CCONJ	CCONJ	_	8	cc:nc	_	_
+2	puis	puis	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+3	,	,	PUNCT	PUNCT	_	5	punct	_	_
+4	par	par	ADP	ADP	_	5	case	_	_
+5	ordre	ordre	NOUN	NOUN	_	8	obl	_	highlight=green|span=2
+6	,	,	PUNCT	PUNCT	_	5	punct	_	_
+7	je	je	PRON	PRON	_	8	nsubj	_	highlight=green|span=1
+8	suyvray	suyvray	VERB	VERB	_	0	root	_	highlight=red
+9	mon	mon	DET	DET	_	10	det	_	_
+10	propos	propos	NOUN	NOUN	_	8	obj	_	highlight=green|span=2
+11	jusques	jusques	ADP	ADP	_	14	case	_	_
+12	à	à	ADP	ADP	_	14	case	_	_
+13	l'	l'	DET	DET	_	14	det	_	_
+14	heure	heure	NOUN	NOUN	_	8	obl	_	highlight=green|span=9
+15	que	que	PRON	PRON	_	17	obl	_	_
+16	je	je	PRON	PRON	_	17	nsubj	_	_
+17	devins	devins	VERB	VERB	_	14	acl	_	_
+18	son	son	DET	DET	_	19	det	_	_
+19	serviteur	serviteur	NOUN	NOUN	_	17	obl	_	_
+20	,	,	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: frm_profiterole-ud-train.conllu · this verb has L=3, R=1 (mean span = 13.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = mais à cause de la mort dudict duc Francisque s' en retournèrent - et aussi par le conseil qu' il luy donna , entretenant la paix appellée le traicté de Conflans , où il luy manda qu' il ne reffusast nulle chose que on luy demandast pour separer ceste compaignye , mais que seullement ses gens luy demourassent .
+1	mais	mais	CCONJ	CCONJ	_	12	cc:nc	_	_
+2	à	à	ADP	ADP	_	3	case	_	_
+3	cause	cause	NOUN	NOUN	_	12	obl	_	highlight=green|span=8
+4	de	de	ADP	ADP	_	6	case	_	_
+5	la	la	DET	DET	_	6	det	_	_
+6	mort	mort	NOUN	NOUN	_	3	nmod	_	_
+7	dudict	dudict	ADP	ADP	_	8	case:det	_	_
+8	duc	duc	NOUN	NOUN	_	6	nmod	_	_
+9	Francisque	Francisque	PROPN	PROPN	_	8	flat	_	_
+10	s'	s'	PRON	PRON	_	12	expl	_	highlight=green|span=1
+11	en	en	ADV	ADV	_	12	obl:mod	_	highlight=green|span=1
+12	retournèrent	retournèrent	VERB	VERB	_	0	root	_	highlight=red
+13	-	-	PUNCT	PUNCT	_	18	punct	_	_
+14	et	et	CCONJ	CCONJ	_	18	cc:nc	_	_
+15	aussi	aussi	ADV	ADV	_	18	advmod	_	_
+16	par	par	ADP	ADP	_	18	case	_	_
+17	le	le	DET	DET	_	18	det	_	_
+18	conseil	conseil	NOUN	NOUN	_	3	conj	_	highlight=green|span=42
+19	qu'	qu'	PRON	PRON	_	22	obj	_	_
+20	il	il	PRON	PRON	_	22	nsubj	_	_
+21	luy	luy	PRON	PRON	_	22	iobj	_	_
+22	donna	donna	VERB	VERB	_	18	acl:relcl	_	_
+23	,	,	PUNCT	PUNCT	_	24	punct	_	_
+24	entretenant	entretenant	VERB	VERB	_	22	advcl	_	_
+25	la	la	DET	DET	_	26	det	_	_
+26	paix	paix	NOUN	NOUN	_	24	obj	_	_
+27	appellée	appellée	VERB	VERB	_	26	acl	_	_
+28	le	le	DET	DET	_	29	det	_	_
+29	traicté	traicté	NOUN	NOUN	_	27	xcomp	_	_
+30	de	de	ADP	ADP	_	31	case	_	_
+31	Conflans	Conflans	PROPN	PROPN	_	29	nmod	_	_
+32	,	,	PUNCT	PUNCT	_	24	punct	_	_
+33	où	où	PRON	PRON	_	36	obl	_	_
+34	il	il	PRON	PRON	_	36	nsubj	_	_
+35	luy	luy	PRON	PRON	_	36	iobj	_	_
+36	manda	manda	VERB	VERB	_	18	acl:relcl	_	_
+37	qu'	qu'	SCONJ	SCONJ	_	40	mark	_	_
+38	il	il	PRON	PRON	_	40	nsubj	_	_
+39	ne	ne	ADV	ADV	_	40	advmod	_	_
+40	reffusast	reffusast	VERB	VERB	_	36	ccomp	_	_
+41	nulle	nulle	DET	DET	_	42	det	_	_
+42	chose	chose	NOUN	NOUN	_	40	obj	_	_
+43	que	que	PRON	PRON	_	46	obj	_	_
+44	on	on	PRON	PRON	_	46	nsubj	_	_
+45	luy	luy	PRON	PRON	_	46	iobj	_	_
+46	demandast	demandast	VERB	VERB	_	42	acl:relcl	_	_
+47	pour	pour	ADP	ADP	_	48	mark	_	_
+48	separer	separer	VERB	VERB	_	46	advcl	_	_
+49	ceste	ceste	DET	DET	_	50	det	_	_
+50	compaignye	compaignye	NOUN	NOUN	_	48	obj	_	_
+51	,	,	PUNCT	PUNCT	_	52	punct	_	_
+52	mais	mais	ADV	ADV	_	58	cc	_	_
+53	que	que	SCONJ	SCONJ	_	58	mark	_	_
+54	seullement	seullement	ADV	ADV	_	58	advmod	_	_
+55	ses	ses	DET	DET	_	56	det	_	_
+56	gens	gens	NOUN	NOUN	_	48	nsubj	_	_
+57	luy	luy	PRON	PRON	_	58	iobj	_	_
+58	demourassent	demourassent	VERB	VERB	_	40	conj	_	_
+59	.	.	PUNCT	PUNCT	_	18	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: frm_profiterole-ud-train.conllu · this verb has L=3, R=4 (mean span = 8.71)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Item , ou mois de fevrier ensuyvant , l' an mil CCC LXVI dessus dit , furent apportées nouvelles à Paris , par devers le Roy de France Charles , que un sien chambellan , appellé messire Jehan de la Riviere , lequel estoit alé oultre mer environ la Nativité saint Jehan precedent , estoit trespassez de ce siecle , à Fomagoste ou royaume de Chipre , environ la feste de Toussains precedent ;
+1	Item	Item	ADV	ADV	_	18	advmod	_	highlight=green|span=1
+2	,	,	PUNCT	PUNCT	_	4	punct	_	_
+3	ou	ou	ADP	ADP	_	4	case:det	_	_
+4	mois	mois	NOUN	NOUN	_	18	obl	_	highlight=green|span=5
+5	de	de	ADP	ADP	_	6	case	_	_
+6	fevrier	fevrier	NOUN	NOUN	_	4	nmod	_	_
+7	ensuyvant	ensuyvant	VERB	VERB	_	6	acl	_	_
+8	,	,	PUNCT	PUNCT	_	4	punct	_	_
+9	l'	l'	DET	DET	_	10	det	_	_
+10	an	an	NOUN	NOUN	_	18	obl	_	highlight=green|span=7
+11	mil	mil	NUM	NUM	_	10	amod	_	_
+12	CCC	CCC	NUM	NUM	_	11	flat	_	_
+13	LXVI	LXVI	NUM	NUM	_	11	flat	_	_
+14	dessus	dessus	ADV	ADV	_	15	advmod	_	_
+15	dit	dit	VERB	VERB	_	10	acl	_	_
+16	,	,	PUNCT	PUNCT	_	18	punct	_	_
+17	furent	furent	AUX	AUX	_	18	aux:pass	_	_
+18	apportées	apportées	VERB	VERB	_	0	root	_	highlight=red
+19	nouvelles	nouvelles	NOUN	NOUN	_	18	nsubj	_	highlight=green|span=1
+20	à	à	ADP	ADP	_	21	case	_	_
+21	Paris	Paris	PROPN	PROPN	_	18	obl	_	highlight=green|span=2
+22	,	,	PUNCT	PUNCT	_	26	punct	_	_
+23	par	par	ADP	ADP	_	26	case	_	_
+24	devers	devers	ADP	ADP	_	26	case	_	_
+25	le	le	DET	DET	_	26	det	_	_
+26	Roy	Roy	NOUN	NOUN	_	18	obl	_	highlight=green|span=7
+27	de	de	ADP	ADP	_	28	case	_	_
+28	France	France	PROPN	PROPN	_	26	nmod	_	_
+29	Charles	Charles	PROPN	PROPN	_	28	flat	_	_
+30	,	,	PUNCT	PUNCT	_	26	punct	_	_
+31	que	que	SCONJ	SCONJ	_	56	mark	_	_
+32	un	un	DET	DET	_	34	det	_	_
+33	sien	sien	ADJ	ADJ	_	34	amod	_	_
+34	chambellan	chambellan	NOUN	NOUN	_	56	nsubj	_	_
+35	,	,	PUNCT	PUNCT	_	36	punct	_	_
+36	appellé	appellé	VERB	VERB	_	34	acl	_	_
+37	messire	messire	NOUN	NOUN	_	36	xcomp	_	_
+38	Jehan	Jehan	PROPN	PROPN	_	37	flat	_	_
+39	de	de	ADP	ADP	_	37	flat	_	_
+40	la	la	DET	DET	_	37	flat	_	_
+41	Riviere	Riviere	PROPN	PROPN	_	37	flat	_	_
+42	,	,	PUNCT	PUNCT	_	36	punct	_	_
+43	lequel	lequel	PRON	PRON	_	45	nsubj	_	_
+44	estoit	estoit	AUX	AUX	_	45	aux	_	_
+45	alé	alé	VERB	VERB	_	34	acl:relcl	_	_
+46	oultre	oultre	ADP	ADP	_	47	case	_	_
+47	mer	mer	NOUN	NOUN	_	45	obl	_	_
+48	environ	environ	ADP	ADP	_	50	case	_	_
+49	la	la	DET	DET	_	50	det	_	_
+50	Nativité	Nativité	NOUN	NOUN	_	45	obl	_	_
+51	saint	saint	ADJ	ADJ	_	52	amod	_	_
+52	Jehan	Jehan	PROPN	PROPN	_	50	nmod	_	_
+53	precedent	precedent	ADJ	ADJ	_	50	amod	_	_
+54	,	,	PUNCT	PUNCT	_	56	punct	_	_
+55	estoit	estoit	AUX	AUX	_	56	aux	_	_
+56	trespassez	trespassez	VERB	VERB	_	19	acl	_	highlight=green|span=38
+57	de	de	ADP	ADP	_	59	case	_	_
+58	ce	ce	DET	DET	_	59	det	_	_
+59	siecle	siecle	NOUN	NOUN	_	56	obl	_	_
+60	,	,	PUNCT	PUNCT	_	56	punct	_	_
+61	à	à	ADP	ADP	_	62	case	_	_
+62	Fomagoste	Fomagoste	PROPN	PROPN	_	56	obl	_	_
+63	ou	ou	ADP	ADP	_	64	case:det	_	_
+64	royaume	royaume	NOUN	NOUN	_	56	obl	_	_
+65	de	de	ADP	ADP	_	66	case	_	_
+66	Chipre	Chipre	PROPN	PROPN	_	64	nmod	_	_
+67	,	,	PUNCT	PUNCT	_	56	punct	_	_
+68	environ	environ	ADP	ADP	_	70	case	_	_
+69	la	la	DET	DET	_	70	det	_	_
+70	feste	feste	NOUN	NOUN	_	56	obl	_	_
+71	de	de	ADP	ADP	_	72	case	_	_
+72	Toussains	Toussains	NOUN	NOUN	_	70	nmod	_	_
+73	precedent	precedent	ADJ	ADJ	_	70	amod	_	_
+74	;	;	PUNCT	PUNCT	_	18	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: frm_profiterole-ud-train.conllu · this verb has L=3, R=4 (mean span = 3.86)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Si s' en allerent moult joyeusement en devisant de moult de choses jusques en la ville , laquelle fut toute tendue le plus richement que l' on peut faire .
+1	Si	Si	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+2	s'	s'	PRON	PRON	_	4	expl	_	highlight=green|span=1
+3	en	en	ADV	ADV	_	4	obl:mod	_	highlight=green|span=1
+4	allerent	allerent	VERB	VERB	_	0	root	_	highlight=red
+5	moult	moult	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+6	joyeusement	joyeusement	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+7	en	en	ADP	ADP	_	8	mark	_	_
+8	devisant	devisant	VERB	VERB	_	4	advcl	_	highlight=green|span=6
+9	de	de	ADP	ADP	_	12	case	_	_
+10	moult	moult	ADV	ADV	_	12	advmod	_	_
+11	de	de	ADP	ADP	_	12	case	_	_
+12	choses	choses	NOUN	NOUN	_	8	obl	_	_
+13	jusques	jusques	ADP	ADP	_	16	case	_	_
+14	en	en	ADP	ADP	_	16	case	_	_
+15	la	la	DET	DET	_	16	det	_	_
+16	ville	ville	NOUN	NOUN	_	4	obl	_	highlight=green|span=16
+17	,	,	PUNCT	PUNCT	_	16	punct	_	_
+18	laquelle	laquelle	PRON	PRON	_	21	nsubj	_	_
+19	fut	fut	AUX	AUX	_	21	aux	_	_
+20	toute	toute	ADV	ADV	_	21	advmod	_	_
+21	tendue	tendue	VERB	VERB	_	16	acl:relcl	_	_
+22	le	le	DET	DET	_	24	det	_	_
+23	plus	plus	ADV	ADV	_	24	advmod	_	_
+24	richement	richement	ADV	ADV	_	21	advmod	_	_
+25	que	que	PRON	PRON	_	29	obj	_	_
+26	l'	l'	DET	DET	_	27	det	_	_
+27	on	on	PRON	PRON	_	29	nsubj	_	_
+28	peut	peut	AUX	AUX	_	29	aux	_	_
+29	faire	faire	VERB	VERB	_	24	advcl	_	_
+30	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: frm_profiterole-ud-train.conllu · this verb has L=3, R=2 (mean span = 1.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Sur lesquelles choses , après pluseurs altercations eues sur ce , et par especial pour ce que les dictes renonciacions ne se font pas de present , avons finablement accordé avec nostre dit frere , par la maniere qui s' ensuit :
+1	Sur	Sur	ADP	ADP	_	3	case	_	_
+2	lesquelles	lesquelles	DET	DET	_	3	det	_	_
+3	choses	choses	NOUN	NOUN	_	30	obl	_	_
+4	,	,	PUNCT	PUNCT	_	7	punct	_	_
+5	après	après	ADP	ADP	_	7	case	_	_
+6	pluseurs	pluseurs	DET	DET	_	7	det	_	_
+7	altercations	altercations	NOUN	NOUN	_	30	obl	_	_
+8	eues	eues	VERB	VERB	_	7	acl	_	_
+9	sur	sur	ADP	ADP	_	10	case	_	_
+10	ce	ce	PRON	PRON	_	8	obl	_	_
+11	,	,	PUNCT	PUNCT	_	14	punct	_	_
+12	et	et	CCONJ	CCONJ	_	14	cc	_	_
+13	par	par	ADP	ADP	_	14	case	_	_
+14	especial	especial	ADJ	ADJ	_	7	conj	_	_
+15	pour	pour	ADP	ADP	_	16	case	_	_
+16	ce	ce	PRON	PRON	_	8	obl	_	_
+17	que	que	SCONJ	SCONJ	_	23	mark	_	_
+18	les	les	DET	DET	_	20	det	_	_
+19	dictes	dictes	VERB	VERB	_	20	acl	_	_
+20	renonciacions	renonciacions	NOUN	NOUN	_	23	nsubj	_	highlight=green|span=3
+21	ne	ne	ADV	ADV	_	23	advmod	_	highlight=green|span=1
+22	se	se	PRON	PRON	_	23	expl	_	highlight=green|span=1
+23	font	font	VERB	VERB	_	16	acl	_	highlight=red
+24	pas	pas	ADV	ADV	_	23	advmod	_	highlight=green|span=1
+25	de	de	ADP	ADP	_	26	case	_	_
+26	present	present	ADJ	ADJ	_	23	obl	_	highlight=green|span=2
+27	,	,	PUNCT	PUNCT	_	7	punct	_	_
+28	avons	avons	AUX	AUX	_	30	aux	_	_
+29	finablement	finablement	ADV	ADV	_	30	advmod	_	_
+30	accordé	accordé	VERB	VERB	_	0	root	_	_
+31	avec	avec	ADP	ADP	_	34	case	_	_
+32	nostre	nostre	DET	DET	_	34	det	_	_
+33	dit	dit	VERB	VERB	_	34	acl	_	_
+34	frere	frere	NOUN	NOUN	_	30	obl	_	_
+35	,	,	PUNCT	PUNCT	_	30	punct	_	_
+36	par	par	ADP	ADP	_	38	case	_	_
+37	la	la	DET	DET	_	38	det	_	_
+38	maniere	maniere	NOUN	NOUN	_	30	obl	_	_
+39	qui	qui	PRON	PRON	_	41	nsubj	_	_
+40	s'	s'	PRON	PRON	_	41	expl	_	_
+41	ensuit	ensuit	VERB	VERB	_	38	acl:relcl	_	_
+42	:	:	PUNCT	PUNCT	_	30	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: frm_profiterole-ud-train.conllu · this verb has L=3, R=2 (mean span = 1.80)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = mais à cause de la mort dudict duc Francisque s' en retournèrent - et aussi par le conseil qu' il luy donna , entretenant la paix appellée le traicté de Conflans , où il luy manda qu' il ne reffusast nulle chose que on luy demandast pour separer ceste compaignye , mais que seullement ses gens luy demourassent .
+1	mais	mais	CCONJ	CCONJ	_	12	cc:nc	_	_
+2	à	à	ADP	ADP	_	3	case	_	_
+3	cause	cause	NOUN	NOUN	_	12	obl	_	_
+4	de	de	ADP	ADP	_	6	case	_	_
+5	la	la	DET	DET	_	6	det	_	_
+6	mort	mort	NOUN	NOUN	_	3	nmod	_	_
+7	dudict	dudict	ADP	ADP	_	8	case:det	_	_
+8	duc	duc	NOUN	NOUN	_	6	nmod	_	_
+9	Francisque	Francisque	PROPN	PROPN	_	8	flat	_	_
+10	s'	s'	PRON	PRON	_	12	expl	_	_
+11	en	en	ADV	ADV	_	12	obl:mod	_	_
+12	retournèrent	retournèrent	VERB	VERB	_	0	root	_	_
+13	-	-	PUNCT	PUNCT	_	18	punct	_	_
+14	et	et	CCONJ	CCONJ	_	18	cc:nc	_	_
+15	aussi	aussi	ADV	ADV	_	18	advmod	_	_
+16	par	par	ADP	ADP	_	18	case	_	_
+17	le	le	DET	DET	_	18	det	_	_
+18	conseil	conseil	NOUN	NOUN	_	3	conj	_	_
+19	qu'	qu'	PRON	PRON	_	22	obj	_	_
+20	il	il	PRON	PRON	_	22	nsubj	_	_
+21	luy	luy	PRON	PRON	_	22	iobj	_	_
+22	donna	donna	VERB	VERB	_	18	acl:relcl	_	_
+23	,	,	PUNCT	PUNCT	_	24	punct	_	_
+24	entretenant	entretenant	VERB	VERB	_	22	advcl	_	_
+25	la	la	DET	DET	_	26	det	_	_
+26	paix	paix	NOUN	NOUN	_	24	obj	_	_
+27	appellée	appellée	VERB	VERB	_	26	acl	_	_
+28	le	le	DET	DET	_	29	det	_	_
+29	traicté	traicté	NOUN	NOUN	_	27	xcomp	_	_
+30	de	de	ADP	ADP	_	31	case	_	_
+31	Conflans	Conflans	PROPN	PROPN	_	29	nmod	_	_
+32	,	,	PUNCT	PUNCT	_	24	punct	_	_
+33	où	où	PRON	PRON	_	36	obl	_	_
+34	il	il	PRON	PRON	_	36	nsubj	_	_
+35	luy	luy	PRON	PRON	_	36	iobj	_	_
+36	manda	manda	VERB	VERB	_	18	acl:relcl	_	_
+37	qu'	qu'	SCONJ	SCONJ	_	40	mark	_	_
+38	il	il	PRON	PRON	_	40	nsubj	_	_
+39	ne	ne	ADV	ADV	_	40	advmod	_	_
+40	reffusast	reffusast	VERB	VERB	_	36	ccomp	_	_
+41	nulle	nulle	DET	DET	_	42	det	_	_
+42	chose	chose	NOUN	NOUN	_	40	obj	_	_
+43	que	que	PRON	PRON	_	46	obj	_	highlight=green|span=1
+44	on	on	PRON	PRON	_	46	nsubj	_	highlight=green|span=1
+45	luy	luy	PRON	PRON	_	46	iobj	_	highlight=green|span=1
+46	demandast	demandast	VERB	VERB	_	42	acl:relcl	_	highlight=red
+47	pour	pour	ADP	ADP	_	48	mark	_	_
+48	separer	separer	VERB	VERB	_	46	advcl	_	highlight=green|span=4
+49	ceste	ceste	DET	DET	_	50	det	_	_
+50	compaignye	compaignye	NOUN	NOUN	_	48	obj	_	_
+51	,	,	PUNCT	PUNCT	_	52	punct	_	_
+52	mais	mais	ADV	ADV	_	58	cc	_	_
+53	que	que	SCONJ	SCONJ	_	58	mark	_	_
+54	seullement	seullement	ADV	ADV	_	58	advmod	_	_
+55	ses	ses	DET	DET	_	56	det	_	_
+56	gens	gens	NOUN	NOUN	_	48	nsubj	_	highlight=green|span=2
+57	luy	luy	PRON	PRON	_	58	iobj	_	_
+58	demourassent	demourassent	VERB	VERB	_	40	conj	_	_
+59	.	.	PUNCT	PUNCT	_	18	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: frm_profiterole-ud-train.conllu · this verb has L=3, R=1 (mean span = 2.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Et , puisque Jouvencel l' avez nommé , desormaiz n' aura autre nom . »
+1	Et	Et	CCONJ	CCONJ	_	11	cc:nc	_	_
+2	,	,	PUNCT	PUNCT	_	7	punct	_	_
+3	puisque	puisque	SCONJ	SCONJ	_	7	mark	_	_
+4	Jouvencel	Jouvencel	PROPN	PROPN	_	7	xcomp	_	_
+5	l'	l'	PRON	PRON	_	7	obj	_	_
+6	avez	avez	AUX	AUX	_	7	aux	_	_
+7	nommé	nommé	VERB	VERB	_	11	advcl	_	highlight=green|span=5
+8	,	,	PUNCT	PUNCT	_	7	punct	_	_
+9	desormaiz	desormaiz	ADV	ADV	_	11	advmod	_	highlight=green|span=1
+10	n'	n'	ADV	ADV	_	11	advmod	_	highlight=green|span=1
+11	aura	aura	VERB	VERB	_	0	root	_	highlight=red
+12	autre	autre	DET	DET	_	13	det	_	_
+13	nom	nom	NOUN	NOUN	_	11	obj	_	highlight=green|span=2
+14	.	.	PUNCT	PUNCT	_	11	punct	_	_
+15	»	»	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: frm_profiterole-ud-test.conllu · this verb has L=3, R=2 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Quant ilz furent en la salle du commun , ilz se esmerveillerent fort de la richesse de la tapisserie que illecq estoit .
+1	Quant	Quant	SCONJ	SCONJ	_	3	mark	_	_
+2	ilz	ilz	PRON	PRON	_	3	nsubj	_	_
+3	furent	furent	VERB	VERB	_	12	advcl	_	highlight=green|span=8
+4	en	en	ADP	ADP	_	6	case	_	_
+5	la	la	DET	DET	_	6	det	_	_
+6	salle	salle	NOUN	NOUN	_	3	obl	_	_
+7	du	du	ADP	ADP	_	8	case:det	_	_
+8	commun	commun	NOUN	NOUN	_	6	nmod	_	_
+9	,	,	PUNCT	PUNCT	_	12	punct	_	_
+10	ilz	ilz	PRON	PRON	_	12	nsubj	_	highlight=green|span=1
+11	se	se	PRON	PRON	_	12	expl	_	highlight=green|span=1
+12	esmerveillerent	esmerveillerent	VERB	VERB	_	0	root	_	highlight=red
+13	fort	fort	ADV	ADV	_	12	advmod	_	highlight=green|span=1
+14	de	de	ADP	ADP	_	16	case	_	_
+15	la	la	DET	DET	_	16	det	_	_
+16	richesse	richesse	NOUN	NOUN	_	12	obl	_	highlight=green|span=9
+17	de	de	ADP	ADP	_	19	case	_	_
+18	la	la	DET	DET	_	19	det	_	_
+19	tapisserie	tapisserie	NOUN	NOUN	_	16	nmod	_	_
+20	que	que	PRON	PRON	_	22	nsubj	_	_
+21	illecq	illecq	ADV	ADV	_	22	advmod	_	_
+22	estoit	estoit	VERB	VERB	_	19	acl:relcl	_	_
+23	.	.	PUNCT	PUNCT	_	12	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: frm_profiterole-ud-test.conllu · this verb has L=3, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Environ celui temps , le conte d' Armignac , le seigneur de Lebret , le conte de Pierregort et pluseurs autres barons et nobles du duchié de Guyenne appellerent du prince de Galles , duc de Guyenne , pour pluseurs griefz que il leur avoit faiz ,
+1	Environ	Environ	ADP	ADP	_	3	case	_	_
+2	celui	celui	DET	DET	_	3	det	_	_
+3	temps	temps	NOUN	NOUN	_	29	obl	_	_
+4	,	,	PUNCT	PUNCT	_	29	punct	_	_
+5	le	le	DET	DET	_	6	det	_	_
+6	conte	conte	NOUN	NOUN	_	29	nsubj	_	_
+7	d'	d'	ADP	ADP	_	8	case	_	_
+8	Armignac	Armignac	PROPN	PROPN	_	6	nmod	_	_
+9	,	,	PUNCT	PUNCT	_	11	punct	_	_
+10	le	le	DET	DET	_	11	det	_	_
+11	seigneur	seigneur	NOUN	NOUN	_	6	conj	_	_
+12	de	de	ADP	ADP	_	13	case	_	_
+13	Lebret	Lebret	PROPN	PROPN	_	11	nmod	_	_
+14	,	,	PUNCT	PUNCT	_	16	punct	_	_
+15	le	le	DET	DET	_	16	det	_	_
+16	conte	conte	NOUN	NOUN	_	6	conj	_	_
+17	de	de	ADP	ADP	_	18	case	_	_
+18	Pierregort	Pierregort	PROPN	PROPN	_	16	nmod	_	_
+19	et	et	CCONJ	CCONJ	_	22	cc	_	_
+20	pluseurs	pluseurs	DET	DET	_	22	det	_	_
+21	autres	autres	DET	DET	_	22	amod	_	_
+22	barons	barons	NOUN	NOUN	_	6	conj	_	_
+23	et	et	CCONJ	CCONJ	_	24	cc	_	_
+24	nobles	nobles	ADJ	ADJ	_	22	conj	_	_
+25	du	du	ADP	ADP	_	26	case:det	_	_
+26	duchié	duchié	NOUN	NOUN	_	22	nmod	_	_
+27	de	de	ADP	ADP	_	28	case	_	_
+28	Guyenne	Guyenne	PROPN	PROPN	_	26	nmod	_	_
+29	appellerent	appellerent	VERB	VERB	_	0	root	_	_
+30	du	du	ADP	ADP	_	31	case:det	_	_
+31	prince	prince	NOUN	NOUN	_	29	obl	_	_
+32	de	de	ADP	ADP	_	33	case	_	_
+33	Galles	Galles	PROPN	PROPN	_	31	nmod	_	_
+34	,	,	PUNCT	PUNCT	_	35	punct	_	_
+35	duc	duc	NOUN	NOUN	_	31	appos	_	_
+36	de	de	ADP	ADP	_	37	case	_	_
+37	Guyenne	Guyenne	PROPN	PROPN	_	35	nmod	_	_
+38	,	,	PUNCT	PUNCT	_	35	punct	_	_
+39	pour	pour	ADP	ADP	_	41	case	_	_
+40	pluseurs	pluseurs	DET	DET	_	41	det	_	_
+41	griefz	griefz	NOUN	NOUN	_	29	obl	_	_
+42	que	que	PRON	PRON	_	46	obj	_	highlight=green|span=1
+43	il	il	PRON	PRON	_	46	nsubj	_	highlight=green|span=1
+44	leur	leur	PRON	PRON	_	46	iobj	_	highlight=green|span=1
+45	avoit	avoit	AUX	AUX	_	46	aux	_	_
+46	faiz	faiz	VERB	VERB	_	41	acl:relcl	_	highlight=red
+47	,	,	PUNCT	PUNCT	_	29	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: frm_profiterole-ud-train.conllu · this verb has L=3, R=3 (mean span = 4.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Et en parlant , le seigneur de Contay , bien saige homme ( comme je vous ay dit ailleurs ) , luy dist qu' il le portast paciemment , car , s' il les courroussoit , qu' ilz trouveroient mieulx leur appointement que luy ; et que , comme il estoit le plus fort , il failloit qu' il fust le plus saige et qu' il les gardast de diviser et entretenir joinctz de tout son povoir et qu' il dissimulast toutes ces choses ; mais que , à la verité , l' on s' esbahissoit assez , et mesmement chez luy , de quoy si petiz personnaiges comme les deux dessus nomméz s' empeschoyent de si grant matière , et que c' estoit chose dangereuse , encores ayant affaire à roy si liberal comme cestuy - cy .
+1	Et	Et	CCONJ	CCONJ	_	23	cc:nc	_	_
+2	en	en	ADP	ADP	_	3	case	_	_
+3	parlant	parlant	VERB	VERB	_	23	advcl	_	_
+4	,	,	PUNCT	PUNCT	_	23	punct	_	_
+5	le	le	DET	DET	_	6	det	_	_
+6	seigneur	seigneur	NOUN	NOUN	_	23	nsubj	_	_
+7	de	de	ADP	ADP	_	8	case	_	_
+8	Contay	Contay	PROPN	PROPN	_	6	nmod	_	_
+9	,	,	PUNCT	PUNCT	_	6	punct	_	_
+10	bien	bien	ADV	ADV	_	11	advmod	_	_
+11	saige	saige	ADJ	ADJ	_	12	amod	_	_
+12	homme	homme	NOUN	NOUN	_	6	appos	_	_
+13	(	(	PUNCT	PUNCT	_	18	punct	_	_
+14	comme	comme	SCONJ	SCONJ	_	18	mark	_	_
+15	je	je	PRON	PRON	_	18	nsubj	_	_
+16	vous	vous	PRON	PRON	_	18	iobj	_	_
+17	ay	ay	AUX	AUX	_	18	aux	_	_
+18	dit	dit	VERB	VERB	_	11	parataxis	_	_
+19	ailleurs	ailleurs	ADV	ADV	_	18	advmod	_	_
+20	)	)	PUNCT	PUNCT	_	18	punct	_	_
+21	,	,	PUNCT	PUNCT	_	23	punct	_	_
+22	luy	luy	PRON	PRON	_	23	iobj	_	_
+23	dist	dist	VERB	VERB	_	0	root	_	_
+24	qu'	qu'	SCONJ	SCONJ	_	27	mark	_	_
+25	il	il	PRON	PRON	_	27	nsubj	_	_
+26	le	le	PRON	PRON	_	27	obj	_	_
+27	portast	portast	VERB	VERB	_	23	ccomp	_	_
+28	paciemment	paciemment	ADV	ADV	_	27	advmod	_	_
+29	,	,	PUNCT	PUNCT	_	30	punct	_	_
+30	car	car	CCONJ	CCONJ	_	39	cc:nc	_	_
+31	,	,	PUNCT	PUNCT	_	30	punct	_	_
+32	s'	s'	SCONJ	SCONJ	_	35	mark	_	_
+33	il	il	PRON	PRON	_	35	nsubj	_	_
+34	les	les	PRON	PRON	_	35	obj	_	_
+35	courroussoit	courroussoit	VERB	VERB	_	39	advcl	_	_
+36	,	,	PUNCT	PUNCT	_	39	punct	_	_
+37	qu'	qu'	SCONJ	SCONJ	_	39	mark	_	_
+38	ilz	ilz	PRON	PRON	_	39	nsubj	_	_
+39	trouveroient	trouveroient	VERB	VERB	_	27	parataxis	_	_
+40	mieulx	mieulx	ADV	ADV	_	39	advmod	_	_
+41	leur	leur	DET	DET	_	42	det	_	_
+42	appointement	appointement	NOUN	NOUN	_	39	obj	_	_
+43	que	que	SCONJ	SCONJ	_	44	mark	_	_
+44	luy	luy	PRON	PRON	_	40	obl	_	_
+45	;	;	PUNCT	PUNCT	_	57	punct	_	_
+46	et	et	CCONJ	CCONJ	_	57	cc	_	_
+47	que	que	SCONJ	SCONJ	_	57	mark	_	_
+48	,	,	PUNCT	PUNCT	_	54	punct	_	_
+49	comme	comme	SCONJ	SCONJ	_	54	mark	_	_
+50	il	il	PRON	PRON	_	54	nsubj	_	_
+51	estoit	estoit	AUX	AUX	_	54	cop	_	_
+52	le	le	DET	DET	_	54	det	_	_
+53	plus	plus	ADV	ADV	_	54	advmod	_	_
+54	fort	fort	ADJ	ADJ	_	57	advcl	_	_
+55	,	,	PUNCT	PUNCT	_	54	punct	_	_
+56	il	il	PRON	PRON	_	57	expl	_	_
+57	failloit	failloit	VERB	VERB	_	27	conj	_	_
+58	qu'	qu'	SCONJ	SCONJ	_	63	mark	_	_
+59	il	il	PRON	PRON	_	63	nsubj	_	_
+60	fust	fust	AUX	AUX	_	63	cop	_	_
+61	le	le	DET	DET	_	63	det	_	_
+62	plus	plus	ADV	ADV	_	63	advmod	_	_
+63	saige	saige	ADJ	ADJ	_	57	ccomp	_	_
+64	et	et	CCONJ	CCONJ	_	68	cc	_	_
+65	qu'	qu'	SCONJ	SCONJ	_	68	mark	_	_
+66	il	il	PRON	PRON	_	68	nsubj	_	_
+67	les	les	PRON	PRON	_	68	obj	_	_
+68	gardast	gardast	VERB	VERB	_	63	conj	_	_
+69	de	de	ADP	ADP	_	70	mark	_	_
+70	diviser	diviser	VERB	VERB	_	68	xcomp	_	_
+71	et	et	CCONJ	CCONJ	_	72	cc	_	_
+72	entretenir	entretenir	VERB	VERB	_	70	conj	_	_
+73	joinctz	joinctz	VERB	VERB	_	66	acl	_	_
+74	de	de	ADP	ADP	_	73	case	_	_
+75	tout	tout	DET	DET	_	73	det	_	_
+76	son	son	DET	DET	_	73	det	_	_
+77	povoir	povoir	NOUN	NOUN	_	73	obl	_	_
+78	et	et	CCONJ	CCONJ	_	81	cc	_	_
+79	qu'	qu'	SCONJ	SCONJ	_	81	mark	_	_
+80	il	il	PRON	PRON	_	81	nsubj	_	_
+81	dissimulast	dissimulast	VERB	VERB	_	63	conj	_	_
+82	toutes	toutes	DET	DET	_	84	det	_	_
+83	ces	ces	DET	DET	_	84	det	_	_
+84	choses	choses	NOUN	NOUN	_	81	obj	_	_
+85	;	;	PUNCT	PUNCT	_	96	punct	_	_
+86	mais	mais	CCONJ	CCONJ	_	96	cc:nc	_	_
+87	que	que	SCONJ	SCONJ	_	96	mark	_	_
+88	,	,	PUNCT	PUNCT	_	91	punct	_	_
+89	à	à	ADP	ADP	_	91	case	_	_
+90	la	la	DET	DET	_	91	det	_	_
+91	verité	verité	NOUN	NOUN	_	96	obl	_	highlight=green|span=3
+92	,	,	PUNCT	PUNCT	_	91	punct	_	_
+93	l'	l'	DET	DET	_	94	det	_	_
+94	on	on	PRON	PRON	_	96	nsubj	_	highlight=green|span=2
+95	s'	s'	PRON	PRON	_	96	expl	_	highlight=green|span=1
+96	esbahissoit	esbahissoit	VERB	VERB	_	27	conj	_	highlight=red
+97	assez	assez	ADV	ADV	_	96	advmod	_	highlight=green|span=1
+98	,	,	PUNCT	PUNCT	_	102	punct	_	_
+99	et	et	CCONJ	CCONJ	_	102	cc	_	_
+100	mesmement	mesmement	ADV	ADV	_	102	advmod	_	_
+101	chez	chez	ADP	ADP	_	102	case	_	_
+102	luy	luy	PRON	PRON	_	96	obl	_	highlight=green|span=4
+103	,	,	PUNCT	PUNCT	_	102	punct	_	_
+104	de	de	ADP	ADP	_	105	case	_	_
+105	quoy	quoy	PRON	PRON	_	96	obl	_	highlight=green|span=16
+106	si	si	ADV	ADV	_	107	advmod	_	_
+107	petiz	petiz	ADJ	ADJ	_	108	amod	_	_
+108	personnaiges	personnaiges	NOUN	NOUN	_	115	nsubj	_	_
+109	comme	comme	SCONJ	SCONJ	_	111	mark	_	_
+110	les	les	DET	DET	_	111	det	_	_
+111	deux	deux	NUM	NUM	_	108	nmod	_	_
+112	dessus	dessus	ADV	ADV	_	113	advmod	_	_
+113	nomméz	nomméz	VERB	VERB	_	111	acl	_	_
+114	s'	s'	PRON	PRON	_	115	expl	_	_
+115	empeschoyent	empeschoyent	VERB	VERB	_	105	acl	_	_
+116	de	de	ADP	ADP	_	119	case	_	_
+117	si	si	ADV	ADV	_	118	advmod	_	_
+118	grant	grant	ADJ	ADJ	_	119	amod	_	_
+119	matière	matière	NOUN	NOUN	_	115	obl	_	_
+120	,	,	PUNCT	PUNCT	_	125	punct	_	_
+121	et	et	CCONJ	CCONJ	_	125	cc	_	_
+122	que	que	SCONJ	SCONJ	_	125	mark	_	_
+123	c'	c'	PRON	PRON	_	125	nsubj	_	_
+124	estoit	estoit	AUX	AUX	_	125	cop	_	_
+125	chose	chose	NOUN	NOUN	_	27	conj	_	_
+126	dangereuse	dangereuse	ADJ	ADJ	_	125	amod	_	_
+127	,	,	PUNCT	PUNCT	_	125	punct	_	_
+128	encores	encores	ADV	ADV	_	129	advmod	_	_
+129	ayant	ayant	VERB	VERB	_	125	advcl	_	_
+130	affaire	affaire	NOUN	NOUN	_	129	obj	_	_
+131	à	à	ADP	ADP	_	132	case	_	_
+132	roy	roy	NOUN	NOUN	_	129	obl	_	_
+133	si	si	ADV	ADV	_	134	advmod	_	_
+134	liberal	liberal	ADJ	ADJ	_	132	amod	_	_
+135	comme	comme	SCONJ	SCONJ	_	136	mark	_	_
+136	cestuy	cestuy	PRON	PRON	_	134	obl	_	_
+137	-	-	PUNCT	PUNCT	_	136	punct	_	_
+138	cy	cy	ADV	ADV	_	136	advmod	_	_
+139	.	.	PUNCT	PUNCT	_	23	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: frm_profiterole-ud-dev.conllu · this verb has L=3, R=1 (mean span = 3.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = car ce peuple que nouvellement a esté reduit , pourroit facillement en vostre absence estre seduit en peu de temps ,
+1	car	car	CCONJ	CCONJ	_	16	cc:nc	_	_
+2	ce	ce	DET	DET	_	3	det	_	_
+3	peuple	peuple	NOUN	NOUN	_	16	nsubj	_	highlight=green|span=7
+4	que	que	PRON	PRON	_	8	nsubj	_	_
+5	nouvellement	nouvellement	ADV	ADV	_	8	advmod	_	_
+6	a	a	AUX	AUX	_	8	aux	_	_
+7	esté	esté	AUX	AUX	_	8	aux:pass	_	_
+8	reduit	reduit	VERB	VERB	_	3	acl:relcl	_	_
+9	,	,	PUNCT	PUNCT	_	16	punct	_	_
+10	pourroit	pourroit	AUX	AUX	_	16	aux	_	_
+11	facillement	facillement	ADV	ADV	_	16	advmod	_	highlight=green|span=1
+12	en	en	ADP	ADP	_	14	case	_	_
+13	vostre	vostre	DET	DET	_	14	det	_	_
+14	absence	absence	NOUN	NOUN	_	16	obl	_	highlight=green|span=3
+15	estre	estre	AUX	AUX	_	16	aux:pass	_	_
+16	seduit	seduit	VERB	VERB	_	0	root	_	highlight=red
+17	en	en	ADP	ADP	_	18	case	_	_
+18	peu	peu	ADV	ADV	_	16	obl	_	highlight=green|span=4
+19	de	de	ADP	ADP	_	20	case	_	_
+20	temps	temps	NOUN	NOUN	_	18	nmod	_	_
+21	,	,	PUNCT	PUNCT	_	16	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: frm_altm-ud-test.conllu · this verb has L=3, R=1 (mean span = 15.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = car jasoit ce que en France adjournement fait à bouche vaille et s' en fait le banissement les troys jours passés , toutes voyes en Normendie est assavoir que se de le jour de le premier adjournement fait en absence jusques à la prouchaine assise a XL jours d' espasse , il ne convient avoir fors quatre appeaulx continuellement fais par quatre assises prouchaines ensuivant sans interruption .
+1	car	car	CCONJ	CCONJ	_	27	cc	_	_
+2	jasoit	jasoit	ADV	ADV	_	11	mark	_	_
+3	ce	ce	PRON	PRON	_	2	fixed	_	_
+4	que	que	SCONJ	SCONJ	_	2	fixed	_	_
+5	en	en	ADP	ADP	_	6	case	_	_
+6	France	France	PROPN	PROPN	_	11	obl	_	_
+7	adjournement	adjournement	NOUN	NOUN	_	11	nsubj	_	_
+8	fait	fait	VERB	VERB	_	7	acl	_	_
+9	à	à	ADP	ADP	_	10	case	_	_
+10	bouche	bouche	NOUN	NOUN	_	8	obl	_	_
+11	vaille	vaille	VERB	VERB	_	27	advcl	_	highlight=green|span=20
+12	et	et	CCONJ	CCONJ	_	15	cc	_	_
+13	s'	s'	PRON	PRON	_	15	expl	_	_
+14	en	en	PRON	PRON	_	15	obl	_	_
+15	fait	fait	VERB	VERB	_	11	conj	_	_
+16	le	le	DET	DET	_	17	det	_	_
+17	banissement	banissement	NOUN	NOUN	_	15	nsubj	_	_
+18	les	les	DET	DET	_	20	det	_	_
+19	troys	troys	NUM	NUM	_	20	nummod	_	_
+20	jours	jours	NOUN	NOUN	_	15	obl	_	_
+21	passés	passés	VERB	VERB	_	20	acl	_	_
+22	,	,	PUNCT	PUNCT	_	27	punct	_	_
+23	toutes	toutes	DET	DET	_	27	advmod	_	highlight=green|span=2
+24	voyes	voyes	NOUN	NOUN	_	23	fixed	_	_
+25	en	en	ADP	ADP	_	26	case	_	_
+26	Normendie	Normendie	PROPN	PROPN	_	27	obl	_	highlight=green|span=2
+27	est	est	VERB	VERB	_	0	root	_	highlight=red
+28	assavoir	assavoir	VERB	VERB	_	27	xcomp	_	highlight=green|span=39
+29	que	que	SCONJ	SCONJ	_	54	mark	_	_
+30	se	se	SCONJ	SCONJ	_	46	mark	_	_
+31	de	de	ADP	ADP	_	33	case	_	_
+32	le	le	DET	DET	_	33	det	_	_
+33	jour	jour	NOUN	NOUN	_	46	obl	_	_
+34	de	de	ADP	ADP	_	37	case	_	_
+35	le	le	DET	DET	_	37	det	_	_
+36	premier	premier	ADJ	ADJ	_	37	amod	_	_
+37	adjournement	adjournement	NOUN	NOUN	_	33	nmod	_	_
+38	fait	fait	VERB	VERB	_	37	acl	_	_
+39	en	en	ADP	ADP	_	40	case	_	_
+40	absence	absence	NOUN	NOUN	_	38	obl	_	_
+41	jusques	jusques	ADP	ADP	_	45	case	_	_
+42	à	à	ADP	ADP	_	41	fixed	_	_
+43	la	la	DET	DET	_	45	det	_	_
+44	prouchaine	prouchaine	ADJ	ADJ	_	45	amod	_	_
+45	assise	assise	NOUN	NOUN	_	46	obl	_	_
+46	a	a	VERB	VERB	_	54	advcl	_	_
+47	XL	XL	NUM	NUM	_	48	nummod	_	_
+48	jours	jours	NOUN	NOUN	_	46	obj	_	_
+49	d'	d'	ADP	ADP	_	50	case	_	_
+50	espasse	espasse	NOUN	NOUN	_	48	nmod	_	_
+51	,	,	PUNCT	PUNCT	_	46	punct	_	_
+52	il	il	PRON	PRON	_	54	nsubj	_	_
+53	ne	ne	ADV	ADV	_	54	advmod	_	_
+54	convient	convient	VERB	VERB	_	28	csubj	_	_
+55	avoir	avoir	VERB	VERB	_	54	xcomp	_	_
+56	fors	fors	ADP	ADP	_	58	case	_	_
+57	quatre	quatre	NUM	NUM	_	58	nummod	_	_
+58	appeaulx	appeaulx	NOUN	NOUN	_	55	obl	_	_
+59	continuellement	continuellement	ADV	ADV	_	60	advmod	_	_
+60	fais	fais	VERB	VERB	_	58	acl	_	_
+61	par	par	ADP	ADP	_	63	case	_	_
+62	quatre	quatre	NUM	NUM	_	63	nummod	_	_
+63	assises	assises	NOUN	NOUN	_	60	obl	_	_
+64	prouchaines	prouchaines	ADJ	ADJ	_	63	amod	_	_
+65	ensuivant	ensuivant	ADJ	ADJ	_	63	acl	_	_
+66	sans	sans	ADP	ADP	_	67	case	_	_
+67	interruption	interruption	NOUN	NOUN	_	60	obl	_	_
+68	.	.	PUNCT	PUNCT	_	28	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: frm_profiterole-ud-train.conllu · this verb has L=3, R=2 (mean span = 3.80)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = car tous les jeunes princes , Jehan de Paris les tenoit avecques luy , du nombre des cent que avez ouy cy devant .
+1	car	car	CCONJ	CCONJ	_	11	cc:nc	_	_
+2	tous	tous	DET	DET	_	5	det	_	_
+3	les	les	DET	DET	_	5	det	_	_
+4	jeunes	jeunes	ADJ	ADJ	_	5	amod	_	_
+5	princes	princes	NOUN	NOUN	_	11	dislocated	_	highlight=green|span=4
+6	,	,	PUNCT	PUNCT	_	11	punct	_	_
+7	Jehan	Jehan	PROPN	PROPN	_	11	nsubj	_	highlight=green|span=3
+8	de	de	ADP	ADP	_	7	flat	_	_
+9	Paris	Paris	PROPN	PROPN	_	7	flat	_	_
+10	les	les	PRON	PRON	_	11	obj	_	highlight=green|span=1
+11	tenoit	tenoit	VERB	VERB	_	0	root	_	highlight=red
+12	avecques	avecques	ADP	ADP	_	13	case	_	_
+13	luy	luy	PRON	PRON	_	11	obl	_	highlight=green|span=2
+14	,	,	PUNCT	PUNCT	_	11	punct	_	_
+15	du	du	ADP	ADP	_	16	case:det	_	_
+16	nombre	nombre	NOUN	NOUN	_	11	obl	_	highlight=green|span=9
+17	des	des	ADP	ADP	_	18	case:det	_	_
+18	cent	cent	NUM	NUM	_	16	nmod	_	_
+19	que	que	PRON	PRON	_	21	obj	_	_
+20	avez	avez	AUX	AUX	_	21	aux	_	_
+21	ouy	ouy	VERB	VERB	_	18	acl:relcl	_	_
+22	cy	cy	ADV	ADV	_	21	advmod	_	_
+23	devant	devant	ADV	ADV	_	21	advmod	_	_
+24	.	.	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: frm_profiterole-ud-dev.conllu · this verb has L=3, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = et dès l' heure s' en alla monter a cheval
+1	et	et	CCONJ	CCONJ	_	7	cc:nc	_	_
+2	dès	dès	ADP	ADP	_	4	case	_	_
+3	l'	l'	DET	DET	_	4	det	_	_
+4	heure	heure	NOUN	NOUN	_	7	obl	_	highlight=green|span=3
+5	s'	s'	PRON	PRON	_	7	expl	_	highlight=green|span=1
+6	en	en	ADV	ADV	_	7	obl:mod	_	highlight=green|span=1
+7	alla	alla	VERB	VERB	_	0	root	_	highlight=red
+8	monter	monter	VERB	VERB	_	7	xcomp	_	highlight=green|span=3
+9	a	a	ADP	ADP	_	10	case	_	_
+10	cheval	cheval	NOUN	NOUN	_	8	obl	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: frm_profiterole-ud-train.conllu · this verb has L=3, R=3 (mean span = 1.17)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = aussi m' a - elle faict quelquefois du plaisir beaucoup .
+1	aussi	aussi	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+2	m'	m'	PRON	PRON	_	6	iobj	_	highlight=green|span=1
+3	a	a	AUX	AUX	_	6	aux	_	_
+4	-	-	PUNCT	PUNCT	_	6	punct	_	_
+5	elle	elle	PRON	PRON	_	6	nsubj	_	highlight=green|span=1
+6	faict	faict	VERB	VERB	_	0	root	_	highlight=red
+7	quelquefois	quelquefois	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+8	du	du	ADP	ADP	_	9	case:det	_	_
+9	plaisir	plaisir	NOUN	NOUN	_	6	obj	_	highlight=green|span=2
+10	beaucoup	beaucoup	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+11	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: frm_profiterole-ud-train.conllu · this verb has L=3, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = et ne se pourroit trop achapter .
+1	et	et	CCONJ	CCONJ	_	6	cc:nc	_	_
+2	ne	ne	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+3	se	se	PRON	PRON	_	6	expl	_	highlight=green|span=1
+4	pourroit	pourroit	AUX	AUX	_	6	aux	_	_
+5	trop	trop	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+6	achapter	achapter	VERB	VERB	_	0	root	_	highlight=red
+7	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: frm_profiterole-ud-train.conllu · this verb has L=3, R=0 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = « Treshault et puissant seigneur , je veulx tenir de point en point , dit la pucelle , ce que mon pere vous a dit ,
+1	«	«	PUNCT	PUNCT	_	8	punct	_	_
+2	Treshault	Treshault	ADJ	ADJ	_	5	amod	_	_
+3	et	et	CCONJ	CCONJ	_	4	cc	_	_
+4	puissant	puissant	ADJ	ADJ	_	2	conj	_	_
+5	seigneur	seigneur	NOUN	NOUN	_	8	vocative	_	_
+6	,	,	PUNCT	PUNCT	_	8	punct	_	_
+7	je	je	PRON	PRON	_	8	nsubj	_	_
+8	veulx	veulx	VERB	VERB	_	0	root	_	_
+9	tenir	tenir	VERB	VERB	_	8	xcomp	_	_
+10	de	de	ADP	ADP	_	11	case	_	_
+11	point	point	NOUN	NOUN	_	9	obl	_	_
+12	en	en	ADP	ADP	_	13	case	_	_
+13	point	point	NOUN	NOUN	_	11	conj	_	_
+14	,	,	PUNCT	PUNCT	_	15	punct	_	_
+15	dit	dit	VERB	VERB	_	8	parataxis	_	_
+16	la	la	DET	DET	_	17	det	_	_
+17	pucelle	pucelle	NOUN	NOUN	_	15	nsubj	_	_
+18	,	,	PUNCT	PUNCT	_	15	punct	_	_
+19	ce	ce	PRON	PRON	_	9	obj	_	_
+20	que	que	PRON	PRON	_	25	obj	_	highlight=green|span=1
+21	mon	mon	DET	DET	_	22	det	_	_
+22	pere	pere	NOUN	NOUN	_	25	nsubj	_	highlight=green|span=2
+23	vous	vous	PRON	PRON	_	25	iobj	_	highlight=green|span=1
+24	a	a	AUX	AUX	_	25	aux	_	_
+25	dit	dit	VERB	VERB	_	19	acl:relcl	_	highlight=red
+26	,	,	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: frm_profiterole-ud-train.conllu · this verb has L=3, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = mais vous envoye ce dont promptement m' est souvenu , esperant que vous le demandez pour le mectre en quelque oeuvre que vous avez intention de faire en langue latine dont vous estes bien usité ;
+1	mais	mais	CCONJ	CCONJ	_	3	cc:nc	_	_
+2	vous	vous	PRON	PRON	_	3	iobj	_	_
+3	envoye	envoye	VERB	VERB	_	0	root	_	_
+4	ce	ce	PRON	PRON	_	3	obj	_	_
+5	dont	dont	PRON	PRON	_	9	obl	_	_
+6	promptement	promptement	ADV	ADV	_	9	advmod	_	_
+7	m'	m'	PRON	PRON	_	9	iobj	_	_
+8	est	est	AUX	AUX	_	9	aux	_	_
+9	souvenu	souvenu	VERB	VERB	_	4	acl:relcl	_	_
+10	,	,	PUNCT	PUNCT	_	3	punct	_	_
+11	esperant	esperant	VERB	VERB	_	3	advcl	_	_
+12	que	que	SCONJ	SCONJ	_	15	mark	_	_
+13	vous	vous	PRON	PRON	_	15	nsubj	_	_
+14	le	le	PRON	PRON	_	15	obj	_	_
+15	demandez	demandez	VERB	VERB	_	11	ccomp	_	_
+16	pour	pour	ADP	ADP	_	18	mark	_	_
+17	le	le	PRON	PRON	_	18	obj	_	_
+18	mectre	mectre	VERB	VERB	_	15	advcl	_	_
+19	en	en	ADP	ADP	_	21	case	_	_
+20	quelque	quelque	DET	DET	_	21	det	_	_
+21	oeuvre	oeuvre	NOUN	NOUN	_	18	obl	_	_
+22	que	que	PRON	PRON	_	27	obj	_	_
+23	vous	vous	PRON	PRON	_	24	nsubj	_	_
+24	avez	avez	VERB	VERB	_	21	acl:relcl	_	_
+25	intention	intention	NOUN	NOUN	_	24	obj	_	_
+26	de	de	ADP	ADP	_	27	mark	_	_
+27	faire	faire	VERB	VERB	_	25	acl	_	_
+28	en	en	ADP	ADP	_	29	case	_	_
+29	langue	langue	NOUN	NOUN	_	27	obl	_	_
+30	latine	latine	ADJ	ADJ	_	29	amod	_	_
+31	dont	dont	PRON	PRON	_	35	obl	_	highlight=green|span=1
+32	vous	vous	PRON	PRON	_	35	nsubj	_	highlight=green|span=1
+33	estes	estes	AUX	AUX	_	35	aux	_	_
+34	bien	bien	ADV	ADV	_	35	advmod	_	highlight=green|span=1
+35	usité	usité	VERB	VERB	_	29	acl:relcl	_	highlight=red
+36	;	;	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

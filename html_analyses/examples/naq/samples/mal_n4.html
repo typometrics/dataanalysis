@@ -1,0 +1,394 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Khoekhoe — MAL_4</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Khoekhoe examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Khoekhoe <small style="color:#999;font-weight:normal">(naq)</small> — MAL<sub>4</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>4</b> dependents in total (left + right combined).</p><p><b>MAL<sub>4</sub> = 2.022</b> &nbsp; <span style="color:#666">(279 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over all dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: naq_kdt-ud-train.conllu · this verb has L=3, R=1 (mean span = 1.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Amase ta ge ǃâu ǁoa Manhattansa ǃoa oa sa .
+1	Amase	Amase	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+2	ta	ta	PRON	PRON	_	5	nsubj	_	highlight=green|span=1
+3	ge	ge	AUX	AUX	_	5	aux	_	_
+4	ǃâu	ǃâu	VERB	VERB	_	5	xcomp	_	highlight=green|span=1
+5	ǁoa	ǁoa	VERB	VERB	_	0	root	_	highlight=red
+6	Manhattansa	Manhattansa	NOUN	NOUN	_	8	obl	_	_
+7	ǃoa	ǃoa	ADP	ADP	_	6	case	_	_
+8	oa	oa	VERB	VERB	_	4	xcomp	_	highlight=green|span=4
+9	sa	sa	SCONJ	SCONJ	_	8	mark	_	_
+10	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: naq_kdt-ud-test.conllu · this verb has L=4, R=0 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ǁNās khaoǃgâ ta ge ǃnani ǀnūga ūhâ ǁaub di ǂgaub ai Montereys ai ge sī sîsen , ǁnāpa xu ta ge Los Angeles ǃnâ Santa Monica piers tawa ge sī tsî ǀnōǁnâde gere dī dīsi senta mâ s hoasa .
+1	ǁNās	ǁNās	PRON	PRON	_	16	obl	_	_
+2	khaoǃgâ	khaoǃgâ	ADP	ADP	_	1	case	_	_
+3	ta	ta	PRON	PRON	_	16	nsubj	_	_
+4	ge	ge	AUX	AUX	_	16	aux	_	_
+5	ǃnani	ǃnani	NUM	NUM	_	6	nummod	_	_
+6	ǀnūga	ǀnūga	NOUN	NOUN	_	7	obj	_	_
+7	ūhâ	ūhâ	VERB	VERB	_	8	acl:relcl	_	_
+8	ǁaub	ǁaub	NOUN	NOUN	_	10	nmod:poss	_	_
+9	di	di	ADP	ADP	_	8	case	_	_
+10	ǂgaub	ǂgaub	NOUN	NOUN	_	16	obl	_	_
+11	ai	ai	ADP	ADP	_	10	case	_	_
+12	Montereys	Montereys	PROPN	PROPN	_	16	obl	_	_
+13	ai	ai	ADP	ADP	_	12	case	_	_
+14	ge	ge	AUX	AUX	_	16	aux	_	_
+15	sī	sī	VERB	VERB	_	16	compound:svc	_	_
+16	sîsen	sîsen	VERB	VERB	_	0	root	_	_
+17	,	,	PUNCT	PUNCT	_	30	punct	_	_
+18	ǁnāpa	ǁnāpa	ADV	ADV	_	30	advmod	_	highlight=green|span=2
+19	xu	xu	ADP	ADP	_	18	case	_	_
+20	ta	ta	PRON	PRON	_	30	nsubj	_	highlight=green|span=1
+21	ge	ge	AUX	AUX	_	30	aux	_	_
+22	Los	Los	PROPN	PROPN	_	30	obl	_	highlight=green|span=3
+23	Angeles	Angeles	PROPN	PROPN	_	22	flat:name	_	_
+24	ǃnâ	ǃnâ	ADP	ADP	_	22	case	_	_
+25	Santa	Santa	PROPN	PROPN	_	30	obl	_	highlight=green|span=4
+26	Monica	Monica	PROPN	PROPN	_	25	flat:name	_	_
+27	piers	piers	NOUN	NOUN	_	25	appos	_	_
+28	tawa	tawa	ADP	ADP	_	25	case	_	_
+29	ge	ge	AUX	AUX	_	30	aux	_	_
+30	sī	sī	VERB	VERB	_	16	parataxis	_	highlight=red
+31	tsî	tsî	CCONJ	CCONJ	_	34	cc	_	_
+32	ǀnōǁnâde	ǀnōǁnâde	NOUN	NOUN	_	34	obj	_	_
+33	gere	gere	AUX	AUX	_	34	aux	_	_
+34	dī	dī	VERB	VERB	_	30	conj	_	_
+35	dīsi	dīsi	NUM	NUM	_	36	nummod	_	_
+36	senta	senta	NOUN	NOUN	_	37	obj	_	_
+37	mâ	mâ	VERB	VERB	_	34	advcl	_	_
+38	s	s	SCONJ	SCONJ	_	37	mark	_	_
+39	hoasa	hoasa	PRON	PRON	_	37	nsubj	_	_
+40	.	.	PUNCT	PUNCT	_	16	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: naq_kdt-ud-train.conllu · this verb has L=4, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Amase ta nēpa hâ ǁkhā tite .
+1	Amase	Amase	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+2	ta	ta	PRON	PRON	_	5	nsubj	_	highlight=green|span=1
+3	nēpa	nēpa	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+4	hâ	hâ	VERB	VERB	_	5	xcomp	_	highlight=green|span=1
+5	ǁkhā	ǁkhā	VERB	VERB	_	0	root	_	highlight=red
+6	tite	tite	AUX	AUX	_	5	aux	_	_
+7	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: naq_kdt-ud-test.conllu · this verb has L=4, R=0 (mean span = 2.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = O nēsi hâ s di ǀgôan ge sats ga sî o nî aisa ǂgae
+1	O	O	ADV	ADV	_	14	advmod	_	highlight=green|span=1
+2	nēsi	nēsi	ADV	ADV	_	3	advmod	_	_
+3	hâ	hâ	VERB	VERB	_	6	acl:relcl	_	_
+4	s	s	SCONJ	SCONJ	_	3	mark	_	_
+5	di	di	ADP	ADP	_	3	case	_	_
+6	ǀgôan	ǀgôan	NOUN	NOUN	_	14	nsubj	_	highlight=green|span=5
+7	ge	ge	AUX	AUX	_	14	aux	_	_
+8	sats	sats	PRON	PRON	_	10	nsubj	_	_
+9	ga	ga	AUX	AUX	_	10	aux	_	_
+10	sî	sî	VERB	VERB	_	14	advcl	_	highlight=green|span=4
+11	o	o	SCONJ	SCONJ	_	10	mark	_	_
+12	nî	nî	AUX	AUX	_	14	aux	_	_
+13	aisa	aisa	NOUN	NOUN	_	14	obj	_	highlight=green|span=1
+14	ǂgae	ǂgae	VERB	VERB	_	0	root	_	highlight=red"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: naq_kdt-ud-train.conllu · this verb has L=3, R=1 (mean span = 2.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Khoen ge ǂhôaǂgaresa ǃgâise ge kōǃnâ , īse i ǀnîsi ǃkhōǁnâ-ūda-e ǀkhai ǃkhaisa ǁapoǁapos ǃaroma .
+1	Khoen	Khoen	NOUN	NOUN	_	6	nsubj	_	highlight=green|span=1
+2	ge	ge	AUX	AUX	_	6	aux	_	_
+3	ǂhôaǂgaresa	ǂhôaǂgaresa	NOUN	NOUN	_	6	obj	_	highlight=green|span=1
+4	ǃgâise	ǃgâise	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+5	ge	ge	AUX	AUX	_	6	aux	_	_
+6	kōǃnâ	kōǃnâ	VERB	VERB	_	0	root	_	highlight=red
+7	,	,	PUNCT	PUNCT	_	6	punct	_	_
+8	īse	īse	SCONJ	SCONJ	_	12	mark	_	_
+9	i	i	PRON	PRON	_	12	expl	_	_
+10	ǀnîsi	ǀnîsi	ADV	ADV	_	12	advmod	_	_
+11	ǃkhōǁnâ-ūda-e	ǃkhōǁnâ-ūda-e	NOUN	NOUN	_	12	nsubj	_	_
+12	ǀkhai	ǀkhai	VERB	VERB	_	14	ccomp	_	_
+13	ǃkhaisa	ǃkhaisa	SCONJ	SCONJ	_	12	mark	_	_
+14	ǁapoǁapos	ǁapoǁapos	NOUN	NOUN	_	6	advcl	_	highlight=green|span=8
+15	ǃaroma	ǃaroma	ADP	ADP	_	14	case	_	_
+16	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: naq_kdt-ud-test.conllu · this verb has L=3, R=1 (mean span = 1.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = o ta ge &quot; Awotse nē spoed-e mā , ao-e xu ūbē &quot;
+1	o	o	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+2	ta	ta	PRON	PRON	_	8	nsubj:outer	_	highlight=green|span=1
+3	ge	ge	AUX	AUX	_	8	aux	_	_
+4	&quot;	&quot;	PUNCT	PUNCT	_	8	punct	_	_
+5	Awotse	Awotse	PROPN	PROPN	_	8	vocative	_	_
+6	nē	nē	DET	DET	_	7	det	_	_
+7	spoed-e	spoed-e	NOUN	NOUN	_	8	obj	_	highlight=green|span=2
+8	mā	mā	VERB	VERB	_	0	root	_	highlight=red
+9	,	,	PUNCT	PUNCT	_	12	punct	_	_
+10	ao-e	ao-e	NOUN	NOUN	_	12	obl	_	_
+11	xu	xu	ADP	ADP	_	10	case	_	_
+12	ūbē	ūbē	VERB	VERB	_	8	advcl	_	highlight=green|span=3
+13	&quot;	&quot;	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: naq_kdt-ud-test.conllu · this verb has L=3, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = [ tare ] tare ts sîsenū hâ o ts ta ǀkhū ǁnāti
+1	[	[	PUNCT	PUNCT	_	2	punct	_	_
+2	tare	tare	PRON	PRON	_	4	reparandum	_	_
+3	]	]	PUNCT	PUNCT	_	2	punct	_	_
+4	tare	tare	PRON	PRON	_	6	obj	_	_
+5	ts	ts	PRON	PRON	_	6	nsubj	_	_
+6	sîsenū	sîsenū	VERB	VERB	_	11	advcl	_	highlight=green|span=5
+7	hâ	hâ	AUX	AUX	_	6	aux	_	_
+8	o	o	ADV	ADV	_	11	advmod	_	highlight=green|span=1
+9	ts	ts	PRON	PRON	_	11	nsubj	_	highlight=green|span=1
+10	ta	ta	AUX	AUX	_	11	aux	_	_
+11	ǀkhū	ǀkhū	VERB	VERB	_	0	root	_	highlight=red
+12	ǁnāti	ǁnāti	ADV	ADV	_	11	advmod	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: naq_kdt-ud-train.conllu · this verb has L=4, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ǃGôahesatse , nēpa i ge khoexaǃnâse ǂâiǀgauba hâ .
+1	ǃGôahesatse	ǃGôahesatse	NOUN	NOUN	_	8	vocative	_	_
+2	,	,	PUNCT	PUNCT	_	1	punct	_	_
+3	nēpa	nēpa	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+4	i	i	PRON	PRON	_	8	expl:impers	_	highlight=green|span=1
+5	ge	ge	AUX	AUX	_	8	aux	_	_
+6	khoexaǃnâse	khoexaǃnâse	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+7	ǂâiǀgauba	ǂâiǀgauba	NOUN	NOUN	_	8	nsubj	_	highlight=green|span=1
+8	hâ	hâ	VERB	VERB	_	0	root	_	highlight=red
+9	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: naq_kdt-ud-train.conllu · this verb has L=3, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Nēpa ta ge tita go ǀkhī , î ta ti ǃoabade ǂhanusi mâisa-i a se mā tsi ga .
+1	Nēpa	Nēpa	ADV	ADV	_	6	advmod	_	_
+2	ta	ta	PRON	PRON	_	6	expl	_	_
+3	ge	ge	AUX	AUX	_	6	aux	_	_
+4	tita	tita	PRON	PRON	_	6	nsubj	_	_
+5	go	go	AUX	AUX	_	6	aux	_	_
+6	ǀkhī	ǀkhī	VERB	VERB	_	0	root	_	_
+7	,	,	PUNCT	PUNCT	_	16	punct	_	_
+8	î	î	SCONJ	SCONJ	_	16	mark	_	_
+9	ta	ta	PRON	PRON	_	16	nsubj	_	highlight=green|span=1
+10	ti	ti	DET	DET	_	11	nmod:poss	_	_
+11	ǃoabade	ǃoabade	NOUN	NOUN	_	16	obj	_	highlight=green|span=2
+12	ǂhanusi	ǂhanusi	ADJ	ADJ	_	13	amod	_	_
+13	mâisa-i	mâisa-i	NOUN	NOUN	_	16	advcl	_	highlight=green|span=4
+14	a	a	AUX	AUX	_	13	cop	_	_
+15	se	se	SCONJ	SCONJ	_	13	mark	_	_
+16	mā	mā	VERB	VERB	_	6	advcl	_	highlight=red
+17	tsi	tsi	PRON	PRON	_	16	iobj	_	highlight=green|span=1
+18	ga	ga	AUX	AUX	_	16	aux	_	_
+19	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: naq_kdt-ud-test.conllu · this verb has L=3, R=1 (mean span = 1.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ǁNās ǀguis ge ǀguri ǀnai nî ǃgam tsi .
+1	ǁNās	ǁNās	NOUN	NOUN	_	7	nsubj	_	highlight=green|span=2
+2	ǀguis	ǀguis	ADJ	ADJ	_	1	amod	_	_
+3	ge	ge	AUX	AUX	_	7	aux	_	_
+4	ǀguri	ǀguri	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+5	ǀnai	ǀnai	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+6	nî	nî	AUX	AUX	_	7	aux	_	_
+7	ǃgam	ǃgam	VERB	VERB	_	0	root	_	highlight=red
+8	tsi	tsi	PRON	PRON	_	7	obj	_	highlight=green|span=1
+9	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: naq_kdt-ud-test.conllu · this verb has L=4, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = So nēsisa ǂguis ra ǁgôa o b ge ǃgâb ǀkhāba ra khuisen , ǂguro ǂause tsî ǃhaese tsî ǃkhaese tsî ǀams ai ǁîs di khaosa s ǂoab ǃnâ ūhâ s kōse .
+1	So	So	ADV	ADV	_	12	advmod	_	_
+2	nēsisa	nēsisa	ADV	ADV	_	12	advmod	_	_
+3	ǂguis	ǂguis	NOUN	NOUN	_	5	nsubj	_	_
+4	ra	ra	AUX	AUX	_	5	aux	_	_
+5	ǁgôa	ǁgôa	VERB	VERB	_	12	advcl	_	_
+6	o	o	SCONJ	SCONJ	_	5	mark	_	_
+7	b	b	PRON	PRON	_	12	expl	_	_
+8	ge	ge	AUX	AUX	_	12	aux	_	_
+9	ǃgâb	ǃgâb	NOUN	NOUN	_	10	nmod:poss	_	_
+10	ǀkhāba	ǀkhāba	NOUN	NOUN	_	12	nsubj	_	_
+11	ra	ra	AUX	AUX	_	12	aux	_	_
+12	khuisen	khuisen	VERB	VERB	_	0	root	_	_
+13	,	,	PUNCT	PUNCT	_	15	punct	_	_
+14	ǂguro	ǂguro	ADJ	ADJ	_	15	amod	_	_
+15	ǂause	ǂause	ADV	ADV	_	12	advmod	_	_
+16	tsî	tsî	CCONJ	CCONJ	_	17	cc	_	_
+17	ǃhaese	ǃhaese	ADV	ADV	_	15	conj	_	_
+18	tsî	tsî	CCONJ	CCONJ	_	19	cc	_	_
+19	ǃkhaese	ǃkhaese	VERB	VERB	_	15	conj	_	_
+20	tsî	tsî	CCONJ	CCONJ	_	29	cc	_	_
+21	ǀams	ǀams	NOUN	NOUN	_	29	obl	_	highlight=green|span=2
+22	ai	ai	ADP	ADP	_	21	case	_	_
+23	ǁîs	ǁîs	PRON	PRON	_	25	nmod:poss	_	_
+24	di	di	ADP	ADP	_	23	case	_	_
+25	khaosa	khaosa	NOUN	NOUN	_	29	obj	_	highlight=green|span=3
+26	s	s	PRON	PRON	_	29	nsubj	_	highlight=green|span=1
+27	ǂoab	ǂoab	NOUN	NOUN	_	29	obl	_	highlight=green|span=2
+28	ǃnâ	ǃnâ	ADP	ADP	_	27	case	_	_
+29	ūhâ	ūhâ	VERB	VERB	_	12	advcl	_	highlight=red
+30	s	s	SCONJ	SCONJ	_	29	mark	_	_
+31	kōse	kōse	ADP	ADP	_	29	case	_	_
+32	.	.	PUNCT	PUNCT	_	12	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: naq_kdt-ud-train.conllu · this verb has L=3, R=1 (mean span = 1.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = [ ah ] nēsi ta ge mî ǁkhā sîsen-e ta ūhâ tama
+1	[	[	PUNCT	PUNCT	_	2	punct	_	_
+2	ah	ah	INTJ	INTJ	_	8	discourse	_	_
+3	]	]	PUNCT	PUNCT	_	2	punct	_	_
+4	nēsi	nēsi	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+5	ta	ta	PRON	PRON	_	8	nsubj	_	highlight=green|span=1
+6	ge	ge	AUX	AUX	_	8	aux	_	_
+7	mî	mî	VERB	VERB	_	8	xcomp	_	highlight=green|span=1
+8	ǁkhā	ǁkhā	VERB	VERB	_	0	root	_	highlight=red
+9	sîsen-e	sîsen-e	NOUN	NOUN	_	11	obj	_	_
+10	ta	ta	PRON	PRON	_	11	nsubj	_	_
+11	ūhâ	ūhâ	VERB	VERB	_	8	advcl	_	highlight=green|span=4
+12	tama	tama	PART	PART	_	11	advmod	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: naq_kdt-ud-test.conllu · this verb has L=4, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Tare-i ǃaroma ts satsa koma ǁnātikō kai sū-e nî kuru ?
+1	Tare-i	Tare-i	PRON	PRON	_	10	obl	_	highlight=green|span=2
+2	ǃaroma	ǃaroma	ADP	ADP	_	1	case	_	_
+3	ts	ts	PRON	PRON	_	10	expl	_	highlight=green|span=1
+4	satsa	satsa	PRON	PRON	_	10	nsubj	_	highlight=green|span=1
+5	koma	koma	ADV	ADV	_	6	advmod	_	_
+6	ǁnātikō	ǁnātikō	ADV	ADV	_	7	advmod	_	_
+7	kai	kai	ADJ	ADJ	_	8	amod	_	_
+8	sū-e	sū-e	NOUN	NOUN	_	10	obj	_	highlight=green|span=4
+9	nî	nî	AUX	AUX	_	10	aux	_	_
+10	kuru	kuru	VERB	VERB	_	0	root	_	highlight=red
+11	?	?	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: naq_kdt-ud-train.conllu · this verb has L=3, R=1 (mean span = 3.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ǃAoǃnâ khoe-i ge aibe ǁî-i di ǁkhoaǂgaoxasiba ra aoxū , ǃkhams di ǂgāba xu i nî ǃkhoe s aiǃâ .
+1	ǃAoǃnâ	ǃAoǃnâ	VERB	VERB	_	2	amod	_	_
+2	khoe-i	khoe-i	NOUN	NOUN	_	9	nsubj	_	highlight=green|span=2
+3	ge	ge	AUX	AUX	_	9	aux	_	_
+4	aibe	aibe	ADV	ADV	_	9	advmod	_	highlight=green|span=1
+5	ǁî-i	ǁî-i	NOUN	NOUN	_	7	nmod:poss	_	_
+6	di	di	ADP	ADP	_	5	case	_	_
+7	ǁkhoaǂgaoxasiba	ǁkhoaǂgaoxasiba	NOUN	NOUN	_	9	obj	_	highlight=green|span=3
+8	ra	ra	AUX	AUX	_	9	aux	_	_
+9	aoxū	aoxū	VERB	VERB	_	0	root	_	highlight=red
+10	,	,	PUNCT	PUNCT	_	17	punct	_	_
+11	ǃkhams	ǃkhams	NOUN	NOUN	_	13	nmod:poss	_	_
+12	di	di	ADP	ADP	_	11	case	_	_
+13	ǂgāba	ǂgāba	NOUN	NOUN	_	17	obl	_	_
+14	xu	xu	ADP	ADP	_	13	case	_	_
+15	i	i	PRON	PRON	_	17	nsubj	_	_
+16	nî	nî	AUX	AUX	_	17	aux	_	_
+17	ǃkhoe	ǃkhoe	VERB	VERB	_	9	advcl	_	highlight=green|span=9
+18	s	s	SCONJ	SCONJ	_	17	mark	_	_
+19	aiǃâ	aiǃâ	ADP	ADP	_	17	case	_	_
+20	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: naq_kdt-ud-train.conllu · this verb has L=3, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ǃGôahesatse Vogel , tita ge ǂhanuba ta nî ǂnûǁkhaeba ga nēpa hā tama hâ .
+1	ǃGôahesatse	ǃGôahesatse	NOUN	NOUN	_	12	vocative	_	_
+2	Vogel	Vogel	PROPN	PROPN	_	1	flat:title	_	_
+3	,	,	PUNCT	PUNCT	_	1	punct	_	_
+4	tita	tita	PRON	PRON	_	12	nsubj	_	highlight=green|span=1
+5	ge	ge	AUX	AUX	_	12	aux	_	_
+6	ǂhanuba	ǂhanuba	NOUN	NOUN	_	9	obj	_	_
+7	ta	ta	PRON	PRON	_	9	nsubj	_	_
+8	nî	nî	AUX	AUX	_	9	aux	_	_
+9	ǂnûǁkhaeba	ǂnûǁkhaeba	VERB	VERB	_	12	advcl	_	highlight=green|span=5
+10	ga	ga	SCONJ	SCONJ	_	9	mark	_	_
+11	nēpa	nēpa	ADV	ADV	_	12	advmod	_	highlight=green|span=1
+12	hā	hā	VERB	VERB	_	0	root	_	highlight=red
+13	tama	tama	PART	PART	_	12	advmod	_	highlight=green|span=1
+14	hâ	hâ	AUX	AUX	_	12	aux	_	_
+15	.	.	PUNCT	PUNCT	_	12	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: naq_kdt-ud-train.conllu · this verb has L=4, R=0 (mean span = 1.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Mâǁae b sa ǂhanuba khoeba nî ǁnāxū ?
+1	Mâǁae	Mâǁae	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+2	b	b	PRON	PRON	_	7	expl	_	highlight=green|span=1
+3	sa	sa	DET	DET	_	4	nmod:poss	_	_
+4	ǂhanuba	ǂhanuba	NOUN	NOUN	_	7	nsubj	_	highlight=green|span=2
+5	khoeba	khoeba	NOUN	NOUN	_	7	obj	_	highlight=green|span=1
+6	nî	nî	AUX	AUX	_	7	aux	_	_
+7	ǁnāxū	ǁnāxū	VERB	VERB	_	0	root	_	highlight=red
+8	?	?	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: naq_kdt-ud-train.conllu · this verb has L=4, R=0 (mean span = 1.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ǁNāpa i ge ǀnîsi ǂkhari ǃgomsiro-e nî hâ .
+1	ǁNāpa	ǁNāpa	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+2	i	i	PRON	PRON	_	8	expl	_	highlight=green|span=1
+3	ge	ge	AUX	AUX	_	8	aux	_	_
+4	ǀnîsi	ǀnîsi	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+5	ǂkhari	ǂkhari	ADJ	ADJ	_	6	amod	_	_
+6	ǃgomsiro-e	ǃgomsiro-e	NOUN	NOUN	_	8	nsubj	_	highlight=green|span=2
+7	nî	nî	AUX	AUX	_	8	aux	_	_
+8	hâ	hâ	VERB	VERB	_	0	root	_	highlight=red
+9	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: naq_kdt-ud-dev.conllu · this verb has L=3, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Tita ge kaise kurin ǃnâ tsūdī-aona ǂnoaba tama hâ .
+1	Tita	Tita	PRON	PRON	_	7	nsubj	_	highlight=green|span=1
+2	ge	ge	AUX	AUX	_	7	aux	_	_
+3	kaise	kaise	ADV	ADV	_	4	advmod	_	_
+4	kurin	kurin	NOUN	NOUN	_	7	obl	_	highlight=green|span=3
+5	ǃnâ	ǃnâ	ADP	ADP	_	4	case	_	_
+6	tsūdī-aona	tsūdī-aona	NOUN	NOUN	_	7	obj	_	highlight=green|span=1
+7	ǂnoaba	ǂnoaba	VERB	VERB	_	0	root	_	highlight=red
+8	tama	tama	PART	PART	_	7	advmod	_	highlight=green|span=1
+9	hâ	hâ	AUX	AUX	_	7	aux	_	_
+10	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: naq_kdt-ud-train.conllu · this verb has L=3, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Hî-î , noxoba ta ǂnoaba tsâ tama .
+1	Hî-î	Hî-î	INTJ	INTJ	_	6	discourse	_	_
+2	,	,	PUNCT	PUNCT	_	1	punct	_	_
+3	noxoba	noxoba	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+4	ta	ta	PRON	PRON	_	6	nsubj	_	highlight=green|span=1
+5	ǂnoaba	ǂnoaba	VERB	VERB	_	6	xcomp	_	highlight=green|span=1
+6	tsâ	tsâ	VERB	VERB	_	0	root	_	highlight=red
+7	tama	tama	PART	PART	_	6	advmod	_	highlight=green|span=1
+8	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: naq_kdt-ud-train.conllu · this verb has L=4, R=0 (mean span = 2.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Tare-e ra ī ǃkhaisa ts ga ǀū o , o ts mâti nî dī ?
+1	Tare-e	Tare-e	PRON	PRON	_	3	nsubj	_	_
+2	ra	ra	AUX	AUX	_	3	aux	_	_
+3	ī	ī	VERB	VERB	_	7	ccomp	_	_
+4	ǃkhaisa	ǃkhaisa	SCONJ	SCONJ	_	3	mark	_	_
+5	ts	ts	PRON	PRON	_	7	nsubj	_	_
+6	ga	ga	AUX	AUX	_	7	aux	_	_
+7	ǀū	ǀū	VERB	VERB	_	14	advcl	_	highlight=green|span=8
+8	o	o	SCONJ	SCONJ	_	7	mark	_	_
+9	,	,	PUNCT	PUNCT	_	7	punct	_	_
+10	o	o	ADV	ADV	_	14	advmod	_	highlight=green|span=1
+11	ts	ts	PRON	PRON	_	14	nsubj	_	highlight=green|span=1
+12	mâti	mâti	ADV	ADV	_	14	advmod	_	highlight=green|span=1
+13	nî	nî	AUX	AUX	_	14	aux	_	_
+14	dī	dī	VERB	VERB	_	0	root	_	highlight=red
+15	?	?	PUNCT	PUNCT	_	14	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

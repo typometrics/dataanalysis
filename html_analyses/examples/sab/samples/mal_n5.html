@@ -1,0 +1,82 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Buglere — MAL_5</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Buglere examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Buglere <small style="color:#999;font-weight:normal">(sab)</small> — MAL<sub>5</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>5</b> dependents in total (left + right combined).</p><p><b>MAL<sub>5</sub> = 2.133</b> &nbsp; <span style="color:#666">(3 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over all dependents of all verbs in this bucket. Below: a reservoir sample of up to 3 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: sab_chibergis-ud-test.conllu · this verb has L=3, R=2 (mean span = 2.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = chui be chkenga cha chebi be kiro manane nengke , ama kike , hoke nga ske sukekre .
+1	chui	chui	NOUN	NOUN	_	3	nsubj	_	_
+2	be	be	AUX	AUX	_	3	aux	_	_
+3	chkenga	chkenga	VERB	VERB	_	8	obl:tmod	_	highlight=green|span=3
+4	cha	cha	PRON	PRON	_	5	nmod:poss	_	_
+5	chebi	chebi	NOUN	NOUN	_	8	nsubj	_	highlight=green|span=2
+6	be	be	AUX	AUX	_	8	aux	_	_
+7	kiro	kiro	NOUN	NOUN	_	8	obj	_	highlight=green|span=1
+8	manane	manane	VERB	VERB	_	0	root	_	highlight=red
+9	nengke	nengke	ADV	ADV	_	8	obl:tmod	_	highlight=green|span=1
+10	,	,	PUNCT	PUNCT	_	8	punct	_	_
+11	ama	ama	ADV	ADV	_	12	cc	_	_
+12	kike	kike	VERB	VERB	_	8	advcl	_	highlight=green|span=6
+13	,	,	PUNCT	PUNCT	_	12	punct	_	_
+14	hoke	hoke	VERB	VERB	_	12	conj	_	_
+15	nga	nga	NOUN	NOUN	_	14	obl:arg	_	_
+16	ske	ske	ADP	ADP	_	15	case	_	_
+17	sukekre	sukekre	ADV	ADV	_	14	obl:lmod	_	_
+18	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: sab_chibergis-ud-test.conllu · this verb has L=3, R=2 (mean span = 2.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = nengke cha be cha geruia trake , cha toidu mine aini , cha chiu mine aini .
+1	nengke	nengke	ADV	ADV	_	6	obl:tmod	_	highlight=green|span=1
+2	cha	cha	PRON	PRON	_	6	nsubj	_	highlight=green|span=1
+3	be	be	AUX	AUX	_	6	aux	_	_
+4	cha	cha	PRON	PRON	_	5	nmod:poss	_	_
+5	geruia	geruia	NOUN	NOUN	_	6	obj	_	highlight=green|span=2
+6	trake	trake	VERB	VERB	_	0	root	_	highlight=red
+7	,	,	PUNCT	PUNCT	_	6	punct	_	_
+8	cha	cha	PRON	PRON	_	9	nsubj	_	_
+9	toidu	toidu	VERB	VERB	_	6	advcl	_	highlight=green|span=4
+10	mine	mine	PART	PART	_	9	advmod	_	_
+11	aini	aini	ADV	ADV	_	9	obl:lmod	_	_
+12	,	,	PUNCT	PUNCT	_	6	punct	_	_
+13	cha	cha	PRON	PRON	_	14	nsubj	_	_
+14	chiu	chiu	VERB	VERB	_	6	advcl	_	highlight=green|span=4
+15	mine	mine	PART	PART	_	14	advmod	_	_
+16	aini	aini	ADV	ADV	_	14	obl:lmod	_	_
+17	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: sab_chibergis-ud-test.conllu · this verb has L=2, R=3 (mean span = 1.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = cha kle koi gweda giska ke ngania giska ke .
+1	cha	cha	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+2	kle	kle	AUX	AUX	_	4	aux	_	_
+3	koi	koi	NOUN	NOUN	_	4	obj	_	highlight=green|span=1
+4	gweda	gweda	VERB	VERB	_	0	root	_	highlight=red
+5	giska	giska	NOUN	NOUN	_	4	obl:arg	_	highlight=green|span=2
+6	ke	ke	ADP	ADP	_	5	case	_	_
+7	ngania	ngania	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+8	giska	giska	NOUN	NOUN	_	4	obl:arg	_	highlight=green|span=2
+9	ke	ke	ADP	ADP	_	8	case	_	_
+10	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

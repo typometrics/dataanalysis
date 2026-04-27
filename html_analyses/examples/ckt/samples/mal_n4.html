@@ -1,0 +1,294 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Chukot — MAL_4</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Chukot examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Chukot <small style="color:#999;font-weight:normal">(ckt)</small> — MAL<sub>4</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>4</b> dependents in total (left + right combined).</p><p><b>MAL<sub>4</sub> = 1.534</b> &nbsp; <span style="color:#666">(43 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over all dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: ckt_hse-ud-test.conllu · this verb has L=3, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ԓюут э Абрамович ӈырон вертолёта вакъогъэ нэмыӄэй .
+1	Ԓюут	Ԓюут	ADV	ADV	_	6	advmod	_	highlight=green|span=2
+2	э	э	PART	PART	_	1	advmod:emph	_	_
+3	Абрамович	Абрамович	PROPN	PROPN	_	6	nsubj	_	highlight=green|span=1
+4	ӈырон	ӈырон	NUM	NUM	_	5	nummod	_	_
+5	вертолёта	вертолёта	NOUN	NOUN	_	6	obl	_	highlight=green|span=2
+6	вакъогъэ	вакъогъэ	VERB	VERB	_	0	root	_	highlight=red
+7	нэмыӄэй	нэмыӄэй	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+8	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: ckt_hse-ud-test.conllu · this verb has L=4, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Медведев ивкэ ԓыгэн ынкы напэԓягъан йъэԓыги Абрамович наягнагъан .
+1	Медведев	Медведев	PROPN	PROPN	_	5	obj	_	highlight=green|span=1
+2	ивкэ	ивкэ	VERB	VERB	_	5	advcl	_	highlight=green|span=1
+3	ԓыгэн	ԓыгэн	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+4	ынкы	ынкы	PRON	PRON	_	5	obl	_	highlight=green|span=1
+5	напэԓягъан	напэԓягъан	VERB	VERB	_	0	root	_	highlight=red
+6	йъэԓыги	йъэԓыги	ADV	ADV	_	8	advmod	_	_
+7	Абрамович	Абрамович	PROPN	PROPN	_	8	obj	_	_
+8	наягнагъан	наягнагъан	VERB	VERB	_	5	parataxis	_	_
+9	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: ckt_hse-ud-test.conllu · this verb has L=2, R=2 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Мури гэтумгинэтэ ӈуткэтэ мытвинвытэгнэнмык айвачваамԓыӈата чама рочгэты .
+1	Мури	Мури	PRON	PRON	_	4	nsubj	_	highlight=green|span=2
+2	гэтумгинэтэ	гэтумгинэтэ	NOUN	NOUN	_	1	conj	_	_
+3	ӈуткэтэ	ӈуткэтэ	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+4	мытвинвытэгнэнмык	мытвинвытэгнэнмык	VERB	VERB	_	0	root	_	highlight=red
+5	айвачваамԓыӈата	айвачваамԓыӈата	NOUN	NOUN	_	4	obl	_	highlight=green|span=1
+6	чама	чама	ADV	ADV	_	7	advmod	_	_
+7	рочгэты	рочгэты	NOUN	NOUN	_	4	obl	_	highlight=green|span=2
+8	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: ckt_hse-ud-test.conllu · this verb has L=3, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ӈайыӄытрык вай ынкы нынтыӄинэт ынӄэн эӈэӈыԓьыт ынӄэ .
+1	Ӈайыӄытрык	Ӈайыӄытрык	PROPN	PROPN	_	4	obl	_	highlight=green|span=1
+2	вай	вай	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+3	ынкы	ынкы	PRON	PRON	_	4	obl	_	highlight=green|span=1
+4	нынтыӄинэт	нынтыӄинэт	VERB	VERB	_	0	root	_	highlight=red
+5	ынӄэн	ынӄэн	PART	PART	_	4	discourse	_	_
+6	эӈэӈыԓьыт	эӈэӈыԓьыт	NOUN	NOUN	_	4	obj	_	highlight=green|span=1
+7	ынӄэ	ынӄэ	PART	PART	_	4	discourse	_	_
+8	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: ckt_hse-ud-test.conllu · this verb has L=3, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ынӄо ԓюут ынкы тыԓьунэт пъомпъоӈыт нымкыӄин .
+1	Ынӄо	Ынӄо	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+2	ԓюут	ԓюут	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+3	ынкы	ынкы	PRON	PRON	_	4	obl	_	highlight=green|span=1
+4	тыԓьунэт	тыԓьунэт	VERB	VERB	_	0	root	_	highlight=red
+5	пъомпъоӈыт	пъомпъоӈыт	NOUN	NOUN	_	4	obj	_	highlight=green|span=1
+6	нымкыӄин	нымкыӄин	ADJ	ADJ	_	4	parataxis	_	_
+7	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: ckt_hse-ud-test.conllu · this verb has L=2, R=2 (mean span = 1.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Гымнан торывтатык нинэгичийгым э вытвыттэ рымавыттэ эээ ръэнут это .
+1	Гымнан	Гымнан	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+2	торывтатык	торывтатык	VERB	VERB	_	3	advcl	_	highlight=green|span=1
+3	нинэгичийгым	нинэгичийгым	VERB	VERB	_	0	root	_	highlight=red
+4	э	э	PART	PART	_	3	advmod:emph	_	highlight=green|span=1
+5	вытвыттэ	вытвыттэ	NOUN	NOUN	_	3	obj	_	highlight=green|span=2
+6	рымавыттэ	рымавыттэ	NOUN	NOUN	_	5	appos	_	_
+7	эээ	эээ	INTJ	INTJ	_	8	discourse	_	_
+8	ръэнут	ръэнут	PRON	PRON	_	3	parataxis	_	_
+9	это	это	X	X	_	8	discourse	_	_
+10	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: ckt_hse-ud-test.conllu · this verb has L=2, R=2 (mean span = 2.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ӄэԓюӄ ъым тэнӈу мытытчыгъэн ԓыгэн ԓёԓьоԓгын пинтыӄэтыԓьын ынӄэн э ранрэԓьэԓгычыкойпы .
+1	Ӄэԓюӄ	Ӄэԓюӄ	ADV	ADV	_	4	advmod	_	highlight=green|span=2
+2	ъым	ъым	PART	PART	_	1	advmod:emph	_	_
+3	тэнӈу	тэнӈу	VERB	VERB	_	4	xcomp	_	highlight=green|span=1
+4	мытытчыгъэн	мытытчыгъэн	VERB	VERB	_	0	root	_	highlight=red
+5	ԓыгэн	ԓыгэн	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+6	ԓёԓьоԓгын	ԓёԓьоԓгын	NOUN	NOUN	_	4	obj	_	highlight=green|span=5
+7	пинтыӄэтыԓьын	пинтыӄэтыԓьын	VERB	VERB	_	6	acl:attr	_	_
+8	ынӄэн	ынӄэн	PART	PART	_	7	discourse	_	_
+9	э	э	PART	PART	_	8	advmod:emph	_	_
+10	ранрэԓьэԓгычыкойпы	ранрэԓьэԓгычыкойпы	NOUN	NOUN	_	7	obl	_	_
+11	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: ckt_hse-ud-test.conllu · this verb has L=1, R=3 (mean span = 2.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ӄытԓыги ыʼм ынӄэн э чапаевӄай Чапаев ынӄэн мытԓьуэʼн кино тэӈвытку ӄэԓюӄ э .
+1	Ӄытԓыги	Ӄытԓыги	PART	PART	_	8	discourse	_	_
+2	ыʼм	ыʼм	PART	PART	_	1	advmod:emph	_	_
+3	ынӄэн	ынӄэн	DET	DET	_	5	det	_	_
+4	э	э	PART	PART	_	3	advmod:emph	_	_
+5	чапаевӄай	чапаевӄай	PROPN	PROPN	_	8	obj	_	highlight=green|span=5
+6	Чапаев	Чапаев	PROPN	PROPN	_	5	appos	_	_
+7	ынӄэн	ынӄэн	DET	DET	_	6	det	_	_
+8	мытԓьуэʼн	мытԓьуэʼн	VERB	VERB	_	0	root	_	highlight=red
+9	кино	кино	NOUN	NOUN	_	5	appos	_	highlight=green|span=1
+10	тэӈвытку	тэӈвытку	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+11	ӄэԓюӄ	ӄэԓюӄ	ADV	ADV	_	8	advmod	_	highlight=green|span=2
+12	э	э	PART	PART	_	11	advmod:emph	_	_
+13	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: ckt_hse-ud-test.conllu · this verb has L=3, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Пԓыткук э рэмкын э клубэты гэԓгиԓӄытръуԓин ынкы .
+1	Пԓыткук	Пԓыткук	VERB	VERB	_	6	advcl	_	highlight=green|span=2
+2	э	э	PART	PART	_	1	advmod:emph	_	_
+3	рэмкын	рэмкын	NOUN	NOUN	_	6	nsubj	_	highlight=green|span=2
+4	э	э	PART	PART	_	3	advmod:emph	_	_
+5	клубэты	клубэты	NOUN	NOUN	_	6	obl	_	highlight=green|span=1
+6	гэԓгиԓӄытръуԓин	гэԓгиԓӄытръуԓин	VERB	VERB	_	0	root	_	highlight=red
+7	ынкы	ынкы	PRON	PRON	_	5	det	_	highlight=green|span=1
+8	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: ckt_hse-ud-test.conllu · this verb has L=3, R=1 (mean span = 1.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ынӄо чаёпԓыткок э Сашана тэйкынин гымнин э орвыӄай ынӄэн э .
+1	Ынӄо	Ынӄо	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+2	чаёпԓыткок	чаёпԓыткок	VERB	VERB	_	5	advcl	_	highlight=green|span=2
+3	э	э	PART	PART	_	2	advmod:emph	_	_
+4	Сашана	Сашана	PROPN	PROPN	_	5	nsubj	_	highlight=green|span=1
+5	тэйкынин	тэйкынин	VERB	VERB	_	0	root	_	highlight=red
+6	гымнин	гымнин	PRON	PRON	_	8	nmod:poss	_	_
+7	э	э	PART	PART	_	6	advmod:emph	_	_
+8	орвыӄай	орвыӄай	NOUN	NOUN	_	5	obj	_	highlight=green|span=3
+9	ынӄэн	ынӄэн	PART	PART	_	5	discourse	_	_
+10	э	э	PART	PART	_	9	advmod:emph	_	_
+11	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: ckt_hse-ud-test.conllu · this verb has L=3, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = А этынвын ъым пэ поӄытгагтыёԓго ытръэч ныԓгыӄин нрзб чьэчеӈвыйичыку .
+1	А	А	CCONJ	CCONJ	_	7	cc	_	_
+2	этынвын	этынвын	NOUN	NOUN	_	7	nsubj	_	highlight=green|span=2
+3	ъым	ъым	PART	PART	_	2	advmod:emph	_	_
+4	пэ	пэ	X	X	_	5	reparandum	_	_
+5	поӄытгагтыёԓго	поӄытгагтыёԓго	NOUN	NOUN	_	7	xcomp	_	highlight=green|span=2
+6	ытръэч	ытръэч	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+7	ныԓгыӄин	ныԓгыӄин	VERB	VERB	_	0	root	_	highlight=red
+8	нрзб	нрзб	X	X	_	7	discourse	_	_
+9	чьэчеӈвыйичыку	чьэчеӈвыйичыку	NOUN	NOUN	_	7	obl	_	highlight=green|span=1
+10	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: ckt_hse-ud-test.conllu · this verb has L=3, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ну ынкатагнэпы ынӄо ԓыгэн энанъотавӈӈогъэ рычвоԓьэгым .
+1	Ну	Ну	X	X	_	5	discourse	_	_
+2	ынкатагнэпы	ынкатагнэпы	PRON	PRON	_	5	obl	_	highlight=green|span=1
+3	ынӄо	ынӄо	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+4	ԓыгэн	ԓыгэн	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+5	энанъотавӈӈогъэ	энанъотавӈӈогъэ	VERB	VERB	_	0	root	_	highlight=red
+6	рычвоԓьэгым	рычвоԓьэгым	VERB	VERB	_	5	ccomp	_	highlight=green|span=1
+7	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: ckt_hse-ud-test.conllu · this verb has L=4, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ынӄоры виин уӄӄэмчыку ынӈин нинэнрэӄэвивым .
+1	Ынӄоры	Ынӄоры	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+2	виин	виин	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+3	уӄӄэмчыку	уӄӄэмчыку	NOUN	NOUN	_	5	obl	_	highlight=green|span=1
+4	ынӈин	ынӈин	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+5	нинэнрэӄэвивым	нинэнрэӄэвивым	VERB	VERB	_	0	root	_	highlight=red
+6	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: ckt_hse-ud-test.conllu · this verb has L=3, R=1 (mean span = 1.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ынӄоры Въаӈгыпы Въаӈгыпы ынкы трабилетынӈааʼ Москвагты .
+1	Ынӄоры	Ынӄоры	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+2	Въаӈгыпы	Въаӈгыпы	PROPN	PROPN	_	3	reparandum	_	_
+3	Въаӈгыпы	Въаӈгыпы	PROPN	PROPN	_	5	obl	_	highlight=green|span=2
+4	ынкы	ынкы	PRON	PRON	_	5	obl	_	highlight=green|span=1
+5	трабилетынӈааʼ	трабилетынӈааʼ	VERB	VERB	_	0	root	_	highlight=red
+6	Москвагты	Москвагты	PROPN	PROPN	_	5	obl	_	highlight=green|span=1
+7	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: ckt_hse-ud-test.conllu · this verb has L=3, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Къам а мимԓык нэмэ пэԓӄынтэттыԓеиʼ м къам иуԓтиӈэгчыкыкваԓьын э ръэвин э ыʼмйиквин ынӄэн э амыԓӄыкваԓьын ынкы гамыԓӄыпэԓятԓен а ръэв .
+1	Къам	Къам	CCONJ	CCONJ	_	5	cc	_	_
+2	а	а	PART	PART	_	5	advmod:emph	_	highlight=green|span=1
+3	мимԓык	мимԓык	NOUN	NOUN	_	5	obl	_	highlight=green|span=1
+4	нэмэ	нэмэ	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+5	пэԓӄынтэттыԓеиʼ	пэԓӄынтэттыԓеиʼ	VERB	VERB	_	0	root	_	highlight=red
+6	м	м	PART	PART	_	5	advmod:emph	_	highlight=green|span=1
+7	къам	къам	CCONJ	CCONJ	_	12	cc	_	_
+8	иуԓтиӈэгчыкыкваԓьын	иуԓтиӈэгчыкыкваԓьын	VERB	VERB	_	12	acl:attr	_	_
+9	э	э	PART	PART	_	8	advmod:emph	_	_
+10	ръэвин	ръэвин	NOUN	NOUN	_	12	nmod:poss	_	_
+11	э	э	PART	PART	_	10	advmod:emph	_	_
+12	ыʼмйиквин	ыʼмйиквин	NOUN	NOUN	_	17	dislocated	_	_
+13	ынӄэн	ынӄэн	PART	PART	_	17	discourse	_	_
+14	э	э	PART	PART	_	13	advmod:emph	_	_
+15	амыԓӄыкваԓьын	амыԓӄыкваԓьын	VERB	VERB	_	19	acl:attr	_	_
+16	ынкы	ынкы	PRON	PRON	_	17	obl	_	_
+17	гамыԓӄыпэԓятԓен	гамыԓӄыпэԓятԓен	VERB	VERB	_	5	parataxis	_	_
+18	а	а	PART	PART	_	17	advmod:emph	_	_
+19	ръэв	ръэв	NOUN	NOUN	_	17	nsubj	_	_
+20	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: ckt_hse-ud-test.conllu · this verb has L=3, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Гымнан э ӄэԓюӄ рырвинрыёт кааръаматыԓьыт чеймыкинэт нинэт нэнавъятэвым итык чама .
+1	Гымнан	Гымнан	PRON	PRON	_	8	nsubj	_	highlight=green|span=2
+2	э	э	PART	PART	_	1	advmod:emph	_	_
+3	ӄэԓюӄ	ӄэԓюӄ	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+4	рырвинрыёт	рырвинрыёт	VERB	VERB	_	8	obj	_	highlight=green|span=3
+5	кааръаматыԓьыт	кааръаматыԓьыт	NOUN	NOUN	_	4	nmod:attr	_	_
+6	чеймыкинэт	чеймыкинэт	NOUN	NOUN	_	4	nmod:relat	_	_
+7	нинэт	нинэт	X	X	_	8	reparandum	_	_
+8	нэнавъятэвым	нэнавъятэвым	VERB	VERB	_	0	root	_	highlight=red
+9	итык	итык	AUX	AUX	_	10	cop	_	_
+10	чама	чама	ADV	ADV	_	8	advcl	_	highlight=green|span=2
+11	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: ckt_hse-ud-test.conllu · this verb has L=4, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Гытгак аʼйӈама тыр тыркыԓьэ тыркыԓьэ ӄора ӄоратыр тыркыԓьэ гаегъентоԓен .
+1	Гытгак	Гытгак	NOUN	NOUN	_	9	obl	_	highlight=green|span=1
+2	аʼйӈама	аʼйӈама	VERB	VERB	_	9	advcl	_	highlight=green|span=1
+3	тыр	тыр	X	X	_	5	reparandum	_	_
+4	тыркыԓьэ	тыркыԓьэ	NOUN	NOUN	_	5	reparandum	_	_
+5	тыркыԓьэ	тыркыԓьэ	NOUN	NOUN	_	9	obl	_	highlight=green|span=3
+6	ӄора	ӄора	X	X	_	8	reparandum	_	_
+7	ӄоратыр	ӄоратыр	X	X	_	8	reparandum	_	_
+8	тыркыԓьэ	тыркыԓьэ	NOUN	NOUN	_	9	obl	_	highlight=green|span=3
+9	гаегъентоԓен	гаегъентоԓен	VERB	VERB	_	0	root	_	highlight=red
+10	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: ckt_hse-ud-test.conllu · this verb has L=2, R=2 (mean span = 1.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ынӄэн эт ъым аӈӄак нъанэԓёӄэн эскимос нэмэ .
+1	Ынӄэн	Ынӄэн	PART	PART	_	5	discourse	_	_
+2	эт	эт	ADV	ADV	_	5	advmod	_	highlight=green|span=2
+3	ъым	ъым	PART	PART	_	2	advmod:emph	_	_
+4	аӈӄак	аӈӄак	NOUN	NOUN	_	5	obl	_	highlight=green|span=1
+5	нъанэԓёӄэн	нъанэԓёӄэн	VERB	VERB	_	0	root	_	highlight=red
+6	эскимос	эскимос	NOUN	NOUN	_	5	nsubj	_	highlight=green|span=1
+7	нэмэ	нэмэ	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+8	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: ckt_hse-ud-test.conllu · this verb has L=3, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Тъэче кивкинэк вытку рэннин иʼӈ кэԓи ӈэвъэнйыръын .
+1	Тъэче	Тъэче	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+2	кивкинэк	кивкинэк	NOUN	NOUN	_	4	obl	_	highlight=green|span=1
+3	вытку	вытку	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+4	рэннин	рэннин	VERB	VERB	_	0	root	_	highlight=red
+5	иʼӈ	иʼӈ	NOUN	NOUN	_	6	obj	_	_
+6	кэԓи	кэԓи	VERB	VERB	_	7	acl	_	_
+7	ӈэвъэнйыръын	ӈэвъэнйыръын	NOUN	NOUN	_	4	obj	_	highlight=green|span=3
+8	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: ckt_hse-ud-test.conllu · this verb has L=2, R=2 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Нрзб тэԓенъеп коԓё ръиԓечитԓьэтԓеэт таӈымԓьаԓяӈэт таӈымыԓьо нымнымыт ъым .
+1	Нрзб	Нрзб	X	X	_	4	discourse	_	_
+2	тэԓенъеп	тэԓенъеп	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+3	коԓё	коԓё	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+4	ръиԓечитԓьэтԓеэт	ръиԓечитԓьэтԓеэт	VERB	VERB	_	0	root	_	highlight=red
+5	таӈымԓьаԓяӈэт	таӈымԓьаԓяӈэт	NOUN	NOUN	_	4	obl	_	highlight=green|span=2
+6	таӈымыԓьо	таӈымыԓьо	NOUN	NOUN	_	5	appos	_	_
+7	нымнымыт	нымнымыт	NOUN	NOUN	_	4	nsubj	_	highlight=green|span=2
+8	ъым	ъым	PART	PART	_	7	advmod:emph	_	_
+9	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

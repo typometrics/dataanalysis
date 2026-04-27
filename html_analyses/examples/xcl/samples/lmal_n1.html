@@ -1,0 +1,670 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>ClassArmenian — LMAL_1</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to ClassArmenian examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>ClassArmenian <small style="color:#999;font-weight:normal">(xcl)</small> — LMAL<sub>1</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>1</b> left dependents (right side may be anything).</p><p><b>LMAL<sub>1</sub> = 2.428</b> &nbsp; <span style="color:#666">(5,428 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>left</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: xcl_caval-ud-test.conllu · this verb has L=1, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Որ ուտէ զ մարմին իմ , եւ ըմպէ զ արիւն իմ . ունի զ կեանս ն յաւիտենականս ՝ եւ ես յարուցից զ նա յ աւուր ն յետնում :
+1	Որ	Որ	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	ուտէ	ուտէ	VERB	VERB	_	13	csubj	_	highlight=red
+3	զ	զ	ADP	ADP	_	4	case	_	_
+4	մարմին	մարմին	NOUN	NOUN	_	2	obj	_	highlight=green|span=3
+5	իմ	իմ	PRON	PRON	_	4	nmod	_	_
+6	,	,	PUNCT	PUNCT	_	8	punct	_	_
+7	եւ	եւ	CCONJ	CCONJ	_	8	cc	_	_
+8	ըմպէ	ըմպէ	VERB	VERB	_	2	conj	_	_
+9	զ	զ	ADP	ADP	_	10	case	_	_
+10	արիւն	արիւն	NOUN	NOUN	_	8	obj	_	_
+11	իմ	իմ	PRON	PRON	_	10	nmod	_	_
+12	.	.	PUNCT	PUNCT	_	8	punct	_	_
+13	ունի	ունի	VERB	VERB	_	0	root	_	_
+14	զ	զ	ADP	ADP	_	15	case	_	_
+15	կեանս	կեանս	NOUN	NOUN	_	13	obj	_	_
+16	ն	ն	DET	DET	_	15	det	_	_
+17	յաւիտենականս	յաւիտենականս	ADJ	ADJ	_	15	amod	_	_
+18	՝	՝	PUNCT	PUNCT	_	21	punct	_	_
+19	եւ	եւ	CCONJ	CCONJ	_	21	cc	_	_
+20	ես	ես	PRON	PRON	_	21	nsubj:caus	_	_
+21	յարուցից	յարուցից	VERB	VERB	_	13	conj	_	_
+22	զ	զ	ADP	ADP	_	23	case	_	_
+23	նա	նա	PRON	PRON	_	21	obj	_	_
+24	յ	յ	ADP	ADP	_	25	case	_	_
+25	աւուր	աւուր	NOUN	NOUN	_	21	obl	_	_
+26	ն	ն	DET	DET	_	25	det	_	_
+27	յետնում	յետնում	ADJ	ADJ	_	25	amod	_	_
+28	:	:	PUNCT	PUNCT	_	13	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: xcl_caval-ud-train.conllu · this verb has L=1, R=0 (mean span = 5.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ասեն ց նա աշակերտք ն ՝ ահա արդ յայտնութեամբ խաւսիս ՝ եւ առակ եւ ոչ մի ինչ ասես ՝
+1	Ասեն	Ասեն	VERB	VERB	_	0	root	_	_
+2	ց	ց	ADP	ADP	_	3	case	_	_
+3	նա	նա	PRON	PRON	_	1	obl:arg	_	_
+4	աշակերտք	աշակերտք	NOUN	NOUN	_	1	nsubj	_	_
+5	ն	ն	DET	DET	_	4	det	_	_
+6	՝	՝	PUNCT	PUNCT	_	7	punct	_	_
+7	ահա	ահա	INTJ	INTJ	_	10	discourse	_	_
+8	արդ	արդ	ADV	ADV	_	10	advmod	_	_
+9	յայտնութեամբ	յայտնութեամբ	NOUN	NOUN	_	10	obl	_	_
+10	խաւսիս	խաւսիս	VERB	VERB	_	1	ccomp	_	_
+11	՝	՝	PUNCT	PUNCT	_	18	punct	_	_
+12	եւ	եւ	CCONJ	CCONJ	_	18	cc	_	_
+13	առակ	առակ	NOUN	NOUN	_	18	obj	_	highlight=green|span=5
+14	եւ	եւ	CCONJ	CCONJ	_	16	cc	_	_
+15	ոչ	ոչ	PART	PART	_	16	advmod	_	_
+16	մի	մի	NUM	NUM	_	13	nummod	_	_
+17	ինչ	ինչ	DET	DET	_	16	det	_	_
+18	ասես	ասես	VERB	VERB	_	10	conj	_	highlight=red
+19	՝	՝	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: xcl_caval-ud-train.conllu · this verb has L=1, R=1 (mean span = 5.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Նա ուրացաւ եւ ասէ ՝ ոչ ճանաչեմ . եւ ոչ գիտեմ զինչ դու դ ասես :
+1	Նա	Նա	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	ուրացաւ	ուրացաւ	VERB	VERB	_	0	root	_	highlight=red
+3	եւ	եւ	CCONJ	CCONJ	_	4	cc	_	_
+4	ասէ	ասէ	VERB	VERB	_	2	conj	_	_
+5	՝	՝	PUNCT	PUNCT	_	7	punct	_	_
+6	ոչ	ոչ	PART	PART	_	7	advmod	_	_
+7	ճանաչեմ	ճանաչեմ	VERB	VERB	_	2	ccomp	_	highlight=green|span=9
+8	.	.	PUNCT	PUNCT	_	11	punct	_	_
+9	եւ	եւ	CCONJ	CCONJ	_	11	cc	_	_
+10	ոչ	ոչ	PART	PART	_	11	advmod	_	_
+11	գիտեմ	գիտեմ	VERB	VERB	_	7	conj	_	_
+12	զինչ	զինչ	PRON	PRON	_	15	obj	_	_
+13	դու	դու	PRON	PRON	_	15	nsubj	_	_
+14	դ	դ	DET	DET	_	13	det	_	_
+15	ասես	ասես	VERB	VERB	_	11	ccomp	_	_
+16	:	:	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: xcl_caval-ud-dev.conllu · this verb has L=1, R=2 (mean span = 7.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Եւ նոքա ասեն ց նա ՝ ընդէր ՞ աշակերտք ն Յովհաննու պահեն ստէպ , եւ խնդրուածս առնեն . նոյնպէս եւ փարիսեցւոց ն ՝ եւ քոյք դ , ուտեն եւ ըմպեն :
+1	Եւ	Եւ	CCONJ	CCONJ	_	3	cc	_	_
+2	նոքա	նոքա	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+3	ասեն	ասեն	VERB	VERB	_	0	root	_	highlight=red
+4	ց	ց	ADP	ADP	_	5	case	_	_
+5	նա	նա	PRON	PRON	_	3	obl:arg	_	highlight=green|span=2
+6	՝	՝	PUNCT	PUNCT	_	12	punct	_	_
+7	ընդէր	ընդէր	ADV	ADV	_	12	mark	_	_
+8	՞	՞	PUNCT	PUNCT	_	7	punct	_	_
+9	աշակերտք	աշակերտք	NOUN	NOUN	_	12	nsubj	_	_
+10	ն	ն	DET	DET	_	9	det	_	_
+11	Յովհաննու	Յովհաննու	PROPN	PROPN	_	9	nmod	_	_
+12	պահեն	պահեն	VERB	VERB	_	3	ccomp	_	highlight=green|span=19
+13	ստէպ	ստէպ	ADV	ADV	_	12	advmod	_	_
+14	,	,	PUNCT	PUNCT	_	17	punct	_	_
+15	եւ	եւ	CCONJ	CCONJ	_	17	cc	_	_
+16	խնդրուածս	խնդրուածս	NOUN	NOUN	_	17	obj	_	_
+17	առնեն	առնեն	VERB	VERB	_	12	conj	_	_
+18	.	.	PUNCT	PUNCT	_	21	punct	_	_
+19	նոյնպէս	նոյնպէս	ADV	ADV	_	21	orphan	_	_
+20	եւ	եւ	CCONJ	CCONJ	_	21	orphan	_	_
+21	փարիսեցւոց	փարիսեցւոց	NOUN	NOUN	_	12	conj	_	_
+22	ն	ն	DET	DET	_	21	orphan	_	_
+23	՝	՝	PUNCT	PUNCT	_	28	punct	_	_
+24	եւ	եւ	CCONJ	CCONJ	_	28	cc	_	_
+25	քոյք	քոյք	DET	DET	_	28	nsubj	_	_
+26	դ	դ	DET	DET	_	25	det	_	_
+27	,	,	PUNCT	PUNCT	_	25	punct	_	_
+28	ուտեն	ուտեն	VERB	VERB	_	12	conj	_	_
+29	եւ	եւ	CCONJ	CCONJ	_	30	cc	_	_
+30	ըմպեն	ըմպեն	VERB	VERB	_	28	conj	_	_
+31	:	:	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: xcl_caval-ud-train.conllu · this verb has L=1, R=1 (mean span = 8.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Եւ նա ասէ ՝ թե մեղաւոր իցէ . ես ոչ գիտեմ ՝ բայց զ այս գիտեմ . զի կոյր եի . եւ արդ տեսանեմ :
+1	Եւ	Եւ	CCONJ	CCONJ	_	3	cc	_	_
+2	նա	նա	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+3	ասէ	ասէ	VERB	VERB	_	0	root	_	highlight=red
+4	՝	՝	PUNCT	PUNCT	_	6	punct	_	_
+5	թե	թե	SCONJ	SCONJ	_	6	mark	_	_
+6	մեղաւոր	մեղաւոր	ADJ	ADJ	_	11	ccomp	_	_
+7	իցէ	իցէ	AUX	AUX	_	6	cop	_	_
+8	.	.	PUNCT	PUNCT	_	6	punct	_	_
+9	ես	ես	PRON	PRON	_	11	nsubj	_	_
+10	ոչ	ոչ	PART	PART	_	11	advmod	_	_
+11	գիտեմ	գիտեմ	VERB	VERB	_	3	ccomp	_	highlight=green|span=16
+12	՝	՝	PUNCT	PUNCT	_	16	punct	_	_
+13	բայց	բայց	CCONJ	CCONJ	_	16	cc	_	_
+14	զ	զ	ADP	ADP	_	15	case	_	_
+15	այս	այս	PRON	PRON	_	16	obj	_	_
+16	գիտեմ	գիտեմ	VERB	VERB	_	11	conj	_	_
+17	.	.	PUNCT	PUNCT	_	19	punct	_	_
+18	զի	զի	SCONJ	SCONJ	_	19	mark	_	_
+19	կոյր	կոյր	ADJ	ADJ	_	16	ccomp	_	_
+20	եի	եի	AUX	AUX	_	19	cop	_	_
+21	.	.	PUNCT	PUNCT	_	24	punct	_	_
+22	եւ	եւ	CCONJ	CCONJ	_	24	cc	_	_
+23	արդ	արդ	ADV	ADV	_	24	advmod	_	_
+24	տեսանեմ	տեսանեմ	VERB	VERB	_	19	conj	_	_
+25	:	:	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: xcl_caval-ud-train.conllu · this verb has L=1, R=3 (mean span = 4.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ց ո ՞ ոք ի ձէնջ հայր խնդրիցէ որդի իւր ձուկն ՝ մի եթե փոխանակ ձկան ն աւձ ՞ տայցէ նմա , եւ կամ խնդրիցէ ձու ՝ մի թե կարիճ ՞ տայցէ նմա :
+1	ց	ց	ADP	ADP	_	2	case	_	_
+2	ո	ո	PRON	PRON	_	8	obl:arg	_	highlight=green|span=6
+3	՞	՞	PUNCT	PUNCT	_	2	punct	_	_
+4	ոք	ոք	PRON	PRON	_	7	nsubj	_	_
+5	ի	ի	ADP	ADP	_	6	case	_	_
+6	ձէնջ	ձէնջ	PRON	PRON	_	4	nmod	_	_
+7	հայր	հայր	NOUN	NOUN	_	2	acl	_	_
+8	խնդրիցէ	խնդրիցէ	VERB	VERB	_	0	root	_	highlight=red
+9	որդի	որդի	NOUN	NOUN	_	8	nsubj	_	highlight=green|span=2
+10	իւր	իւր	PRON	PRON	_	9	nmod	_	_
+11	ձուկն	ձուկն	NOUN	NOUN	_	8	obj	_	highlight=green|span=1
+12	՝	՝	PUNCT	PUNCT	_	20	punct	_	_
+13	մի	մի	PART	PART	_	14	advmod	_	_
+14	եթե	եթե	SCONJ	SCONJ	_	20	mark	_	_
+15	փոխանակ	փոխանակ	ADP	ADP	_	16	case	_	_
+16	ձկան	ձկան	NOUN	NOUN	_	20	obl	_	_
+17	ն	ն	DET	DET	_	16	det	_	_
+18	աւձ	աւձ	NOUN	NOUN	_	20	obj	_	_
+19	՞	՞	PUNCT	PUNCT	_	18	punct	_	_
+20	տայցէ	տայցէ	VERB	VERB	_	8	ccomp	_	highlight=green|span=8
+21	նմա	նմա	PRON	PRON	_	20	iobj	_	_
+22	,	,	PUNCT	PUNCT	_	25	punct	_	_
+23	եւ	եւ	CCONJ	CCONJ	_	25	cc	_	_
+24	կամ	կամ	CCONJ	CCONJ	_	25	cc	_	_
+25	խնդրիցէ	խնդրիցէ	VERB	VERB	_	8	conj	_	_
+26	ձու	ձու	NOUN	NOUN	_	25	obj	_	_
+27	՝	՝	PUNCT	PUNCT	_	32	punct	_	_
+28	մի	մի	PART	PART	_	29	advmod	_	_
+29	թե	թե	SCONJ	SCONJ	_	32	mark	_	_
+30	կարիճ	կարիճ	NOUN	NOUN	_	32	obj	_	_
+31	՞	՞	PUNCT	PUNCT	_	30	punct	_	_
+32	տայցէ	տայցէ	VERB	VERB	_	25	ccomp	_	_
+33	նմա	նմա	PRON	PRON	_	32	iobj	_	_
+34	:	:	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: xcl_caval-ud-train.conllu · this verb has L=1, R=2 (mean span = 7.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Եւ որ անցանեին հայհոյեին զ նա ՝ շարժեին զ գլուխս իւրեանց եւ ասեին ՝ վահ , որ քակեիր զ տաճար ն ՝ եւ զ երիս աւուրս շինեիր զ նա ՝ ապրեցո զ քեզ թե որդի ես Աստուածոյ ՝ էջ ի խաչէ դ :
+1	Եւ	Եւ	CCONJ	CCONJ	_	4	cc	_	_
+2	որ	որ	PRON	PRON	_	3	nsubj	_	_
+3	անցանեին	անցանեին	VERB	VERB	_	4	csubj	_	_
+4	հայհոյեին	հայհոյեին	VERB	VERB	_	0	root	_	_
+5	զ	զ	ADP	ADP	_	6	case	_	_
+6	նա	նա	PRON	PRON	_	4	obj	_	_
+7	՝	՝	PUNCT	PUNCT	_	8	punct	_	_
+8	շարժեին	շարժեին	VERB	VERB	_	4	conj	_	_
+9	զ	զ	ADP	ADP	_	10	case	_	_
+10	գլուխս	գլուխս	NOUN	NOUN	_	8	obj	_	_
+11	իւրեանց	իւրեանց	PRON	PRON	_	10	nmod	_	_
+12	եւ	եւ	CCONJ	CCONJ	_	13	cc	_	_
+13	ասեին	ասեին	VERB	VERB	_	4	conj	_	_
+14	՝	՝	PUNCT	PUNCT	_	15	punct	_	_
+15	վահ	վահ	INTJ	INTJ	_	31	discourse	_	_
+16	,	,	PUNCT	PUNCT	_	15	punct	_	_
+17	որ	որ	PRON	PRON	_	18	nsubj	_	_
+18	քակեիր	քակեիր	VERB	VERB	_	31	csubj	_	highlight=green|span=12
+19	զ	զ	ADP	ADP	_	20	case	_	_
+20	տաճար	տաճար	NOUN	NOUN	_	18	obj	_	_
+21	ն	ն	DET	DET	_	20	det	_	_
+22	՝	՝	PUNCT	PUNCT	_	27	punct	_	_
+23	եւ	եւ	CCONJ	CCONJ	_	27	cc	_	_
+24	զ	զ	ADP	ADP	_	26	case	_	_
+25	երիս	երիս	NUM	NUM	_	26	nummod	_	_
+26	աւուրս	աւուրս	NOUN	NOUN	_	27	obl	_	_
+27	շինեիր	շինեիր	VERB	VERB	_	18	conj	_	_
+28	զ	զ	ADP	ADP	_	29	case	_	_
+29	նա	նա	PRON	PRON	_	27	obj	_	_
+30	՝	՝	PUNCT	PUNCT	_	27	punct	_	_
+31	ապրեցո	ապրեցո	VERB	VERB	_	4	ccomp	_	highlight=red
+32	զ	զ	ADP	ADP	_	33	case	_	_
+33	քեզ	քեզ	PRON	PRON	_	31	obj	_	highlight=green|span=2
+34	թե	թե	SCONJ	SCONJ	_	35	mark	_	_
+35	որդի	որդի	NOUN	NOUN	_	39	advcl	_	_
+36	ես	ես	AUX	AUX	_	35	cop	_	_
+37	Աստուածոյ	Աստուածոյ	NOUN	NOUN	_	35	nmod	_	_
+38	՝	՝	PUNCT	PUNCT	_	39	punct	_	_
+39	էջ	էջ	VERB	VERB	_	31	ccomp	_	highlight=green|span=8
+40	ի	ի	ADP	ADP	_	41	case	_	_
+41	խաչէ	խաչէ	NOUN	NOUN	_	39	obl	_	_
+42	դ	դ	DET	DET	_	41	det	_	_
+43	:	:	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: xcl_caval-ud-dev.conllu · this verb has L=1, R=3 (mean span = 3.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Պատասխանի ետ Յիսուս եւ ասէ ց նոսա ՝ ամէն ամէն ասեմ ձեզ ՝ ոչ կարէ որդի մարդոյ առնել յ անձնէ եւ ոչ ինչ . եթե ոչ տեսանիցէ զ հայր ն զի առնէ . զ նոյն եւ որդի նմին նման գործէ : Զի հայր սիրէ զ որդի . եւ զ ամենայն ինչ ցուցանէ նմա զ որ ինքն առնէ :
+1	Պատասխանի	Պատասխանի	NOUN	NOUN	_	2	obj	_	_
+2	ետ	ետ	VERB	VERB	_	0	root	_	_
+3	Յիսուս	Յիսուս	PROPN	PROPN	_	2	nsubj	_	_
+4	եւ	եւ	CCONJ	CCONJ	_	5	cc	_	_
+5	ասէ	ասէ	VERB	VERB	_	2	conj	_	_
+6	ց	ց	ADP	ADP	_	7	case	_	_
+7	նոսա	նոսա	PRON	PRON	_	5	obl:arg	_	_
+8	՝	՝	PUNCT	PUNCT	_	11	punct	_	_
+9	ամէն	ամէն	ADV	ADV	_	11	advmod	_	highlight=green|span=2
+10	ամէն	ամէն	ADV	ADV	_	9	compound:redup	_	_
+11	ասեմ	ասեմ	VERB	VERB	_	5	ccomp	_	highlight=red
+12	ձեզ	ձեզ	PRON	PRON	_	11	iobj	_	highlight=green|span=1
+13	՝	՝	PUNCT	PUNCT	_	15	punct	_	_
+14	ոչ	ոչ	PART	PART	_	15	advmod	_	_
+15	կարէ	կարէ	VERB	VERB	_	11	ccomp	_	_
+16	որդի	որդի	NOUN	NOUN	_	15	nsubj	_	_
+17	մարդոյ	մարդոյ	NOUN	NOUN	_	16	nmod	_	_
+18	առնել	առնել	VERB	VERB	_	15	xcomp	_	_
+19	յ	յ	ADP	ADP	_	20	case	_	_
+20	անձնէ	անձնէ	NOUN	NOUN	_	18	obl	_	_
+21	եւ	եւ	CCONJ	CCONJ	_	23	cc	_	_
+22	ոչ	ոչ	PART	PART	_	23	advmod	_	_
+23	ինչ	ինչ	PRON	PRON	_	18	obj	_	_
+24	.	.	PUNCT	PUNCT	_	27	punct	_	_
+25	եթե	եթե	SCONJ	SCONJ	_	27	mark	_	_
+26	ոչ	ոչ	PART	PART	_	27	advmod	_	_
+27	տեսանիցէ	տեսանիցէ	VERB	VERB	_	15	advcl	_	highlight=green|span=8
+28	զ	զ	ADP	ADP	_	29	case	_	_
+29	հայր	հայր	NOUN	NOUN	_	27	obj	_	_
+30	ն	ն	DET	DET	_	29	det	_	_
+31	զի	զի	SCONJ	SCONJ	_	32	mark	_	_
+32	առնէ	առնէ	VERB	VERB	_	27	ccomp	_	_
+33	.	.	PUNCT	PUNCT	_	40	punct	_	_
+34	զ	զ	ADP	ADP	_	35	case	_	_
+35	նոյն	նոյն	PRON	PRON	_	40	obj	_	_
+36	եւ	եւ	CCONJ	CCONJ	_	37	cc	_	_
+37	որդի	որդի	NOUN	NOUN	_	40	nsubj	_	_
+38	նմին	նմին	PRON	PRON	_	39	iobj	_	_
+39	նման	նման	ADJ	ADJ	_	35	acl	_	_
+40	գործէ	գործէ	VERB	VERB	_	15	conj	_	highlight=green|span=3
+41	:	:	PUNCT	PUNCT	_	44	punct	_	_
+42	Զի	Զի	SCONJ	SCONJ	_	44	mark	_	_
+43	հայր	հայր	NOUN	NOUN	_	44	nsubj	_	_
+44	սիրէ	սիրէ	VERB	VERB	_	40	advcl	_	_
+45	զ	զ	ADP	ADP	_	46	case	_	_
+46	որդի	որդի	NOUN	NOUN	_	44	obj	_	_
+47	.	.	PUNCT	PUNCT	_	52	punct	_	_
+48	եւ	եւ	CCONJ	CCONJ	_	52	cc	_	_
+49	զ	զ	ADP	ADP	_	51	case	_	_
+50	ամենայն	ամենայն	DET	DET	_	51	det	_	_
+51	ինչ	ինչ	PRON	PRON	_	52	obj	_	_
+52	ցուցանէ	ցուցանէ	VERB	VERB	_	44	conj	_	_
+53	նմա	նմա	PRON	PRON	_	52	iobj	_	_
+54	զ	զ	ADP	ADP	_	55	case	_	_
+55	որ	որ	PRON	PRON	_	57	obj	_	_
+56	ինքն	ինքն	PRON	PRON	_	57	nsubj	_	_
+57	առնէ	առնէ	VERB	VERB	_	51	acl	_	_
+58	:	:	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: xcl_caval-ud-train.conllu · this verb has L=1, R=1 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Եւ ահա մի ոմն յ այնցանէ որ եին ընդ Յիսուսի ձգեաց զ ձեռն եւ եհան զ սուր իւր ՝ եւ եհար զ ծառայ քահանայապետի ն ՝ եւ ի բաց եհան զ ունկն նորա :
+1	Եւ	Եւ	CCONJ	CCONJ	_	11	cc	_	_
+2	ահա	ահա	INTJ	INTJ	_	11	discourse	_	_
+3	մի	մի	NUM	NUM	_	11	nsubj	_	_
+4	ոմն	ոմն	DET	DET	_	3	det	_	_
+5	յ	յ	ADP	ADP	_	6	case	_	_
+6	այնցանէ	այնցանէ	PRON	PRON	_	3	nmod	_	_
+7	որ	որ	PRON	PRON	_	10	nsubj	_	_
+8	եին	եին	AUX	AUX	_	10	cop	_	_
+9	ընդ	ընդ	ADP	ADP	_	10	case	_	_
+10	Յիսուսի	Յիսուսի	PROPN	PROPN	_	6	nmod	_	_
+11	ձգեաց	ձգեաց	VERB	VERB	_	0	root	_	_
+12	զ	զ	ADP	ADP	_	13	case	_	_
+13	ձեռն	ձեռն	NOUN	NOUN	_	11	obj	_	_
+14	եւ	եւ	CCONJ	CCONJ	_	15	cc	_	_
+15	եհան	եհան	VERB	VERB	_	11	conj	_	_
+16	զ	զ	ADP	ADP	_	17	case	_	_
+17	սուր	սուր	ADJ	ADJ	_	15	obj	_	_
+18	իւր	իւր	PRON	PRON	_	17	nmod	_	_
+19	՝	՝	PUNCT	PUNCT	_	21	punct	_	_
+20	եւ	եւ	CCONJ	CCONJ	_	21	cc	_	_
+21	եհար	եհար	VERB	VERB	_	11	conj	_	_
+22	զ	զ	ADP	ADP	_	23	case	_	_
+23	ծառայ	ծառայ	NOUN	NOUN	_	21	obj	_	_
+24	քահանայապետի	քահանայապետի	NOUN	NOUN	_	23	nmod	_	_
+25	ն	ն	DET	DET	_	24	det	_	_
+26	՝	՝	PUNCT	PUNCT	_	30	punct	_	_
+27	եւ	եւ	CCONJ	CCONJ	_	30	cc	_	_
+28	ի	ի	ADP	ADP	_	30	advmod	_	highlight=green|span=2
+29	բաց	բաց	ADV	ADV	_	28	fixed	_	_
+30	եհան	եհան	VERB	VERB	_	11	conj	_	highlight=red
+31	զ	զ	ADP	ADP	_	32	case	_	_
+32	ունկն	ունկն	NOUN	NOUN	_	30	obj	_	highlight=green|span=3
+33	նորա	նորա	PRON	PRON	_	32	nmod	_	_
+34	:	:	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: xcl_caval-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Պատասխանի ետ նոցա եւ ասէ ՝ երթայք պատմեցէք Յովհաննու զ որ տեսէք դ եւ լուայք ՝ զի կոյրք տեսանեն ՝ եւ կաղք գնան ՝ բորոտք սրբին ՝ խուլք լսեն ՝ մեռեալք յառնեն ՝ աղքատք աւետարանին ՝
+1	Պատասխանի	Պատասխանի	NOUN	NOUN	_	2	obj	_	_
+2	ետ	ետ	VERB	VERB	_	0	root	_	_
+3	նոցա	նոցա	PRON	PRON	_	2	iobj	_	_
+4	եւ	եւ	CCONJ	CCONJ	_	5	cc	_	_
+5	ասէ	ասէ	VERB	VERB	_	2	conj	_	_
+6	՝	՝	PUNCT	PUNCT	_	7	punct	_	_
+7	երթայք	երթայք	VERB	VERB	_	5	ccomp	_	_
+8	պատմեցէք	պատմեցէք	VERB	VERB	_	7	parataxis	_	_
+9	Յովհաննու	Յովհաննու	PROPN	PROPN	_	8	iobj	_	_
+10	զ	զ	ADP	ADP	_	11	case	_	_
+11	որ	որ	PRON	PRON	_	12	obj	_	_
+12	տեսէք	տեսէք	VERB	VERB	_	8	ccomp	_	_
+13	դ	դ	DET	DET	_	12	det	_	_
+14	եւ	եւ	CCONJ	CCONJ	_	15	cc	_	_
+15	լուայք	լուայք	VERB	VERB	_	12	conj	_	_
+16	՝	՝	PUNCT	PUNCT	_	19	punct	_	_
+17	զի	զի	SCONJ	SCONJ	_	19	mark	_	_
+18	կոյրք	կոյրք	ADJ	ADJ	_	19	nsubj	_	_
+19	տեսանեն	տեսանեն	VERB	VERB	_	12	advcl	_	_
+20	՝	՝	PUNCT	PUNCT	_	23	punct	_	_
+21	եւ	եւ	CCONJ	CCONJ	_	23	cc	_	_
+22	կաղք	կաղք	ADJ	ADJ	_	23	nsubj	_	_
+23	գնան	գնան	VERB	VERB	_	19	conj	_	_
+24	՝	՝	PUNCT	PUNCT	_	26	punct	_	_
+25	բորոտք	բորոտք	ADJ	ADJ	_	26	nsubj	_	highlight=green|span=1
+26	սրբին	սրբին	VERB	VERB	_	19	conj	_	highlight=red
+27	՝	՝	PUNCT	PUNCT	_	29	punct	_	_
+28	խուլք	խուլք	NOUN	NOUN	_	29	nsubj	_	_
+29	լսեն	լսեն	VERB	VERB	_	19	conj	_	_
+30	՝	՝	PUNCT	PUNCT	_	32	punct	_	_
+31	մեռեալք	մեռեալք	VERB	VERB	_	32	nsubj	_	_
+32	յառնեն	յառնեն	VERB	VERB	_	19	conj	_	_
+33	՝	՝	PUNCT	PUNCT	_	35	punct	_	_
+34	աղքատք	աղքատք	ADJ	ADJ	_	35	nsubj	_	_
+35	աւետարանին	աւետարանին	VERB	VERB	_	19	conj	_	_
+36	՝	՝	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: xcl_caval-ud-train.conllu · this verb has L=1, R=0 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Որոց ի մի վայր հասելոց բաւական էր տեսիլ ն միայն , եւ որ ի նոցայ ն պահպանակաց եւ զինուց փայլմունք եւ շողիւնք զ թշնամիս ն արտահալածել :
+1	Որոց	Որոց	PRON	PRON	_	8	nmod	_	_
+2	ի	ի	ADP	ADP	_	4	case	_	_
+3	մի	մի	NUM	NUM	_	4	nummod	_	_
+4	վայր	վայր	NOUN	NOUN	_	5	obl	_	_
+5	հասելոց	հասելոց	VERB	VERB	_	1	acl	_	_
+6	բաւական	բաւական	ADJ	ADJ	_	0	root	_	_
+7	էր	էր	AUX	AUX	_	6	cop	_	_
+8	տեսիլ	տեսիլ	NOUN	NOUN	_	6	nsubj	_	_
+9	ն	ն	DET	DET	_	8	det	_	_
+10	միայն	միայն	ADJ	ADJ	_	8	amod	_	_
+11	,	,	PUNCT	PUNCT	_	20	punct	_	_
+12	եւ	եւ	CCONJ	CCONJ	_	20	cc	_	_
+13	որ	որ	PRON	PRON	_	20	nsubj	_	_
+14	ի	ի	ADP	ADP	_	17	case	_	_
+15	նոցայ	նոցայ	PRON	PRON	_	17	nmod	_	_
+16	ն	ն	DET	DET	_	15	det	_	_
+17	պահպանակաց	պահպանակաց	NOUN	NOUN	_	20	nmod	_	_
+18	եւ	եւ	CCONJ	CCONJ	_	19	cc	_	_
+19	զինուց	զինուց	NOUN	NOUN	_	17	conj	_	_
+20	փայլմունք	փայլմունք	NOUN	NOUN	_	8	acl	_	_
+21	եւ	եւ	CCONJ	CCONJ	_	22	cc	_	_
+22	շողիւնք	շողիւնք	NOUN	NOUN	_	20	conj	_	_
+23	զ	զ	ADP	ADP	_	24	case	_	_
+24	թշնամիս	թշնամիս	NOUN	NOUN	_	26	obj	_	highlight=green|span=3
+25	ն	ն	DET	DET	_	24	det	_	_
+26	արտահալածել	արտահալածել	VERB	VERB	_	6	xcomp	_	highlight=red
+27	:	:	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: xcl_caval-ud-train.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Եւ ածեն զ նա ի Գողգոթա տեղի մի ՝ որ թարգմանի տեղի կառափելոյ :
+1	Եւ	Եւ	CCONJ	CCONJ	_	2	cc	_	_
+2	ածեն	ածեն	VERB	VERB	_	0	root	_	_
+3	զ	զ	ADP	ADP	_	4	case	_	_
+4	նա	նա	PRON	PRON	_	2	obj	_	_
+5	ի	ի	ADP	ADP	_	6	case	_	_
+6	Գողգոթա	Գողգոթա	PROPN	PROPN	_	2	obl	_	_
+7	տեղի	տեղի	NOUN	NOUN	_	6	appos	_	_
+8	մի	մի	DET	DET	_	7	det	_	_
+9	՝	՝	PUNCT	PUNCT	_	11	punct	_	_
+10	որ	որ	PRON	PRON	_	11	nsubj:pass	_	highlight=green|span=1
+11	թարգմանի	թարգմանի	VERB	VERB	_	7	acl	_	highlight=red
+12	տեղի	տեղի	NOUN	NOUN	_	11	xcomp	_	highlight=green|span=2
+13	կառափելոյ	կառափելոյ	VERB	VERB	_	12	amod	_	_
+14	:	:	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: xcl_caval-ud-test.conllu · this verb has L=1, R=2 (mean span = 5.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ոչ ոք կարէ գալ առ իս . եթե ոչ հայր ն որ զ իս առաքեաց ձգեսցէ զ նա ՝ եւ ես յարուցից զ նա յ աւուր ն յետնում :
+1	ոչ	ոչ	PART	PART	_	2	advmod	_	_
+2	ոք	ոք	PRON	PRON	_	3	nsubj	_	highlight=green|span=2
+3	կարէ	կարէ	VERB	VERB	_	0	root	_	highlight=red
+4	գալ	գալ	VERB	VERB	_	3	xcomp	_	highlight=green|span=3
+5	առ	առ	ADP	ADP	_	6	case	_	_
+6	իս	իս	PRON	PRON	_	4	obl	_	_
+7	.	.	PUNCT	PUNCT	_	16	punct	_	_
+8	եթե	եթե	SCONJ	SCONJ	_	16	mark	_	_
+9	ոչ	ոչ	PART	PART	_	16	advmod	_	_
+10	հայր	հայր	NOUN	NOUN	_	16	nsubj	_	_
+11	ն	ն	DET	DET	_	10	det	_	_
+12	որ	որ	PRON	PRON	_	15	nsubj	_	_
+13	զ	զ	ADP	ADP	_	14	case	_	_
+14	իս	իս	PRON	PRON	_	15	obj	_	_
+15	առաքեաց	առաքեաց	VERB	VERB	_	10	acl	_	_
+16	ձգեսցէ	ձգեսցէ	VERB	VERB	_	3	advcl	_	highlight=green|span=11
+17	զ	զ	ADP	ADP	_	18	case	_	_
+18	նա	նա	PRON	PRON	_	16	obj	_	_
+19	՝	՝	PUNCT	PUNCT	_	22	punct	_	_
+20	եւ	եւ	CCONJ	CCONJ	_	22	cc	_	_
+21	ես	ես	PRON	PRON	_	22	nsubj:caus	_	_
+22	յարուցից	յարուցից	VERB	VERB	_	3	conj	_	_
+23	զ	զ	ADP	ADP	_	24	case	_	_
+24	նա	նա	PRON	PRON	_	22	obj	_	_
+25	յ	յ	ADP	ADP	_	26	case	_	_
+26	աւուր	աւուր	NOUN	NOUN	_	22	obl	_	_
+27	ն	ն	DET	DET	_	26	det	_	_
+28	յետնում	յետնում	ADJ	ADJ	_	26	amod	_	_
+29	:	:	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: xcl_caval-ud-train.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Եւ լու ի լու ամենայն ժողովրդեան ն . ասէ ց աշակերտս ն ՝ զգոյշ լերուք ի դպրաց ն որ կամին պատմուճանաւք շրջել ՝ եւ սիրեն ողջոյնս ի հրապարակս . եւ զ նախաթոռս ի ժողովուրդս , եւ զ բարձերէցս յ նթրիս : Որ ուտեն զ տունս այրեաց . եւ պատճառանաւք յերկարեն զ աղաւթս ,
+1	Եւ	Եւ	CCONJ	CCONJ	_	9	cc	_	_
+2	լու	լու	NOUN	NOUN	_	9	obl	_	_
+3	ի	ի	ADP	ADP	_	4	case	_	_
+4	լու	լու	NOUN	NOUN	_	2	nmod	_	_
+5	ամենայն	ամենայն	DET	DET	_	6	det	_	_
+6	ժողովրդեան	ժողովրդեան	NOUN	NOUN	_	2	nmod	_	_
+7	ն	ն	DET	DET	_	6	det	_	_
+8	.	.	PUNCT	PUNCT	_	2	punct	_	_
+9	ասէ	ասէ	VERB	VERB	_	0	root	_	_
+10	ց	ց	ADP	ADP	_	11	case	_	_
+11	աշակերտս	աշակերտս	NOUN	NOUN	_	9	obl:arg	_	_
+12	ն	ն	DET	DET	_	11	det	_	_
+13	՝	՝	PUNCT	PUNCT	_	14	punct	_	_
+14	զգոյշ	զգոյշ	ADJ	ADJ	_	9	ccomp	_	_
+15	լերուք	լերուք	AUX	AUX	_	14	cop	_	_
+16	ի	ի	ADP	ADP	_	17	case	_	_
+17	դպրաց	դպրաց	NOUN	NOUN	_	14	nmod	_	_
+18	ն	ն	DET	DET	_	17	det	_	_
+19	որ	որ	PRON	PRON	_	20	nsubj	_	_
+20	կամին	կամին	VERB	VERB	_	17	acl	_	_
+21	պատմուճանաւք	պատմուճանաւք	NOUN	NOUN	_	22	obl	_	_
+22	շրջել	շրջել	VERB	VERB	_	20	xcomp	_	_
+23	՝	՝	PUNCT	PUNCT	_	25	punct	_	_
+24	եւ	եւ	CCONJ	CCONJ	_	25	cc	_	_
+25	սիրեն	սիրեն	VERB	VERB	_	20	conj	_	_
+26	ողջոյնս	ողջոյնս	NOUN	NOUN	_	25	obj	_	_
+27	ի	ի	ADP	ADP	_	28	case	_	_
+28	հրապարակս	հրապարակս	NOUN	NOUN	_	26	nmod	_	_
+29	.	.	PUNCT	PUNCT	_	32	punct	_	_
+30	եւ	եւ	CCONJ	CCONJ	_	32	cc	_	_
+31	զ	զ	ADP	ADP	_	32	case	_	_
+32	նախաթոռս	նախաթոռս	NOUN	NOUN	_	26	conj	_	_
+33	ի	ի	ADP	ADP	_	34	case	_	_
+34	ժողովուրդս	ժողովուրդս	NOUN	NOUN	_	32	nmod	_	_
+35	,	,	PUNCT	PUNCT	_	38	punct	_	_
+36	եւ	եւ	CCONJ	CCONJ	_	38	cc	_	_
+37	զ	զ	ADP	ADP	_	38	case	_	_
+38	բարձերէցս	բարձերէցս	ADJ	ADJ	_	26	conj	_	_
+39	յ	յ	ADP	ADP	_	40	case	_	_
+40	նթրիս	նթրիս	NOUN	NOUN	_	38	nmod	_	_
+41	:	:	PUNCT	PUNCT	_	43	punct	_	_
+42	Որ	Որ	PRON	PRON	_	43	nsubj	_	_
+43	ուտեն	ուտեն	VERB	VERB	_	17	acl	_	_
+44	զ	զ	ADP	ADP	_	45	case	_	_
+45	տունս	տունս	NOUN	NOUN	_	43	obj	_	_
+46	այրեաց	այրեաց	NOUN	NOUN	_	45	nmod	_	_
+47	.	.	PUNCT	PUNCT	_	50	punct	_	_
+48	եւ	եւ	CCONJ	CCONJ	_	50	cc	_	_
+49	պատճառանաւք	պատճառանաւք	NOUN	NOUN	_	50	obl	_	highlight=green|span=1
+50	յերկարեն	յերկարեն	VERB	VERB	_	43	conj	_	highlight=red
+51	զ	զ	ADP	ADP	_	52	case	_	_
+52	աղաւթս	աղաւթս	NOUN	NOUN	_	50	obj	_	highlight=green|span=2
+53	,	,	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: xcl_caval-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = եւ ի սերմանել ն իւրում . էր որ անկաւ առ ճանապարհաւ ՝ եւ եղեւ կոխան . եւ թռչունք երկնից կերան զ նա :
+1	եւ	եւ	CCONJ	CCONJ	_	7	cc	_	_
+2	ի	ի	ADP	ADP	_	3	case	_	_
+3	սերմանել	սերմանել	VERB	VERB	_	7	obl	_	_
+4	ն	ն	DET	DET	_	3	det	_	_
+5	իւրում	իւրում	PRON	PRON	_	3	nmod	_	_
+6	.	.	PUNCT	PUNCT	_	3	punct	_	_
+7	էր	էր	AUX	AUX	_	0	root	_	_
+8	որ	որ	PRON	PRON	_	9	nsubj	_	highlight=green|span=1
+9	անկաւ	անկաւ	VERB	VERB	_	7	csubj	_	highlight=red
+10	առ	առ	ADP	ADP	_	11	case	_	_
+11	ճանապարհաւ	ճանապարհաւ	NOUN	NOUN	_	9	obl	_	highlight=green|span=2
+12	՝	՝	PUNCT	PUNCT	_	15	punct	_	_
+13	եւ	եւ	CCONJ	CCONJ	_	15	cc	_	_
+14	եղեւ	եղեւ	AUX	AUX	_	15	cop	_	_
+15	կոխան	կոխան	ADJ	ADJ	_	9	conj	_	_
+16	.	.	PUNCT	PUNCT	_	20	punct	_	_
+17	եւ	եւ	CCONJ	CCONJ	_	20	cc	_	_
+18	թռչունք	թռչունք	NOUN	NOUN	_	20	nsubj	_	_
+19	երկնից	երկնից	NOUN	NOUN	_	18	nmod	_	_
+20	կերան	կերան	VERB	VERB	_	9	conj	_	_
+21	զ	զ	ADP	ADP	_	22	case	_	_
+22	նա	նա	PRON	PRON	_	20	obj	_	_
+23	:	:	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: xcl_caval-ud-train.conllu · this verb has L=1, R=2 (mean span = 3.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ասէ ՝ այր ոմն ազնուական գնաց յ աշխարհ հեռի ՝ առնուլ իւր թագաւորութիւն եւ դառնալ :
+1	Ասէ	Ասէ	VERB	VERB	_	0	root	_	_
+2	՝	՝	PUNCT	PUNCT	_	6	punct	_	_
+3	այր	այր	NOUN	NOUN	_	6	nsubj	_	highlight=green|span=3
+4	ոմն	ոմն	DET	DET	_	3	det	_	_
+5	ազնուական	ազնուական	ADJ	ADJ	_	3	amod	_	_
+6	գնաց	գնաց	VERB	VERB	_	1	ccomp	_	highlight=red
+7	յ	յ	ADP	ADP	_	8	case	_	_
+8	աշխարհ	աշխարհ	NOUN	NOUN	_	6	obl	_	highlight=green|span=3
+9	հեռի	հեռի	ADJ	ADJ	_	8	amod	_	_
+10	՝	՝	PUNCT	PUNCT	_	11	punct	_	_
+11	առնուլ	առնուլ	VERB	VERB	_	6	xcomp	_	highlight=green|span=5
+12	իւր	իւր	PRON	PRON	_	11	iobj	_	_
+13	թագաւորութիւն	թագաւորութիւն	NOUN	NOUN	_	11	obj	_	_
+14	եւ	եւ	CCONJ	CCONJ	_	15	cc	_	_
+15	դառնալ	դառնալ	VERB	VERB	_	11	conj	_	_
+16	:	:	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: xcl_caval-ud-train.conllu · this verb has L=1, R=2 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Մի փոխիցիք տանէ ի տուն :
+1	Մի	Մի	PART	PART	_	2	advmod	_	highlight=green|span=1
+2	փոխիցիք	փոխիցիք	VERB	VERB	_	0	root	_	highlight=red
+3	տանէ	տանէ	NOUN	NOUN	_	2	obl	_	highlight=green|span=1
+4	ի	ի	ADP	ADP	_	5	case	_	_
+5	տուն	տուն	NOUN	NOUN	_	2	obl	_	highlight=green|span=2
+6	:	:	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: xcl_caval-ud-dev.conllu · this verb has L=1, R=1 (mean span = 3.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Եւ խփեալ զ գիրս ն ետ ց պաշտաւնեայ ն . եւ նստաւ : Եւ ամենեցուն որ ի ժողովրդեան ն եին աչք ի նա հայեին :
+1	Եւ	Եւ	CCONJ	CCONJ	_	6	cc	_	_
+2	խփեալ	խփեալ	VERB	VERB	_	6	advcl	_	highlight=green|span=4
+3	զ	զ	ADP	ADP	_	4	case	_	_
+4	գիրս	գիրս	NOUN	NOUN	_	2	obj	_	_
+5	ն	ն	DET	DET	_	4	det	_	_
+6	ետ	ետ	VERB	VERB	_	0	root	_	highlight=red
+7	ց	ց	ADP	ADP	_	8	case	_	_
+8	պաշտաւնեայ	պաշտաւնեայ	NOUN	NOUN	_	6	obl:arg	_	highlight=green|span=3
+9	ն	ն	DET	DET	_	8	det	_	_
+10	.	.	PUNCT	PUNCT	_	12	punct	_	_
+11	եւ	եւ	CCONJ	CCONJ	_	12	cc	_	_
+12	նստաւ	նստաւ	VERB	VERB	_	6	conj	_	_
+13	:	:	PUNCT	PUNCT	_	24	punct	_	_
+14	Եւ	Եւ	CCONJ	CCONJ	_	24	cc	_	_
+15	ամենեցուն	ամենեցուն	PRON	PRON	_	21	nmod	_	_
+16	որ	որ	PRON	PRON	_	20	nsubj	_	_
+17	ի	ի	ADP	ADP	_	18	case	_	_
+18	ժողովրդեան	ժողովրդեան	NOUN	NOUN	_	20	obl	_	_
+19	ն	ն	DET	DET	_	18	det	_	_
+20	եին	եին	AUX	AUX	_	15	acl	_	_
+21	աչք	աչք	NOUN	NOUN	_	24	nsubj	_	_
+22	ի	ի	ADP	ADP	_	23	case	_	_
+23	նա	նա	PRON	PRON	_	24	obl	_	_
+24	հայեին	հայեին	VERB	VERB	_	6	conj	_	_
+25	:	:	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: xcl_caval-ud-train.conllu · this verb has L=1, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Եւ մինչդեռ խաւսէր , ահաւասիկ ամբոխ ՝ եւ որ կոչէր ն Յուդա մի յ երկոտասանից ն առաջնորդ էր նոցա :
+1	Եւ	Եւ	CCONJ	CCONJ	_	5	cc	_	_
+2	մինչդեռ	մինչդեռ	SCONJ	SCONJ	_	3	mark	_	_
+3	խաւսէր	խաւսէր	VERB	VERB	_	5	advcl	_	_
+4	,	,	PUNCT	PUNCT	_	3	punct	_	_
+5	ահաւասիկ	ահաւասիկ	INTJ	INTJ	_	0	root	_	_
+6	ամբոխ	ամբոխ	NOUN	NOUN	_	5	xcomp	_	_
+7	՝	՝	PUNCT	PUNCT	_	10	punct	_	_
+8	եւ	եւ	CCONJ	CCONJ	_	10	cc	_	_
+9	որ	որ	PRON	PRON	_	10	nsubj	_	highlight=green|span=1
+10	կոչէր	կոչէր	VERB	VERB	_	17	csubj	_	highlight=red
+11	ն	ն	DET	DET	_	10	det	_	_
+12	Յուդա	Յուդա	PROPN	PROPN	_	10	xcomp	_	highlight=green|span=5
+13	մի	մի	NUM	NUM	_	12	appos	_	_
+14	յ	յ	ADP	ADP	_	15	case	_	_
+15	երկոտասանից	երկոտասանից	NUM	NUM	_	13	nmod	_	_
+16	ն	ն	DET	DET	_	15	det	_	_
+17	առաջնորդ	առաջնորդ	VERB	VERB	_	5	conj	_	_
+18	էր	էր	AUX	AUX	_	17	cop	_	_
+19	նոցա	նոցա	PRON	PRON	_	17	iobj	_	_
+20	:	:	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: xcl_caval-ud-train.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ղազարոս մեռաւ ՝ եւ ես ուրախ եմ վասն ձեր ՝ զի դուք հաւատասջիք ինձ . զի ես չ եի անդ ՝ բայց արդ եկայք երթիցուք առ նա :
+1	Ղազարոս	Ղազարոս	PROPN	PROPN	_	2	nsubj	_	_
+2	մեռաւ	մեռաւ	VERB	VERB	_	0	root	_	_
+3	՝	՝	PUNCT	PUNCT	_	6	punct	_	_
+4	եւ	եւ	CCONJ	CCONJ	_	6	cc	_	_
+5	ես	ես	PRON	PRON	_	6	nsubj	_	_
+6	ուրախ	ուրախ	ADJ	ADJ	_	2	conj	_	_
+7	եմ	եմ	AUX	AUX	_	6	cop	_	_
+8	վասն	վասն	ADP	ADP	_	9	case	_	_
+9	ձեր	ձեր	PRON	PRON	_	6	obl	_	_
+10	՝	՝	PUNCT	PUNCT	_	13	punct	_	_
+11	զի	զի	SCONJ	SCONJ	_	13	mark	_	_
+12	դուք	դուք	PRON	PRON	_	13	nsubj	_	_
+13	հաւատասջիք	հաւատասջիք	VERB	VERB	_	6	advcl	_	_
+14	ինձ	ինձ	PRON	PRON	_	13	iobj	_	_
+15	.	.	PUNCT	PUNCT	_	20	punct	_	_
+16	զի	զի	SCONJ	SCONJ	_	20	mark	_	_
+17	ես	ես	PRON	PRON	_	20	nsubj	_	_
+18	չ	չ	PART	PART	_	20	advmod	_	_
+19	եի	եի	AUX	AUX	_	20	cop	_	_
+20	անդ	անդ	ADV	ADV	_	13	advcl	_	_
+21	՝	՝	PUNCT	PUNCT	_	24	punct	_	_
+22	բայց	բայց	CCONJ	CCONJ	_	24	cc	_	_
+23	արդ	արդ	ADV	ADV	_	24	advmod	_	highlight=green|span=1
+24	եկայք	եկայք	VERB	VERB	_	2	conj	_	highlight=red
+25	երթիցուք	երթիցուք	VERB	VERB	_	24	parataxis	_	_
+26	առ	առ	ADP	ADP	_	27	case	_	_
+27	նա	նա	PRON	PRON	_	25	obl	_	_
+28	:	:	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

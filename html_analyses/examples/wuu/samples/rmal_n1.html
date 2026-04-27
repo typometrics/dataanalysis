@@ -1,0 +1,303 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Wu — RMAL_1</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Wu examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Wu <small style="color:#999;font-weight:normal">(wuu)</small> — RMAL<sub>1</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>1</b> right dependents (left side may be anything).</p><p><b>RMAL<sub>1</sub> = 1.889</b> &nbsp; <span style="color:#666">(902 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>right</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: wuu_shud-ud-train.conllu · this verb has L=0, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 是 辣海 接 撒拧 电话 。
+1	是	是	VERB	VERB	_	0	root	_	_
+2	辣海	辣海	VERB	VERB	_	1	xcomp	_	_
+3	接	接	VERB	VERB	_	2	xcomp	_	highlight=red
+4	撒拧	撒拧	PRON	PRON	_	5	det	_	_
+5	电话	电话	NOUN	NOUN	_	3	obj	_	highlight=green|span=2
+6	。	。	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: wuu_shud-ud-test.conllu · this verb has L=0, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 有 啥 事体 伐 ， 前头 到 广场 去 溜 了 一 圈 。
+1	有	有	VERB	VERB	_	10	parataxis	_	highlight=red
+2	啥	啥	ADJ	ADJ	_	3	amod	_	_
+3	事体	事体	NOUN	NOUN	_	1	obj	_	highlight=green|span=2
+4	伐	伐	PART	PART	_	1	discourse	_	_
+5	，	，	PUNCT	PUNCT	_	1	punct	_	_
+6	前头	前头	NOUN	NOUN	_	10	nsubj	_	_
+7	到	到	VERB	VERB	_	10	advcl	_	_
+8	广场	广场	NOUN	NOUN	_	7	obj	_	_
+9	去	去	ADP	ADP	_	7	obl	_	_
+10	溜	溜	VERB	VERB	_	0	root	_	_
+11	了	了	AUX	AUX	_	10	aux	_	_
+12	一	一	NUM	NUM	_	13	nummod	_	_
+13	圈	圈	NOUN	NOUN	_	10	obj	_	_
+14	。	。	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: wuu_shud-ud-train.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 吾 辣 去 乌市 呃 路哴 ， 明朝 去 吐鲁番 。
+1	吾	吾	PRON	PRON	_	9	nsubj	_	_
+2	辣	辣	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+3	去	去	VERB	VERB	_	6	acl	_	highlight=red
+4	乌市	乌市	PROPN	PROPN	_	3	obj	_	highlight=green|span=1
+5	呃	呃	SCONJ	SCONJ	_	3	mark	_	_
+6	路哴	路哴	NOUN	NOUN	_	9	obl	_	_
+7	，	，	PUNCT	PUNCT	_	6	punct	_	_
+8	明朝	明朝	NOUN	NOUN	_	9	nmod	_	_
+9	去	去	VERB	VERB	_	0	root	_	_
+10	吐鲁番	吐鲁番	PROPN	PROPN	_	9	obj	_	_
+11	。	。	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: wuu_shud-ud-train.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 侬 晓得 侬 搿能葛 讲 ， 吾 是 又 感动 又 怕 ， 吾 讲 真呃 。
+1	侬	侬	PRON	PRON	_	2	nsubj	_	_
+2	晓得	晓得	VERB	VERB	_	0	root	_	_
+3	侬	侬	PRON	PRON	_	5	nsubj	_	_
+4	搿能葛	搿能葛	ADV	ADV	_	5	advmod	_	_
+5	讲	讲	VERB	VERB	_	2	ccomp	_	_
+6	，	，	PUNCT	PUNCT	_	2	punct	_	_
+7	吾	吾	PRON	PRON	_	12	nsubj	_	_
+8	是	是	AUX	AUX	_	10	cop	_	_
+9	又	又	SCONJ	SCONJ	_	10	mark	_	_
+10	感动	感动	ADJ	ADJ	_	12	advcl	_	_
+11	又	又	SCONJ	SCONJ	_	12	mark	_	_
+12	怕	怕	VERB	VERB	_	2	parataxis	_	_
+13	，	，	PUNCT	PUNCT	_	12	punct	_	_
+14	吾	吾	PRON	PRON	_	15	nsubj	_	highlight=green|span=1
+15	讲	讲	VERB	VERB	_	2	parataxis	_	highlight=red
+16	真呃	真呃	ADJ	ADJ	_	15	xcomp	_	highlight=green|span=1
+17	。	。	PUNCT	PUNCT	_	15	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: wuu_shud-ud-train.conllu · this verb has L=3, R=1 (mean span = 1.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 那 一定 要 拿 安全 放 辣 头一 。
+1	那	那	PRON	PRON	_	6	nsubj	_	highlight=green|span=1
+2	一定	一定	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+3	要	要	AUX	AUX	_	6	aux	_	_
+4	拿	拿	ADP	ADP	_	5	case	_	_
+5	安全	安全	NOUN	NOUN	_	6	obl	_	highlight=green|span=2
+6	放	放	VERB	VERB	_	0	root	_	highlight=red
+7	辣	辣	VERB	VERB	_	6	mark	_	_
+8	头一	头一	NUM	NUM	_	6	obj	_	highlight=green|span=1
+9	。	。	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: wuu_shud-ud-train.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 实在 寻 伐 着 吗 ？
+1	实在	实在	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+2	寻	寻	VERB	VERB	_	0	root	_	highlight=red
+3	伐	伐	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+4	着	着	AUX	AUX	_	2	aux	_	_
+5	吗	吗	PART	PART	_	2	discourse	_	_
+6	？	？	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: wuu_shud-ud-test.conllu · this verb has L=1, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 段 呃 电话 告诉 吾 。
+1	段	段	PROPN	PROPN	_	3	nmod	_	_
+2	呃	呃	PART	PART	_	1	case	_	_
+3	电话	电话	NOUN	NOUN	_	4	nsubj	_	highlight=green|span=3
+4	告诉	告诉	VERB	VERB	_	0	root	_	highlight=red
+5	吾	吾	PRON	PRON	_	4	obj	_	highlight=green|span=1
+6	。	。	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: wuu_shud-ud-train.conllu · this verb has L=0, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = “ 吃 ” 一 个 字 就 拿 吾 打发 咯 ！
+1	“	“	PUNCT	PUNCT	_	2	punct	_	_
+2	吃	吃	VERB	VERB	_	10	nsubj	_	highlight=red
+3	”	”	PUNCT	PUNCT	_	2	punct	_	_
+4	一	一	NUM	NUM	_	6	nummod	_	_
+5	个	个	NOUN	NOUN	_	4	clf	_	_
+6	字	字	NOUN	NOUN	_	2	appos	_	highlight=green|span=3
+7	就	就	SCONJ	SCONJ	_	10	mark	_	_
+8	拿	拿	ADP	ADP	_	9	case	_	_
+9	吾	吾	PRON	PRON	_	10	obl	_	_
+10	打发	打发	VERB	VERB	_	0	root	_	_
+11	咯	咯	AUX	AUX	_	10	aux	_	_
+12	！	！	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: wuu_shud-ud-train.conllu · this verb has L=1, R=1 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 吾 就是 到 楼下 去 搭 啊 。
+1	吾	吾	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	就是	就是	VERB	VERB	_	0	root	_	highlight=red
+3	到	到	VERB	VERB	_	6	advcl	_	_
+4	楼下	楼下	NOUN	NOUN	_	3	obj	_	_
+5	去	去	SCONJ	SCONJ	_	6	mark	_	_
+6	搭	搭	VERB	VERB	_	2	xcomp	_	highlight=green|span=4
+7	啊	啊	PART	PART	_	2	discourse	_	_
+8	。	。	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: wuu_shud-ud-test.conllu · this verb has L=0, R=1 (mean span = 10.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 吾 伐是 记得 换 号 时 跟 侬 群发 过 吾 的 号 吗 ？
+1	吾	吾	PRON	PRON	_	2	nsubj	_	_
+2	伐是	伐是	VERB	VERB	_	0	root	_	_
+3	记得	记得	VERB	VERB	_	2	xcomp	_	highlight=red
+4	换	换	VERB	VERB	_	9	advcl	_	_
+5	号	号	NOUN	NOUN	_	4	obj	_	_
+6	时	时	ADP	ADP	_	4	mark	_	_
+7	跟	跟	ADP	ADP	_	8	case	_	_
+8	侬	侬	PRON	PRON	_	9	obl	_	_
+9	群发	群发	VERB	VERB	_	3	xcomp	_	highlight=green|span=10
+10	过	过	AUX	AUX	_	9	aux	_	_
+11	吾	吾	PRON	PRON	_	13	det	_	_
+12	的	的	PART	PART	_	11	case	_	_
+13	号	号	NOUN	NOUN	_	9	obj	_	_
+14	吗	吗	PART	PART	_	2	discourse	_	_
+15	？	？	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: wuu_shud-ud-train.conllu · this verb has L=0, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 晕 ， 没 闲话 刚 ， 唉 ！
+1	晕	晕	INTJ	INTJ	_	5	discourse	_	_
+2	，	，	PUNCT	PUNCT	_	1	punct	_	_
+3	没	没	VERB	VERB	_	5	advcl	_	highlight=red
+4	闲话	闲话	NOUN	NOUN	_	3	obj	_	highlight=green|span=1
+5	刚	刚	VERB	VERB	_	0	root	_	_
+6	，	，	PUNCT	PUNCT	_	5	punct	_	_
+7	唉	唉	INTJ	INTJ	_	5	discourse	_	_
+8	！	！	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: wuu_shud-ud-train.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 老公 吾 爱 侬 ， 吾 会 梦到 侬 呃 ！
+1	老公	老公	NOUN	NOUN	_	3	vocative	_	_
+2	吾	吾	PRON	PRON	_	3	nsubj	_	_
+3	爱	爱	VERB	VERB	_	0	root	_	_
+4	侬	侬	PRON	PRON	_	3	obj	_	_
+5	，	，	PUNCT	PUNCT	_	3	punct	_	_
+6	吾	吾	PRON	PRON	_	8	nsubj	_	highlight=green|span=1
+7	会	会	AUX	AUX	_	8	aux	_	_
+8	梦到	梦到	VERB	VERB	_	3	parataxis	_	highlight=red
+9	侬	侬	PRON	PRON	_	8	obj	_	highlight=green|span=1
+10	呃	呃	PART	PART	_	8	discourse	_	_
+11	！	！	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: wuu_shud-ud-train.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 搿 侬 呃 意思 是 伐想 在 睬 吾 勒 ， 是 伐 ？
+1	搿	搿	ADV	ADV	_	4	advmod	_	_
+2	侬	侬	PRON	PRON	_	4	det	_	_
+3	呃	呃	PART	PART	_	2	case	_	_
+4	意思	意思	NOUN	NOUN	_	5	nsubj	_	_
+5	是	是	VERB	VERB	_	0	root	_	_
+6	伐想	伐想	AUX	AUX	_	8	aux	_	_
+7	在	在	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+8	睬	睬	VERB	VERB	_	5	xcomp	_	highlight=red
+9	吾	吾	PRON	PRON	_	8	obj	_	highlight=green|span=1
+10	勒	勒	PART	PART	_	5	discourse	_	_
+11	，	，	PUNCT	PUNCT	_	12	punct	_	_
+12	是	是	AUX	AUX	_	5	xcomp	_	_
+13	伐	伐	PART	PART	_	5	discourse	_	_
+14	？	？	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: wuu_shud-ud-dev.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 前头 伐是 辣辣 上网 吗 ？
+1	前头	前头	NOUN	NOUN	_	2	nmod	_	highlight=green|span=1
+2	伐是	伐是	VERB	VERB	_	0	root	_	highlight=red
+3	辣辣	辣辣	ADV	ADV	_	4	advmod	_	_
+4	上网	上网	VERB	VERB	_	2	xcomp	_	highlight=green|span=2
+5	吗	吗	PART	PART	_	2	discourse	_	_
+6	？	？	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: wuu_shud-ud-train.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 侬 给 吾 发 则 相片 好 伐好 ？
+1	侬	侬	PRON	PRON	_	2	nsubj	_	_
+2	给	给	VERB	VERB	_	0	root	_	_
+3	吾	吾	PRON	PRON	_	4	iobj	_	highlight=green|span=1
+4	发	发	VERB	VERB	_	7	advcl	_	highlight=red
+5	则	则	PRON	PRON	_	6	det	_	_
+6	相片	相片	NOUN	NOUN	_	4	obj	_	highlight=green|span=2
+7	好	好	ADJ	ADJ	_	2	ccomp	_	_
+8	伐好	伐好	ADJ	ADJ	_	7	xcomp	_	_
+9	？	？	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: wuu_shud-ud-dev.conllu · this verb has L=2, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 搿歇 辣 做 撒 。
+1	搿歇	搿歇	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+2	辣	辣	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+3	做	做	VERB	VERB	_	0	root	_	highlight=red
+4	撒	撒	PRON	PRON	_	3	obj	_	highlight=green|span=1
+5	。	。	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: wuu_shud-ud-train.conllu · this verb has L=2, R=1 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 吾 困觉 了 ， 侬 慢慢 较 开 车子 伐 。
+1	吾	吾	PRON	PRON	_	2	nsubj	_	_
+2	困觉	困觉	VERB	VERB	_	0	root	_	_
+3	了	了	PART	PART	_	2	discourse	_	_
+4	，	，	PUNCT	PUNCT	_	2	punct	_	_
+5	侬	侬	PRON	PRON	_	8	nsubj	_	highlight=green|span=1
+6	慢慢	慢慢	ADJ	ADJ	_	8	advmod	_	highlight=green|span=2
+7	较	较	SCONJ	SCONJ	_	6	mark	_	_
+8	开	开	VERB	VERB	_	2	parataxis	_	highlight=red
+9	车子	车子	NOUN	NOUN	_	8	obj	_	highlight=green|span=1
+10	伐	伐	PART	PART	_	8	discourse	_	_
+11	。	。	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: wuu_shud-ud-train.conllu · this verb has L=0, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 当然 想 了 ， 伐想 会的 发 信息 拨 侬 伐啦 ！
+1	当然	当然	ADV	ADV	_	2	advmod	_	_
+2	想	想	AUX	AUX	_	7	parataxis	_	_
+3	了	了	PART	PART	_	2	discourse	_	_
+4	，	，	PUNCT	PUNCT	_	2	punct	_	_
+5	伐想	伐想	AUX	AUX	_	7	aux	_	_
+6	会的	会的	AUX	AUX	_	7	aux	_	_
+7	发	发	VERB	VERB	_	0	root	_	_
+8	信息	信息	NOUN	NOUN	_	7	obj	_	_
+9	拨	拨	VERB	VERB	_	7	advcl	_	highlight=red
+10	侬	侬	PRON	PRON	_	9	obj	_	highlight=green|span=1
+11	伐啦	伐啦	PART	PART	_	7	discourse	_	_
+12	！	！	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: wuu_shud-ud-train.conllu · this verb has L=1, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 侬 讲 侬 好 寻得到 伐 ？
+1	侬	侬	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	讲	讲	VERB	VERB	_	0	root	_	highlight=red
+3	侬	侬	PRON	PRON	_	5	nsubj	_	_
+4	好	好	ADV	ADV	_	5	advmod	_	_
+5	寻得到	寻得到	VERB	VERB	_	2	ccomp	_	highlight=green|span=3
+6	伐	伐	PART	PART	_	2	discourse	_	_
+7	？	？	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: wuu_shud-ud-train.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 侬 还 回屋 里 伐 ， 侬 辣 啊里的 呢 ？
+1	侬	侬	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+2	还	还	SCONJ	SCONJ	_	3	mark	_	_
+3	回屋	回屋	VERB	VERB	_	0	root	_	highlight=red
+4	里	里	NOUN	NOUN	_	3	obl	_	highlight=green|span=1
+5	伐	伐	PART	PART	_	3	discourse	_	_
+6	，	，	PUNCT	PUNCT	_	3	punct	_	_
+7	侬	侬	PRON	PRON	_	8	nsubj	_	_
+8	辣	辣	VERB	VERB	_	3	parataxis	_	_
+9	啊里的	啊里的	PRON	PRON	_	8	obj	_	_
+10	呢	呢	PART	PART	_	8	discourse	_	_
+11	？	？	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

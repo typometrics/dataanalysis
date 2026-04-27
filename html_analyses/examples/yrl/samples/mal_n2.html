@@ -1,0 +1,357 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Nhengatu — MAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Nhengatu examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Nhengatu <small style="color:#999;font-weight:normal">(yrl)</small> — MAL<sub>2</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>2</b> dependents in total (left + right combined).</p><p><b>MAL<sub>2</sub> = 2.104</b> &nbsp; <span style="color:#666">(981 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over all dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: yrl_complin-ud-train.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Intí maã xawasemu .
+1	Intí	Intí	PART	PART	_	3	advmod	_	highlight=green|span=1
+2	maã	maã	PRON	PRON	_	3	obj	_	highlight=green|span=1
+3	xawasemu	xawasemu	VERB	VERB	_	0	root	_	highlight=red
+4	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: yrl_complin-ud-train.conllu · this verb has L=1, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Karuka kuẽma yuíri suí yumunhã ara irundí .
+1	Karuka	Karuka	NOUN	NOUN	_	5	obl	_	highlight=green|span=4
+2	kuẽma	kuẽma	NOUN	NOUN	_	1	conj	_	_
+3	yuíri	yuíri	CCONJ	CCONJ	_	2	cc	_	_
+4	suí	suí	ADP	ADP	_	1	case	_	_
+5	yumunhã	yumunhã	VERB	VERB	_	0	root	_	highlight=red
+6	ara	ara	NOUN	NOUN	_	5	nsubj	_	highlight=green|span=2
+7	irundí	irundí	NUM	NUM	_	6	nummod	_	_
+8	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: yrl_complin-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ariré nhaã kunhamukú upitá i puruã tenhuntu , ti masuí apigawa uyukwáu .
+1	Ariré	Ariré	ADV	ADV	_	4	advmod	_	_
+2	nhaã	nhaã	DET	DET	_	3	det	_	_
+3	kunhamukú	kunhamukú	NOUN	NOUN	_	4	nsubj	_	_
+4	upitá	upitá	VERB	VERB	_	0	root	_	_
+5	i	i	PRON	PRON	_	6	nsubj	_	highlight=green|span=1
+6	puruã	puruã	VERB	VERB	_	4	parataxis	_	highlight=red
+7	tenhuntu	tenhuntu	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+8	,	,	PUNCT	PUNCT	_	12	punct	_	_
+9	ti	ti	PART	PART	_	12	advmod	_	_
+10	masuí	masuí	ADV	ADV	_	12	advmod	_	_
+11	apigawa	apigawa	NOUN	NOUN	_	12	nsubj	_	_
+12	uyukwáu	uyukwáu	VERB	VERB	_	6	parataxis	_	_
+13	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: yrl_complin-ud-train.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Yautí usuaxara : — U !
+1	Yautí	Yautí	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+2	usuaxara	usuaxara	VERB	VERB	_	0	root	_	highlight=red
+3	:	:	PUNCT	PUNCT	_	5	punct	_	_
+4	—	—	PUNCT	PUNCT	_	5	punct	_	_
+5	U	U	INTJ	INTJ	_	2	ccomp	_	highlight=green|span=1
+6	!	!	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: yrl_complin-ud-train.conllu · this verb has L=1, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Usika paraná mirĩ pupé ; kwayé upuranú : — Paraná , maã paá ne yara ?
+1	Usika	Usika	VERB	VERB	_	0	root	_	_
+2	paraná	paraná	NOUN	NOUN	_	1	obl	_	_
+3	mirĩ	mirĩ	ADJ	ADJ	_	2	amod	_	_
+4	pupé	pupé	ADP	ADP	_	2	case	_	_
+5	;	;	PUNCT	PUNCT	_	7	punct	_	_
+6	kwayé	kwayé	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+7	upuranú	upuranú	VERB	VERB	_	1	parataxis	_	highlight=red
+8	:	:	PUNCT	PUNCT	_	12	punct	_	_
+9	—	—	PUNCT	PUNCT	_	12	punct	_	_
+10	Paraná	Paraná	NOUN	NOUN	_	12	vocative	_	_
+11	,	,	PUNCT	PUNCT	_	10	punct	_	_
+12	maã	maã	PRON	PRON	_	7	ccomp	_	highlight=green|span=5
+13	paá	paá	PART	PART	_	12	fixed	_	_
+14	ne	ne	PRON	PRON	_	15	nmod:poss	_	_
+15	yara	yara	NOUN	NOUN	_	12	nsubj	_	_
+16	?	?	PUNCT	PUNCT	_	12	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: yrl_complin-ud-test.conllu · this verb has L=1, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Maria uwatá São Gabriel rupí
+1	Maria	Maria	PROPN	PROPN	_	2	nsubj	_	highlight=green|span=1
+2	uwatá	uwatá	VERB	VERB	_	0	root	_	highlight=red
+3	São	São	PROPN	PROPN	_	2	obl	_	highlight=green|span=3
+4	Gabriel	Gabriel	PROPN	PROPN	_	3	flat	_	_
+5	rupí	rupí	ADP	ADP	_	3	case	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: yrl_complin-ud-test.conllu · this verb has L=0, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Tamanduá uri , uwasemu yawareté ukarãi-karãi mirá , usika i kupé rupí merupí , uyumana aé , umundéu i puampé .
+1	Tamanduá	Tamanduá	NOUN	NOUN	_	2	nsubj	_	_
+2	uri	uri	VERB	VERB	_	0	root	_	_
+3	,	,	PUNCT	PUNCT	_	4	punct	_	_
+4	uwasemu	uwasemu	VERB	VERB	_	2	parataxis	_	_
+5	yawareté	yawareté	NOUN	NOUN	_	6	nsubj	_	_
+6	ukarãi-karãi	ukarãi-karãi	VERB	VERB	_	4	xcomp	_	_
+7	mirá	mirá	NOUN	NOUN	_	6	obj	_	_
+8	,	,	PUNCT	PUNCT	_	9	punct	_	_
+9	usika	usika	VERB	VERB	_	6	parataxis	_	highlight=red
+10	i	i	PRON	PRON	_	11	nmod:poss	_	_
+11	kupé	kupé	NOUN	NOUN	_	9	obl	_	highlight=green|span=3
+12	rupí	rupí	ADP	ADP	_	11	case	_	_
+13	merupí	merupí	ADV	ADV	_	9	advmod	_	highlight=green|span=1
+14	,	,	PUNCT	PUNCT	_	15	punct	_	_
+15	uyumana	uyumana	VERB	VERB	_	9	parataxis	_	_
+16	aé	aé	PRON	PRON	_	15	obj	_	_
+17	,	,	PUNCT	PUNCT	_	18	punct	_	_
+18	umundéu	umundéu	VERB	VERB	_	15	parataxis	_	_
+19	i	i	PRON	PRON	_	20	nmod:poss	_	_
+20	puampé	puampé	NOUN	NOUN	_	18	obj	_	_
+21	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: yrl_complin-ud-train.conllu · this verb has L=0, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ekũi esupiri se miára i xupé .
+1	Ekũi	Ekũi	AUX	AUX	_	2	aux	_	_
+2	esupiri	esupiri	VERB	VERB	_	0	root	_	highlight=red
+3	se	se	PRON	PRON	_	4	nmod:poss	_	_
+4	miára	miára	NOUN	NOUN	_	2	obj	_	highlight=green|span=2
+5	i	i	PRON	PRON	_	2	iobj	_	highlight=green|span=2
+6	xupé	xupé	ADP	ADP	_	5	case	_	_
+7	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: yrl_complin-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ixé awewé merupí , ma asika puranga makití asú waá .
+1	Ixé	Ixé	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	awewé	awewé	VERB	VERB	_	0	root	_	highlight=red
+3	merupí	merupí	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+4	,	,	PUNCT	PUNCT	_	6	punct	_	_
+5	ma	ma	CCONJ	CCONJ	_	6	cc	_	_
+6	asika	asika	VERB	VERB	_	2	conj	_	_
+7	puranga	puranga	ADV	ADV	_	6	advmod	_	_
+8	makití	makití	ADV	ADV	_	6	advmod	_	_
+9	asú	asú	VERB	VERB	_	8	acl:relcl	_	_
+10	waá	waá	PRON	PRON	_	9	obl	_	_
+11	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: yrl_complin-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Panhẽ urikú aintá piá surí , uyapukúi puranga , satambika paranawasú pitera kití , ti umaã sakakwera kití , yandara upituú umbaú arama .
+1	Panhẽ	Panhẽ	PRON	PRON	_	2	nsubj	_	_
+2	urikú	urikú	VERB	VERB	_	0	root	_	_
+3	aintá	aintá	PRON	PRON	_	4	nmod:poss	_	_
+4	piá	piá	NOUN	NOUN	_	2	obj	_	_
+5	surí	surí	VERB	VERB	_	2	xcomp	_	_
+6	,	,	PUNCT	PUNCT	_	7	punct	_	_
+7	uyapukúi	uyapukúi	VERB	VERB	_	2	parataxis	_	_
+8	puranga	puranga	ADV	ADV	_	7	advmod	_	_
+9	,	,	PUNCT	PUNCT	_	7	punct	_	_
+10	satambika	satambika	ADV	ADV	_	7	advmod	_	_
+11	paranawasú	paranawasú	NOUN	NOUN	_	12	nmod:poss	_	_
+12	pitera	pitera	NOUN	NOUN	_	7	obl	_	_
+13	kití	kití	ADP	ADP	_	12	case	_	_
+14	,	,	PUNCT	PUNCT	_	16	punct	_	_
+15	ti	ti	PART	PART	_	16	advmod	_	highlight=green|span=1
+16	umaã	umaã	VERB	VERB	_	7	parataxis	_	highlight=red
+17	sakakwera	sakakwera	NOUN	NOUN	_	16	obl	_	highlight=green|span=2
+18	kití	kití	ADP	ADP	_	17	case	_	_
+19	,	,	PUNCT	PUNCT	_	21	punct	_	_
+20	yandara	yandara	NOUN	NOUN	_	21	obl	_	_
+21	upituú	upituú	VERB	VERB	_	16	parataxis	_	_
+22	umbaú	umbaú	VERB	VERB	_	21	advcl	_	_
+23	arama	arama	SCONJ	SCONJ	_	22	mark	_	_
+24	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: yrl_complin-ud-train.conllu · this verb has L=0, R=2 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Nhaã tiapuwasú umunhã waá iwí urirí , paá , nhaã payé tuyué tenhẽ awá umunhã aé umukameẽ arama i kirimbasawa upaĩ mira xupé .
+1	Nhaã	Nhaã	DET	DET	_	2	det	_	_
+2	tiapuwasú	tiapuwasú	NOUN	NOUN	_	15	dislocated	_	_
+3	umunhã	umunhã	VERB	VERB	_	2	acl:relcl	_	_
+4	waá	waá	PRON	PRON	_	3	nsubj	_	_
+5	iwí	iwí	NOUN	NOUN	_	6	nsubj	_	_
+6	urirí	urirí	VERB	VERB	_	3	ccomp	_	_
+7	,	,	PUNCT	PUNCT	_	8	punct	_	_
+8	paá	paá	PART	PART	_	14	advmod	_	_
+9	,	,	PUNCT	PUNCT	_	8	punct	_	_
+10	nhaã	nhaã	DET	DET	_	11	det	_	_
+11	payé	payé	NOUN	NOUN	_	12	nmod:poss	_	_
+12	tuyué	tuyué	NOUN	NOUN	_	14	nsubj	_	_
+13	tenhẽ	tenhẽ	PART	PART	_	12	advmod	_	_
+14	awá	awá	PRON	PRON	_	0	root	_	_
+15	umunhã	umunhã	VERB	VERB	_	14	acl:relcl	_	_
+16	aé	aé	PRON	PRON	_	15	obj	_	_
+17	umukameẽ	umukameẽ	VERB	VERB	_	15	advcl	_	highlight=red
+18	arama	arama	SCONJ	SCONJ	_	17	mark	_	_
+19	i	i	PRON	PRON	_	20	nmod:poss	_	_
+20	kirimbasawa	kirimbasawa	NOUN	NOUN	_	17	obj	_	highlight=green|span=2
+21	upaĩ	upaĩ	DET	DET	_	22	det	_	_
+22	mira	mira	NOUN	NOUN	_	17	iobj	_	highlight=green|span=3
+23	xupé	xupé	ADP	ADP	_	22	case	_	_
+24	.	.	PUNCT	PUNCT	_	14	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: yrl_complin-ud-train.conllu · this verb has L=1, R=1 (mean span = 4.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Muíri yasí riré umusema mukũi taína , yepé kunhã , yepé apigawa .
+1	Muíri	Muíri	DET	DET	_	2	det	_	_
+2	yasí	yasí	NOUN	NOUN	_	4	obl	_	highlight=green|span=3
+3	riré	riré	ADP	ADP	_	2	case	_	_
+4	umusema	umusema	VERB	VERB	_	0	root	_	highlight=red
+5	mukũi	mukũi	NUM	NUM	_	6	nummod	_	_
+6	taína	taína	NOUN	NOUN	_	4	obj	_	highlight=green|span=6
+7	,	,	PUNCT	PUNCT	_	9	punct	_	_
+8	yepé	yepé	DET	DET	_	9	det	_	_
+9	kunhã	kunhã	NOUN	NOUN	_	6	appos	_	_
+10	,	,	PUNCT	PUNCT	_	12	punct	_	_
+11	yepé	yepé	DET	DET	_	12	det	_	_
+12	apigawa	apigawa	NOUN	NOUN	_	9	conj	_	_
+13	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: yrl_complin-ud-test.conllu · this verb has L=1, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Nti akwáu masuí Pedro usika .
+1	Nti	Nti	PART	PART	_	2	advmod	_	highlight=green|span=1
+2	akwáu	akwáu	VERB	VERB	_	0	root	_	highlight=red
+3	masuí	masuí	ADV	ADV	_	5	advmod	_	_
+4	Pedro	Pedro	PROPN	PROPN	_	5	nsubj	_	_
+5	usika	usika	VERB	VERB	_	2	ccomp	_	highlight=green|span=3
+6	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: yrl_complin-ud-test.conllu · this verb has L=0, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Urikú i pira sawa pawa .
+1	Urikú	Urikú	VERB	VERB	_	0	root	_	highlight=red
+2	i	i	PRON	PRON	_	3	nmod:poss	_	_
+3	pira	pira	NOUN	NOUN	_	1	obj	_	highlight=green|span=2
+4	sawa	sawa	VERB	VERB	_	1	xcomp	_	highlight=green|span=2
+5	pawa	pawa	PART	PART	_	4	advmod	_	_
+6	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: yrl_complin-ud-train.conllu · this verb has L=1, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Supí tenhẽ , arikú ne mukawa .
+1	Supí	Supí	PART	PART	_	4	advmod	_	highlight=green|span=2
+2	tenhẽ	tenhẽ	PART	PART	_	1	advmod	_	_
+3	,	,	PUNCT	PUNCT	_	1	punct	_	_
+4	arikú	arikú	VERB	VERB	_	0	root	_	highlight=red
+5	ne	ne	PRON	PRON	_	6	nmod:poss	_	_
+6	mukawa	mukawa	NOUN	NOUN	_	4	obj	_	highlight=green|span=2
+7	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: yrl_complin-ud-train.conllu · this verb has L=0, R=2 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Panhẽ maã usãi uikú waá paraná rupí , uyeréu ipeka arama , pirá arama ; urusakanga uyeréu yawareté arama .
+1	Panhẽ	Panhẽ	DET	DET	_	2	det	_	_
+2	maã	maã	PRON	PRON	_	9	nsubj	_	_
+3	usãi	usãi	VERB	VERB	_	2	acl:relcl	_	highlight=red
+4	uikú	uikú	AUX	AUX	_	3	aux	_	_
+5	waá	waá	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+6	paraná	paraná	NOUN	NOUN	_	3	obl	_	highlight=green|span=2
+7	rupí	rupí	ADP	ADP	_	6	case	_	_
+8	,	,	PUNCT	PUNCT	_	2	punct	_	_
+9	uyeréu	uyeréu	VERB	VERB	_	0	root	_	_
+10	ipeka	ipeka	NOUN	NOUN	_	9	obl	_	_
+11	arama	arama	ADP	ADP	_	10	case	_	_
+12	,	,	PUNCT	PUNCT	_	13	punct	_	_
+13	pirá	pirá	NOUN	NOUN	_	10	conj	_	_
+14	arama	arama	ADP	ADP	_	13	case	_	_
+15	;	;	PUNCT	PUNCT	_	17	punct	_	_
+16	urusakanga	urusakanga	NOUN	NOUN	_	17	nsubj	_	_
+17	uyeréu	uyeréu	VERB	VERB	_	9	parataxis	_	_
+18	yawareté	yawareté	NOUN	NOUN	_	17	obl	_	_
+19	arama	arama	ADP	ADP	_	18	case	_	_
+20	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: yrl_complin-ud-test.conllu · this verb has L=0, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Yeperesé aé upisika kururú mirĩ resé , upumbika , umuatiri suwí i pú upé , i irumu umupinima tuixawa arú ruá rupí kururú rangawa riiya , [...] .
+1	Yeperesé	Yeperesé	ADV	ADV	_	3	advmod	_	_
+2	aé	aé	PRON	PRON	_	3	nsubj	_	_
+3	upisika	upisika	VERB	VERB	_	0	root	_	_
+4	kururú	kururú	NOUN	NOUN	_	3	obl	_	_
+5	mirĩ	mirĩ	ADJ	ADJ	_	4	amod	_	_
+6	resé	resé	ADP	ADP	_	4	case	_	_
+7	,	,	PUNCT	PUNCT	_	8	punct	_	_
+8	upumbika	upumbika	VERB	VERB	_	3	parataxis	_	_
+9	,	,	PUNCT	PUNCT	_	10	punct	_	_
+10	umuatiri	umuatiri	VERB	VERB	_	8	parataxis	_	highlight=red
+11	suwí	suwí	NOUN	NOUN	_	10	obj	_	highlight=green|span=1
+12	i	i	PRON	PRON	_	13	nmod:poss	_	_
+13	pú	pú	NOUN	NOUN	_	10	obl	_	highlight=green|span=3
+14	upé	upé	ADP	ADP	_	13	case	_	_
+15	,	,	PUNCT	PUNCT	_	18	punct	_	_
+16	i	i	PRON	PRON	_	18	obl	_	_
+17	irumu	irumu	ADP	ADP	_	16	case	_	_
+18	umupinima	umupinima	VERB	VERB	_	10	parataxis	_	_
+19	tuixawa	tuixawa	NOUN	NOUN	_	20	nmod:poss	_	_
+20	arú	arú	NOUN	NOUN	_	21	nmod:poss	_	_
+21	ruá	ruá	NOUN	NOUN	_	18	obl	_	_
+22	rupí	rupí	ADP	ADP	_	21	case	_	_
+23	kururú	kururú	NOUN	NOUN	_	24	nmod:poss	_	_
+24	rangawa	rangawa	NOUN	NOUN	_	25	nmod:poss	_	_
+25	riiya	riiya	NOUN	NOUN	_	18	obj	_	_
+26	,	,	PUNCT	PUNCT	_	3	punct	_	_
+27	[...]	[...]	PUNCT	PUNCT	_	3	punct	_	_
+28	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: yrl_complin-ud-train.conllu · this verb has L=0, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Uyatití reté pirá .
+1	Uyatití	Uyatití	VERB	VERB	_	0	root	_	highlight=red
+2	reté	reté	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+3	pirá	pirá	NOUN	NOUN	_	1	obj	_	highlight=green|span=1
+4	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: yrl_complin-ud-train.conllu · this verb has L=1, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Aé riré apiripana yukira umukaẽ putari i pirá .
+1	Aé	Aé	PRON	PRON	_	3	nsubj	_	_
+2	riré	riré	SCONJ	SCONJ	_	3	mark	_	_
+3	apiripana	apiripana	VERB	VERB	_	5	advcl	_	highlight=green|span=4
+4	yukira	yukira	NOUN	NOUN	_	3	obj	_	_
+5	umukaẽ	umukaẽ	VERB	VERB	_	0	root	_	highlight=red
+6	putari	putari	AUX	AUX	_	5	aux	_	_
+7	i	i	PRON	PRON	_	8	nmod:poss	_	_
+8	pirá	pirá	NOUN	NOUN	_	5	obj	_	highlight=green|span=2
+9	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: yrl_complin-ud-test.conllu · this verb has L=1, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Usú panhẽ tetama rupí , marupí usú waá uxari usú uikú taíra-itá , ariré paá uwasemu ana i manha .
+1	Usú	Usú	VERB	VERB	_	0	root	_	_
+2	panhẽ	panhẽ	DET	DET	_	3	det	_	_
+3	tetama	tetama	NOUN	NOUN	_	1	obl	_	_
+4	rupí	rupí	ADP	ADP	_	3	case	_	_
+5	,	,	PUNCT	PUNCT	_	9	punct	_	_
+6	marupí	marupí	ADV	ADV	_	9	advmod	_	highlight=green|span=3
+7	usú	usú	AUX	AUX	_	6	acl:relcl	_	_
+8	waá	waá	PRON	PRON	_	7	obl	_	_
+9	uxari	uxari	VERB	VERB	_	1	parataxis	_	highlight=red
+10	usú	usú	AUX	AUX	_	9	aux	_	_
+11	uikú	uikú	AUX	AUX	_	9	aux	_	_
+12	taíra-itá	taíra-itá	NOUN	NOUN	_	9	obj	_	highlight=green|span=1
+13	,	,	PUNCT	PUNCT	_	16	punct	_	_
+14	ariré	ariré	ADV	ADV	_	16	advmod	_	_
+15	paá	paá	PART	PART	_	16	advmod	_	_
+16	uwasemu	uwasemu	VERB	VERB	_	9	parataxis	_	_
+17	ana	ana	PART	PART	_	16	advmod	_	_
+18	i	i	PRON	PRON	_	19	nmod:poss	_	_
+19	manha	manha	NOUN	NOUN	_	16	obj	_	_
+20	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

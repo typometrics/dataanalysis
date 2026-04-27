@@ -1,0 +1,814 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Thai — RMAL_4</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Thai examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Thai <small style="color:#999;font-weight:normal">(th)</small> — RMAL<sub>4</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>4</b> right dependents (left side may be anything).</p><p><b>RMAL<sub>4</sub> = 4.228</b> &nbsp; <span style="color:#666">(161 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>right</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: th_pud-ud-test.conllu · this verb has L=1, R=4 (mean span = 2.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = เวก้า แสดง ความเห็น ว่า คน จำนวน มาก คง ไม่ รู้ ประวัติ ของ มัน เนื่อง ด้วย อายุ พวก เขา
+1	เวก้า	เวก้า	PROPN	PROPN	_	2	nsubj	_	_
+2	แสดง	แสดง	VERB	VERB	_	0	root	_	_
+3	ความเห็น	ความเห็น	VERB	VERB	_	2	obj	_	_
+4	ว่า	ว่า	ADP	ADP	_	8	mark	_	_
+5	คน	คน	NOUN	NOUN	_	8	nsubj	_	highlight=green|span=3
+6	จำนวน	จำนวน	NOUN	NOUN	_	5	compound	_	_
+7	มาก	มาก	ADJ	ADJ	_	6	amod	_	_
+8	คง	คง	VERB	VERB	_	2	ccomp	_	highlight=red
+9	ไม่	ไม่	PART	PART	_	8	advmod	_	highlight=green|span=1
+10	รู้	รู้	VERB	VERB	_	8	xcomp	_	highlight=green|span=1
+11	ประวัติ	ประวัติ	NOUN	NOUN	_	8	obj	_	highlight=green|span=3
+12	ของ	ของ	ADP	ADP	_	13	case	_	_
+13	มัน	มัน	PRON	PRON	_	11	nmod:poss	_	_
+14	เนื่อง	เนื่อง	ADP	ADP	_	16	case	_	_
+15	ด้วย	ด้วย	ADP	ADP	_	14	fixed	_	_
+16	อายุ	อายุ	NOUN	NOUN	_	8	obl	_	highlight=green|span=5
+17	พวก	พวก	NOUN	NOUN	_	16	compound	_	_
+18	เขา	เขา	PRON	PRON	_	16	compound	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: th_tud-ud-train.conllu · this verb has L=0, R=4 (mean span = 5.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ทำ ความ สะอาด บ้าน ด้วย น้ำยา กำจัด เชื้อโรค เพื่อ ป้องกัน และ กำจัด เชื้อโรค ที่ เจริญ เติบโต ขณะ น้ำ ท่วม ขัง ใน บ้าน
+1	ทำ	ทำ	VERB	VERB	_	0	root	_	highlight=red
+2	ความ	ความ	NOUN	NOUN	_	1	obj	_	highlight=green|span=2
+3	สะอาด	สะอาด	VERB	VERB	_	2	acl	_	_
+4	บ้าน	บ้าน	NOUN	NOUN	_	1	obl	_	highlight=green|span=1
+5	ด้วย	ด้วย	ADP	ADP	_	6	case	_	_
+6	น้ำยา	น้ำยา	NOUN	NOUN	_	1	obl	_	highlight=green|span=4
+7	กำจัด	กำจัด	VERB	VERB	_	6	acl	_	_
+8	เชื้อโรค	เชื้อโรค	NOUN	NOUN	_	7	obj	_	_
+9	เพื่อ	เพื่อ	SCONJ	SCONJ	_	10	mark	_	_
+10	ป้องกัน	ป้องกัน	VERB	VERB	_	1	advcl	_	highlight=green|span=14
+11	และ	และ	CCONJ	CCONJ	_	12	cc	_	_
+12	กำจัด	กำจัด	VERB	VERB	_	10	conj	_	_
+13	เชื้อโรค	เชื้อโรค	NOUN	NOUN	_	10	obj	_	_
+14	ที่	ที่	PRON	PRON	_	15	nsubj	_	_
+15	เจริญ	เจริญ	VERB	VERB	_	13	acl	_	_
+16	เติบโต	เติบโต	VERB	VERB	_	15	compound	_	_
+17	ขณะ	ขณะ	ADV	ADV	_	19	advmod	_	_
+18	น้ำ	น้ำ	NOUN	NOUN	_	19	nsubj	_	_
+19	ท่วม	ท่วม	VERB	VERB	_	16	advcl	_	_
+20	ขัง	ขัง	VERB	VERB	_	19	compound	_	_
+21	ใน	ใน	ADP	ADP	_	22	case	_	_
+22	บ้าน	บ้าน	NOUN	NOUN	_	20	obl	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: th_tud-ud-train.conllu · this verb has L=2, R=4 (mean span = 12.17)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = บาง ครั้ง เรา สามารถ ทำ สิ่ง ที่ เรา ชอบ เพื่อ ประโยชน์ ต่อ สังคม ได้ เช่น เรา เป็น คน ชอบ ท่อง เที่ยว เรา อาจ จะ เลือก ท่อง เที่ยว เพื่อ ศึกษา ธรรมชาติ และ ชนบท ต่าง ๆ ว่า แต่ละ ที่ มี การ พัฒนา ไป ถึง ไหน อย่างไร บ้าง แล้ว นำ กลับ คิด หรือ เสนอ ไป ยัง หน่วย งาน ต่าง ๆ เพื่อ นำ ไป ปรับ ปรุง และ พัฒนา ต่อ ไป แบบ นี้ ทั้ง ตัว เรา และ สังคม ก็ จะ มี ความ สุข
+1	บาง	บาง	ADV	ADV	_	2	advmod	_	_
+2	ครั้ง	ครั้ง	NOUN	NOUN	_	5	obl	_	highlight=green|span=2
+3	เรา	เรา	PRON	PRON	_	5	nsubj	_	highlight=green|span=1
+4	สามารถ	สามารถ	AUX	AUX	_	5	aux	_	_
+5	ทำ	ทำ	VERB	VERB	_	0	root	_	highlight=red
+6	สิ่ง	สิ่ง	NOUN	NOUN	_	5	obj	_	highlight=green|span=4
+7	ที่	ที่	PRON	PRON	_	9	obj	_	_
+8	เรา	เรา	PRON	PRON	_	9	nsubj	_	_
+9	ชอบ	ชอบ	VERB	VERB	_	6	acl	_	_
+10	เพื่อ	เพื่อ	ADP	ADP	_	11	case	_	_
+11	ประโยชน์	ประโยชน์	NOUN	NOUN	_	5	obl	_	highlight=green|span=4
+12	ต่อ	ต่อ	ADP	ADP	_	13	case	_	_
+13	สังคม	สังคม	NOUN	NOUN	_	11	nmod	_	_
+14	ได้	ได้	AUX	AUX	_	5	aux	_	_
+15	เช่น	เช่น	SCONJ	SCONJ	_	18	mark	_	_
+16	เรา	เรา	PRON	PRON	_	18	nsubj	_	_
+17	เป็น	เป็น	AUX	AUX	_	18	cop	_	_
+18	คน	คน	NOUN	NOUN	_	5	advcl	_	highlight=green|span=50
+19	ชอบ	ชอบ	VERB	VERB	_	18	acl	_	_
+20	ท่อง	ท่อง	VERB	VERB	_	19	xcomp	_	_
+21	เที่ยว	เที่ยว	VERB	VERB	_	20	compound	_	_
+22	เรา	เรา	PRON	PRON	_	25	nsubj	_	_
+23	อาจ	อาจ	AUX	AUX	_	25	aux	_	_
+24	จะ	จะ	AUX	AUX	_	25	aux	_	_
+25	เลือก	เลือก	VERB	VERB	_	18	conj	_	_
+26	ท่อง	ท่อง	VERB	VERB	_	25	advcl	_	_
+27	เที่ยว	เที่ยว	VERB	VERB	_	26	compound	_	_
+28	เพื่อ	เพื่อ	ADP	ADP	_	29	case	_	_
+29	ศึกษา	ศึกษา	VERB	VERB	_	26	obl	_	_
+30	ธรรมชาติ	ธรรมชาติ	NOUN	NOUN	_	29	obj	_	_
+31	และ	และ	CCONJ	CCONJ	_	32	cc	_	_
+32	ชนบท	ชนบท	NOUN	NOUN	_	30	conj	_	_
+33	ต่าง	ต่าง	DET	DET	_	32	det	_	_
+34	ๆ	ๆ	PUNCT	PUNCT	_	33	punct	_	_
+35	ว่า	ว่า	SCONJ	SCONJ	_	38	mark	_	_
+36	แต่ละ	แต่ละ	ADV	ADV	_	37	advmod	_	_
+37	ที่	ที่	NOUN	NOUN	_	38	nsubj	_	_
+38	มี	มี	VERB	VERB	_	29	ccomp	_	_
+39	การ	การ	NOUN	NOUN	_	38	obj	_	_
+40	พัฒนา	พัฒนา	VERB	VERB	_	39	acl	_	_
+41	ไป	ไป	ADV	ADV	_	40	advmod	_	_
+42	ถึง	ถึง	ADP	ADP	_	43	case	_	_
+43	ไหน	ไหน	PART	PART	_	40	obl	_	_
+44	อย่างไร	อย่างไร	ADV	ADV	_	40	advmod	_	_
+45	บ้าง	บ้าง	ADV	ADV	_	40	advmod	_	_
+46	แล้ว	แล้ว	CCONJ	CCONJ	_	47	cc	_	_
+47	นำ	นำ	VERB	VERB	_	29	conj	_	_
+48	กลับ	กลับ	ADV	ADV	_	47	advmod	_	_
+49	คิด	คิด	VERB	VERB	_	47	compound	_	_
+50	หรือ	หรือ	CCONJ	CCONJ	_	51	cc	_	_
+51	เสนอ	เสนอ	VERB	VERB	_	47	conj	_	_
+52	ไป	ไป	ADV	ADV	_	51	advmod	_	_
+53	ยัง	ยัง	ADP	ADP	_	54	case	_	_
+54	หน่วย	หน่วย	NOUN	NOUN	_	51	obl	_	_
+55	งาน	งาน	NOUN	NOUN	_	54	nmod	_	_
+56	ต่าง	ต่าง	DET	DET	_	54	det	_	_
+57	ๆ	ๆ	PUNCT	PUNCT	_	56	punct	_	_
+58	เพื่อ	เพื่อ	SCONJ	SCONJ	_	59	mark	_	_
+59	นำ	นำ	VERB	VERB	_	51	advcl	_	_
+60	ไป	ไป	ADV	ADV	_	59	advmod	_	_
+61	ปรับ	ปรับ	VERB	VERB	_	59	compound	_	_
+62	ปรุง	ปรุง	VERB	VERB	_	61	compound	_	_
+63	และ	และ	CCONJ	CCONJ	_	64	cc	_	_
+64	พัฒนา	พัฒนา	VERB	VERB	_	61	conj	_	_
+65	ต่อ	ต่อ	VERB	VERB	_	64	advcl	_	_
+66	ไป	ไป	ADV	ADV	_	65	advmod	_	_
+67	แบบ	แบบ	NOUN	NOUN	_	76	obl	_	_
+68	นี้	นี้	DET	DET	_	67	det	_	_
+69	ทั้ง	ทั้ง	ADV	ADV	_	70	advmod	_	_
+70	ตัว	ตัว	NOUN	NOUN	_	76	nsubj	_	_
+71	เรา	เรา	PRON	PRON	_	70	compound	_	_
+72	และ	และ	CCONJ	CCONJ	_	73	cc	_	_
+73	สังคม	สังคม	NOUN	NOUN	_	70	conj	_	_
+74	ก็	ก็	ADV	ADV	_	76	advmod	_	_
+75	จะ	จะ	AUX	AUX	_	76	aux	_	_
+76	มี	มี	VERB	VERB	_	5	advcl	_	highlight=green|span=12
+77	ความ	ความ	NOUN	NOUN	_	76	obj	_	_
+78	สุข	สุข	VERB	VERB	_	77	acl	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: th_pud-ud-test.conllu · this verb has L=1, R=4 (mean span = 7.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = เคชา และ พีบี ได้ แต่ง เพลง “ สตีเฟน ” ด้วย กัน ตอน ที่ เคชา อายุ 16 ปี จาก นั้น เคชา ก็ ตาม ตัว เดวิด แกมสัน โปรดิวเซอร์ ที่ เธอ ชื่นชอบ มา ได้ ผ่าน สกริตตี โปลิตตี ที่ ตกลง ว่า จะ ช่วย ทำ เพลง ให้
+1	เคชา	เคชา	PROPN	PROPN	_	5	nsubj	_	highlight=green|span=3
+2	และ	และ	CCONJ	CCONJ	_	3	cc	_	_
+3	พีบี	พีบี	PROPN	PROPN	_	1	conj	_	_
+4	ได้	ได้	AUX	AUX	_	5	aux	_	_
+5	แต่ง	แต่ง	VERB	VERB	_	0	root	_	highlight=red
+6	เพลง	เพลง	NOUN	NOUN	_	5	obj	_	highlight=green|span=2
+7	“	“	PUNCT	PUNCT	_	8	punct	_	_
+8	สตีเฟน	สตีเฟน	PROPN	PROPN	_	6	compound	_	_
+9	”	”	PUNCT	PUNCT	_	8	punct	_	_
+10	ด้วย	ด้วย	ADV	ADV	_	5	advmod	_	highlight=green|span=2
+11	กัน	กัน	PRON	PRON	_	10	obl	_	_
+12	ตอน	ตอน	NOUN	NOUN	_	5	obl:tmod	_	highlight=green|span=6
+13	ที่	ที่	DET	DET	_	15	obl:tmod	_	_
+14	เคชา	เคชา	PROPN	PROPN	_	15	nsubj	_	_
+15	อายุ	อายุ	NOUN	NOUN	_	12	acl:relcl	_	_
+16	16	16	NUM	NUM	_	17	nummod	_	_
+17	ปี	ปี	NOUN	NOUN	_	15	obl	_	_
+18	จาก	จาก	ADP	ADP	_	22	mark	_	_
+19	นั้น	นั้น	PRON	PRON	_	18	fixed	_	_
+20	เคชา	เคชา	PROPN	PROPN	_	22	nsubj	_	_
+21	ก็	ก็	ADV	ADV	_	22	advmod	_	_
+22	ตาม	ตาม	VERB	VERB	_	5	advcl	_	highlight=green|span=25
+23	ตัว	ตัว	NOUN	NOUN	_	22	obj	_	_
+24	เดวิด	เดวิด	PROPN	PROPN	_	23	compound	_	_
+25	แกมสัน	แกมสัน	PROPN	PROPN	_	24	flat:name	_	_
+26	โปรดิวเซอร์	โปรดิวเซอร์	NOUN	NOUN	_	24	appos	_	_
+27	ที่	ที่	DET	DET	_	29	obj	_	_
+28	เธอ	เธอ	PRON	PRON	_	29	nsubj	_	_
+29	ชื่นชอบ	ชื่นชอบ	VERB	VERB	_	26	acl:relcl	_	_
+30	มา	มา	PART	PART	_	22	compound:prt	_	_
+31	ได้	ได้	AUX	AUX	_	22	aux	_	_
+32	ผ่าน	ผ่าน	ADP	ADP	_	33	case	_	_
+33	สกริตตี	สกริตตี	NOUN	NOUN	_	22	obl	_	_
+34	โปลิตตี	โปลิตตี	PROPN	PROPN	_	33	flat:name	_	_
+35	ที่	ที่	DET	DET	_	36	nsubj	_	_
+36	ตกลง	ตกลง	VERB	VERB	_	33	acl:relcl	_	_
+37	ว่า	ว่า	ADP	ADP	_	39	mark	_	_
+38	จะ	จะ	AUX	AUX	_	39	aux	_	_
+39	ช่วย	ช่วย	VERB	VERB	_	36	ccomp	_	_
+40	ทำ	ทำ	VERB	VERB	_	39	xcomp	_	_
+41	เพลง	เพลง	NOUN	NOUN	_	40	obj	_	_
+42	ให้	ให้	VERB	VERB	_	40	acl	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: th_tud-ud-test.conllu · this verb has L=0, R=4 (mean span = 6.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = นอกจากนี้ ที่ กรุง ปักกิ่ง มี การ ปิด ถนน ถึง 93 สาย เป็น เวลา ครึ่ง ชั่ว โมง เมื่อ เย็น วัน เดียว กัน เพื่อ เปิด โอกาส ให้ ประชา ชน เล่น ดอก ไม้ ไฟ อย่าง เต็ม ที่
+1	นอกจากนี้	นอกจากนี้	SCONJ	SCONJ	_	5	mark	_	_
+2	ที่	ที่	ADP	ADP	_	3	case	_	_
+3	กรุง	กรุง	NOUN	NOUN	_	5	obl	_	_
+4	ปักกิ่ง	ปักกิ่ง	PROPN	PROPN	_	3	nmod	_	_
+5	มี	มี	VERB	VERB	_	0	root	_	_
+6	การ	การ	NOUN	NOUN	_	5	obj	_	_
+7	ปิด	ปิด	VERB	VERB	_	6	acl	_	highlight=red
+8	ถนน	ถนน	NOUN	NOUN	_	7	obj	_	highlight=green|span=4
+9	ถึง	ถึง	ADV	ADV	_	10	advmod	_	_
+10	93	93	NUM	NUM	_	8	nummod	_	_
+11	สาย	สาย	NOUN	NOUN	_	10	clf	_	_
+12	เป็น	เป็น	VERB	VERB	_	7	advcl	_	highlight=green|span=5
+13	เวลา	เวลา	NOUN	NOUN	_	12	obj	_	_
+14	ครึ่ง	ครึ่ง	ADV	ADV	_	13	advmod	_	_
+15	ชั่ว	ชั่ว	NOUN	NOUN	_	13	clf	_	_
+16	โมง	โมง	NOUN	NOUN	_	13	compound	_	_
+17	เมื่อ	เมื่อ	ADP	ADP	_	18	case	_	_
+18	เย็น	เย็น	NOUN	NOUN	_	7	obl	_	highlight=green|span=5
+19	วัน	วัน	NOUN	NOUN	_	18	nmod	_	_
+20	เดียว	เดียว	ADJ	ADJ	_	19	amod	_	_
+21	กัน	กัน	ADJ	ADJ	_	20	fixed	_	_
+22	เพื่อ	เพื่อ	SCONJ	SCONJ	_	23	mark	_	_
+23	เปิด	เปิด	VERB	VERB	_	7	advcl	_	highlight=green|span=13
+24	โอกาส	โอกาส	NOUN	NOUN	_	23	obj	_	_
+25	ให้	ให้	VERB	VERB	_	23	compound	_	_
+26	ประชา	ประชา	NOUN	NOUN	_	28	nsubj	_	_
+27	ชน	ชน	NOUN	NOUN	_	26	compound	_	_
+28	เล่น	เล่น	VERB	VERB	_	25	ccomp	_	_
+29	ดอก	ดอก	NOUN	NOUN	_	28	obj	_	_
+30	ไม้	ไม้	NOUN	NOUN	_	29	compound	_	_
+31	ไฟ	ไฟ	NOUN	NOUN	_	29	compound	_	_
+32	อย่าง	อย่าง	PART	PART	_	33	mark	_	_
+33	เต็ม	เต็ม	ADV	ADV	_	28	advmod	_	_
+34	ที่	ที่	ADJ	ADJ	_	33	compound	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: th_tud-ud-test.conllu · this verb has L=0, R=4 (mean span = 8.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ด้าน นัก การทูต ตะวันตก ผู้ หนึ่ง ไม่ ออก นาม ให้ ความเห็น ว่า อิหร่าน ต้องการ ที่จะ คง อิทธิ พล ไว้ ใน ภูมิ ภาค ตะวันออกกลาง ด้วย การ สนับสนุน กลุ่ม ติด อาวุธ ให้ มี ความ แข็ง แกร่ง ต่อไป ไม่ ว่า จะ เป็น กลุ่ม เฮซบอลเลาะห์ ใน เลบานอน หรือ กลุ่ม ฮามาส ใน ปาเลสไตน์
+1	ด้าน	ด้าน	ADP	ADP	_	2	case	_	_
+2	นัก	นัก	NOUN	NOUN	_	10	nsubj	_	_
+3	การทูต	การทูต	NOUN	NOUN	_	2	nmod	_	_
+4	ตะวันตก	ตะวันตก	NOUN	NOUN	_	2	nmod	_	_
+5	ผู้	ผู้	NOUN	NOUN	_	2	nmod	_	_
+6	หนึ่ง	หนึ่ง	DET	DET	_	5	det	_	_
+7	ไม่	ไม่	ADV	ADV	_	8	advmod	_	_
+8	ออก	ออก	VERB	VERB	_	5	acl	_	_
+9	นาม	นาม	NOUN	NOUN	_	8	obj	_	_
+10	ให้	ให้	VERB	VERB	_	0	root	_	_
+11	ความเห็น	ความเห็น	NOUN	NOUN	_	10	obj	_	_
+12	ว่า	ว่า	SCONJ	SCONJ	_	14	mark	_	_
+13	อิหร่าน	อิหร่าน	PROPN	PROPN	_	14	nsubj	_	_
+14	ต้องการ	ต้องการ	VERB	VERB	_	10	ccomp	_	_
+15	ที่จะ	ที่จะ	AUX	AUX	_	16	aux	_	_
+16	คง	คง	VERB	VERB	_	14	xcomp	_	highlight=red
+17	อิทธิ	อิทธิ	NOUN	NOUN	_	16	obj	_	highlight=green|span=2
+18	พล	พล	NOUN	NOUN	_	17	compound	_	_
+19	ไว้	ไว้	ADV	ADV	_	16	advmod	_	highlight=green|span=1
+20	ใน	ใน	ADP	ADP	_	21	case	_	_
+21	ภูมิ	ภูมิ	NOUN	NOUN	_	16	obl	_	highlight=green|span=4
+22	ภาค	ภาค	NOUN	NOUN	_	21	compound	_	_
+23	ตะวันออกกลาง	ตะวันออกกลาง	NOUN	NOUN	_	21	nmod	_	_
+24	ด้วย	ด้วย	ADP	ADP	_	25	case	_	_
+25	การ	การ	NOUN	NOUN	_	16	obl	_	highlight=green|span=25
+26	สนับสนุน	สนับสนุน	VERB	VERB	_	25	acl	_	_
+27	กลุ่ม	กลุ่ม	NOUN	NOUN	_	26	obj	_	_
+28	ติด	ติด	VERB	VERB	_	27	acl	_	_
+29	อาวุธ	อาวุธ	NOUN	NOUN	_	28	obj	_	_
+30	ให้	ให้	SCONJ	SCONJ	_	31	mark	_	_
+31	มี	มี	VERB	VERB	_	26	advcl	_	_
+32	ความ	ความ	NOUN	NOUN	_	31	obj	_	_
+33	แข็ง	แข็ง	VERB	VERB	_	32	acl	_	_
+34	แกร่ง	แกร่ง	VERB	VERB	_	33	compound	_	_
+35	ต่อไป	ต่อไป	ADV	ADV	_	31	advmod	_	_
+36	ไม่	ไม่	SCONJ	SCONJ	_	40	mark	_	_
+37	ว่า	ว่า	SCONJ	SCONJ	_	36	fixed	_	_
+38	จะ	จะ	AUX	AUX	_	40	aux	_	_
+39	เป็น	เป็น	AUX	AUX	_	40	cop	_	_
+40	กลุ่ม	กลุ่ม	NOUN	NOUN	_	26	advcl	_	_
+41	เฮซบอลเลาะห์	เฮซบอลเลาะห์	PROPN	PROPN	_	40	nmod	_	_
+42	ใน	ใน	ADP	ADP	_	43	case	_	_
+43	เลบานอน	เลบานอน	PROPN	PROPN	_	40	nmod	_	_
+44	หรือ	หรือ	CCONJ	CCONJ	_	45	cc	_	_
+45	กลุ่ม	กลุ่ม	NOUN	NOUN	_	40	conj	_	_
+46	ฮามาส	ฮามาส	PROPN	PROPN	_	45	nmod	_	_
+47	ใน	ใน	ADP	ADP	_	48	case	_	_
+48	ปาเลสไตน์	ปาเลสไตน์	PROPN	PROPN	_	45	nmod	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: th_tud-ud-train.conllu · this verb has L=2, R=4 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ต่อ มา ใน ปี พ.ศ. 2540 จึง ได้ ถูก สร้าง เป็น ละคร อีก ครั้ง ทาง ช่อง 3 โดย ค่าย บรอดคาซท์
+1	ต่อ	ต่อ	CCONJ	CCONJ	_	10	cc	_	_
+2	มา	มา	CCONJ	CCONJ	_	1	fixed	_	_
+3	ใน	ใน	ADP	ADP	_	4	case	_	_
+4	ปี	ปี	NOUN	NOUN	_	10	obl	_	highlight=green|span=4
+5	พ.ศ.	พ.ศ.	NOUN	NOUN	_	4	nmod	_	_
+6	2540	2540	NUM	NUM	_	5	nummod	_	_
+7	จึง	จึง	ADV	ADV	_	10	advmod	_	highlight=green|span=1
+8	ได้	ได้	AUX	AUX	_	10	aux	_	_
+9	ถูก	ถูก	AUX	AUX	_	10	aux	_	_
+10	สร้าง	สร้าง	VERB	VERB	_	0	root	_	highlight=red
+11	เป็น	เป็น	AUX	AUX	_	12	cop	_	_
+12	ละคร	ละคร	NOUN	NOUN	_	10	advcl	_	highlight=green|span=2
+13	อีก	อีก	ADV	ADV	_	14	advmod	_	_
+14	ครั้ง	ครั้ง	ADV	ADV	_	10	advmod	_	highlight=green|span=2
+15	ทาง	ทาง	ADP	ADP	_	16	case	_	_
+16	ช่อง	ช่อง	NOUN	NOUN	_	10	obl	_	highlight=green|span=3
+17	3	3	NUM	NUM	_	16	nummod	_	_
+18	โดย	โดย	ADP	ADP	_	19	case	_	_
+19	ค่าย	ค่าย	NOUN	NOUN	_	10	obl	_	highlight=green|span=3
+20	บรอดคาซท์	บรอดคาซท์	PROPN	PROPN	_	19	nmod	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: th_tud-ud-train.conllu · this verb has L=1, R=4 (mean span = 14.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ประธานาธิบดี บารัค โอบามา ของ สหรัฐ เลือก เครือ ข่าย โทรทัศน์ ผ่าน ดาว เทียม ของ อาหรับ ใน การ ให้ สัมภาษณ์ สถานี โทรทัศน์ อย่าง เป็น ทางการ ครั้ง แรก ใน ฐานะ ประธานาธิบดี ส่ง สาร ถึง โลก มุสลิม เมื่อ วัน อังคาร ( 27 ม.ค. ) ว่า อเมริกา ไม่ ได้ เป็น ศัตรู กับ โลก มุสลิม พร้อม ทั้ง ย้ำ พันธสัญญา ที่ จะ ปรับ ปรุง ความ สัมพันธ์ กับ โลก มุสลิม ซึ่ง อยู่ ใน ภาวะ ขม ขื่น ภายใต้ รัฐบาล ชุด ก่อน ของ สหรัฐ
+1	ประธานาธิบดี	ประธานาธิบดี	NOUN	NOUN	_	6	nsubj	_	highlight=green|span=5
+2	บารัค	บารัค	PROPN	PROPN	_	1	nmod	_	_
+3	โอบามา	โอบามา	PROPN	PROPN	_	2	flat	_	_
+4	ของ	ของ	ADP	ADP	_	5	case	_	_
+5	สหรัฐ	สหรัฐ	PROPN	PROPN	_	2	nmod	_	_
+6	เลือก	เลือก	VERB	VERB	_	0	root	_	highlight=red
+7	เครือ	เครือ	NOUN	NOUN	_	6	obj	_	highlight=green|span=3
+8	ข่าย	ข่าย	NOUN	NOUN	_	7	compound	_	_
+9	โทรทัศน์	โทรทัศน์	NOUN	NOUN	_	7	nmod	_	_
+10	ผ่าน	ผ่าน	ADP	ADP	_	11	case	_	_
+11	ดาว	ดาว	NOUN	NOUN	_	6	obl	_	highlight=green|span=5
+12	เทียม	เทียม	ADJ	ADJ	_	11	compound	_	_
+13	ของ	ของ	ADP	ADP	_	14	case	_	_
+14	อาหรับ	อาหรับ	PROPN	PROPN	_	11	nmod	_	_
+15	ใน	ใน	ADP	ADP	_	16	case	_	_
+16	การ	การ	NOUN	NOUN	_	6	obl	_	highlight=green|span=14
+17	ให้	ให้	VERB	VERB	_	16	acl	_	_
+18	สัมภาษณ์	สัมภาษณ์	VERB	VERB	_	17	ccomp	_	_
+19	สถานี	สถานี	NOUN	NOUN	_	18	obj	_	_
+20	โทรทัศน์	โทรทัศน์	NOUN	NOUN	_	19	nmod	_	_
+21	อย่าง	อย่าง	SCONJ	SCONJ	_	22	mark	_	_
+22	เป็น	เป็น	VERB	VERB	_	17	advcl	_	_
+23	ทางการ	ทางการ	NOUN	NOUN	_	22	obj	_	_
+24	ครั้ง	ครั้ง	NOUN	NOUN	_	17	obl	_	_
+25	แรก	แรก	ADJ	ADJ	_	24	amod	_	_
+26	ใน	ใน	ADP	ADP	_	27	case	_	_
+27	ฐานะ	ฐานะ	NOUN	NOUN	_	24	nmod	_	_
+28	ประธานาธิบดี	ประธานาธิบดี	NOUN	NOUN	_	27	nmod	_	_
+29	ส่ง	ส่ง	VERB	VERB	_	6	ccomp	_	highlight=green|span=44
+30	สาร	สาร	NOUN	NOUN	_	29	obj	_	_
+31	ถึง	ถึง	ADP	ADP	_	32	case	_	_
+32	โลก	โลก	NOUN	NOUN	_	29	obl	_	_
+33	มุสลิม	มุสลิม	PROPN	PROPN	_	32	nmod	_	_
+34	เมื่อ	เมื่อ	ADP	ADP	_	35	case	_	_
+35	วัน	วัน	NOUN	NOUN	_	29	obl	_	_
+36	อังคาร	อังคาร	PROPN	PROPN	_	35	nmod	_	_
+37	(	(	PUNCT	PUNCT	_	38	punct	_	_
+38	27	27	NUM	NUM	_	35	appos	_	_
+39	ม.ค.	ม.ค.	PROPN	PROPN	_	38	flat	_	_
+40	)	)	PUNCT	PUNCT	_	38	punct	_	_
+41	ว่า	ว่า	SCONJ	SCONJ	_	46	mark	_	_
+42	อเมริกา	อเมริกา	PROPN	PROPN	_	46	nsubj	_	_
+43	ไม่	ไม่	ADV	ADV	_	46	advmod	_	_
+44	ได้	ได้	AUX	AUX	_	46	aux	_	_
+45	เป็น	เป็น	AUX	AUX	_	46	cop	_	_
+46	ศัตรู	ศัตรู	NOUN	NOUN	_	29	ccomp	_	_
+47	กับ	กับ	ADP	ADP	_	48	case	_	_
+48	โลก	โลก	NOUN	NOUN	_	46	nmod	_	_
+49	มุสลิม	มุสลิม	PROPN	PROPN	_	48	nmod	_	_
+50	พร้อม	พร้อม	CCONJ	CCONJ	_	52	cc	_	_
+51	ทั้ง	ทั้ง	ADV	ADV	_	52	advmod	_	_
+52	ย้ำ	ย้ำ	VERB	VERB	_	46	conj	_	_
+53	พันธสัญญา	พันธสัญญา	NOUN	NOUN	_	52	obj	_	_
+54	ที่	ที่	PRON	PRON	_	56	nsubj	_	_
+55	จะ	จะ	AUX	AUX	_	56	aux	_	_
+56	ปรับ	ปรับ	VERB	VERB	_	53	acl	_	_
+57	ปรุง	ปรุง	VERB	VERB	_	56	compound	_	_
+58	ความ	ความ	NOUN	NOUN	_	56	obj	_	_
+59	สัมพันธ์	สัมพันธ์	VERB	VERB	_	58	acl	_	_
+60	กับ	กับ	ADP	ADP	_	61	case	_	_
+61	โลก	โลก	NOUN	NOUN	_	59	obl	_	_
+62	มุสลิม	มุสลิม	PROPN	PROPN	_	61	nmod	_	_
+63	ซึ่ง	ซึ่ง	PRON	PRON	_	64	nsubj	_	_
+64	อยู่	อยู่	VERB	VERB	_	61	acl	_	_
+65	ใน	ใน	ADP	ADP	_	66	case	_	_
+66	ภาวะ	ภาวะ	NOUN	NOUN	_	64	obl	_	_
+67	ขม	ขม	ADJ	ADJ	_	66	amod	_	_
+68	ขื่น	ขื่น	ADJ	ADJ	_	67	compound	_	_
+69	ภายใต้	ภายใต้	ADP	ADP	_	70	case	_	_
+70	รัฐบาล	รัฐบาล	NOUN	NOUN	_	58	nmod	_	_
+71	ชุด	ชุด	NOUN	NOUN	_	70	nmod	_	_
+72	ก่อน	ก่อน	ADJ	ADJ	_	71	amod	_	_
+73	ของ	ของ	ADP	ADP	_	74	case	_	_
+74	สหรัฐ	สหรัฐ	PROPN	PROPN	_	71	nmod	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: th_tud-ud-train.conllu · this verb has L=1, R=4 (mean span = 1.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = นอกจากนี้ กิจกรรม จรรโลง ใจ ทำ เพื่อ ผ่อนคลาย ความเครียด ก็ เป็น สิ่ง ที่ ไม่ ควร มอง ข้าม สำหรับ ผู้ ประสบ ภัย ที่ อาจ สะสม ความเครียด ระหว่าง น้ำท่วม มา เป็น เวลา นาน
+1	นอกจากนี้	นอกจากนี้	CCONJ	CCONJ	_	11	cc	_	_
+2	กิจกรรม	กิจกรรม	NOUN	NOUN	_	11	nsubj	_	_
+3	จรรโลง	จรรโลง	VERB	VERB	_	2	acl	_	_
+4	ใจ	ใจ	NOUN	NOUN	_	3	obj	_	_
+5	ทำ	ทำ	VERB	VERB	_	2	acl	_	_
+6	เพื่อ	เพื่อ	SCONJ	SCONJ	_	7	mark	_	_
+7	ผ่อนคลาย	ผ่อนคลาย	VERB	VERB	_	5	advcl	_	_
+8	ความเครียด	ความเครียด	NOUN	NOUN	_	7	obj	_	_
+9	ก็	ก็	ADV	ADV	_	11	advmod	_	_
+10	เป็น	เป็น	AUX	AUX	_	11	cop	_	_
+11	สิ่ง	สิ่ง	NOUN	NOUN	_	0	root	_	_
+12	ที่	ที่	PRON	PRON	_	15	obj	_	_
+13	ไม่	ไม่	ADV	ADV	_	15	advmod	_	_
+14	ควร	ควร	AUX	AUX	_	15	aux	_	_
+15	มอง	มอง	VERB	VERB	_	11	acl	_	_
+16	ข้าม	ข้าม	VERB	VERB	_	15	compound	_	_
+17	สำหรับ	สำหรับ	ADP	ADP	_	18	case	_	_
+18	ผู้	ผู้	NOUN	NOUN	_	11	nmod	_	_
+19	ประสบ	ประสบ	VERB	VERB	_	18	acl	_	_
+20	ภัย	ภัย	NOUN	NOUN	_	19	obj	_	_
+21	ที่	ที่	PRON	PRON	_	23	nsubj	_	highlight=green|span=1
+22	อาจ	อาจ	AUX	AUX	_	23	aux	_	_
+23	สะสม	สะสม	VERB	VERB	_	18	acl	_	highlight=red
+24	ความเครียด	ความเครียด	NOUN	NOUN	_	23	obj	_	highlight=green|span=1
+25	ระหว่าง	ระหว่าง	SCONJ	SCONJ	_	26	mark	_	_
+26	น้ำท่วม	น้ำท่วม	VERB	VERB	_	23	advcl	_	highlight=green|span=2
+27	มา	มา	ADV	ADV	_	23	advmod	_	highlight=green|span=1
+28	เป็น	เป็น	VERB	VERB	_	23	advcl	_	highlight=green|span=3
+29	เวลา	เวลา	NOUN	NOUN	_	28	obj	_	_
+30	นาน	นาน	ADJ	ADJ	_	29	amod	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: th_tud-ud-train.conllu · this verb has L=1, R=4 (mean span = 1.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = มัก มี ความเชื่อ ใน เรื่อง เหนือ ธรรมชาติ เป็น อย่าง มาก และ ยาวนาน ซึ่ง เล่า ต่อ ๆ กัน มา เป็น เวลา นาน
+1	มัก	มัก	AUX	AUX	_	2	aux	_	_
+2	มี	มี	VERB	VERB	_	0	root	_	_
+3	ความเชื่อ	ความเชื่อ	NOUN	NOUN	_	2	obj	_	_
+4	ใน	ใน	ADP	ADP	_	5	case	_	_
+5	เรื่อง	เรื่อง	NOUN	NOUN	_	3	nmod	_	_
+6	เหนือ	เหนือ	ADP	ADP	_	7	case	_	_
+7	ธรรมชาติ	ธรรมชาติ	NOUN	NOUN	_	5	nmod	_	_
+8	เป็น	เป็น	VERB	VERB	_	2	advcl	_	_
+9	อย่าง	อย่าง	PART	PART	_	10	mark	_	_
+10	มาก	มาก	ADV	ADV	_	8	advmod	_	_
+11	และ	และ	CCONJ	CCONJ	_	12	cc	_	_
+12	ยาวนาน	ยาวนาน	ADV	ADV	_	10	conj	_	_
+13	ซึ่ง	ซึ่ง	PRON	PRON	_	14	obj	_	highlight=green|span=1
+14	เล่า	เล่า	VERB	VERB	_	3	acl	_	highlight=red
+15	ต่อ	ต่อ	ADV	ADV	_	14	advmod	_	highlight=green|span=1
+16	ๆ	ๆ	PUNCT	PUNCT	_	15	punct	_	_
+17	กัน	กัน	ADV	ADV	_	14	advmod	_	highlight=green|span=1
+18	มา	มา	ADV	ADV	_	14	advmod	_	highlight=green|span=1
+19	เป็น	เป็น	VERB	VERB	_	14	advcl	_	highlight=green|span=3
+20	เวลา	เวลา	NOUN	NOUN	_	19	obj	_	_
+21	นาน	นาน	ADJ	ADJ	_	20	amod	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: th_tud-ud-train.conllu · this verb has L=0, R=4 (mean span = 7.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ติดตาม ข้อมูล ข่าวสาร จาก ศูนย์ เตือน ภัย เป็น ระยะ เพราะ อาจ มี สัตว์ ที่ เป็น อันตราย แก่ มนุษย์ หรือ มี การ เตือน เชื้อโรค ที่ มา กับ น้ำ ใน บาง พื้นที่
+1	ติดตาม	ติดตาม	VERB	VERB	_	0	root	_	highlight=red
+2	ข้อมูล	ข้อมูล	NOUN	NOUN	_	1	obj	_	highlight=green|span=2
+3	ข่าวสาร	ข่าวสาร	NOUN	NOUN	_	2	nmod	_	_
+4	จาก	จาก	ADP	ADP	_	5	case	_	_
+5	ศูนย์	ศูนย์	NOUN	NOUN	_	1	obl	_	highlight=green|span=4
+6	เตือน	เตือน	VERB	VERB	_	5	acl	_	_
+7	ภัย	ภัย	NOUN	NOUN	_	6	obj	_	_
+8	เป็น	เป็น	VERB	VERB	_	1	advcl	_	highlight=green|span=2
+9	ระยะ	ระยะ	NOUN	NOUN	_	8	obj	_	_
+10	เพราะ	เพราะ	SCONJ	SCONJ	_	12	mark	_	_
+11	อาจ	อาจ	AUX	AUX	_	12	aux	_	_
+12	มี	มี	VERB	VERB	_	1	advcl	_	highlight=green|span=21
+13	สัตว์	สัตว์	NOUN	NOUN	_	12	obj	_	_
+14	ที่	ที่	PRON	PRON	_	16	nsubj	_	_
+15	เป็น	เป็น	AUX	AUX	_	16	cop	_	_
+16	อันตราย	อันตราย	NOUN	NOUN	_	13	acl	_	_
+17	แก่	แก่	ADP	ADP	_	18	case	_	_
+18	มนุษย์	มนุษย์	NOUN	NOUN	_	16	nmod	_	_
+19	หรือ	หรือ	CCONJ	CCONJ	_	20	cc	_	_
+20	มี	มี	VERB	VERB	_	12	conj	_	_
+21	การ	การ	NOUN	NOUN	_	20	obj	_	_
+22	เตือน	เตือน	VERB	VERB	_	21	acl	_	_
+23	เชื้อโรค	เชื้อโรค	NOUN	NOUN	_	22	obj	_	_
+24	ที่	ที่	PRON	PRON	_	25	nsubj	_	_
+25	มา	มา	VERB	VERB	_	23	acl	_	_
+26	กับ	กับ	ADP	ADP	_	27	case	_	_
+27	น้ำ	น้ำ	NOUN	NOUN	_	25	obl	_	_
+28	ใน	ใน	ADP	ADP	_	30	case	_	_
+29	บาง	บาง	ADV	ADV	_	30	advmod	_	_
+30	พื้นที่	พื้นที่	NOUN	NOUN	_	22	obl	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: th_tud-ud-dev.conllu · this verb has L=1, R=4 (mean span = 2.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = คำ ประกาศ ดัง กล่าว มี ขึ้น ภายหลัง รัฐบาล จีน แจ้ง ว่า ใน ช่วง 3 เดือน สุดท้าย ของ ปี 2551 มี คน ตก งาน มาก กว่า ครึ่ง ล้าน ราย เนื่องจาก วิกฤติ เศรษฐกิจ โลก
+1	คำ	คำ	NOUN	NOUN	_	5	nsubj	_	_
+2	ประกาศ	ประกาศ	VERB	VERB	_	1	acl	_	_
+3	ดัง	ดัง	DET	DET	_	1	det	_	_
+4	กล่าว	กล่าว	DET	DET	_	3	fixed	_	_
+5	มี	มี	VERB	VERB	_	0	root	_	_
+6	ขึ้น	ขึ้น	ADV	ADV	_	5	advmod	_	_
+7	ภายหลัง	ภายหลัง	SCONJ	SCONJ	_	10	mark	_	_
+8	รัฐบาล	รัฐบาล	NOUN	NOUN	_	10	nsubj	_	_
+9	จีน	จีน	PROPN	PROPN	_	8	nmod	_	_
+10	แจ้ง	แจ้ง	VERB	VERB	_	5	advcl	_	_
+11	ว่า	ว่า	SCONJ	SCONJ	_	20	mark	_	_
+12	ใน	ใน	ADP	ADP	_	13	case	_	_
+13	ช่วง	ช่วง	NOUN	NOUN	_	20	obl	_	_
+14	3	3	NUM	NUM	_	13	nummod	_	_
+15	เดือน	เดือน	NOUN	NOUN	_	14	clf	_	_
+16	สุดท้าย	สุดท้าย	ADJ	ADJ	_	14	amod	_	_
+17	ของ	ของ	ADP	ADP	_	18	case	_	_
+18	ปี	ปี	NOUN	NOUN	_	13	nmod	_	_
+19	2551	2551	NUM	NUM	_	18	nummod	_	_
+20	มี	มี	VERB	VERB	_	10	ccomp	_	_
+21	คน	คน	NOUN	NOUN	_	22	nsubj	_	highlight=green|span=1
+22	ตก	ตก	VERB	VERB	_	20	ccomp	_	highlight=red
+23	งาน	งาน	NOUN	NOUN	_	22	obj	_	highlight=green|span=1
+24	มาก	มาก	ADV	ADV	_	22	advmod	_	highlight=green|span=1
+25	กว่า	กว่า	ADP	ADP	_	28	case	_	_
+26	ครึ่ง	ครึ่ง	ADV	ADV	_	27	advmod	_	_
+27	ล้าน	ล้าน	NUM	NUM	_	28	nummod	_	_
+28	ราย	ราย	NOUN	NOUN	_	22	obl	_	highlight=green|span=4
+29	เนื่องจาก	เนื่องจาก	ADP	ADP	_	30	case	_	_
+30	วิกฤติ	วิกฤติ	NOUN	NOUN	_	22	obl	_	highlight=green|span=4
+31	เศรษฐกิจ	เศรษฐกิจ	NOUN	NOUN	_	30	nmod	_	_
+32	โลก	โลก	NOUN	NOUN	_	31	nmod	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: th_tud-ud-train.conllu · this verb has L=1, R=4 (mean span = 3.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = พาดหัวข่าว ที่ เบี่ยงเบน ความสนใจ ฉัน คือ ข่าว น้ำท่วม นิคมอุตสาหกรรม โรจนะ ของ บุคคล ที่ มี ชื่อเสียง อยู่ ใน ปัจจุบัน เกี่ยวกับ อาหาร ญี่ปุ่น ไม่ว่า จะ เป็น ร้าน อาหาร เครื่องดื่ม ชา เขียว ร้าน ช็อคโกแลต
+1	พาดหัวข่าว	พาดหัวข่าว	NOUN	NOUN	_	7	nsubj	_	_
+2	ที่	ที่	PRON	PRON	_	3	nsubj	_	_
+3	เบี่ยงเบน	เบี่ยงเบน	VERB	VERB	_	1	acl	_	_
+4	ความสนใจ	ความสนใจ	NOUN	NOUN	_	3	obj	_	_
+5	ฉัน	ฉัน	PRON	PRON	_	4	nmod	_	_
+6	คือ	คือ	AUX	AUX	_	7	cop	_	_
+7	ข่าว	ข่าว	NOUN	NOUN	_	0	root	_	_
+8	น้ำท่วม	น้ำท่วม	VERB	VERB	_	7	acl	_	_
+9	นิคมอุตสาหกรรม	นิคมอุตสาหกรรม	NOUN	NOUN	_	8	obj	_	_
+10	โรจนะ	โรจนะ	PROPN	PROPN	_	9	nmod	_	_
+11	ของ	ของ	ADP	ADP	_	12	case	_	_
+12	บุคคล	บุคคล	NOUN	NOUN	_	9	nmod	_	_
+13	ที่	ที่	PRON	PRON	_	14	nsubj	_	highlight=green|span=1
+14	มี	มี	VERB	VERB	_	12	acl	_	highlight=red
+15	ชื่อเสียง	ชื่อเสียง	NOUN	NOUN	_	14	obj	_	highlight=green|span=1
+16	อยู่	อยู่	ADV	ADV	_	14	advmod	_	highlight=green|span=1
+17	ใน	ใน	ADP	ADP	_	18	case	_	_
+18	ปัจจุบัน	ปัจจุบัน	NOUN	NOUN	_	14	obl	_	highlight=green|span=2
+19	เกี่ยวกับ	เกี่ยวกับ	ADP	ADP	_	20	case	_	_
+20	อาหาร	อาหาร	NOUN	NOUN	_	15	nmod	_	highlight=green|span=13
+21	ญี่ปุ่น	ญี่ปุ่น	PROPN	PROPN	_	20	nmod	_	_
+22	ไม่ว่า	ไม่ว่า	SCONJ	SCONJ	_	24	mark	_	_
+23	จะ	จะ	AUX	AUX	_	24	aux	_	_
+24	เป็น	เป็น	VERB	VERB	_	20	acl	_	_
+25	ร้าน	ร้าน	NOUN	NOUN	_	24	obj	_	_
+26	อาหาร	อาหาร	NOUN	NOUN	_	25	nmod	_	_
+27	เครื่องดื่ม	เครื่องดื่ม	NOUN	NOUN	_	25	list	_	_
+28	ชา	ชา	NOUN	NOUN	_	27	nmod	_	_
+29	เขียว	เขียว	ADJ	ADJ	_	28	amod	_	_
+30	ร้าน	ร้าน	NOUN	NOUN	_	25	list	_	_
+31	ช็อคโกแลต	ช็อคโกแลต	NOUN	NOUN	_	30	nmod	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: th_tud-ud-train.conllu · this verb has L=1, R=4 (mean span = 4.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ดันดี เสีย ชีวิต ลง ด้วย อาการ หัว ใจ วาย เฉียบพลัน ที่ โรง พยาบาล ใน แทมปา รัฐ ฟลอริดา เมื่อ วัน ที่ 1 กุมภาพันธ์ พ.ศ. 2555
+1	ดันดี	ดันดี	PROPN	PROPN	_	2	nsubj	_	highlight=green|span=1
+2	เสีย	เสีย	VERB	VERB	_	0	root	_	highlight=red
+3	ชีวิต	ชีวิต	NOUN	NOUN	_	2	compound	_	_
+4	ลง	ลง	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+5	ด้วย	ด้วย	ADP	ADP	_	6	case	_	_
+6	อาการ	อาการ	NOUN	NOUN	_	2	obl	_	highlight=green|span=6
+7	หัว	หัว	NOUN	NOUN	_	9	nsubj	_	_
+8	ใจ	ใจ	NOUN	NOUN	_	7	compound	_	_
+9	วาย	วาย	VERB	VERB	_	6	acl	_	_
+10	เฉียบพลัน	เฉียบพลัน	ADV	ADV	_	9	advmod	_	_
+11	ที่	ที่	ADP	ADP	_	12	case	_	_
+12	โรง	โรง	NOUN	NOUN	_	2	obl	_	highlight=green|span=7
+13	พยาบาล	พยาบาล	NOUN	NOUN	_	12	compound	_	_
+14	ใน	ใน	ADP	ADP	_	15	case	_	_
+15	แทมปา	แทมปา	PROPN	PROPN	_	12	nmod	_	_
+16	รัฐ	รัฐ	NOUN	NOUN	_	15	nmod	_	_
+17	ฟลอริดา	ฟลอริดา	PROPN	PROPN	_	16	nmod	_	_
+18	เมื่อ	เมื่อ	ADP	ADP	_	19	case	_	_
+19	วัน	วัน	NOUN	NOUN	_	2	obl	_	highlight=green|span=7
+20	ที่	ที่	PART	PART	_	19	amod	_	_
+21	1	1	NUM	NUM	_	20	nummod	_	_
+22	กุมภาพันธ์	กุมภาพันธ์	NOUN	NOUN	_	21	flat	_	_
+23	พ.ศ.	พ.ศ.	NOUN	NOUN	_	22	flat	_	_
+24	2555	2555	NUM	NUM	_	23	flat	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: th_tud-ud-train.conllu · this verb has L=0, R=4 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = เสีย ชีวิต อย่าง สงบ เพราะ อาการ แทรก ซ้อน เมื่อ เช้า มืด ของ วัน เสาร์ ที่ ผ่าน มา
+1	เสีย	เสีย	VERB	VERB	_	0	root	_	highlight=red
+2	ชีวิต	ชีวิต	NOUN	NOUN	_	1	obj	_	highlight=green|span=1
+3	อย่าง	อย่าง	PART	PART	_	4	mark	_	_
+4	สงบ	สงบ	ADV	ADV	_	1	advmod	_	highlight=green|span=2
+5	เพราะ	เพราะ	ADP	ADP	_	6	case	_	_
+6	อาการ	อาการ	NOUN	NOUN	_	1	obl	_	highlight=green|span=4
+7	แทรก	แทรก	VERB	VERB	_	6	acl	_	_
+8	ซ้อน	ซ้อน	VERB	VERB	_	7	compound	_	_
+9	เมื่อ	เมื่อ	ADP	ADP	_	10	case	_	_
+10	เช้า	เช้า	NOUN	NOUN	_	1	obl	_	highlight=green|span=9
+11	มืด	มืด	NOUN	NOUN	_	10	compound	_	_
+12	ของ	ของ	ADP	ADP	_	13	case	_	_
+13	วัน	วัน	NOUN	NOUN	_	10	nmod	_	_
+14	เสาร์	เสาร์	PROPN	PROPN	_	13	nmod	_	_
+15	ที่	ที่	PRON	PRON	_	16	nsubj	_	_
+16	ผ่าน	ผ่าน	VERB	VERB	_	13	acl	_	_
+17	มา	มา	ADV	ADV	_	16	advmod	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: th_tud-ud-train.conllu · this verb has L=2, R=4 (mean span = 3.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ประธานาธิบดี โอบามา ยัง ได้ พบ กับ ทีม เศรษฐกิจ เมื่อ วัน เสาร์ ตาม เวลา ท้อง ถิ่น โดย การ ประชุม ดำเนิน ไป 2 ชั่ว โมง
+1	ประธานาธิบดี	ประธานาธิบดี	NOUN	NOUN	_	5	nsubj	_	highlight=green|span=2
+2	โอบามา	โอบามา	PROPN	PROPN	_	1	nmod	_	_
+3	ยัง	ยัง	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+4	ได้	ได้	AUX	AUX	_	5	aux	_	_
+5	พบ	พบ	VERB	VERB	_	0	root	_	highlight=red
+6	กับ	กับ	ADP	ADP	_	7	case	_	_
+7	ทีม	ทีม	NOUN	NOUN	_	5	obl	_	highlight=green|span=3
+8	เศรษฐกิจ	เศรษฐกิจ	NOUN	NOUN	_	7	nmod	_	_
+9	เมื่อ	เมื่อ	ADP	ADP	_	10	case	_	_
+10	วัน	วัน	NOUN	NOUN	_	5	obl	_	highlight=green|span=3
+11	เสาร์	เสาร์	PROPN	PROPN	_	10	nmod	_	_
+12	ตาม	ตาม	ADP	ADP	_	13	case	_	_
+13	เวลา	เวลา	NOUN	NOUN	_	5	obl	_	highlight=green|span=4
+14	ท้อง	ท้อง	NOUN	NOUN	_	13	nmod	_	_
+15	ถิ่น	ถิ่น	NOUN	NOUN	_	14	compound	_	_
+16	โดย	โดย	SCONJ	SCONJ	_	19	mark	_	_
+17	การ	การ	NOUN	NOUN	_	19	nsubj	_	_
+18	ประชุม	ประชุม	VERB	VERB	_	17	acl	_	_
+19	ดำเนิน	ดำเนิน	VERB	VERB	_	5	advcl	_	highlight=green|span=8
+20	ไป	ไป	AUX	AUX	_	19	aux	_	_
+21	2	2	NUM	NUM	_	22	nummod	_	_
+22	ชั่ว	ชั่ว	NOUN	NOUN	_	19	obl	_	_
+23	โมง	โมง	NOUN	NOUN	_	22	compound	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: th_tud-ud-train.conllu · this verb has L=1, R=4 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = เช่น การ ที่ นิสิต ไม่ อ่าน หนังสือ สอบ เพราะ คิด ว่า ตนเอง มี ความรู้ มาก พอ อยู่แล้ว หรือ แม้แต่ นักกีฬา ที่ ประมาท คิด ว่า ตนเอง มี พรสวรรค์ ทาง ด้าน นี้ มาก เพียงพอ ที่ จะ เอาชนะ ผู้ อื่น จึง ไม่ ฝึกซ้อม จน เป็น เหตุ ทำให้ พ่ายแพ้ และ สุดท้าย ก็ รู้สึก เสียดาย ใน ภายหลัง เป็นต้น
+1	เช่น	เช่น	PART	PART	_	2	mark	_	_
+2	การ	การ	NOUN	NOUN	_	0	root	_	_
+3	ที่	ที่	SCONJ	SCONJ	_	6	mark	_	_
+4	นิสิต	นิสิต	NOUN	NOUN	_	6	nsubj	_	_
+5	ไม่	ไม่	ADV	ADV	_	6	advmod	_	_
+6	อ่าน	อ่าน	VERB	VERB	_	2	acl	_	_
+7	หนังสือ	หนังสือ	NOUN	NOUN	_	6	obj	_	_
+8	สอบ	สอบ	VERB	VERB	_	7	acl	_	_
+9	เพราะ	เพราะ	SCONJ	SCONJ	_	10	mark	_	_
+10	คิด	คิด	VERB	VERB	_	6	advcl	_	_
+11	ว่า	ว่า	SCONJ	SCONJ	_	13	mark	_	_
+12	ตนเอง	ตนเอง	NOUN	NOUN	_	13	nsubj	_	highlight=green|span=1
+13	มี	มี	VERB	VERB	_	10	ccomp	_	highlight=red
+14	ความรู้	ความรู้	NOUN	NOUN	_	13	obj	_	highlight=green|span=1
+15	มาก	มาก	ADV	ADV	_	13	advmod	_	highlight=green|span=1
+16	พอ	พอ	ADV	ADV	_	13	advmod	_	highlight=green|span=1
+17	อยู่แล้ว	อยู่แล้ว	ADV	ADV	_	13	advmod	_	highlight=green|span=1
+18	หรือ	หรือ	SCONJ	SCONJ	_	20	mark	_	_
+19	แม้แต่	แม้แต่	SCONJ	SCONJ	_	20	mark	_	_
+20	นักกีฬา	นักกีฬา	NOUN	NOUN	_	2	conj	_	_
+21	ที่	ที่	PRON	PRON	_	22	nsubj	_	_
+22	ประมาท	ประมาท	VERB	VERB	_	20	acl	_	_
+23	คิด	คิด	VERB	VERB	_	22	compound	_	_
+24	ว่า	ว่า	SCONJ	SCONJ	_	26	mark	_	_
+25	ตนเอง	ตนเอง	NOUN	NOUN	_	26	nsubj	_	_
+26	มี	มี	VERB	VERB	_	23	ccomp	_	_
+27	พรสวรรค์	พรสวรรค์	NOUN	NOUN	_	26	obj	_	_
+28	ทาง	ทาง	ADP	ADP	_	29	case	_	_
+29	ด้าน	ด้าน	NOUN	NOUN	_	27	nmod	_	_
+30	นี้	นี้	DET	DET	_	29	det	_	_
+31	มาก	มาก	ADV	ADV	_	26	advmod	_	_
+32	เพียงพอ	เพียงพอ	VERB	VERB	_	26	advcl	_	_
+33	ที่	ที่	SCONJ	SCONJ	_	35	mark	_	_
+34	จะ	จะ	AUX	AUX	_	35	aux	_	_
+35	เอาชนะ	เอาชนะ	VERB	VERB	_	32	advcl	_	_
+36	ผู้	ผู้	NOUN	NOUN	_	35	obj	_	_
+37	อื่น	อื่น	DET	DET	_	36	det	_	_
+38	จึง	จึง	ADV	ADV	_	40	advmod	_	_
+39	ไม่	ไม่	ADV	ADV	_	40	advmod	_	_
+40	ฝึกซ้อม	ฝึกซ้อม	VERB	VERB	_	26	conj	_	_
+41	จน	จน	SCONJ	SCONJ	_	42	mark	_	_
+42	เป็น	เป็น	VERB	VERB	_	40	advcl	_	_
+43	เหตุ	เหตุ	NOUN	NOUN	_	42	obj	_	_
+44	ทำให้	ทำให้	VERB	VERB	_	42	ccomp	_	_
+45	พ่ายแพ้	พ่ายแพ้	VERB	VERB	_	44	ccomp	_	_
+46	และ	และ	CCONJ	CCONJ	_	49	cc	_	_
+47	สุดท้าย	สุดท้าย	ADV	ADV	_	49	advmod	_	_
+48	ก็	ก็	ADV	ADV	_	49	advmod	_	_
+49	รู้สึก	รู้สึก	VERB	VERB	_	45	conj	_	_
+50	เสียดาย	เสียดาย	VERB	VERB	_	49	ccomp	_	_
+51	ใน	ใน	ADP	ADP	_	52	case	_	_
+52	ภายหลัง	ภายหลัง	NOUN	NOUN	_	50	obl	_	_
+53	เป็นต้น	เป็นต้น	PART	PART	_	49	mark	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: th_pud-ud-test.conllu · this verb has L=1, R=4 (mean span = 1.80)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = แอมะซอน จะ กลาย เป็น บริษัท อเมริกัน อันดับ สี่ ที่ มี มูลค่า ตาม ราคา ตลาด สูง ที่สุด แซงหน้า เอ็กซอนโมบิล
+1	แอมะซอน	แอมะซอน	PROPN	PROPN	_	3	nsubj	_	_
+2	จะ	จะ	AUX	AUX	_	3	aux	_	_
+3	กลาย	กลาย	VERB	VERB	_	0	root	_	_
+4	เป็น	เป็น	AUX	AUX	_	5	cop	_	_
+5	บริษัท	บริษัท	NOUN	NOUN	_	3	xcomp	_	_
+6	อเมริกัน	อเมริกัน	PROPN	PROPN	_	5	compound	_	_
+7	อันดับ	อันดับ	NOUN	NOUN	_	8	clf	_	_
+8	สี่	สี่	NUM	NUM	_	5	nummod	_	_
+9	ที่	ที่	DET	DET	_	10	nsubj	_	highlight=green|span=1
+10	มี	มี	VERB	VERB	_	5	acl:relcl	_	highlight=red
+11	มูลค่า	มูลค่า	NOUN	NOUN	_	10	obj	_	highlight=green|span=1
+12	ตาม	ตาม	ADP	ADP	_	13	case	_	_
+13	ราคา	ราคา	NOUN	NOUN	_	10	obl	_	highlight=green|span=3
+14	ตลาด	ตลาด	NOUN	NOUN	_	13	compound	_	_
+15	สูง	สูง	ADV	ADV	_	10	advmod	_	highlight=green|span=2
+16	ที่สุด	ที่สุด	ADV	ADV	_	15	advmod	_	_
+17	แซงหน้า	แซงหน้า	VERB	VERB	_	10	acl	_	highlight=green|span=2
+18	เอ็กซอนโมบิล	เอ็กซอนโมบิล	PROPN	PROPN	_	17	obj	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: th_tud-ud-train.conllu · this verb has L=1, R=4 (mean span = 5.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = สาว ญี่ปุ่น ผม แดง นั่ง อยู่ เดียวดาย ริม ถนน ท่ามกลาง ซากปรักหักพัง ไม่ เหลือ ชิ้น ดี ของ บ้านเรือน นับ พัน หลัง และ ซาก สิ่งของ ที่ วาง อย่าง ระเกะระกะ ทั่ว บริเวณ
+1	สาว	สาว	NOUN	NOUN	_	5	nsubj	_	highlight=green|span=4
+2	ญี่ปุ่น	ญี่ปุ่น	PROPN	PROPN	_	1	nmod	_	_
+3	ผม	ผม	NOUN	NOUN	_	1	nmod	_	_
+4	แดง	แดง	ADJ	ADJ	_	3	amod	_	_
+5	นั่ง	นั่ง	VERB	VERB	_	0	root	_	highlight=red
+6	อยู่	อยู่	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+7	เดียวดาย	เดียวดาย	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+8	ริม	ริม	ADP	ADP	_	9	case	_	_
+9	ถนน	ถนน	NOUN	NOUN	_	5	obl	_	highlight=green|span=2
+10	ท่ามกลาง	ท่ามกลาง	ADP	ADP	_	11	case	_	_
+11	ซากปรักหักพัง	ซากปรักหักพัง	NOUN	NOUN	_	5	obl	_	highlight=green|span=20
+12	ไม่	ไม่	ADV	ADV	_	13	advmod	_	_
+13	เหลือ	เหลือ	VERB	VERB	_	11	acl	_	_
+14	ชิ้น	ชิ้น	NOUN	NOUN	_	13	obj	_	_
+15	ดี	ดี	ADJ	ADJ	_	14	amod	_	_
+16	ของ	ของ	ADP	ADP	_	17	case	_	_
+17	บ้านเรือน	บ้านเรือน	NOUN	NOUN	_	11	nmod	_	_
+18	นับ	นับ	VERB	VERB	_	17	acl	_	_
+19	พัน	พัน	NUM	NUM	_	18	nummod	_	_
+20	หลัง	หลัง	NOUN	NOUN	_	19	clf	_	_
+21	และ	และ	CCONJ	CCONJ	_	22	cc	_	_
+22	ซาก	ซาก	NOUN	NOUN	_	11	conj	_	_
+23	สิ่งของ	สิ่งของ	NOUN	NOUN	_	22	nmod	_	_
+24	ที่	ที่	PRON	PRON	_	25	nsubj	_	_
+25	วาง	วาง	VERB	VERB	_	22	acl	_	_
+26	อย่าง	อย่าง	PART	PART	_	27	mark	_	_
+27	ระเกะระกะ	ระเกะระกะ	ADV	ADV	_	25	advcl	_	_
+28	ทั่ว	ทั่ว	ADP	ADP	_	29	case	_	_
+29	บริเวณ	บริเวณ	NOUN	NOUN	_	25	obl	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: th_tud-ud-dev.conllu · this verb has L=1, R=4 (mean span = 5.80)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ฉนวน กาซา กลับ สู่ ความ สงบ อีก ครั้ง หลังจาก การ โจม ตี ต่อ เนื่อง นาน 3 สัปดาห์ หลัง จาก ที่ กลุ่ม ฮามาส ประกาศ หยุด ยิง คล้อย หลัง การ ประกาศ หยุด ยิง ฝ่าย เดียว ของ อิสราเอล ได้ ไม่ นาน โดย ที่ เป็น การ ประกาศ หยุด ยิง แต่ ฝ่าย เดียว เช่น กัน ขณะ ที่ กอง ทัพ อิสราเอล ถอน กำลัง ออก จาก พื้น ที่ ยุทธศาสตร์ บาง จุด แล้ว
+1	ฉนวน	ฉนวน	NOUN	NOUN	_	3	nsubj	_	_
+2	กาซา	กาซา	PROPN	PROPN	_	1	nmod	_	_
+3	กลับ	กลับ	VERB	VERB	_	0	root	_	_
+4	สู่	สู่	ADP	ADP	_	5	case	_	_
+5	ความ	ความ	NOUN	NOUN	_	3	obl	_	_
+6	สงบ	สงบ	VERB	VERB	_	5	acl	_	_
+7	อีก	อีก	ADV	ADV	_	8	advmod	_	_
+8	ครั้ง	ครั้ง	NOUN	NOUN	_	3	obl	_	_
+9	หลังจาก	หลังจาก	ADP	ADP	_	10	case	_	_
+10	การ	การ	NOUN	NOUN	_	3	obl	_	_
+11	โจม	โจม	VERB	VERB	_	10	acl	_	_
+12	ตี	ตี	VERB	VERB	_	11	compound	_	_
+13	ต่อ	ต่อ	ADV	ADV	_	11	advmod	_	_
+14	เนื่อง	เนื่อง	ADV	ADV	_	13	fixed	_	_
+15	นาน	นาน	VERB	VERB	_	11	advcl	_	_
+16	3	3	NUM	NUM	_	17	nummod	_	_
+17	สัปดาห์	สัปดาห์	NOUN	NOUN	_	15	obl	_	_
+18	หลัง	หลัง	SCONJ	SCONJ	_	23	mark	_	_
+19	จาก	จาก	SCONJ	SCONJ	_	18	fixed	_	_
+20	ที่	ที่	SCONJ	SCONJ	_	18	fixed	_	_
+21	กลุ่ม	กลุ่ม	NOUN	NOUN	_	23	nsubj	_	highlight=green|span=2
+22	ฮามาส	ฮามาส	PROPN	PROPN	_	21	nmod	_	_
+23	ประกาศ	ประกาศ	VERB	VERB	_	3	advcl	_	highlight=red
+24	หยุด	หยุด	VERB	VERB	_	23	ccomp	_	highlight=green|span=2
+25	ยิง	ยิง	VERB	VERB	_	24	ccomp	_	_
+26	คล้อย	คล้อย	ADV	ADV	_	23	advmod	_	highlight=green|span=1
+27	หลัง	หลัง	SCONJ	SCONJ	_	38	mark	_	_
+28	การ	การ	NOUN	NOUN	_	38	nsubj	_	_
+29	ประกาศ	ประกาศ	VERB	VERB	_	28	acl	_	_
+30	หยุด	หยุด	VERB	VERB	_	29	ccomp	_	_
+31	ยิง	ยิง	VERB	VERB	_	30	ccomp	_	_
+32	ฝ่าย	ฝ่าย	NOUN	NOUN	_	29	obl	_	_
+33	เดียว	เดียว	ADJ	ADJ	_	32	amod	_	_
+34	ของ	ของ	ADP	ADP	_	35	case	_	_
+35	อิสราเอล	อิสราเอล	PROPN	PROPN	_	28	nmod	_	_
+36	ได้	ได้	AUX	AUX	_	38	aux	_	_
+37	ไม่	ไม่	ADV	ADV	_	38	advmod	_	_
+38	นาน	นาน	VERB	VERB	_	23	advcl	_	highlight=green|span=12
+39	โดย	โดย	SCONJ	SCONJ	_	42	mark	_	_
+40	ที่	ที่	SCONJ	SCONJ	_	39	fixed	_	_
+41	เป็น	เป็น	AUX	AUX	_	42	cop	_	_
+42	การ	การ	NOUN	NOUN	_	23	advcl	_	highlight=green|span=12
+43	ประกาศ	ประกาศ	VERB	VERB	_	42	acl	_	_
+44	หยุด	หยุด	VERB	VERB	_	43	ccomp	_	_
+45	ยิง	ยิง	VERB	VERB	_	44	ccomp	_	_
+46	แต่	แต่	ADV	ADV	_	47	advmod	_	_
+47	ฝ่าย	ฝ่าย	NOUN	NOUN	_	43	obl	_	_
+48	เดียว	เดียว	ADJ	ADJ	_	47	amod	_	_
+49	เช่น	เช่น	ADV	ADV	_	42	advmod	_	_
+50	กัน	กัน	PRON	PRON	_	49	compound	_	_
+51	ขณะ	ขณะ	SCONJ	SCONJ	_	56	mark	_	_
+52	ที่	ที่	SCONJ	SCONJ	_	51	fixed	_	_
+53	กอง	กอง	NOUN	NOUN	_	56	nsubj	_	_
+54	ทัพ	ทัพ	NOUN	NOUN	_	53	compound	_	_
+55	อิสราเอล	อิสราเอล	PROPN	PROPN	_	54	nmod	_	_
+56	ถอน	ถอน	VERB	VERB	_	3	advcl	_	_
+57	กำลัง	กำลัง	NOUN	NOUN	_	56	obj	_	_
+58	ออก	ออก	VERB	VERB	_	56	compound	_	_
+59	จาก	จาก	ADP	ADP	_	60	case	_	_
+60	พื้น	พื้น	NOUN	NOUN	_	58	obl	_	_
+61	ที่	ที่	NOUN	NOUN	_	60	compound	_	_
+62	ยุทธศาสตร์	ยุทธศาสตร์	NOUN	NOUN	_	60	nmod	_	_
+63	บาง	บาง	ADV	ADV	_	60	advmod	_	_
+64	จุด	จุด	NOUN	NOUN	_	60	clf	_	_
+65	แล้ว	แล้ว	ADV	ADV	_	56	advcl	_	_"></reactive-dep-tree>
+</div>
+</body></html>

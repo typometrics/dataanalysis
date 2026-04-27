@@ -1,0 +1,508 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Javanese — RMAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Javanese examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Javanese <small style="color:#999;font-weight:normal">(jv)</small> — RMAL<sub>2</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>2</b> right dependents (left side may be anything).</p><p><b>RMAL<sub>2</sub> = 3.979</b> &nbsp; <span style="color:#666">(315 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>right</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: jv_csui-ud-test.conllu · this verb has L=0, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = &quot; Aku kepingin mantu ana gedhung , Lek , &quot; semaur ku ora kalah sengit .
+1	&quot;	&quot;	PUNCT	PUNCT	_	3	punct	_	_
+2	Aku	Aku	PRON	PRON	_	3	nsubj	_	_
+3	kepingin	kepingin	VERB	VERB	_	0	root	_	_
+4	mantu	mantu	VERB	VERB	_	3	xcomp	_	_
+5	ana	ana	VERB	VERB	_	4	advcl	_	_
+6	gedhung	gedhung	NOUN	NOUN	_	5	obl	_	_
+7	,	,	PUNCT	PUNCT	_	3	punct	_	_
+8	Lek	Lek	PROPN	PROPN	_	3	vocative	_	_
+9	,	,	PUNCT	PUNCT	_	3	punct	_	_
+10	&quot;	&quot;	PUNCT	PUNCT	_	3	punct	_	_
+11	semaur	semaur	VERB	VERB	_	3	parataxis	_	highlight=red
+12	ku	ku	PRON	PRON	_	11	nsubj	_	highlight=green|span=1
+13	ora	ora	PART	PART	_	14	advmod	_	_
+14	kalah	kalah	ADJ	ADJ	_	11	advcl	_	highlight=green|span=3
+15	sengit	sengit	ADJ	ADJ	_	14	advmod	_	_
+16	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: jv_csui-ud-test.conllu · this verb has L=1, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ibu maringi aku kalung .
+1	Ibu	Ibu	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+2	maringi	maringi	VERB	VERB	_	0	root	_	highlight=red
+3	aku	aku	PRON	PRON	_	2	iobj	_	highlight=green|span=1
+4	kalung	kalung	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
+5	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: jv_csui-ud-test.conllu · this verb has L=1, R=2 (mean span = 9.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Tembung krama inggil digunakake kanggo ngluhurake wong sing dikarepake , dene tembung krama andhap digunakake kanggo ngasorake dhiri pribadi e wong sing guneman utawa sing ngurmati ( andhap : cendhek , asor ) .
+1	Tembung	Tembung	NOUN	NOUN	_	4	nsubj:pass	_	highlight=green|span=3
+2	krama	krama	ADJ	ADJ	_	1	nmod	_	_
+3	inggil	inggil	ADJ	ADJ	_	2	amod	_	_
+4	digunakake	digunakake	VERB	VERB	_	0	root	_	highlight=red
+5	kanggo	kanggo	SCONJ	SCONJ	_	6	mark	_	_
+6	ngluhurake	ngluhurake	VERB	VERB	_	4	advcl	_	highlight=green|span=5
+7	wong	wong	NOUN	NOUN	_	6	obj	_	_
+8	sing	sing	PRON	PRON	_	9	nsubj:pass	_	_
+9	dikarepake	dikarepake	VERB	VERB	_	7	acl:relcl	_	_
+10	,	,	PUNCT	PUNCT	_	4	punct	_	_
+11	dene	dene	ADV	ADV	_	15	advmod	_	_
+12	tembung	tembung	NOUN	NOUN	_	15	nsubj:pass	_	_
+13	krama	krama	ADJ	ADJ	_	12	nmod	_	_
+14	andhap	andhap	ADJ	ADJ	_	13	amod	_	_
+15	digunakake	digunakake	VERB	VERB	_	4	advcl	_	highlight=green|span=19
+16	kanggo	kanggo	SCONJ	SCONJ	_	17	mark	_	_
+17	ngasorake	ngasorake	VERB	VERB	_	15	advcl	_	_
+18	dhiri	dhiri	NOUN	NOUN	_	17	obj	_	_
+19	pribadi	pribadi	NOUN	NOUN	_	18	nmod	_	_
+20	e	e	DET	DET	_	19	det	_	_
+21	wong	wong	NOUN	NOUN	_	18	nmod:poss	_	_
+22	sing	sing	PRON	PRON	_	23	nsubj	_	_
+23	guneman	guneman	VERB	VERB	_	21	acl:relcl	_	_
+24	utawa	utawa	CCONJ	CCONJ	_	26	cc	_	_
+25	sing	sing	PRON	PRON	_	26	nsubj	_	_
+26	ngurmati	ngurmati	VERB	VERB	_	23	conj	_	_
+27	(	(	PUNCT	PUNCT	_	28	punct	_	_
+28	andhap	andhap	ADJ	ADJ	_	21	appos	_	_
+29	:	:	PUNCT	PUNCT	_	28	punct	_	_
+30	cendhek	cendhek	ADJ	ADJ	_	28	advcl	_	_
+31	,	,	PUNCT	PUNCT	_	32	punct	_	_
+32	asor	asor	ADJ	ADJ	_	30	conj	_	_
+33	)	)	PUNCT	PUNCT	_	28	punct	_	_
+34	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: jv_csui-ud-test.conllu · this verb has L=0, R=2 (mean span = 7.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Maskape iki ngoperasikake jaringan penerbangan tumuju 50 tujuan ing 20 nagara , kalebu penerbangan jarak adoh tumuju Afrika Timur , Tengah , lan Barat .
+1	Maskape	Maskape	NOUN	NOUN	_	3	nsubj	_	_
+2	iki	iki	DET	DET	_	1	det	_	_
+3	ngoperasikake	ngoperasikake	VERB	VERB	_	0	root	_	_
+4	jaringan	jaringan	X	X	_	3	obj	_	_
+5	penerbangan	penerbangan	X	X	_	4	flat:foreign	_	_
+6	tumuju	tumuju	VERB	VERB	_	3	advcl	_	highlight=red
+7	50	50	NUM	NUM	_	8	nummod	_	_
+8	tujuan	tujuan	X	X	_	6	obl	_	highlight=green|span=5
+9	ing	ing	ADP	ADP	_	11	case	_	_
+10	20	20	NUM	NUM	_	11	nummod	_	_
+11	nagara	nagara	NOUN	NOUN	_	8	nmod	_	_
+12	,	,	PUNCT	PUNCT	_	13	punct	_	_
+13	kalebu	kalebu	VERB	VERB	_	6	advcl	_	highlight=green|span=10
+14	penerbangan	penerbangan	X	X	_	13	obl	_	_
+15	jarak	jarak	NOUN	NOUN	_	14	nmod	_	_
+16	adoh	adoh	ADJ	ADJ	_	15	amod	_	_
+17	tumuju	tumuju	VERB	VERB	_	14	acl	_	_
+18	Afrika	Afrika	PROPN	PROPN	_	17	obj	_	_
+19	Timur	Timur	PROPN	PROPN	_	18	flat:name	_	_
+20	,	,	PUNCT	PUNCT	_	21	punct	_	_
+21	Tengah	Tengah	PROPN	PROPN	_	19	conj	_	_
+22	,	,	PUNCT	PUNCT	_	23	punct	_	_
+23	lan	lan	CCONJ	CCONJ	_	24	cc	_	_
+24	Barat	Barat	PROPN	PROPN	_	19	conj	_	_
+25	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: jv_csui-ud-test.conllu · this verb has L=1, R=2 (mean span = 6.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Bocah sakloron iku dadi conto liya e , yen di-PHK ra usah wedi anggere sregep maca lan usaha ngupaya upa .
+1	Bocah	Bocah	NOUN	NOUN	_	4	nsubj	_	highlight=green|span=3
+2	sakloron	sakloron	NUM	NUM	_	1	nummod	_	_
+3	iku	iku	DET	DET	_	1	det	_	_
+4	dadi	dadi	VERB	VERB	_	0	root	_	highlight=red
+5	conto	conto	NOUN	NOUN	_	4	obl	_	highlight=green|span=3
+6	liya	liya	ADJ	ADJ	_	5	amod	_	_
+7	e	e	DET	DET	_	6	det	_	_
+8	,	,	PUNCT	PUNCT	_	4	punct	_	_
+9	yen	yen	SCONJ	SCONJ	_	10	mark	_	_
+10	di-PHK	di-PHK	VERB	VERB	_	4	advcl	_	highlight=green|span=12
+11	ra	ra	PART	PART	_	12	advmod	_	_
+12	usah	usah	VERB	VERB	_	10	advcl	_	_
+13	wedi	wedi	ADJ	ADJ	_	12	xcomp	_	_
+14	anggere	anggere	SCONJ	SCONJ	_	15	mark	_	_
+15	sregep	sregep	ADJ	ADJ	_	13	conj	_	_
+16	maca	maca	VERB	VERB	_	15	advcl	_	_
+17	lan	lan	CCONJ	CCONJ	_	18	cc	_	_
+18	usaha	usaha	NOUN	NOUN	_	16	conj	_	_
+19	ngupaya	ngupaya	VERB	VERB	_	18	acl	_	_
+20	upa	upa	PRON	PRON	_	19	obl	_	_
+21	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: jv_csui-ud-test.conllu · this verb has L=1, R=2 (mean span = 2.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Priya kang kajibah nabuh drum ing pepanthan utawa grup Makam , Julius , ngandharake grup Makam wis pentas tekan ngendi-ngendi saindhenge Indonesia .
+1	Priya	Priya	NOUN	NOUN	_	14	nsubj	_	_
+2	kang	kang	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+3	kajibah	kajibah	VERB	VERB	_	1	acl:relcl	_	highlight=red
+4	nabuh	nabuh	NOUN	NOUN	_	3	obj	_	highlight=green|span=2
+5	drum	drum	X	X	_	4	amod	_	_
+6	ing	ing	ADP	ADP	_	7	case	_	_
+7	pepanthan	pepanthan	NOUN	NOUN	_	3	obl	_	highlight=green|span=5
+8	utawa	utawa	CCONJ	CCONJ	_	9	cc	_	_
+9	grup	grup	NOUN	NOUN	_	7	conj	_	_
+10	Makam	Makam	PROPN	PROPN	_	7	nmod	_	_
+11	,	,	PUNCT	PUNCT	_	12	punct	_	_
+12	Julius	Julius	PROPN	PROPN	_	1	conj	_	_
+13	,	,	PUNCT	PUNCT	_	12	punct	_	_
+14	ngandharake	ngandharake	VERB	VERB	_	0	root	_	_
+15	grup	grup	NOUN	NOUN	_	18	nsubj	_	_
+16	Makam	Makam	PROPN	PROPN	_	15	nmod	_	_
+17	wis	wis	AUX	AUX	_	18	aux	_	_
+18	pentas	pentas	VERB	VERB	_	14	ccomp	_	_
+19	tekan	tekan	ADP	ADP	_	20	case	_	_
+20	ngendi-ngendi	ngendi-ngendi	PRON	PRON	_	18	obl	_	_
+21	saindhenge	saindhenge	DET	DET	_	22	det	_	_
+22	Indonesia	Indonesia	PROPN	PROPN	_	20	nmod	_	_
+23	.	.	PUNCT	PUNCT	_	14	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: jv_csui-ud-test.conllu · this verb has L=1, R=2 (mean span = 4.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = EAT ngambakake kegiyatan e kanthi ngleboni tataran kontrak karo DHL Worldwide Express taun 1985 .
+1	EAT	EAT	PROPN	PROPN	_	2	nsubj	_	highlight=green|span=1
+2	ngambakake	ngambakake	VERB	VERB	_	0	root	_	highlight=red
+3	kegiyatan	kegiyatan	NOUN	NOUN	_	2	obj	_	highlight=green|span=2
+4	e	e	PRON	PRON	_	3	nmod:poss	_	_
+5	kanthi	kanthi	SCONJ	SCONJ	_	6	mark	_	_
+6	ngleboni	ngleboni	VERB	VERB	_	2	advcl	_	highlight=green|span=10
+7	tataran	tataran	NOUN	NOUN	_	6	obj	_	_
+8	kontrak	kontrak	X	X	_	7	nmod	_	_
+9	karo	karo	ADP	ADP	_	10	case	_	_
+10	DHL	DHL	PROPN	PROPN	_	7	nmod	_	_
+11	Worldwide	Worldwide	PROPN	PROPN	_	10	flat:name	_	_
+12	Express	Express	PROPN	PROPN	_	10	flat:name	_	_
+13	taun	taun	NOUN	NOUN	_	6	obl:tmod	_	_
+14	1985	1985	NUM	NUM	_	13	nummod	_	_
+15	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: jv_csui-ud-test.conllu · this verb has L=2, R=2 (mean span = 4.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Vesta wujud sabuk asteroid paling utami ingkang kadang-kala ketingal tanpa piranti tambahan ( ing saperangan kadadosan ingkang cekap langka , asteroid ingkang cedhak kaliyan bumi saged ketingal tanpa bantuan teknis ; pirsani 99942 Apophis ) .
+1	Vesta	Vesta	PROPN	PROPN	_	2	nsubj	_	_
+2	wujud	wujud	NOUN	NOUN	_	0	root	_	_
+3	sabuk	sabuk	NOUN	NOUN	_	2	nmod	_	_
+4	asteroid	asteroid	NOUN	NOUN	_	3	nmod	_	_
+5	paling	paling	ADV	ADV	_	6	advmod	_	_
+6	utami	utami	ADJ	ADJ	_	3	amod	_	_
+7	ingkang	ingkang	PRON	PRON	_	9	nsubj:pass	_	_
+8	kadang-kala	kadang-kala	ADV	ADV	_	9	advmod	_	_
+9	ketingal	ketingal	VERB	VERB	_	2	acl:relcl	_	_
+10	tanpa	tanpa	ADP	ADP	_	11	case	_	_
+11	piranti	piranti	NOUN	NOUN	_	9	obl	_	_
+12	tambahan	tambahan	NOUN	NOUN	_	11	nmod	_	_
+13	(	(	PUNCT	PUNCT	_	27	punct	_	_
+14	ing	ing	ADP	ADP	_	16	case	_	_
+15	saperangan	saperangan	DET	DET	_	16	det	_	_
+16	kadadosan	kadadosan	NOUN	NOUN	_	27	obl	_	highlight=green|span=6
+17	ingkang	ingkang	PRON	PRON	_	19	nsubj	_	_
+18	cekap	cekap	ADJ	ADJ	_	19	advmod	_	_
+19	langka	langka	ADJ	ADJ	_	16	acl:relcl	_	_
+20	,	,	PUNCT	PUNCT	_	16	punct	_	_
+21	asteroid	asteroid	NOUN	NOUN	_	27	nsubj	_	highlight=green|span=5
+22	ingkang	ingkang	PRON	PRON	_	23	nsubj	_	_
+23	cedhak	cedhak	ADJ	ADJ	_	21	acl:relcl	_	_
+24	kaliyan	kaliyan	ADP	ADP	_	25	case	_	_
+25	bumi	bumi	NOUN	NOUN	_	23	obl	_	_
+26	saged	saged	AUX	AUX	_	27	aux	_	_
+27	ketingal	ketingal	VERB	VERB	_	9	advcl	_	highlight=red
+28	tanpa	tanpa	ADP	ADP	_	29	case	_	_
+29	bantuan	bantuan	NOUN	NOUN	_	27	obl	_	highlight=green|span=3
+30	teknis	teknis	ADJ	ADJ	_	29	amod	_	_
+31	;	;	PUNCT	PUNCT	_	32	punct	_	_
+32	pirsani	pirsani	VERB	VERB	_	27	appos	_	highlight=green|span=3
+33	99942	99942	NUM	NUM	_	34	nummod	_	_
+34	Apophis	Apophis	PROPN	PROPN	_	32	obj	_	_
+35	)	)	PUNCT	PUNCT	_	27	punct	_	_
+36	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: jv_csui-ud-test.conllu · this verb has L=0, R=2 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Gegojegan karo Lintang , gawe ayem ati ku .
+1	Gegojegan	Gegojegan	VERB	VERB	_	0	root	_	highlight=red
+2	karo	karo	ADP	ADP	_	3	case	_	_
+3	Lintang	Lintang	PROPN	PROPN	_	1	obl	_	highlight=green|span=2
+4	,	,	PUNCT	PUNCT	_	1	punct	_	_
+5	gawe	gawe	VERB	VERB	_	1	advcl	_	highlight=green|span=4
+6	ayem	ayem	ADJ	ADJ	_	5	xcomp	_	_
+7	ati	ati	NOUN	NOUN	_	6	nsubj	_	_
+8	ku	ku	PRON	PRON	_	7	nmod:poss	_	_
+9	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: jv_csui-ud-test.conllu · this verb has L=0, R=2 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Tari wanodya sing kuwat , garwa e seda jalaran kenthir ing Kali Bengawan Solo nalika arep nyebrangke traktor .
+1	Tari	Tari	PROPN	PROPN	_	2	nsubj	_	_
+2	wanodya	wanodya	NOUN	NOUN	_	0	root	_	_
+3	sing	sing	PRON	PRON	_	4	nsubj	_	_
+4	kuwat	kuwat	ADJ	ADJ	_	2	acl:relcl	_	_
+5	,	,	PUNCT	PUNCT	_	4	punct	_	_
+6	garwa	garwa	NOUN	NOUN	_	8	nsubj	_	_
+7	e	e	PRON	PRON	_	6	nmod:poss	_	_
+8	seda	seda	VERB	VERB	_	4	advcl	_	_
+9	jalaran	jalaran	SCONJ	SCONJ	_	10	mark	_	_
+10	kenthir	kenthir	VERB	VERB	_	8	advcl	_	highlight=red
+11	ing	ing	ADP	ADP	_	12	case	_	_
+12	Kali	Kali	PROPN	PROPN	_	10	obl	_	highlight=green|span=4
+13	Bengawan	Bengawan	PROPN	PROPN	_	12	flat:name	_	_
+14	Solo	Solo	PROPN	PROPN	_	12	flat:name	_	_
+15	nalika	nalika	SCONJ	SCONJ	_	17	case	_	_
+16	arep	arep	AUX	AUX	_	17	aux	_	_
+17	nyebrangke	nyebrangke	VERB	VERB	_	10	advcl	_	highlight=green|span=4
+18	traktor	traktor	NOUN	NOUN	_	17	obl	_	_
+19	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: jv_csui-ud-test.conllu · this verb has L=2, R=2 (mean span = 2.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Jamaika pungkasan oleh panggonan semifinalis taun 2004 , Ukraina pungkasan oleh panggonan semifinalis taun 2007 , Meksiko , Rusia lan Kolombia pungkasan oleh panggonan semifinalis taun 2008 .
+1	Jamaika	Jamaika	PROPN	PROPN	_	3	nsubj	_	_
+2	pungkasan	pungkasan	ADJ	ADJ	_	3	advmod	_	_
+3	oleh	oleh	VERB	VERB	_	0	root	_	_
+4	panggonan	panggonan	NOUN	NOUN	_	3	obj	_	_
+5	semifinalis	semifinalis	X	X	_	4	amod	_	_
+6	taun	taun	NOUN	NOUN	_	3	obl:tmod	_	_
+7	2004	2004	NUM	NUM	_	6	nummod	_	_
+8	,	,	PUNCT	PUNCT	_	11	punct	_	_
+9	Ukraina	Ukraina	PROPN	PROPN	_	11	nsubj	_	_
+10	pungkasan	pungkasan	ADJ	ADJ	_	11	advmod	_	_
+11	oleh	oleh	VERB	VERB	_	3	conj	_	_
+12	panggonan	panggonan	NOUN	NOUN	_	11	obj	_	_
+13	semifinalis	semifinalis	X	X	_	12	amod	_	_
+14	taun	taun	NOUN	NOUN	_	11	obl:tmod	_	_
+15	2007	2007	NUM	NUM	_	14	nummod	_	_
+16	,	,	PUNCT	PUNCT	_	23	punct	_	_
+17	Meksiko	Meksiko	PROPN	PROPN	_	23	nsubj	_	highlight=green|span=4
+18	,	,	PUNCT	PUNCT	_	19	punct	_	_
+19	Rusia	Rusia	PROPN	PROPN	_	17	conj	_	_
+20	lan	lan	CCONJ	CCONJ	_	21	cc	_	_
+21	Kolombia	Kolombia	PROPN	PROPN	_	17	conj	_	_
+22	pungkasan	pungkasan	ADJ	ADJ	_	23	advmod	_	highlight=green|span=1
+23	oleh	oleh	VERB	VERB	_	3	conj	_	highlight=red
+24	panggonan	panggonan	NOUN	NOUN	_	23	obj	_	highlight=green|span=2
+25	semifinalis	semifinalis	X	X	_	24	amod	_	_
+26	taun	taun	NOUN	NOUN	_	23	obl:tmod	_	highlight=green|span=2
+27	2008	2008	NUM	NUM	_	26	nummod	_	_
+28	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: jv_csui-ud-test.conllu · this verb has L=2, R=2 (mean span = 2.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Tembang Cublak-cublak Suweng uga ngandhut piwulang becik sajroning golek katentreman ing donya .
+1	Tembang	Tembang	NOUN	NOUN	_	5	nsubj	_	highlight=green|span=3
+2	Cublak-cublak	Cublak-cublak	PROPN	PROPN	_	1	nmod	_	_
+3	Suweng	Suweng	PROPN	PROPN	_	2	flat:name	_	_
+4	uga	uga	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+5	ngandhut	ngandhut	VERB	VERB	_	0	root	_	highlight=red
+6	piwulang	piwulang	NOUN	NOUN	_	5	obl	_	highlight=green|span=2
+7	becik	becik	ADJ	ADJ	_	6	amod	_	_
+8	sajroning	sajroning	SCONJ	SCONJ	_	9	mark	_	_
+9	golek	golek	VERB	VERB	_	5	advcl	_	highlight=green|span=5
+10	katentreman	katentreman	NOUN	NOUN	_	9	obl	_	_
+11	ing	ing	ADP	ADP	_	12	case	_	_
+12	donya	donya	NOUN	NOUN	_	10	nmod	_	_
+13	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: jv_csui-ud-test.conllu · this verb has L=2, R=2 (mean span = 3.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Apa maneh , Lek Wiro Bengah ngusir udan ya ora nganggo sesaji menyan lan kembang .
+1	Apa	Apa	PRON	PRON	_	7	obl	_	highlight=green|span=2
+2	maneh	maneh	ADV	ADV	_	1	advmod	_	_
+3	,	,	PUNCT	PUNCT	_	1	punct	_	_
+4	Lek	Lek	PROPN	PROPN	_	7	nsubj	_	highlight=green|span=3
+5	Wiro	Wiro	PROPN	PROPN	_	4	nmod	_	_
+6	Bengah	Bengah	PROPN	PROPN	_	5	flat:name	_	_
+7	ngusir	ngusir	VERB	VERB	_	0	root	_	highlight=red
+8	udan	udan	NOUN	NOUN	_	7	obj	_	highlight=green|span=1
+9	ya	ya	PART	PART	_	11	advmod:emph	_	_
+10	ora	ora	PART	PART	_	11	advmod	_	_
+11	nganggo	nganggo	VERB	VERB	_	7	advcl	_	highlight=green|span=7
+12	sesaji	sesaji	NOUN	NOUN	_	11	obj	_	_
+13	menyan	menyan	NOUN	NOUN	_	12	nmod	_	_
+14	lan	lan	CCONJ	CCONJ	_	15	cc	_	_
+15	kembang	kembang	NOUN	NOUN	_	13	conj	_	_
+16	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: jv_csui-ud-test.conllu · this verb has L=2, R=2 (mean span = 4.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ing Oktober 2010 , Otoritas Palestina nyekel dheweke amarga diduga ngolok-olok marang Islam ing Facebook lan ing postingan blog ; Penangkapan e entuk perhatian internasional .
+1	Ing	Ing	ADP	ADP	_	2	case	_	_
+2	Oktober	Oktober	PROPN	PROPN	_	7	obl:tmod	_	highlight=green|span=3
+3	2010	2010	NUM	NUM	_	2	flat	_	_
+4	,	,	PUNCT	PUNCT	_	2	punct	_	_
+5	Otoritas	Otoritas	PROPN	PROPN	_	7	nsubj	_	highlight=green|span=2
+6	Palestina	Palestina	PROPN	PROPN	_	5	flat:name	_	_
+7	nyekel	nyekel	VERB	VERB	_	0	root	_	highlight=red
+8	dheweke	dheweke	PRON	PRON	_	7	obj	_	highlight=green|span=1
+9	amarga	amarga	SCONJ	SCONJ	_	10	mark	_	_
+10	diduga	diduga	VERB	VERB	_	7	advcl	_	highlight=green|span=11
+11	ngolok-olok	ngolok-olok	VERB	VERB	_	10	xcomp	_	_
+12	marang	marang	ADP	ADP	_	13	case	_	_
+13	Islam	Islam	PROPN	PROPN	_	11	obl	_	_
+14	ing	ing	ADP	ADP	_	15	case	_	_
+15	Facebook	Facebook	PROPN	PROPN	_	11	obl	_	_
+16	lan	lan	CCONJ	CCONJ	_	18	cc	_	_
+17	ing	ing	ADP	ADP	_	18	case	_	_
+18	postingan	postingan	X	X	_	15	conj	_	_
+19	blog	blog	NOUN	NOUN	_	18	nmod	_	_
+20	;	;	PUNCT	PUNCT	_	23	punct	_	_
+21	Penangkapan	Penangkapan	PROPN	PROPN	_	23	nsubj	_	_
+22	e	e	DET	DET	_	21	nmod:poss	_	_
+23	entuk	entuk	VERB	VERB	_	7	parataxis	_	_
+24	perhatian	perhatian	X	X	_	23	obj	_	_
+25	internasional	internasional	ADJ	ADJ	_	24	amod	_	_
+26	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: jv_csui-ud-test.conllu · this verb has L=1, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Koizumi mundur ana ing tanggal 26 September lan sakpungkasane digantiake Abe .
+1	Koizumi	Koizumi	PROPN	PROPN	_	2	nsubj	_	highlight=green|span=1
+2	mundur	mundur	VERB	VERB	_	0	root	_	highlight=red
+3	ana	ana	VERB	VERB	_	2	advcl	_	highlight=green|span=1
+4	ing	ing	ADP	ADP	_	5	case	_	_
+5	tanggal	tanggal	NOUN	NOUN	_	2	obl	_	highlight=green|span=4
+6	26	26	NUM	NUM	_	5	nummod	_	_
+7	September	September	PROPN	PROPN	_	6	flat	_	_
+8	lan	lan	CCONJ	CCONJ	_	10	cc	_	_
+9	sakpungkasane	sakpungkasane	ADV	ADV	_	10	advmod	_	_
+10	digantiake	digantiake	VERB	VERB	_	2	conj	_	_
+11	Abe	Abe	PROPN	PROPN	_	10	obl:agent	_	_
+12	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: jv_csui-ud-test.conllu · this verb has L=2, R=2 (mean span = 6.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Nganti pertengahan 1986 bae , AS wis sumadya dana ora kurang sak milyar dollar ( aji nalika iku ) nganti nggawa implikasi ing tingkat pulitik antara e Washington karo Tel-Aviv .
+1	Nganti	Nganti	ADP	ADP	_	2	case	_	_
+2	pertengahan	pertengahan	X	X	_	8	obl:tmod	_	highlight=green|span=4
+3	1986	1986	NUM	NUM	_	2	nummod	_	_
+4	bae	bae	ADV	ADV	_	2	advmod	_	_
+5	,	,	PUNCT	PUNCT	_	2	punct	_	_
+6	AS	AS	PROPN	PROPN	_	8	nsubj	_	highlight=green|span=1
+7	wis	wis	AUX	AUX	_	8	aux	_	_
+8	sumadya	sumadya	VERB	VERB	_	0	root	_	highlight=red
+9	dana	dana	NOUN	NOUN	_	8	obj	_	highlight=green|span=9
+10	ora	ora	PART	PART	_	14	advmod	_	_
+11	kurang	kurang	ADV	ADV	_	14	advmod	_	_
+12	sak	sak	NUM	NUM	_	14	nummod	_	_
+13	milyar	milyar	NUM	NUM	_	12	flat	_	_
+14	dollar	dollar	NOUN	NOUN	_	9	nmod	_	_
+15	(	(	PUNCT	PUNCT	_	16	punct	_	_
+16	aji	aji	NOUN	NOUN	_	14	appos	_	_
+17	nalika	nalika	ADP	ADP	_	18	case	_	_
+18	iku	iku	PRON	PRON	_	16	nmod	_	_
+19	)	)	PUNCT	PUNCT	_	16	punct	_	_
+20	nganti	nganti	SCONJ	SCONJ	_	21	mark	_	_
+21	nggawa	nggawa	VERB	VERB	_	8	advcl	_	highlight=green|span=11
+22	implikasi	implikasi	NOUN	NOUN	_	21	obj	_	_
+23	ing	ing	ADP	ADP	_	24	case	_	_
+24	tingkat	tingkat	NOUN	NOUN	_	22	nmod	_	_
+25	pulitik	pulitik	NOUN	NOUN	_	24	nmod	_	_
+26	antara	antara	NOUN	NOUN	_	27	nmod:lmod	_	_
+27	e	e	PRON	PRON	_	28	nmod	_	_
+28	Washington	Washington	PROPN	PROPN	_	22	nmod	_	_
+29	karo	karo	CCONJ	CCONJ	_	30	cc	_	_
+30	Tel-Aviv	Tel-Aviv	PROPN	PROPN	_	28	conj	_	_
+31	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: jv_csui-ud-test.conllu · this verb has L=2, R=2 (mean span = 1.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Wingi sore Tami mbebeda adhi e nganti kekejer .
+1	Wingi	Wingi	ADV	ADV	_	4	advmod	_	highlight=green|span=2
+2	sore	sore	NOUN	NOUN	_	1	nmod	_	_
+3	Tami	Tami	PROPN	PROPN	_	4	nsubj	_	highlight=green|span=1
+4	mbebeda	mbebeda	VERB	VERB	_	0	root	_	highlight=red
+5	adhi	adhi	NOUN	NOUN	_	4	obl	_	highlight=green|span=2
+6	e	e	PRON	PRON	_	5	nmod:poss	_	_
+7	nganti	nganti	SCONJ	SCONJ	_	8	mark	_	_
+8	kekejer	kekejer	VERB	VERB	_	4	advcl	_	highlight=green|span=2
+9	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: jv_csui-ud-test.conllu · this verb has L=1, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Tangan sepuh bapak isih kuwat njunjung bentelan pring sing wis dipasangi trontong tilas wadhah susu kang diisi krikil mau .
+1	Tangan	Tangan	NOUN	NOUN	_	5	nsubj	_	_
+2	sepuh	sepuh	ADJ	ADJ	_	1	amod	_	_
+3	bapak	bapak	NOUN	NOUN	_	1	nmod:poss	_	_
+4	isih	isih	ADV	ADV	_	5	advmod	_	_
+5	kuwat	kuwat	ADJ	ADJ	_	0	root	_	_
+6	njunjung	njunjung	VERB	VERB	_	5	advcl	_	_
+7	bentelan	bentelan	NOUN	NOUN	_	6	obj	_	_
+8	pring	pring	NOUN	NOUN	_	7	nmod	_	_
+9	sing	sing	PRON	PRON	_	11	nsubj	_	_
+10	wis	wis	AUX	AUX	_	11	aux	_	_
+11	dipasangi	dipasangi	VERB	VERB	_	7	acl:relcl	_	_
+12	trontong	trontong	NOUN	NOUN	_	11	nmod	_	_
+13	tilas	tilas	NOUN	NOUN	_	12	nmod	_	_
+14	wadhah	wadhah	NOUN	NOUN	_	13	nmod	_	_
+15	susu	susu	NOUN	NOUN	_	14	nmod	_	_
+16	kang	kang	PRON	PRON	_	17	nsubj:pass	_	highlight=green|span=1
+17	diisi	diisi	VERB	VERB	_	12	acl:relcl	_	highlight=red
+18	krikil	krikil	NOUN	NOUN	_	17	obl	_	highlight=green|span=1
+19	mau	mau	ADV	ADV	_	17	advmod	_	highlight=green|span=1
+20	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: jv_csui-ud-test.conllu · this verb has L=0, R=2 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = &quot; Mula dienggo tenger dadi jeneng kampung supaya gampang sing ngeling-eling utawa nggoleki , ” ujar e Nursalim , Selasa ( 7 / 6 / 2022 ) .
+1	&quot;	&quot;	PUNCT	PUNCT	_	9	punct	_	_
+2	Mula	Mula	NOUN	NOUN	_	9	nsubj	_	_
+3	dienggo	dienggo	VERB	VERB	_	2	acl	_	_
+4	tenger	tenger	NOUN	NOUN	_	3	obl	_	_
+5	dadi	dadi	VERB	VERB	_	4	acl	_	_
+6	jeneng	jeneng	NOUN	NOUN	_	5	xcomp	_	_
+7	kampung	kampung	NOUN	NOUN	_	6	nmod	_	_
+8	supaya	supaya	SCONJ	SCONJ	_	9	mark	_	_
+9	gampang	gampang	ADJ	ADJ	_	0	root	_	_
+10	sing	sing	PRON	PRON	_	11	nsubj	_	_
+11	ngeling-eling	ngeling-eling	VERB	VERB	_	9	advcl	_	_
+12	utawa	utawa	CCONJ	CCONJ	_	13	cc	_	_
+13	nggoleki	nggoleki	VERB	VERB	_	11	conj	_	_
+14	,	,	PUNCT	PUNCT	_	9	punct	_	_
+15	”	”	PUNCT	PUNCT	_	9	punct	_	_
+16	ujar	ujar	VERB	VERB	_	9	parataxis	_	highlight=red
+17	e	e	DET	DET	_	16	det	_	_
+18	Nursalim	Nursalim	PROPN	PROPN	_	16	nsubj	_	highlight=green|span=1
+19	,	,	PUNCT	PUNCT	_	20	punct	_	_
+20	Selasa	Selasa	PROPN	PROPN	_	16	obl:tmod	_	highlight=green|span=4
+21	(	(	PUNCT	PUNCT	_	22	punct	_	_
+22	7	7	NUM	NUM	_	20	appos	_	_
+23	/	/	PUNCT	PUNCT	_	24	punct	_	_
+24	6	6	NUM	NUM	_	22	flat	_	_
+25	/	/	PUNCT	PUNCT	_	26	punct	_	_
+26	2022	2022	NUM	NUM	_	22	flat	_	_
+27	)	)	PUNCT	PUNCT	_	22	punct	_	_
+28	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: jv_csui-ud-test.conllu · this verb has L=2, R=2 (mean span = 3.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Mula saka iku , basa krama kena dibedakake antara e sing alus lan sing kurang alus .
+1	Mula	Mula	ADV	ADV	_	3	advmod	_	_
+2	saka	saka	ADP	ADP	_	3	case	_	_
+3	iku	iku	PRON	PRON	_	8	obl	_	highlight=green|span=3
+4	,	,	PUNCT	PUNCT	_	3	punct	_	_
+5	basa	basa	NOUN	NOUN	_	8	nsubj:pass	_	highlight=green|span=2
+6	krama	krama	ADJ	ADJ	_	5	amod	_	_
+7	kena	kena	AUX	AUX	_	8	aux	_	_
+8	dibedakake	dibedakake	VERB	VERB	_	0	root	_	highlight=red
+9	antara	antara	NOUN	NOUN	_	10	nmod:lmod	_	_
+10	e	e	PRON	PRON	_	8	obl	_	highlight=green|span=2
+11	sing	sing	PRON	PRON	_	12	nsubj	_	_
+12	alus	alus	ADJ	ADJ	_	8	advcl	_	highlight=green|span=6
+13	lan	lan	CCONJ	CCONJ	_	16	cc	_	_
+14	sing	sing	PRON	PRON	_	16	nsubj	_	_
+15	kurang	kurang	ADV	ADV	_	16	advmod	_	_
+16	alus	alus	ADJ	ADJ	_	12	conj	_	_
+17	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

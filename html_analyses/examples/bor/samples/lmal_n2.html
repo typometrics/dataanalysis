@@ -1,0 +1,341 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Borôro — LMAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Borôro examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Borôro <small style="color:#999;font-weight:normal">(bor)</small> — LMAL<sub>2</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>2</b> left dependents (right side may be anything).</p><p><b>LMAL<sub>2</sub> = 1.494</b> &nbsp; <span style="color:#666">(5,238 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>left</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: bor_bdt-ud-dev.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Icare ere akedudo .
+1	Icare	Icare	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+2	ere	ere	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+3	akedudo	akedudo	VERB	VERB	_	0	root	_	highlight=red
+4	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: bor_bdt-ud-train.conllu · this verb has L=2, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ure edo torudo jamedu , tugeje .
+1	Ure	Ure	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+2	edo	edo	NOUN	NOUN	_	3	obj	_	highlight=green|span=1
+3	torudo	torudo	VERB	VERB	_	0	root	_	highlight=red
+4	jamedu	jamedu	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+5	,	,	PUNCT	PUNCT	_	6	punct	_	_
+6	tugeje	tugeje	VERB	VERB	_	3	conj	_	_
+7	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: bor_bdt-ud-train.conllu · this verb has L=2, R=3 (mean span = 1.80)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Du tabore itaiwore tu ei , eroi tuwoadu tabo duji , nowu'dama'roguji .
+1	Du	Du	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+2	tabore	tabore	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+3	itaiwore	itaiwore	VERB	VERB	_	0	root	_	highlight=red
+4	tu	tu	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+5	ei	ei	ADP	ADP	_	3	obl	_	highlight=green|span=1
+6	,	,	PUNCT	PUNCT	_	3	punct	_	_
+7	eroi	eroi	NOUN	NOUN	_	8	nmod	_	_
+8	tuwoadu	tuwoadu	NOUN	NOUN	_	10	obl	_	_
+9	tabo	tabo	ADP	ADP	_	8	case	_	_
+10	duji	duji	X	X	_	3	ccomp	_	highlight=green|span=5
+11	,	,	PUNCT	PUNCT	_	12	punct	_	_
+12	nowu'dama'roguji	nowu'dama'roguji	X	X	_	10	conj	_	_
+13	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: bor_bdt-ud-train.conllu · this verb has L=2, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Icare ere iogwarido ji pugeje .
+1	Icare	Icare	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+2	ere	ere	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+3	iogwarido	iogwarido	VERB	VERB	_	0	root	_	highlight=red
+4	ji	ji	ADP	ADP	_	3	obl	_	highlight=green|span=1
+5	pugeje	pugeje	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+6	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: bor_bdt-ud-train.conllu · this verb has L=2, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Du kejere eture mato pugeje .
+1	Du	Du	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+2	kejere	kejere	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+3	eture	eture	VERB	VERB	_	0	root	_	highlight=red
+4	mato	mato	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+5	pugeje	pugeje	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+6	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: bor_bdt-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Icare ire iwuredo .
+1	Icare	Icare	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+2	ire	ire	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+3	iwuredo	iwuredo	VERB	VERB	_	0	root	_	highlight=red
+4	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: bor_bdt-ud-dev.conllu · this verb has L=2, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Icare oreduje Jezabel akore oino ji oinore are Israeldoge ekodu pemegado ?
+1	Icare	Icare	ADV	ADV	_	4	advmod	_	_
+2	oreduje	oreduje	NOUN	NOUN	_	3	nsubj	_	_
+3	Jezabel	Jezabel	NOUN	NOUN	_	4	nsubj	_	_
+4	akore	akore	VERB	VERB	_	0	root	_	_
+5	oino	oino	ADV	ADV	_	4	advmod	_	_
+6	ji	ji	ADP	ADP	_	4	obl	_	_
+7	oinore	oinore	ADV	ADV	_	11	advmod	_	highlight=green|span=1
+8	are	are	PROPN	PROPN	_	10	nmod	_	_
+9	Israeldoge	Israeldoge	PROPN	PROPN	_	8	flat	_	_
+10	ekodu	ekodu	PRON	PRON	_	11	nsubj	_	highlight=green|span=3
+11	pemegado	pemegado	VERB	VERB	_	4	parataxis	_	highlight=red
+12	?	?	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: bor_bdt-ud-train.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Icare barogwa kododure , ocagodure pugeje , biapagare ...
+1	Icare	Icare	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+2	barogwa	barogwa	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=1
+3	kododure	kododure	VERB	VERB	_	0	root	_	highlight=red
+4	,	,	PUNCT	PUNCT	_	5	punct	_	_
+5	ocagodure	ocagodure	VERB	VERB	_	3	parataxis	_	_
+6	pugeje	pugeje	ADV	ADV	_	5	advmod	_	_
+7	,	,	PUNCT	PUNCT	_	8	punct	_	_
+8	biapagare	biapagare	VERB	VERB	_	5	conj	_	_
+9	...	...	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: bor_bdt-ud-train.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Icare inagore pabadumode mito tu woe .
+1	Icare	Icare	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+2	inagore	inagore	VERB	VERB	_	3	nsubj	_	highlight=green|span=1
+3	pabadumode	pabadumode	VERB	VERB	_	0	root	_	highlight=red
+4	mito	mito	VERB	VERB	_	3	parataxis	_	_
+5	tu	tu	ADV	ADV	_	4	advmod	_	_
+6	woe	woe	ADV	ADV	_	4	advmod	_	_
+7	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: bor_bdt-ud-train.conllu · this verb has L=2, R=1 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Icare ure tudugu nowu karoji , ure bu mato tuboru keje , nowu bai kujiagi , icare ure nowu riwudu jeto taobiri ji , icare uture apo .
+1	Icare	Icare	ADV	ADV	_	3	advmod	_	_
+2	ure	ure	PRON	PRON	_	3	nsubj	_	_
+3	tudugu	tudugu	VERB	VERB	_	0	root	_	_
+4	nowu	nowu	PROPN	PROPN	_	3	obl	_	_
+5	karoji	karoji	ADP	ADP	_	4	case	_	_
+6	,	,	PUNCT	PUNCT	_	9	punct	_	_
+7	ure	ure	PRON	PRON	_	9	nsubj	_	highlight=green|span=1
+8	bu	bu	NOUN	NOUN	_	9	obj	_	highlight=green|span=1
+9	mato	mato	VERB	VERB	_	3	parataxis	_	highlight=red
+10	tuboru	tuboru	NOUN	NOUN	_	9	obl	_	highlight=green|span=2
+11	keje	keje	ADP	ADP	_	10	case	_	_
+12	,	,	PUNCT	PUNCT	_	14	punct	_	_
+13	nowu	nowu	DET	DET	_	14	det	_	_
+14	bai	bai	NOUN	NOUN	_	3	conj	_	_
+15	kujiagi	kujiagi	ADP	ADP	_	14	case	_	_
+16	,	,	PUNCT	PUNCT	_	21	punct	_	_
+17	icare	icare	ADV	ADV	_	21	advmod	_	_
+18	ure	ure	PRON	PRON	_	21	nsubj	_	_
+19	nowu	nowu	DET	DET	_	20	det	_	_
+20	riwudu	riwudu	NOUN	NOUN	_	21	obj	_	_
+21	jeto	jeto	VERB	VERB	_	3	conj	_	_
+22	taobiri	taobiri	NOUN	NOUN	_	21	obl	_	_
+23	ji	ji	ADP	ADP	_	22	case	_	_
+24	,	,	PUNCT	PUNCT	_	26	punct	_	_
+25	icare	icare	ADV	ADV	_	26	advmod	_	_
+26	uture	uture	VERB	VERB	_	3	parataxis	_	_
+27	apo	apo	ADP	ADP	_	26	obl	_	_
+28	.	.	PUNCT	PUNCT	_	26	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: bor_bdt-ud-dev.conllu · this verb has L=2, R=2 (mean span = 1.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 6Nowu inodu tabo ekare pobe pugeje , mare ere mito tu je .
+1	6Nowu	6Nowu	DET	DET	_	2	nmod	_	_
+2	inodu	inodu	ADV	ADV	_	4	advmod	_	_
+3	tabo	tabo	ADP	ADP	_	2	case	_	_
+4	ekare	ekare	VERB	VERB	_	0	root	_	_
+5	pobe	pobe	ADV	ADV	_	10	advmod	_	highlight=green|span=2
+6	pugeje	pugeje	ADV	ADV	_	5	advmod	_	_
+7	,	,	PUNCT	PUNCT	_	10	punct	_	_
+8	mare	mare	CCONJ	CCONJ	_	10	cc	_	_
+9	ere	ere	PRON	PRON	_	10	nsubj	_	highlight=green|span=1
+10	mito	mito	VERB	VERB	_	4	parataxis	_	highlight=red
+11	tu	tu	ADV	ADV	_	10	advmod	_	highlight=green|span=1
+12	je	je	ADV	ADV	_	10	advmod	_	highlight=green|span=1
+13	.	.	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: bor_bdt-ud-train.conllu · this verb has L=2, R=2 (mean span = 1.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Du kodi icare akaregodure oino akaobiji .
+1	Du	Du	VERB	VERB	_	4	advcl	_	highlight=green|span=2
+2	kodi	kodi	SCONJ	SCONJ	_	1	mark	_	_
+3	icare	icare	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+4	akaregodure	akaregodure	VERB	VERB	_	0	root	_	highlight=red
+5	oino	oino	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+6	akaobiji	akaobiji	ADP	ADP	_	4	obl	_	highlight=green|span=1
+7	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: bor_bdt-ud-train.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Koiare ure inagodo'tugarege'ino .
+1	Koiare	Koiare	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+2	ure	ure	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+3	inagodo'tugarege'ino	inagodo'tugarege'ino	VERB	VERB	_	0	root	_	highlight=red
+4	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: bor_bdt-ud-train.conllu · this verb has L=2, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Oinore boe egore tai .
+1	Oinore	Oinore	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+2	boe	boe	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=1
+3	egore	egore	VERB	VERB	_	0	root	_	highlight=red
+4	tai	tai	ADP	ADP	_	3	obl	_	highlight=green|span=1
+5	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: bor_bdt-ud-dev.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ica , cenogituwa nure tai tawo taedorodo , tawo tagirimi boe pegarewu piji , Pao jerewu kae , koiare ure baru to , ure awu moto to , ure pobo maerewu to , ure mugure jekeboe jamedu boe ure towuje jamedu .
+1	Ica	Ica	NOUN	NOUN	_	3	nmod	_	_
+2	,	,	PUNCT	PUNCT	_	1	punct	_	_
+3	cenogituwa	cenogituwa	NOUN	NOUN	_	7	nsubj	_	_
+4	nure	nure	X	X	_	3	dep	_	_
+5	tai	tai	ADP	ADP	_	3	case	_	_
+6	tawo	tawo	NOUN	NOUN	_	7	obj	_	_
+7	taedorodo	taedorodo	VERB	VERB	_	0	root	_	_
+8	,	,	PUNCT	PUNCT	_	12	punct	_	_
+9	tawo	tawo	PRON	PRON	_	12	nsubj	_	_
+10	tagirimi	tagirimi	NOUN	NOUN	_	11	nmod	_	_
+11	boe	boe	NOUN	NOUN	_	12	nmod	_	_
+12	pegarewu	pegarewu	NOUN	NOUN	_	7	obl	_	_
+13	piji	piji	ADP	ADP	_	12	case	_	_
+14	,	,	PUNCT	PUNCT	_	15	punct	_	_
+15	Pao	Pao	NOUN	NOUN	_	7	obl	_	_
+16	jerewu	jerewu	NOUN	NOUN	_	15	nmod	_	_
+17	kae	kae	ADP	ADP	_	15	case	_	_
+18	,	,	PUNCT	PUNCT	_	22	punct	_	_
+19	koiare	koiare	VERB	VERB	_	22	nsubj	_	_
+20	ure	ure	PRON	PRON	_	22	dep	_	_
+21	baru	baru	NOUN	NOUN	_	22	obj	_	_
+22	to	to	VERB	VERB	_	7	parataxis	_	_
+23	,	,	PUNCT	PUNCT	_	26	punct	_	_
+24	ure	ure	PRON	PRON	_	26	nsubj	_	_
+25	awu	awu	DET	DET	_	26	det	_	_
+26	moto	moto	NOUN	NOUN	_	7	conj	_	_
+27	to	to	ADP	ADP	_	26	case	_	_
+28	,	,	PUNCT	PUNCT	_	32	punct	_	_
+29	ure	ure	PRON	PRON	_	32	nsubj	_	highlight=green|span=1
+30	pobo	pobo	NOUN	NOUN	_	32	obj	_	highlight=green|span=2
+31	maerewu	maerewu	NOUN	NOUN	_	30	nmod	_	_
+32	to	to	VERB	VERB	_	7	parataxis	_	highlight=red
+33	,	,	PUNCT	PUNCT	_	32	punct	_	_
+34	ure	ure	PRON	PRON	_	36	dep	_	_
+35	mugure	mugure	NOUN	NOUN	_	36	nmod	_	_
+36	jekeboe	jekeboe	NOUN	NOUN	_	40	nmod	_	_
+37	jamedu	jamedu	ADV	ADV	_	40	advmod	_	_
+38	boe	boe	NOUN	NOUN	_	40	nsubj	_	_
+39	ure	ure	PRON	PRON	_	40	dep	_	_
+40	towuje	towuje	VERB	VERB	_	32	parataxis	_	_
+41	jamedu	jamedu	ADV	ADV	_	40	advmod	_	_
+42	.	.	PUNCT	PUNCT	_	40	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: bor_bdt-ud-train.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ure tuwairogu iado .
+1	Ure	Ure	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+2	tuwairogu	tuwairogu	PRON	PRON	_	3	obj	_	highlight=green|span=1
+3	iado	iado	VERB	VERB	_	0	root	_	highlight=red
+4	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: bor_bdt-ud-train.conllu · this verb has L=2, R=2 (mean span = 1.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Icare ere iogwarido pugeje tuiamedu tabo , egore wa ...
+1	Icare	Icare	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+2	ere	ere	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+3	iogwarido	iogwarido	VERB	VERB	_	0	root	_	highlight=red
+4	pugeje	pugeje	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+5	tuiamedu	tuiamedu	NOUN	NOUN	_	3	obl	_	highlight=green|span=2
+6	tabo	tabo	ADP	ADP	_	5	case	_	_
+7	,	,	PUNCT	PUNCT	_	8	punct	_	_
+8	egore	egore	VERB	VERB	_	3	conj	_	_
+9	wa	wa	INTJ	INTJ	_	8	parataxis	_	_
+10	...	...	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: bor_bdt-ud-train.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Icare ure cewu toe bu kowu , ure ewu gori rawuje , ure kabi ...
+1	Icare	Icare	ADV	ADV	_	6	advmod	_	_
+2	ure	ure	PRON	PRON	_	6	nsubj	_	_
+3	cewu	cewu	DET	DET	_	5	det	_	_
+4	toe	toe	NOUN	NOUN	_	5	nmod	_	_
+5	bu	bu	NOUN	NOUN	_	6	obj	_	_
+6	kowu	kowu	NOUN	NOUN	_	0	root	_	_
+7	,	,	PUNCT	PUNCT	_	11	punct	_	_
+8	ure	ure	PRON	PRON	_	11	nsubj	_	highlight=green|span=1
+9	ewu	ewu	NOUN	NOUN	_	10	nmod	_	_
+10	gori	gori	NOUN	NOUN	_	11	obj	_	highlight=green|span=2
+11	rawuje	rawuje	VERB	VERB	_	6	parataxis	_	highlight=red
+12	,	,	PUNCT	PUNCT	_	14	punct	_	_
+13	ure	ure	PRON	PRON	_	14	nsubj	_	_
+14	kabi	kabi	VERB	VERB	_	6	parataxis	_	_
+15	...	...	PUNCT	PUNCT	_	14	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: bor_bdt-ud-train.conllu · this verb has L=2, R=0 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Adugo Jari tada , itura kurirewu , ere bato .
+1	Adugo	Adugo	PROPN	PROPN	_	9	obl	_	highlight=green|span=5
+2	Jari	Jari	PROPN	PROPN	_	1	flat	_	_
+3	tada	tada	ADP	ADP	_	1	case	_	_
+4	,	,	PUNCT	PUNCT	_	5	punct	_	_
+5	itura	itura	NOUN	NOUN	_	1	conj	_	_
+6	kurirewu	kurirewu	NOUN	NOUN	_	5	nmod	_	_
+7	,	,	PUNCT	PUNCT	_	5	punct	_	_
+8	ere	ere	PRON	PRON	_	9	nsubj	_	highlight=green|span=1
+9	bato	bato	VERB	VERB	_	0	root	_	highlight=red
+10	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: bor_bdt-ud-dev.conllu · this verb has L=2, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 2 Lot kodiwu kejedu kodiboe reore jamedu ime eegarere pudui , ere akirodo boeji , ere akirodo boe tabo , ere boe a tugu , ere baidoge emugudo jamedu .
+1	2	2	NUM	NUM	_	2	nmod	_	_
+2	Lot	Lot	NOUN	NOUN	_	3	nmod	_	_
+3	kodiwu	kodiwu	PROPN	PROPN	_	5	nmod	_	_
+4	kejedu	kejedu	PROPN	PROPN	_	3	flat	_	_
+5	kodiboe	kodiboe	NOUN	NOUN	_	6	nsubj	_	_
+6	reore	reore	ADV	ADV	_	9	advmod	_	_
+7	jamedu	jamedu	ADV	ADV	_	9	advmod	_	_
+8	ime	ime	NOUN	NOUN	_	9	nsubj	_	_
+9	eegarere	eegarere	VERB	VERB	_	0	root	_	_
+10	pudui	pudui	ADP	ADP	_	9	obl	_	_
+11	,	,	PUNCT	PUNCT	_	13	punct	_	_
+12	ere	ere	PRON	PRON	_	13	nsubj	_	_
+13	akirodo	akirodo	VERB	VERB	_	9	parataxis	_	_
+14	boeji	boeji	X	X	_	13	dep	_	_
+15	,	,	PUNCT	PUNCT	_	17	punct	_	_
+16	ere	ere	PRON	PRON	_	17	nsubj	_	_
+17	akirodo	akirodo	VERB	VERB	_	13	parataxis	_	_
+18	boe	boe	NOUN	NOUN	_	17	obl	_	_
+19	tabo	tabo	ADP	ADP	_	18	case	_	_
+20	,	,	PUNCT	PUNCT	_	24	punct	_	_
+21	ere	ere	PRON	PRON	_	24	nsubj	_	_
+22	boe	boe	NOUN	NOUN	_	23	nmod	_	_
+23	a	a	NOUN	NOUN	_	24	obj	_	_
+24	tugu	tugu	VERB	VERB	_	17	parataxis	_	_
+25	,	,	PUNCT	PUNCT	_	28	punct	_	_
+26	ere	ere	PRON	PRON	_	28	nsubj	_	highlight=green|span=1
+27	baidoge	baidoge	NOUN	NOUN	_	28	obj	_	highlight=green|span=1
+28	emugudo	emugudo	VERB	VERB	_	24	parataxis	_	highlight=red
+29	jamedu	jamedu	ADV	ADV	_	28	advmod	_	highlight=green|span=1
+30	.	.	PUNCT	PUNCT	_	28	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

@@ -1,0 +1,987 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Arabic — RMAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Arabic examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Arabic <small style="color:#999;font-weight:normal">(ar)</small> — RMAL<sub>2</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>2</b> right dependents (left side may be anything).</p><p><b>RMAL<sub>2</sub> = 8.439</b> &nbsp; <span style="color:#666">(29,052 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>right</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: ar_padt-ud-train.conllu · this verb has L=1, R=2 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = فرنسا تؤيد ب شكل تام تنفيذ &quot; خريطة الطريق &quot;
+1	فرنسا	فرنسا	X	X	_	2	nsubj	_	highlight=green|span=1
+2	تؤيد	تؤيد	VERB	VERB	_	0	root	_	highlight=red
+3	ب	ب	ADP	ADP	_	4	mark	_	_
+4	شكل	شكل	NOUN	NOUN	_	2	obl	_	highlight=green|span=3
+5	تام	تام	ADJ	ADJ	_	4	amod	_	_
+6	تنفيذ	تنفيذ	NOUN	NOUN	_	2	obj	_	highlight=green|span=3
+7	&quot;	&quot;	PUNCT	PUNCT	_	8	punct	_	_
+8	خريطة	خريطة	NOUN	NOUN	_	6	nmod	_	_
+9	الطريق	الطريق	NOUN	NOUN	_	8	nmod	_	_
+10	&quot;	&quot;	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: ar_pud-ud-test.conllu · this verb has L=0, R=2 (mean span = 11.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = قال جو ستيرنليب , رئيس منطقة جورجتاون ل تطوير الأعمال : &quot; نواجه الكثير من المنافسة , و نرى أن ب وسع النقل ب المرور أن يساعد &quot; .
+1	قال	قال	VERB	VERB	_	0	root	_	highlight=red
+2	جو	جو	PROPN	PROPN	_	1	nsubj	_	highlight=green|span=8
+3	ستيرنليب	ستيرنليب	PROPN	PROPN	_	2	flat	_	_
+4	,	,	PUNCT	PUNCT	_	5	punct	_	_
+5	رئيس	رئيس	NOUN	NOUN	_	2	appos	_	_
+6	منطقة	منطقة	NOUN	NOUN	_	5	nmod	_	_
+7	جورجتاون	جورجتاون	PROPN	PROPN	_	6	nmod	_	_
+8	ل	ل	ADP	ADP	_	9	case	_	_
+9	تطوير	تطوير	NOUN	NOUN	_	5	nmod	_	_
+10	الأعمال	الأعمال	NOUN	NOUN	_	9	nmod	_	_
+11	:	:	PUNCT	PUNCT	_	13	punct	_	_
+12	&quot;	&quot;	PUNCT	PUNCT	_	13	punct	_	_
+13	نواجه	نواجه	VERB	VERB	_	1	ccomp	_	highlight=green|span=14
+14	الكثير	الكثير	NOUN	NOUN	_	13	obj	_	_
+15	من	من	ADP	ADP	_	16	case	_	_
+16	المنافسة	المنافسة	NOUN	NOUN	_	14	nmod	_	_
+17	,	,	PUNCT	PUNCT	_	19	punct	_	_
+18	و	و	CCONJ	CCONJ	_	19	cc	_	_
+19	نرى	نرى	VERB	VERB	_	13	conj	_	_
+20	أن	أن	SCONJ	SCONJ	_	27	mark	_	_
+21	ب	ب	ADP	ADP	_	22	case	_	_
+22	وسع	وسع	NOUN	NOUN	_	27	obl	_	_
+23	النقل	النقل	NOUN	NOUN	_	22	nmod	_	_
+24	ب	ب	ADP	ADP	_	25	case	_	_
+25	المرور	المرور	NOUN	NOUN	_	23	nmod	_	_
+26	أن	أن	ADP	ADP	_	27	mark	_	_
+27	يساعد	يساعد	VERB	VERB	_	19	ccomp	_	_
+28	&quot;	&quot;	PUNCT	PUNCT	_	13	punct	_	_
+29	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: ar_nyuad-ud-train.conllu · this verb has L=1, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = _ _ _ _ _ _ _ _ _ _
+1	_	_	NOUN	NOUN	_	6	nmod	_	highlight=green|span=3
+2	_	_	ADP	ADP	_	3	case	_	_
+3	_	_	NOUN	NOUN	_	1	obj	_	_
+4	_	_	PUNCT	PUNCT	_	6	punct	_	_
+5	_	_	AUX	AUX	_	6	aux	_	_
+6	_	_	VERB	VERB	_	0	root	_	highlight=red
+7	_	_	PRON	PRON	_	6	obj	_	highlight=green|span=1
+8	_	_	PART	PART	_	6	nmod	_	highlight=green|span=2
+9	_	_	PROPN	PROPN	_	8	obj	_	_
+10	_	_	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: ar_padt-ud-dev.conllu · this verb has L=1, R=2 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = * متى بدأت مهنة ك ك قاض ؟
+1	*	*	PUNCT	PUNCT	_	3	punct	_	_
+2	متى	متى	DET	DET	_	3	obl	_	highlight=green|span=1
+3	بدأت	بدأت	VERB	VERB	_	0	root	_	highlight=red
+4	مهنة	مهنة	NOUN	NOUN	_	3	obj	_	highlight=green|span=2
+5	ك	ك	PRON	PRON	_	4	nmod	_	_
+6	ك	ك	ADP	ADP	_	7	case	_	_
+7	قاض	قاض	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=2
+8	؟	؟	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: ar_nyuad-ud-dev.conllu · this verb has L=1, R=2 (mean span = 6.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+1	_	_	CCONJ	CCONJ	_	2	cc	_	_
+2	_	_	VERB	VERB	_	0	root	_	_
+3	_	_	ADP	ADP	_	4	case	_	_
+4	_	_	NOUN	NOUN	_	2	obj	_	_
+5	_	_	ADJ	ADJ	_	4	amod	_	_
+6	_	_	SCONJ	SCONJ	_	12	mark	_	_
+7	_	_	PUNCT	PUNCT	_	12	punct	_	_
+8	_	_	NOUN	NOUN	_	12	nsubj	_	highlight=green|span=4
+9	_	_	ADJ	ADJ	_	8	amod	_	_
+10	_	_	ADP	ADP	_	11	case	_	_
+11	_	_	NOUN	NOUN	_	8	obj	_	_
+12	_	_	VERB	VERB	_	2	ccomp	_	highlight=red
+13	_	_	DET	DET	_	14	det	_	_
+14	_	_	NOUN	NOUN	_	12	obj	_	highlight=green|span=2
+15	_	_	CCONJ	CCONJ	_	16	cc	_	_
+16	_	_	VERB	VERB	_	12	ccomp	_	highlight=green|span=14
+17	_	_	PRON	PRON	_	16	obj	_	_
+18	_	_	ADP	ADP	_	19	case	_	_
+19	_	_	NOUN	NOUN	_	16	iobj	_	_
+20	_	_	NOUN	NOUN	_	19	nmod:poss	_	_
+21	_	_	NOUN	NOUN	_	20	nmod:poss	_	_
+22	_	_	NOUN	NOUN	_	21	nmod:poss	_	_
+23	_	_	ADJ	ADJ	_	22	amod	_	_
+24	_	_	ADP	ADP	_	25	case	_	_
+25	_	_	PROPN	PROPN	_	20	obj	_	_
+26	_	_	NOUN	NOUN	_	25	nmod:poss	_	_
+27	_	_	ADP	ADP	_	28	case	_	_
+28	_	_	NOUN	NOUN	_	25	obj	_	_
+29	_	_	PUNCT	PUNCT	_	12	punct	_	_
+30	_	_	PUNCT	PUNCT	_	2	punct	_	_
+31	_	_	CCONJ	CCONJ	_	34	cc	_	_
+32	_	_	AUX	AUX	_	34	cop	_	_
+33	_	_	PROPN	PROPN	_	34	nsubj	_	_
+34	_	_	VERB	VERB	_	2	ccomp	_	_
+35	_	_	ADV	ADV	_	34	advmod	_	_
+36	_	_	NOUN	NOUN	_	35	nmod:poss	_	_
+37	_	_	PROPN	PROPN	_	36	nmod	_	_
+38	_	_	PROPN	PROPN	_	37	flat	_	_
+39	_	_	PUNCT	PUNCT	_	42	punct	_	_
+40	_	_	CCONJ	CCONJ	_	42	cc	_	_
+41	_	_	PRON	PRON	_	42	nsubj	_	_
+42	_	_	ADJ	ADJ	_	36	amod	_	_
+43	_	_	ADJ	ADJ	_	42	amod	_	_
+44	_	_	PUNCT	PUNCT	_	34	punct	_	_
+45	_	_	NOUN	NOUN	_	34	obj	_	_
+46	_	_	NOUN	NOUN	_	45	nmod:poss	_	_
+47	_	_	NOUN	NOUN	_	46	nmod:poss	_	_
+48	_	_	NOUN	NOUN	_	47	nmod:poss	_	_
+49	_	_	ADP	ADP	_	50	case	_	_
+50	_	_	NOUN	NOUN	_	46	obj	_	_
+51	_	_	VERB	VERB	_	50	xcomp	_	_
+52	_	_	NOUN	NOUN	_	51	obj	_	_
+53	_	_	NOUN	NOUN	_	52	nmod:poss	_	_
+54	_	_	NOUN	NOUN	_	53	nmod:poss	_	_
+55	_	_	CCONJ	CCONJ	_	56	cc	_	_
+56	_	_	NOUN	NOUN	_	54	obj	_	_
+57	_	_	CCONJ	CCONJ	_	58	cc	_	_
+58	_	_	NOUN	NOUN	_	56	obj	_	_
+59	_	_	ADP	ADP	_	60	case	_	_
+60	_	_	PRON	PRON	_	52	obj	_	_
+61	_	_	ADP	ADP	_	62	case	_	_
+62	_	_	NOUN	NOUN	_	60	obj	_	_
+63	_	_	ADJ	ADJ	_	62	amod	_	_
+64	_	_	PUNCT	PUNCT	_	34	punct	_	_
+65	_	_	CCONJ	CCONJ	_	67	cc	_	_
+66	_	_	PRON	PRON	_	67	nsubj	_	_
+67	_	_	PRON	PRON	_	34	obj	_	_
+68	_	_	VERB	VERB	_	67	ccomp	_	_
+69	_	_	NOUN	NOUN	_	68	nsubj	_	_
+70	_	_	ADP	ADP	_	71	case	_	_
+71	_	_	PROPN	PROPN	_	69	obj	_	_
+72	_	_	NOUN	NOUN	_	68	obj	_	_
+73	_	_	PRON	PRON	_	72	nmod:poss	_	_
+74	_	_	ADP	ADP	_	75	case	_	_
+75	_	_	NOUN	NOUN	_	72	obj	_	_
+76	_	_	PUNCT	PUNCT	_	34	punct	_	_
+77	_	_	CCONJ	CCONJ	_	78	cc	_	_
+78	_	_	VERB	VERB	_	34	ccomp	_	_
+79	_	_	NOUN	NOUN	_	78	nsubj	_	_
+80	_	_	ADJ	ADJ	_	79	amod	_	_
+81	_	_	ADP	ADP	_	82	case	_	_
+82	_	_	NOUN	NOUN	_	79	obj	_	_
+83	_	_	DET	DET	_	84	det	_	_
+84	_	_	NOUN	NOUN	_	78	obj	_	_
+85	_	_	PUNCT	PUNCT	_	34	punct	_	_
+86	_	_	CCONJ	CCONJ	_	88	cc	_	_
+87	_	_	ADV	ADV	_	88	advmod	_	_
+88	_	_	VERB	VERB	_	34	xcomp	_	_
+89	_	_	NOUN	NOUN	_	88	obj	_	_
+90	_	_	PRON	PRON	_	89	nmod:poss	_	_
+91	_	_	ADP	ADP	_	92	case	_	_
+92	_	_	PRON	PRON	_	89	obj	_	_
+93	_	_	ADP	ADP	_	94	case	_	_
+94	_	_	NOUN	NOUN	_	88	iobj	_	_
+95	_	_	NOUN	NOUN	_	94	nmod:poss	_	_
+96	_	_	NOUN	NOUN	_	95	nmod:poss	_	_
+97	_	_	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: ar_padt-ud-train.conllu · this verb has L=0, R=2 (mean span = 4.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = تم الترخيص لشنتشن ب فحص السفن الاجنبية منذ عام 1996 .
+1	تم	تم	VERB	VERB	_	0	root	_	highlight=red
+2	الترخيص	الترخيص	NOUN	NOUN	_	1	nsubj	_	highlight=green|span=6
+3	لشنتشن	لشنتشن	X	X	_	2	nmod	_	_
+4	ب	ب	ADP	ADP	_	5	case	_	_
+5	فحص	فحص	NOUN	NOUN	_	2	nmod	_	_
+6	السفن	السفن	X	X	_	5	nmod	_	_
+7	الاجنبية	الاجنبية	X	X	_	6	nmod	_	_
+8	منذ	منذ	ADP	ADP	_	9	case	_	_
+9	عام	عام	NOUN	NOUN	_	1	obl	_	highlight=green|span=3
+10	1996	1996	NUM	NUM	_	9	nummod	_	_
+11	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: ar_nyuad-ud-train.conllu · this verb has L=0, R=2 (mean span = 5.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+1	_	_	VERB	VERB	_	0	root	_	_
+2	_	_	SCONJ	SCONJ	_	3	mark	_	_
+3	_	_	NOUN	NOUN	_	1	obj	_	_
+4	_	_	ADV	ADV	_	3	advmod	_	_
+5	_	_	NOUN	NOUN	_	4	nmod:poss	_	_
+6	_	_	CCONJ	CCONJ	_	7	cc	_	_
+7	_	_	ADJ	ADJ	_	5	obj	_	_
+8	_	_	VERB	VERB	_	3	ccomp	_	_
+9	_	_	ADP	ADP	_	10	case	_	_
+10	_	_	NOUN	NOUN	_	8	obj	_	_
+11	_	_	ADJ	ADJ	_	10	amod	_	_
+12	_	_	NOUN	NOUN	_	8	iobj	_	_
+13	_	_	ADJ	ADJ	_	12	amod	_	_
+14	_	_	ADP	ADP	_	15	case	_	_
+15	_	_	NOUN	NOUN	_	13	obj	_	_
+16	_	_	ADJ	ADJ	_	15	amod	_	_
+17	_	_	PUNCT	PUNCT	_	15	punct	_	_
+18	_	_	ADV	ADV	_	19	advmod	_	_
+19	_	_	VERB	VERB	_	15	ccomp	_	_
+20	_	_	NOUN	NOUN	_	19	nsubj	_	_
+21	_	_	NOUN	NOUN	_	19	obj	_	_
+22	_	_	NOUN	NOUN	_	21	nmod:poss	_	_
+23	_	_	PART	PART	_	25	mark	_	_
+24	_	_	CCONJ	CCONJ	_	25	cc	_	_
+25	_	_	VERB	VERB	_	19	xcomp	_	highlight=red
+26	_	_	PRON	PRON	_	25	obj	_	highlight=green|span=1
+27	_	_	ADP	ADP	_	28	case	_	_
+28	_	_	NOUN	NOUN	_	25	iobj	_	highlight=green|span=9
+29	_	_	NOUN	NOUN	_	28	nmod:poss	_	_
+30	_	_	ADP	ADP	_	31	case	_	_
+31	_	_	NOUN	NOUN	_	29	obj	_	_
+32	_	_	PRON	PRON	_	31	nmod:poss	_	_
+33	_	_	ADJ	ADJ	_	31	amod	_	_
+34	_	_	ADP	ADP	_	35	case	_	_
+35	_	_	NOUN	NOUN	_	28	obj	_	_
+36	_	_	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: ar_nyuad-ud-train.conllu · this verb has L=0, R=2 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+1	_	_	CCONJ	CCONJ	_	2	cc	_	_
+2	_	_	VERB	VERB	_	0	root	_	_
+3	_	_	ADP	ADP	_	4	case	_	_
+4	_	_	NOUN	NOUN	_	2	obj	_	_
+5	_	_	PRON	PRON	_	4	nmod	_	_
+6	_	_	VERB	VERB	_	5	ccomp	_	highlight=red
+7	_	_	PROPN	PROPN	_	6	nsubj	_	highlight=green|span=2
+8	_	_	PROPN	PROPN	_	7	flat	_	_
+9	_	_	ADP	ADP	_	10	case	_	_
+10	_	_	X	X	_	6	obj	_	highlight=green|span=4
+11	_	_	ADP	ADP	_	12	case	_	_
+12	_	_	PRON	PRON	_	10	obj	_	_
+13	_	_	PUNCT	PUNCT	_	36	punct	_	_
+14	_	_	SCONJ	SCONJ	_	36	mark	_	_
+15	_	_	NOUN	NOUN	_	36	nmod	_	_
+16	_	_	ADP	ADP	_	17	case	_	_
+17	_	_	PROPN	PROPN	_	15	obj	_	_
+18	_	_	NOUN	NOUN	_	17	nmod	_	_
+19	_	_	ADP	ADP	_	20	case	_	_
+20	_	_	NOUN	NOUN	_	15	iobj	_	_
+21	_	_	ADJ	ADJ	_	20	amod	_	_
+22	_	_	ADP	ADP	_	23	case	_	_
+23	_	_	NOUN	NOUN	_	15	iobj	_	_
+24	_	_	PRON	PRON	_	23	nmod	_	_
+25	_	_	ADV	ADV	_	26	advmod	_	_
+26	_	_	VERB	VERB	_	24	ccomp	_	_
+27	_	_	ADP	ADP	_	28	case	_	_
+28	_	_	PRON	PRON	_	26	obj	_	_
+29	_	_	NOUN	NOUN	_	26	nsubj	_	_
+30	_	_	NOUN	NOUN	_	29	nmod:poss	_	_
+31	_	_	CCONJ	CCONJ	_	32	cc	_	_
+32	_	_	ADV	ADV	_	23	obj	_	_
+33	_	_	NOUN	NOUN	_	32	nmod:poss	_	_
+34	_	_	NOUN	NOUN	_	33	nmod:poss	_	_
+35	_	_	ADJ	ADJ	_	34	amod	_	_
+36	_	_	NOUN	NOUN	_	2	iobj	_	_
+37	_	_	ADP	ADP	_	38	case	_	_
+38	_	_	PROPN	PROPN	_	36	obj	_	_
+39	_	_	ADP	ADP	_	40	case	_	_
+40	_	_	NOUN	NOUN	_	36	iobj	_	_
+41	_	_	NOUN	NOUN	_	40	nmod:poss	_	_
+42	_	_	CCONJ	CCONJ	_	43	cc	_	_
+43	_	_	NOUN	NOUN	_	36	obj	_	_
+44	_	_	ADP	ADP	_	45	case	_	_
+45	_	_	NOUN	NOUN	_	43	obj	_	_
+46	_	_	NOUN	NOUN	_	45	nmod:poss	_	_
+47	_	_	NOUN	NOUN	_	46	nmod:poss	_	_
+48	_	_	ADJ	ADJ	_	47	amod	_	_
+49	_	_	CCONJ	CCONJ	_	50	cc	_	_
+50	_	_	ADJ	ADJ	_	48	obj	_	_
+51	_	_	ADV	ADV	_	47	advmod	_	_
+52	_	_	NOUN	NOUN	_	51	nmod:poss	_	_
+53	_	_	ADJ	ADJ	_	52	amod	_	_
+54	_	_	CCONJ	CCONJ	_	55	cc	_	_
+55	_	_	NOUN	NOUN	_	43	obj	_	_
+56	_	_	ADP	ADP	_	57	case	_	_
+57	_	_	NOUN	NOUN	_	55	obj	_	_
+58	_	_	NOUN	NOUN	_	57	nmod:poss	_	_
+59	_	_	ADJ	ADJ	_	58	amod	_	_
+60	_	_	CCONJ	CCONJ	_	61	cc	_	_
+61	_	_	NOUN	NOUN	_	55	obj	_	_
+62	_	_	PRON	PRON	_	61	nmod:poss	_	_
+63	_	_	ADP	ADP	_	64	case	_	_
+64	_	_	NOUN	NOUN	_	61	obj	_	_
+65	_	_	NOUN	NOUN	_	64	nmod:poss	_	_
+66	_	_	ADV	ADV	_	64	advmod	_	_
+67	_	_	NOUN	NOUN	_	66	nmod:poss	_	_
+68	_	_	PRON	PRON	_	67	nmod:poss	_	_
+69	_	_	CCONJ	CCONJ	_	70	cc	_	_
+70	_	_	NOUN	NOUN	_	67	obj	_	_
+71	_	_	PRON	PRON	_	70	nmod:poss	_	_
+72	_	_	PUNCT	PUNCT	_	36	punct	_	_
+73	_	_	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: ar_nyuad-ud-train.conllu · this verb has L=0, R=2 (mean span = 3.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+1	_	_	CCONJ	CCONJ	_	2	cc	_	_
+2	_	_	VERB	VERB	_	0	root	_	_
+3	_	_	NOUN	NOUN	_	2	nsubj	_	_
+4	_	_	PUNCT	PUNCT	_	2	punct	_	_
+5	_	_	SCONJ	SCONJ	_	6	mark	_	_
+6	_	_	ADV	ADV	_	2	obj	_	_
+7	_	_	NOUN	NOUN	_	6	nmod	_	_
+8	_	_	NOUN	NOUN	_	7	nmod	_	_
+9	_	_	ADJ	ADJ	_	7	amod	_	_
+10	_	_	ADP	ADP	_	11	case	_	_
+11	_	_	NOUN	NOUN	_	7	obj	_	_
+12	_	_	NOUN	NOUN	_	11	nmod:poss	_	_
+13	_	_	NOUN	NOUN	_	12	nmod:poss	_	_
+14	_	_	ADP	ADP	_	15	case	_	_
+15	_	_	NOUN	NOUN	_	12	obj	_	_
+16	_	_	PROPN	PROPN	_	15	nmod:poss	_	_
+17	_	_	ADP	ADP	_	18	case	_	_
+18	_	_	NOUN	NOUN	_	11	obj	_	_
+19	_	_	ADP	ADP	_	21	case	_	_
+20	_	_	SCONJ	SCONJ	_	21	mark	_	_
+21	_	_	PRON	PRON	_	6	obj	_	_
+22	_	_	PUNCT	PUNCT	_	24	punct	_	_
+23	_	_	AUX	AUX	_	24	aux	_	_
+24	_	_	VERB	VERB	_	21	xcomp	_	highlight=red
+25	_	_	ADP	ADP	_	26	case	_	_
+26	_	_	NOUN	NOUN	_	24	obj	_	highlight=green|span=4
+27	_	_	ADV	ADV	_	26	advmod	_	_
+28	_	_	NOUN	NOUN	_	27	nmod:poss	_	_
+29	_	_	ADP	ADP	_	31	case	_	_
+30	_	_	DET	DET	_	31	det	_	_
+31	_	_	NOUN	NOUN	_	24	iobj	_	highlight=green|span=3
+32	_	_	PUNCT	PUNCT	_	24	punct	_	_
+33	_	_	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: ar_nyuad-ud-train.conllu · this verb has L=0, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+1	_	_	CCONJ	CCONJ	_	2	cc	_	_
+2	_	_	VERB	VERB	_	0	root	_	_
+3	_	_	SCONJ	SCONJ	_	4	mark	_	_
+4	_	_	NOUN	NOUN	_	2	obj	_	_
+5	_	_	ADJ	ADJ	_	4	amod	_	_
+6	_	_	PRON	PRON	_	4	nmod	_	_
+7	_	_	NOUN	NOUN	_	4	nmod	_	_
+8	_	_	ADJ	ADJ	_	7	amod	_	_
+9	_	_	PUNCT	PUNCT	_	4	punct	_	_
+10	_	_	CCONJ	CCONJ	_	17	cc	_	_
+11	_	_	SCONJ	SCONJ	_	12	mark	_	_
+12	_	_	VERB	VERB	_	17	ccomp	_	_
+13	_	_	PART	PART	_	17	mark	_	_
+14	_	_	NOUN	NOUN	_	17	nmod	_	_
+15	_	_	ADJ	ADJ	_	14	amod	_	_
+16	_	_	PRON	PRON	_	14	nmod	_	_
+17	_	_	NOUN	NOUN	_	4	obj	_	_
+18	_	_	ADJ	ADJ	_	17	amod	_	_
+19	_	_	PRON	PRON	_	17	nmod	_	_
+20	_	_	VERB	VERB	_	19	xcomp	_	highlight=red
+21	_	_	ADP	ADP	_	22	case	_	_
+22	_	_	NOUN	NOUN	_	20	obj	_	highlight=green|span=3
+23	_	_	NOUN	NOUN	_	22	nmod:poss	_	_
+24	_	_	ADV	ADV	_	20	nmod	_	highlight=green|span=1
+25	_	_	PUNCT	PUNCT	_	4	punct	_	_
+26	_	_	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: ar_nyuad-ud-dev.conllu · this verb has L=0, R=2 (mean span = 13.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+1	_	_	PROPN	PROPN	_	0	root	_	_
+2	_	_	NUM	NUM	_	1	nummod	_	_
+3	_	_	PUNCT	PUNCT	_	4	punct	_	_
+4	_	_	PROPN	PROPN	_	1	nmod	_	_
+5	_	_	PROPN	PROPN	_	4	flat	_	_
+6	_	_	PROPN	PROPN	_	4	flat	_	_
+7	_	_	PUNCT	PUNCT	_	4	punct	_	_
+8	_	_	PUNCT	PUNCT	_	1	punct	_	_
+9	_	_	VERB	VERB	_	1	ccomp	_	highlight=red
+10	_	_	NOUN	NOUN	_	9	nsubj	_	highlight=green|span=3
+11	_	_	PROPN	PROPN	_	10	nmod:poss	_	_
+12	_	_	ADJ	ADJ	_	11	amod	_	_
+13	_	_	NOUN	NOUN	_	9	nmod	_	highlight=green|span=23
+14	_	_	PRON	PRON	_	13	nmod:poss	_	_
+15	_	_	ADP	ADP	_	16	case	_	_
+16	_	_	NOUN	NOUN	_	13	obj	_	_
+17	_	_	ADP	ADP	_	18	case	_	_
+18	_	_	NOUN	NOUN	_	16	obj	_	_
+19	_	_	NOUN	NOUN	_	18	nmod:poss	_	_
+20	_	_	ADJ	ADJ	_	19	amod	_	_
+21	_	_	ADJ	ADJ	_	19	amod	_	_
+22	_	_	ADP	ADP	_	23	case	_	_
+23	_	_	NOUN	NOUN	_	18	obj	_	_
+24	_	_	NOUN	NOUN	_	23	nmod:poss	_	_
+25	_	_	PRON	PRON	_	18	nmod	_	_
+26	_	_	VERB	VERB	_	25	ccomp	_	_
+27	_	_	PRON	PRON	_	26	obj	_	_
+28	_	_	PROPN	PROPN	_	26	nsubj	_	_
+29	_	_	ADP	ADP	_	30	case	_	_
+30	_	_	NUM	NUM	_	26	iobj	_	_
+31	_	_	ADP	ADP	_	32	case	_	_
+32	_	_	NUM	NUM	_	33	obj	_	_
+33	_	_	ADV	ADV	_	30	advmod	_	_
+34	_	_	PUNCT	PUNCT	_	33	punct	_	_
+35	_	_	PROPN	PROPN	_	33	nmod	_	_
+36	_	_	ADJ	ADJ	_	33	amod	_	_
+37	_	_	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: ar_padt-ud-train.conllu · this verb has L=0, R=2 (mean span = 22.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = و كان مشروع القرار الحالي قد رفع الى مجلس الامن الاسبوع الماضي بعد التقرير الذي أصدر ه الامين العام ل الأمم المتحدة كوفي انان و تحدث في ه عن عدم التزام سوريا ب بنود القرار السابق الذي طالب ها ب سحب القوات السورية المنتشرة في لبنان .
+1	و	و	CCONJ	CCONJ	_	0	root	_	_
+2	كان	كان	VERB	VERB	_	1	parataxis	_	highlight=red
+3	مشروع	مشروع	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=3
+4	القرار	القرار	NOUN	NOUN	_	3	nmod	_	_
+5	الحالي	الحالي	ADJ	ADJ	_	4	amod	_	_
+6	قد	قد	AUX	AUX	_	7	aux:pass	_	_
+7	رفع	رفع	VERB	VERB	_	2	advcl:pred	_	highlight=green|span=41
+8	الى	الى	ADP	ADP	_	9	case	_	_
+9	مجلس	مجلس	NOUN	NOUN	_	7	obl:arg	_	_
+10	الامن	الامن	NOUN	NOUN	_	9	nmod	_	_
+11	الاسبوع	الاسبوع	NOUN	NOUN	_	7	obl	_	_
+12	الماضي	الماضي	ADJ	ADJ	_	11	amod	_	_
+13	بعد	بعد	ADP	ADP	_	14	case	_	_
+14	التقرير	التقرير	NOUN	NOUN	_	7	obl	_	_
+15	الذي	الذي	DET	DET	_	14	det	_	_
+16	أصدر	أصدر	VERB	VERB	_	14	acl	_	_
+17	ه	ه	PRON	PRON	_	16	obj	_	_
+18	الامين	الامين	NOUN	NOUN	_	16	nsubj	_	_
+19	العام	العام	ADJ	ADJ	_	18	amod	_	_
+20	ل	ل	ADP	ADP	_	21	case	_	_
+21	الأمم	الأمم	NOUN	NOUN	_	18	nmod	_	_
+22	المتحدة	المتحدة	ADJ	ADJ	_	21	amod	_	_
+23	كوفي	كوفي	X	X	_	24	nmod	_	_
+24	انان	انان	X	X	_	18	nmod	_	_
+25	و	و	CCONJ	CCONJ	_	26	cc	_	_
+26	تحدث	تحدث	VERB	VERB	_	16	conj	_	_
+27	في	في	ADP	ADP	_	28	case	_	_
+28	ه	ه	PRON	PRON	_	26	obl	_	_
+29	عن	عن	ADP	ADP	_	30	case	_	_
+30	عدم	عدم	NOUN	NOUN	_	26	obl:arg	_	_
+31	التزام	التزام	NOUN	NOUN	_	30	nmod	_	_
+32	سوريا	سوريا	X	X	_	31	nmod	_	_
+33	ب	ب	ADP	ADP	_	34	case	_	_
+34	بنود	بنود	NOUN	NOUN	_	31	nmod	_	_
+35	القرار	القرار	NOUN	NOUN	_	34	nmod	_	_
+36	السابق	السابق	ADJ	ADJ	_	35	amod	_	_
+37	الذي	الذي	DET	DET	_	38	nsubj	_	_
+38	طالب	طالب	VERB	VERB	_	35	acl:relcl	_	_
+39	ها	ها	PRON	PRON	_	38	obj	_	_
+40	ب	ب	ADP	ADP	_	41	case	_	_
+41	سحب	سحب	NOUN	NOUN	_	38	obl:arg	_	_
+42	القوات	القوات	NOUN	NOUN	_	41	nmod	_	_
+43	السورية	السورية	ADJ	ADJ	_	42	amod	_	_
+44	المنتشرة	المنتشرة	ADJ	ADJ	_	42	amod	_	_
+45	في	في	ADP	ADP	_	46	case	_	_
+46	لبنان	لبنان	NOUN	NOUN	_	44	obl	_	_
+47	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: ar_nyuad-ud-train.conllu · this verb has L=0, R=2 (mean span = 5.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+1	_	_	NUM	NUM	_	3	nummod	_	_
+2	_	_	PUNCT	PUNCT	_	1	punct	_	_
+3	_	_	NOUN	NOUN	_	0	root	_	_
+4	_	_	NOUN	NOUN	_	3	nmod:poss	_	_
+5	_	_	ADJ	ADJ	_	4	amod	_	_
+6	_	_	PUNCT	PUNCT	_	3	punct	_	_
+7	_	_	CCONJ	CCONJ	_	10	cc	_	_
+8	_	_	ADP	ADP	_	9	case	_	_
+9	_	_	ADJ	ADJ	_	10	obj	_	_
+10	_	_	NOUN	NOUN	_	3	obj	_	_
+11	_	_	ADP	ADP	_	12	case	_	_
+12	_	_	NOUN	NOUN	_	10	iobj	_	_
+13	_	_	ADJ	ADJ	_	12	amod	_	_
+14	_	_	ADJ	ADJ	_	12	amod	_	_
+15	_	_	NOUN	NOUN	_	10	nmod	_	_
+16	_	_	PRON	PRON	_	15	nmod:poss	_	_
+17	_	_	VERB	VERB	_	16	ccomp	_	_
+18	_	_	ADP	ADP	_	19	case	_	_
+19	_	_	PRON	PRON	_	17	obj	_	_
+20	_	_	NOUN	NOUN	_	17	nsubj	_	_
+21	_	_	NOUN	NOUN	_	20	nmod:poss	_	_
+22	_	_	ADJ	ADJ	_	21	amod	_	_
+23	_	_	CCONJ	CCONJ	_	24	cc	_	_
+24	_	_	NOUN	NOUN	_	20	obj	_	_
+25	_	_	NOUN	NOUN	_	24	nmod:poss	_	_
+26	_	_	ADJ	ADJ	_	24	amod	_	_
+27	_	_	PROPN	PROPN	_	24	nmod	_	_
+28	_	_	PROPN	PROPN	_	27	flat	_	_
+29	_	_	PROPN	PROPN	_	27	flat	_	_
+30	_	_	PUNCT	PUNCT	_	3	punct	_	_
+31	_	_	CCONJ	CCONJ	_	32	cc	_	_
+32	_	_	VERB	VERB	_	3	ccomp	_	highlight=red
+33	_	_	DET	DET	_	32	nsubj	_	highlight=green|span=2
+34	_	_	ADJ	ADJ	_	33	amod	_	_
+35	_	_	NOUN	NOUN	_	32	obj	_	highlight=green|span=9
+36	_	_	NOUN	NOUN	_	35	nmod	_	_
+37	_	_	NOUN	NOUN	_	36	nmod:poss	_	_
+38	_	_	ADJ	ADJ	_	37	amod	_	_
+39	_	_	CCONJ	CCONJ	_	40	cc	_	_
+40	_	_	NOUN	NOUN	_	35	obj	_	_
+41	_	_	NOUN	NOUN	_	40	nmod:poss	_	_
+42	_	_	ADJ	ADJ	_	41	amod	_	_
+43	_	_	ADJ	ADJ	_	41	amod	_	_
+44	_	_	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: ar_nyuad-ud-train.conllu · this verb has L=0, R=2 (mean span = 32.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+1	_	_	ADJ	ADJ	_	4	amod	_	_
+2	_	_	PUNCT	PUNCT	_	4	punct	_	_
+3	_	_	SCONJ	SCONJ	_	4	mark	_	_
+4	_	_	NOUN	NOUN	_	0	root	_	_
+5	_	_	SCONJ	SCONJ	_	6	mark	_	_
+6	_	_	VERB	VERB	_	4	xcomp	_	highlight=red
+7	_	_	PUNCT	PUNCT	_	6	punct	_	_
+8	_	_	CCONJ	CCONJ	_	11	cc	_	_
+9	_	_	NOUN	NOUN	_	11	nsubj	_	_
+10	_	_	NOUN	NOUN	_	9	nmod:poss	_	_
+11	_	_	ADJ	ADJ	_	6	amod	_	highlight=green|span=11
+12	_	_	PUNCT	PUNCT	_	11	punct	_	_
+13	_	_	CCONJ	CCONJ	_	14	cc	_	_
+14	_	_	VERB	VERB	_	11	ccomp	_	_
+15	_	_	PRON	PRON	_	14	obj	_	_
+16	_	_	NOUN	NOUN	_	14	nmod	_	_
+17	_	_	NOUN	NOUN	_	14	nsubj	_	_
+18	_	_	NOUN	NOUN	_	17	nmod:poss	_	_
+19	_	_	ADJ	ADJ	_	18	amod	_	_
+20	_	_	PUNCT	PUNCT	_	6	punct	_	_
+21	_	_	SCONJ	SCONJ	_	22	mark	_	_
+22	_	_	PROPN	PROPN	_	6	obj	_	highlight=green|span=53
+23	_	_	VERB	VERB	_	22	ccomp	_	_
+24	_	_	ADV	ADV	_	23	advmod	_	_
+25	_	_	NOUN	NOUN	_	24	nmod:poss	_	_
+26	_	_	NOUN	NOUN	_	25	nmod:poss	_	_
+27	_	_	ADJ	ADJ	_	26	amod	_	_
+28	_	_	ADJ	ADJ	_	26	amod	_	_
+29	_	_	NOUN	NOUN	_	25	nmod	_	_
+30	_	_	NUM	NUM	_	29	nummod	_	_
+31	_	_	PRON	PRON	_	23	obj	_	_
+32	_	_	VERB	VERB	_	31	xcomp	_	_
+33	_	_	ADP	ADP	_	34	case	_	_
+34	_	_	NOUN	NOUN	_	32	obj	_	_
+35	_	_	PROPN	PROPN	_	34	nmod:poss	_	_
+36	_	_	PROPN	PROPN	_	35	flat	_	_
+37	_	_	PUNCT	PUNCT	_	34	punct	_	_
+38	_	_	CCONJ	CCONJ	_	39	cc	_	_
+39	_	_	PRON	PRON	_	34	nmod	_	_
+40	_	_	VERB	VERB	_	39	ccomp	_	_
+41	_	_	ADP	ADP	_	42	case	_	_
+42	_	_	NOUN	NOUN	_	40	obj	_	_
+43	_	_	NOUN	NOUN	_	42	nmod:poss	_	_
+44	_	_	ADP	ADP	_	45	case	_	_
+45	_	_	NOUN	NOUN	_	42	obj	_	_
+46	_	_	NOUN	NOUN	_	45	nmod:poss	_	_
+47	_	_	PROPN	PROPN	_	46	nmod:poss	_	_
+48	_	_	ADP	ADP	_	49	case	_	_
+49	_	_	NOUN	NOUN	_	40	iobj	_	_
+50	_	_	VERB	VERB	_	49	ccomp	_	_
+51	_	_	NOUN	NOUN	_	50	nmod	_	_
+52	_	_	PRON	PRON	_	51	nmod:poss	_	_
+53	_	_	AUX	AUX	_	50	cop	_	_
+54	_	_	PRON	PRON	_	50	nsubj	_	_
+55	_	_	ADJ	ADJ	_	50	amod	_	_
+56	_	_	CCONJ	CCONJ	_	57	cc	_	_
+57	_	_	ADJ	ADJ	_	55	obj	_	_
+58	_	_	PUNCT	PUNCT	_	50	punct	_	_
+59	_	_	CCONJ	CCONJ	_	61	cc	_	_
+60	_	_	SCONJ	SCONJ	_	61	mark	_	_
+61	_	_	NOUN	NOUN	_	50	obj	_	_
+62	_	_	ADP	ADP	_	63	case	_	_
+63	_	_	NOUN	NOUN	_	61	obj	_	_
+64	_	_	PRON	PRON	_	63	nmod:poss	_	_
+65	_	_	ADV	ADV	_	63	nmod	_	_
+66	_	_	PART	PART	_	67	mark	_	_
+67	_	_	VERB	VERB	_	50	ccomp	_	_
+68	_	_	ADP	ADP	_	69	case	_	_
+69	_	_	PRON	PRON	_	67	obj	_	_
+70	_	_	ADV	ADV	_	71	advmod	_	_
+71	_	_	ADV	ADV	_	69	advmod	_	_
+72	_	_	ADP	ADP	_	73	case	_	_
+73	_	_	PROPN	PROPN	_	71	obj	_	_
+74	_	_	NOUN	NOUN	_	73	nmod	_	_
+75	_	_	PRON	PRON	_	74	nmod:poss	_	_
+76	_	_	CCONJ	CCONJ	_	77	cc	_	_
+77	_	_	VERB	VERB	_	4	ccomp	_	_
+78	_	_	ADV	ADV	_	77	advmod	_	_
+79	_	_	DET	DET	_	78	nmod:poss	_	_
+80	_	_	ADP	ADP	_	81	case	_	_
+81	_	_	NOUN	NOUN	_	77	obj	_	_
+82	_	_	ADJ	ADJ	_	81	amod	_	_
+83	_	_	ADJ	ADJ	_	81	amod	_	_
+84	_	_	ADV	ADV	_	77	advmod	_	_
+85	_	_	NOUN	NOUN	_	84	nmod:poss	_	_
+86	_	_	NUM	NUM	_	85	nummod	_	_
+87	_	_	ADJ	ADJ	_	85	amod	_	_
+88	_	_	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: ar_nyuad-ud-train.conllu · this verb has L=0, R=2 (mean span = 31.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+1	_	_	CCONJ	CCONJ	_	2	cc	_	_
+2	_	_	VERB	VERB	_	0	root	_	highlight=red
+3	_	_	ADP	ADP	_	4	case	_	_
+4	_	_	NOUN	NOUN	_	2	obj	_	highlight=green|span=13
+5	_	_	VERB	VERB	_	4	ccomp	_	_
+6	_	_	PRON	PRON	_	5	obj	_	_
+7	_	_	ADP	ADP	_	8	case	_	_
+8	_	_	NOUN	NOUN	_	5	iobj	_	_
+9	_	_	NOUN	NOUN	_	8	nmod:poss	_	_
+10	_	_	NOUN	NOUN	_	9	nmod:poss	_	_
+11	_	_	ADJ	ADJ	_	10	amod	_	_
+12	_	_	ADJ	ADJ	_	10	amod	_	_
+13	_	_	CCONJ	CCONJ	_	14	cc	_	_
+14	_	_	NOUN	NOUN	_	10	obj	_	_
+15	_	_	PROPN	PROPN	_	14	nmod:poss	_	_
+16	_	_	PUNCT	PUNCT	_	2	punct	_	_
+17	_	_	PUNCT	PUNCT	_	22	punct	_	_
+18	_	_	NOUN	NOUN	_	22	nsubj	_	_
+19	_	_	NOUN	NOUN	_	18	nmod:poss	_	_
+20	_	_	ADJ	ADJ	_	19	amod	_	_
+21	_	_	ADJ	ADJ	_	19	amod	_	_
+22	_	_	VERB	VERB	_	2	ccomp	_	highlight=green|span=50
+23	_	_	ADP	ADP	_	24	case	_	_
+24	_	_	NOUN	NOUN	_	22	obj	_	_
+25	_	_	PRON	PRON	_	24	nmod:poss	_	_
+26	_	_	ADJ	ADJ	_	22	iobj	_	_
+27	_	_	NOUN	NOUN	_	26	nmod	_	_
+28	_	_	ADJ	ADJ	_	27	amod	_	_
+29	_	_	ADP	ADP	_	30	case	_	_
+30	_	_	NOUN	NOUN	_	26	obj	_	_
+31	_	_	NOUN	NOUN	_	30	nmod:poss	_	_
+32	_	_	CCONJ	CCONJ	_	33	cc	_	_
+33	_	_	NOUN	NOUN	_	31	obj	_	_
+34	_	_	PRON	PRON	_	31	nmod	_	_
+35	_	_	VERB	VERB	_	34	ccomp	_	_
+36	_	_	PRON	PRON	_	35	obj	_	_
+37	_	_	NOUN	NOUN	_	35	nsubj	_	_
+38	_	_	PROPN	PROPN	_	37	nmod:poss	_	_
+39	_	_	PUNCT	PUNCT	_	40	punct	_	_
+40	_	_	PROPN	PROPN	_	37	nmod	_	_
+41	_	_	PUNCT	PUNCT	_	40	punct	_	_
+42	_	_	CCONJ	CCONJ	_	44	cc	_	_
+43	_	_	ADP	ADP	_	44	case	_	_
+44	_	_	NOUN	NOUN	_	35	iobj	_	_
+45	_	_	PRON	PRON	_	44	nmod:poss	_	_
+46	_	_	NOUN	NOUN	_	44	obj	_	_
+47	_	_	PROPN	PROPN	_	46	nmod:poss	_	_
+48	_	_	ADJ	ADJ	_	44	amod	_	_
+49	_	_	CCONJ	CCONJ	_	69	cc	_	_
+50	_	_	PROPN	PROPN	_	48	obj	_	_
+51	_	_	SCONJ	SCONJ	_	52	mark	_	_
+52	_	_	VERB	VERB	_	50	ccomp	_	_
+53	_	_	NOUN	NOUN	_	52	obj	_	_
+54	_	_	ADP	ADP	_	55	case	_	_
+55	_	_	NOUN	NOUN	_	52	iobj	_	_
+56	_	_	PRON	PRON	_	55	nmod:poss	_	_
+57	_	_	CCONJ	CCONJ	_	58	cc	_	_
+58	_	_	NOUN	NOUN	_	52	obj	_	_
+59	_	_	ADP	ADP	_	60	case	_	_
+60	_	_	NOUN	NOUN	_	58	obj	_	_
+61	_	_	PRON	PRON	_	60	nmod:poss	_	_
+62	_	_	ADP	ADP	_	64	case	_	_
+63	_	_	SCONJ	SCONJ	_	64	mark	_	_
+64	_	_	VERB	VERB	_	52	xcomp	_	_
+65	_	_	DET	DET	_	66	det	_	_
+66	_	_	NOUN	NOUN	_	64	obj	_	_
+67	_	_	ADP	ADP	_	52	case	_	_
+68	_	_	ADV	ADV	_	52	advmod	_	_
+69	_	_	VERB	VERB	_	68	ccomp	_	_
+70	_	_	PUNCT	PUNCT	_	22	punct	_	_
+71	_	_	PUNCT	PUNCT	_	22	punct	_	_
+72	_	_	PUNCT	PUNCT	_	22	punct	_	_
+73	_	_	PUNCT	PUNCT	_	22	punct	_	_
+74	_	_	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: ar_nyuad-ud-train.conllu · this verb has L=0, R=2 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+1	_	_	CCONJ	CCONJ	_	2	cc	_	_
+2	_	_	VERB	VERB	_	0	root	_	_
+3	_	_	NOUN	NOUN	_	2	nsubj	_	_
+4	_	_	ADP	ADP	_	5	case	_	_
+5	_	_	NOUN	NOUN	_	3	obj	_	_
+6	_	_	NOUN	NOUN	_	5	nmod:poss	_	_
+7	_	_	ADP	ADP	_	9	case	_	_
+8	_	_	SCONJ	SCONJ	_	9	mark	_	_
+9	_	_	NOUN	NOUN	_	2	obj	_	_
+10	_	_	PUNCT	PUNCT	_	11	punct	_	_
+11	_	_	NOUN	NOUN	_	9	nmod:poss	_	_
+12	_	_	PUNCT	PUNCT	_	11	punct	_	_
+13	_	_	VERB	VERB	_	9	ccomp	_	_
+14	_	_	NUM	NUM	_	13	nummod	_	_
+15	_	_	PUNCT	PUNCT	_	14	punct	_	_
+16	_	_	ADP	ADP	_	17	case	_	_
+17	_	_	NOUN	NOUN	_	14	obj	_	_
+18	_	_	NOUN	NOUN	_	17	nmod:poss	_	_
+19	_	_	NOUN	NOUN	_	18	nmod:poss	_	_
+20	_	_	CCONJ	CCONJ	_	23	cc	_	_
+21	_	_	PRON	PRON	_	23	nsubj	_	_
+22	_	_	ADP	ADP	_	23	case	_	_
+23	_	_	NOUN	NOUN	_	2	obj	_	_
+24	_	_	PRON	PRON	_	23	nmod:poss	_	_
+25	_	_	ADP	ADP	_	26	case	_	_
+26	_	_	NOUN	NOUN	_	23	obj	_	_
+27	_	_	ADJ	ADJ	_	26	amod	_	_
+28	_	_	ADP	ADP	_	29	case	_	_
+29	_	_	NOUN	NOUN	_	26	obj	_	_
+30	_	_	VERB	VERB	_	29	xcomp	_	highlight=red
+31	_	_	ADV	ADV	_	30	advmod	_	highlight=green|span=4
+32	_	_	NUM	NUM	_	31	nummod	_	_
+33	_	_	CCONJ	CCONJ	_	34	cc	_	_
+34	_	_	NUM	NUM	_	32	nummod	_	_
+35	_	_	PUNCT	PUNCT	_	32	punct	_	_
+36	_	_	ADJ	ADJ	_	30	amod	_	highlight=green|span=1
+37	_	_	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: ar_nyuad-ud-train.conllu · this verb has L=0, R=2 (mean span = 10.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+1	_	_	PART	PART	_	2	mark	_	_
+2	_	_	VERB	VERB	_	0	root	_	highlight=red
+3	_	_	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+4	_	_	SCONJ	SCONJ	_	5	mark	_	_
+5	_	_	PROPN	PROPN	_	2	obj	_	highlight=green|span=19
+6	_	_	VERB	VERB	_	5	ccomp	_	_
+7	_	_	NOUN	NOUN	_	6	nmod	_	_
+8	_	_	NOUN	NOUN	_	6	obj	_	_
+9	_	_	NOUN	NOUN	_	8	nmod:poss	_	_
+10	_	_	ADP	ADP	_	11	case	_	_
+11	_	_	NOUN	NOUN	_	9	obj	_	_
+12	_	_	ADP	ADP	_	13	case	_	_
+13	_	_	NOUN	NOUN	_	11	obj	_	_
+14	_	_	PRON	PRON	_	13	nmod:poss	_	_
+15	_	_	ADJ	ADJ	_	13	amod	_	_
+16	_	_	PUNCT	PUNCT	_	5	punct	_	_
+17	_	_	CCONJ	CCONJ	_	19	cc	_	_
+18	_	_	SCONJ	SCONJ	_	19	mark	_	_
+19	_	_	NOUN	NOUN	_	5	obj	_	_
+20	_	_	NOUN	NOUN	_	19	nmod:poss	_	_
+21	_	_	ADJ	ADJ	_	20	amod	_	_
+22	_	_	AUX	AUX	_	19	aux	_	_
+23	_	_	VERB	VERB	_	19	xcomp	_	_
+24	_	_	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: ar_nyuad-ud-train.conllu · this verb has L=0, R=2 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+1	_	_	PROPN	PROPN	_	0	root	_	_
+2	_	_	NUM	NUM	_	1	nummod	_	_
+3	_	_	PUNCT	PUNCT	_	4	punct	_	_
+4	_	_	PROPN	PROPN	_	1	nmod	_	_
+5	_	_	PROPN	PROPN	_	4	flat	_	_
+6	_	_	PUNCT	PUNCT	_	4	punct	_	_
+7	_	_	PUNCT	PUNCT	_	1	punct	_	_
+8	_	_	VERB	VERB	_	1	ccomp	_	_
+9	_	_	NOUN	NOUN	_	8	nsubj	_	_
+10	_	_	ADJ	ADJ	_	9	amod	_	_
+11	_	_	PROPN	PROPN	_	9	nmod	_	_
+12	_	_	PROPN	PROPN	_	11	flat	_	_
+13	_	_	ADP	ADP	_	14	case	_	_
+14	_	_	NOUN	NOUN	_	8	obj	_	_
+15	_	_	NOUN	NOUN	_	14	nmod:poss	_	_
+16	_	_	ADJ	ADJ	_	14	amod	_	_
+17	_	_	PROPN	PROPN	_	14	nmod	_	_
+18	_	_	PROPN	PROPN	_	17	flat	_	_
+19	_	_	ADJ	ADJ	_	14	amod	_	_
+20	_	_	ADP	ADP	_	21	case	_	_
+21	_	_	PROPN	PROPN	_	19	obj	_	_
+22	_	_	SCONJ	SCONJ	_	23	mark	_	_
+23	_	_	NOUN	NOUN	_	8	iobj	_	_
+24	_	_	PRON	PRON	_	23	nmod:poss	_	_
+25	_	_	AUX	AUX	_	26	cop	_	_
+26	_	_	ADJ	ADJ	_	23	amod	_	_
+27	_	_	ADP	ADP	_	28	case	_	_
+28	_	_	NOUN	NOUN	_	26	obj	_	_
+29	_	_	NOUN	NOUN	_	28	nmod:poss	_	_
+30	_	_	ADJ	ADJ	_	29	amod	_	_
+31	_	_	ADV	ADV	_	28	advmod	_	_
+32	_	_	NOUN	NOUN	_	31	nmod:poss	_	_
+33	_	_	ADJ	ADJ	_	32	amod	_	_
+34	_	_	PRON	PRON	_	32	nmod	_	_
+35	_	_	VERB	VERB	_	34	ccomp	_	_
+36	_	_	NUM	NUM	_	37	nummod	_	_
+37	_	_	NOUN	NOUN	_	35	obj	_	_
+38	_	_	ADP	ADP	_	39	case	_	_
+39	_	_	NOUN	NOUN	_	35	iobj	_	_
+40	_	_	PROPN	PROPN	_	39	nmod:poss	_	_
+41	_	_	PUNCT	PUNCT	_	8	punct	_	_
+42	_	_	ADV	ADV	_	8	advmod	_	_
+43	_	_	PRON	PRON	_	42	nmod:poss	_	_
+44	_	_	VERB	VERB	_	43	ccomp	_	highlight=red
+45	_	_	NOUN	NOUN	_	44	nmod	_	highlight=green|span=2
+46	_	_	NOUN	NOUN	_	45	nmod	_	_
+47	_	_	NOUN	NOUN	_	44	nsubj	_	highlight=green|span=6
+48	_	_	ADP	ADP	_	49	case	_	_
+49	_	_	NOUN	NOUN	_	47	obj	_	_
+50	_	_	NOUN	NOUN	_	49	nmod:poss	_	_
+51	_	_	NOUN	NOUN	_	50	nmod:poss	_	_
+52	_	_	ADJ	ADJ	_	50	amod	_	_
+53	_	_	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: ar_nyuad-ud-train.conllu · this verb has L=0, R=2 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+1	_	_	CCONJ	CCONJ	_	2	cc	_	_
+2	_	_	VERB	VERB	_	0	root	_	_
+3	_	_	NOUN	NOUN	_	2	nsubj	_	_
+4	_	_	ADP	ADP	_	6	case	_	_
+5	_	_	PUNCT	PUNCT	_	6	punct	_	_
+6	_	_	NOUN	NOUN	_	3	obj	_	_
+7	_	_	PUNCT	PUNCT	_	6	punct	_	_
+8	_	_	SCONJ	SCONJ	_	10	mark	_	_
+9	_	_	ADV	ADV	_	10	advmod	_	_
+10	_	_	VERB	VERB	_	2	ccomp	_	_
+11	_	_	NOUN	NOUN	_	10	nsubj	_	_
+12	_	_	NOUN	NOUN	_	11	nmod:poss	_	_
+13	_	_	NOUN	NOUN	_	12	nmod:poss	_	_
+14	_	_	ADP	ADP	_	16	case	_	_
+15	_	_	NUM	NUM	_	16	nummod	_	_
+16	_	_	ADV	ADV	_	10	obj	_	_
+17	_	_	PRON	PRON	_	16	nmod:poss	_	_
+18	_	_	NOUN	NOUN	_	16	nmod	_	_
+19	_	_	VERB	VERB	_	18	ccomp	_	_
+20	_	_	ADP	ADP	_	21	case	_	_
+21	_	_	NOUN	NOUN	_	19	obj	_	_
+22	_	_	NOUN	NOUN	_	21	nmod	_	_
+23	_	_	ADV	ADV	_	19	advmod	_	_
+24	_	_	SCONJ	SCONJ	_	25	mark	_	_
+25	_	_	VERB	VERB	_	23	ccomp	_	_
+26	_	_	NOUN	NOUN	_	25	obj	_	_
+27	_	_	NOUN	NOUN	_	26	nmod:poss	_	_
+28	_	_	ADP	ADP	_	29	case	_	_
+29	_	_	NOUN	NOUN	_	25	iobj	_	_
+30	_	_	CCONJ	CCONJ	_	2	cc	_	_
+31	_	_	AUX	AUX	_	2	cop	_	_
+32	_	_	NOUN	NOUN	_	2	nmod	_	_
+33	_	_	SCONJ	SCONJ	_	34	mark	_	_
+34	_	_	NOUN	NOUN	_	32	nsubj	_	_
+35	_	_	VERB	VERB	_	34	ccomp	_	_
+36	_	_	NOUN	NOUN	_	35	obj	_	_
+37	_	_	ADP	ADP	_	38	case	_	_
+38	_	_	NUM	NUM	_	36	nummod	_	_
+39	_	_	ADP	ADP	_	40	case	_	_
+40	_	_	NOUN	NOUN	_	38	obj	_	_
+41	_	_	NOUN	NOUN	_	40	nmod:poss	_	_
+42	_	_	ADP	ADP	_	43	case	_	_
+43	_	_	NOUN	NOUN	_	36	iobj	_	_
+44	_	_	PROPN	PROPN	_	43	nmod:poss	_	_
+45	_	_	PROPN	PROPN	_	44	nmod:poss	_	_
+46	_	_	PUNCT	PUNCT	_	43	punct	_	_
+47	_	_	ADV	ADV	_	43	nmod	_	_
+48	_	_	VERB	VERB	_	47	ccomp	_	_
+49	_	_	SCONJ	SCONJ	_	50	mark	_	_
+50	_	_	NOUN	NOUN	_	48	nsubj	_	_
+51	_	_	ADP	ADP	_	52	case	_	_
+52	_	_	NOUN	NOUN	_	50	obj	_	_
+53	_	_	VERB	VERB	_	50	ccomp	_	_
+54	_	_	ADP	ADP	_	55	case	_	_
+55	_	_	NOUN	NOUN	_	53	obj	_	_
+56	_	_	NOUN	NOUN	_	55	nmod:poss	_	_
+57	_	_	NOUN	NOUN	_	56	nmod:poss	_	_
+58	_	_	ADP	ADP	_	59	case	_	_
+59	_	_	NOUN	NOUN	_	57	obj	_	_
+60	_	_	ADP	ADP	_	61	case	_	_
+61	_	_	NOUN	NOUN	_	59	obj	_	_
+62	_	_	NOUN	NOUN	_	61	nmod:poss	_	_
+63	_	_	PRON	PRON	_	62	nmod:poss	_	_
+64	_	_	PUNCT	PUNCT	_	34	punct	_	_
+65	_	_	CCONJ	CCONJ	_	66	obj	_	_
+66	_	_	VERB	VERB	_	34	ccomp	_	_
+67	_	_	NOUN	NOUN	_	66	nsubj	_	_
+68	_	_	ADP	ADP	_	69	case	_	_
+69	_	_	NOUN	NOUN	_	66	obj	_	_
+70	_	_	PROPN	PROPN	_	69	nmod:poss	_	_
+71	_	_	NUM	NUM	_	66	nummod	_	_
+72	_	_	ADP	ADP	_	74	case	_	_
+73	_	_	PUNCT	PUNCT	_	74	punct	_	_
+74	_	_	NOUN	NOUN	_	71	obj	_	_
+75	_	_	PUNCT	PUNCT	_	74	punct	_	_
+76	_	_	VERB	VERB	_	71	ccomp	_	highlight=red
+77	_	_	NOUN	NOUN	_	76	nsubj	_	highlight=green|span=1
+78	_	_	X	X	_	81	nmod	_	_
+79	_	_	PRON	PRON	_	81	nsubj	_	_
+80	_	_	AUX	AUX	_	81	cop	_	_
+81	_	_	VERB	VERB	_	76	ccomp	_	highlight=green|span=7
+82	_	_	NOUN	NOUN	_	81	obj	_	_
+83	_	_	NOUN	NOUN	_	82	nmod:poss	_	_
+84	_	_	PRON	PRON	_	83	nmod:poss	_	_
+85	_	_	CCONJ	CCONJ	_	86	cc	_	_
+86	_	_	VERB	VERB	_	66	ccomp	_	_
+87	_	_	PUNCT	PUNCT	_	88	punct	_	_
+88	_	_	NOUN	NOUN	_	86	nsubj	_	_
+89	_	_	PUNCT	PUNCT	_	88	punct	_	_
+90	_	_	NOUN	NOUN	_	86	obj	_	_
+91	_	_	ADP	ADP	_	92	case	_	_
+92	_	_	NOUN	NOUN	_	90	obj	_	_
+93	_	_	PUNCT	PUNCT	_	94	punct	_	_
+94	_	_	NOUN	NOUN	_	92	nmod:poss	_	_
+95	_	_	ADV	ADV	_	94	advmod	_	_
+96	_	_	ADJ	ADJ	_	95	nmod:poss	_	_
+97	_	_	PUNCT	PUNCT	_	94	punct	_	_
+98	_	_	VERB	VERB	_	90	ccomp	_	_
+99	_	_	ADP	ADP	_	100	case	_	_
+100	_	_	NOUN	NOUN	_	98	obj	_	_
+101	_	_	ADJ	ADJ	_	100	amod	_	_
+102	_	_	VERB	VERB	_	100	ccomp	_	_
+103	_	_	NOUN	NOUN	_	102	obj	_	_
+104	_	_	ADP	ADP	_	105	case	_	_
+105	_	_	NOUN	NOUN	_	103	obj	_	_
+106	_	_	NOUN	NOUN	_	105	nmod:poss	_	_
+107	_	_	NOUN	NOUN	_	106	nmod:poss	_	_
+108	_	_	ADP	ADP	_	109	case	_	_
+109	_	_	ADV	ADV	_	105	obj	_	_
+110	_	_	NOUN	NOUN	_	109	nmod:poss	_	_
+111	_	_	ADJ	ADJ	_	110	amod	_	_
+112	_	_	ADP	ADP	_	113	case	_	_
+113	_	_	NOUN	NOUN	_	110	obj	_	_
+114	_	_	PRON	PRON	_	113	nmod:poss	_	_
+115	_	_	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: ar_pud-ud-test.conllu · this verb has L=1, R=2 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ب الرغم من أن تصنيف الكتل الهوائية استخدم بدايةً في التوقعات الجوية خلال الخمسينيات , بدأ خبراء المناخ ب وضع بيانات مناخية إجمالية استناداً إلى هذه الفكرة عام 1973 .
+1	ب	ب	ADP	ADP	_	8	case	_	_
+2	الرغم	الرغم	NOUN	NOUN	_	1	fixed	_	_
+3	من	من	ADP	ADP	_	1	fixed	_	_
+4	أن	أن	SCONJ	SCONJ	_	8	mark	_	_
+5	تصنيف	تصنيف	NOUN	NOUN	_	8	nsubj:pass	_	highlight=green|span=3
+6	الكتل	الكتل	NOUN	NOUN	_	5	nmod	_	_
+7	الهوائية	الهوائية	ADJ	ADJ	_	6	amod	_	_
+8	استخدم	استخدم	VERB	VERB	_	16	xcomp	_	highlight=red
+9	بدايةً	بدايةً	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+10	في	في	ADP	ADP	_	11	case	_	_
+11	التوقعات	التوقعات	NOUN	NOUN	_	8	obl	_	highlight=green|span=5
+12	الجوية	الجوية	ADJ	ADJ	_	11	amod	_	_
+13	خلال	خلال	ADP	ADP	_	14	case	_	_
+14	الخمسينيات	الخمسينيات	NOUN	NOUN	_	11	nmod	_	_
+15	,	,	PUNCT	PUNCT	_	8	punct	_	_
+16	بدأ	بدأ	VERB	VERB	_	0	root	_	_
+17	خبراء	خبراء	NOUN	NOUN	_	16	nsubj	_	_
+18	المناخ	المناخ	NOUN	NOUN	_	17	nmod	_	_
+19	ب	ب	ADP	ADP	_	20	case	_	_
+20	وضع	وضع	NOUN	NOUN	_	16	obl	_	_
+21	بيانات	بيانات	NOUN	NOUN	_	20	nmod	_	_
+22	مناخية	مناخية	ADJ	ADJ	_	21	amod	_	_
+23	إجمالية	إجمالية	ADJ	ADJ	_	21	amod	_	_
+24	استناداً	استناداً	NOUN	NOUN	_	16	advcl	_	_
+25	إلى	إلى	ADP	ADP	_	27	case	_	_
+26	هذه	هذه	PRON	PRON	_	27	det	_	_
+27	الفكرة	الفكرة	NOUN	NOUN	_	24	obl	_	_
+28	عام	عام	ADV	ADV	_	16	obl:tmod	_	_
+29	1973	1973	NUM	NUM	_	28	obl	_	_
+30	.	.	PUNCT	PUNCT	_	16	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

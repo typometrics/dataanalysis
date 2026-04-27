@@ -1,0 +1,356 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Xavánte — LMAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Xavánte examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Xavánte <small style="color:#999;font-weight:normal">(xav)</small> — LMAL<sub>2</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>2</b> left dependents (right side may be anything).</p><p><b>LMAL<sub>2</sub> = 1.633</b> &nbsp; <span style="color:#666">(94 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>left</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: xav_xdt-ud-test.conllu · this verb has L=2, R=2 (mean span = 3.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Taha parimhã rowahutu'wa te dama tinha : &quot; Ãne wamhã , ma'ãpé , ai'repudu , awa'awi hã , wama ãma ĩsahu na marĩ na te aima ĩrowasu'u za'ra aba na ahömhö hã , wẽ uptabi na wa te waihu'u za'ra da ! &quot;
+1	Taha	Taha	PRON	PRON	_	6	obl	_	_
+2	parimhã	parimhã	ADP	ADP	_	1	case	_	_
+3	rowahutu'wa	rowahutu'wa	NOUN	NOUN	_	6	nsubj	_	_
+4	te	te	AUX	AUX	_	6	dep	_	_
+5	dama	dama	PRON	PRON	_	6	iobj	_	_
+6	tinha	tinha	VERB	VERB	_	0	root	_	_
+7	:	:	PUNCT	PUNCT	_	6	punct	_	_
+8	&quot;	&quot;	PUNCT	PUNCT	_	21	punct	_	_
+9	Ãne	Ãne	ADV	ADV	_	21	dislocated	_	_
+10	wamhã	wamhã	X	X	_	9	dep	_	_
+11	,	,	PUNCT	PUNCT	_	21	punct	_	_
+12	ma'ãpé	ma'ãpé	AUX	AUX	_	21	dislocated	_	_
+13	,	,	PUNCT	PUNCT	_	21	punct	_	_
+14	ai'repudu	ai'repudu	NOUN	NOUN	_	21	vocative	_	_
+15	,	,	PUNCT	PUNCT	_	21	punct	_	_
+16	awa'awi	awa'awi	ADV	ADV	_	21	dislocated	_	_
+17	hã	hã	PART	PART	_	16	discourse	_	_
+18	,	,	PUNCT	PUNCT	_	21	punct	_	_
+19	wama	wama	PRON	PRON	_	21	iobj	_	_
+20	ãma	ãma	ADP	ADP	_	21	dep	_	_
+21	ĩsahu	ĩsahu	VERB	VERB	_	6	ccomp	_	_
+22	na	na	ADP	ADP	_	23	case	_	_
+23	marĩ	marĩ	NOUN	NOUN	_	21	obl	_	_
+24	na	na	ADP	ADP	_	27	obl	_	highlight=green|span=1
+25	te	te	AUX	AUX	_	27	dep	_	_
+26	aima	aima	PRON	PRON	_	27	iobj	_	highlight=green|span=1
+27	ĩrowasu'u	ĩrowasu'u	VERB	VERB	_	21	xcomp	_	highlight=red
+28	za'ra	za'ra	PART	PART	_	27	dep	_	_
+29	aba	aba	PART	PART	_	27	dep	_	_
+30	na	na	ADP	ADP	_	31	dep	_	_
+31	ahömhö	ahömhö	ADV	ADV	_	27	advmod	_	highlight=green|span=3
+32	hã	hã	PART	PART	_	31	discourse	_	_
+33	,	,	PUNCT	PUNCT	_	27	punct	_	_
+34	wẽ	wẽ	NOUN	NOUN	_	39	dislocated	_	_
+35	uptabi	uptabi	NOUN	NOUN	_	34	nmod	_	_
+36	na	na	ADP	ADP	_	35	case	_	_
+37	wa	wa	PRON	PRON	_	39	dep	_	_
+38	te	te	AUX	AUX	_	39	aux	_	_
+39	waihu'u	waihu'u	VERB	VERB	_	27	advcl	_	highlight=green|span=8
+40	za'ra	za'ra	PART	PART	_	39	dep	_	_
+41	da	da	ADP	ADP	_	39	mark	_	_
+42	!	!	PUNCT	PUNCT	_	39	punct	_	_
+43	&quot;	&quot;	PUNCT	PUNCT	_	21	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: xav_xdt-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Robduripré wapsã ma tô tipã .
+1	Robduripré	Robduripré	NOUN	NOUN	_	5	nsubj	_	highlight=green|span=1
+2	wapsã	wapsã	NOUN	NOUN	_	5	obj	_	highlight=green|span=1
+3	ma	ma	PART	PART	_	5	dep	_	_
+4	tô	tô	PART	PART	_	5	dep	_	_
+5	tipã	tipã	VERB	VERB	_	0	root	_	highlight=red
+6	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: xav_xdt-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Aibö te wei mo 'watébrémi me , 'watébrémi marĩ na te aibö sadanha .
+1	Aibö	Aibö	NOUN	NOUN	_	4	nsubj	_	highlight=green|span=1
+2	te	te	AUX	AUX	_	4	dep	_	_
+3	wei	wei	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+4	mo	mo	VERB	VERB	_	0	root	_	highlight=red
+5	'watébrémi	'watébrémi	NOUN	NOUN	_	4	obl	_	highlight=green|span=2
+6	me	me	ADP	ADP	_	5	case	_	_
+7	,	,	PUNCT	PUNCT	_	4	punct	_	_
+8	'watébrémi	'watébrémi	NOUN	NOUN	_	13	nsubj	_	_
+9	marĩ	marĩ	NOUN	NOUN	_	13	obl	_	_
+10	na	na	ADP	ADP	_	9	case	_	_
+11	te	te	AUX	AUX	_	13	dep	_	_
+12	aibö	aibö	NOUN	NOUN	_	13	obj	_	_
+13	sadanha	sadanha	VERB	VERB	_	4	parataxis	_	_
+14	.	.	PUNCT	PUNCT	_	13	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: xav_xdt-ud-test.conllu · this verb has L=2, R=0 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = &quot; Tane wamhã , oto 'ri tẽme wasi'aba'ré na ! &quot; pi'õ te 'mahö .
+1	&quot;	&quot;	PUNCT	PUNCT	_	8	punct	_	_
+2	Tane	Tane	ADV	ADV	_	8	advcl	_	_
+3	wamhã	wamhã	SCONJ	SCONJ	_	2	mark	_	_
+4	,	,	PUNCT	PUNCT	_	2	punct	_	_
+5	oto	oto	ADV	ADV	_	8	advmod	_	_
+6	'ri	'ri	NOUN	NOUN	_	8	obl	_	_
+7	tẽme	tẽme	ADP	ADP	_	6	case	_	_
+8	wasi'aba'ré	wasi'aba'ré	VERB	VERB	_	14	ccomp	_	highlight=green|span=7
+9	na	na	ADP	ADP	_	8	obl	_	_
+10	!	!	PUNCT	PUNCT	_	8	punct	_	_
+11	&quot;	&quot;	PUNCT	PUNCT	_	8	punct	_	_
+12	pi'õ	pi'õ	NOUN	NOUN	_	14	nsubj	_	highlight=green|span=1
+13	te	te	AUX	AUX	_	14	dep	_	_
+14	'mahö	'mahö	VERB	VERB	_	0	root	_	highlight=red
+15	.	.	PUNCT	PUNCT	_	14	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: xav_xdt-ud-test.conllu · this verb has L=2, R=2 (mean span = 2.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Aihini wapté si'utu wamhã , te za sõ're za'ra , dama rowẽ da hã .
+1	Aihini	Aihini	PRON	PRON	_	2	nmod	_	_
+2	wapté	wapté	NOUN	NOUN	_	8	nsubj	_	highlight=green|span=2
+3	si'utu	si'utu	VERB	VERB	_	8	advcl	_	highlight=green|span=2
+4	wamhã	wamhã	ADV	ADV	_	3	advmod	_	_
+5	,	,	PUNCT	PUNCT	_	3	punct	_	_
+6	te	te	AUX	AUX	_	8	aux	_	_
+7	za	za	PART	PART	_	8	dep	_	_
+8	sõ're	sõ're	VERB	VERB	_	0	root	_	highlight=red
+9	za'ra	za'ra	PART	PART	_	2	dep	_	highlight=green|span=1
+10	,	,	PUNCT	PUNCT	_	8	punct	_	_
+11	dama	dama	SCONJ	SCONJ	_	12	dep	_	_
+12	rowẽ	rowẽ	NOUN	NOUN	_	8	advcl	_	highlight=green|span=4
+13	da	da	SCONJ	SCONJ	_	12	mark	_	_
+14	hã	hã	PART	PART	_	12	dep	_	_
+15	.	.	PUNCT	PUNCT	_	12	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: xav_xdt-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ö wa ĩĩsima wẽ
+1	Ö	Ö	NOUN	NOUN	_	4	obj	_	highlight=green|span=1
+2	wa	wa	PRON	PRON	_	4	dep	_	_
+3	ĩĩsima	ĩĩsima	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+4	wẽ	wẽ	VERB	VERB	_	0	root	_	highlight=red"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: xav_xdt-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = E 'wa te aima tinha , wapté aihini pese te te romhuri za'ra õ na hã .
+1	E	E	PART	PART	_	5	dep	_	_
+2	'wa	'wa	PRON	PRON	_	5	nsubj	_	_
+3	te	te	AUX	AUX	_	5	dep	_	_
+4	aima	aima	PRON	PRON	_	5	iobj	_	_
+5	tinha	tinha	VERB	VERB	_	0	root	_	_
+6	,	,	PUNCT	PUNCT	_	5	punct	_	_
+7	wapté	wapté	NOUN	NOUN	_	12	nsubj	_	highlight=green|span=2
+8	aihini	aihini	PRON	PRON	_	7	nmod	_	_
+9	pese	pese	ADV	ADV	_	12	advmod	_	highlight=green|span=1
+10	te	te	AUX	AUX	_	12	dep	_	_
+11	te	te	AUX	AUX	_	12	aux	_	_
+12	romhuri	romhuri	VERB	VERB	_	5	ccomp	_	highlight=red
+13	za'ra	za'ra	PART	PART	_	12	dep	_	_
+14	õ	õ	PART	PART	_	12	dep	_	_
+15	na	na	X	X	_	12	dep	_	_
+16	hã	hã	PART	PART	_	12	discourse	_	_
+17	.	.	PUNCT	PUNCT	_	12	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: xav_xdt-ud-test.conllu · this verb has L=2, R=1 (mean span = 3.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Aimama te za wei mo , marĩ ĩpire hã te te aima waihu'u da .
+1	Aimama	Aimama	NOUN	NOUN	_	5	nsubj	_	highlight=green|span=1
+2	te	te	AUX	AUX	_	5	dep	_	_
+3	za	za	PART	PART	_	5	dep	_	_
+4	wei	wei	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+5	mo	mo	VERB	VERB	_	0	root	_	highlight=red
+6	,	,	PUNCT	PUNCT	_	5	punct	_	_
+7	marĩ	marĩ	NOUN	NOUN	_	13	obj	_	_
+8	ĩpire	ĩpire	NOUN	NOUN	_	7	nmod	_	_
+9	hã	hã	DET	DET	_	8	det	_	_
+10	te	te	AUX	AUX	_	13	dep	_	_
+11	te	te	AUX	AUX	_	13	aux	_	_
+12	aima	aima	PRON	PRON	_	13	iobj	_	_
+13	waihu'u	waihu'u	VERB	VERB	_	5	advcl	_	highlight=green|span=8
+14	da	da	ADP	ADP	_	13	mark	_	_
+15	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: xav_xdt-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Wahitébré ma robze uptabi di , ĩsa wa te tãma sõmri wa .
+1	Wahitébré	Wahitébré	NOUN	NOUN	_	3	nsubj	_	_
+2	ma	ma	PART	PART	_	3	dep	_	_
+3	robze	robze	NOUN	NOUN	_	0	root	_	_
+4	uptabi	uptabi	NOUN	NOUN	_	3	nmod	_	_
+5	di	di	X	X	_	3	dep	_	_
+6	,	,	PUNCT	PUNCT	_	3	punct	_	_
+7	ĩsa	ĩsa	NOUN	NOUN	_	11	obj	_	highlight=green|span=1
+8	wa	wa	PRON	PRON	_	11	dep	_	_
+9	te	te	AUX	AUX	_	11	aux	_	_
+10	tãma	tãma	PRON	PRON	_	11	iobj	_	highlight=green|span=1
+11	sõmri	sõmri	VERB	VERB	_	3	advcl	_	highlight=red
+12	wa	wa	SCONJ	SCONJ	_	11	mark	_	_
+13	.	.	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: xav_xdt-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ahã aimama ãma te aiwaʔwa
+1	ahã	ahã	NOUN	NOUN	_	5	nsubj	_	highlight=green|span=1
+2	aimama	aimama	NOUN	NOUN	_	5	obl	_	highlight=green|span=2
+3	ãma	ãma	ADP	ADP	_	2	case	_	_
+4	te	te	AUX	AUX	_	5	aux	_	_
+5	aiwaʔwa	aiwaʔwa	VERB	VERB	_	0	root	_	highlight=red"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: xav_xdt-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Taha wa te mararé 're sõtõ za'ra aptö'ö te .
+1	Taha	Taha	ADV	ADV	_	6	advmod	_	highlight=green|span=2
+2	wa	wa	ADV	ADV	_	1	flat	_	_
+3	te	te	AUX	AUX	_	6	aux	_	_
+4	mararé	mararé	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+5	're	're	PART	PART	_	6	dep	_	_
+6	sõtõ	sõtõ	VERB	VERB	_	0	root	_	highlight=red
+7	za'ra	za'ra	PART	PART	_	6	dep	_	_
+8	aptö'ö	aptö'ö	NOUN	NOUN	_	6	obl	_	highlight=green|span=2
+9	te	te	ADP	ADP	_	8	case	_	_
+10	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: xav_xdt-ud-test.conllu · this verb has L=2, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Rowahutu'wa ĩta'are te ta'a , 'watébrémi norĩ zô romnhoré u da hã .
+1	Rowahutu'wa	Rowahutu'wa	NOUN	NOUN	_	4	nsubj	_	highlight=green|span=1
+2	ĩta'are	ĩta'are	NOUN	NOUN	_	4	obj	_	highlight=green|span=1
+3	te	te	AUX	AUX	_	4	dep	_	_
+4	ta'a	ta'a	VERB	VERB	_	0	root	_	highlight=red
+5	,	,	PUNCT	PUNCT	_	4	punct	_	_
+6	'watébrémi	'watébrémi	NOUN	NOUN	_	9	nsubj	_	_
+7	norĩ	norĩ	PART	PART	_	6	dep	_	_
+8	zô	zô	SCONJ	SCONJ	_	9	mark	_	_
+9	romnhoré	romnhoré	NOUN	NOUN	_	4	advcl	_	highlight=green|span=7
+10	u	u	ADP	ADP	_	9	case	_	_
+11	da	da	ADP	ADP	_	9	mark	_	_
+12	hã	hã	PART	PART	_	9	discourse	_	_
+13	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: xav_xdt-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Aibö te mo buru u , pi'õ dzéma te mo buru u .
+1	Aibö	Aibö	NOUN	NOUN	_	3	nsubj	_	_
+2	te	te	AUX	AUX	_	3	aux	_	_
+3	mo	mo	VERB	VERB	_	0	root	_	_
+4	buru	buru	NOUN	NOUN	_	3	obl	_	_
+5	u	u	ADP	ADP	_	4	case	_	_
+6	,	,	PUNCT	PUNCT	_	3	punct	_	_
+7	pi'õ	pi'õ	NOUN	NOUN	_	10	nsubj	_	highlight=green|span=1
+8	dzéma	dzéma	ADV	ADV	_	10	advmod	_	highlight=green|span=1
+9	te	te	AUX	AUX	_	10	aux	_	_
+10	mo	mo	VERB	VERB	_	3	conj	_	highlight=red
+11	buru	buru	NOUN	NOUN	_	10	obl	_	highlight=green|span=2
+12	u	u	ADP	ADP	_	11	case	_	_
+13	.	.	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: xav_xdt-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Asõhui'wa te ĩma nharĩ za'ra ĩprédub nhimiroti zarina .
+1	Asõhui'wa	Asõhui'wa	NOUN	NOUN	_	4	nsubj	_	highlight=green|span=1
+2	te	te	AUX	AUX	_	4	dep	_	_
+3	ĩma	ĩma	PRON	PRON	_	4	iobj	_	highlight=green|span=1
+4	nharĩ	nharĩ	VERB	VERB	_	0	root	_	highlight=red
+5	za'ra	za'ra	PART	PART	_	4	dep	_	_
+6	ĩprédub	ĩprédub	NOUN	NOUN	_	7	nmod	_	_
+7	nhimiroti	nhimiroti	NOUN	NOUN	_	4	advcl	_	highlight=green|span=3
+8	zarina	zarina	SCONJ	SCONJ	_	7	mark	_	_
+9	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: xav_xdt-ud-test.conllu · this verb has L=2, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Dasimasisi aba wamhã , e niha te tahöjmana aba ni ?
+1	Dasimasisi	Dasimasisi	VERB	VERB	_	8	advcl	_	highlight=green|span=3
+2	aba	aba	PART	PART	_	1	dep	_	_
+3	wamhã	wamhã	SCONJ	SCONJ	_	1	mark	_	_
+4	,	,	PUNCT	PUNCT	_	1	punct	_	_
+5	e	e	PART	PART	_	8	dep	_	_
+6	niha	niha	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+7	te	te	PART	PART	_	8	dep	_	_
+8	tahöjmana	tahöjmana	VERB	VERB	_	0	root	_	highlight=red
+9	aba	aba	PART	PART	_	8	dep	_	_
+10	ni	ni	PRON	PRON	_	8	dep	_	_
+11	?	?	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: xav_xdt-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Tsi'a bara ma tô tiwĩ . Mrap te ma tô tiwĩ .
+1	Tsi'a	Tsi'a	NOUN	NOUN	_	5	nsubj	_	highlight=green|span=1
+2	bara	bara	NOUN	NOUN	_	5	obj	_	highlight=green|span=1
+3	ma	ma	PART	PART	_	5	dep	_	_
+4	tô	tô	PART	PART	_	5	dep	_	_
+5	tiwĩ	tiwĩ	VERB	VERB	_	0	root	_	highlight=red
+6	.	.	PUNCT	PUNCT	_	5	punct	_	_
+7	Mrap	Mrap	NOUN	NOUN	_	11	obl	_	_
+8	te	te	ADP	ADP	_	7	case	_	_
+9	ma	ma	PART	PART	_	11	dep	_	_
+10	tô	tô	PART	PART	_	11	dep	_	_
+11	tiwĩ	tiwĩ	VERB	VERB	_	5	parataxis	_	_
+12	.	.	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: xav_xdt-ud-test.conllu · this verb has L=2, R=0 (mean span = 3.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Warazu tiʔa te siwi ʔrepuʔu wamha wedenhõrõ te siwi sõrõ sada , ĩpa uptabi wedenhõrõ hã
+1	Warazu	Warazu	NOUN	NOUN	_	5	nsubj	_	_
+2	tiʔa	tiʔa	NOUN	NOUN	_	1	dep	_	_
+3	te	te	AUX	AUX	_	1	dep	_	_
+4	siwi	siwi	PRON	PRON	_	1	dep	_	_
+5	ʔrepuʔu	ʔrepuʔu	VERB	VERB	_	10	advcl	_	highlight=green|span=6
+6	wamha	wamha	SCONJ	SCONJ	_	5	mark	_	_
+7	wedenhõrõ	wedenhõrõ	NOUN	NOUN	_	10	obj	_	highlight=green|span=1
+8	te	te	AUX	AUX	_	10	aux	_	_
+9	siwi	siwi	PART	PART	_	10	dep	_	_
+10	sõrõ	sõrõ	VERB	VERB	_	0	root	_	highlight=red
+11	sada	sada	ADP	ADP	_	10	case	_	_
+12	,	,	PUNCT	PUNCT	_	10	punct	_	_
+13	ĩpa	ĩpa	ADJ	ADJ	_	15	amod	_	_
+14	uptabi	uptabi	ADV	ADV	_	13	amod	_	_
+15	wedenhõrõ	wedenhõrõ	NOUN	NOUN	_	10	dep	_	_
+16	hã	hã	PART	PART	_	15	dep	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: xav_xdt-ud-test.conllu · this verb has L=2, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = wahã wanorĩ waʔwa hã wa aimãdöʔö ʔwa
+1	wahã	wahã	PRON	PRON	_	6	nsubj	_	highlight=green|span=1
+2	wanorĩ	wanorĩ	PRON	PRON	_	6	obj	_	highlight=green|span=3
+3	waʔwa	waʔwa	PART	PART	_	2	dep	_	_
+4	hã	hã	PART	PART	_	2	dep	_	_
+5	wa	wa	AUX	AUX	_	6	aux	_	_
+6	aimãdöʔö	aimãdöʔö	VERB	VERB	_	0	root	_	highlight=red
+7	ʔwa	ʔwa	PART	PART	_	6	dep	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: xav_xdt-ud-test.conllu · this verb has L=2, R=2 (mean span = 1.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Duré nimamem hã ĩĩzahi wasédé ĩĩsiré piʔõ da
+1	Duré	Duré	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+2	nimamem	nimamem	ADV	ADV	_	4	advmod	_	highlight=green|span=2
+3	hã	hã	PART	PART	_	2	dep	_	_
+4	ĩĩzahi	ĩĩzahi	VERB	VERB	_	0	root	_	highlight=red
+5	wasédé	wasédé	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+6	ĩĩsiré	ĩĩsiré	NOUN	NOUN	_	7	nmod	_	_
+7	piʔõ	piʔõ	NOUN	NOUN	_	4	obl	_	highlight=green|span=3
+8	da	da	ADP	ADP	_	7	case	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: xav_xdt-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Õhã pe'a ma tino .
+1	Õhã	Õhã	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+2	pe'a	pe'a	NOUN	NOUN	_	4	obj	_	highlight=green|span=1
+3	ma	ma	PART	PART	_	4	dep	_	_
+4	tino	tino	VERB	VERB	_	0	root	_	highlight=red
+5	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

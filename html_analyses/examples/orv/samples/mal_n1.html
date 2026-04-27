@@ -1,0 +1,595 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>OldEastSlavic — MAL_1</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to OldEastSlavic examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>OldEastSlavic <small style="color:#999;font-weight:normal">(orv)</small> — MAL<sub>1</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>1</b> dependents in total (left + right combined).</p><p><b>MAL<sub>1</sub> = 2.668</b> &nbsp; <span style="color:#666">(7,104 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over all dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: orv_torot-ud-train.conllu · this verb has L=0, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = да ѱи ꙇ свини по естеству а я чрез естество ѿ грѣхъ воняю яко пес мертвои поверженъ на улице града
+1	да	да	ADV	ADV	_	2	discourse	_	_
+2	ѱи	ѱи	NOUN	NOUN	_	0	root	_	_
+3	ꙇ	ꙇ	CCONJ	CCONJ	_	4	cc	_	_
+4	свини	свини	NOUN	NOUN	_	2	conj	_	_
+5	по	по	ADP	ADP	_	6	case	_	_
+6	естеству	естеству	NOUN	NOUN	_	2	orphan	_	_
+7	а	а	CCONJ	CCONJ	_	13	cc	_	_
+8	я	я	PRON	PRON	_	13	nsubj	_	_
+9	чрез	чрез	ADP	ADP	_	10	case	_	_
+10	естество	естество	NOUN	NOUN	_	13	obl	_	_
+11	ѿ	ѿ	ADP	ADP	_	12	case	_	_
+12	грѣхъ	грѣхъ	NOUN	NOUN	_	13	obl	_	_
+13	воняю	воняю	VERB	VERB	_	2	conj	_	_
+14	яко	яко	ADV	ADV	_	15	mark	_	_
+15	пес	пес	NOUN	NOUN	_	13	advcl:cmp	_	_
+16	мертвои	мертвои	ADJ	ADJ	_	15	amod	_	_
+17	поверженъ	поверженъ	VERB	VERB	_	15	acl	_	highlight=red
+18	на	на	ADP	ADP	_	19	case	_	_
+19	улице	улице	NOUN	NOUN	_	17	obl	_	highlight=green|span=3
+20	града	града	NOUN	NOUN	_	19	nmod	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: orv_rnc-ud-train.conllu · this verb has L=0, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Туто жъ во граде Тоболске создаша храмъ во имя Пресвятыя Живоначалные Троицы , понеже ту в Троицы славимому Богу прославляему быти отъ православъныхъ крестьянъ ; аще бы не благоволи Богъ создатись ту граду і воздвигнутись святымъ Божіимъ церквамъ , мощенъ бо есть Богъ наставити крестьянъ и помоши имъ , дабы шедши , помошию Его взя[ти] градъ Сибирь и князя Седяка , иже и бѣ в немъ господинъ , победити , ныне же благоизволи ту и просвети место во славословие Живоначальной Троіцы Отцу и Сыну і Святому Духу : вместо преже имянітаго града Сибири Старой сей і именовася и начало градомъ бысть градъ Тоболескъ , понеже еще ту побѣда и одоленіе на окаянныхъ бесерменъ бысть ; и началныі царствующаго града Старой Сибири Сейдякъ въ Тоболскѣ взятъ бысть Божиимъ праведнымъ промысломъ , паче жъ сей Тоболескъ вместо царствующаго града Старой Сибири именовася и препрослыся началнымъ градомъ .
+1	Туто	Туто	ADV	ADV	_	6	advmod	_	_
+2	жъ	жъ	PART	PART	_	1	advmod	_	_
+3	во	во	ADP	ADP	_	4	case	_	_
+4	граде	граде	NOUN	NOUN	_	1	nmod	_	_
+5	Тоболске	Тоболске	PROPN	PROPN	_	4	appos	_	_
+6	создаша	создаша	VERB	VERB	_	0	root	_	_
+7	храмъ	храмъ	NOUN	NOUN	_	6	obj	_	_
+8	во	во	ADP	ADP	_	9	case	_	_
+9	имя	имя	NOUN	NOUN	_	7	nmod	_	_
+10	Пресвятыя	Пресвятыя	ADJ	ADJ	_	12	amod	_	_
+11	Живоначалные	Живоначалные	ADJ	ADJ	_	12	amod	_	_
+12	Троицы	Троицы	NOUN	NOUN	_	9	nmod	_	_
+13	,	,	PUNCT	PUNCT	_	20	punct	_	_
+14	понеже	понеже	SCONJ	SCONJ	_	20	mark	_	_
+15	ту	ту	ADV	ADV	_	20	advmod	_	_
+16	в	в	ADP	ADP	_	17	case	_	_
+17	Троицы	Троицы	NOUN	NOUN	_	18	obl	_	_
+18	славимому	славимому	VERB	VERB	_	19	acl	_	_
+19	Богу	Богу	NOUN	NOUN	_	20	iobj	_	_
+20	прославляему	прославляему	VERB	VERB	_	6	advcl	_	_
+21	быти	быти	AUX	AUX	_	20	aux:pass	_	_
+22	отъ	отъ	ADP	ADP	_	24	case	_	_
+23	православъныхъ	православъныхъ	ADJ	ADJ	_	24	amod	_	_
+24	крестьянъ	крестьянъ	NOUN	NOUN	_	20	obl:agent	_	_
+25	;	;	PUNCT	PUNCT	_	73	punct	_	_
+26	аще	аще	SCONJ	SCONJ	_	29	mark	_	_
+27	бы	бы	AUX	AUX	_	29	aux	_	_
+28	не	не	PART	PART	_	29	advmod	_	_
+29	благоволи	благоволи	VERB	VERB	_	73	advcl	_	_
+30	Богъ	Богъ	NOUN	NOUN	_	29	nsubj	_	_
+31	создатись	создатись	VERB	VERB	_	29	xcomp	_	_
+32	ту	ту	ADV	ADV	_	31	advmod	_	_
+33	граду	граду	NOUN	NOUN	_	31	nsubj	_	_
+34	і	і	CCONJ	CCONJ	_	35	cc	_	_
+35	воздвигнутись	воздвигнутись	VERB	VERB	_	31	conj	_	_
+36	святымъ	святымъ	ADJ	ADJ	_	38	amod	_	_
+37	Божіимъ	Божіимъ	ADJ	ADJ	_	38	amod	_	_
+38	церквамъ	церквамъ	NOUN	NOUN	_	35	nsubj	_	_
+39	,	,	PUNCT	PUNCT	_	29	punct	_	_
+40	мощенъ	мощенъ	ADJ	ADJ	_	29	advcl	_	_
+41	бо	бо	PART	PART	_	40	advmod	_	_
+42	есть	есть	AUX	AUX	_	40	cop	_	_
+43	Богъ	Богъ	NOUN	NOUN	_	40	nsubj	_	_
+44	наставити	наставити	VERB	VERB	_	40	xcomp	_	highlight=red
+45	крестьянъ	крестьянъ	NOUN	NOUN	_	44	obj	_	highlight=green|span=1
+46	и	и	CCONJ	CCONJ	_	47	cc	_	_
+47	помоши	помоши	VERB	VERB	_	44	conj	_	_
+48	имъ	имъ	PRON	PRON	_	47	iobj	_	_
+49	,	,	PUNCT	PUNCT	_	55	punct	_	_
+50	дабы	дабы	SCONJ	SCONJ	_	55	mark	_	_
+51	шедши	шедши	VERB	VERB	_	55	advcl	_	_
+52	,	,	PUNCT	PUNCT	_	51	punct	_	_
+53	помошию	помошию	NOUN	NOUN	_	55	iobj	_	_
+54	Его	Его	PRON	PRON	_	53	det	_	_
+55	взя[ти]	взя[ти]	VERB	VERB	_	47	advcl	_	_
+56	градъ	градъ	NOUN	NOUN	_	55	obj	_	_
+57	Сибирь	Сибирь	PROPN	PROPN	_	56	appos	_	_
+58	и	и	CCONJ	CCONJ	_	69	cc	_	_
+59	князя	князя	NOUN	NOUN	_	69	obj	_	_
+60	Седяка	Седяка	PROPN	PROPN	_	59	appos	_	_
+61	,	,	PUNCT	PUNCT	_	67	punct	_	_
+62	иже	иже	PRON	PRON	_	67	nsubj	_	_
+63	и	и	PART	PART	_	67	advmod	_	_
+64	бѣ	бѣ	AUX	AUX	_	67	cop	_	_
+65	в	в	ADP	ADP	_	66	case	_	_
+66	немъ	немъ	PRON	PRON	_	67	obl	_	_
+67	господинъ	господинъ	NOUN	NOUN	_	59	acl:relcl	_	_
+68	,	,	PUNCT	PUNCT	_	67	punct	_	_
+69	победити	победити	VERB	VERB	_	55	conj	_	_
+70	,	,	PUNCT	PUNCT	_	29	punct	_	_
+71	ныне	ныне	ADV	ADV	_	73	advmod	_	_
+72	же	же	PART	PART	_	73	advmod	_	_
+73	благоизволи	благоизволи	VERB	VERB	_	6	conj	_	_
+74	ту	ту	ADV	ADV	_	73	advmod	_	_
+75	и	и	CCONJ	CCONJ	_	76	cc	_	_
+76	просвети	просвети	VERB	VERB	_	73	conj	_	_
+77	место	место	NOUN	NOUN	_	76	obj	_	_
+78	во	во	ADP	ADP	_	79	case	_	_
+79	славословие	славословие	NOUN	NOUN	_	76	obl	_	_
+80	Живоначальной	Живоначальной	ADJ	ADJ	_	81	amod	_	_
+81	Троіцы	Троіцы	NOUN	NOUN	_	79	nmod	_	_
+82	Отцу	Отцу	NOUN	NOUN	_	81	appos	_	_
+83	и	и	CCONJ	CCONJ	_	84	cc	_	_
+84	Сыну	Сыну	NOUN	NOUN	_	82	conj	_	_
+85	і	і	CCONJ	CCONJ	_	87	cc	_	_
+86	Святому	Святому	ADJ	ADJ	_	87	amod	_	_
+87	Духу	Духу	NOUN	NOUN	_	82	conj	_	_
+88	:	:	PUNCT	PUNCT	_	97	punct	_	_
+89	вместо	вместо	ADP	ADP	_	92	case	_	_
+90	преже	преже	ADP	ADP	_	91	case	_	_
+91	имянітаго	имянітаго	ADJ	ADJ	_	92	acl	_	_
+92	града	града	NOUN	NOUN	_	97	obl	_	_
+93	Сибири	Сибири	PROPN	PROPN	_	92	appos	_	_
+94	Старой	Старой	ADJ	ADJ	_	93	amod	_	_
+95	сей	сей	DET	DET	_	97	nsubj	_	_
+96	і	і	CCONJ	CCONJ	_	97	cc	_	_
+97	именовася	именовася	VERB	VERB	_	73	parataxis	_	_
+98	и	и	CCONJ	CCONJ	_	99	cc	_	_
+99	начало	начало	NOUN	NOUN	_	97	conj	_	_
+100	градомъ	градомъ	NOUN	NOUN	_	99	nmod	_	_
+101	бысть	бысть	AUX	AUX	_	99	cop	_	_
+102	градъ	градъ	NOUN	NOUN	_	99	nsubj	_	_
+103	Тоболескъ	Тоболескъ	PROPN	PROPN	_	102	appos	_	_
+104	,	,	PUNCT	PUNCT	_	114	punct	_	_
+105	понеже	понеже	SCONJ	SCONJ	_	114	mark	_	_
+106	еще	еще	ADV	ADV	_	114	advmod	_	_
+107	ту	ту	ADV	ADV	_	114	advmod	_	_
+108	побѣда	побѣда	NOUN	NOUN	_	114	nsubj	_	_
+109	и	и	CCONJ	CCONJ	_	110	cc	_	_
+110	одоленіе	одоленіе	NOUN	NOUN	_	108	conj	_	_
+111	на	на	ADP	ADP	_	113	case	_	_
+112	окаянныхъ	окаянныхъ	ADJ	ADJ	_	113	amod	_	_
+113	бесерменъ	бесерменъ	NOUN	NOUN	_	108	nmod	_	_
+114	бысть	бысть	VERB	VERB	_	97	advcl	_	_
+115	;	;	PUNCT	PUNCT	_	125	punct	_	_
+116	и	и	CCONJ	CCONJ	_	125	cc	_	_
+117	началныі	началныі	ADJ	ADJ	_	125	nsubj:pass	_	_
+118	царствующаго	царствующаго	VERB	VERB	_	119	amod	_	_
+119	града	града	NOUN	NOUN	_	117	nmod	_	_
+120	Старой	Старой	ADJ	ADJ	_	121	amod	_	_
+121	Сибири	Сибири	PROPN	PROPN	_	119	appos	_	_
+122	Сейдякъ	Сейдякъ	PROPN	PROPN	_	117	appos	_	_
+123	въ	въ	ADP	ADP	_	124	case	_	_
+124	Тоболскѣ	Тоболскѣ	PROPN	PROPN	_	125	obl	_	_
+125	взятъ	взятъ	VERB	VERB	_	114	conj	_	_
+126	бысть	бысть	AUX	AUX	_	125	aux:pass	_	_
+127	Божиимъ	Божиимъ	ADJ	ADJ	_	129	amod	_	_
+128	праведнымъ	праведнымъ	ADJ	ADJ	_	129	amod	_	_
+129	промысломъ	промысломъ	NOUN	NOUN	_	125	iobj	_	_
+130	,	,	PUNCT	PUNCT	_	140	punct	_	_
+131	паче	паче	ADV	ADV	_	140	advmod	_	_
+132	жъ	жъ	PART	PART	_	131	advmod	_	_
+133	сей	сей	DET	DET	_	134	det	_	_
+134	Тоболескъ	Тоболескъ	PROPN	PROPN	_	140	nsubj	_	_
+135	вместо	вместо	ADP	ADP	_	137	case	_	_
+136	царствующаго	царствующаго	VERB	VERB	_	137	amod	_	_
+137	града	града	NOUN	NOUN	_	140	obl	_	_
+138	Старой	Старой	ADJ	ADJ	_	139	amod	_	_
+139	Сибири	Сибири	PROPN	PROPN	_	137	appos	_	_
+140	именовася	именовася	VERB	VERB	_	125	conj	_	_
+141	и	и	CCONJ	CCONJ	_	142	cc	_	_
+142	препрослыся	препрослыся	VERB	VERB	_	140	conj	_	_
+143	началнымъ	началнымъ	ADJ	ADJ	_	144	amod	_	_
+144	градомъ	градомъ	NOUN	NOUN	_	142	xcomp	_	_
+145	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: orv_birchbark-ud-train.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = …е[ни]ѥ …деть а такоѥ же … исп[ꙑ]…
+1	…е[ни]ѥ	…е[ни]ѥ	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+2	…деть	…деть	VERB	VERB	_	0	root	_	highlight=red
+3	а	а	CCONJ	CCONJ	_	7	cc	_	_
+4	такоѥ	такоѥ	DET	DET	_	7	dep	_	_
+5	же	же	PART	PART	_	4	advmod	_	_
+6	…	…	PUNCT	PUNCT	_	7	punct	_	_
+7	исп[ꙑ]…	исп[ꙑ]…	VERB	VERB	_	2	dep	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: orv_torot-ud-train.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = егда же ли кого слышаше бесѣдѹюща два или трїе съшедше сѧ вкѹпѣ или смѣхи тъкꙋща ѡ семъ ѹбо негодоваше
+1	егда	егда	ADV	ADV	_	5	advcl	_	_
+2	же	же	ADV	ADV	_	19	discourse	_	_
+3	ли	ли	ADV	ADV	_	19	discourse	_	_
+4	кого	кого	PRON	PRON	_	5	obj	_	_
+5	слышаше	слышаше	VERB	VERB	_	19	dislocated	_	_
+6	бесѣдѹюща	бесѣдѹюща	VERB	VERB	_	5	xcomp	_	_
+7	два	два	NUM	NUM	_	10	nsubj	_	_
+8	или	или	CCONJ	CCONJ	_	9	cc	_	_
+9	трїе	трїе	NUM	NUM	_	7	conj	_	_
+10	съшедше	съшедше	VERB	VERB	_	6	advcl	_	_
+11	сѧ	сѧ	PRON	PRON	_	10	expl:pv	_	_
+12	вкѹпѣ	вкѹпѣ	ADV	ADV	_	10	advmod	_	_
+13	или	или	CCONJ	CCONJ	_	15	cc	_	_
+14	смѣхи	смѣхи	NOUN	NOUN	_	15	obj	_	highlight=green|span=1
+15	тъкꙋща	тъкꙋща	VERB	VERB	_	6	conj	_	highlight=red
+16	ѡ	ѡ	ADP	ADP	_	17	case	_	_
+17	семъ	семъ	PRON	PRON	_	19	obl	_	_
+18	ѹбо	ѹбо	ADV	ADV	_	19	discourse	_	_
+19	негодоваше	негодоваше	VERB	VERB	_	0	root	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: orv_torot-ud-train.conllu · this verb has L=0, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = помѧноух Бг҃а и возвеселих сѧ
+1	помѧноух	помѧноух	VERB	VERB	_	0	root	_	highlight=red
+2	Бг҃а	Бг҃а	NOUN	NOUN	_	1	obj	_	highlight=green|span=1
+3	и	и	CCONJ	CCONJ	_	4	cc	_	_
+4	возвеселих	возвеселих	VERB	VERB	_	1	conj	_	_
+5	сѧ	сѧ	PRON	PRON	_	4	expl:pv	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: orv_torot-ud-train.conllu · this verb has L=0, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = а двд҃ъ заимъ сутѣску червенъ приде внезапу и зая володимерцѣ
+1	а	а	CCONJ	CCONJ	_	6	cc	_	_
+2	двд҃ъ	двд҃ъ	PROPN	PROPN	_	6	nsubj	_	_
+3	заимъ	заимъ	VERB	VERB	_	6	advcl	_	_
+4	сутѣску	сутѣску	PROPN	PROPN	_	3	obj	_	_
+5	червенъ	червенъ	PROPN	PROPN	_	4	conj	_	_
+6	приде	приде	VERB	VERB	_	0	root	_	_
+7	внезапу	внезапу	ADV	ADV	_	6	advmod	_	_
+8	и	и	CCONJ	CCONJ	_	9	cc	_	_
+9	зая	зая	VERB	VERB	_	6	conj	_	highlight=red
+10	володимерцѣ	володимерцѣ	NOUN	NOUN	_	9	obj	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: orv_torot-ud-train.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = а третьюю выдахомъ а нѣмьцмъ и гтъмъ и всемоу латиньскомоу ꙗзꙑкоу платити по двѣ коунѣ ѿ капи и ѿ всѧкого вѣснаго товара что кладоуть на скалви и продавше и коупивше
+1	а	а	CCONJ	CCONJ	_	3	cc	_	_
+2	третьюю	третьюю	ADJ	ADJ	_	3	obj	_	highlight=green|span=1
+3	выдахомъ	выдахомъ	VERB	VERB	_	0	root	_	highlight=red
+4	а	а	CCONJ	CCONJ	_	12	cc	_	_
+5	нѣмьцмъ	нѣмьцмъ	NOUN	NOUN	_	12	nsubj	_	_
+6	и	и	CCONJ	CCONJ	_	7	cc	_	_
+7	гтъмъ	гтъмъ	NOUN	NOUN	_	5	conj	_	_
+8	и	и	CCONJ	CCONJ	_	11	cc	_	_
+9	всемоу	всемоу	DET	DET	_	11	det	_	_
+10	латиньскомоу	латиньскомоу	ADJ	ADJ	_	11	amod	_	_
+11	ꙗзꙑкоу	ꙗзꙑкоу	NOUN	NOUN	_	5	conj	_	_
+12	платити	платити	VERB	VERB	_	3	conj	_	_
+13	по	по	ADV	ADV	_	15	advmod	_	_
+14	двѣ	двѣ	NUM	NUM	_	15	nummod	_	_
+15	коунѣ	коунѣ	NOUN	NOUN	_	12	obj	_	_
+16	ѿ	ѿ	ADP	ADP	_	17	case	_	_
+17	капи	капи	NOUN	NOUN	_	12	obl	_	_
+18	и	и	CCONJ	CCONJ	_	22	cc	_	_
+19	ѿ	ѿ	ADP	ADP	_	22	case	_	_
+20	всѧкого	всѧкого	ADJ	ADJ	_	22	amod	_	_
+21	вѣснаго	вѣснаго	ADJ	ADJ	_	22	amod	_	_
+22	товара	товара	NOUN	NOUN	_	17	conj	_	_
+23	что	что	PRON	PRON	_	24	obj	_	_
+24	кладоуть	кладоуть	VERB	VERB	_	22	acl	_	_
+25	на	на	ADP	ADP	_	26	case	_	_
+26	скалви	скалви	NOUN	NOUN	_	24	obl	_	_
+27	и	и	CCONJ	CCONJ	_	28	cc	_	_
+28	продавше	продавше	VERB	VERB	_	24	advcl	_	_
+29	и	и	CCONJ	CCONJ	_	30	cc	_	_
+30	коупивше	коупивше	VERB	VERB	_	28	conj	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: orv_torot-ud-train.conllu · this verb has L=0, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = азъ же вземъ рогалью начах копати рамено
+1	азъ	азъ	PRON	PRON	_	5	nsubj	_	_
+2	же	же	ADV	ADV	_	5	discourse	_	_
+3	вземъ	вземъ	VERB	VERB	_	5	advcl	_	highlight=red
+4	рогалью	рогалью	NOUN	NOUN	_	3	obj	_	highlight=green|span=1
+5	начах	начах	VERB	VERB	_	0	root	_	_
+6	копати	копати	VERB	VERB	_	5	xcomp	_	_
+7	рамено	рамено	ADV	ADV	_	6	advmod	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: orv_ruthenian-ud-train.conllu · this verb has L=1, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Адамъ жаловал перед нами на бояр полоцких , и на намѣсника нашег(о) , и на мѣщан , рекꙋч(и) : « Безвиннѣ мя сковали и до Риги послали » .
+1	Адамъ	Адамъ	PROPN	PROPN	_	2	nsubj	_	_
+2	жаловал	жаловал	VERB	VERB	_	0	root	_	_
+3	перед	перед	ADP	ADP	_	4	case	_	_
+4	нами	нами	PRON	PRON	_	2	obl	_	_
+5	на	на	ADP	ADP	_	6	case	_	_
+6	бояр	бояр	NOUN	NOUN	_	2	obl	_	_
+7	полоцких	полоцких	ADJ	ADJ	_	6	amod	_	_
+8	,	,	PUNCT	PUNCT	_	11	punct	_	_
+9	и	и	CCONJ	CCONJ	_	11	cc	_	_
+10	на	на	ADP	ADP	_	11	case	_	_
+11	намѣсника	намѣсника	NOUN	NOUN	_	6	conj	_	_
+12	нашег(о)	нашег(о)	DET	DET	_	11	det	_	_
+13	,	,	PUNCT	PUNCT	_	16	punct	_	_
+14	и	и	CCONJ	CCONJ	_	16	cc	_	_
+15	на	на	ADP	ADP	_	16	case	_	_
+16	мѣщан	мѣщан	NOUN	NOUN	_	6	conj	_	_
+17	,	,	PUNCT	PUNCT	_	18	punct	_	_
+18	рекꙋч(и)	рекꙋч(и)	VERB	VERB	_	2	advcl	_	_
+19	:	:	PUNCT	PUNCT	_	23	punct	_	_
+20	«	«	PUNCT	PUNCT	_	23	punct	_	_
+21	Безвиннѣ	Безвиннѣ	ADV	ADV	_	23	advmod	_	_
+22	мя	мя	PRON	PRON	_	23	obj	_	_
+23	сковали	сковали	VERB	VERB	_	18	conj	_	_
+24	и	и	CCONJ	CCONJ	_	27	cc	_	_
+25	до	до	ADP	ADP	_	26	case	_	_
+26	Риги	Риги	PROPN	PROPN	_	27	obl	_	highlight=green|span=2
+27	послали	послали	VERB	VERB	_	23	conj	_	highlight=red
+28	»	»	PUNCT	PUNCT	_	27	punct	_	_
+29	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: orv_torot-ud-dev.conllu · this verb has L=0, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = возрите на первыѧ роды и видите
+1	возрите	возрите	VERB	VERB	_	0	root	_	highlight=red
+2	на	на	ADP	ADP	_	4	case	_	_
+3	первыѧ	первыѧ	ADJ	ADJ	_	4	nmod	_	_
+4	роды	роды	NOUN	NOUN	_	1	obl	_	highlight=green|span=3
+5	и	и	CCONJ	CCONJ	_	6	cc	_	_
+6	видите	видите	VERB	VERB	_	1	conj	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: orv_ruthenian-ud-train.conllu · this verb has L=1, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = И тєнъ Процикъ клячу тую , в себє де(р)жачи и по(д) часъ нужъны(и) зимуючи , а понєважъ Гри(ц)ко любо и жона єго , будучи ви(н)ними , а нє хотѣли шкапи тоє(и) к собѣ викупи(т) <.>
+1	И	И	CCONJ	CCONJ	_	29	cc	_	_
+2	тєнъ	тєнъ	DET	DET	_	3	det	_	_
+3	Процикъ	Процикъ	PROPN	PROPN	_	29	nsubj	_	_
+4	клячу	клячу	NOUN	NOUN	_	34	obj	_	_
+5	тую	тую	DET	DET	_	4	det	_	_
+6	,	,	PUNCT	PUNCT	_	9	punct	_	_
+7	в	в	ADP	ADP	_	8	case	_	_
+8	себє	себє	PRON	PRON	_	9	obl	_	highlight=green|span=2
+9	де(р)жачи	де(р)жачи	VERB	VERB	_	29	advcl	_	highlight=red
+10	и	и	CCONJ	CCONJ	_	14	cc	_	_
+11	по(д)	по(д)	ADP	ADP	_	12	case	_	_
+12	часъ	часъ	NOUN	NOUN	_	14	obl	_	_
+13	нужъны(и)	нужъны(и)	ADJ	ADJ	_	12	amod	_	_
+14	зимуючи	зимуючи	VERB	VERB	_	9	conj	_	_
+15	,	,	PUNCT	PUNCT	_	17	punct	_	_
+16	а	а	CCONJ	CCONJ	_	17	cc	_	_
+17	понєважъ	понєважъ	SCONJ	SCONJ	_	9	conj	_	_
+18	Гри(ц)ко	Гри(ц)ко	PROPN	PROPN	_	17	nsubj	_	_
+19	любо	любо	CCONJ	CCONJ	_	21	cc	_	_
+20	и	и	CCONJ	CCONJ	_	21	cc	_	_
+21	жона	жона	NOUN	NOUN	_	18	conj	_	_
+22	єго	єго	PRON	PRON	_	21	det	_	_
+23	,	,	PUNCT	PUNCT	_	25	punct	_	_
+24	будучи	будучи	AUX	AUX	_	25	cop	_	_
+25	ви(н)ними	ви(н)ними	ADJ	ADJ	_	29	advcl	_	_
+26	,	,	PUNCT	PUNCT	_	29	punct	_	_
+27	а	а	CCONJ	CCONJ	_	29	cc	_	_
+28	нє	нє	PART	PART	_	29	advmod	_	_
+29	хотѣли	хотѣли	VERB	VERB	_	0	root	_	_
+30	шкапи	шкапи	NOUN	NOUN	_	29	obj	_	_
+31	тоє(и)	тоє(и)	DET	DET	_	30	det	_	_
+32	к	к	ADP	ADP	_	33	case	_	_
+33	собѣ	собѣ	PRON	PRON	_	34	obl	_	_
+34	викупи(т)	викупи(т)	VERB	VERB	_	29	xcomp	_	_
+35	<.>	<.>	PUNCT	PUNCT	_	29	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: orv_torot-ud-train.conllu · this verb has L=0, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = и не дадѧху вылѣсти из города
+1	и	и	CCONJ	CCONJ	_	3	cc	_	_
+2	не	не	ADV	ADV	_	3	advmod	_	_
+3	дадѧху	дадѧху	VERB	VERB	_	0	root	_	_
+4	вылѣсти	вылѣсти	VERB	VERB	_	3	xcomp	_	highlight=red
+5	из	из	ADP	ADP	_	6	case	_	_
+6	города	города	NOUN	NOUN	_	4	obl	_	highlight=green|span=2"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: orv_torot-ud-train.conllu · this verb has L=0, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = въ лѣт҃ ҂ѕ҃ х҃ м҃ в почаша мълъвити о сѹжьдальстѣи воинѣ новъгородци
+1	въ	въ	ADP	ADP	_	2	case	_	_
+2	лѣт҃	лѣт҃	NOUN	NOUN	_	7	obl	_	_
+3	҂ѕ҃	҂ѕ҃	NUM	NUM	_	2	nummod	_	_
+4	х҃	х҃	NUM	NUM	_	3	conj	_	_
+5	м҃	м҃	NUM	NUM	_	3	conj	_	_
+6	в	в	NUM	NUM	_	3	conj	_	_
+7	почаша	почаша	VERB	VERB	_	0	root	_	_
+8	мълъвити	мълъвити	VERB	VERB	_	7	xcomp	_	highlight=red
+9	о	о	ADP	ADP	_	11	case	_	_
+10	сѹжьдальстѣи	сѹжьдальстѣи	ADJ	ADJ	_	11	amod	_	_
+11	воинѣ	воинѣ	NOUN	NOUN	_	8	obl	_	highlight=green|span=3
+12	новъгородци	новъгородци	NOUN	NOUN	_	7	nsubj	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: orv_torot-ud-dev.conllu · this verb has L=0, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ѡн же помысли и реч собѣ в срдци
+1	ѡн	ѡн	PRON	PRON	_	3	nsubj	_	_
+2	же	же	ADV	ADV	_	3	discourse	_	_
+3	помысли	помысли	VERB	VERB	_	0	root	_	_
+4	и	и	CCONJ	CCONJ	_	5	cc	_	_
+5	реч	реч	VERB	VERB	_	3	conj	_	highlight=red
+6	собѣ	собѣ	PRON	PRON	_	8	det	_	_
+7	в	в	ADP	ADP	_	8	case	_	_
+8	срдци	срдци	NOUN	NOUN	_	5	obl	_	highlight=green|span=3"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: orv_torot-ud-train.conllu · this verb has L=0, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = велено ехат на рус
+1	велено	велено	VERB	VERB	_	0	root	_	highlight=red
+2	ехат	ехат	VERB	VERB	_	1	csubj:pass	_	highlight=green|span=3
+3	на	на	ADP	ADP	_	4	case	_	_
+4	рус	рус	PROPN	PROPN	_	2	obl	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: orv_torot-ud-train.conllu · this verb has L=0, R=1 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = оже кто хотѧ купить до полу гр҃и а послухи поставить а ногату дасть перед самѣмъ холѡпомь
+1	оже	оже	SCONJ	SCONJ	_	10	mark	_	_
+2	кто	кто	PRON	PRON	_	10	nsubj	_	_
+3	хотѧ	хотѧ	VERB	VERB	_	10	advcl	_	highlight=red
+4	купить	купить	VERB	VERB	_	3	xcomp	_	highlight=green|span=4
+5	до	до	ADP	ADP	_	6	case	_	_
+6	полу	полу	NOUN	NOUN	_	4	obl	_	_
+7	гр҃и	гр҃и	NOUN	NOUN	_	6	nmod	_	_
+8	а	а	CCONJ	CCONJ	_	10	cc	_	_
+9	послухи	послухи	NOUN	NOUN	_	10	obj	_	_
+10	поставить	поставить	VERB	VERB	_	0	root	_	_
+11	а	а	CCONJ	CCONJ	_	13	cc	_	_
+12	ногату	ногату	NOUN	NOUN	_	13	obj	_	_
+13	дасть	дасть	VERB	VERB	_	10	conj	_	_
+14	перед	перед	ADP	ADP	_	16	case	_	_
+15	самѣмъ	самѣмъ	DET	DET	_	16	det	_	_
+16	холѡпомь	холѡпомь	NOUN	NOUN	_	13	obl	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: orv_torot-ud-train.conllu · this verb has L=0, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = тог҃же лѣт҃ ходи всеволодъ на рѧзань и реч҃ имъ
+1	тог҃же	тог҃же	DET	DET	_	2	det	_	_
+2	лѣт҃	лѣт҃	NOUN	NOUN	_	3	obl	_	_
+3	ходи	ходи	VERB	VERB	_	0	root	_	_
+4	всеволодъ	всеволодъ	PROPN	PROPN	_	3	nsubj	_	_
+5	на	на	ADP	ADP	_	6	case	_	_
+6	рѧзань	рѧзань	PROPN	PROPN	_	3	obl	_	_
+7	и	и	CCONJ	CCONJ	_	8	cc	_	_
+8	реч҃	реч҃	VERB	VERB	_	3	conj	_	highlight=red
+9	имъ	имъ	PRON	PRON	_	8	obl:arg	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: orv_torot-ud-train.conllu · this verb has L=0, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ѡбычаи же в началѡ игѹменьс꙽тва своего сицевъ имѣѧше еже всѧкомѹ приходѧщемѹ к немѹ и хотѧщемѹ быти мнихѹ и желающемꙋ ѡстрищи сѧ не ѿрѣваше ѹбо никогож ни стара ни ѹна ни богата ни ѹбога но всѣхъ прїимаше со ѹсръдїемъ и с радостїю
+1	ѡбычаи	ѡбычаи	NOUN	NOUN	_	8	obj	_	_
+2	же	же	ADV	ADV	_	8	discourse	_	_
+3	в	в	ADP	ADP	_	4	case	_	_
+4	началѡ	началѡ	NOUN	NOUN	_	8	obl	_	_
+5	игѹменьс꙽тва	игѹменьс꙽тва	NOUN	NOUN	_	4	nmod	_	_
+6	своего	своего	DET	DET	_	5	det	_	_
+7	сицевъ	сицевъ	ADJ	ADJ	_	1	amod	_	_
+8	имѣѧше	имѣѧше	VERB	VERB	_	0	root	_	_
+9	еже	еже	SCONJ	SCONJ	_	23	mark	_	_
+10	всѧкомѹ	всѧкомѹ	ADJ	ADJ	_	11	nsubj	_	_
+11	приходѧщемѹ	приходѧщемѹ	VERB	VERB	_	23	advcl	_	_
+12	к	к	ADP	ADP	_	13	case	_	_
+13	немѹ	немѹ	PRON	PRON	_	11	obl	_	_
+14	и	и	CCONJ	CCONJ	_	15	cc	_	_
+15	хотѧщемѹ	хотѧщемѹ	VERB	VERB	_	11	conj	_	_
+16	быти	быти	AUX	AUX	_	17	cop	_	_
+17	мнихѹ	мнихѹ	NOUN	NOUN	_	15	xcomp	_	_
+18	и	и	CCONJ	CCONJ	_	19	cc	_	_
+19	желающемꙋ	желающемꙋ	VERB	VERB	_	11	conj	_	highlight=red
+20	ѡстрищи	ѡстрищи	VERB	VERB	_	19	xcomp	_	highlight=green|span=2
+21	сѧ	сѧ	PRON	PRON	_	20	expl:pv	_	_
+22	не	не	ADV	ADV	_	23	advmod	_	_
+23	ѿрѣваше	ѿрѣваше	VERB	VERB	_	7	advcl	_	_
+24	ѹбо	ѹбо	ADV	ADV	_	23	discourse	_	_
+25	никогож	никогож	PRON	PRON	_	23	obj	_	_
+26	ни	ни	CCONJ	CCONJ	_	27	cc	_	_
+27	стара	стара	ADJ	ADJ	_	25	appos	_	_
+28	ни	ни	CCONJ	CCONJ	_	29	cc	_	_
+29	ѹна	ѹна	ADJ	ADJ	_	27	conj	_	_
+30	ни	ни	CCONJ	CCONJ	_	31	cc	_	_
+31	богата	богата	ADJ	ADJ	_	27	conj	_	_
+32	ни	ни	CCONJ	CCONJ	_	33	cc	_	_
+33	ѹбога	ѹбога	ADJ	ADJ	_	27	conj	_	_
+34	но	но	CCONJ	CCONJ	_	36	cc	_	_
+35	всѣхъ	всѣхъ	PRON	PRON	_	36	obj	_	_
+36	прїимаше	прїимаше	VERB	VERB	_	23	conj	_	_
+37	со	со	ADP	ADP	_	38	case	_	_
+38	ѹсръдїемъ	ѹсръдїемъ	NOUN	NOUN	_	36	obl	_	_
+39	и	и	CCONJ	CCONJ	_	41	cc	_	_
+40	с	с	ADP	ADP	_	41	case	_	_
+41	радостїю	радостїю	NOUN	NOUN	_	38	conj	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: orv_torot-ud-train.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = и тако пакы по вьсѧ дн҃и прѣбывааше братию ѹча и ѹтѣшаѧ и запрѣщаꙗ же никакоже раслабѣти нъ крѣпѣ быти на вьсѧ трѹды чьрьньчьскыꙗ
+1	и	и	CCONJ	CCONJ	_	7	cc	_	_
+2	тако	тако	ADV	ADV	_	7	advmod	_	_
+3	пакы	пакы	ADV	ADV	_	7	advmod	_	_
+4	по	по	ADP	ADP	_	6	case	_	_
+5	вьсѧ	вьсѧ	DET	DET	_	6	det	_	_
+6	дн҃и	дн҃и	NOUN	NOUN	_	7	obl	_	_
+7	прѣбывааше	прѣбывааше	VERB	VERB	_	0	root	_	_
+8	братию	братию	NOUN	NOUN	_	9	obj	_	_
+9	ѹча	ѹча	VERB	VERB	_	7	xcomp	_	_
+10	и	и	CCONJ	CCONJ	_	11	cc	_	_
+11	ѹтѣшаѧ	ѹтѣшаѧ	VERB	VERB	_	9	conj	_	_
+12	и	и	CCONJ	CCONJ	_	13	cc	_	_
+13	запрѣщаꙗ	запрѣщаꙗ	VERB	VERB	_	9	conj	_	_
+14	же	же	ADV	ADV	_	13	discourse	_	_
+15	никакоже	никакоже	ADV	ADV	_	16	advmod	_	highlight=green|span=1
+16	раслабѣти	раслабѣти	VERB	VERB	_	13	xcomp	_	highlight=red
+17	нъ	нъ	CCONJ	CCONJ	_	18	cc	_	_
+18	крѣпѣ	крѣпѣ	ADV	ADV	_	16	conj	_	_
+19	быти	быти	AUX	AUX	_	18	cop	_	_
+20	на	на	ADP	ADP	_	22	case	_	_
+21	вьсѧ	вьсѧ	DET	DET	_	22	det	_	_
+22	трѹды	трѹды	NOUN	NOUN	_	18	obl	_	_
+23	чьрьньчьскыꙗ	чьрьньчьскыꙗ	ADJ	ADJ	_	22	amod	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: orv_rnc-ud-train.conllu · this verb has L=0, R=1 (mean span = 24.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = За вашу гордость отпали есть славы Божия , а на рабе Божие {л._44_об.} име[ре]к опочевает Господь Бог Исус Христос , крестьная сила и его печат[ь] Святаго Духа , блюдет и стережет ангел хранител[ь] , которой дан на соблюдение во святом крещении по сей ден[ь] и по сей час до скончания жития его , до гробные ево доски .
+1	За	За	ADP	ADP	_	3	case	_	_
+2	вашу	вашу	DET	DET	_	3	det	_	_
+3	гордость	гордость	NOUN	NOUN	_	4	obl	_	_
+4	отпали	отпали	VERB	VERB	_	0	root	_	_
+5	есть	есть	AUX	AUX	_	4	aux	_	_
+6	славы	славы	NOUN	NOUN	_	4	obj	_	_
+7	Божия	Божия	ADJ	ADJ	_	6	amod	_	_
+8	,	,	PUNCT	PUNCT	_	15	punct	_	_
+9	а	а	CCONJ	CCONJ	_	15	cc	_	_
+10	на	на	ADP	ADP	_	11	case	_	_
+11	рабе	рабе	NOUN	NOUN	_	15	obl	_	_
+12	Божие	Божие	ADJ	ADJ	_	11	amod	_	_
+13	{л._44_об.}	{л._44_об.}	X	X	_	11	dep	_	_
+14	име[ре]к	име[ре]к	NOUN	NOUN	_	11	appos	_	_
+15	опочевает	опочевает	VERB	VERB	_	4	conj	_	_
+16	Господь	Господь	NOUN	NOUN	_	15	nsubj	_	_
+17	Бог	Бог	NOUN	NOUN	_	16	appos	_	_
+18	Исус	Исус	PROPN	PROPN	_	17	appos	_	_
+19	Христос	Христос	PROPN	PROPN	_	18	flat:name	_	_
+20	,	,	PUNCT	PUNCT	_	22	punct	_	_
+21	крестьная	крестьная	ADJ	ADJ	_	22	amod	_	_
+22	сила	сила	NOUN	NOUN	_	16	conj	_	_
+23	и	и	CCONJ	CCONJ	_	25	cc	_	_
+24	его	его	PRON	PRON	_	25	det	_	_
+25	печат[ь]	печат[ь]	NOUN	NOUN	_	22	conj	_	_
+26	Святаго	Святаго	ADJ	ADJ	_	27	amod	_	_
+27	Духа	Духа	NOUN	NOUN	_	25	nmod	_	_
+28	,	,	PUNCT	PUNCT	_	29	punct	_	_
+29	блюдет	блюдет	VERB	VERB	_	15	conj	_	highlight=red
+30	и	и	CCONJ	CCONJ	_	31	cc	_	_
+31	стережет	стережет	VERB	VERB	_	29	conj	_	_
+32	ангел	ангел	NOUN	NOUN	_	29	nsubj	_	highlight=green|span=24
+33	хранител[ь]	хранител[ь]	NOUN	NOUN	_	32	appos	_	_
+34	,	,	PUNCT	PUNCT	_	36	punct	_	_
+35	которой	которой	DET	DET	_	36	nsubj:pass	_	_
+36	дан	дан	VERB	VERB	_	32	acl:relcl	_	_
+37	на	на	ADP	ADP	_	38	case	_	_
+38	соблюдение	соблюдение	NOUN	NOUN	_	36	obl	_	_
+39	во	во	ADP	ADP	_	41	case	_	_
+40	святом	святом	ADJ	ADJ	_	41	amod	_	_
+41	крещении	крещении	NOUN	NOUN	_	36	obl	_	_
+42	по	по	ADP	ADP	_	44	case	_	_
+43	сей	сей	DET	DET	_	44	det	_	_
+44	ден[ь]	ден[ь]	NOUN	NOUN	_	36	obl:tmod	_	_
+45	и	и	CCONJ	CCONJ	_	48	cc	_	_
+46	по	по	ADP	ADP	_	48	case	_	_
+47	сей	сей	DET	DET	_	48	det	_	_
+48	час	час	NOUN	NOUN	_	44	conj	_	_
+49	до	до	ADP	ADP	_	50	case	_	_
+50	скончания	скончания	NOUN	NOUN	_	36	obl:tmod	_	_
+51	жития	жития	NOUN	NOUN	_	50	nmod	_	_
+52	его	его	PRON	PRON	_	51	det	_	_
+53	,	,	PUNCT	PUNCT	_	57	punct	_	_
+54	до	до	ADP	ADP	_	57	case	_	_
+55	гробные	гробные	ADJ	ADJ	_	57	amod	_	_
+56	ево	ево	PRON	PRON	_	57	det	_	_
+57	доски	доски	NOUN	NOUN	_	50	conj	_	_
+58	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

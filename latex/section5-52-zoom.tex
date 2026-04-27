@@ -1,35 +1,87 @@
-\section{Zooming into langages with unexpected behevior}\label{zoom}
-It would not possible to present the results for all the languages which contradict a universal MAL hypothesis. An online website will all the results will be proposed with the final version. Here we will present some remarkable cases of Anti MAL languages, as well as some cases of languages with inconsistnent behavior in the pre- and/por postverbal domains. 
+\subsection{Zooming into languages with unexpected behaviour}\label{zoom}
+It is not possible to present the results for all the languages that contradict a universal MAL hypothesis. All the results are presented in Table \ref{tab:all-miniplots} in Appendix A. Here, we present some notable cases of Anti-MAL languages, as well as some cases of languages with inconsistent behaviour in the pre- and/or postverbal domains.
 
-One interesting example of an Anti MAL language is the OldEast Slavic, which not only has an Anti MAL effect (that is, the mean length of the constituents increase with the number of constituents), but on top of that the Anti MAL effect increases with the number of constituents (Figure \ref{fig:OldEastSlavic})
+One interesting example of an Anti-MAL language is Old East Slavic, which not only has an Anti-MAL effect (that is, the mean length of constituents increases with the number of constituents), but moreover displays an Anti-MAL effect that grows stronger with the number of constituents (Figure~\ref{fig:OldEastSlavic}).
 
 \begin{figure}[!ht]
 \begin{center}
-\includegraphics[width=\columnwidth]{latex/OldEastSlavic.png}
+\begin{tikzpicture}
+\begin{axis}[
+  width=\columnwidth, height=0.65\columnwidth,
+  xlabel={$\log(n)$}, ylabel={$\log(\mathrm{MAL}_n)$},
+  xmin=-0.1, xmax=2.2,
+  ymin=0.85, ymax=1.65,
+  xtick={0, 0.6931, 1.0986, 1.3863, 1.6094, 1.7918, 1.9459, 2.0794},
+  xticklabels={1, 2, 3, 4, 5, 6, 7, 8},
+  grid=major, grid style={gray!30},
+]
+\addplot[only marks, mark=*, mark size=2pt, malblue] coordinates {
+  (0.0000, 0.9814) (0.6931, 0.9840) (1.0986, 1.0382)
+  (1.3863, 1.0833) (1.6094, 1.1662) (1.7918, 1.2971)
+  (1.9459, 1.4054) (2.0794, 1.5513)
+};
+\addplot[no markers, malred, thick, domain=0:2.08] {0.255235*x + 0.850043};
+\node[anchor=south west, font=\footnotesize] at (axis cs:0.02,0.87) {$\beta = -0.255$, $R^2 = 0.729$};
+\end{axis}
+\end{tikzpicture}
 \caption{$\lambda$MAL(OldEastSlavic).}
 \label{fig:OldEastSlavic}
 \end{center}
 \end{figure}
 
-Starting with the preverbal domain, we find 29 Anti LMAL languages, among which 13 are also RMAL. Otherwise, they are mostly in the grey zone when the bilateral MAL is considered. Two of these languages are remarkable: Occitan (Romance, France) is MAL, while Naija (English pidgincreole, Nigeria) is Anti MAL. Naija is also remarkable, since it is the most strongly Anti LMAL language of our sample, following a straight power law (Figures \ref{fig:Naija-L} and \ref{fig:Naija-R}).
+Starting with the preverbal domain, we find 29 Anti-LMAL languages, of which 17 are RMAL -- and they are mostly in the grey zone when bilateral MAL is considered. Two of these languages are noteworthy: Occitan (Romance, France) is MAL, while Naija (English-based pidgincreole, Nigeria) is Anti-MAL. Naija is also remarkable in that it is the most strongly Anti-LMAL language in our sample, following a near-perfect power law (Figures~\ref{fig:Naija-L} and~\ref{fig:Naija-R}).
 
 \begin{figure}[!ht]
 \begin{center}
-\includegraphics[width=\columnwidth]{latex/Naija-L.png}
-\caption{$\lambda$MAL(Naija).}
+\begin{tikzpicture}
+\begin{axis}[
+  width=\columnwidth, height=0.65\columnwidth,
+  xlabel={$\log(n)$}, ylabel={$\log(\mathrm{LMAL}_n)$},
+  xmin=-0.1, xmax=1.55,
+  ymin=0.1, ymax=1.45,
+  xtick={0, 0.6931, 1.0986, 1.3863},
+  xticklabels={1, 2, 3, 4},
+  grid=major, grid style={gray!30},
+]
+\addplot[only marks, mark=*, mark size=2pt, malblue] coordinates {
+  (0.0000, 0.2515) (0.6931, 0.9103)
+  (1.0986, 1.1697) (1.3863, 1.2369)
+};
+\addplot[no markers, malred, thick, domain=0:1.39] {0.733780*x + 0.309108};
+\node[anchor=south west, font=\footnotesize] at (axis cs:0.02,0.12) {$\beta = -0.734$, $R^2 = 0.962$};
+\end{axis}
+\end{tikzpicture}
+\caption{$\lambda$LMAL(Naija).}
 \label{fig:Naija-L}
 \end{center}
 \end{figure}
 
 \begin{figure}[!ht]
 \begin{center}
-\includegraphics[width=\columnwidth]{latex/Naija-R.png}
-\caption{$\lambda$MAL(Naija).}
+\begin{tikzpicture}
+\begin{axis}[
+  width=\columnwidth, height=0.65\columnwidth,
+  xlabel={$\log(n)$}, ylabel={$\log(\mathrm{RMAL}_n)$},
+  xmin=-0.1, xmax=1.25,
+  ymin=1.1, ymax=1.35,
+  xtick={0, 0.6931, 1.0986},
+  xticklabels={1, 2, 3},
+  grid=major, grid style={gray!30},
+]
+\addplot[only marks, mark=*, mark size=2pt, malblue] coordinates {
+  (0.0000, 1.3024) (0.6931, 1.2012)
+  (1.0986, 1.1578)
+};
+\addplot[no markers, malgreen, thick, domain=0:1.10] {-0.133124*x + 1.299963};
+\node[anchor=south west, font=\footnotesize] at (axis cs:0.02,1.12) {$\beta = 0.133$, $R^2 = 0.994$};
+\end{axis}
+\end{tikzpicture}
+\caption{$\lambda$RMAL(Naija).}
 \label{fig:Naija-R}
 \end{center}
 \end{figure}
 
 
-As for the postverdal domain, we find the follwoing 7 Anti RMAL languages: Khoekhoe, Bambara, Egyptian, OldEastSlavic, WestArmenian, Gothic, and Latin. It is worth noting that among them, 4 are corpora of ancient languages:  Egyptian, OldEastSlavic, Gothic, and Latin. There are only 3 languages which are both Anti LMAL and Anti RMAL: Bambara, OldEastSlavic, and Latin. 
+As for the postverbal domain, we find the following seven Anti-RMAL languages: Khoekhoe, Bambara, Egyptian, Old East Slavic, Western Armenian, Gothic, and Latin. It is worth noting that among them, four are corpora of ancient languages: Egyptian, Old East Slavic, Gothic, and Latin. Three are both Anti-MAL and Anti-LMAL as well (Bambara, Old East Slavic, and Latin),  the others are in the grey zone (for MAL, LMAL or both). In other words, none of the seven languages shows a MAL or an LMAL preference.  
 
-Exploring (gentic and/or areal) similarties and differences of these indiviual languages is beyond the scope of this paper, while it constitues a necessary avenue for future research in understanding length-based effects accross languages and linguistic domains.
+Exploring the genetic and/or areal similarities and differences among these individual languages is beyond the scope of this paper, but it constitutes a necessary avenue for future research in understanding length-based effects across languages and linguistic domains.

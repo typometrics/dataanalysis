@@ -1,0 +1,670 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Xibe — MAL_3</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Xibe examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Xibe <small style="color:#999;font-weight:normal">(sjo)</small> — MAL<sub>3</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>3</b> dependents in total (left + right combined).</p><p><b>MAL<sub>3</sub> = 4.006</b> &nbsp; <span style="color:#666">(388 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over all dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: sjo_xdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ᠰᡠᠯᠠ ᠯᡝᡠᠯᡝᠷᡝ ᠰᡞᡩᡝᠨᡩᡝ , ᠯᠠᠪᡩᡠ ᠮᡝᡪᡞᡤᡝ ᠪᠠᡥᠠᠮᡝ ᡩᠣᠨᡪᡞᡥᠠ 。
+1	ᠰᡠᠯᠠ	ᠰᡠᠯᠠ	ADJ	ADJ	_	2	amod	_	_
+2	ᠯᡝᡠᠯᡝᠷᡝ	ᠯᡝᡠᠯᡝᠷᡝ	VERB	VERB	_	3	acl	_	_
+3	ᠰᡞᡩᡝᠨᡩᡝ	ᠰᡞᡩᡝᠨᡩᡝ	NOUN	NOUN	_	8	obl:tmod	_	highlight=green|span=3
+4	,	,	PUNCT	PUNCT	_	3	punct	_	_
+5	ᠯᠠᠪᡩᡠ	ᠯᠠᠪᡩᡠ	ADJ	ADJ	_	6	amod	_	_
+6	ᠮᡝᡪᡞᡤᡝ	ᠮᡝᡪᡞᡤᡝ	NOUN	NOUN	_	8	obj	_	highlight=green|span=2
+7	ᠪᠠᡥᠠᠮᡝ	ᠪᠠᡥᠠᠮᡝ	VERB	VERB	_	8	advcl	_	highlight=green|span=1
+8	ᡩᠣᠨᡪᡞᡥᠠ	ᡩᠣᠨᡪᡞᡥᠠ	VERB	VERB	_	0	root	_	highlight=red
+9	。	。	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: sjo_xdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 6.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ︽ ᡨᠠᡞ ᠸᠠᠨ ᡝᠮᡠ ᡥᡝᡫᡝᠯᡞᡢᡤᡡ ᡩᡝ ᡠᠯᡥᡞᠪᡠᠷᡝ ᠪᡞᡨᡥᡝ ︾ ᠪᡝ ᠰᡝᠯᡤᡞᠶᡝᡥᡝ 40 ᠪᠠᠷᡠᠨᡞᠶᠠ ᠪᡝ ᡝᡪᡝᡨᡠᠯᡝᠷᡝ ᡞᠰᠠᠨ ᠪᡝ ᠪᡝᡞᡪᡞᠨᡤ ᡩᡝ ᡠᡪᡝᠨ ᡪᡞᠷᠠᠮᡞᠨ ᡞ᠋ ᠶᠠᠪᡠᠪᡠᡥᠠ
+1	︽	︽	PUNCT	PUNCT	_	8	punct	_	_
+2	ᡨᠠᡞ	ᡨᠠᡞ	PROPN	PROPN	_	5	nmod	_	_
+3	ᠸᠠᠨ	ᠸᠠᠨ	PROPN	PROPN	_	2	flat	_	_
+4	ᡝᠮᡠ	ᡝᠮᡠ	NUM	NUM	_	5	compound	_	_
+5	ᡥᡝᡫᡝᠯᡞᡢᡤᡡ	ᡥᡝᡫᡝᠯᡞᡢᡤᡡ	NOUN	NOUN	_	7	obl	_	_
+6	ᡩᡝ	ᡩᡝ	ADP	ADP	_	5	case	_	_
+7	ᡠᠯᡥᡞᠪᡠᠷᡝ	ᡠᠯᡥᡞᠪᡠᠷᡝ	VERB	VERB	_	8	acl:relcl	_	_
+8	ᠪᡞᡨᡥᡝ	ᠪᡞᡨᡥᡝ	NOUN	NOUN	_	11	obj	_	_
+9	︾	︾	PUNCT	PUNCT	_	8	punct	_	_
+10	ᠪᡝ	ᠪᡝ	ADP	ADP	_	8	case	_	_
+11	ᠰᡝᠯᡤᡞᠶᡝᡥᡝ	ᠰᡝᠯᡤᡞᠶᡝᡥᡝ	VERB	VERB	_	13	acl	_	_
+12	40	40	NUM	NUM	_	13	nummod	_	_
+13	ᠪᠠᠷᡠᠨᡞᠶᠠ	ᠪᠠᠷᡠᠨᡞᠶᠠ	NOUN	NOUN	_	15	obj	_	_
+14	ᠪᡝ	ᠪᡝ	ADP	ADP	_	13	case	_	_
+15	ᡝᡪᡝᡨᡠᠯᡝᠷᡝ	ᡝᡪᡝᡨᡠᠯᡝᠷᡝ	VERB	VERB	_	16	acl:relcl	_	_
+16	ᡞᠰᠠᠨ	ᡞᠰᠠᠨ	NOUN	NOUN	_	23	nsubj:pass	_	highlight=green|span=15
+17	ᠪᡝ	ᠪᡝ	ADP	ADP	_	16	case	_	_
+18	ᠪᡝᡞᡪᡞᠨᡤ	ᠪᡝᡞᡪᡞᠨᡤ	PROPN	PROPN	_	23	obl:lmod	_	highlight=green|span=2
+19	ᡩᡝ	ᡩᡝ	ADP	ADP	_	18	case	_	_
+20	ᡠᡪᡝᠨ	ᡠᡪᡝᠨ	ADJ	ADJ	_	23	advmod	_	highlight=green|span=3
+21	ᡪᡞᠷᠠᠮᡞᠨ	ᡪᡞᠷᠠᠮᡞᠨ	ADJ	ADJ	_	20	conj	_	_
+22	ᡞ᠋	ᡞ᠋	PART	PART	_	20	mark:adv	_	_
+23	ᠶᠠᠪᡠᠪᡠᡥᠠ	ᠶᠠᠪᡠᠪᡠᡥᠠ	VERB	VERB	_	0	root	_	highlight=red"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: sjo_xdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ᠪᡞ ᡤᡡᠯᡪᠠ ᡩᡝ ᡞᠰᡞᠨᡪᡞᡫᡞ , ᡣᡝᡪᡞᠨᡝ ᡠᡩᡠ ᡞᠨᡝᡢᡤᡞ ᠣᡥᠣ 。
+1	ᠪᡞ	ᠪᡞ	PRON	PRON	_	4	nsubj	_	_
+2	ᡤᡡᠯᡪᠠ	ᡤᡡᠯᡪᠠ	PROPN	PROPN	_	4	obl	_	_
+3	ᡩᡝ	ᡩᡝ	ADP	ADP	_	2	case	_	_
+4	ᡞᠰᡞᠨᡪᡞᡫᡞ	ᡞᠰᡞᠨᡪᡞᡫᡞ	VERB	VERB	_	8	advcl	_	highlight=green|span=4
+5	,	,	PUNCT	PUNCT	_	4	punct	_	_
+6	ᡣᡝᡪᡞᠨᡝ	ᡣᡝᡪᡞᠨᡝ	ADV	ADV	_	9	advmod	_	highlight=green|span=1
+7	ᡠᡩᡠ	ᡠᡩᡠ	DET	DET	_	8	det	_	_
+8	ᡞᠨᡝᡢᡤᡞ	ᡞᠨᡝᡢᡤᡞ	NOUN	NOUN	_	9	xcomp	_	highlight=green|span=2
+9	ᠣᡥᠣ	ᠣᡥᠣ	VERB	VERB	_	0	root	_	highlight=red
+10	。	。	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: sjo_xdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ᡝᠷᡝ ᠪᠠᡞᡨᠠ ᡩᡝ ᠰᡠᠸᡝᠨᡞ ᠪᡝᠶᡝ ᠨᡞᡣᡝᠨᡝᠮᡝ ᡤᡝᠨᡝᠷᠠᡣᡡ ᠣᠴᡞ , ᠯᠠᠷᡤᡞᠨ ᠮᡠᠷᡠ ᠪᡞ 。
+1	ᡝᠷᡝ	ᡝᠷᡝ	DET	DET	_	2	det	_	_
+2	ᠪᠠᡞᡨᠠ	ᠪᠠᡞᡨᠠ	NOUN	NOUN	_	7	obl	_	highlight=green|span=3
+3	ᡩᡝ	ᡩᡝ	ADP	ADP	_	2	case	_	_
+4	ᠰᡠᠸᡝᠨᡞ	ᠰᡠᠸᡝᠨᡞ	PRON	PRON	_	5	nmod:poss	_	_
+5	ᠪᡝᠶᡝ	ᠪᡝᠶᡝ	PRON	PRON	_	7	nsubj	_	highlight=green|span=2
+6	ᠨᡞᡣᡝᠨᡝᠮᡝ	ᠨᡞᡣᡝᠨᡝᠮᡝ	VERB	VERB	_	7	advcl	_	highlight=green|span=1
+7	ᡤᡝᠨᡝᠷᠠᡣᡡ	ᡤᡝᠨᡝᠷᠠᡣᡡ	VERB	VERB	_	11	advcl	_	highlight=red
+8	ᠣᠴᡞ	ᠣᠴᡞ	SCONJ	SCONJ	_	7	mark	_	_
+9	,	,	PUNCT	PUNCT	_	10	punct	_	_
+10	ᠯᠠᠷᡤᡞᠨ	ᠯᠠᠷᡤᡞᠨ	NOUN	NOUN	_	11	nmod	_	_
+11	ᠮᡠᠷᡠ	ᠮᡠᠷᡠ	NOUN	NOUN	_	12	obj	_	_
+12	ᠪᡞ	ᠪᡞ	VERB	VERB	_	0	root	_	_
+13	。	。	PUNCT	PUNCT	_	12	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: sjo_xdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 4.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ᡤᡠᠸᠠᠨ ᠯᡞ ᡪᡞᠣᡞ ᡩᠠᠷᡠᡥᠠᡞ ᡠᠰᡞᠨ ᠶᠠᠯᡠ ᡩᡝ ᡤᡝᠨᡝᠮᡝ ᡩᠠᠨᠠᠮᡝ ︑ ᡥᡠᡣᡠᠨ ᠪᡝ ᠺᠣᡨᠠᠴᡞᡢᡤᡝ ᡞᠰᡞᠪᡠᠷᡝ ︑ ᠨᡞᠮᡝᡣᡠ ᡞ᠋ ᡠᠮᡞᠶᠠᡥᠠ ᠪᡝ ᠰᡝᠷᡝᠮᡧᡝᠮᡝ ᡩᠠᠰᠠᠷᠠ ᠪᡝ ᡪᠣᠷᡞᡧᠠᠮᡝ ᠪᡠᠷᡝ ᡨᡝᡞᠯᡝ ᠸᠠᡣᠠ ︐ ᡣᡝᠮᡠᠨᡞ ᡠᠰᡞᠰᡞ ᡩᡝ ᠠᡞᠰᡞᠯᠠᠮᡝ ᠰᠠᡞᠨ ᡫᡝᡨᡝᠰᡠ ᡩᡝᠨ ᡨᡠᠰᠠ ᠪᡞᠰᡞᠷᡝ ᡞᠴᡝ ᡥᠠᠴᡞᠨ ᡩᡠᠸᠠᠯᡞ ᠪᡝ ᠶᠠᠷᡠᠮᡝ ᡩᠣᠰᡞᠪᡠᡥᠠ ︐ ᡞᠴᡝ ᡨᡠᠸᠠᡣᡡᠨ ᠪᡝ ᡪᡞᠶᠠᡢᠨᠠᠮᡝ ᠪᡠᠮᡝ ︐ ᡞᠴᡝ ᡩᡠᠷᡠᠨ ᠪᡝ ᠪᠠᡞᠮᡝ ᠰᡞᡥᡝᡧᡝᠮᠪᡞ ︒
+1	ᡤᡠᠸᠠᠨ	ᡤᡠᠸᠠᠨ	PROPN	PROPN	_	9	nsubj	_	_
+2	ᠯᡞ	ᠯᡞ	PROPN	PROPN	_	1	flat:name	_	_
+3	ᡪᡞᠣᡞ	ᡪᡞᠣᡞ	PROPN	PROPN	_	2	flat:name	_	_
+4	ᡩᠠᠷᡠᡥᠠᡞ	ᡩᠠᠷᡠᡥᠠᡞ	ADV	ADV	_	9	advmod	_	_
+5	ᡠᠰᡞᠨ	ᡠᠰᡞᠨ	NOUN	NOUN	_	6	nmod	_	_
+6	ᠶᠠᠯᡠ	ᠶᠠᠯᡠ	NOUN	NOUN	_	9	obl:lmod	_	_
+7	ᡩᡝ	ᡩᡝ	ADP	ADP	_	6	case	_	_
+8	ᡤᡝᠨᡝᠮᡝ	ᡤᡝᠨᡝᠮᡝ	VERB	VERB	_	9	advcl	_	_
+9	ᡩᠠᠨᠠᠮᡝ	ᡩᠠᠨᠠᠮᡝ	VERB	VERB	_	14	advcl	_	_
+10	︑	︑	PUNCT	PUNCT	_	9	punct	_	_
+11	ᡥᡠᡣᡠᠨ	ᡥᡠᡣᡠᠨ	NOUN	NOUN	_	14	obj	_	_
+12	ᠪᡝ	ᠪᡝ	ADP	ADP	_	11	case	_	_
+13	ᠺᠣᡨᠠᠴᡞᡢᡤᡝ	ᠺᠣᡨᠠᠴᡞᡢᡤᡝ	ADJ	ADJ	_	14	advmod	_	_
+14	ᡞᠰᡞᠪᡠᠷᡝ	ᡞᠰᡞᠪᡠᠷᡝ	VERB	VERB	_	24	parataxis	_	_
+15	︑	︑	PUNCT	PUNCT	_	14	punct	_	_
+16	ᠨᡞᠮᡝᡣᡠ	ᠨᡞᠮᡝᡣᡠ	NOUN	NOUN	_	18	nmod	_	_
+17	ᡞ᠋	ᡞ᠋	PART	PART	_	16	mark	_	_
+18	ᡠᠮᡞᠶᠠᡥᠠ	ᡠᠮᡞᠶᠠᡥᠠ	NOUN	NOUN	_	21	obj	_	_
+19	ᠪᡝ	ᠪᡝ	ADP	ADP	_	18	case	_	_
+20	ᠰᡝᠷᡝᠮᡧᡝᠮᡝ	ᠰᡝᠷᡝᠮᡧᡝᠮᡝ	VERB	VERB	_	21	advcl	_	_
+21	ᡩᠠᠰᠠᠷᠠ	ᡩᠠᠰᠠᠷᠠ	VERB	VERB	_	24	obj	_	_
+22	ᠪᡝ	ᠪᡝ	ADP	ADP	_	21	case	_	_
+23	ᡪᠣᠷᡞᡧᠠᠮᡝ	ᡪᠣᠷᡞᡧᠠᠮᡝ	VERB	VERB	_	24	advcl	_	_
+24	ᠪᡠᠷᡝ	ᠪᡠᠷᡝ	VERB	VERB	_	54	advcl	_	_
+25	ᡨᡝᡞᠯᡝ	ᡨᡝᡞᠯᡝ	ADP	ADP	_	24	case	_	_
+26	ᠸᠠᡣᠠ	ᠸᠠᡣᠠ	ADV	ADV	_	24	advmod	_	_
+27	︐	︐	PUNCT	PUNCT	_	24	punct	_	_
+28	ᡣᡝᠮᡠᠨᡞ	ᡣᡝᠮᡠᠨᡞ	ADV	ADV	_	31	advmod	_	_
+29	ᡠᠰᡞᠰᡞ	ᡠᠰᡞᠰᡞ	NOUN	NOUN	_	31	obj	_	_
+30	ᡩᡝ	ᡩᡝ	ADP	ADP	_	29	case	_	_
+31	ᠠᡞᠰᡞᠯᠠᠮᡝ	ᠠᡞᠰᡞᠯᠠᠮᡝ	VERB	VERB	_	42	advcl	_	highlight=green|span=4
+32	ᠰᠠᡞᠨ	ᠰᠠᡞᠨ	ADJ	ADJ	_	33	amod	_	_
+33	ᡫᡝᡨᡝᠰᡠ	ᡫᡝᡨᡝᠰᡠ	NOUN	NOUN	_	36	obj	_	_
+34	ᡩᡝᠨ	ᡩᡝᠨ	ADJ	ADJ	_	35	amod	_	_
+35	ᡨᡠᠰᠠ	ᡨᡠᠰᠠ	NOUN	NOUN	_	33	conj	_	_
+36	ᠪᡞᠰᡞᠷᡝ	ᠪᡞᠰᡞᠷᡝ	VERB	VERB	_	38	acl:relcl	_	_
+37	ᡞᠴᡝ	ᡞᠴᡝ	ADJ	ADJ	_	38	amod	_	_
+38	ᡥᠠᠴᡞᠨ	ᡥᠠᠴᡞᠨ	NOUN	NOUN	_	42	obj	_	highlight=green|span=9
+39	ᡩᡠᠸᠠᠯᡞ	ᡩᡠᠸᠠᠯᡞ	NOUN	NOUN	_	38	compound	_	_
+40	ᠪᡝ	ᠪᡝ	ADP	ADP	_	38	case	_	_
+41	ᠶᠠᠷᡠᠮᡝ	ᠶᠠᠷᡠᠮᡝ	VERB	VERB	_	42	advcl	_	highlight=green|span=1
+42	ᡩᠣᠰᡞᠪᡠᡥᠠ	ᡩᠣᠰᡞᠪᡠᡥᠠ	VERB	VERB	_	54	parataxis	_	highlight=red
+43	︐	︐	PUNCT	PUNCT	_	42	punct	_	_
+44	ᡞᠴᡝ	ᡞᠴᡝ	ADJ	ADJ	_	45	amod	_	_
+45	ᡨᡠᠸᠠᡣᡡᠨ	ᡨᡠᠸᠠᡣᡡᠨ	NOUN	NOUN	_	47	obj	_	_
+46	ᠪᡝ	ᠪᡝ	ADP	ADP	_	45	case	_	_
+47	ᡪᡞᠶᠠᡢᠨᠠᠮᡝ	ᡪᡞᠶᠠᡢᠨᠠᠮᡝ	VERB	VERB	_	48	advcl	_	_
+48	ᠪᡠᠮᡝ	ᠪᡠᠮᡝ	VERB	VERB	_	54	advcl	_	_
+49	︐	︐	PUNCT	PUNCT	_	48	punct	_	_
+50	ᡞᠴᡝ	ᡞᠴᡝ	ADJ	ADJ	_	51	amod	_	_
+51	ᡩᡠᠷᡠᠨ	ᡩᡠᠷᡠᠨ	NOUN	NOUN	_	54	obj	_	_
+52	ᠪᡝ	ᠪᡝ	ADP	ADP	_	51	case	_	_
+53	ᠪᠠᡞᠮᡝ	ᠪᠠᡞᠮᡝ	VERB	VERB	_	54	advcl	_	_
+54	ᠰᡞᡥᡝᡧᡝᠮᠪᡞ	ᠰᡞᡥᡝᡧᡝᠮᠪᡞ	VERB	VERB	_	0	root	_	_
+55	︒	︒	PUNCT	PUNCT	_	54	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: sjo_xdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ᠪᠠᠨᡪᡞᠨ ᠮᠠᡢᡤᠠ ᡨᠠᠴᡞᠰᠠ ᡞ ᡫᡠᠨᡩᡝ , ᡩᠠᠷᡠᡥᠠᡞ ᡥᡡᠰᡠᠨ ᠠᡞᠰᡞᠯᠠᠮᠪᡞ 。
+1	ᠪᠠᠨᡪᡞᠨ	ᠪᠠᠨᡪᡞᠨ	NOUN	NOUN	_	2	nsubj	_	_
+2	ᠮᠠᡢᡤᠠ	ᠮᠠᡢᡤᠠ	ADJ	ADJ	_	3	amod	_	_
+3	ᡨᠠᠴᡞᠰᠠ	ᡨᠠᠴᡞᠰᠠ	NOUN	NOUN	_	9	obl	_	highlight=green|span=5
+4	ᡞ	ᡞ	ADP	ADP	_	3	case	_	_
+5	ᡫᡠᠨᡩᡝ	ᡫᡠᠨᡩᡝ	ADP	ADP	_	3	case	_	_
+6	,	,	PUNCT	PUNCT	_	7	punct	_	_
+7	ᡩᠠᠷᡠᡥᠠᡞ	ᡩᠠᠷᡠᡥᠠᡞ	ADV	ADV	_	9	advmod	_	highlight=green|span=1
+8	ᡥᡡᠰᡠᠨ	ᡥᡡᠰᡠᠨ	NOUN	NOUN	_	9	obj	_	highlight=green|span=1
+9	ᠠᡞᠰᡞᠯᠠᠮᠪᡞ	ᠠᡞᠰᡞᠯᠠᠮᠪᡞ	VERB	VERB	_	0	root	_	highlight=red
+10	。	。	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: sjo_xdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 7.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ᠮᡞ ᠯᡞᠶᠠᡢ ᠴᡞᠣᠸᠠᠨ ᡤᡡᠰᠠ ᠨᡞᡢᡤᡝ 2019 ᠴᡞ ᠠᠨᡞᠶᠠᡞ ᡠᠰᡞᠨ ᡥᡝᡨᡥᡝ ᡧᡠᡢᡤᡞᡨᡠᠨ ᡞ᠋ ᡝᠯᡥᡝ ᠨᡝᠯᡥᡝ ᡫᠠᡣᠰᡞ ᡝᠷᡩᡝᠮᡠ ᠪᡝ ᠪᠠᠨᡪᡞᠴᠠᠷᠠ ᠸᡝᡞᠯᡝᠷᠠᠨ ᠪᡝ ᡩᡝᠨ ᡣᡝᠮᡠᠨ ᡞ᠋ ᠣᠶᠣᠷᠣᡧᠣᠮᡝ ︐ ᡝᠷᡩᡝᡣᡝᠨ ᡞ᠋ ᠪᠣᡩᠣᠮᡞᠯᡝᠮᡝ ᡨᡝᠪᡠᠨᡝᠪᡠᡥᡝ ︐ ᡤᡡᠰᠠ ᡞ᠋ ᡠᠰᡞᠨ ᡧᡠᡢᡤᡞᡨᡠᠨ ᡨᠠᡨᠠᠨ ᡞ᠋ ᠪᠠᡞᡨᠠᠯᠠᠪᡠᠨ ᠪᡝ ᡨᡝᠰᡠᡨᡝᠯᡝ ᠨᡝᡞᠯᡝᠮᡝ ᡨᡠᠴᡞᠪᡠᠮᡝ ︐ ᡨᡠᠸᡝᠷᡞ ᡧᠣᠯᠣ ᡠᠴᡠᠷᡞ ᠪᡝ ᡪᠠᡫᠠᡫᡞ ︐ ᠪᠠᡞᠴᠠᠷᠠ ᠪᡝ ᡩᡠᠯᡝᠮᠪᡠᡫᡞ ᡨᠠᡣᠰᡞᠮᡝ ᠪᡞᡥᡝ ᡝᠯᡥᡝ ᠨᡝᠯᡥᡝ ᡩᡝ ᠰᠣᠮᡞᠪᡠᡥᠠ ᡪᠣᠪᠣᠯᠣᠨ ᠪᡝ ᡨᡠᠰᠠ ᠪᡞᠮᡝ ᠠᡣᡡᠪᡠᡥᠠ ︐ ᡧᡠᡢᡤᡞᡨᡠᠨ ᡞ᠋ ᡫᡠᠯᡠ ᠰᠠᡞᠨ ᠠᠷᠪᡠᠨ ᠪᡝ ᡣᠠᠷᠮᠠᡨᠠᠮᡝ ᡠᠰᡞᠨ ᡝᠷᡤᡞ ᡠᠷᡝᠪᡠᠰᡠ ᡩᡝ ᠠᡩᠠᠨᠠᠪᡠᠮᡝ ︐ ᠪᠠᡞᡨᠠ ᡥᠠᠴᡞᠨ ᡨᡠᠴᡞᠨᡪᡞᠷᡝ ᠪᡝ ᠯᠠᡣᠴᠠᠪᡠᡥᠠᠪᡞ ︒
+1	ᠮᡞ	ᠮᡞ	PROPN	PROPN	_	24	nsubj	_	highlight=green|span=5
+2	ᠯᡞᠶᠠᡢ	ᠯᡞᠶᠠᡢ	PROPN	PROPN	_	1	flat:name	_	_
+3	ᠴᡞᠣᠸᠠᠨ	ᠴᡞᠣᠸᠠᠨ	PROPN	PROPN	_	2	flat:name	_	_
+4	ᡤᡡᠰᠠ	ᡤᡡᠰᠠ	NOUN	NOUN	_	1	flat	_	_
+5	ᠨᡞᡢᡤᡝ	ᠨᡞᡢᡤᡝ	AUX	AUX	_	1	aux	_	_
+6	2019	2019	NUM	NUM	_	8	nummod	_	_
+7	ᠴᡞ	ᠴᡞ	ADP	ADP	_	6	case	_	_
+8	ᠠᠨᡞᠶᠠᡞ	ᠠᠨᡞᠶᠠᡞ	NOUN	NOUN	_	19	nmod	_	_
+9	ᡠᠰᡞᠨ	ᡠᠰᡞᠨ	NOUN	NOUN	_	10	nmod	_	_
+10	ᡥᡝᡨᡥᡝ	ᡥᡝᡨᡥᡝ	NOUN	NOUN	_	11	nmod	_	_
+11	ᡧᡠᡢᡤᡞᡨᡠᠨ	ᡧᡠᡢᡤᡞᡨᡠᠨ	NOUN	NOUN	_	15	nmod	_	_
+12	ᡞ᠋	ᡞ᠋	ADP	ADP	_	11	case	_	_
+13	ᡝᠯᡥᡝ	ᡝᠯᡥᡝ	NOUN	NOUN	_	15	nmod	_	_
+14	ᠨᡝᠯᡥᡝ	ᠨᡝᠯᡥᡝ	NOUN	NOUN	_	13	compound	_	_
+15	ᡫᠠᡣᠰᡞ	ᡫᠠᡣᠰᡞ	NOUN	NOUN	_	18	obj	_	_
+16	ᡝᠷᡩᡝᠮᡠ	ᡝᠷᡩᡝᠮᡠ	NOUN	NOUN	_	15	compound	_	_
+17	ᠪᡝ	ᠪᡝ	ADP	ADP	_	15	case	_	_
+18	ᠪᠠᠨᡪᡞᠴᠠᠷᠠ	ᠪᠠᠨᡪᡞᠴᠠᠷᠠ	VERB	VERB	_	19	acl	_	_
+19	ᠸᡝᡞᠯᡝᠷᠠᠨ	ᠸᡝᡞᠯᡝᠷᠠᠨ	NOUN	NOUN	_	24	obj	_	highlight=green|span=15
+20	ᠪᡝ	ᠪᡝ	ADP	ADP	_	19	case	_	_
+21	ᡩᡝᠨ	ᡩᡝᠨ	ADJ	ADJ	_	22	amod	_	_
+22	ᡣᡝᠮᡠᠨ	ᡣᡝᠮᡠᠨ	NOUN	NOUN	_	24	obl	_	highlight=green|span=3
+23	ᡞ᠋	ᡞ᠋	PART	PART	_	22	mark:adv	_	_
+24	ᠣᠶᠣᠷᠣᡧᠣᠮᡝ	ᠣᠶᠣᠷᠣᡧᠣᠮᡝ	VERB	VERB	_	29	advcl	_	highlight=red
+25	︐	︐	PUNCT	PUNCT	_	24	punct	_	_
+26	ᡝᠷᡩᡝᡣᡝᠨ	ᡝᠷᡩᡝᡣᡝᠨ	ADJ	ADJ	_	29	advmod	_	_
+27	ᡞ᠋	ᡞ᠋	PART	PART	_	26	mark:adv	_	_
+28	ᠪᠣᡩᠣᠮᡞᠯᡝᠮᡝ	ᠪᠣᡩᠣᠮᡞᠯᡝᠮᡝ	VERB	VERB	_	29	advcl	_	_
+29	ᡨᡝᠪᡠᠨᡝᠪᡠᡥᡝ	ᡨᡝᠪᡠᠨᡝᠪᡠᡥᡝ	VERB	VERB	_	81	parataxis	_	_
+30	︐	︐	PUNCT	PUNCT	_	29	punct	_	_
+31	ᡤᡡᠰᠠ	ᡤᡡᠰᠠ	NOUN	NOUN	_	35	nmod	_	_
+32	ᡞ᠋	ᡞ᠋	ADP	ADP	_	31	case	_	_
+33	ᡠᠰᡞᠨ	ᡠᠰᡞᠨ	NOUN	NOUN	_	34	nmod	_	_
+34	ᡧᡠᡢᡤᡞᡨᡠᠨ	ᡧᡠᡢᡤᡞᡨᡠᠨ	NOUN	NOUN	_	35	compound	_	_
+35	ᡨᠠᡨᠠᠨ	ᡨᠠᡨᠠᠨ	NOUN	NOUN	_	37	nmod	_	_
+36	ᡞ᠋	ᡞ᠋	ADP	ADP	_	35	case	_	_
+37	ᠪᠠᡞᡨᠠᠯᠠᠪᡠᠨ	ᠪᠠᡞᡨᠠᠯᠠᠪᡠᠨ	NOUN	NOUN	_	41	obj	_	_
+38	ᠪᡝ	ᠪᡝ	ADP	ADP	_	37	case	_	_
+39	ᡨᡝᠰᡠᡨᡝᠯᡝ	ᡨᡝᠰᡠᡨᡝᠯᡝ	ADJ	ADJ	_	41	advmod	_	_
+40	ᠨᡝᡞᠯᡝᠮᡝ	ᠨᡝᡞᠯᡝᠮᡝ	VERB	VERB	_	41	advcl	_	_
+41	ᡨᡠᠴᡞᠪᡠᠮᡝ	ᡨᡠᠴᡞᠪᡠᠮᡝ	VERB	VERB	_	62	advcl	_	_
+42	︐	︐	PUNCT	PUNCT	_	41	punct	_	_
+43	ᡨᡠᠸᡝᠷᡞ	ᡨᡠᠸᡝᠷᡞ	NOUN	NOUN	_	45	nmod	_	_
+44	ᡧᠣᠯᠣ	ᡧᠣᠯᠣ	NOUN	NOUN	_	45	nmod	_	_
+45	ᡠᠴᡠᠷᡞ	ᡠᠴᡠᠷᡞ	NOUN	NOUN	_	47	obj	_	_
+46	ᠪᡝ	ᠪᡝ	ADP	ADP	_	45	case	_	_
+47	ᡪᠠᡫᠠᡫᡞ	ᡪᠠᡫᠠᡫᡞ	VERB	VERB	_	62	advcl	_	_
+48	︐	︐	PUNCT	PUNCT	_	47	punct	_	_
+49	ᠪᠠᡞᠴᠠᠷᠠ	ᠪᠠᡞᠴᠠᠷᠠ	VERB	VERB	_	51	obj	_	_
+50	ᠪᡝ	ᠪᡝ	ADP	ADP	_	49	case	_	_
+51	ᡩᡠᠯᡝᠮᠪᡠᡫᡞ	ᡩᡠᠯᡝᠮᠪᡠᡫᡞ	VERB	VERB	_	62	advcl	_	_
+52	ᡨᠠᡣᠰᡞᠮᡝ	ᡨᠠᡣᠰᡞᠮᡝ	VERB	VERB	_	53	advcl	_	_
+53	ᠪᡞᡥᡝ	ᠪᡞᡥᡝ	VERB	VERB	_	54	acl:relcl	_	_
+54	ᡝᠯᡥᡝ	ᡝᠯᡥᡝ	NOUN	NOUN	_	57	obl	_	_
+55	ᠨᡝᠯᡥᡝ	ᠨᡝᠯᡥᡝ	NOUN	NOUN	_	54	compound	_	_
+56	ᡩᡝ	ᡩᡝ	ADP	ADP	_	54	case	_	_
+57	ᠰᠣᠮᡞᠪᡠᡥᠠ	ᠰᠣᠮᡞᠪᡠᡥᠠ	VERB	VERB	_	58	acl	_	_
+58	ᡪᠣᠪᠣᠯᠣᠨ	ᡪᠣᠪᠣᠯᠣᠨ	NOUN	NOUN	_	62	obj	_	_
+59	ᠪᡝ	ᠪᡝ	ADP	ADP	_	58	case	_	_
+60	ᡨᡠᠰᠠ	ᡨᡠᠰᠠ	NOUN	NOUN	_	61	nsubj	_	_
+61	ᠪᡞᠮᡝ	ᠪᡞᠮᡝ	VERB	VERB	_	62	advcl	_	_
+62	ᠠᡣᡡᠪᡠᡥᠠ	ᠠᡣᡡᠪᡠᡥᠠ	VERB	VERB	_	81	parataxis	_	_
+63	︐	︐	PUNCT	PUNCT	_	62	punct	_	_
+64	ᡧᡠᡢᡤᡞᡨᡠᠨ	ᡧᡠᡢᡤᡞᡨᡠᠨ	NOUN	NOUN	_	68	nmod	_	_
+65	ᡞ᠋	ᡞ᠋	ADP	ADP	_	64	case	_	_
+66	ᡫᡠᠯᡠ	ᡫᡠᠯᡠ	ADJ	ADJ	_	68	amod	_	_
+67	ᠰᠠᡞᠨ	ᠰᠠᡞᠨ	ADJ	ADJ	_	66	compound	_	_
+68	ᠠᠷᠪᡠᠨ	ᠠᠷᠪᡠᠨ	NOUN	NOUN	_	70	obj	_	_
+69	ᠪᡝ	ᠪᡝ	ADP	ADP	_	68	case	_	_
+70	ᡣᠠᠷᠮᠠᡨᠠᠮᡝ	ᡣᠠᠷᠮᠠᡨᠠᠮᡝ	VERB	VERB	_	81	advcl	_	_
+71	ᡠᠰᡞᠨ	ᡠᠰᡞᠨ	NOUN	NOUN	_	72	nmod	_	_
+72	ᡝᠷᡤᡞ	ᡝᠷᡤᡞ	NOUN	NOUN	_	73	nmod	_	_
+73	ᡠᠷᡝᠪᡠᠰᡠ	ᡠᠷᡝᠪᡠᠰᡠ	NOUN	NOUN	_	75	obl	_	_
+74	ᡩᡝ	ᡩᡝ	ADP	ADP	_	73	case	_	_
+75	ᠠᡩᠠᠨᠠᠪᡠᠮᡝ	ᠠᡩᠠᠨᠠᠪᡠᠮᡝ	VERB	VERB	_	81	advcl	_	_
+76	︐	︐	PUNCT	PUNCT	_	75	punct	_	_
+77	ᠪᠠᡞᡨᠠ	ᠪᠠᡞᡨᠠ	NOUN	NOUN	_	79	nsubj	_	_
+78	ᡥᠠᠴᡞᠨ	ᡥᠠᠴᡞᠨ	NOUN	NOUN	_	77	compound	_	_
+79	ᡨᡠᠴᡞᠨᡪᡞᠷᡝ	ᡨᡠᠴᡞᠨᡪᡞᠷᡝ	VERB	VERB	_	81	nsubj:pass	_	_
+80	ᠪᡝ	ᠪᡝ	ADP	ADP	_	79	case	_	_
+81	ᠯᠠᡣᠴᠠᠪᡠᡥᠠᠪᡞ	ᠯᠠᡣᠴᠠᠪᡠᡥᠠᠪᡞ	VERB	VERB	_	0	root	_	_
+82	︒	︒	PUNCT	PUNCT	_	81	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: sjo_xdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ᡞ ᠮᡞᠨᡩᡝ ᠠᠯᠠᠷᠠ ᡪᠠᡣᠠᡩᡝ , ᠪᡞ ᡨᡝᠨᡞ ᠰᠠᡥᠠ 。
+1	ᡞ	ᡞ	PRON	PRON	_	3	nsubj	_	_
+2	ᠮᡞᠨᡩᡝ	ᠮᡞᠨᡩᡝ	PRON	PRON	_	3	obl	_	_
+3	ᠠᠯᠠᠷᠠ	ᠠᠯᠠᠷᠠ	VERB	VERB	_	8	advcl	_	highlight=green|span=4
+4	ᡪᠠᡣᠠᡩᡝ	ᡪᠠᡣᠠᡩᡝ	SCONJ	SCONJ	_	3	mark	_	_
+5	,	,	PUNCT	PUNCT	_	3	punct	_	_
+6	ᠪᡞ	ᠪᡞ	PRON	PRON	_	8	nsubj	_	highlight=green|span=1
+7	ᡨᡝᠨᡞ	ᡨᡝᠨᡞ	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+8	ᠰᠠᡥᠠ	ᠰᠠᡥᠠ	VERB	VERB	_	0	root	_	highlight=red
+9	。	。	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: sjo_xdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 4.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ᡞᠯᠠᠴᡞ ᠨᡞᠷᡠᡞ ᠠᠮᠪᠠ ᡠᠯᠠᠨ ᡞ ᡝᠮᡠ ᡤᡞᠷᡞᠨ ᠪᠠ , ᠮᡠᡩᠠᠨ ᡩᠠᠷᡞ ᠮᡠᡣᡝᡞ ᡤᠠᠰᡥᠠᠨ ᡩᡝ ᡨᡠᡧᠠᠮᠪᡞ 。
+1	ᡞᠯᠠᠴᡞ	ᡞᠯᠠᠴᡞ	ADJ	ADJ	_	2	amod	_	_
+2	ᠨᡞᠷᡠᡞ	ᠨᡞᠷᡠᡞ	NOUN	NOUN	_	4	nmod	_	_
+3	ᠠᠮᠪᠠ	ᠠᠮᠪᠠ	ADJ	ADJ	_	4	amod	_	_
+4	ᡠᠯᠠᠨ	ᡠᠯᠠᠨ	NOUN	NOUN	_	7	nmod	_	_
+5	ᡞ	ᡞ	ADP	ADP	_	4	case	_	_
+6	ᡝᠮᡠ	ᡝᠮᡠ	NUM	NUM	_	7	nummod	_	_
+7	ᡤᡞᠷᡞᠨ	ᡤᡞᠷᡞᠨ	NOUN	NOUN	_	15	nsubj	_	highlight=green|span=8
+8	ᠪᠠ	ᠪᠠ	NOUN	NOUN	_	7	compound	_	_
+9	,	,	PUNCT	PUNCT	_	7	punct	_	_
+10	ᠮᡠᡩᠠᠨ	ᠮᡠᡩᠠᠨ	NOUN	NOUN	_	15	obl	_	highlight=green|span=2
+11	ᡩᠠᠷᡞ	ᡩᠠᠷᡞ	ADP	ADP	_	10	case	_	_
+12	ᠮᡠᡣᡝᡞ	ᠮᡠᡣᡝᡞ	NOUN	NOUN	_	13	nmod	_	_
+13	ᡤᠠᠰᡥᠠᠨ	ᡤᠠᠰᡥᠠᠨ	NOUN	NOUN	_	15	obl	_	highlight=green|span=3
+14	ᡩᡝ	ᡩᡝ	ADP	ADP	_	13	case	_	_
+15	ᡨᡠᡧᠠᠮᠪᡞ	ᡨᡠᡧᠠᠮᠪᡞ	VERB	VERB	_	0	root	_	highlight=red
+16	。	。	PUNCT	PUNCT	_	15	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: sjo_xdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ᡠᠯᡥᡞᠴᡠᠨ ᠮᡝᠨᡞ ᠪᠠᠨᠰᡝ ᡞ ᠪᠠᠨᠰᡝ ᡩᠠ ᠣᡥᠣᠪᡞ 。
+1	ᡠᠯᡥᡞᠴᡠᠨ	ᡠᠯᡥᡞᠴᡠᠨ	PROPN	PROPN	_	7	nsubj	_	highlight=green|span=1
+2	ᠮᡝᠨᡞ	ᠮᡝᠨᡞ	PRON	PRON	_	3	nmod:poss	_	_
+3	ᠪᠠᠨᠰᡝ	ᠪᠠᠨᠰᡝ	NOUN	NOUN	_	7	nmod	_	highlight=green|span=3
+4	ᡞ	ᡞ	ADP	ADP	_	3	case	_	_
+5	ᠪᠠᠨᠰᡝ	ᠪᠠᠨᠰᡝ	NOUN	NOUN	_	6	compound	_	_
+6	ᡩᠠ	ᡩᠠ	NOUN	NOUN	_	7	xcomp	_	highlight=green|span=2
+7	ᠣᡥᠣᠪᡞ	ᠣᡥᠣᠪᡞ	VERB	VERB	_	0	root	_	highlight=red
+8	。	。	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: sjo_xdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 5.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ᡩᠣᠪᠣᠷᡞ ᠣᠮᡝ , ᡥᠣᡨᠣᠨ ᡩᠣᠷᡤᡞ ᠠᠮᠪᠠ ᡪᡠᡤᡡᠨ ᡞ ᡪᡠᠸᡝ ᡝᠷᡤᡞ ᡞ ᡩᡝᡢᡪᠠᠨ , ᠠᡞᠮᠠᡣᠠ ᡞᠨᡝᡢᡤᡞ ᡧᡠᠨ ᡞ ᠠᡩᠠᠯᡞ ᡝᠯᡩᡝᡧᡝᠮᠪᡞ 。
+1	ᡩᠣᠪᠣᠷᡞ	ᡩᠣᠪᠣᠷᡞ	NOUN	NOUN	_	2	xcomp	_	_
+2	ᠣᠮᡝ	ᠣᠮᡝ	AUX	AUX	_	19	advcl	_	highlight=green|span=2
+3	,	,	PUNCT	PUNCT	_	19	punct	_	_
+4	ᡥᠣᡨᠣᠨ	ᡥᠣᡨᠣᠨ	NOUN	NOUN	_	5	compound	_	_
+5	ᡩᠣᠷᡤᡞ	ᡩᠣᠷᡤᡞ	NOUN	NOUN	_	7	nmod	_	_
+6	ᠠᠮᠪᠠ	ᠠᠮᠪᠠ	ADJ	ADJ	_	7	amod	_	_
+7	ᡪᡠᡤᡡᠨ	ᡪᡠᡤᡡᠨ	NOUN	NOUN	_	10	nmod	_	_
+8	ᡞ	ᡞ	ADP	ADP	_	7	case	_	_
+9	ᡪᡠᠸᡝ	ᡪᡠᠸᡝ	ADJ	ADJ	_	10	amod	_	_
+10	ᡝᠷᡤᡞ	ᡝᠷᡤᡞ	NOUN	NOUN	_	12	nmod	_	_
+11	ᡞ	ᡞ	ADP	ADP	_	10	case	_	_
+12	ᡩᡝᡢᡪᠠᠨ	ᡩᡝᡢᡪᠠᠨ	NOUN	NOUN	_	19	nsubj	_	highlight=green|span=9
+13	,	,	PUNCT	PUNCT	_	19	punct	_	_
+14	ᠠᡞᠮᠠᡣᠠ	ᠠᡞᠮᠠᡣᠠ	ADV	ADV	_	15	advmod	_	_
+15	ᡞᠨᡝᡢᡤᡞ	ᡞᠨᡝᡢᡤᡞ	NOUN	NOUN	_	16	nmod	_	_
+16	ᡧᡠᠨ	ᡧᡠᠨ	NOUN	NOUN	_	19	obl	_	highlight=green|span=5
+17	ᡞ	ᡞ	ADP	ADP	_	16	case	_	_
+18	ᠠᡩᠠᠯᡞ	ᠠᡩᠠᠯᡞ	ADP	ADP	_	16	case	_	_
+19	ᡝᠯᡩᡝᡧᡝᠮᠪᡞ	ᡝᠯᡩᡝᡧᡝᠮᠪᡞ	VERB	VERB	_	0	root	_	highlight=red
+20	。	。	PUNCT	PUNCT	_	19	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: sjo_xdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ᠪᠠᠷᡥᠠ ᡧᡝᠷᡞ ᡨᠣᡣᠰᠣᡞ ᡩᠠᡢ ᡲᡞᠪᡠ ᡠᡪᡠᡞ ᡧᡠᡪᡞ ᠸᡝᠨ ᡩᡠᡢ ᡤᡞᠰᡠᠷᡝᠮᡝ ︐ ᡝᠷᡝ ᡪᡞᡢᡣᡞᠨᡞ ᡝᠮᡠ ᡫᠠᠯᡤᠠ ᡥᡡᠰᡠᠨ ᡣᡝᠮᡠᠨ ᡞ᠋ ᠮᡝᡣᡨᡝᠨ ︐ ᡧᡠᠸᡝ ᡧᠣᡧᠣᡥᠣᠨ ᡩᡝ ᡤᡝᠨᡝᠮᡝ ᠮᡝᡣᡨᡝᠷᡝᡢᡤᡝ ᡤᡝᠮᡠ ᠨᡞᠶᠠᠨᠴᠠᠨ ᡥᡡᠰᡠᠨ ︐ ᠮᡝᠨᡞ ᡨᠣᡣᠰᠣᡞ ᡞᠷᡤᡝᠨ ᡝᠷᡝ ᠮᡠᡩᠠᠨ ᠠᡧᡧᠠᠨ ᠪᡝ ᡩᡠᠯᡝᠪᡠᡫᡞ ᠪᠠᡣᡪᠠᠮᡝ ᡞᠰᠠᠷᠠ ᡥᡡᠰᡠᠨ ᡝᠯᡝ ᡝᡨᡠᡥᡠᠨ ᠣᡥᠣᠪᡞ ︒
+1	ᠪᠠᠷᡥᠠ	ᠪᠠᠷᡥᠠ	PROPN	PROPN	_	3	compound	_	_
+2	ᡧᡝᠷᡞ	ᡧᡝᠷᡞ	PROPN	PROPN	_	1	flat:name	_	_
+3	ᡨᠣᡣᠰᠣᡞ	ᡨᠣᡣᠰᠣᡞ	NOUN	NOUN	_	7	nmod	_	_
+4	ᡩᠠᡢ	ᡩᠠᡢ	NOUN	NOUN	_	5	nmod	_	_
+5	ᡲᡞᠪᡠ	ᡲᡞᠪᡠ	NOUN	NOUN	_	7	nmod	_	_
+6	ᡠᡪᡠᡞ	ᡠᡪᡠᡞ	NUM	NUM	_	7	nummod	_	_
+7	ᡧᡠᡪᡞ	ᡧᡠᡪᡞ	NOUN	NOUN	_	10	nsubj	_	_
+8	ᠸᡝᠨ	ᠸᡝᠨ	PROPN	PROPN	_	7	appos	_	_
+9	ᡩᡠᡢ	ᡩᡠᡢ	PROPN	PROPN	_	8	flat:name	_	_
+10	ᡤᡞᠰᡠᠷᡝᠮᡝ	ᡤᡞᠰᡠᠷᡝᠮᡝ	VERB	VERB	_	42	advcl	_	_
+11	︐	︐	PUNCT	PUNCT	_	10	punct	_	_
+12	ᡝᠷᡝ	ᡝᠷᡝ	DET	DET	_	19	nsubj	_	_
+13	ᡪᡞᡢᡣᡞᠨᡞ	ᡪᡞᡢᡣᡞᠨᡞ	ADJ	ADJ	_	19	advmod	_	_
+14	ᡝᠮᡠ	ᡝᠮᡠ	NUM	NUM	_	19	nummod	_	_
+15	ᡫᠠᠯᡤᠠ	ᡫᠠᠯᡤᠠ	NOUN	NOUN	_	14	clf	_	_
+16	ᡥᡡᠰᡠᠨ	ᡥᡡᠰᡠᠨ	NOUN	NOUN	_	19	nmod	_	_
+17	ᡣᡝᠮᡠᠨ	ᡣᡝᠮᡠᠨ	NOUN	NOUN	_	16	compound	_	_
+18	ᡞ᠋	ᡞ᠋	PART	PART	_	17	mark:rel	_	_
+19	ᠮᡝᡣᡨᡝᠨ	ᠮᡝᡣᡨᡝᠨ	NOUN	NOUN	_	42	parataxis	_	_
+20	︐	︐	PUNCT	PUNCT	_	19	punct	_	_
+21	ᡧᡠᠸᡝ	ᡧᡠᠸᡝ	ADV	ADV	_	25	advmod	_	highlight=green|span=1
+22	ᡧᠣᡧᠣᡥᠣᠨ	ᡧᠣᡧᠣᡥᠣᠨ	NOUN	NOUN	_	25	obl	_	highlight=green|span=2
+23	ᡩᡝ	ᡩᡝ	ADP	ADP	_	22	case	_	_
+24	ᡤᡝᠨᡝᠮᡝ	ᡤᡝᠨᡝᠮᡝ	VERB	VERB	_	25	advcl	_	highlight=green|span=1
+25	ᠮᡝᡣᡨᡝᠷᡝᡢᡤᡝ	ᠮᡝᡣᡨᡝᠷᡝᡢᡤᡝ	VERB	VERB	_	28	acl:relcl	_	highlight=red
+26	ᡤᡝᠮᡠ	ᡤᡝᠮᡠ	ADV	ADV	_	28	advmod	_	_
+27	ᠨᡞᠶᠠᠨᠴᠠᠨ	ᠨᡞᠶᠠᠨᠴᠠᠨ	NOUN	NOUN	_	28	nmod	_	_
+28	ᡥᡡᠰᡠᠨ	ᡥᡡᠰᡠᠨ	NOUN	NOUN	_	42	parataxis	_	_
+29	︐	︐	PUNCT	PUNCT	_	28	punct	_	_
+30	ᠮᡝᠨᡞ	ᠮᡝᠨᡞ	PRON	PRON	_	31	nmod:poss	_	_
+31	ᡨᠣᡣᠰᠣᡞ	ᡨᠣᡣᠰᠣᡞ	NOUN	NOUN	_	32	nmod	_	_
+32	ᡞᠷᡤᡝᠨ	ᡞᠷᡤᡝᠨ	NOUN	NOUN	_	37	nsubj	_	_
+33	ᡝᠷᡝ	ᡝᠷᡝ	DET	DET	_	35	det	_	_
+34	ᠮᡠᡩᠠᠨ	ᠮᡠᡩᠠᠨ	NOUN	NOUN	_	33	clf	_	_
+35	ᠠᡧᡧᠠᠨ	ᠠᡧᡧᠠᠨ	NOUN	NOUN	_	37	obj	_	_
+36	ᠪᡝ	ᠪᡝ	ADP	ADP	_	35	case	_	_
+37	ᡩᡠᠯᡝᠪᡠᡫᡞ	ᡩᡠᠯᡝᠪᡠᡫᡞ	VERB	VERB	_	42	advcl	_	_
+38	ᠪᠠᡣᡪᠠᠮᡝ	ᠪᠠᡣᡪᠠᠮᡝ	VERB	VERB	_	39	advcl	_	_
+39	ᡞᠰᠠᠷᠠ	ᡞᠰᠠᠷᠠ	VERB	VERB	_	40	acl:relcl	_	_
+40	ᡥᡡᠰᡠᠨ	ᡥᡡᠰᡠᠨ	NOUN	NOUN	_	42	nsubj	_	_
+41	ᡝᠯᡝ	ᡝᠯᡝ	ADV	ADV	_	42	advmod	_	_
+42	ᡝᡨᡠᡥᡠᠨ	ᡝᡨᡠᡥᡠᠨ	ADJ	ADJ	_	43	xcomp	_	_
+43	ᠣᡥᠣᠪᡞ	ᠣᡥᠣᠪᡞ	VERB	VERB	_	0	root	_	_
+44	︒	︒	PUNCT	PUNCT	_	43	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: sjo_xdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ᡨᡝᠷᡝ ᡠᠮᠠᡞ ᠪᠠᡞᡨᠠ ᠠᠷᠠᠷᠠᠠᡣᡡ 。
+1	ᡨᡝᠷᡝ	ᡨᡝᠷᡝ	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+2	ᡠᠮᠠᡞ	ᡠᠮᠠᡞ	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+3	ᠪᠠᡞᡨᠠ	ᠪᠠᡞᡨᠠ	NOUN	NOUN	_	4	obj	_	highlight=green|span=1
+4	ᠠᠷᠠᠷᠠᠠᡣᡡ	ᠠᠷᠠᠷᠠᠠᡣᡡ	VERB	VERB	_	0	root	_	highlight=red
+5	。	。	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: sjo_xdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ᠠᠯᡞᠨ ᠠᠨᡨᡠ ᡩᡝ ᡥᠠᠴᡞᠨ ᡥᠠᠴᡞᠨ ᡞᠯᡥᠠ ᠪᡞᠷᡝᠮᡝ ᡫᡞᡨᡥᡝᡫᡞ , ᠠᠯᡥᠠ ᠪᡠᠯᡥᠠ ᡪᠠᠴᡞ ᡥᠣᠴᡞᡣᠣᠰᠠᡣᠠ 。
+1	ᠠᠯᡞᠨ	ᠠᠯᡞᠨ	NOUN	NOUN	_	2	nmod	_	_
+2	ᠠᠨᡨᡠ	ᠠᠨᡨᡠ	NOUN	NOUN	_	8	obl	_	highlight=green|span=3
+3	ᡩᡝ	ᡩᡝ	ADP	ADP	_	2	case	_	_
+4	ᡥᠠᠴᡞᠨ	ᡥᠠᠴᡞᠨ	NOUN	NOUN	_	5	compound	_	_
+5	ᡥᠠᠴᡞᠨ	ᡥᠠᠴᡞᠨ	NOUN	NOUN	_	6	nmod	_	_
+6	ᡞᠯᡥᠠ	ᡞᠯᡥᠠ	NOUN	NOUN	_	8	nsubj	_	highlight=green|span=3
+7	ᠪᡞᠷᡝᠮᡝ	ᠪᡞᠷᡝᠮᡝ	VERB	VERB	_	8	advcl	_	highlight=green|span=1
+8	ᡫᡞᡨᡥᡝᡫᡞ	ᡫᡞᡨᡥᡝᡫᡞ	VERB	VERB	_	13	advcl	_	highlight=red
+9	,	,	PUNCT	PUNCT	_	8	punct	_	_
+10	ᠠᠯᡥᠠ	ᠠᠯᡥᠠ	ADJ	ADJ	_	11	compound	_	_
+11	ᠪᡠᠯᡥᠠ	ᠪᡠᠯᡥᠠ	NOUN	NOUN	_	13	obl	_	_
+12	ᡪᠠᠴᡞ	ᡪᠠᠴᡞ	ADV	ADV	_	13	advmod	_	_
+13	ᡥᠣᠴᡞᡣᠣᠰᠠᡣᠠ	ᡥᠣᠴᡞᡣᠣᠰᠠᡣᠠ	ADJ	ADJ	_	0	root	_	_
+14	。	。	PUNCT	PUNCT	_	13	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: sjo_xdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 15.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ᡤᡠᠸᠠᠨ ᠯᡞ ᡪᡞᠣᡞ ᠨᡝᠨᡝᠮᡝ ᠠᠮᠠᠯᠠ ᡤᡠᠪᠴᡞ ᡤᡠᠷᡠᠨ ᡠᠰᡞᠨ ᡥᡝᡨᡥᡝᡞ ᠨᡝᠨᡩᡝᡥᡝ ᠸᡝᡞᠯᡝᠷᠠᠰᡞ ︑ ᡤᡠᠪᠴᡞ ᡤᡠᠷᡠᠨ “ ᡥᡝᡥᡝ ᠪᠠᠨᡞᡢᡤᡝ ” ᡫᡠᠯᡤᡞᠶᠠᠨ ᡣᡞᠷᡠ ᡤᠠᠯᠠ ︑ ᡯᡞᡲᡞᠴᡞᠣᡞ ᡫᡠᠯᡠ ᠰᠠᡞᠨ ᡠᠰᡞᠨ ᡥᡝᡨᡥᡝᡞ ᡫᠠᡣᠰᡞ ᡝᠷᡩᡝᠮᡠ ᠪᡝ ᠪᡞᠷᡝᡨᡝᠯᡝᠷᡝ ᠨᡞᠶᠠᠯᠮᠠ ︑ ᡞᠯᡞ ᡪᡝᠣ ᡫᡠᠯᡠ ᠰᠠᡞᠨ ᡤᡠᡢᠴᠠᠨ ᡩᠠᡢ ᠶᡠᠸᠠᠨ ︑ ᡞᠯᡞ ᡪᡝᠣ ᡪᡠᠸᠠᠨ ᠰᠠᡞᠨ ᡠᠰᡞᠨ ᡥᡝᡨᡥᡝᡞ ᠺᠣᡨᠠᠴᡞᠨ ᠸᡝᡞᠯᡝᠷᠠᠰᡞ ᡪᡝᠷᡤᡞ ᡩᡝᠷᡝᡢᡤᡝ ᠴᠣᠯᠣ ᡩᡝ ᡦᡞᡢᠯᡝᠪᡠᡥᡝᠪᡞ ︒
+1	ᡤᡠᠸᠠᠨ	ᡤᡠᠸᠠᠨ	PROPN	PROPN	_	54	nsubj:pass	_	highlight=green|span=3
+2	ᠯᡞ	ᠯᡞ	PROPN	PROPN	_	1	flat:name	_	_
+3	ᡪᡞᠣᡞ	ᡪᡞᠣᡞ	PROPN	PROPN	_	2	flat:name	_	_
+4	ᠨᡝᠨᡝᠮᡝ	ᠨᡝᠨᡝᠮᡝ	ADV	ADV	_	54	advmod	_	highlight=green|span=2
+5	ᠠᠮᠠᠯᠠ	ᠠᠮᠠᠯᠠ	NOUN	NOUN	_	4	compound	_	_
+6	ᡤᡠᠪᠴᡞ	ᡤᡠᠪᠴᡞ	PRON	PRON	_	7	det	_	_
+7	ᡤᡠᠷᡠᠨ	ᡤᡠᠷᡠᠨ	NOUN	NOUN	_	11	nmod	_	_
+8	ᡠᠰᡞᠨ	ᡠᠰᡞᠨ	NOUN	NOUN	_	9	nmod	_	_
+9	ᡥᡝᡨᡥᡝᡞ	ᡥᡝᡨᡥᡝᡞ	NOUN	NOUN	_	11	nmod	_	_
+10	ᠨᡝᠨᡩᡝᡥᡝ	ᠨᡝᠨᡩᡝᡥᡝ	VERB	VERB	_	11	acl	_	_
+11	ᠸᡝᡞᠯᡝᠷᠠᠰᡞ	ᠸᡝᡞᠯᡝᠷᠠᠰᡞ	NOUN	NOUN	_	54	obl	_	highlight=green|span=42
+12	︑	︑	PUNCT	PUNCT	_	11	punct	_	_
+13	ᡤᡠᠪᠴᡞ	ᡤᡠᠪᠴᡞ	PRON	PRON	_	14	det	_	_
+14	ᡤᡠᠷᡠᠨ	ᡤᡠᠷᡠᠨ	NOUN	NOUN	_	21	nmod	_	_
+15	“	“	PUNCT	PUNCT	_	17	punct	_	_
+16	ᡥᡝᡥᡝ	ᡥᡝᡥᡝ	NOUN	NOUN	_	17	compound	_	_
+17	ᠪᠠᠨᡞᡢᡤᡝ	ᠪᠠᠨᡞᡢᡤᡝ	NOUN	NOUN	_	21	nmod	_	_
+18	”	”	PUNCT	PUNCT	_	17	punct	_	_
+19	ᡫᡠᠯᡤᡞᠶᠠᠨ	ᡫᡠᠯᡤᡞᠶᠠᠨ	NOUN	NOUN	_	20	nmod	_	_
+20	ᡣᡞᠷᡠ	ᡣᡞᠷᡠ	NOUN	NOUN	_	21	nmod	_	_
+21	ᡤᠠᠯᠠ	ᡤᠠᠯᠠ	NOUN	NOUN	_	11	conj	_	_
+22	︑	︑	PUNCT	PUNCT	_	21	punct	_	_
+23	ᡯᡞᡲᡞᠴᡞᠣᡞ	ᡯᡞᡲᡞᠴᡞᠣᡞ	NOUN	NOUN	_	32	nmod	_	_
+24	ᡫᡠᠯᡠ	ᡫᡠᠯᡠ	ADJ	ADJ	_	32	amod	_	_
+25	ᠰᠠᡞᠨ	ᠰᠠᡞᠨ	ADJ	ADJ	_	24	compound	_	_
+26	ᡠᠰᡞᠨ	ᡠᠰᡞᠨ	NOUN	NOUN	_	27	nmod	_	_
+27	ᡥᡝᡨᡥᡝᡞ	ᡥᡝᡨᡥᡝᡞ	NOUN	NOUN	_	29	nmod	_	_
+28	ᡫᠠᡣᠰᡞ	ᡫᠠᡣᠰᡞ	ADJ	ADJ	_	29	amod	_	_
+29	ᡝᠷᡩᡝᠮᡠ	ᡝᠷᡩᡝᠮᡠ	NOUN	NOUN	_	31	obj	_	_
+30	ᠪᡝ	ᠪᡝ	ADP	ADP	_	29	case	_	_
+31	ᠪᡞᠷᡝᡨᡝᠯᡝᠷᡝ	ᠪᡞᠷᡝᡨᡝᠯᡝᠷᡝ	VERB	VERB	_	32	acl:relcl	_	_
+32	ᠨᡞᠶᠠᠯᠮᠠ	ᠨᡞᠶᠠᠯᠮᠠ	NOUN	NOUN	_	11	conj	_	_
+33	︑	︑	PUNCT	PUNCT	_	32	punct	_	_
+34	ᡞᠯᡞ	ᡞᠯᡞ	PROPN	PROPN	_	35	compound	_	_
+35	ᡪᡝᠣ	ᡪᡝᠣ	NOUN	NOUN	_	40	nmod	_	_
+36	ᡫᡠᠯᡠ	ᡫᡠᠯᡠ	ADJ	ADJ	_	40	amod	_	_
+37	ᠰᠠᡞᠨ	ᠰᠠᡞᠨ	ADJ	ADJ	_	36	compound	_	_
+38	ᡤᡠᡢᠴᠠᠨ	ᡤᡠᡢᠴᠠᠨ	NOUN	NOUN	_	39	compound	_	_
+39	ᡩᠠᡢ	ᡩᠠᡢ	NOUN	NOUN	_	40	compound	_	_
+40	ᠶᡠᠸᠠᠨ	ᠶᡠᠸᠠᠨ	NOUN	NOUN	_	11	conj	_	_
+41	︑	︑	PUNCT	PUNCT	_	40	punct	_	_
+42	ᡞᠯᡞ	ᡞᠯᡞ	PROPN	PROPN	_	43	compound	_	_
+43	ᡪᡝᠣ	ᡪᡝᠣ	NOUN	NOUN	_	49	nmod	_	_
+44	ᡪᡠᠸᠠᠨ	ᡪᡠᠸᠠᠨ	NUM	NUM	_	45	compound	_	_
+45	ᠰᠠᡞᠨ	ᠰᠠᡞᠨ	ADJ	ADJ	_	49	amod	_	_
+46	ᡠᠰᡞᠨ	ᡠᠰᡞᠨ	NOUN	NOUN	_	47	nmod	_	_
+47	ᡥᡝᡨᡥᡝᡞ	ᡥᡝᡨᡥᡝᡞ	NOUN	NOUN	_	49	nmod	_	_
+48	ᠺᠣᡨᠠᠴᡞᠨ	ᠺᠣᡨᠠᠴᡞᠨ	NOUN	NOUN	_	49	nmod	_	_
+49	ᠸᡝᡞᠯᡝᠷᠠᠰᡞ	ᠸᡝᡞᠯᡝᠷᠠᠰᡞ	NOUN	NOUN	_	11	conj	_	_
+50	ᡪᡝᠷᡤᡞ	ᡪᡝᠷᡤᡞ	NOUN	NOUN	_	11	acl	_	_
+51	ᡩᡝᠷᡝᡢᡤᡝ	ᡩᡝᠷᡝᡢᡤᡝ	ADJ	ADJ	_	52	amod	_	_
+52	ᠴᠣᠯᠣ	ᠴᠣᠯᠣ	NOUN	NOUN	_	11	appos	_	_
+53	ᡩᡝ	ᡩᡝ	ADP	ADP	_	11	case	_	_
+54	ᡦᡞᡢᠯᡝᠪᡠᡥᡝᠪᡞ	ᡦᡞᡢᠯᡝᠪᡠᡥᡝᠪᡞ	VERB	VERB	_	0	root	_	highlight=red
+55	︒	︒	PUNCT	PUNCT	_	54	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: sjo_xdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 3.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ᡝᠷᡝᠴᡞ ᠠᠮᠠᠰᡞ 10 ᡞᠨᡝᡢᡤᡞ ᡩᠣᠯᠣ , 2000 ᡩᡠᠯᡝᠷᡝ ᡤᡠᠪᠴᡞ ᡤᡠᠷᡠᠨ ᡪᡝᡢᠰᡞᠶᡝ ᠸᡝᡞ ᠶᡠᠸᠠᠨ ᡨᡠᡧᠠᠨ ᠪᡝ ᡠᠨᡝᡢᡤᡞᠯᡝᠮᡝ ᠶᠠᠪᡠᠪᡠᠮᡝ , ᠪᡞᠷᡝᡨᡝᡞ ᠮᡠᡪᡞᠯᡝᠨ ᠪᡝ ᠪᠠᡣᡪᠠᠮᡝ ᡥᡡᠰᡠᠨ ᠪᡝ ᡞᠰᠠᠪᡠᠮᡝ , ᠠᡫᠠᠪᡠᡥᠠ ᡥᡝᠰᡝ ᡠᠨᡠᠨ ᡨᡠᡧᠠᠨ ᠪᡝ ᡝᡨᡠᡥᡠᠯᡝᠮᡝ , ᠶᡝᠪᡣᡝᠨ ᡤᡝᠷᡝᠨᡠᠰᡠ ᠪᡝ ᡤᡠᠪᠴᡞ ᡩᡝᠷᡝᡞ ᡞᠯᡞᠪᡠᠮᡝ ᠠᠷᠠᠷᠠ ᡩᡝ ᠯᠠᠰᡥᠠᡨᠠᡞ ᡝᡨᡝᠨ ᠪᠠᡥᠠᠷᠠ 、 ᡞᠴᡝ ᡝᠷᡞᠨ ᡪᠠᠯᠠᠨ ᡪᡠᡢᡬᠣ ᠴᠣᡥᠣᡨᠣᠰᡥᡡᠨ ᠪᡞᠰᡞᠷᡝ ᡧᡝᡥᡡᡞ ᡪᡠᠠᡞ ᡥᠣᠷᠣᡢᡤᠣ ᠠᠮᠪᠠᠯᡞᡢᡤᡡ ᡝᡨᡝᠨ ᠪᡝ ᠨᡝᠮᡧᡝᠮᡝ ᠪᠠᡥᠠᠷᠠ ᡪᠠᠯᡞᠨ ᡞᠴᡝ ᠪᡞᠮᡝ ᡝᠯᡝ ᠠᠮᠪᠠ ᠠᠯᡞᠪᡠᠨ ᠪᡝ ᠠᠯᡞᠪᡠᠮᠪᡞ 。
+1	ᡝᠷᡝᠴᡞ	ᡝᠷᡝᠴᡞ	DET	DET	_	4	obl	_	_
+2	ᠠᠮᠠᠰᡞ	ᠠᠮᠠᠰᡞ	ADV	ADV	_	3	advmod	_	_
+3	10	10	NUM	NUM	_	4	nummod	_	_
+4	ᡞᠨᡝᡢᡤᡞ	ᡞᠨᡝᡢᡤᡞ	NOUN	NOUN	_	5	nmod	_	_
+5	ᡩᠣᠯᠣ	ᡩᠣᠯᠣ	NOUN	NOUN	_	67	obl:tmod	_	_
+6	,	,	PUNCT	PUNCT	_	5	punct	_	_
+7	2000	2000	NUM	NUM	_	8	obj	_	_
+8	ᡩᡠᠯᡝᠷᡝ	ᡩᡠᠯᡝᠷᡝ	VERB	VERB	_	12	acl:relcl	_	_
+9	ᡤᡠᠪᠴᡞ	ᡤᡠᠪᠴᡞ	PRON	PRON	_	10	det	_	_
+10	ᡤᡠᠷᡠᠨ	ᡤᡠᠷᡠᠨ	NOUN	NOUN	_	11	nmod	_	_
+11	ᡪᡝᡢᠰᡞᠶᡝ	ᡪᡝᡢᠰᡞᠶᡝ	NOUN	NOUN	_	12	nmod	_	_
+12	ᠸᡝᡞ	ᠸᡝᡞ	X	X	_	17	nsubj	_	highlight=green|span=7
+13	ᠶᡠᠸᠠᠨ	ᠶᡠᠸᠠᠨ	X	X	_	12	flat	_	_
+14	ᡨᡠᡧᠠᠨ	ᡨᡠᡧᠠᠨ	NOUN	NOUN	_	17	obj	_	highlight=green|span=2
+15	ᠪᡝ	ᠪᡝ	ADP	ADP	_	14	case	_	_
+16	ᡠᠨᡝᡢᡤᡞᠯᡝᠮᡝ	ᡠᠨᡝᡢᡤᡞᠯᡝᠮᡝ	VERB	VERB	_	17	advcl	_	highlight=green|span=1
+17	ᠶᠠᠪᡠᠪᡠᠮᡝ	ᠶᠠᠪᡠᠪᡠᠮᡝ	VERB	VERB	_	67	advcl	_	highlight=red
+18	,	,	PUNCT	PUNCT	_	17	punct	_	_
+19	ᠪᡞᠷᡝᡨᡝᡞ	ᠪᡞᠷᡝᡨᡝᡞ	ADV	ADV	_	25	advmod	_	_
+20	ᠮᡠᡪᡞᠯᡝᠨ	ᠮᡠᡪᡞᠯᡝᠨ	NOUN	NOUN	_	22	obj	_	_
+21	ᠪᡝ	ᠪᡝ	ADP	ADP	_	20	case	_	_
+22	ᠪᠠᡣᡪᠠᠮᡝ	ᠪᠠᡣᡪᠠᠮᡝ	VERB	VERB	_	25	advcl	_	_
+23	ᡥᡡᠰᡠᠨ	ᡥᡡᠰᡠᠨ	NOUN	NOUN	_	25	obj	_	_
+24	ᠪᡝ	ᠪᡝ	ADP	ADP	_	23	case	_	_
+25	ᡞᠰᠠᠪᡠᠮᡝ	ᡞᠰᠠᠪᡠᠮᡝ	VERB	VERB	_	67	advcl	_	_
+26	,	,	PUNCT	PUNCT	_	25	punct	_	_
+27	ᠠᡫᠠᠪᡠᡥᠠ	ᠠᡫᠠᠪᡠᡥᠠ	VERB	VERB	_	28	acl	_	_
+28	ᡥᡝᠰᡝ	ᡥᡝᠰᡝ	NOUN	NOUN	_	32	obj	_	_
+29	ᡠᠨᡠᠨ	ᡠᠨᡠᠨ	NOUN	NOUN	_	28	conj	_	_
+30	ᡨᡠᡧᠠᠨ	ᡨᡠᡧᠠᠨ	NOUN	NOUN	_	28	conj	_	_
+31	ᠪᡝ	ᠪᡝ	ADP	ADP	_	28	case	_	_
+32	ᡝᡨᡠᡥᡠᠯᡝᠮᡝ	ᡝᡨᡠᡥᡠᠯᡝᠮᡝ	VERB	VERB	_	67	advcl	_	_
+33	,	,	PUNCT	PUNCT	_	32	punct	_	_
+34	ᠶᡝᠪᡣᡝᠨ	ᠶᡝᠪᡣᡝᠨ	ADJ	ADJ	_	35	amod	_	_
+35	ᡤᡝᠷᡝᠨᡠᠰᡠ	ᡤᡝᠷᡝᠨᡠᠰᡠ	NOUN	NOUN	_	40	obj	_	_
+36	ᠪᡝ	ᠪᡝ	ADP	ADP	_	35	case	_	_
+37	ᡤᡠᠪᠴᡞ	ᡤᡠᠪᠴᡞ	PRON	PRON	_	38	det	_	_
+38	ᡩᡝᠷᡝᡞ	ᡩᡝᠷᡝᡞ	NOUN	NOUN	_	40	obl	_	_
+39	ᡞᠯᡞᠪᡠᠮᡝ	ᡞᠯᡞᠪᡠᠮᡝ	VERB	VERB	_	40	advcl	_	_
+40	ᠠᠷᠠᠷᠠ	ᠠᠷᠠᠷᠠ	VERB	VERB	_	44	obj	_	_
+41	ᡩᡝ	ᡩᡝ	ADP	ADP	_	40	case	_	_
+42	ᠯᠠᠰᡥᠠᡨᠠᡞ	ᠯᠠᠰᡥᠠᡨᠠᡞ	ADV	ADV	_	44	advmod	_	_
+43	ᡝᡨᡝᠨ	ᡝᡨᡝᠨ	NOUN	NOUN	_	44	obj	_	_
+44	ᠪᠠᡥᠠᠷᠠ	ᠪᠠᡥᠠᠷᠠ	VERB	VERB	_	67	obl	_	_
+45	、	、	PUNCT	PUNCT	_	44	punct	_	_
+46	ᡞᠴᡝ	ᡞᠴᡝ	ADJ	ADJ	_	47	amod	_	_
+47	ᡝᠷᡞᠨ	ᡝᠷᡞᠨ	NOUN	NOUN	_	56	nmod	_	_
+48	ᡪᠠᠯᠠᠨ	ᡪᠠᠯᠠᠨ	NOUN	NOUN	_	47	compound	_	_
+49	ᡪᡠᡢᡬᠣ	ᡪᡠᡢᡬᠣ	PROPN	PROPN	_	50	nmod	_	_
+50	ᠴᠣᡥᠣᡨᠣᠰᡥᡡᠨ	ᠴᠣᡥᠣᡨᠣᠰᡥᡡᠨ	NOUN	NOUN	_	51	obj	_	_
+51	ᠪᡞᠰᡞᠷᡝ	ᠪᡞᠰᡞᠷᡝ	VERB	VERB	_	53	acl:relcl	_	_
+52	ᡧᡝᡥᡡᡞ	ᡧᡝᡥᡡᡞ	NOUN	NOUN	_	53	nmod	_	_
+53	ᡪᡠᠠᡞ	ᡪᡠᠠᡞ	NOUN	NOUN	_	56	nmod	_	_
+54	ᡥᠣᠷᠣᡢᡤᠣ	ᡥᠣᠷᠣᡢᡤᠣ	ADJ	ADJ	_	56	amod	_	_
+55	ᠠᠮᠪᠠᠯᡞᡢᡤᡡ	ᠠᠮᠪᠠᠯᡞᡢᡤᡡ	ADJ	ADJ	_	54	compound	_	_
+56	ᡝᡨᡝᠨ	ᡝᡨᡝᠨ	NOUN	NOUN	_	59	obj	_	_
+57	ᠪᡝ	ᠪᡝ	ADP	ADP	_	56	case	_	_
+58	ᠨᡝᠮᡧᡝᠮᡝ	ᠨᡝᠮᡧᡝᠮᡝ	VERB	VERB	_	59	advcl	_	_
+59	ᠪᠠᡥᠠᠷᠠ	ᠪᠠᡥᠠᠷᠠ	VERB	VERB	_	44	conj	_	_
+60	ᡪᠠᠯᡞᠨ	ᡪᠠᠯᡞᠨ	ADP	ADP	_	44	case	_	_
+61	ᡞᠴᡝ	ᡞᠴᡝ	ADJ	ADJ	_	65	amod	_	_
+62	ᠪᡞᠮᡝ	ᠪᡞᠮᡝ	CCONJ	CCONJ	_	64	cc	_	_
+63	ᡝᠯᡝ	ᡝᠯᡝ	ADV	ADV	_	64	advmod	_	_
+64	ᠠᠮᠪᠠ	ᠠᠮᠪᠠ	ADJ	ADJ	_	61	conj	_	_
+65	ᠠᠯᡞᠪᡠᠨ	ᠠᠯᡞᠪᡠᠨ	NOUN	NOUN	_	67	obj	_	_
+66	ᠪᡝ	ᠪᡝ	ADP	ADP	_	65	case	_	_
+67	ᠠᠯᡞᠪᡠᠮᠪᡞ	ᠠᠯᡞᠪᡠᠮᠪᡞ	VERB	VERB	_	0	root	_	_
+68	。	。	PUNCT	PUNCT	_	67	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: sjo_xdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 4.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ᡫᡝ ᠠᠨᡞᠶᠠ ᠪᡝ ᡫᡠᡩᡝᠮᡝ ᡞᠴᡝ ᠠᠨᡞᠶᠠ ᠪᡝ ᠣᡣᡩᠣᠮᡝ ︐ ᡤᡝᠷᡝᠨ ᡠᡣᠰᡠᠷᠠ ᠨᡞᠶᠠᠯᠮᠠ ᡞᠷᡤᡝᠨ ᡝᠮᠪᠠᡩᡝ ᠠᠴᠠᡥᠠᠪᡞ
+1	ᡫᡝ	ᡫᡝ	ADJ	ADJ	_	2	amod	_	_
+2	ᠠᠨᡞᠶᠠ	ᠠᠨᡞᠶᠠ	NOUN	NOUN	_	4	obj	_	_
+3	ᠪᡝ	ᠪᡝ	ADP	ADP	_	2	case	_	_
+4	ᡫᡠᡩᡝᠮᡝ	ᡫᡠᡩᡝᠮᡝ	VERB	VERB	_	15	advcl	_	highlight=green|span=8
+5	ᡞᠴᡝ	ᡞᠴᡝ	ADJ	ADJ	_	6	amod	_	_
+6	ᠠᠨᡞᠶᠠ	ᠠᠨᡞᠶᠠ	NOUN	NOUN	_	8	obj	_	_
+7	ᠪᡝ	ᠪᡝ	ADP	ADP	_	6	case	_	_
+8	ᠣᡣᡩᠣᠮᡝ	ᠣᡣᡩᠣᠮᡝ	VERB	VERB	_	4	conj	_	_
+9	︐	︐	PUNCT	PUNCT	_	4	punct	_	_
+10	ᡤᡝᠷᡝᠨ	ᡤᡝᠷᡝᠨ	PRON	PRON	_	11	det	_	_
+11	ᡠᡣᠰᡠᠷᠠ	ᡠᡣᠰᡠᠷᠠ	NOUN	NOUN	_	12	nmod	_	_
+12	ᠨᡞᠶᠠᠯᠮᠠ	ᠨᡞᠶᠠᠯᠮᠠ	NOUN	NOUN	_	15	nsubj	_	highlight=green|span=4
+13	ᡞᠷᡤᡝᠨ	ᡞᠷᡤᡝᠨ	NOUN	NOUN	_	12	compound	_	_
+14	ᡝᠮᠪᠠᡩᡝ	ᡝᠮᠪᠠᡩᡝ	ADV	ADV	_	15	advmod	_	highlight=green|span=1
+15	ᠠᠴᠠᡥᠠᠪᡞ	ᠠᠴᠠᡥᠠᠪᡞ	VERB	VERB	_	0	root	_	highlight=red"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: sjo_xdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 7.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ᠴᠠᠪᠴᠠᠯ ᠰᡞᠶᠠᠨ ᠴᡞᠶᡠᡢᠪᡠᠯᠠᡣ ᡪᡝᠨ ᡠᠰᡞᠨ ᠠᡩᡠᠯᠠᠷᠠ ᡞᠷᡤᡝᠨ ᠴᡞᠶᡠᠨᡪᡠᡢ ᡞ᠋ ᠺᠣᡨᠠᠴᡞᠨ ᡫᠠᡣᠰᡞ ᡝᠷᡩᡝᠮᡠ ᡫᡝᡨᡝᠰᡠ ᡪᠠᡞ ᡣᠠᡩᠠᠯᠠᠮᡝ ᡩᠠᠨᠠᠷᠠ ᠮᡠᡣᡝᠨᡝᠴᡞᠨ ᠪᡝ ᡝᠯᡝᡞ ᡝᠮᡠ ᠣᡣᠰᠣᠨ ᡞ᠋ ᡩᡝᠨ ᡨᡠᡣᡞᠶᡝᠷᡝ ︐ ᠨᡝᡞ ᡫᠣᡢᡤᡝ ᠪᡠᡪᠠᠨ ᡨᡠᠪᡞᡥᡝ ᡫᡠᠯᡝᡥᡝᡢᡤᡝ ᡞᠯᡞᠪᡠᠷᠠᠨ ᠠᠯᡣᡡᠨ ᠪᡝ ᡥᡡᡩᡠᠯᠠᠷᠠ ᡪᠠᠯᡞᠨ ︐ ᠨᡞᠶᠠᠯᠮᠠ ᡞᠷᡤᡝᠨ ᠴᡞᠶᡠᠨᡪᡠᡢ ᠪᡝ ᠺᠣᡨᠠᠴᡞᠨ ᡫᠠᡣᠰᡞ ᡝᠷᡩᡝᠮᡠ ᡩᡝ ᠨᡞᡣᡝᡫᡞ ᠪᠠᠶᠠᠨᠠᠷᠠ ᡪᡠᡤᡡᠨ ᡩᡝ ᠶᠠᠪᡠᠪᡠᠮᠠᡥᠠᠪᡞ ︒
+1	ᠴᠠᠪᠴᠠᠯ	ᠴᠠᠪᠴᠠᠯ	PROPN	PROPN	_	2	nmod	_	_
+2	ᠰᡞᠶᠠᠨ	ᠰᡞᠶᠠᠨ	NOUN	NOUN	_	7	nmod	_	_
+3	ᠴᡞᠶᡠᡢᠪᡠᠯᠠᡣ	ᠴᡞᠶᡠᡢᠪᡠᠯᠠᡣ	PROPN	PROPN	_	4	nmod	_	_
+4	ᡪᡝᠨ	ᡪᡝᠨ	NOUN	NOUN	_	2	flat	_	_
+5	ᡠᠰᡞᠨ	ᡠᠰᡞᠨ	NOUN	NOUN	_	7	nmod	_	_
+6	ᠠᡩᡠᠯᠠᠷᠠ	ᠠᡩᡠᠯᠠᠷᠠ	VERB	VERB	_	7	acl:relcl	_	_
+7	ᡞᠷᡤᡝᠨ	ᡞᠷᡤᡝᠨ	NOUN	NOUN	_	13	nmod	_	_
+8	ᠴᡞᠶᡠᠨᡪᡠᡢ	ᠴᡞᠶᡠᠨᡪᡠᡢ	NOUN	NOUN	_	7	conj	_	_
+9	ᡞ᠋	ᡞ᠋	ADP	ADP	_	7	case	_	_
+10	ᠺᠣᡨᠠᠴᡞᠨ	ᠺᠣᡨᠠᠴᡞᠨ	NOUN	NOUN	_	11	nmod	_	_
+11	ᡫᠠᡣᠰᡞ	ᡫᠠᡣᠰᡞ	NOUN	NOUN	_	13	nmod	_	_
+12	ᡝᠷᡩᡝᠮᡠ	ᡝᠷᡩᡝᠮᡠ	NOUN	NOUN	_	11	compound	_	_
+13	ᡫᡝᡨᡝᠰᡠ	ᡫᡝᡨᡝᠰᡠ	NOUN	NOUN	_	24	obj	_	highlight=green|span=18
+14	ᡪᠠᡞ	ᡪᠠᡞ	CCONJ	CCONJ	_	17	cc	_	_
+15	ᡣᠠᡩᠠᠯᠠᠮᡝ	ᡣᠠᡩᠠᠯᠠᠮᡝ	VERB	VERB	_	16	advcl	_	_
+16	ᡩᠠᠨᠠᠷᠠ	ᡩᠠᠨᠠᠷᠠ	VERB	VERB	_	17	acl:relcl	_	_
+17	ᠮᡠᡣᡝᠨᡝᠴᡞᠨ	ᠮᡠᡣᡝᠨᡝᠴᡞᠨ	NOUN	NOUN	_	13	conj	_	_
+18	ᠪᡝ	ᠪᡝ	ADP	ADP	_	13	case	_	_
+19	ᡝᠯᡝᡞ	ᡝᠯᡝᡞ	ADV	ADV	_	20	advmod	_	_
+20	ᡝᠮᡠ	ᡝᠮᡠ	NUM	NUM	_	21	nummod	_	_
+21	ᠣᡣᠰᠣᠨ	ᠣᡣᠰᠣᠨ	NOUN	NOUN	_	24	obl	_	highlight=green|span=4
+22	ᡞ᠋	ᡞ᠋	ADP	ADP	_	21	case	_	_
+23	ᡩᡝᠨ	ᡩᡝᠨ	ADJ	ADJ	_	24	advmod	_	highlight=green|span=1
+24	ᡨᡠᡣᡞᠶᡝᠷᡝ	ᡨᡠᡣᡞᠶᡝᠷᡝ	VERB	VERB	_	49	obl	_	highlight=red
+25	︐	︐	PUNCT	PUNCT	_	24	punct	_	_
+26	ᠨᡝᡞ	ᠨᡝᡞ	NOUN	NOUN	_	27	nmod	_	_
+27	ᡫᠣᡢᡤᡝ	ᡫᠣᡢᡤᡝ	NOUN	NOUN	_	34	obl:tmod	_	_
+28	ᠪᡠᡪᠠᠨ	ᠪᡠᡪᠠᠨ	NOUN	NOUN	_	32	nmod	_	_
+29	ᡨᡠᠪᡞᡥᡝ	ᡨᡠᠪᡞᡥᡝ	NOUN	NOUN	_	28	conj	_	_
+30	ᡫᡠᠯᡝᡥᡝᡢᡤᡝ	ᡫᡠᠯᡝᡥᡝᡢᡤᡝ	ADJ	ADJ	_	31	amod	_	_
+31	ᡞᠯᡞᠪᡠᠷᠠᠨ	ᡞᠯᡞᠪᡠᠷᠠᠨ	NOUN	NOUN	_	32	nmod	_	_
+32	ᠠᠯᡣᡡᠨ	ᠠᠯᡣᡡᠨ	NOUN	NOUN	_	34	obj	_	_
+33	ᠪᡝ	ᠪᡝ	ADP	ADP	_	32	case	_	_
+34	ᡥᡡᡩᡠᠯᠠᠷᠠ	ᡥᡡᡩᡠᠯᠠᠷᠠ	VERB	VERB	_	24	conj	_	_
+35	ᡪᠠᠯᡞᠨ	ᡪᠠᠯᡞᠨ	ADP	ADP	_	24	case	_	_
+36	︐	︐	PUNCT	PUNCT	_	35	punct	_	_
+37	ᠨᡞᠶᠠᠯᠮᠠ	ᠨᡞᠶᠠᠯᠮᠠ	NOUN	NOUN	_	49	obj	_	_
+38	ᡞᠷᡤᡝᠨ	ᡞᠷᡤᡝᠨ	NOUN	NOUN	_	37	compound	_	_
+39	ᠴᡞᠶᡠᠨᡪᡠᡢ	ᠴᡞᠶᡠᠨᡪᡠᡢ	NOUN	NOUN	_	37	conj	_	_
+40	ᠪᡝ	ᠪᡝ	ADP	ADP	_	37	case	_	_
+41	ᠺᠣᡨᠠᠴᡞᠨ	ᠺᠣᡨᠠᠴᡞᠨ	NOUN	NOUN	_	42	nmod	_	_
+42	ᡫᠠᡣᠰᡞ	ᡫᠠᡣᠰᡞ	NOUN	NOUN	_	45	obl	_	_
+43	ᡝᠷᡩᡝᠮᡠ	ᡝᠷᡩᡝᠮᡠ	NOUN	NOUN	_	42	compound	_	_
+44	ᡩᡝ	ᡩᡝ	ADP	ADP	_	42	case	_	_
+45	ᠨᡞᡣᡝᡫᡞ	ᠨᡞᡣᡝᡫᡞ	VERB	VERB	_	49	advcl	_	_
+46	ᠪᠠᠶᠠᠨᠠᠷᠠ	ᠪᠠᠶᠠᠨᠠᠷᠠ	VERB	VERB	_	47	acl:relcl	_	_
+47	ᡪᡠᡤᡡᠨ	ᡪᡠᡤᡡᠨ	NOUN	NOUN	_	49	obj	_	_
+48	ᡩᡝ	ᡩᡝ	ADP	ADP	_	47	case	_	_
+49	ᠶᠠᠪᡠᠪᡠᠮᠠᡥᠠᠪᡞ	ᠶᠠᠪᡠᠪᡠᠮᠠᡥᠠᠪᡞ	VERB	VERB	_	0	root	_	_
+50	︒	︒	PUNCT	PUNCT	_	49	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: sjo_xdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ᠰᡞᠮᠪᡝ ᠮᡞᠨᡞ ᠰᡝᡪᡝᠨ ᠪᡝ ᠶᠠᠯᡠᡫᡞ ᠨᡝᠨᡝᠮᡝ ᠪᡝᡩᡝᠷᡝ ᠰᡝᠷᡝᡢᡤᡝ , ᠰᡠᠸᡝᠨᡞ ᠪᠣᡠ ᡞ ᡠᠷᠰᡝ ᡨᠠᡨᠠᡧᠠᠷᠠᡣᡡ ᠣᡣᡞᠨᡞ ᠰᡝᠷᡝ ᡪᠠᠯᡞᠨ 。
+1	ᠰᡞᠮᠪᡝ	ᠰᡞᠮᠪᡝ	PRON	PRON	_	7	nsubj	_	highlight=green|span=1
+2	ᠮᡞᠨᡞ	ᠮᡞᠨᡞ	PRON	PRON	_	3	nmod:poss	_	_
+3	ᠰᡝᡪᡝᠨ	ᠰᡝᡪᡝᠨ	NOUN	NOUN	_	5	obj	_	_
+4	ᠪᡝ	ᠪᡝ	ADP	ADP	_	3	case	_	_
+5	ᠶᠠᠯᡠᡫᡞ	ᠶᠠᠯᡠᡫᡞ	VERB	VERB	_	7	advcl	_	highlight=green|span=4
+6	ᠨᡝᠨᡝᠮᡝ	ᠨᡝᠨᡝᠮᡝ	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+7	ᠪᡝᡩᡝᠷᡝ	ᠪᡝᡩᡝᠷᡝ	VERB	VERB	_	8	ccomp	_	highlight=red
+8	ᠰᡝᠷᡝᡢᡤᡝ	ᠰᡝᠷᡝᡢᡤᡝ	VERB	VERB	_	15	advcl	_	_
+9	,	,	PUNCT	PUNCT	_	8	punct	_	_
+10	ᠰᡠᠸᡝᠨᡞ	ᠰᡠᠸᡝᠨᡞ	PRON	PRON	_	11	amod	_	_
+11	ᠪᠣᡠ	ᠪᠣᡠ	NOUN	NOUN	_	13	nmod	_	_
+12	ᡞ	ᡞ	ADP	ADP	_	11	case	_	_
+13	ᡠᠷᠰᡝ	ᡠᠷᠰᡝ	NOUN	NOUN	_	14	nsubj	_	_
+14	ᡨᠠᡨᠠᡧᠠᠷᠠᡣᡡ	ᡨᠠᡨᠠᡧᠠᠷᠠᡣᡡ	VERB	VERB	_	15	xcomp	_	_
+15	ᠣᡣᡞᠨᡞ	ᠣᡣᡞᠨᡞ	VERB	VERB	_	0	root	_	_
+16	ᠰᡝᠷᡝ	ᠰᡝᠷᡝ	AUX	AUX	_	15	aux	_	_
+17	ᡪᠠᠯᡞᠨ	ᡪᠠᠯᡞᠨ	SCONJ	SCONJ	_	15	mark	_	_
+18	。	。	PUNCT	PUNCT	_	15	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: sjo_xdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 3.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ᠪᡝ ᡝᠷᡝ ᠠᠨᡞᠶᠠ ᡩᡝ ᠣᠶᠣᡢᡤᠣᡢᡤᡝ ᠪᠣ ᡠ ᡤᡠᠸᠠᠨ ᡨᡠᡧᠠᠨ ᠮᡠᡨᡝᠨ ᠣᠷᠣᠨ ᡨᠣᡣᡨᠣᠪᡠᠷᡝ ᠪᡝ ᡥᠠᡥᡞ ᠴᡞᠷᠠᠯᠠᠮᡝ ᡪᠠᡫᠠᡫᡞ , ᡝᠷᡝ ᠠᠨᡞᠶᠠ ᠪᠣ ᡠ ᡤᡠᠸᠠᠨ ᡞ ᡥᠠᠯᠠᠨ ᠶᠠᠪᡠᠪᡠᠷᡝ ᠶᠠᠷᡤᡞᠶᠠᠯᠠᠮᡝ ᠶᠠᠪᡠᠪᡠᠷᡝ ᠪᠠᡩᠠᠷᠠᠷᠠ ᡤᡡᠨᡞᡤᠠᠨ ᡨᡠᠴᡞᠪᡠᠷᡝ ᠪᡝ ᠨᡝᠮᡧᡝᠮᡝ , ᠪᠣ ᡠ ᡤᡠᠸᠠᠨ ᡞᠴᡝ ᠪᠠᡞᠪᡠᠰᡥᡡᠨ ᠪᡝ ᡪᠠᠯᡠᡣᡞᠶᠠᠮᠪᡞ 。
+1	ᠪᡝ	ᠪᡝ	PRON	PRON	_	5	obl	_	_
+2	ᡝᠷᡝ	ᡝᠷᡝ	DET	DET	_	3	det	_	_
+3	ᠠᠨᡞᠶᠠ	ᠠᠨᡞᠶᠠ	NOUN	NOUN	_	5	obl:tmod	_	_
+4	ᡩᡝ	ᡩᡝ	ADP	ADP	_	3	case	_	_
+5	ᠣᠶᠣᡢᡤᠣᡢᡤᡝ	ᠣᠶᠣᡢᡤᠣᡢᡤᡝ	NOUN	NOUN	_	40	nsubj	_	_
+6	ᠪᠣ	ᠪᠣ	X	X	_	10	nmod	_	_
+7	ᡠ	ᡠ	NOUN	NOUN	_	6	flat	_	_
+8	ᡤᡠᠸᠠᠨ	ᡤᡠᠸᠠᠨ	NOUN	NOUN	_	7	flat	_	_
+9	ᡨᡠᡧᠠᠨ	ᡨᡠᡧᠠᠨ	NOUN	NOUN	_	10	nmod	_	_
+10	ᠮᡠᡨᡝᠨ	ᠮᡠᡨᡝᠨ	NOUN	NOUN	_	16	obj	_	highlight=green|span=8
+11	ᠣᠷᠣᠨ	ᠣᠷᠣᠨ	NOUN	NOUN	_	12	obj	_	_
+12	ᡨᠣᡣᡨᠣᠪᡠᠷᡝ	ᡨᠣᡣᡨᠣᠪᡠᠷᡝ	VERB	VERB	_	10	conj	_	_
+13	ᠪᡝ	ᠪᡝ	ADP	ADP	_	10	case	_	_
+14	ᡥᠠᡥᡞ	ᡥᠠᡥᡞ	ADJ	ADJ	_	16	advmod	_	highlight=green|span=1
+15	ᠴᡞᠷᠠᠯᠠᠮᡝ	ᠴᡞᠷᠠᠯᠠᠮᡝ	VERB	VERB	_	16	advcl	_	highlight=green|span=1
+16	ᡪᠠᡫᠠᡫᡞ	ᡪᠠᡫᠠᡫᡞ	VERB	VERB	_	40	advcl	_	highlight=red
+17	,	,	PUNCT	PUNCT	_	16	punct	_	_
+18	ᡝᠷᡝ	ᡝᠷᡝ	DET	DET	_	19	det	_	_
+19	ᠠᠨᡞᠶᠠ	ᠠᠨᡞᠶᠠ	NOUN	NOUN	_	32	obl:tmod	_	_
+20	ᠪᠣ	ᠪᠣ	X	X	_	29	nmod	_	_
+21	ᡠ	ᡠ	NOUN	NOUN	_	20	flat	_	_
+22	ᡤᡠᠸᠠᠨ	ᡤᡠᠸᠠᠨ	NOUN	NOUN	_	21	flat	_	_
+23	ᡞ	ᡞ	ADP	ADP	_	20	case	_	_
+24	ᡥᠠᠯᠠᠨ	ᡥᠠᠯᠠᠨ	NOUN	NOUN	_	25	obj	_	_
+25	ᠶᠠᠪᡠᠪᡠᠷᡝ	ᠶᠠᠪᡠᠪᡠᠷᡝ	VERB	VERB	_	29	acl	_	_
+26	ᠶᠠᠷᡤᡞᠶᠠᠯᠠᠮᡝ	ᠶᠠᠷᡤᡞᠶᠠᠯᠠᠮᡝ	VERB	VERB	_	27	advcl	_	_
+27	ᠶᠠᠪᡠᠪᡠᠷᡝ	ᠶᠠᠪᡠᠪᡠᠷᡝ	VERB	VERB	_	25	conj	_	_
+28	ᠪᠠᡩᠠᠷᠠᠷᠠ	ᠪᠠᡩᠠᠷᠠᠷᠠ	VERB	VERB	_	25	conj	_	_
+29	ᡤᡡᠨᡞᡤᠠᠨ	ᡤᡡᠨᡞᡤᠠᠨ	NOUN	NOUN	_	30	obj	_	_
+30	ᡨᡠᠴᡞᠪᡠᠷᡝ	ᡨᡠᠴᡞᠪᡠᠷᡝ	VERB	VERB	_	32	obj	_	_
+31	ᠪᡝ	ᠪᡝ	ADP	ADP	_	30	case	_	_
+32	ᠨᡝᠮᡧᡝᠮᡝ	ᠨᡝᠮᡧᡝᠮᡝ	VERB	VERB	_	40	advcl	_	_
+33	,	,	PUNCT	PUNCT	_	32	punct	_	_
+34	ᠪᠣ	ᠪᠣ	X	X	_	38	nmod	_	_
+35	ᡠ	ᡠ	NOUN	NOUN	_	34	flat	_	_
+36	ᡤᡠᠸᠠᠨ	ᡤᡠᠸᠠᠨ	NOUN	NOUN	_	35	flat	_	_
+37	ᡞᠴᡝ	ᡞᠴᡝ	ADJ	ADJ	_	38	amod	_	_
+38	ᠪᠠᡞᠪᡠᠰᡥᡡᠨ	ᠪᠠᡞᠪᡠᠰᡥᡡᠨ	NOUN	NOUN	_	40	obj	_	_
+39	ᠪᡝ	ᠪᡝ	ADP	ADP	_	38	case	_	_
+40	ᡪᠠᠯᡠᡣᡞᠶᠠᠮᠪᡞ	ᡪᠠᠯᡠᡣᡞᠶᠠᠮᠪᡞ	VERB	VERB	_	0	root	_	_
+41	。	。	PUNCT	PUNCT	_	40	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

@@ -1,0 +1,518 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Gheg — MAL_5</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Gheg examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Gheg <small style="color:#999;font-weight:normal">(aln)</small> — MAL<sub>5</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>5</b> dependents in total (left + right combined).</p><p><b>MAL<sub>5</sub> = 2.015</b> &nbsp; <span style="color:#666">(68 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over all dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: aln_gps-ud-test.conllu · this verb has L=3, R=2 (mean span = 1.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = tani ëhm qa/ aj djali ëhm tu tu dasht me shku e ëhm e ka pa ni djal tjeter qe j a/ perpara qe ëhm i ka ra atyne ni kapuq .
+1	tani	tani	ADV	ADV	_	16	advmod	_	_
+2	ëhm	ëhm	INTJ	INTJ	_	16	discourse	_	_
+3	qa/	qa/	PRON	PRON	_	4	reparandum	_	_
+4	aj	aj	PRON	PRON	_	5	det	_	_
+5	djali	djali	NOUN	NOUN	_	16	nsubj	_	_
+6	ëhm	ëhm	INTJ	INTJ	_	9	discourse	_	_
+7	tu	tu	AUX	AUX	_	8	reparandum	_	_
+8	tu	tu	AUX	AUX	_	9	aux:part	_	_
+9	dasht	dasht	VERB	VERB	_	5	acl	_	_
+10	me	me	PART	PART	_	11	mark	_	_
+11	shku	shku	VERB	VERB	_	9	xcomp	_	_
+12	e	e	CCONJ	CCONJ	_	16	cc	_	_
+13	ëhm	ëhm	INTJ	INTJ	_	16	discourse	_	_
+14	e	e	PRON	PRON	_	16	expl	_	_
+15	ka	ka	AUX	AUX	_	16	aux	_	_
+16	pa	pa	VERB	VERB	_	0	root	_	_
+17	ni	ni	DET	DET	_	18	det	_	_
+18	djal	djal	NOUN	NOUN	_	16	obj	_	_
+19	tjeter	tjeter	ADJ	ADJ	_	18	amod	_	_
+20	qe	qe	PRON	PRON	_	28	reparandum	_	_
+21	j	j	PRON	PRON	_	20	orphan	_	_
+22	a/	a/	PRON	PRON	_	20	orphan	_	_
+23	perpara	perpara	ADV	ADV	_	28	advmod	_	highlight=green|span=1
+24	qe	qe	PRON	PRON	_	28	obj	_	highlight=green|span=1
+25	ëhm	ëhm	INTJ	INTJ	_	28	discourse	_	_
+26	i	i	PRON	PRON	_	28	expl	_	highlight=green|span=1
+27	ka	ka	AUX	AUX	_	28	aux	_	_
+28	ra	ra	VERB	VERB	_	18	acl	_	highlight=red
+29	atyne	atyne	PRON	PRON	_	28	iobj	_	highlight=green|span=1
+30	ni	ni	DET	DET	_	31	det	_	_
+31	kapuq	kapuq	NOUN	NOUN	_	28	nsubj	_	highlight=green|span=2
+32	.	.	PUNCT	PUNCT	_	16	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: aln_gps-ud-test.conllu · this verb has L=2, R=3 (mean span = 3.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ather u kujtu: që t j av jep atyre nga ni dardh se fillimisht kur i ndimuan nuk u a dha: fare .
+1	ather	ather	ADV	ADV	_	3	advmod	_	_
+2	u	u	AUX	AUX	_	3	aux:part	_	_
+3	kujtu:	kujtu:	VERB	VERB	_	0	root	_	_
+4	që	që	SCONJ	SCONJ	_	8	mark	_	_
+5	t	t	PART	PART	_	8	mark	_	_
+6	j	j	PRON	PRON	_	8	expl	_	highlight=green|span=1
+7	av	av	PRON	PRON	_	8	expl	_	highlight=green|span=1
+8	jep	jep	VERB	VERB	_	3	ccomp	_	highlight=red
+9	atyre	atyre	PRON	PRON	_	8	iobj	_	highlight=green|span=1
+10	nga	nga	ADV	ADV	_	11	advmod	_	_
+11	ni	ni	NUM	NUM	_	12	nummod	_	_
+12	dardh	dardh	NOUN	NOUN	_	8	obj	_	highlight=green|span=3
+13	se	se	SCONJ	SCONJ	_	17	mark	_	_
+14	fillimisht	fillimisht	ADV	ADV	_	17	advmod	_	_
+15	kur	kur	ADV	ADV	_	17	mark	_	_
+16	i	i	PRON	PRON	_	17	iobj	_	_
+17	ndimuan	ndimuan	VERB	VERB	_	8	advcl	_	highlight=green|span=10
+18	nuk	nuk	PART	PART	_	21	advmod	_	_
+19	u	u	PRON	PRON	_	21	iobj	_	_
+20	a	a	PRON	PRON	_	21	obj	_	_
+21	dha:	dha:	VERB	VERB	_	17	ccomp	_	_
+22	fare	fare	PRON	PRON	_	21	obl	_	_
+23	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: aln_gps-ud-test.conllu · this verb has L=4, R=1 (mean span = 3.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = edhe: pa e pa: edhe: pa e ndegju aj burri aty: lart qe osht mbi shka:ll e merr ata: .
+1	edhe:	edhe:	CCONJ	CCONJ	_	4	cc	_	_
+2	pa	pa	ADV	ADV	_	4	advmod	_	_
+3	e	e	PRON	PRON	_	4	obj	_	_
+4	pa:	pa:	VERB	VERB	_	18	xcomp	_	highlight=green|span=4
+5	edhe:	edhe:	CCONJ	CCONJ	_	8	cc	_	_
+6	pa	pa	ADV	ADV	_	8	advmod	_	_
+7	e	e	PRON	PRON	_	8	obj	_	_
+8	ndegju	ndegju	VERB	VERB	_	18	xcomp	_	highlight=green|span=4
+9	aj	aj	PRON	PRON	_	10	det	_	_
+10	burri	burri	NOUN	NOUN	_	18	nsubj	_	highlight=green|span=8
+11	aty:	aty:	ADV	ADV	_	12	advmod	_	_
+12	lart	lart	ADV	ADV	_	10	advmod	_	_
+13	qe	qe	PRON	PRON	_	16	nsubj	_	_
+14	osht	osht	AUX	AUX	_	16	cop	_	_
+15	mbi	mbi	ADP	ADP	_	16	case	_	_
+16	shka:ll	shka:ll	NOUN	NOUN	_	10	acl	_	_
+17	e	e	PRON	PRON	_	18	expl	_	highlight=green|span=1
+18	merr	merr	VERB	VERB	_	0	root	_	highlight=red
+19	ata:	ata:	PRON	PRON	_	18	obj	_	highlight=green|span=1
+20	.	.	PUNCT	PUNCT	_	18	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: aln_gps-ud-test.conllu · this verb has L=3, R=2 (mean span = 3.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = dhe kalo:jn aty: ku perso:ni ishte duke mble:dhur da:rdha dhe njeri:u vetëm i shikon duke mendu:ar se ata tre fëmi:jët tre fëmi:jët kishin ma:rr da:rdha nga: ko:rpa e tij .
+1	dhe	dhe	CCONJ	CCONJ	_	2	cc	_	_
+2	kalo:jn	kalo:jn	VERB	VERB	_	0	root	_	_
+3	aty:	aty:	ADV	ADV	_	2	advmod	_	_
+4	ku	ku	ADV	ADV	_	8	advmod	_	_
+5	perso:ni	perso:ni	NOUN	NOUN	_	8	nsubj	_	_
+6	ishte	ishte	AUX	AUX	_	8	aux	_	_
+7	duke	duke	AUX	AUX	_	8	aux:part	_	_
+8	mble:dhur	mble:dhur	VERB	VERB	_	2	advcl	_	_
+9	da:rdha	da:rdha	NOUN	NOUN	_	8	obj	_	_
+10	dhe	dhe	CCONJ	CCONJ	_	14	cc	_	_
+11	njeri:u	njeri:u	NOUN	NOUN	_	14	nsubj	_	highlight=green|span=1
+12	vetëm	vetëm	ADV	ADV	_	14	advmod	_	highlight=green|span=1
+13	i	i	PRON	PRON	_	14	obj	_	highlight=green|span=1
+14	shikon	shikon	VERB	VERB	_	2	conj	_	highlight=red
+15	duke	duke	AUX	AUX	_	16	aux:part	_	_
+16	mendu:ar	mendu:ar	VERB	VERB	_	14	xcomp	_	highlight=green|span=2
+17	se	se	SCONJ	SCONJ	_	24	mark	_	_
+18	ata	ata	PRON	PRON	_	20	det	_	_
+19	tre	tre	NUM	NUM	_	20	nummod	_	_
+20	fëmi:jët	fëmi:jët	NOUN	NOUN	_	22	reparandum	_	_
+21	tre	tre	NUM	NUM	_	22	nummod	_	_
+22	fëmi:jët	fëmi:jët	NOUN	NOUN	_	24	nsubj	_	_
+23	kishin	kishin	AUX	AUX	_	24	aux	_	_
+24	ma:rr	ma:rr	VERB	VERB	_	14	advcl	_	highlight=green|span=13
+25	da:rdha	da:rdha	NOUN	NOUN	_	24	obj	_	_
+26	nga:	nga:	ADP	ADP	_	27	case	_	_
+27	ko:rpa	ko:rpa	NOUN	NOUN	_	24	obl	_	_
+28	e	e	DET	DET	_	29	det	_	_
+29	tij	tij	PRON	PRON	_	27	nmod	_	_
+30	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: aln_gps-ud-test.conllu · this verb has L=4, R=1 (mean span = 4.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = edhe pse: en filim ish aj: nuk i dike nuk i dike se: a i ka pas tri: ko:rba apo dy: se: njo:na vetëm se: kishte: humbur edhe kshtu përfundon kjo storja .
+1	edhe	edhe	CCONJ	CCONJ	_	4	cc	_	_
+2	pse:	pse:	CCONJ	CCONJ	_	1	fixed	_	_
+3	en	en	ADP	ADP	_	4	case	_	_
+4	filim	filim	NOUN	NOUN	_	9	obl	_	highlight=green|span=5
+5	ish	ish	AUX	AUX	_	4	cop	_	_
+6	aj:	aj:	PRON	PRON	_	9	nsubj	_	highlight=green|span=1
+7	nuk	nuk	PART	PART	_	9	advmod	_	highlight=green|span=1
+8	i	i	PRON	PRON	_	9	obj	_	highlight=green|span=1
+9	dike	dike	VERB	VERB	_	0	root	_	highlight=red
+10	nuk	nuk	PART	PART	_	12	advmod	_	_
+11	i	i	PRON	PRON	_	12	obj	_	_
+12	dike	dike	VERB	VERB	_	9	conj	_	_
+13	se:	se:	SCONJ	SCONJ	_	17	mark	_	_
+14	a	a	CCONJ	CCONJ	_	17	cc	_	_
+15	i	i	PRON	PRON	_	17	expl	_	_
+16	ka	ka	AUX	AUX	_	17	aux	_	_
+17	pas	pas	VERB	VERB	_	9	advcl	_	highlight=green|span=15
+18	tri:	tri:	NUM	NUM	_	19	nummod	_	_
+19	ko:rba	ko:rba	NOUN	NOUN	_	17	obj	_	_
+20	apo	apo	CCONJ	CCONJ	_	21	cc	_	_
+21	dy:	dy:	NUM	NUM	_	19	conj	_	_
+22	se:	se:	SCONJ	SCONJ	_	27	mark	_	_
+23	njo:na	njo:na	PRON	PRON	_	27	obj	_	_
+24	vetëm	vetëm	ADV	ADV	_	27	advmod	_	_
+25	se:	se:	SCONJ	SCONJ	_	27	mark	_	_
+26	kishte:	kishte:	AUX	AUX	_	27	aux	_	_
+27	humbur	humbur	VERB	VERB	_	17	advcl	_	_
+28	edhe	edhe	CCONJ	CCONJ	_	30	cc	_	_
+29	kshtu	kshtu	ADV	ADV	_	30	advmod	_	_
+30	përfundon	përfundon	VERB	VERB	_	9	conj	_	_
+31	kjo	kjo	PRON	PRON	_	32	det	_	_
+32	storja	storja	NOUN	NOUN	_	30	obj	_	_
+33	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: aln_gps-ud-test.conllu · this verb has L=4, R=1 (mean span = 1.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = u: ko:n ni njeri: që e që i ka mledh do dardha: edhe i ka shti me një korp pe:jmes ni si: shka:ll .
+1	u:	u:	AUX	AUX	_	2	aux	_	_
+2	ko:n	ko:n	VERB	VERB	_	0	root	_	_
+3	ni	ni	DET	DET	_	4	det	_	_
+4	njeri:	njeri:	NOUN	NOUN	_	2	nsubj	_	_
+5	që	që	PRON	PRON	_	7	reparandum	_	highlight=green|span=1
+6	e	e	DET	DET	_	8	reparandum	_	highlight=green|span=1
+7	që	që	PRON	PRON	_	10	nsubj	_	highlight=green|span=1
+8	i	i	PRON	PRON	_	10	expl	_	highlight=green|span=1
+9	ka	ka	AUX	AUX	_	10	aux	_	_
+10	mledh	mledh	VERB	VERB	_	4	acl	_	highlight=red
+11	do	do	PRON	PRON	_	12	det	_	_
+12	dardha:	dardha:	NOUN	NOUN	_	10	obj	_	highlight=green|span=2
+13	edhe	edhe	CCONJ	CCONJ	_	16	cc	_	_
+14	i	i	PRON	PRON	_	16	expl	_	_
+15	ka	ka	AUX	AUX	_	16	aux	_	_
+16	shti	shti	VERB	VERB	_	2	conj	_	_
+17	me	me	ADP	ADP	_	19	case	_	_
+18	një	një	DET	DET	_	19	det	_	_
+19	korp	korp	NOUN	NOUN	_	16	obl	_	_
+20	pe:jmes	pe:jmes	ADV	ADV	_	16	advmod	_	_
+21	ni	ni	DET	DET	_	23	det	_	_
+22	si:	si:	ADV	ADV	_	23	case	_	_
+23	shka:ll	shka:ll	NOUN	NOUN	_	16	obl	_	_
+24	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: aln_gps-ud-test.conllu · this verb has L=4, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = shkun edhe j a prun edhe tana aj djali j a dha tre molla ëh tre dardha: .
+1	shkun	shkun	VERB	VERB	_	0	root	_	_
+2	edhe	edhe	CCONJ	CCONJ	_	5	cc	_	_
+3	j	j	PRON	PRON	_	5	iobj	_	_
+4	a	a	PRON	PRON	_	5	obj	_	_
+5	prun	prun	VERB	VERB	_	1	conj	_	_
+6	edhe	edhe	CCONJ	CCONJ	_	12	cc	_	_
+7	tana	tana	ADV	ADV	_	12	advmod	_	highlight=green|span=1
+8	aj	aj	PRON	PRON	_	9	det	_	_
+9	djali	djali	NOUN	NOUN	_	12	nsubj	_	highlight=green|span=2
+10	j	j	PRON	PRON	_	12	iobj	_	highlight=green|span=1
+11	a	a	PRON	PRON	_	12	expl	_	highlight=green|span=1
+12	dha	dha	VERB	VERB	_	5	conj	_	highlight=red
+13	tre	tre	NUM	NUM	_	14	nummod	_	_
+14	molla	molla	NOUN	NOUN	_	12	obj	_	highlight=green|span=5
+15	ëh	ëh	INTJ	INTJ	_	17	discourse	_	_
+16	tre	tre	NUM	NUM	_	17	nummod	_	_
+17	dardha:	dardha:	NOUN	NOUN	_	14	conj	_	_
+18	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: aln_gps-ud-test.conllu · this verb has L=3, R=2 (mean span = 1.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = u ardh ni qik prej drejtimit tjeter edhe ky tani e ka kthy kryt me pa qiken .
+1	u	u	AUX	AUX	_	2	aux	_	_
+2	ardh	ardh	VERB	VERB	_	0	root	_	_
+3	ni	ni	DET	DET	_	4	det	_	_
+4	qik	qik	NOUN	NOUN	_	2	nsubj	_	_
+5	prej	prej	ADV	ADV	_	6	case	_	_
+6	drejtimit	drejtimit	NOUN	NOUN	_	2	obl	_	_
+7	tjeter	tjeter	ADJ	ADJ	_	6	amod	_	_
+8	edhe	edhe	CCONJ	CCONJ	_	13	cc	_	_
+9	ky	ky	PRON	PRON	_	13	nsubj	_	highlight=green|span=1
+10	tani	tani	ADV	ADV	_	13	advmod	_	highlight=green|span=1
+11	e	e	PRON	PRON	_	13	expl	_	highlight=green|span=1
+12	ka	ka	AUX	AUX	_	13	aux	_	_
+13	kthy	kthy	VERB	VERB	_	2	conj	_	highlight=red
+14	kryt	kryt	NOUN	NOUN	_	13	obj	_	highlight=green|span=1
+15	me	me	PART	PART	_	16	mark	_	_
+16	pa	pa	VERB	VERB	_	13	xcomp	_	highlight=green|span=3
+17	qiken	qiken	NOUN	NOUN	_	16	obl	_	_
+18	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: aln_gps-ud-test.conllu · this verb has L=2, R=3 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = i mledhin dardhat edhe ky thmija qe i ka vjedh i shperblen ato djem per ndimen me një dardh .
+1	i	i	PRON	PRON	_	2	expl	_	_
+2	mledhin	mledhin	VERB	VERB	_	0	root	_	_
+3	dardhat	dardhat	NOUN	NOUN	_	2	obj	_	_
+4	edhe	edhe	CCONJ	CCONJ	_	6	cc	_	_
+5	ky	ky	PRON	PRON	_	6	det	_	_
+6	thmija	thmija	NOUN	NOUN	_	12	nsubj	_	highlight=green|span=7
+7	qe	qe	PRON	PRON	_	10	nsubj	_	_
+8	i	i	PRON	PRON	_	10	obj	_	_
+9	ka	ka	AUX	AUX	_	10	aux	_	_
+10	vjedh	vjedh	VERB	VERB	_	6	acl	_	_
+11	i	i	PRON	PRON	_	12	expl	_	highlight=green|span=1
+12	shperblen	shperblen	VERB	VERB	_	2	conj	_	highlight=red
+13	ato	ato	PRON	PRON	_	14	det	_	_
+14	djem	djem	NOUN	NOUN	_	12	obj	_	highlight=green|span=2
+15	per	per	ADP	ADP	_	16	case	_	_
+16	ndimen	ndimen	NOUN	NOUN	_	12	obl	_	highlight=green|span=2
+17	me	me	ADP	ADP	_	19	case	_	_
+18	një	një	DET	DET	_	19	det	_	_
+19	dardh	dardh	NOUN	NOUN	_	12	obl	_	highlight=green|span=3
+20	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: aln_gps-ud-test.conllu · this verb has L=3, R=2 (mean span = 2.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ata nuk e dishin shemull qe ky i ka vjedh ato dardha .
+1	ata	ata	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+2	nuk	nuk	PART	PART	_	4	advmod	_	highlight=green|span=1
+3	e	e	PRON	PRON	_	4	expl	_	highlight=green|span=1
+4	dishin	dishin	VERB	VERB	_	0	root	_	highlight=red
+5	shemull	shemull	NOUN	NOUN	_	4	obl	_	highlight=green|span=1
+6	qe	qe	SCONJ	SCONJ	_	10	mark	_	_
+7	ky	ky	PRON	PRON	_	10	nsubj	_	_
+8	i	i	PRON	PRON	_	10	expl	_	_
+9	ka	ka	AUX	AUX	_	10	aux	_	_
+10	vjedh	vjedh	VERB	VERB	_	4	ccomp	_	highlight=green|span=7
+11	ato	ato	PRON	PRON	_	12	det	_	_
+12	dardha	dardha	NOUN	NOUN	_	10	obj	_	_
+13	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: aln_gps-ud-test.conllu · this verb has L=4, R=1 (mean span = 1.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = edhe ajo me bicikell j a prek kryt j a hek kapuqin e ngutz pak .
+1	edhe	edhe	CCONJ	CCONJ	_	7	cc	_	_
+2	ajo	ajo	PRON	PRON	_	7	nsubj	_	highlight=green|span=1
+3	me	me	ADP	ADP	_	4	case	_	_
+4	bicikell	bicikell	NOUN	NOUN	_	7	obl	_	highlight=green|span=2
+5	j	j	PRON	PRON	_	7	iobj	_	highlight=green|span=1
+6	a	a	PRON	PRON	_	7	expl	_	highlight=green|span=1
+7	prek	prek	VERB	VERB	_	0	root	_	highlight=red
+8	kryt	kryt	NOUN	NOUN	_	7	obj	_	highlight=green|span=1
+9	j	j	PRON	PRON	_	11	iobj	_	_
+10	a	a	PRON	PRON	_	11	expl	_	_
+11	hek	hek	VERB	VERB	_	7	conj	_	_
+12	kapuqin	kapuqin	NOUN	NOUN	_	11	obj	_	_
+13	e	e	PRON	PRON	_	14	obj	_	_
+14	ngutz	ngutz	VERB	VERB	_	11	conj	_	_
+15	pak	pak	ADJ	ADJ	_	14	advmod	_	_
+16	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: aln_gps-ud-test.conllu · this verb has L=3, R=2 (mean span = 1.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = edhe: tana ëhm j a dha te treve ni dardh .
+1	edhe:	edhe:	CCONJ	CCONJ	_	2	cc	_	_
+2	tana	tana	ADV	ADV	_	6	advmod	_	highlight=green|span=2
+3	ëhm	ëhm	INTJ	INTJ	_	6	discourse	_	_
+4	j	j	PRON	PRON	_	6	expl	_	highlight=green|span=1
+5	a	a	PRON	PRON	_	6	expl	_	highlight=green|span=1
+6	dha	dha	VERB	VERB	_	0	root	_	highlight=red
+7	te	te	DET	DET	_	8	det	_	_
+8	treve	treve	NUM	NUM	_	6	iobj	_	highlight=green|span=2
+9	ni	ni	DET	DET	_	10	det	_	_
+10	dardh	dardh	NOUN	NOUN	_	6	obj	_	highlight=green|span=2
+11	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: aln_gps-ud-test.conllu · this verb has L=3, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = njoni me shkun ato tjetri j a nis m i mledh dardha:t me mush koshin edhe masanej aj i hy:p biciklets apet .
+1	njoni	njoni	PRON	PRON	_	3	reparandum	_	_
+2	me	me	ADP	ADP	_	1	case	_	_
+3	shkun	shkun	VERB	VERB	_	0	root	_	_
+4	ato	ato	PRON	PRON	_	3	nsubj	_	_
+5	tjetri	tjetri	ADJ	ADJ	_	8	nsubj	_	_
+6	j	j	PRON	PRON	_	8	iobj	_	_
+7	a	a	PRON	PRON	_	8	expl	_	_
+8	nis	nis	VERB	VERB	_	3	parataxis	_	_
+9	m	m	PART	PART	_	11	mark	_	_
+10	i	i	PRON	PRON	_	11	expl	_	_
+11	mledh	mledh	VERB	VERB	_	8	xcomp	_	_
+12	dardha:t	dardha:t	NOUN	NOUN	_	11	obj	_	_
+13	me	me	PART	PART	_	14	mark	_	_
+14	mush	mush	VERB	VERB	_	11	conj	_	_
+15	koshin	koshin	NOUN	NOUN	_	14	obj	_	_
+16	edhe	edhe	CCONJ	CCONJ	_	20	cc	_	_
+17	masanej	masanej	ADV	ADV	_	20	advmod	_	highlight=green|span=1
+18	aj	aj	PRON	PRON	_	20	nsubj	_	highlight=green|span=1
+19	i	i	PRON	PRON	_	20	expl	_	highlight=green|span=1
+20	hy:p	hy:p	VERB	VERB	_	3	conj	_	highlight=red
+21	biciklets	biciklets	NOUN	NOUN	_	20	obj	_	highlight=green|span=1
+22	apet	apet	ADV	ADV	_	20	advmod	_	highlight=green|span=1
+23	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: aln_gps-ud-test.conllu · this verb has L=4, R=1 (mean span = 2.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = edhe aj hala: at punen e veti tu e ba: tu i mledh da:rdhat .
+1	edhe	edhe	CCONJ	CCONJ	_	10	cc	_	_
+2	aj	aj	PRON	PRON	_	10	nsubj	_	highlight=green|span=1
+3	hala:	hala:	ADV	ADV	_	10	advmod	_	highlight=green|span=1
+4	at	at	PRON	PRON	_	5	det	_	_
+5	punen	punen	NOUN	NOUN	_	10	obj	_	highlight=green|span=4
+6	e	e	DET	DET	_	7	det	_	_
+7	veti	veti	PRON	PRON	_	5	nmod	_	_
+8	tu	tu	AUX	AUX	_	10	aux:part	_	_
+9	e	e	PRON	PRON	_	10	expl	_	highlight=green|span=1
+10	ba:	ba:	VERB	VERB	_	0	root	_	highlight=red
+11	tu	tu	AUX	AUX	_	13	aux:part	_	_
+12	i	i	PRON	PRON	_	13	expl	_	_
+13	mledh	mledh	VERB	VERB	_	10	xcomp	_	highlight=green|span=4
+14	da:rdhat	da:rdhat	NOUN	NOUN	_	13	obj	_	_
+15	.	.	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: aln_gps-ud-test.conllu · this verb has L=3, R=2 (mean span = 1.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = edhe viq j a merr ni korp plot me da:rdha edhe e qet n bicikul edhe niset .
+1	edhe	edhe	CCONJ	CCONJ	_	5	cc	_	_
+2	viq	viq	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+3	j	j	PRON	PRON	_	5	iobj	_	highlight=green|span=1
+4	a	a	PRON	PRON	_	5	expl	_	highlight=green|span=1
+5	merr	merr	VERB	VERB	_	0	root	_	highlight=red
+6	ni	ni	DET	DET	_	7	det	_	_
+7	korp	korp	NOUN	NOUN	_	5	obj	_	highlight=green|span=2
+8	plot	plot	ADV	ADV	_	10	advmod	_	_
+9	me	me	ADP	ADP	_	10	case	_	_
+10	da:rdha	da:rdha	NOUN	NOUN	_	5	obl	_	highlight=green|span=3
+11	edhe	edhe	CCONJ	CCONJ	_	13	cc	_	_
+12	e	e	PRON	PRON	_	13	obj	_	_
+13	qet	qet	VERB	VERB	_	5	conj	_	_
+14	n	n	ADP	ADP	_	15	case	_	_
+15	bicikul	bicikul	NOUN	NOUN	_	13	obl	_	_
+16	edhe	edhe	CCONJ	CCONJ	_	17	cc	_	_
+17	niset	niset	VERB	VERB	_	13	conj	_	_
+18	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: aln_gps-ud-test.conllu · this verb has L=3, R=2 (mean span = 3.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = dhe djali fillon te hec me bicikul n dor ëhëm nga mbra:pa nga mbra:pa i fishllojn ëhëm ata tre djemt se e ka harru kapelen n rrug .
+1	dhe	dhe	CCONJ	CCONJ	_	3	cc	_	_
+2	djali	djali	NOUN	NOUN	_	3	nsubj	_	_
+3	fillon	fillon	VERB	VERB	_	0	root	_	_
+4	te	te	PART	PART	_	5	mark	_	_
+5	hec	hec	VERB	VERB	_	3	xcomp	_	_
+6	me	me	ADP	ADP	_	7	case	_	_
+7	bicikul	bicikul	NOUN	NOUN	_	5	obl	_	_
+8	n	n	ADP	ADP	_	9	case	_	_
+9	dor	dor	NOUN	NOUN	_	7	nmod	_	_
+10	ëhëm	ëhëm	INTJ	INTJ	_	12	discourse	_	_
+11	nga	nga	ADP	ADP	_	12	case	_	_
+12	mbra:pa	mbra:pa	ADV	ADV	_	16	advmod	_	highlight=green|span=3
+13	nga	nga	ADP	ADP	_	14	case	_	_
+14	mbra:pa	mbra:pa	ADV	ADV	_	16	advmod	_	highlight=green|span=2
+15	i	i	PRON	PRON	_	16	iobj	_	highlight=green|span=1
+16	fishllojn	fishllojn	VERB	VERB	_	3	conj	_	highlight=red
+17	ëhëm	ëhëm	INTJ	INTJ	_	20	discourse	_	_
+18	ata	ata	PRON	PRON	_	20	det	_	_
+19	tre	tre	NUM	NUM	_	20	nummod	_	_
+20	djemt	djemt	NOUN	NOUN	_	16	nsubj	_	highlight=green|span=4
+21	se	se	SCONJ	SCONJ	_	24	mark	_	_
+22	e	e	PRON	PRON	_	24	expl	_	_
+23	ka	ka	AUX	AUX	_	24	aux	_	_
+24	harru	harru	VERB	VERB	_	16	ccomp	_	highlight=green|span=7
+25	kapelen	kapelen	NOUN	NOUN	_	24	obj	_	_
+26	n	n	ADP	ADP	_	27	case	_	_
+27	rrug	rrug	NOUN	NOUN	_	24	obl	_	_
+28	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: aln_gps-ud-test.conllu · this verb has L=4, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = edhe nja:ni tani j a jep kapelen .
+1	edhe	edhe	CCONJ	CCONJ	_	6	cc	_	_
+2	nja:ni	nja:ni	PRON	PRON	_	6	nsubj	_	highlight=green|span=1
+3	tani	tani	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+4	j	j	PRON	PRON	_	6	iobj	_	highlight=green|span=1
+5	a	a	PRON	PRON	_	6	expl	_	highlight=green|span=1
+6	jep	jep	VERB	VERB	_	0	root	_	highlight=red
+7	kapelen	kapelen	NOUN	NOUN	_	6	obj	_	highlight=green|span=1
+8	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: aln_gps-ud-test.conllu · this verb has L=4, R=1 (mean span = 1.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ëhm mi:rpo gjat ëhm i:kjes nga da:rdha ëhm aj me bicikle:tën e ti:j ëhm sheh një va:jz poashtu me bicikle:t dhe: në moment ëhm për shkak se: ajo j a tërhe:q vëmendjen ëhm ai ha:s në ni gu:r edhe aksidento:het .
+1	ëhm	ëhm	INTJ	INTJ	_	15	discourse	_	_
+2	mi:rpo	mi:rpo	CCONJ	CCONJ	_	5	cc	_	_
+3	gjat	gjat	ADP	ADP	_	5	case	_	_
+4	ëhm	ëhm	INTJ	INTJ	_	5	discourse	_	_
+5	i:kjes	i:kjes	NOUN	NOUN	_	15	obl	_	_
+6	nga	nga	ADP	ADP	_	7	case	_	_
+7	da:rdha	da:rdha	NOUN	NOUN	_	5	nmod	_	_
+8	ëhm	ëhm	INTJ	INTJ	_	9	discourse	_	_
+9	aj	aj	PRON	PRON	_	15	nsubj	_	_
+10	me	me	ADP	ADP	_	11	case	_	_
+11	bicikle:tën	bicikle:tën	NOUN	NOUN	_	9	nmod	_	_
+12	e	e	DET	DET	_	13	det	_	_
+13	ti:j	ti:j	PRON	PRON	_	11	nmod	_	_
+14	ëhm	ëhm	INTJ	INTJ	_	15	discourse	_	_
+15	sheh	sheh	VERB	VERB	_	0	root	_	_
+16	një	një	DET	DET	_	17	det	_	_
+17	va:jz	va:jz	NOUN	NOUN	_	15	obj	_	_
+18	poashtu	poashtu	CCONJ	CCONJ	_	20	cc	_	_
+19	me	me	ADP	ADP	_	20	case	_	_
+20	bicikle:t	bicikle:t	NOUN	NOUN	_	15	conj	_	_
+21	dhe:	dhe:	CCONJ	CCONJ	_	23	cc	_	_
+22	në	në	ADP	ADP	_	23	case	_	_
+23	moment	moment	NOUN	NOUN	_	31	obl	_	highlight=green|span=3
+24	ëhm	ëhm	INTJ	INTJ	_	31	discourse	_	_
+25	për	për	ADP	ADP	_	31	mark	_	_
+26	shkak	shkak	NOUN	NOUN	_	25	fixed	_	_
+27	se:	se:	SCONJ	SCONJ	_	25	fixed	_	_
+28	ajo	ajo	PRON	PRON	_	31	nsubj	_	highlight=green|span=1
+29	j	j	PRON	PRON	_	31	iobj	_	highlight=green|span=1
+30	a	a	PRON	PRON	_	31	expl	_	highlight=green|span=1
+31	tërhe:q	tërhe:q	VERB	VERB	_	15	conj	_	highlight=red
+32	vëmendjen	vëmendjen	NOUN	NOUN	_	31	obj	_	highlight=green|span=1
+33	ëhm	ëhm	INTJ	INTJ	_	34	discourse	_	_
+34	ai	ai	PRON	PRON	_	35	nsubj	_	_
+35	ha:s	ha:s	VERB	VERB	_	31	conj	_	_
+36	në	në	ADP	ADP	_	38	case	_	_
+37	ni	ni	DET	DET	_	38	det	_	_
+38	gu:r	gu:r	NOUN	NOUN	_	35	obl	_	_
+39	edhe	edhe	CCONJ	CCONJ	_	40	cc	_	_
+40	aksidento:het	aksidento:het	VERB	VERB	_	35	conj	_	_
+41	.	.	PUNCT	PUNCT	_	15	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: aln_gps-ud-test.conllu · this verb has L=3, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = tani n:i tri djemt i ka mar veq nja ëhm: ato dardhat .
+1	tani	tani	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+2	n:i	n:i	DET	DET	_	4	det	_	_
+3	tri	tri	NUM	NUM	_	4	nummod	_	_
+4	djemt	djemt	NOUN	NOUN	_	7	nsubj	_	highlight=green|span=3
+5	i	i	PRON	PRON	_	7	expl	_	highlight=green|span=1
+6	ka	ka	AUX	AUX	_	7	aux	_	_
+7	mar	mar	VERB	VERB	_	0	root	_	highlight=red
+8	veq	veq	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+9	nja	nja	DET	DET	_	10	det	_	_
+10	ëhm:	ëhm:	INTJ	INTJ	_	11	discourse	_	_
+11	ato	ato	PRON	PRON	_	12	det	_	_
+12	dardhat	dardhat	NOUN	NOUN	_	7	obj	_	highlight=green|span=4
+13	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: aln_gps-ud-test.conllu · this verb has L=3, R=2 (mean span = 1.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = edhe ather j a dha:n edhe kapu:qin pas/ .
+1	edhe	edhe	CCONJ	CCONJ	_	5	cc	_	_
+2	ather	ather	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+3	j	j	PRON	PRON	_	5	iobj	_	highlight=green|span=1
+4	a	a	PRON	PRON	_	5	expl	_	highlight=green|span=1
+5	dha:n	dha:n	VERB	VERB	_	0	root	_	highlight=red
+6	edhe	edhe	CCONJ	CCONJ	_	7	cc	_	_
+7	kapu:qin	kapu:qin	NOUN	NOUN	_	5	obj	_	highlight=green|span=2
+8	pas/	pas/	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+9	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

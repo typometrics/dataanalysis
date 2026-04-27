@@ -1,0 +1,589 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Gothic — RMAL_5</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Gothic examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Gothic <small style="color:#999;font-weight:normal">(got)</small> — RMAL<sub>5</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>5</b> right dependents (left side may be anything).</p><p><b>RMAL<sub>5</sub> = 3.671</b> &nbsp; <span style="color:#666">(17 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>right</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 17 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: got_proiel-ud-test.conllu · this verb has L=1, R=5 (mean span = 3.83)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = jah qimandin imma hindar marein in gauja Gairgaisaine gamotidedun imma twai daimonarjos us hlaiwasnom rinnandans sleidjai filu swaswe ni mahta manna usleiþan þairh þana wig jainana
+1	jah	jah	CCONJ	CCONJ	_	9	cc	_	_
+2	qimandin	qimandin	VERB	VERB	_	9	advcl	_	highlight=green|span=7
+3	imma	imma	PRON	PRON	_	2	nsubj	_	_
+4	hindar	hindar	ADP	ADP	_	5	case	_	_
+5	marein	marein	NOUN	NOUN	_	2	obl	_	_
+6	in	in	ADP	ADP	_	7	case	_	_
+7	gauja	gauja	NOUN	NOUN	_	5	appos	_	_
+8	Gairgaisaine	Gairgaisaine	PROPN	PROPN	_	7	nmod	_	_
+9	gamotidedun	gamotidedun	VERB	VERB	_	0	root	_	highlight=red
+10	imma	imma	PRON	PRON	_	9	obl:arg	_	highlight=green|span=1
+11	twai	twai	NUM	NUM	_	12	nummod	_	_
+12	daimonarjos	daimonarjos	NOUN	NOUN	_	9	nsubj	_	highlight=green|span=2
+13	us	us	ADP	ADP	_	14	case	_	_
+14	hlaiwasnom	hlaiwasnom	NOUN	NOUN	_	15	obl	_	_
+15	rinnandans	rinnandans	VERB	VERB	_	9	advcl	_	highlight=green|span=3
+16	sleidjai	sleidjai	ADJ	ADJ	_	9	advmod	_	highlight=green|span=3
+17	filu	filu	ADV	ADV	_	16	advmod	_	_
+18	swaswe	swaswe	SCONJ	SCONJ	_	20	mark	_	_
+19	ni	ni	ADV	ADV	_	21	advmod	_	_
+20	mahta	mahta	VERB	VERB	_	16	advcl	_	highlight=green|span=7
+21	manna	manna	NOUN	NOUN	_	20	nsubj	_	_
+22	usleiþan	usleiþan	VERB	VERB	_	20	xcomp	_	_
+23	þairh	þairh	ADP	ADP	_	25	case	_	_
+24	þana	þana	DET	DET	_	25	det	_	_
+25	wig	wig	NOUN	NOUN	_	22	obl	_	_
+26	jainana	jainana	DET	DET	_	25	det	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: got_proiel-ud-test.conllu · this verb has L=0, R=5 (mean span = 1.80)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = jah attauhun ina ana Gaulgauþa staþ þatei ist gaskeiriþ ƕairneins staþs
+1	jah	jah	CCONJ	CCONJ	_	2	cc	_	_
+2	attauhun	attauhun	VERB	VERB	_	0	root	_	highlight=red
+3	ina	ina	PRON	PRON	_	2	obj	_	highlight=green|span=1
+4	ana	ana	ADP	ADP	_	6	case	_	highlight=green|span=1
+5	Gaulgauþa	Gaulgauþa	PROPN	PROPN	_	2	dislocated	_	highlight=green|span=1
+6	staþ	staþ	NOUN	NOUN	_	2	obl	_	highlight=green|span=1
+7	þatei	þatei	PRON	PRON	_	8	nsubj	_	_
+8	ist	ist	VERB	VERB	_	5	acl	_	highlight=green|span=5
+9	gaskeiriþ	gaskeiriþ	VERB	VERB	_	8	xcomp	_	_
+10	ƕairneins	ƕairneins	NOUN	NOUN	_	11	nmod	_	_
+11	staþs	staþs	NOUN	NOUN	_	9	xcomp	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: got_proiel-ud-dev.conllu · this verb has L=0, R=5 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = insandida mik du ganasjan þans gamalwidans hairtin merjan frahunþanaim fralet jah blindaim siun fraletan gamaidans in gaþrafstein merjan jer fraujins andanem
+1	insandida	insandida	VERB	VERB	_	0	root	_	highlight=red
+2	mik	mik	PRON	PRON	_	1	obj	_	highlight=green|span=1
+3	du	du	ADP	ADP	_	4	mark	_	_
+4	ganasjan	ganasjan	VERB	VERB	_	1	advcl	_	highlight=green|span=5
+5	þans	þans	DET	DET	_	6	det	_	_
+6	gamalwidans	gamalwidans	VERB	VERB	_	4	obj	_	_
+7	hairtin	hairtin	NOUN	NOUN	_	6	obl	_	_
+8	merjan	merjan	VERB	VERB	_	1	advcl	_	highlight=green|span=6
+9	frahunþanaim	frahunþanaim	VERB	VERB	_	8	advcl	_	_
+10	fralet	fralet	NOUN	NOUN	_	8	obj	_	_
+11	jah	jah	CCONJ	CCONJ	_	13	cc	_	_
+12	blindaim	blindaim	ADJ	ADJ	_	13	orphan	_	_
+13	siun	siun	NOUN	NOUN	_	8	conj	_	_
+14	fraletan	fraletan	VERB	VERB	_	1	advcl	_	highlight=green|span=4
+15	gamaidans	gamaidans	ADJ	ADJ	_	14	obj	_	_
+16	in	in	ADP	ADP	_	17	case	_	_
+17	gaþrafstein	gaþrafstein	NOUN	NOUN	_	15	obl	_	_
+18	merjan	merjan	VERB	VERB	_	1	advcl	_	highlight=green|span=4
+19	jer	jer	NOUN	NOUN	_	18	obj	_	_
+20	fraujins	fraujins	NOUN	NOUN	_	19	nmod	_	_
+21	andanem	andanem	ADJ	ADJ	_	19	amod	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: got_proiel-ud-test.conllu · this verb has L=0, R=5 (mean span = 3.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = munaidedun uþ þan auk þai auhumistans gudjans ei jah Lazarau usqemeina unte managai in þis garunnun Iudaiei jah galaubidedun Iesua
+1	munaidedun	munaidedun	VERB	VERB	_	0	root	_	highlight=red
+2	uþ	uþ	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+3	þan	þan	ADV	ADV	_	1	discourse	_	_
+4	auk	auk	ADV	ADV	_	1	discourse	_	_
+5	þai	þai	DET	DET	_	7	det	_	_
+6	auhumistans	auhumistans	ADJ	ADJ	_	7	amod	_	_
+7	gudjans	gudjans	NOUN	NOUN	_	1	nsubj	_	highlight=green|span=3
+8	ei	ei	SCONJ	SCONJ	_	11	mark	_	_
+9	jah	jah	ADV	ADV	_	10	advmod	_	_
+10	Lazarau	Lazarau	PROPN	PROPN	_	11	obl:arg	_	_
+11	usqemeina	usqemeina	VERB	VERB	_	1	ccomp	_	highlight=green|span=4
+12	unte	unte	SCONJ	SCONJ	_	16	mark	_	_
+13	managai	managai	ADJ	ADJ	_	16	nsubj	_	_
+14	in	in	ADP	ADP	_	15	case	_	_
+15	þis	þis	PRON	PRON	_	16	obl	_	_
+16	garunnun	garunnun	VERB	VERB	_	1	advcl	_	highlight=green|span=5
+17	Iudaiei	Iudaiei	NOUN	NOUN	_	13	nmod	_	_
+18	jah	jah	CCONJ	CCONJ	_	19	cc	_	_
+19	galaubidedun	galaubidedun	VERB	VERB	_	16	conj	_	highlight=green|span=3
+20	Iesua	Iesua	PROPN	PROPN	_	19	obl:arg	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: got_proiel-ud-train.conllu · this verb has L=2, R=5 (mean span = 3.29)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ni ƕashun ist saei aflailoti gard aiþþau broþruns aiþþau swistruns aiþþau aiþein aiþþau attan aiþþau qen aiþþau barna aiþþau haimoþlja in meina jah in þizos aiwaggeljons saei ni andnimai ·r· falþ nu in þamma mela gardins jah broþruns jah swistruns jah attan jah aiþein jah barna jah haimoþlja miþ wrakom jah in aiwa þamma anawairþin libain aiweinon
+1	ni	ni	ADV	ADV	_	3	advmod	_	_
+2	ƕashun	ƕashun	PRON	PRON	_	3	nsubj	_	_
+3	ist	ist	VERB	VERB	_	0	root	_	_
+4	saei	saei	PRON	PRON	_	5	nsubj	_	_
+5	aflailoti	aflailoti	VERB	VERB	_	2	acl	_	_
+6	gard	gard	NOUN	NOUN	_	5	obj	_	_
+7	aiþþau	aiþþau	CCONJ	CCONJ	_	8	cc	_	_
+8	broþruns	broþruns	NOUN	NOUN	_	6	conj	_	_
+9	aiþþau	aiþþau	CCONJ	CCONJ	_	10	cc	_	_
+10	swistruns	swistruns	NOUN	NOUN	_	6	conj	_	_
+11	aiþþau	aiþþau	CCONJ	CCONJ	_	12	cc	_	_
+12	aiþein	aiþein	NOUN	NOUN	_	6	conj	_	_
+13	aiþþau	aiþþau	CCONJ	CCONJ	_	14	cc	_	_
+14	attan	attan	NOUN	NOUN	_	6	conj	_	_
+15	aiþþau	aiþþau	CCONJ	CCONJ	_	16	cc	_	_
+16	qen	qen	NOUN	NOUN	_	6	conj	_	_
+17	aiþþau	aiþþau	CCONJ	CCONJ	_	18	cc	_	_
+18	barna	barna	NOUN	NOUN	_	6	conj	_	_
+19	aiþþau	aiþþau	CCONJ	CCONJ	_	20	cc	_	_
+20	haimoþlja	haimoþlja	NOUN	NOUN	_	6	conj	_	_
+21	in	in	ADP	ADP	_	22	case	_	_
+22	meina	meina	PRON	PRON	_	5	obl	_	_
+23	jah	jah	CCONJ	CCONJ	_	26	cc	_	_
+24	in	in	ADP	ADP	_	26	case	_	_
+25	þizos	þizos	DET	DET	_	26	det	_	_
+26	aiwaggeljons	aiwaggeljons	NOUN	NOUN	_	22	conj	_	_
+27	saei	saei	PRON	PRON	_	29	nsubj	_	highlight=green|span=1
+28	ni	ni	ADV	ADV	_	29	advmod	_	highlight=green|span=1
+29	andnimai	andnimai	VERB	VERB	_	5	conj	_	highlight=red
+30	·r·	·r·	ADJ	ADJ	_	29	advmod	_	highlight=green|span=2
+31	falþ	falþ	ADJ	ADJ	_	30	fixed	_	_
+32	nu	nu	ADV	ADV	_	29	advmod	_	highlight=green|span=1
+33	in	in	ADP	ADP	_	35	case	_	_
+34	þamma	þamma	DET	DET	_	35	det	_	_
+35	mela	mela	NOUN	NOUN	_	29	obl	_	highlight=green|span=3
+36	gardins	gardins	NOUN	NOUN	_	29	obj	_	highlight=green|span=13
+37	jah	jah	CCONJ	CCONJ	_	38	cc	_	_
+38	broþruns	broþruns	NOUN	NOUN	_	36	conj	_	_
+39	jah	jah	CCONJ	CCONJ	_	40	cc	_	_
+40	swistruns	swistruns	NOUN	NOUN	_	36	conj	_	_
+41	jah	jah	CCONJ	CCONJ	_	42	cc	_	_
+42	attan	attan	NOUN	NOUN	_	36	conj	_	_
+43	jah	jah	CCONJ	CCONJ	_	44	cc	_	_
+44	aiþein	aiþein	NOUN	NOUN	_	36	conj	_	_
+45	jah	jah	CCONJ	CCONJ	_	46	cc	_	_
+46	barna	barna	NOUN	NOUN	_	36	conj	_	_
+47	jah	jah	CCONJ	CCONJ	_	48	cc	_	_
+48	haimoþlja	haimoþlja	NOUN	NOUN	_	36	conj	_	_
+49	miþ	miþ	ADP	ADP	_	50	case	_	_
+50	wrakom	wrakom	NOUN	NOUN	_	29	obl	_	highlight=green|span=2
+51	jah	jah	CCONJ	CCONJ	_	56	cc	_	_
+52	in	in	ADP	ADP	_	53	case	_	_
+53	aiwa	aiwa	NOUN	NOUN	_	56	orphan	_	_
+54	þamma	þamma	DET	DET	_	55	det	_	_
+55	anawairþin	anawairþin	ADJ	ADJ	_	53	nmod	_	_
+56	libain	libain	NOUN	NOUN	_	29	conj	_	_
+57	aiweinon	aiweinon	ADJ	ADJ	_	56	amod	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: got_proiel-ud-test.conllu · this verb has L=0, R=5 (mean span = 2.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = was uh þan anakumbjands ains þize siponje is in barma Iesuis þanei frijoda Iesus
+1	was	was	VERB	VERB	_	0	root	_	highlight=red
+2	uh	uh	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+3	þan	þan	ADV	ADV	_	1	discourse	_	_
+4	anakumbjands	anakumbjands	VERB	VERB	_	1	xcomp	_	highlight=green|span=1
+5	ains	ains	NUM	NUM	_	1	nsubj	_	highlight=green|span=4
+6	þize	þize	DET	DET	_	7	det	_	_
+7	siponje	siponje	NOUN	NOUN	_	5	nmod	_	_
+8	is	is	PRON	PRON	_	7	det	_	_
+9	in	in	ADP	ADP	_	10	case	_	_
+10	barma	barma	NOUN	NOUN	_	4	obl	_	highlight=green|span=3
+11	Iesuis	Iesuis	PROPN	PROPN	_	10	nmod	_	_
+12	þanei	þanei	PRON	PRON	_	13	obj	_	_
+13	frijoda	frijoda	VERB	VERB	_	5	acl	_	highlight=green|span=3
+14	Iesus	Iesus	PROPN	PROPN	_	13	nsubj	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: got_proiel-ud-dev.conllu · this verb has L=1, R=5 (mean span = 4.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = þiuþiþs guþ jah atta fraujins unsaris Iesuis Xristaus izei gaþiuþida uns ana allai þiuþeinai ahmeinai in himinakundaim in Xristau swaswe gawalida uns in imma faur gasatein fairƕaus ei sijaima weihai jah unwammai in andwairþja is in frijaþwai
+1	þiuþiþs	þiuþiþs	VERB	VERB	_	0	root	_	_
+2	guþ	guþ	NOUN	NOUN	_	1	nsubj:pass	_	_
+3	jah	jah	CCONJ	CCONJ	_	4	cc	_	_
+4	atta	atta	NOUN	NOUN	_	2	conj	_	_
+5	fraujins	fraujins	NOUN	NOUN	_	4	nmod	_	_
+6	unsaris	unsaris	DET	DET	_	5	det	_	_
+7	Iesuis	Iesuis	PROPN	PROPN	_	5	appos	_	_
+8	Xristaus	Xristaus	PROPN	PROPN	_	7	nmod	_	_
+9	izei	izei	PRON	PRON	_	10	nsubj	_	highlight=green|span=1
+10	gaþiuþida	gaþiuþida	VERB	VERB	_	4	acl	_	highlight=red
+11	uns	uns	PRON	PRON	_	10	obj	_	highlight=green|span=1
+12	ana	ana	ADP	ADP	_	14	case	_	_
+13	allai	allai	DET	DET	_	14	det	_	_
+14	þiuþeinai	þiuþeinai	NOUN	NOUN	_	10	obl	_	highlight=green|span=4
+15	ahmeinai	ahmeinai	ADJ	ADJ	_	14	amod	_	_
+16	in	in	ADP	ADP	_	17	case	_	_
+17	himinakundaim	himinakundaim	ADJ	ADJ	_	10	advmod	_	highlight=green|span=2
+18	in	in	ADP	ADP	_	19	case	_	_
+19	Xristau	Xristau	PROPN	PROPN	_	10	obl	_	highlight=green|span=2
+20	swaswe	swaswe	ADV	ADV	_	21	advcl	_	_
+21	gawalida	gawalida	VERB	VERB	_	10	advcl	_	highlight=green|span=18
+22	uns	uns	PRON	PRON	_	21	obj	_	_
+23	in	in	ADP	ADP	_	24	case	_	_
+24	imma	imma	PRON	PRON	_	21	obl	_	_
+25	faur	faur	ADP	ADP	_	26	case	_	_
+26	gasatein	gasatein	NOUN	NOUN	_	21	obl	_	_
+27	fairƕaus	fairƕaus	NOUN	NOUN	_	26	nmod	_	_
+28	ei	ei	SCONJ	SCONJ	_	29	mark	_	_
+29	sijaima	sijaima	VERB	VERB	_	21	ccomp	_	_
+30	weihai	weihai	ADJ	ADJ	_	29	xcomp	_	_
+31	jah	jah	CCONJ	CCONJ	_	32	cc	_	_
+32	unwammai	unwammai	ADJ	ADJ	_	30	conj	_	_
+33	in	in	ADP	ADP	_	34	case	_	_
+34	andwairþja	andwairþja	NOUN	NOUN	_	29	obl	_	_
+35	is	is	PRON	PRON	_	34	det	_	_
+36	in	in	ADP	ADP	_	37	case	_	_
+37	frijaþwai	frijaþwai	NOUN	NOUN	_	29	obl	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: got_proiel-ud-test.conllu · this verb has L=1, R=5 (mean span = 3.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = unte ik andnam at fraujin þatei jah anafalh izwis þatei frauja Iesus in þizaiei naht galewiþs was nam hlaif jah awiliudonds gabrak jah qaþ
+1	unte	unte	ADV	ADV	_	3	discourse	_	_
+2	ik	ik	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+3	andnam	andnam	VERB	VERB	_	0	root	_	highlight=red
+4	at	at	ADP	ADP	_	5	case	_	_
+5	fraujin	fraujin	NOUN	NOUN	_	3	obl	_	highlight=green|span=2
+6	þatei	þatei	PRON	PRON	_	8	obj	_	_
+7	jah	jah	CCONJ	CCONJ	_	8	cc	_	_
+8	anafalh	anafalh	VERB	VERB	_	3	obj	_	highlight=green|span=4
+9	izwis	izwis	PRON	PRON	_	8	obl:arg	_	_
+10	þatei	þatei	SCONJ	SCONJ	_	18	mark	_	_
+11	frauja	frauja	NOUN	NOUN	_	18	nsubj	_	_
+12	Iesus	Iesus	PROPN	PROPN	_	11	appos	_	_
+13	in	in	ADP	ADP	_	15	case	_	highlight=green|span=1
+14	þizaiei	þizaiei	PRON	PRON	_	17	advcl	_	_
+15	naht	naht	NOUN	NOUN	_	3	obl	_	highlight=green|span=3
+16	galewiþs	galewiþs	VERB	VERB	_	17	xcomp	_	_
+17	was	was	VERB	VERB	_	15	acl	_	_
+18	nam	nam	VERB	VERB	_	8	parataxis	_	highlight=green|span=9
+19	hlaif	hlaif	NOUN	NOUN	_	18	obj	_	_
+20	jah	jah	CCONJ	CCONJ	_	22	cc	_	_
+21	awiliudonds	awiliudonds	VERB	VERB	_	22	advcl	_	_
+22	gabrak	gabrak	VERB	VERB	_	18	conj	_	_
+23	jah	jah	CCONJ	CCONJ	_	24	cc	_	_
+24	qaþ	qaþ	VERB	VERB	_	18	conj	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: got_proiel-ud-dev.conllu · this verb has L=0, R=5 (mean span = 1.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Bidja nu frumist allis taujan bidos aihtronins liteinins awiliuda fram allaim mannam
+1	Bidja	Bidja	VERB	VERB	_	0	root	_	_
+2	nu	nu	ADV	ADV	_	1	discourse	_	_
+3	frumist	frumist	ADV	ADV	_	1	advmod	_	_
+4	allis	allis	PRON	PRON	_	3	nmod	_	_
+5	taujan	taujan	VERB	VERB	_	1	ccomp	_	highlight=red
+6	bidos	bidos	NOUN	NOUN	_	5	obj	_	highlight=green|span=1
+7	aihtronins	aihtronins	NOUN	NOUN	_	5	obj	_	highlight=green|span=1
+8	liteinins	liteinins	NOUN	NOUN	_	5	obj	_	highlight=green|span=1
+9	awiliuda	awiliuda	NOUN	NOUN	_	5	obj	_	highlight=green|span=1
+10	fram	fram	ADP	ADP	_	12	case	_	_
+11	allaim	allaim	DET	DET	_	12	det	_	_
+12	mannam	mannam	NOUN	NOUN	_	5	obl	_	highlight=green|span=3"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: got_proiel-ud-train.conllu · this verb has L=0, R=5 (mean span = 2.80)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = wesun uh þan garaihta ba in andwairþja gudis gaggandona in allaim anabusnim jah garaihteim fraujins unwaha
+1	wesun	wesun	VERB	VERB	_	0	root	_	highlight=red
+2	uh	uh	CCONJ	CCONJ	_	1	cc	_	_
+3	þan	þan	ADV	ADV	_	1	advmod	_	highlight=green|span=1
+4	garaihta	garaihta	ADJ	ADJ	_	1	xcomp	_	highlight=green|span=1
+5	ba	ba	ADJ	ADJ	_	1	nsubj	_	highlight=green|span=1
+6	in	in	ADP	ADP	_	7	case	_	_
+7	andwairþja	andwairþja	NOUN	NOUN	_	4	nmod	_	highlight=green|span=3
+8	gudis	gudis	NOUN	NOUN	_	7	nmod	_	_
+9	gaggandona	gaggandona	VERB	VERB	_	1	advcl	_	highlight=green|span=8
+10	in	in	ADP	ADP	_	12	case	_	_
+11	allaim	allaim	DET	DET	_	12	det	_	_
+12	anabusnim	anabusnim	NOUN	NOUN	_	9	obl	_	_
+13	jah	jah	CCONJ	CCONJ	_	14	cc	_	_
+14	garaihteim	garaihteim	NOUN	NOUN	_	12	conj	_	_
+15	fraujins	fraujins	NOUN	NOUN	_	14	nmod	_	_
+16	unwaha	unwaha	ADJ	ADJ	_	9	advmod	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: got_proiel-ud-test.conllu · this verb has L=0, R=5 (mean span = 2.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = sa auk ist gawairþi unsar saei gatawida þo ba du samin jah midgardiwaddju faþos gatairands fijaþwa ana leika seinamma witoþ anabusne garaideinim gatairands ei þans twans gaskopi in sis silbin du ainamma niujamma mann waurkjands gawairþi jah gafriþodedi þans bans in ainamma leika guda þairh galgan afslahands fijaþwa in sis silbin
+1	sa	sa	PRON	PRON	_	3	nsubj	_	_
+2	auk	auk	ADV	ADV	_	3	discourse	_	_
+3	ist	ist	VERB	VERB	_	0	root	_	_
+4	gawairþi	gawairþi	NOUN	NOUN	_	3	xcomp	_	_
+5	unsar	unsar	DET	DET	_	4	det	_	_
+6	saei	saei	PRON	PRON	_	7	nsubj	_	_
+7	gatawida	gatawida	VERB	VERB	_	1	acl	_	_
+8	þo	þo	DET	DET	_	9	det	_	_
+9	ba	ba	ADJ	ADJ	_	7	obj	_	_
+10	du	du	ADP	ADP	_	11	case	_	_
+11	samin	samin	ADJ	ADJ	_	7	xcomp	_	_
+12	jah	jah	CCONJ	CCONJ	_	15	cc	_	_
+13	midgardiwaddju	midgardiwaddju	NOUN	NOUN	_	15	obj	_	_
+14	faþos	faþos	NOUN	NOUN	_	13	nmod	_	_
+15	gatairands	gatairands	VERB	VERB	_	7	conj	_	_
+16	fijaþwa	fijaþwa	NOUN	NOUN	_	23	obj	_	_
+17	ana	ana	ADP	ADP	_	18	case	_	_
+18	leika	leika	NOUN	NOUN	_	23	obl	_	_
+19	seinamma	seinamma	DET	DET	_	18	det	_	_
+20	witoþ	witoþ	NOUN	NOUN	_	16	appos	_	_
+21	anabusne	anabusne	NOUN	NOUN	_	20	nmod	_	_
+22	garaideinim	garaideinim	NOUN	NOUN	_	21	nmod	_	_
+23	gatairands	gatairands	VERB	VERB	_	15	advcl	_	_
+24	ei	ei	SCONJ	SCONJ	_	27	mark	_	_
+25	þans	þans	DET	DET	_	26	det	_	_
+26	twans	twans	NUM	NUM	_	27	obj	_	_
+27	gaskopi	gaskopi	VERB	VERB	_	23	advcl	_	_
+28	in	in	ADP	ADP	_	29	case	_	_
+29	sis	sis	PRON	PRON	_	27	obl	_	_
+30	silbin	silbin	PRON	PRON	_	29	det	_	_
+31	du	du	ADP	ADP	_	34	case	_	_
+32	ainamma	ainamma	NUM	NUM	_	34	nummod	_	_
+33	niujamma	niujamma	ADJ	ADJ	_	34	amod	_	_
+34	mann	mann	NOUN	NOUN	_	27	xcomp	_	_
+35	waurkjands	waurkjands	VERB	VERB	_	27	advcl	_	_
+36	gawairþi	gawairþi	NOUN	NOUN	_	35	obj	_	_
+37	jah	jah	CCONJ	CCONJ	_	38	cc	_	_
+38	gafriþodedi	gafriþodedi	VERB	VERB	_	27	conj	_	highlight=red
+39	þans	þans	DET	DET	_	40	det	_	_
+40	bans	bans	ADJ	ADJ	_	38	obj	_	highlight=green|span=2
+41	in	in	ADP	ADP	_	43	case	_	_
+42	ainamma	ainamma	NUM	NUM	_	43	nummod	_	_
+43	leika	leika	NOUN	NOUN	_	38	obl	_	highlight=green|span=3
+44	guda	guda	NOUN	NOUN	_	38	obl:arg	_	highlight=green|span=1
+45	þairh	þairh	ADP	ADP	_	46	case	_	_
+46	galgan	galgan	NOUN	NOUN	_	38	obl	_	highlight=green|span=2
+47	afslahands	afslahands	VERB	VERB	_	38	advcl	_	highlight=green|span=5
+48	fijaþwa	fijaþwa	NOUN	NOUN	_	47	obj	_	_
+49	in	in	ADP	ADP	_	50	case	_	_
+50	sis	sis	PRON	PRON	_	47	obl	_	_
+51	silbin	silbin	PRON	PRON	_	50	expl:pv	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: got_proiel-ud-train.conllu · this verb has L=0, R=5 (mean span = 6.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Urrann þan jah Iosef us Galeilaia us baurg Nazaraiþ in Iudaian in baurg Daweidis sei haitada Beþlaihaim duþe ei was us garda fadreinais Daweidis anameljan miþ Mariin sei in fragiftim was imma qeins wisandein inkilþon
+1	Urrann	Urrann	VERB	VERB	_	0	root	_	highlight=red
+2	þan	þan	ADV	ADV	_	1	discourse	_	_
+3	jah	jah	ADV	ADV	_	4	advmod	_	_
+4	Iosef	Iosef	PROPN	PROPN	_	1	nsubj	_	highlight=green|span=2
+5	us	us	ADP	ADP	_	6	case	_	_
+6	Galeilaia	Galeilaia	PROPN	PROPN	_	1	obl	_	highlight=green|span=5
+7	us	us	ADP	ADP	_	8	case	_	_
+8	baurg	baurg	NOUN	NOUN	_	6	appos	_	_
+9	Nazaraiþ	Nazaraiþ	PROPN	PROPN	_	8	appos	_	_
+10	in	in	ADP	ADP	_	11	case	_	_
+11	Iudaian	Iudaian	PROPN	PROPN	_	1	obl	_	highlight=green|span=8
+12	in	in	ADP	ADP	_	13	case	_	_
+13	baurg	baurg	NOUN	NOUN	_	11	appos	_	_
+14	Daweidis	Daweidis	PROPN	PROPN	_	13	nmod	_	_
+15	sei	sei	PRON	PRON	_	16	nsubj:pass	_	_
+16	haitada	haitada	VERB	VERB	_	13	acl	_	_
+17	Beþlaihaim	Beþlaihaim	PROPN	PROPN	_	16	xcomp	_	_
+18	duþe	duþe	SCONJ	SCONJ	_	20	mark	_	_
+19	ei	ei	SCONJ	SCONJ	_	20	mark	_	_
+20	was	was	VERB	VERB	_	1	advcl	_	highlight=green|span=7
+21	us	us	ADP	ADP	_	22	case	_	_
+22	garda	garda	NOUN	NOUN	_	20	xcomp	_	_
+23	fadreinais	fadreinais	NOUN	NOUN	_	22	nmod	_	_
+24	Daweidis	Daweidis	PROPN	PROPN	_	23	nmod	_	_
+25	anameljan	anameljan	VERB	VERB	_	1	advcl	_	highlight=green|span=8
+26	miþ	miþ	ADP	ADP	_	27	case	_	_
+27	Mariin	Mariin	PROPN	PROPN	_	25	obl	_	_
+28	sei	sei	PRON	PRON	_	31	nsubj	_	_
+29	in	in	ADP	ADP	_	30	case	_	_
+30	fragiftim	fragiftim	NOUN	NOUN	_	33	nmod	_	_
+31	was	was	VERB	VERB	_	27	acl	_	_
+32	imma	imma	PRON	PRON	_	31	obl:arg	_	_
+33	qeins	qeins	NOUN	NOUN	_	31	xcomp	_	_
+34	wisandein	wisandein	VERB	VERB	_	27	acl	_	_
+35	inkilþon	inkilþon	NOUN	NOUN	_	34	xcomp	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: got_proiel-ud-train.conllu · this verb has L=0, R=5 (mean span = 5.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = qiþa auk þairh anst gudis sei gibana ist mis allaim wisandam in izwis ni mais fraþjan þau skuli fraþjan ak fraþjan du waila fraþjan ƕarjammeh swaswe guþ gadailida mitaþ galaubeinais
+1	qiþa	qiþa	VERB	VERB	_	0	root	_	highlight=red
+2	auk	auk	ADV	ADV	_	1	discourse	_	_
+3	þairh	þairh	ADP	ADP	_	4	case	_	_
+4	anst	anst	NOUN	NOUN	_	1	obl	_	highlight=green|span=7
+5	gudis	gudis	NOUN	NOUN	_	4	nmod	_	_
+6	sei	sei	PRON	PRON	_	8	nsubj	_	_
+7	gibana	gibana	VERB	VERB	_	8	xcomp	_	_
+8	ist	ist	VERB	VERB	_	4	acl	_	_
+9	mis	mis	PRON	PRON	_	7	obl:arg	_	_
+10	allaim	allaim	DET	DET	_	11	det	_	_
+11	wisandam	wisandam	VERB	VERB	_	1	obl:arg	_	highlight=green|span=4
+12	in	in	ADP	ADP	_	13	case	_	_
+13	izwis	izwis	PRON	PRON	_	11	xcomp	_	_
+14	ni	ni	ADV	ADV	_	16	advmod	_	_
+15	mais	mais	ADV	ADV	_	16	advmod	_	_
+16	fraþjan	fraþjan	VERB	VERB	_	1	xcomp	_	highlight=green|span=3
+17	þau	þau	SCONJ	SCONJ	_	18	mark	_	_
+18	skuli	skuli	VERB	VERB	_	15	advcl	_	_
+19	fraþjan	fraþjan	VERB	VERB	_	18	xcomp	_	_
+20	ak	ak	CCONJ	CCONJ	_	21	cc	_	_
+21	fraþjan	fraþjan	VERB	VERB	_	16	conj	_	highlight=green|span=5
+22	du	du	ADP	ADP	_	24	mark	_	_
+23	waila	waila	ADV	ADV	_	24	advmod	_	_
+24	fraþjan	fraþjan	VERB	VERB	_	21	advcl	_	_
+25	ƕarjammeh	ƕarjammeh	PRON	PRON	_	28	obl:arg	_	_
+26	swaswe	swaswe	ADV	ADV	_	28	advcl	_	_
+27	guþ	guþ	NOUN	NOUN	_	28	nsubj	_	_
+28	gadailida	gadailida	VERB	VERB	_	1	advcl	_	highlight=green|span=6
+29	mitaþ	mitaþ	NOUN	NOUN	_	28	obj	_	_
+30	galaubeinais	galaubeinais	NOUN	NOUN	_	29	nmod	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: got_proiel-ud-train.conllu · this verb has L=1, R=5 (mean span = 3.17)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = jah bi filusnai andhuleino ei ni ufarhafnau atgibana ist mis hnuþo leika meinamma aggilus Satanins ei mik kaupastedi ei ni ufarhugjau
+1	jah	jah	CCONJ	CCONJ	_	9	cc	_	_
+2	bi	bi	ADP	ADP	_	3	case	_	_
+3	filusnai	filusnai	NOUN	NOUN	_	8	obl	_	_
+4	andhuleino	andhuleino	NOUN	NOUN	_	3	nmod	_	_
+5	ei	ei	SCONJ	SCONJ	_	7	mark	_	_
+6	ni	ni	ADV	ADV	_	7	advmod	_	_
+7	ufarhafnau	ufarhafnau	VERB	VERB	_	8	advcl	_	_
+8	atgibana	atgibana	VERB	VERB	_	9	xcomp	_	highlight=green|span=7
+9	ist	ist	VERB	VERB	_	0	root	_	highlight=red
+10	mis	mis	PRON	PRON	_	8	obl:arg	_	highlight=green|span=1
+11	hnuþo	hnuþo	NOUN	NOUN	_	9	nsubj	_	highlight=green|span=1
+12	leika	leika	NOUN	NOUN	_	8	obl	_	highlight=green|span=2
+13	meinamma	meinamma	DET	DET	_	12	det	_	_
+14	aggilus	aggilus	NOUN	NOUN	_	11	appos	_	highlight=green|span=2
+15	Satanins	Satanins	PROPN	PROPN	_	14	nmod	_	_
+16	ei	ei	SCONJ	SCONJ	_	18	mark	_	_
+17	mik	mik	PRON	PRON	_	18	obj	_	_
+18	kaupastedi	kaupastedi	VERB	VERB	_	8	advcl	_	highlight=green|span=6
+19	ei	ei	SCONJ	SCONJ	_	21	mark	_	_
+20	ni	ni	ADV	ADV	_	21	advmod	_	_
+21	ufarhugjau	ufarhugjau	VERB	VERB	_	18	advcl	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: got_proiel-ud-train.conllu · this verb has L=0, R=5 (mean span = 2.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Wairþaiþ nu galeikondans guda swe barna liuba jah gaggaiþ in frijaþwai swaswe jah Xristus frijoda uns jah atgaf sik silban faur uns hunsl jah sauþ guda du daunai woþjai
+1	Wairþaiþ	Wairþaiþ	VERB	VERB	_	0	root	_	_
+2	nu	nu	ADV	ADV	_	1	discourse	_	_
+3	galeikondans	galeikondans	VERB	VERB	_	1	xcomp	_	_
+4	guda	guda	NOUN	NOUN	_	3	obl:arg	_	_
+5	swe	swe	ADV	ADV	_	1	advcl	_	_
+6	barna	barna	NOUN	NOUN	_	5	nsubj	_	_
+7	liuba	liuba	ADJ	ADJ	_	6	amod	_	_
+8	jah	jah	CCONJ	CCONJ	_	9	cc	_	_
+9	gaggaiþ	gaggaiþ	VERB	VERB	_	1	conj	_	_
+10	in	in	ADP	ADP	_	11	case	_	_
+11	frijaþwai	frijaþwai	NOUN	NOUN	_	9	obl	_	_
+12	swaswe	swaswe	ADV	ADV	_	15	advcl	_	_
+13	jah	jah	ADV	ADV	_	14	advmod	_	_
+14	Xristus	Xristus	PROPN	PROPN	_	15	nsubj	_	_
+15	frijoda	frijoda	VERB	VERB	_	9	advcl	_	_
+16	uns	uns	PRON	PRON	_	15	obj	_	_
+17	jah	jah	CCONJ	CCONJ	_	18	cc	_	_
+18	atgaf	atgaf	VERB	VERB	_	15	conj	_	highlight=red
+19	sik	sik	PRON	PRON	_	18	obj	_	highlight=green|span=2
+20	silban	silban	ADJ	ADJ	_	19	amod	_	_
+21	faur	faur	ADP	ADP	_	22	case	_	_
+22	uns	uns	PRON	PRON	_	18	obl	_	highlight=green|span=2
+23	hunsl	hunsl	NOUN	NOUN	_	18	xcomp	_	highlight=green|span=3
+24	jah	jah	CCONJ	CCONJ	_	25	cc	_	_
+25	sauþ	sauþ	NOUN	NOUN	_	23	conj	_	_
+26	guda	guda	NOUN	NOUN	_	18	obl:arg	_	highlight=green|span=1
+27	du	du	ADP	ADP	_	28	case	_	_
+28	daunai	daunai	NOUN	NOUN	_	18	obl	_	highlight=green|span=3
+29	woþjai	woþjai	ADJ	ADJ	_	28	amod	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: got_proiel-ud-train.conllu · this verb has L=0, R=5 (mean span = 3.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = jus wairos frijoþ qenins izwaros swaswe jah Xristus frijoda aikklesjon jah sik silban atgaf faur þo ei þo gaweihaidedi gahrainjands þwahla watins in waurda ei ustauhi silba sis wulþaga aikklesjon ni habandein wamme aiþþau maile aiþþau ƕa swaleikaize ak ei sijai weiha jah unwamma
+1	jus	jus	PRON	PRON	_	3	nsubj	_	_
+2	wairos	wairos	NOUN	NOUN	_	3	vocative	_	_
+3	frijoþ	frijoþ	VERB	VERB	_	0	root	_	_
+4	qenins	qenins	NOUN	NOUN	_	3	obj	_	_
+5	izwaros	izwaros	DET	DET	_	4	det	_	_
+6	swaswe	swaswe	ADV	ADV	_	9	advcl	_	_
+7	jah	jah	ADV	ADV	_	9	advmod	_	_
+8	Xristus	Xristus	PROPN	PROPN	_	9	nsubj	_	_
+9	frijoda	frijoda	VERB	VERB	_	3	advcl	_	_
+10	aikklesjon	aikklesjon	NOUN	NOUN	_	9	obj	_	_
+11	jah	jah	CCONJ	CCONJ	_	14	cc	_	_
+12	sik	sik	PRON	PRON	_	14	obj	_	_
+13	silban	silban	ADJ	ADJ	_	12	amod	_	_
+14	atgaf	atgaf	VERB	VERB	_	9	conj	_	_
+15	faur	faur	ADP	ADP	_	16	case	_	_
+16	þo	þo	PRON	PRON	_	14	obl	_	_
+17	ei	ei	SCONJ	SCONJ	_	19	mark	_	_
+18	þo	þo	PRON	PRON	_	19	obj	_	_
+19	gaweihaidedi	gaweihaidedi	VERB	VERB	_	14	advcl	_	_
+20	gahrainjands	gahrainjands	VERB	VERB	_	19	advcl	_	_
+21	þwahla	þwahla	NOUN	NOUN	_	20	obl	_	_
+22	watins	watins	NOUN	NOUN	_	21	nmod	_	_
+23	in	in	ADP	ADP	_	24	case	_	_
+24	waurda	waurda	NOUN	NOUN	_	20	obl	_	_
+25	ei	ei	SCONJ	SCONJ	_	26	mark	_	_
+26	ustauhi	ustauhi	VERB	VERB	_	20	advcl	_	highlight=red
+27	silba	silba	PRON	PRON	_	26	nsubj	_	highlight=green|span=1
+28	sis	sis	PRON	PRON	_	26	obl:arg	_	highlight=green|span=1
+29	wulþaga	wulþaga	ADJ	ADJ	_	26	advmod	_	highlight=green|span=1
+30	aikklesjon	aikklesjon	NOUN	NOUN	_	26	obj	_	highlight=green|span=1
+31	ni	ni	ADV	ADV	_	32	advmod	_	_
+32	habandein	habandein	VERB	VERB	_	26	advcl	_	highlight=green|span=14
+33	wamme	wamme	NOUN	NOUN	_	32	obj	_	_
+34	aiþþau	aiþþau	CCONJ	CCONJ	_	35	cc	_	_
+35	maile	maile	NOUN	NOUN	_	33	conj	_	_
+36	aiþþau	aiþþau	CCONJ	CCONJ	_	37	cc	_	_
+37	ƕa	ƕa	PRON	PRON	_	33	conj	_	_
+38	swaleikaize	swaleikaize	ADJ	ADJ	_	37	nmod	_	_
+39	ak	ak	CCONJ	CCONJ	_	41	cc	_	_
+40	ei	ei	SCONJ	SCONJ	_	41	mark	_	_
+41	sijai	sijai	VERB	VERB	_	32	conj	_	_
+42	weiha	weiha	ADJ	ADJ	_	41	xcomp	_	_
+43	jah	jah	CCONJ	CCONJ	_	44	cc	_	_
+44	unwamma	unwamma	ADJ	ADJ	_	42	conj	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: got_proiel-ud-train.conllu · this verb has L=2, R=5 (mean span = 6.43)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = du þammei jah bidjam sinteino bi izwis ei izwis wairþans briggai þizos laþonais guþ unsar jah fulljai alla leikain þiuþeinais seinaizos jah waurstw galaubeinais in mahtai ei ushauhnai namo fraujins unsaris Iesuis Xristaus in izwis jah jus in imma bi anstai gudis unsaris jah fraujins unsaris Iesuis Xristaus
+1	du	du	ADP	ADP	_	2	case	_	_
+2	þammei	þammei	PRON	PRON	_	4	advcl	_	highlight=green|span=2
+3	jah	jah	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+4	bidjam	bidjam	VERB	VERB	_	0	root	_	highlight=red
+5	sinteino	sinteino	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+6	bi	bi	ADP	ADP	_	7	case	_	_
+7	izwis	izwis	PRON	PRON	_	4	obl	_	highlight=green|span=2
+8	ei	ei	SCONJ	SCONJ	_	11	mark	_	_
+9	izwis	izwis	PRON	PRON	_	11	obj	_	_
+10	wairþans	wairþans	ADJ	ADJ	_	11	advmod	_	_
+11	briggai	briggai	VERB	VERB	_	4	ccomp	_	highlight=green|span=15
+12	þizos	þizos	DET	DET	_	13	det	_	_
+13	laþonais	laþonais	NOUN	NOUN	_	10	obl	_	_
+14	guþ	guþ	NOUN	NOUN	_	11	nsubj	_	highlight=green|span=2
+15	unsar	unsar	DET	DET	_	14	det	_	_
+16	jah	jah	CCONJ	CCONJ	_	17	cc	_	_
+17	fulljai	fulljai	VERB	VERB	_	11	conj	_	_
+18	alla	alla	DET	DET	_	19	det	_	_
+19	leikain	leikain	NOUN	NOUN	_	17	obj	_	_
+20	þiuþeinais	þiuþeinais	NOUN	NOUN	_	19	nmod	_	_
+21	seinaizos	seinaizos	DET	DET	_	20	det	_	_
+22	jah	jah	CCONJ	CCONJ	_	23	cc	_	_
+23	waurstw	waurstw	NOUN	NOUN	_	19	conj	_	_
+24	galaubeinais	galaubeinais	NOUN	NOUN	_	23	nmod	_	_
+25	in	in	ADP	ADP	_	26	case	_	_
+26	mahtai	mahtai	NOUN	NOUN	_	17	obl	_	_
+27	ei	ei	SCONJ	SCONJ	_	28	mark	_	_
+28	ushauhnai	ushauhnai	VERB	VERB	_	4	advcl	_	highlight=green|span=22
+29	namo	namo	NOUN	NOUN	_	28	nsubj	_	_
+30	fraujins	fraujins	NOUN	NOUN	_	29	nmod	_	_
+31	unsaris	unsaris	DET	DET	_	30	det	_	_
+32	Iesuis	Iesuis	PROPN	PROPN	_	30	appos	_	_
+33	Xristaus	Xristaus	PROPN	PROPN	_	32	flat:name	_	_
+34	in	in	ADP	ADP	_	35	case	_	_
+35	izwis	izwis	PRON	PRON	_	28	obl	_	_
+36	jah	jah	CCONJ	CCONJ	_	37	cc	_	_
+37	jus	jus	PRON	PRON	_	28	conj	_	_
+38	in	in	ADP	ADP	_	39	case	_	_
+39	imma	imma	PRON	PRON	_	37	orphan	_	_
+40	bi	bi	ADP	ADP	_	41	case	_	_
+41	anstai	anstai	NOUN	NOUN	_	37	orphan	_	_
+42	gudis	gudis	NOUN	NOUN	_	41	nmod	_	_
+43	unsaris	unsaris	DET	DET	_	42	det	_	_
+44	jah	jah	CCONJ	CCONJ	_	45	cc	_	_
+45	fraujins	fraujins	NOUN	NOUN	_	42	conj	_	_
+46	unsaris	unsaris	DET	DET	_	45	det	_	_
+47	Iesuis	Iesuis	PROPN	PROPN	_	45	appos	_	_
+48	Xristaus	Xristaus	PROPN	PROPN	_	47	flat:name	_	_"></reactive-dep-tree>
+</div>
+</body></html>

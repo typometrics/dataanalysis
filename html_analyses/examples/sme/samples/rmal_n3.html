@@ -1,0 +1,363 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>NorthSami — RMAL_3</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to NorthSami examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>NorthSami <small style="color:#999;font-weight:normal">(sme)</small> — RMAL<sub>3</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>3</b> right dependents (left side may be anything).</p><p><b>RMAL<sub>3</sub> = 2.135</b> &nbsp; <span style="color:#666">(270 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>right</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: sme_giella-ud-test.conllu · this verb has L=1, R=3 (mean span = 1.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Rievtti mielde lea duodjeluohkás gulahallanoahpaheaddji , muhto son ii leat doppe nu dávjá go oahppit sávvet .
+1	Rievtti	Rievtti	NOUN	NOUN	_	3	obl	_	_
+2	mielde	mielde	ADP	ADP	_	1	case	_	_
+3	lea	lea	VERB	VERB	_	0	root	_	_
+4	duodjeluohkás	duodjeluohkás	NOUN	NOUN	_	3	obl	_	_
+5	gulahallanoahpaheaddji	gulahallanoahpaheaddji	NOUN	NOUN	_	3	nsubj	_	_
+6	,	,	PUNCT	PUNCT	_	3	punct	_	_
+7	muhto	muhto	CCONJ	CCONJ	_	3	cc	_	_
+8	son	son	PRON	PRON	_	10	nsubj	_	highlight=green|span=1
+9	ii	ii	AUX	AUX	_	10	aux:neg	_	_
+10	leat	leat	VERB	VERB	_	3	parataxis	_	highlight=red
+11	doppe	doppe	ADV	ADV	_	10	advmod	_	highlight=green|span=1
+12	nu	nu	ADV	ADV	_	13	advmod	_	_
+13	dávjá	dávjá	ADV	ADV	_	10	advmod	_	highlight=green|span=2
+14	go	go	SCONJ	SCONJ	_	16	mark	_	_
+15	oahppit	oahppit	NOUN	NOUN	_	16	nsubj	_	_
+16	sávvet	sávvet	VERB	VERB	_	10	advcl	_	highlight=green|span=3
+17	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: sme_giella-ud-test.conllu · this verb has L=0, R=3 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Nuolli njuoska biktasiid ja čohkkádeahkki dohko loidui duljiid ala .
+1	Nuolli	Nuolli	VERB	VERB	_	0	root	_	_
+2	njuoska	njuoska	ADJ	ADJ	_	3	amod	_	_
+3	biktasiid	biktasiid	NOUN	NOUN	_	1	obj	_	_
+4	ja	ja	CCONJ	CCONJ	_	1	cc	_	_
+5	čohkkádeahkki	čohkkádeahkki	VERB	VERB	_	1	conj	_	highlight=red
+6	dohko	dohko	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+7	loidui	loidui	NOUN	NOUN	_	5	obl	_	highlight=green|span=1
+8	duljiid	duljiid	NOUN	NOUN	_	5	obl	_	highlight=green|span=2
+9	ala	ala	ADP	ADP	_	8	case	_	_
+10	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: sme_giella-ud-test.conllu · this verb has L=1, R=3 (mean span = 1.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 1973 rájes son barggai Romssa Museas , 1982:s gitta 1993 rádjái jođihii son Norgga Álbmotmusea sámi ossodaga Oslos .
+1	1973	1973	NUM	NUM	_	4	obl	_	_
+2	rájes	rájes	ADP	ADP	_	1	case	_	_
+3	son	son	PRON	PRON	_	4	nsubj	_	_
+4	barggai	barggai	VERB	VERB	_	0	root	_	_
+5	Romssa	Romssa	PROPN	PROPN	_	6	nmod:poss	_	_
+6	Museas	Museas	NOUN	NOUN	_	4	obl	_	_
+7	,	,	PUNCT	PUNCT	_	4	punct	_	_
+8	1982:s	1982:s	NUM	NUM	_	12	obl	_	_
+9	gitta	gitta	ADV	ADV	_	12	advmod	_	highlight=green|span=1
+10	1993	1993	NUM	NUM	_	4	obl	_	_
+11	rádjái	rádjái	ADP	ADP	_	10	case	_	_
+12	jođihii	jođihii	VERB	VERB	_	4	parataxis	_	highlight=red
+13	son	son	PRON	PRON	_	12	nsubj	_	highlight=green|span=1
+14	Norgga	Norgga	PROPN	PROPN	_	15	compound:nn	_	_
+15	Álbmotmusea	Álbmotmusea	PROPN	PROPN	_	16	nmod:poss	_	_
+16	sámi	sámi	NOUN	NOUN	_	17	nmod:poss	_	_
+17	ossodaga	ossodaga	NOUN	NOUN	_	12	obj	_	highlight=green|span=4
+18	Oslos	Oslos	PROPN	PROPN	_	12	obl	_	highlight=green|span=1
+19	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: sme_giella-ud-test.conllu · this verb has L=1, R=3 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ii fal runiidan jalges gittiide , muhto meahccái , gosa návddit dávjá ja lunddolaččat fievrredit ráppiid .
+1	Ii	Ii	AUX	AUX	_	3	aux:neg	_	_
+2	fal	fal	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+3	runiidan	runiidan	VERB	VERB	_	0	root	_	highlight=red
+4	jalges	jalges	ADJ	ADJ	_	5	amod	_	_
+5	gittiide	gittiide	NOUN	NOUN	_	3	obl	_	highlight=green|span=3
+6	,	,	PUNCT	PUNCT	_	7	punct	_	_
+7	muhto	muhto	CCONJ	CCONJ	_	5	cc	_	_
+8	meahccái	meahccái	NOUN	NOUN	_	3	obl	_	highlight=green|span=1
+9	,	,	PUNCT	PUNCT	_	15	punct	_	_
+10	gosa	gosa	ADV	ADV	_	15	advmod	_	_
+11	návddit	návddit	NOUN	NOUN	_	15	nsubj	_	_
+12	dávjá	dávjá	ADV	ADV	_	15	advmod	_	_
+13	ja	ja	CCONJ	CCONJ	_	12	cc	_	_
+14	lunddolaččat	lunddolaččat	ADV	ADV	_	12	conj	_	_
+15	fievrredit	fievrredit	VERB	VERB	_	3	advcl	_	highlight=green|span=7
+16	ráppiid	ráppiid	NOUN	NOUN	_	15	obj	_	_
+17	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: sme_giella-ud-train.conllu · this verb has L=1, R=3 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Gállá loakkui beatnagiiguin šlundimielain ruoktot .
+1	Gállá	Gállá	PROPN	PROPN	_	2	nsubj	_	highlight=green|span=1
+2	loakkui	loakkui	VERB	VERB	_	0	root	_	highlight=red
+3	beatnagiiguin	beatnagiiguin	NOUN	NOUN	_	2	obl	_	highlight=green|span=1
+4	šlundimielain	šlundimielain	NOUN	NOUN	_	2	obl	_	highlight=green|span=1
+5	ruoktot	ruoktot	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+6	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: sme_giella-ud-test.conllu · this verb has L=1, R=3 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Álo ledje earát maid das .
+1	Álo	Álo	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+2	ledje	ledje	VERB	VERB	_	0	root	_	highlight=red
+3	earát	earát	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+4	maid	maid	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+5	das	das	PRON	PRON	_	2	obl	_	highlight=green|span=1
+6	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: sme_giella-ud-train.conllu · this verb has L=1, R=3 (mean span = 1.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Muhtin gánda vulggii oktii meahccái vázzit .
+1	Muhtin	Muhtin	PRON	PRON	_	2	amod	_	_
+2	gánda	gánda	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=2
+3	vulggii	vulggii	VERB	VERB	_	0	root	_	highlight=red
+4	oktii	oktii	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+5	meahccái	meahccái	NOUN	NOUN	_	3	obl	_	highlight=green|span=1
+6	vázzit	vázzit	VERB	VERB	_	3	advcl	_	highlight=green|span=1
+7	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: sme_giella-ud-train.conllu · this verb has L=3, R=3 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Na gal don dal oaččut dan beannot čuohtái , go juo válddežat .
+1	Na	Na	PART	PART	_	5	discourse	_	_
+2	gal	gal	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+3	don	don	PRON	PRON	_	5	nsubj	_	highlight=green|span=1
+4	dal	dal	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+5	oaččut	oaččut	VERB	VERB	_	0	root	_	highlight=red
+6	dan	dan	PRON	PRON	_	5	obj	_	highlight=green|span=1
+7	beannot	beannot	NUM	NUM	_	8	amod	_	_
+8	čuohtái	čuohtái	NUM	NUM	_	5	obl	_	highlight=green|span=2
+9	,	,	PUNCT	PUNCT	_	12	punct	_	_
+10	go	go	SCONJ	SCONJ	_	12	mark	_	_
+11	juo	juo	ADV	ADV	_	12	advmod	_	_
+12	válddežat	válddežat	VERB	VERB	_	5	advcl	_	highlight=green|span=3
+13	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: sme_giella-ud-train.conllu · this verb has L=2, R=3 (mean span = 1.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Mo Alimusriekti meannudii vaikkoba dakkár vuolit dási olbmuid vihtančilgehusaiguin ?
+1	Mo	Mo	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+2	Alimusriekti	Alimusriekti	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=1
+3	meannudii	meannudii	VERB	VERB	_	0	root	_	highlight=red
+4	vaikkoba	vaikkoba	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+5	dakkár	dakkár	PRON	PRON	_	7	amod	_	_
+6	vuolit	vuolit	ADJ	ADJ	_	7	amod	_	_
+7	dási	dási	NOUN	NOUN	_	8	nmod:poss	_	_
+8	olbmuid	olbmuid	NOUN	NOUN	_	3	obj	_	highlight=green|span=4
+9	vihtančilgehusaiguin	vihtančilgehusaiguin	NOUN	NOUN	_	3	obl	_	highlight=green|span=1
+10	?	?	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: sme_giella-ud-train.conllu · this verb has L=2, R=3 (mean span = 2.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ulbmil seammádássásaš bohtosiid juksamis galgá gustot álo beroškeahttá makkár giella- dahje kulturduogáš dárbbašeaddjis lea .
+1	Ulbmil	Ulbmil	NOUN	NOUN	_	6	nsubj	_	highlight=green|span=1
+2	seammádássásaš	seammádássásaš	ADJ	ADJ	_	3	amod	_	_
+3	bohtosiid	bohtosiid	NOUN	NOUN	_	4	nmod:poss	_	_
+4	juksamis	juksamis	NOUN	NOUN	_	6	obl	_	highlight=green|span=3
+5	galgá	galgá	AUX	AUX	_	6	aux	_	_
+6	gustot	gustot	VERB	VERB	_	0	root	_	highlight=red
+7	álo	álo	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+8	beroškeahttá	beroškeahttá	VERB	VERB	_	6	advcl	_	highlight=green|span=1
+9	makkár	makkár	PRON	PRON	_	12	compound	_	_
+10	giella-	giella-	NOUN	NOUN	_	9	conj	_	_
+11	dahje	dahje	CCONJ	CCONJ	_	10	cc	_	_
+12	kulturduogáš	kulturduogáš	NOUN	NOUN	_	14	nsubj	_	_
+13	dárbbašeaddjis	dárbbašeaddjis	NOUN	NOUN	_	14	obl	_	_
+14	lea	lea	VERB	VERB	_	6	advcl	_	highlight=green|span=6
+15	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: sme_giella-ud-train.conllu · this verb has L=3, R=3 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Sámi geavaheaddjit galggašedje sáhttit váidalit njálmmálaččat , man vuođul fylkkadoavttir de čállá váidaga , dárbbu mielde dulkka vehkiin .
+1	Sámi	Sámi	NOUN	NOUN	_	2	nmod:poss	_	_
+2	geavaheaddjit	geavaheaddjit	NOUN	NOUN	_	5	nsubj	_	_
+3	galggašedje	galggašedje	AUX	AUX	_	5	aux	_	_
+4	sáhttit	sáhttit	AUX	AUX	_	5	aux	_	_
+5	váidalit	váidalit	VERB	VERB	_	0	root	_	_
+6	njálmmálaččat	njálmmálaččat	ADV	ADV	_	5	advmod	_	_
+7	,	,	PUNCT	PUNCT	_	5	punct	_	_
+8	man	man	PRON	PRON	_	12	obl	_	highlight=green|span=2
+9	vuođul	vuođul	ADP	ADP	_	8	case	_	_
+10	fylkkadoavttir	fylkkadoavttir	NOUN	NOUN	_	12	nsubj	_	highlight=green|span=1
+11	de	de	ADV	ADV	_	12	advmod	_	highlight=green|span=1
+12	čállá	čállá	VERB	VERB	_	5	acl:relcl	_	highlight=red
+13	váidaga	váidaga	NOUN	NOUN	_	12	obj	_	highlight=green|span=1
+14	,	,	PUNCT	PUNCT	_	15	punct	_	_
+15	dárbbu	dárbbu	NOUN	NOUN	_	12	obl	_	highlight=green|span=2
+16	mielde	mielde	ADP	ADP	_	15	case	_	_
+17	dulkka	dulkka	NOUN	NOUN	_	12	obl	_	highlight=green|span=2
+18	vehkiin	vehkiin	ADP	ADP	_	17	case	_	_
+19	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: sme_giella-ud-test.conllu · this verb has L=0, R=3 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Addet munnje eatnama hávdebáikin , vai mun beasan hávdádit jápmán áhkkán .
+1	Addet	Addet	VERB	VERB	_	0	root	_	highlight=red
+2	munnje	munnje	PRON	PRON	_	1	obl	_	highlight=green|span=1
+3	eatnama	eatnama	NOUN	NOUN	_	1	obj	_	highlight=green|span=2
+4	hávdebáikin	hávdebáikin	NOUN	NOUN	_	3	xcomp:obj	_	_
+5	,	,	PUNCT	PUNCT	_	9	punct	_	_
+6	vai	vai	SCONJ	SCONJ	_	9	mark	_	_
+7	mun	mun	PRON	PRON	_	9	nsubj	_	_
+8	beasan	beasan	AUX	AUX	_	9	aux	_	_
+9	hávdádit	hávdádit	VERB	VERB	_	1	advcl	_	highlight=green|span=6
+10	jápmán	jápmán	VERB	VERB	_	11	acl	_	_
+11	áhkkán	áhkkán	NOUN	NOUN	_	9	obj	_	_
+12	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: sme_giella-ud-train.conllu · this verb has L=1, R=3 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Son lei doppe Ohcejogas golggotmánu nuppi beaivvi .
+1	Son	Son	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	lei	lei	VERB	VERB	_	0	root	_	highlight=red
+3	doppe	doppe	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+4	Ohcejogas	Ohcejogas	PROPN	PROPN	_	2	obl	_	highlight=green|span=1
+5	golggotmánu	golggotmánu	NOUN	NOUN	_	6	nmod:poss	_	_
+6	nuppi	nuppi	ADJ	ADJ	_	7	nmod:poss	_	_
+7	beaivvi	beaivvi	NOUN	NOUN	_	2	obl	_	highlight=green|span=3
+8	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: sme_giella-ud-train.conllu · this verb has L=1, R=3 (mean span = 1.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Sii olihedje diibmá nu movt dán jagi nubbin .
+1	Sii	Sii	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	olihedje	olihedje	VERB	VERB	_	0	root	_	highlight=red
+3	diibmá	diibmá	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+4	nu	nu	ADV	ADV	_	5	advmod	_	_
+5	movt	movt	ADV	ADV	_	2	advmod	_	highlight=green|span=2
+6	dán	dán	PRON	PRON	_	7	det	_	_
+7	jagi	jagi	NOUN	NOUN	_	8	nmod:poss	_	_
+8	nubbin	nubbin	ADJ	ADJ	_	2	xcomp	_	highlight=green|span=3
+9	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: sme_giella-ud-test.conllu · this verb has L=0, R=3 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ja go sámit oidne , ahte dáža vulggii eret , de vihke sii dan jápma olbmo lusa ja guoddile hoahpus eret rásiid sisa .
+1	Ja	Ja	CCONJ	CCONJ	_	4	mark	_	_
+2	go	go	SCONJ	SCONJ	_	1	conj	_	_
+3	sámit	sámit	NOUN	NOUN	_	4	nsubj	_	_
+4	oidne	oidne	VERB	VERB	_	0	root	_	_
+5	,	,	PUNCT	PUNCT	_	8	punct	_	_
+6	ahte	ahte	SCONJ	SCONJ	_	8	mark	_	_
+7	dáža	dáža	NOUN	NOUN	_	8	nsubj	_	_
+8	vulggii	vulggii	VERB	VERB	_	4	ccomp	_	_
+9	eret	eret	ADV	ADV	_	8	advmod	_	_
+10	,	,	PUNCT	PUNCT	_	4	punct	_	_
+11	de	de	ADV	ADV	_	12	advmod	_	_
+12	vihke	vihke	VERB	VERB	_	4	conj	_	_
+13	sii	sii	PRON	PRON	_	12	nsubj	_	_
+14	dan	dan	PRON	PRON	_	15	det	_	_
+15	jápma	jápma	ADJ	ADJ	_	16	amod	_	_
+16	olbmo	olbmo	NOUN	NOUN	_	12	obl	_	_
+17	lusa	lusa	ADP	ADP	_	16	case	_	_
+18	ja	ja	CCONJ	CCONJ	_	12	cc	_	_
+19	guoddile	guoddile	VERB	VERB	_	12	conj	_	highlight=red
+20	hoahpus	hoahpus	ADV	ADV	_	19	advmod	_	highlight=green|span=1
+21	eret	eret	ADV	ADV	_	19	advmod	_	highlight=green|span=1
+22	rásiid	rásiid	NOUN	NOUN	_	19	obl	_	highlight=green|span=2
+23	sisa	sisa	ADP	ADP	_	22	case	_	_
+24	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: sme_giella-ud-train.conllu · this verb has L=1, R=3 (mean span = 1.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Dálvet leat heasttat eanas áigge stáljas .
+1	Dálvet	Dálvet	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+2	leat	leat	VERB	VERB	_	0	root	_	highlight=red
+3	heasttat	heasttat	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+4	eanas	eanas	ADJ	ADJ	_	5	amod	_	_
+5	áigge	áigge	NOUN	NOUN	_	2	obl	_	highlight=green|span=2
+6	stáljas	stáljas	NOUN	NOUN	_	2	obl	_	highlight=green|span=1
+7	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: sme_giella-ud-train.conllu · this verb has L=0, R=3 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Dárbbašlaš lea dikšut jávrriid ovdal_go lea ekonomalaččat veara bivdit .
+1	Dárbbašlaš	Dárbbašlaš	ADJ	ADJ	_	0	root	_	_
+2	lea	lea	AUX	AUX	_	1	cop	_	_
+3	dikšut	dikšut	VERB	VERB	_	1	csubj	_	_
+4	jávrriid	jávrriid	NOUN	NOUN	_	3	obj	_	_
+5	ovdal_go	ovdal_go	SCONJ	SCONJ	_	6	mark	_	_
+6	lea	lea	VERB	VERB	_	1	advcl	_	highlight=red
+7	ekonomalaččat	ekonomalaččat	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+8	veara	veara	ADJ	ADJ	_	6	xcomp	_	highlight=green|span=1
+9	bivdit	bivdit	VERB	VERB	_	6	csubj	_	highlight=green|span=1
+10	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: sme_giella-ud-test.conllu · this verb has L=1, R=3 (mean span = 3.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Mis lea ain gáibádus ahte sámit galget mealgat eanet beassat searvat suodjalanguovlluid ásahan- ja hálddašanbargui .
+1	Mis	Mis	PRON	PRON	_	2	obl	_	highlight=green|span=1
+2	lea	lea	VERB	VERB	_	0	root	_	highlight=red
+3	ain	ain	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+4	gáibádus	gáibádus	NOUN	NOUN	_	2	nsubj	_	highlight=green|span=1
+5	ahte	ahte	SCONJ	SCONJ	_	11	mark	_	_
+6	sámit	sámit	NOUN	NOUN	_	11	nsubj	_	_
+7	galget	galget	AUX	AUX	_	11	aux	_	_
+8	mealgat	mealgat	ADV	ADV	_	9	advmod	_	_
+9	eanet	eanet	ADV	ADV	_	11	advmod	_	_
+10	beassat	beassat	AUX	AUX	_	11	aux	_	_
+11	searvat	searvat	VERB	VERB	_	2	ccomp	_	highlight=green|span=11
+12	suodjalanguovlluid	suodjalanguovlluid	NOUN	NOUN	_	15	compound	_	_
+13	ásahan-	ásahan-	NOUN	NOUN	_	12	conj	_	_
+14	ja	ja	CCONJ	CCONJ	_	13	cc	_	_
+15	hálddašanbargui	hálddašanbargui	NOUN	NOUN	_	11	obl	_	_
+16	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: sme_giella-ud-train.conllu · this verb has L=0, R=3 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Aarebrot maiddái dutkkai Sámedikke jienasteddjiid Sámedikke vuosttaš válggas 1989:s , ja lohká iežas dárkilit čuvvon mielde Sámediggeválggain dan rájes .
+1	Aarebrot	Aarebrot	PROPN	PROPN	_	3	nsubj	_	_
+2	maiddái	maiddái	ADV	ADV	_	3	advmod	_	_
+3	dutkkai	dutkkai	VERB	VERB	_	0	root	_	_
+4	Sámedikke	Sámedikke	PROPN	PROPN	_	5	nmod:poss	_	_
+5	jienasteddjiid	jienasteddjiid	NOUN	NOUN	_	3	obj	_	_
+6	Sámedikke	Sámedikke	PROPN	PROPN	_	8	nmod:poss	_	_
+7	vuosttaš	vuosttaš	ADJ	ADJ	_	8	amod	_	_
+8	válggas	válggas	NOUN	NOUN	_	3	obl	_	_
+9	1989:s	1989:s	NUM	NUM	_	3	obl	_	_
+10	,	,	PUNCT	PUNCT	_	3	punct	_	_
+11	ja	ja	CCONJ	CCONJ	_	3	cc	_	_
+12	lohká	lohká	VERB	VERB	_	3	conj	_	_
+13	iežas	iežas	PRON	PRON	_	15	nsubj	_	_
+14	dárkilit	dárkilit	ADV	ADV	_	12	advmod	_	_
+15	čuvvon	čuvvon	VERB	VERB	_	12	ccomp	_	highlight=red
+16	mielde	mielde	ADV	ADV	_	15	advmod	_	highlight=green|span=1
+17	Sámediggeválggain	Sámediggeválggain	NOUN	NOUN	_	15	nmod	_	highlight=green|span=1
+18	dan	dan	PRON	PRON	_	19	obl	_	_
+19	rájes	rájes	ADP	ADP	_	15	nmod	_	highlight=green|span=2
+20	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: sme_giella-ud-train.conllu · this verb has L=0, R=3 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Jouni lea hárjánan bivdi ja lohká iežas hirbmadit illudan go vuittii váldovuoittu .
+1	Jouni	Jouni	PROPN	PROPN	_	4	nsubj	_	_
+2	lea	lea	AUX	AUX	_	4	cop	_	_
+3	hárjánan	hárjánan	VERB	VERB	_	4	acl	_	_
+4	bivdi	bivdi	NOUN	NOUN	_	0	root	_	_
+5	ja	ja	CCONJ	CCONJ	_	4	cc	_	_
+6	lohká	lohká	VERB	VERB	_	4	conj	_	highlight=red
+7	iežas	iežas	PRON	PRON	_	9	nsubj	_	highlight=green|span=1
+8	hirbmadit	hirbmadit	ADV	ADV	_	6	advmod	_	_
+9	illudan	illudan	VERB	VERB	_	6	ccomp	_	highlight=green|span=1
+10	go	go	SCONJ	SCONJ	_	11	mark	_	_
+11	vuittii	vuittii	VERB	VERB	_	6	advcl	_	highlight=green|span=3
+12	váldovuoittu	váldovuoittu	NOUN	NOUN	_	11	obj	_	_
+13	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

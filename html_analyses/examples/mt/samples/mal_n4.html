@@ -1,0 +1,853 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Maltese — MAL_4</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Maltese examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>Maltese <small style="color:#999;font-weight:normal">(mt)</small> — MAL<sub>4</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>4</b> dependents in total (left + right combined).</p><p><b>MAL<sub>4</sub> = 4.639</b> &nbsp; <span style="color:#666">(240 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over all dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: mt_mudt-ud-train.conllu · this verb has L=3, R=1 (mean span = 5.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Illum waranofsinhar il- Maġistrat Miriam Hayman iddikjarat li hemm biżżejjed provi biex il- ħames aħwa tan- negozjant George Farrugia jitqiegħdu taħt att ta' akkuża .
+1	Illum	Illum	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+2	waranofsinhar	waranofsinhar	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+3	il-	il-	DET	DET	_	4	det	_	_
+4	Maġistrat	Maġistrat	NOUN	NOUN	_	5	compound	_	_
+5	Miriam	Miriam	PROPN	PROPN	_	7	nsubj	_	highlight=green|span=4
+6	Hayman	Hayman	PROPN	PROPN	_	5	flat:name	_	_
+7	iddikjarat	iddikjarat	VERB	VERB	_	0	root	_	highlight=red
+8	li	li	SCONJ	SCONJ	_	9	mark	_	_
+9	hemm	hemm	VERB	VERB	_	7	ccomp	_	highlight=green|span=17
+10	biżżejjed	biżżejjed	DET	DET	_	11	det	_	_
+11	provi	provi	NOUN	NOUN	_	9	nsubj	_	_
+12	biex	biex	SCONJ	SCONJ	_	20	mark	_	_
+13	il-	il-	DET	DET	_	15	det	_	_
+14	ħames	ħames	NUM	NUM	_	15	nummod	_	_
+15	aħwa	aħwa	NOUN	NOUN	_	20	nsubj:pass	_	_
+16	tan-	tan-	ADP	ADP	_	17	case:det	_	_
+17	negozjant	negozjant	NOUN	NOUN	_	18	compound	_	_
+18	George	George	PROPN	PROPN	_	15	nmod:poss	_	_
+19	Farrugia	Farrugia	PROPN	PROPN	_	18	flat:name	_	_
+20	jitqiegħdu	jitqiegħdu	VERB	VERB	_	9	ccomp	_	_
+21	taħt	taħt	ADP	ADP	_	22	case	_	_
+22	att	att	NOUN	NOUN	_	20	obl	_	_
+23	ta'	ta'	ADP	ADP	_	24	case	_	_
+24	akkuża	akkuża	NOUN	NOUN	_	22	nmod:poss	_	_
+25	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: mt_mudt-ud-train.conllu · this verb has L=3, R=1 (mean span = 6.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Għalkemm il- fjuri ma jkun fihom riħa ta' xejn , il- frott malajr jibda jieħu l- lewn tiegħu li minħabba fih dawn il- pjanti huma daqshekk imfittxa .
+1	Għalkemm	Għalkemm	SCONJ	SCONJ	_	6	mark	_	_
+2	il-	il-	DET	DET	_	3	det	_	_
+3	fjuri	fjuri	NOUN	NOUN	_	6	nsubj	_	_
+4	ma	ma	PART	PART	_	6	advmod:neg	_	_
+5	jkun	jkun	AUX	AUX	_	6	aux	_	_
+6	fihom	fihom	VERB	VERB	_	14	advcl	_	highlight=green|span=9
+7	riħa	riħa	NOUN	NOUN	_	6	obj	_	_
+8	ta'	ta'	ADP	ADP	_	9	case	_	_
+9	xejn	xejn	PRON	PRON	_	7	nmod:poss	_	_
+10	,	,	PUNCT	PUNCT	_	6	punct	_	_
+11	il-	il-	DET	DET	_	12	det	_	_
+12	frott	frott	NOUN	NOUN	_	14	nsubj	_	highlight=green|span=2
+13	malajr	malajr	ADV	ADV	_	14	advmod	_	highlight=green|span=1
+14	jibda	jibda	VERB	VERB	_	0	root	_	highlight=red
+15	jieħu	jieħu	VERB	VERB	_	14	xcomp	_	highlight=green|span=13
+16	l-	l-	DET	DET	_	17	det	_	_
+17	lewn	lewn	NOUN	NOUN	_	15	obj	_	_
+18	tiegħu	tiegħu	PRON	PRON	_	17	nmod:poss	_	_
+19	li	li	SCONJ	SCONJ	_	27	mark	_	_
+20	minħabba	minħabba	ADP	ADP	_	21	mark	_	_
+21	fih	fih	VERB	VERB	_	27	advcl	_	_
+22	dawn	dawn	PRON	PRON	_	24	det	_	_
+23	il-	il-	DET	DET	_	24	det	_	_
+24	pjanti	pjanti	NOUN	NOUN	_	21	obj	_	_
+25	huma	huma	PRON	PRON	_	27	cop	_	_
+26	daqshekk	daqshekk	ADV	ADV	_	27	advmod	_	_
+27	imfittxa	imfittxa	VERB	VERB	_	17	acl	_	_
+28	.	.	PUNCT	PUNCT	_	14	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: mt_mudt-ud-train.conllu · this verb has L=2, R=2 (mean span = 5.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Il- prosekuzzjoni f' dan il- każ qed titmexxa mill- Ispettur Jonathan Ferris waqt li l- ħamest aħwa Farrugia għandhom jiddefendihom lill- Avukat David Farrugia Sacco .
+1	Il-	Il-	DET	DET	_	2	det	_	_
+2	prosekuzzjoni	prosekuzzjoni	NOUN	NOUN	_	8	nsubj:pass	_	highlight=green|span=2
+3	f'	f'	ADP	ADP	_	6	case	_	_
+4	dan	dan	PRON	PRON	_	6	det	_	_
+5	il-	il-	DET	DET	_	6	det	_	_
+6	każ	każ	NOUN	NOUN	_	8	obl	_	highlight=green|span=4
+7	qed	qed	AUX	AUX	_	8	aux:part	_	_
+8	titmexxa	titmexxa	VERB	VERB	_	0	root	_	highlight=red
+9	mill-	mill-	ADP	ADP	_	10	case:det	_	_
+10	Ispettur	Ispettur	NOUN	NOUN	_	11	compound	_	_
+11	Jonathan	Jonathan	PROPN	PROPN	_	8	obl:agent	_	highlight=green|span=4
+12	Ferris	Ferris	PROPN	PROPN	_	11	flat:name	_	_
+13	waqt	waqt	ADP	ADP	_	19	mark	_	_
+14	li	li	SCONJ	SCONJ	_	13	fixed	_	_
+15	l-	l-	DET	DET	_	17	det	_	_
+16	ħamest	ħamest	NUM	NUM	_	17	nummod	_	_
+17	aħwa	aħwa	NOUN	NOUN	_	18	compound	_	_
+18	Farrugia	Farrugia	PROPN	PROPN	_	19	nsubj	_	_
+19	għandhom	għandhom	VERB	VERB	_	8	advcl	_	highlight=green|span=13
+20	jiddefendihom	jiddefendihom	VERB	VERB	_	23	acl	_	_
+21	lill-	lill-	ADP	ADP	_	22	case:det	_	_
+22	Avukat	Avukat	NOUN	NOUN	_	23	compound	_	_
+23	David	David	PROPN	PROPN	_	19	obj	_	_
+24	Farrugia	Farrugia	PROPN	PROPN	_	23	flat:name	_	_
+25	Sacco	Sacco	PROPN	PROPN	_	23	flat:name	_	_
+26	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: mt_mudt-ud-train.conllu · this verb has L=1, R=3 (mean span = 2.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Aħna m' aħniex se niddiskutu jekk kienx tajjeb jew le li l- Gvern daħal f' IIP - dik hija issue li naħseb li ġiet dibattuta biżżejjed u mhijiex l- intenzjoni ta' din il- Kamra li tagħmel dan - imma li se nagħmlu huwa skrutinju tal- kuntratt innifsu u l- aspetti tal- kuntratt f' termini ta' x' qed jgħid dan l- istess kuntratt , x' commitments daħal għalihom il- pajjiż b' dan il- kuntratt , u l- aspetti kollha li jemerġu minnu .
+1	Aħna	Aħna	PRON	PRON	_	5	nsubj	_	_
+2	m'	m'	PART	PART	_	5	advmod:neg	_	_
+3	aħniex	aħniex	AUX	AUX	_	5	aux:neg	_	_
+4	se	se	AUX	AUX	_	5	aux:part	_	_
+5	niddiskutu	niddiskutu	VERB	VERB	_	0	root	_	_
+6	jekk	jekk	SCONJ	SCONJ	_	8	mark	_	_
+7	kienx	kienx	AUX	AUX	_	8	cop	_	_
+8	tajjeb	tajjeb	ADJ	ADJ	_	5	ccomp	_	_
+9	jew	jew	CCONJ	CCONJ	_	10	cc	_	_
+10	le	le	INTJ	INTJ	_	8	conj	_	_
+11	li	li	SCONJ	SCONJ	_	14	mark	_	_
+12	l-	l-	DET	DET	_	13	det	_	_
+13	Gvern	Gvern	NOUN	NOUN	_	14	nsubj	_	_
+14	daħal	daħal	VERB	VERB	_	8	csubj	_	_
+15	f'	f'	ADP	ADP	_	16	case	_	_
+16	IIP	IIP	NOUN	NOUN	_	14	obl	_	_
+17	-	-	PUNCT	PUNCT	_	20	punct	_	_
+18	dik	dik	PRON	PRON	_	20	nsubj	_	_
+19	hija	hija	PRON	PRON	_	20	cop	_	_
+20	issue	issue	NOUN	NOUN	_	5	parataxis	_	_
+21	li	li	SCONJ	SCONJ	_	22	mark	_	_
+22	naħseb	naħseb	VERB	VERB	_	25	parataxis	_	_
+23	li	li	SCONJ	SCONJ	_	25	mark	_	_
+24	ġiet	ġiet	AUX	AUX	_	25	aux:pass	_	_
+25	dibattuta	dibattuta	VERB	VERB	_	20	acl	_	_
+26	biżżejjed	biżżejjed	ADV	ADV	_	25	advmod	_	_
+27	u	u	CCONJ	CCONJ	_	30	cc	_	_
+28	mhijiex	mhijiex	AUX	AUX	_	30	aux:neg	_	_
+29	l-	l-	DET	DET	_	30	det	_	_
+30	intenzjoni	intenzjoni	NOUN	NOUN	_	20	conj	_	_
+31	ta'	ta'	ADP	ADP	_	34	case	_	_
+32	din	din	PRON	PRON	_	34	det	_	_
+33	il-	il-	DET	DET	_	34	det	_	_
+34	Kamra	Kamra	NOUN	NOUN	_	30	nmod:poss	_	_
+35	li	li	SCONJ	SCONJ	_	36	mark	_	_
+36	tagħmel	tagħmel	VERB	VERB	_	30	acl	_	_
+37	dan	dan	PRON	PRON	_	36	obj	_	_
+38	-	-	PUNCT	PUNCT	_	20	punct	_	_
+39	imma	imma	CCONJ	CCONJ	_	44	cc	_	_
+40	li	li	SCONJ	SCONJ	_	42	mark	_	_
+41	se	se	AUX	AUX	_	42	aux:part	_	_
+42	nagħmlu	nagħmlu	VERB	VERB	_	44	csubj	_	_
+43	huwa	huwa	PRON	PRON	_	44	cop	_	_
+44	skrutinju	skrutinju	NOUN	NOUN	_	20	conj	_	_
+45	tal-	tal-	ADP	ADP	_	46	case:det	_	_
+46	kuntratt	kuntratt	NOUN	NOUN	_	44	nmod:poss	_	_
+47	innifsu	innifsu	PRON	PRON	_	46	nmod	_	_
+48	u	u	CCONJ	CCONJ	_	50	cc	_	_
+49	l-	l-	DET	DET	_	50	det	_	_
+50	aspetti	aspetti	NOUN	NOUN	_	46	conj	_	_
+51	tal-	tal-	ADP	ADP	_	52	case:det	_	_
+52	kuntratt	kuntratt	NOUN	NOUN	_	50	nmod:poss	_	_
+53	f'	f'	ADP	ADP	_	54	case	_	_
+54	termini	termini	NOUN	NOUN	_	44	obl	_	_
+55	ta'	ta'	ADP	ADP	_	58	mark	_	_
+56	x'	x'	PRON	PRON	_	58	obj	_	_
+57	qed	qed	AUX	AUX	_	58	aux:part	_	_
+58	jgħid	jgħid	VERB	VERB	_	54	acl	_	_
+59	dan	dan	PRON	PRON	_	62	det	_	_
+60	l-	l-	DET	DET	_	62	det	_	_
+61	istess	istess	ADJ	ADJ	_	62	amod	_	_
+62	kuntratt	kuntratt	NOUN	NOUN	_	58	nsubj	_	_
+63	,	,	PUNCT	PUNCT	_	58	punct	_	_
+64	x'	x'	PRON	PRON	_	65	det	_	_
+65	commitments	commitments	NOUN	NOUN	_	66	dislocated	_	highlight=green|span=2
+66	daħal	daħal	VERB	VERB	_	58	conj	_	highlight=red
+67	għalihom	għalihom	PRON	PRON	_	66	obl	_	highlight=green|span=1
+68	il-	il-	DET	DET	_	69	det	_	_
+69	pajjiż	pajjiż	NOUN	NOUN	_	66	nsubj	_	highlight=green|span=2
+70	b'	b'	ADP	ADP	_	73	case	_	_
+71	dan	dan	PRON	PRON	_	73	det	_	_
+72	il-	il-	DET	DET	_	73	det	_	_
+73	kuntratt	kuntratt	NOUN	NOUN	_	66	obl	_	highlight=green|span=4
+74	,	,	PUNCT	PUNCT	_	58	punct	_	_
+75	u	u	CCONJ	CCONJ	_	77	cc	_	_
+76	l-	l-	DET	DET	_	77	det	_	_
+77	aspetti	aspetti	NOUN	NOUN	_	58	conj	_	_
+78	kollha	kollha	DET	DET	_	77	det	_	_
+79	li	li	SCONJ	SCONJ	_	80	mark	_	_
+80	jemerġu	jemerġu	VERB	VERB	_	77	acl	_	_
+81	minnu	minnu	PRON	PRON	_	80	obl	_	_
+82	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: mt_mudt-ud-dev.conllu · this verb has L=1, R=3 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Alex Muscat kien ippumpjat ħafna mill- media laburista matul il- kampanja għall- kunsilli lokali u fil- Mosta ġriet ix- xnigħa li kien il- Leader stess li riedu bħala s- sindku l- ġdid tal- Mosta .
+1	Alex	Alex	PROPN	PROPN	_	4	nsubj:pass	_	highlight=green|span=2
+2	Muscat	Muscat	PROPN	PROPN	_	1	flat:name	_	_
+3	kien	kien	AUX	AUX	_	4	cop	_	_
+4	ippumpjat	ippumpjat	VERB	VERB	_	0	root	_	highlight=red
+5	ħafna	ħafna	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+6	mill-	mill-	ADP	ADP	_	7	case:det	_	_
+7	media	media	NOUN	NOUN	_	4	obl:agent	_	highlight=green|span=3
+8	laburista	laburista	ADJ	ADJ	_	7	amod	_	_
+9	matul	matul	ADP	ADP	_	11	case	_	_
+10	il-	il-	DET	DET	_	11	det	_	_
+11	kampanja	kampanja	NOUN	NOUN	_	4	obl	_	highlight=green|span=6
+12	għall-	għall-	ADP	ADP	_	13	case:det	_	_
+13	kunsilli	kunsilli	NOUN	NOUN	_	11	nmod	_	_
+14	lokali	lokali	ADJ	ADJ	_	13	amod	_	_
+15	u	u	CCONJ	CCONJ	_	18	cc	_	_
+16	fil-	fil-	ADP	ADP	_	17	case:det	_	_
+17	Mosta	Mosta	PROPN	PROPN	_	18	obl	_	_
+18	ġriet	ġriet	VERB	VERB	_	4	conj	_	_
+19	ix-	ix-	DET	DET	_	20	det	_	_
+20	xnigħa	xnigħa	NOUN	NOUN	_	18	nsubj	_	_
+21	li	li	SCONJ	SCONJ	_	24	mark	_	_
+22	kien	kien	AUX	AUX	_	24	cop	_	_
+23	il-	il-	DET	DET	_	24	det	_	_
+24	Leader	Leader	NOUN	NOUN	_	20	acl	_	_
+25	stess	stess	PRON	PRON	_	24	nmod	_	_
+26	li	li	SCONJ	SCONJ	_	27	mark	_	_
+27	riedu	riedu	VERB	VERB	_	24	acl	_	_
+28	bħala	bħala	ADP	ADP	_	30	case	_	_
+29	s-	s-	DET	DET	_	30	det	_	_
+30	sindku	sindku	NOUN	NOUN	_	27	obl	_	_
+31	l-	l-	DET	DET	_	32	det	_	_
+32	ġdid	ġdid	ADJ	ADJ	_	30	amod	_	_
+33	tal-	tal-	ADP	ADP	_	34	case:det	_	_
+34	Mosta	Mosta	PROPN	PROPN	_	30	nmod:poss	_	_
+35	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: mt_mudt-ud-train.conllu · this verb has L=2, R=2 (mean span = 1.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Dan il- bexx tal- weraq ma jsirx biex innaddfu l- weraq , imma sempliċiment biex ma nħallux il- pjanta nieqsa mill- umdità .
+1	Dan	Dan	PRON	PRON	_	3	det	_	_
+2	il-	il-	DET	DET	_	3	det	_	_
+3	bexx	bexx	NOUN	NOUN	_	7	nsubj	_	_
+4	tal-	tal-	ADP	ADP	_	5	case:det	_	_
+5	weraq	weraq	NOUN	NOUN	_	3	nmod:poss	_	_
+6	ma	ma	PART	PART	_	7	advmod:neg	_	_
+7	jsirx	jsirx	VERB	VERB	_	0	root	_	_
+8	biex	biex	SCONJ	SCONJ	_	9	mark	_	_
+9	innaddfu	innaddfu	VERB	VERB	_	7	ccomp	_	_
+10	l-	l-	DET	DET	_	11	det	_	_
+11	weraq	weraq	NOUN	NOUN	_	9	obj	_	_
+12	,	,	PUNCT	PUNCT	_	9	punct	_	_
+13	imma	imma	CCONJ	CCONJ	_	17	cc	_	_
+14	sempliċiment	sempliċiment	ADV	ADV	_	17	advmod	_	highlight=green|span=1
+15	biex	biex	SCONJ	SCONJ	_	17	mark	_	_
+16	ma	ma	PART	PART	_	17	advmod:neg	_	highlight=green|span=1
+17	nħallux	nħallux	VERB	VERB	_	9	conj	_	highlight=red
+18	il-	il-	DET	DET	_	19	det	_	_
+19	pjanta	pjanta	NOUN	NOUN	_	17	obj	_	highlight=green|span=2
+20	nieqsa	nieqsa	VERB	VERB	_	17	xcomp	_	highlight=green|span=3
+21	mill-	mill-	ADP	ADP	_	22	case:det	_	_
+22	umdità	umdità	NOUN	NOUN	_	20	obl:arg	_	_
+23	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: mt_mudt-ud-train.conllu · this verb has L=2, R=2 (mean span = 3.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Fi Ħġieġ , ir- ritratti pprojbiti jġiegħlu lil Amanda tintebaħ bir- rivalità bejn ommha u zijitha .
+1	Fi	Fi	ADP	ADP	_	2	case	_	_
+2	Ħġieġ	Ħġieġ	NOUN	NOUN	_	7	obl	_	highlight=green|span=2
+3	,	,	PUNCT	PUNCT	_	2	punct	_	_
+4	ir-	ir-	DET	DET	_	5	det	_	_
+5	ritratti	ritratti	NOUN	NOUN	_	7	nsubj	_	highlight=green|span=3
+6	pprojbiti	pprojbiti	VERB	VERB	_	5	amod	_	_
+7	jġiegħlu	jġiegħlu	VERB	VERB	_	0	root	_	highlight=red
+8	lil	lil	ADP	ADP	_	9	case	_	_
+9	Amanda	Amanda	PROPN	PROPN	_	7	obj	_	highlight=green|span=2
+10	tintebaħ	tintebaħ	VERB	VERB	_	7	xcomp	_	highlight=green|span=7
+11	bir-	bir-	ADP	ADP	_	12	case:det	_	_
+12	rivalità	rivalità	NOUN	NOUN	_	10	obl:arg	_	_
+13	bejn	bejn	ADP	ADP	_	14	case	_	_
+14	ommha	ommha	NOUN	NOUN	_	12	nmod	_	_
+15	u	u	CCONJ	CCONJ	_	16	cc	_	_
+16	zijitha	zijitha	NOUN	NOUN	_	14	conj	_	_
+17	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: mt_mudt-ud-dev.conllu · this verb has L=2, R=2 (mean span = 4.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = L- Assoċjazzjoni tal- Kunsilli Lokali ma taqbilx mal- mod kif il- Gvern waqqaf mill- ġdid il- Kumitat ta' Azzjoni bejn Malta u l- Unjoni Ewropea magħruf bħala l- MEUSAC .
+1	L-	L-	DET	DET	_	2	det	_	_
+2	Assoċjazzjoni	Assoċjazzjoni	NOUN	NOUN	_	7	nsubj	_	_
+3	tal-	tal-	ADP	ADP	_	4	case:det	_	_
+4	Kunsilli	Kunsilli	NOUN	NOUN	_	2	nmod:poss	_	_
+5	Lokali	Lokali	ADJ	ADJ	_	4	amod	_	_
+6	ma	ma	PART	PART	_	7	advmod:neg	_	_
+7	taqbilx	taqbilx	VERB	VERB	_	0	root	_	_
+8	mal-	mal-	ADP	ADP	_	9	case:det	_	_
+9	mod	mod	NOUN	NOUN	_	7	obl:arg	_	_
+10	kif	kif	ADV	ADV	_	13	advmod	_	highlight=green|span=1
+11	il-	il-	DET	DET	_	12	det	_	_
+12	Gvern	Gvern	NOUN	NOUN	_	13	nsubj	_	highlight=green|span=2
+13	waqqaf	waqqaf	VERB	VERB	_	9	acl	_	highlight=red
+14	mill-	mill-	ADP	ADP	_	15	case:det	_	_
+15	ġdid	ġdid	ADJ	ADJ	_	13	obl	_	highlight=green|span=2
+16	il-	il-	DET	DET	_	17	det	_	_
+17	Kumitat	Kumitat	NOUN	NOUN	_	13	obj	_	highlight=green|span=14
+18	ta'	ta'	ADP	ADP	_	19	case	_	_
+19	Azzjoni	Azzjoni	NOUN	NOUN	_	17	nmod:poss	_	_
+20	bejn	bejn	ADP	ADP	_	21	case	_	_
+21	Malta	Malta	PROPN	PROPN	_	19	nmod	_	_
+22	u	u	CCONJ	CCONJ	_	24	cc	_	_
+23	l-	l-	DET	DET	_	24	det	_	_
+24	Unjoni	Unjoni	NOUN	NOUN	_	21	conj	_	_
+25	Ewropea	Ewropea	ADJ	ADJ	_	24	amod	_	_
+26	magħruf	magħruf	VERB	VERB	_	17	acl	_	_
+27	bħala	bħala	ADP	ADP	_	29	case	_	_
+28	l-	l-	DET	DET	_	29	det	_	_
+29	MEUSAC	MEUSAC	NOUN	NOUN	_	26	obl	_	_
+30	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: mt_mudt-ud-test.conllu · this verb has L=2, R=2 (mean span = 4.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ma' dan il- kliem , l- erwieħ twajba ta' fuq iz- zuntier ċarrtu ħalqhom f' daħka kbira li kienet tfisser ħafna .
+1	Ma'	Ma'	ADP	ADP	_	4	case	_	_
+2	dan	dan	PRON	PRON	_	4	det	_	_
+3	il-	il-	DET	DET	_	4	det	_	_
+4	kliem	kliem	NOUN	NOUN	_	13	obl	_	highlight=green|span=4
+5	,	,	PUNCT	PUNCT	_	4	punct	_	_
+6	l-	l-	DET	DET	_	7	det	_	_
+7	erwieħ	erwieħ	NOUN	NOUN	_	13	nsubj	_	highlight=green|span=7
+8	twajba	twajba	ADJ	ADJ	_	7	amod	_	_
+9	ta'	ta'	ADP	ADP	_	12	case	_	_
+10	fuq	fuq	ADP	ADP	_	12	case	_	_
+11	iz-	iz-	DET	DET	_	12	det	_	_
+12	zuntier	zuntier	NOUN	NOUN	_	7	nmod:poss	_	_
+13	ċarrtu	ċarrtu	VERB	VERB	_	0	root	_	highlight=red
+14	ħalqhom	ħalqhom	NOUN	NOUN	_	13	obj	_	highlight=green|span=1
+15	f'	f'	ADP	ADP	_	16	case	_	_
+16	daħka	daħka	NOUN	NOUN	_	13	obl	_	highlight=green|span=7
+17	kbira	kbira	ADJ	ADJ	_	16	amod	_	_
+18	li	li	SCONJ	SCONJ	_	20	mark	_	_
+19	kienet	kienet	AUX	AUX	_	20	aux	_	_
+20	tfisser	tfisser	VERB	VERB	_	16	acl	_	_
+21	ħafna	ħafna	DET	DET	_	20	obj	_	_
+22	.	.	PUNCT	PUNCT	_	13	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: mt_mudt-ud-dev.conllu · this verb has L=2, R=2 (mean span = 6.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Fl- istess żmien , tal- PN kienu organizzaw xibka ta' street leaders mat- toroq kollha ta' Malta u Għawdex biex jirrapportaw lura lill- partit dwar ir- residenti tat- triq tagħhom .
+1	Fl-	Fl-	ADP	ADP	_	3	case:det	_	_
+2	istess	istess	ADJ	ADJ	_	3	amod	_	_
+3	żmien	żmien	NOUN	NOUN	_	8	obl	_	highlight=green|span=3
+4	,	,	PUNCT	PUNCT	_	3	punct	_	_
+5	tal-	tal-	ADP	ADP	_	6	case:det	_	_
+6	PN	PN	NOUN	NOUN	_	8	nsubj	_	highlight=green|span=2
+7	kienu	kienu	AUX	AUX	_	8	aux	_	_
+8	organizzaw	organizzaw	VERB	VERB	_	0	root	_	highlight=red
+9	xibka	xibka	NOUN	NOUN	_	8	obj	_	highlight=green|span=11
+10	ta'	ta'	ADP	ADP	_	12	case	_	_
+11	street	street	ADJ	ADJ	_	12	amod	_	_
+12	leaders	leaders	NOUN	NOUN	_	9	nmod:poss	_	_
+13	mat-	mat-	ADP	ADP	_	14	case:det	_	_
+14	toroq	toroq	NOUN	NOUN	_	9	nmod	_	_
+15	kollha	kollha	DET	DET	_	14	det	_	_
+16	ta'	ta'	ADP	ADP	_	17	case	_	_
+17	Malta	Malta	PROPN	PROPN	_	14	nmod:poss	_	_
+18	u	u	CCONJ	CCONJ	_	19	cc	_	_
+19	Għawdex	Għawdex	PROPN	PROPN	_	17	conj	_	_
+20	biex	biex	SCONJ	SCONJ	_	21	mark	_	_
+21	jirrapportaw	jirrapportaw	VERB	VERB	_	8	advcl	_	highlight=green|span=11
+22	lura	lura	ADV	ADV	_	21	advmod	_	_
+23	lill-	lill-	ADP	ADP	_	24	case:det	_	_
+24	partit	partit	NOUN	NOUN	_	21	iobj	_	_
+25	dwar	dwar	ADP	ADP	_	27	case	_	_
+26	ir-	ir-	DET	DET	_	27	det	_	_
+27	residenti	residenti	NOUN	NOUN	_	21	obl	_	_
+28	tat-	tat-	ADP	ADP	_	29	case:det	_	_
+29	triq	triq	NOUN	NOUN	_	27	nmod:poss	_	_
+30	tagħhom	tagħhom	PRON	PRON	_	29	nmod:poss	_	_
+31	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: mt_mudt-ud-test.conllu · this verb has L=2, R=2 (mean span = 12.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Barra mill- mezzi tax- xandir , il- Malti Standard jinstema' ħafna f' dawk l- inħawi li huma ċentri kummerċjali u dipartimentali , u għalhekk huma ċentri li jiġbdu lejhom taħlita ta' nies ġejjin minn postijiet differenti ta' Malta u Għawdex u li bejniethom jinqdew b' dan it- tip ta' Malti biex jiftehmu .
+1	Barra	Barra	ADV	ADV	_	10	advmod	_	highlight=green|span=5
+2	mill-	mill-	ADP	ADP	_	3	case:det	_	_
+3	mezzi	mezzi	NOUN	NOUN	_	1	obl	_	_
+4	tax-	tax-	ADP	ADP	_	5	case:det	_	_
+5	xandir	xandir	NOUN	NOUN	_	3	nmod:poss	_	_
+6	,	,	PUNCT	PUNCT	_	3	punct	_	_
+7	il-	il-	DET	DET	_	8	det	_	_
+8	Malti	Malti	NOUN	NOUN	_	10	nsubj:pass	_	highlight=green|span=3
+9	Standard	Standard	ADJ	ADJ	_	8	amod	_	_
+10	jinstema'	jinstema'	VERB	VERB	_	0	root	_	highlight=red
+11	ħafna	ħafna	ADV	ADV	_	10	advmod	_	highlight=green|span=1
+12	f'	f'	ADP	ADP	_	15	case	_	_
+13	dawk	dawk	PRON	PRON	_	15	det	_	_
+14	l-	l-	DET	DET	_	15	det	_	_
+15	inħawi	inħawi	NOUN	NOUN	_	10	obl	_	highlight=green|span=40
+16	li	li	SCONJ	SCONJ	_	18	mark	_	_
+17	huma	huma	PRON	PRON	_	18	cop	_	_
+18	ċentri	ċentri	NOUN	NOUN	_	15	acl	_	_
+19	kummerċjali	kummerċjali	ADJ	ADJ	_	18	amod	_	_
+20	u	u	CCONJ	CCONJ	_	21	cc	_	_
+21	dipartimentali	dipartimentali	ADJ	ADJ	_	19	conj	_	_
+22	,	,	PUNCT	PUNCT	_	18	punct	_	_
+23	u	u	CCONJ	CCONJ	_	26	cc	_	_
+24	għalhekk	għalhekk	ADV	ADV	_	26	advmod	_	_
+25	huma	huma	PRON	PRON	_	26	nsubj	_	_
+26	ċentri	ċentri	NOUN	NOUN	_	18	conj	_	_
+27	li	li	SCONJ	SCONJ	_	28	mark	_	_
+28	jiġbdu	jiġbdu	VERB	VERB	_	26	acl	_	_
+29	lejhom	lejhom	PRON	PRON	_	28	obl	_	_
+30	taħlita	taħlita	NOUN	NOUN	_	28	nsubj	_	_
+31	ta'	ta'	ADP	ADP	_	32	case	_	_
+32	nies	nies	NOUN	NOUN	_	30	nmod:poss	_	_
+33	ġejjin	ġejjin	VERB	VERB	_	32	acl	_	_
+34	minn	minn	ADP	ADP	_	35	case	_	_
+35	postijiet	postijiet	NOUN	NOUN	_	33	obl	_	_
+36	differenti	differenti	ADJ	ADJ	_	35	amod	_	_
+37	ta'	ta'	ADP	ADP	_	38	case	_	_
+38	Malta	Malta	PROPN	PROPN	_	35	nmod:poss	_	_
+39	u	u	CCONJ	CCONJ	_	40	cc	_	_
+40	Għawdex	Għawdex	PROPN	PROPN	_	38	conj	_	_
+41	u	u	CCONJ	CCONJ	_	44	cc	_	_
+42	li	li	SCONJ	SCONJ	_	44	mark	_	_
+43	bejniethom	bejniethom	PRON	PRON	_	44	obl	_	_
+44	jinqdew	jinqdew	VERB	VERB	_	28	conj	_	_
+45	b'	b'	ADP	ADP	_	48	case	_	_
+46	dan	dan	PRON	PRON	_	48	det	_	_
+47	it-	it-	DET	DET	_	48	det	_	_
+48	tip	tip	NOUN	NOUN	_	44	obl:arg	_	_
+49	ta'	ta'	ADP	ADP	_	50	case	_	_
+50	Malti	Malti	NOUN	NOUN	_	48	nmod:poss	_	_
+51	biex	biex	SCONJ	SCONJ	_	52	mark	_	_
+52	jiftehmu	jiftehmu	VERB	VERB	_	44	advcl	_	_
+53	.	.	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: mt_mudt-ud-dev.conllu · this verb has L=3, R=1 (mean span = 3.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ftit jiem wara s- Segretarju Parlamentari Dr Chris Said pubblikament sostna l- argument tas- Sur Borg u qal li skont stima li saru , dan il- proġett għandu jiġi jiswa madwar € 150 miljun .
+1	Ftit	Ftit	DET	DET	_	2	det	_	_
+2	jiem	jiem	NOUN	NOUN	_	11	obl	_	highlight=green|span=3
+3	wara	wara	ADP	ADP	_	2	case	_	_
+4	s-	s-	DET	DET	_	5	det	_	_
+5	Segretarju	Segretarju	NOUN	NOUN	_	7	compound	_	_
+6	Parlamentari	Parlamentari	ADJ	ADJ	_	5	amod	_	_
+7	Dr	Dr	NOUN	NOUN	_	11	nsubj	_	highlight=green|span=6
+8	Chris	Chris	PROPN	PROPN	_	7	flat:name	_	_
+9	Said	Said	PROPN	PROPN	_	7	flat:name	_	_
+10	pubblikament	pubblikament	ADV	ADV	_	11	advmod	_	highlight=green|span=1
+11	sostna	sostna	VERB	VERB	_	0	root	_	highlight=red
+12	l-	l-	DET	DET	_	13	det	_	_
+13	argument	argument	NOUN	NOUN	_	11	obj	_	highlight=green|span=5
+14	tas-	tas-	ADP	ADP	_	15	case:det	_	_
+15	Sur	Sur	NOUN	NOUN	_	13	nmod:poss	_	_
+16	Borg	Borg	PROPN	PROPN	_	15	flat:name	_	_
+17	u	u	CCONJ	CCONJ	_	18	cc	_	_
+18	qal	qal	VERB	VERB	_	11	conj	_	_
+19	li	li	SCONJ	SCONJ	_	28	mark	_	_
+20	skont	skont	ADP	ADP	_	21	case	_	_
+21	stima	stima	NOUN	NOUN	_	28	obl	_	_
+22	li	li	SCONJ	SCONJ	_	23	mark	_	_
+23	saru	saru	VERB	VERB	_	21	acl	_	_
+24	,	,	PUNCT	PUNCT	_	21	punct	_	_
+25	dan	dan	PRON	PRON	_	27	det	_	_
+26	il-	il-	DET	DET	_	27	det	_	_
+27	proġett	proġett	NOUN	NOUN	_	28	nsubj	_	_
+28	għandu	għandu	VERB	VERB	_	18	ccomp	_	_
+29	jiġi	jiġi	VERB	VERB	_	28	xcomp	_	_
+30	jiswa	jiswa	VERB	VERB	_	29	xcomp	_	_
+31	madwar	madwar	ADP	ADP	_	32	case	_	_
+32	€	€	SYM	SYM	_	30	obj	_	_
+33	150	150	NUM	NUM	_	34	compound	_	_
+34	miljun	miljun	NUM	NUM	_	32	nummod	_	_
+35	.	.	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: mt_mudt-ud-train.conllu · this verb has L=2, R=2 (mean span = 9.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Irrid ngħid li din kienet dwar l- ittra li konna rċevejna mingħand offerent ta' servizzi ta' laying tal- grounds fejn talabna niġbdu l- attenzjoni lill- Ministeru għall- Finanzi li għandu jkun hemm framework ta' kif meta l- Gvern qed jipparteċipa bħala parti minn fondi u mhux qed jiffinanzja l- proġett sħiħ , ikun hemm xi forma ta' guidelines ta' meta għandhom jintalbu ċerti proċeduri jew le , ovvjament skont kemm ikun kbir l- intervent tal- Gvern .
+1	Irrid	Irrid	VERB	VERB	_	0	root	_	_
+2	ngħid	ngħid	VERB	VERB	_	1	xcomp	_	_
+3	li	li	SCONJ	SCONJ	_	8	mark	_	_
+4	din	din	PRON	PRON	_	8	nsubj	_	_
+5	kienet	kienet	AUX	AUX	_	8	cop	_	_
+6	dwar	dwar	ADP	ADP	_	8	case	_	_
+7	l-	l-	DET	DET	_	8	det	_	_
+8	ittra	ittra	NOUN	NOUN	_	2	ccomp	_	_
+9	li	li	SCONJ	SCONJ	_	11	mark	_	_
+10	konna	konna	AUX	AUX	_	11	aux	_	_
+11	rċevejna	rċevejna	VERB	VERB	_	8	acl	_	_
+12	mingħand	mingħand	ADP	ADP	_	13	case	_	_
+13	offerent	offerent	NOUN	NOUN	_	11	obl	_	_
+14	ta'	ta'	ADP	ADP	_	15	case	_	_
+15	servizzi	servizzi	NOUN	NOUN	_	13	nmod:poss	_	_
+16	ta'	ta'	ADP	ADP	_	17	case	_	_
+17	laying	laying	NOUN	NOUN	_	15	nmod:poss	_	_
+18	tal-	tal-	ADP	ADP	_	19	case:det	_	_
+19	grounds	grounds	NOUN	NOUN	_	17	nmod:poss	_	_
+20	fejn	fejn	ADV	ADV	_	21	advmod	_	_
+21	talabna	talabna	VERB	VERB	_	8	acl	_	_
+22	niġbdu	niġbdu	VERB	VERB	_	21	xcomp	_	_
+23	l-	l-	DET	DET	_	24	det	_	_
+24	attenzjoni	attenzjoni	NOUN	NOUN	_	22	obj	_	_
+25	lill-	lill-	ADP	ADP	_	26	case:det	_	_
+26	Ministeru	Ministeru	NOUN	NOUN	_	22	iobj	_	_
+27	għall-	għall-	ADP	ADP	_	28	case:det	_	_
+28	Finanzi	Finanzi	NOUN	NOUN	_	26	nmod	_	_
+29	li	li	SCONJ	SCONJ	_	30	mark	_	_
+30	għandu	għandu	VERB	VERB	_	22	ccomp	_	_
+31	jkun	jkun	AUX	AUX	_	32	aux	_	_
+32	hemm	hemm	VERB	VERB	_	30	xcomp	_	_
+33	framework	framework	NOUN	NOUN	_	32	nsubj	_	_
+34	ta'	ta'	ADP	ADP	_	54	mark	_	_
+35	kif	kif	ADV	ADV	_	54	advmod	_	highlight=green|span=1
+36	meta	meta	SCONJ	SCONJ	_	40	mark	_	_
+37	l-	l-	DET	DET	_	38	det	_	_
+38	Gvern	Gvern	NOUN	NOUN	_	40	nsubj	_	_
+39	qed	qed	AUX	AUX	_	40	aux:part	_	_
+40	jipparteċipa	jipparteċipa	VERB	VERB	_	54	advcl	_	highlight=green|span=16
+41	bħala	bħala	ADP	ADP	_	42	case	_	_
+42	parti	parti	NOUN	NOUN	_	40	obl	_	_
+43	minn	minn	ADP	ADP	_	44	case	_	_
+44	fondi	fondi	NOUN	NOUN	_	42	nmod	_	_
+45	u	u	CCONJ	CCONJ	_	48	cc	_	_
+46	mhux	mhux	AUX	AUX	_	48	aux:neg	_	_
+47	qed	qed	AUX	AUX	_	48	aux:part	_	_
+48	jiffinanzja	jiffinanzja	VERB	VERB	_	40	conj	_	_
+49	l-	l-	DET	DET	_	50	det	_	_
+50	proġett	proġett	NOUN	NOUN	_	48	obj	_	_
+51	sħiħ	sħiħ	ADJ	ADJ	_	50	amod	_	_
+52	,	,	PUNCT	PUNCT	_	40	punct	_	_
+53	ikun	ikun	AUX	AUX	_	54	aux	_	_
+54	hemm	hemm	VERB	VERB	_	33	acl	_	highlight=red
+55	xi	xi	DET	DET	_	56	det	_	_
+56	forma	forma	NOUN	NOUN	_	54	nsubj	_	highlight=green|span=12
+57	ta'	ta'	ADP	ADP	_	58	case	_	_
+58	guidelines	guidelines	NOUN	NOUN	_	56	nmod:poss	_	_
+59	ta'	ta'	ADP	ADP	_	61	mark	_	_
+60	meta	meta	ADV	ADV	_	61	advmod	_	_
+61	għandhom	għandhom	VERB	VERB	_	58	acl	_	_
+62	jintalbu	jintalbu	VERB	VERB	_	61	xcomp	_	_
+63	ċerti	ċerti	ADJ	ADJ	_	64	amod	_	_
+64	proċeduri	proċeduri	NOUN	NOUN	_	62	nsubj:pass	_	_
+65	jew	jew	CCONJ	CCONJ	_	66	cc	_	_
+66	le	le	INTJ	INTJ	_	62	conj	_	_
+67	,	,	PUNCT	PUNCT	_	54	punct	_	_
+68	ovvjament	ovvjament	ADV	ADV	_	72	advmod	_	_
+69	skont	skont	ADP	ADP	_	72	case	_	_
+70	kemm	kemm	ADV	ADV	_	72	advmod	_	_
+71	ikun	ikun	AUX	AUX	_	72	cop	_	_
+72	kbir	kbir	ADJ	ADJ	_	54	advcl	_	highlight=green|span=9
+73	l-	l-	DET	DET	_	74	det	_	_
+74	intervent	intervent	NOUN	NOUN	_	72	nsubj	_	_
+75	tal-	tal-	ADP	ADP	_	76	case:det	_	_
+76	Gvern	Gvern	NOUN	NOUN	_	74	nmod:poss	_	_
+77	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: mt_mudt-ud-dev.conllu · this verb has L=2, R=2 (mean span = 3.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Fl- 1927 f' Karsiyaka kien hemm bħala kappillan Dun Dward Tonna li wara sar isqof ta' Smyrna .
+1	Fl-	Fl-	ADP	ADP	_	2	case:det	_	_
+2	1927	1927	NUM	NUM	_	6	obl	_	highlight=green|span=2
+3	f'	f'	ADP	ADP	_	4	case	_	_
+4	Karsiyaka	Karsiyaka	PROPN	PROPN	_	6	obl	_	highlight=green|span=2
+5	kien	kien	AUX	AUX	_	6	aux	_	_
+6	hemm	hemm	VERB	VERB	_	0	root	_	highlight=red
+7	bħala	bħala	ADP	ADP	_	8	case	_	_
+8	kappillan	kappillan	NOUN	NOUN	_	6	obl	_	highlight=green|span=2
+9	Dun	Dun	PROPN	PROPN	_	6	nsubj	_	highlight=green|span=9
+10	Dward	Dward	PROPN	PROPN	_	9	flat:name	_	_
+11	Tonna	Tonna	PROPN	PROPN	_	9	flat:name	_	_
+12	li	li	SCONJ	SCONJ	_	14	mark	_	_
+13	wara	wara	ADV	ADV	_	14	advmod	_	_
+14	sar	sar	VERB	VERB	_	9	acl	_	_
+15	isqof	isqof	NOUN	NOUN	_	14	xcomp	_	_
+16	ta'	ta'	ADP	ADP	_	17	case	_	_
+17	Smyrna	Smyrna	PROPN	PROPN	_	15	nmod:poss	_	_
+18	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: mt_mudt-ud-test.conllu · this verb has L=2, R=2 (mean span = 1.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Minħabba l- misterju li t- tqala u t- twelid kienu joħolqu fil- popli primittivi u fost l- injoranza tal- imgħoddi , inħolqu għadd kbir ta' superstizzjonijiet , qwiel , għajdut twemmin ieħor li jkompli jikkomplika proċess li fih innifsu huwa ġa kkomplikat biżżejjed fin- natura tiegħu .
+1	Minħabba	Minħabba	ADP	ADP	_	3	case	_	_
+2	l-	l-	DET	DET	_	3	det	_	_
+3	misterju	misterju	NOUN	NOUN	_	22	obl	_	_
+4	li	li	SCONJ	SCONJ	_	11	mark	_	_
+5	t-	t-	DET	DET	_	6	det	_	_
+6	tqala	tqala	NOUN	NOUN	_	11	nsubj	_	_
+7	u	u	CCONJ	CCONJ	_	9	cc	_	_
+8	t-	t-	DET	DET	_	9	det	_	_
+9	twelid	twelid	NOUN	NOUN	_	6	conj	_	_
+10	kienu	kienu	AUX	AUX	_	11	aux	_	_
+11	joħolqu	joħolqu	VERB	VERB	_	3	acl	_	_
+12	fil-	fil-	ADP	ADP	_	13	case:det	_	_
+13	popli	popli	NOUN	NOUN	_	11	obl	_	_
+14	primittivi	primittivi	ADJ	ADJ	_	13	amod	_	_
+15	u	u	CCONJ	CCONJ	_	18	cc	_	_
+16	fost	fost	ADP	ADP	_	18	case	_	_
+17	l-	l-	DET	DET	_	18	det	_	_
+18	injoranza	injoranza	NOUN	NOUN	_	13	conj	_	_
+19	tal-	tal-	ADP	ADP	_	20	case:det	_	_
+20	imgħoddi	imgħoddi	NOUN	NOUN	_	18	nmod:poss	_	_
+21	,	,	PUNCT	PUNCT	_	3	punct	_	_
+22	inħolqu	inħolqu	VERB	VERB	_	0	root	_	_
+23	għadd	għadd	NOUN	NOUN	_	22	nsubj:pass	_	_
+24	kbir	kbir	ADJ	ADJ	_	23	amod	_	_
+25	ta'	ta'	ADP	ADP	_	26	case	_	_
+26	superstizzjonijiet	superstizzjonijiet	NOUN	NOUN	_	23	nmod:poss	_	_
+27	,	,	PUNCT	PUNCT	_	26	punct	_	_
+28	qwiel	qwiel	NOUN	NOUN	_	26	conj	_	_
+29	,	,	PUNCT	PUNCT	_	26	punct	_	_
+30	għajdut	għajdut	NOUN	NOUN	_	26	conj	_	_
+31	twemmin	twemmin	NOUN	NOUN	_	30	nmod:poss	_	_
+32	ieħor	ieħor	ADJ	ADJ	_	31	amod	_	_
+33	li	li	SCONJ	SCONJ	_	34	mark	_	_
+34	jkompli	jkompli	VERB	VERB	_	30	acl	_	_
+35	jikkomplika	jikkomplika	VERB	VERB	_	34	xcomp	_	_
+36	proċess	proċess	NOUN	NOUN	_	35	obj	_	_
+37	li	li	SCONJ	SCONJ	_	42	mark	_	_
+38	fih	fih	PRON	PRON	_	42	obl	_	highlight=green|span=2
+39	innifsu	innifsu	PRON	PRON	_	38	nmod	_	_
+40	huwa	huwa	PRON	PRON	_	42	cop	_	_
+41	ġa	ġa	ADV	ADV	_	42	advmod	_	highlight=green|span=1
+42	kkomplikat	kkomplikat	VERB	VERB	_	36	acl	_	highlight=red
+43	biżżejjed	biżżejjed	ADV	ADV	_	42	advmod	_	highlight=green|span=1
+44	fin-	fin-	ADP	ADP	_	45	case:det	_	_
+45	natura	natura	NOUN	NOUN	_	42	obl	_	highlight=green|span=3
+46	tiegħu	tiegħu	PRON	PRON	_	45	nmod:poss	_	_
+47	.	.	PUNCT	PUNCT	_	22	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: mt_mudt-ud-test.conllu · this verb has L=1, R=3 (mean span = 7.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ma kellhiex ħajra ttejjeb il- qagħda tagħha f' dik il- fabbrika magħġuna b' għan wieħed ta' żieda sfrenata fil- produzzjoni , imqar jekk spejjeż tal- ħaddiema u xi drabi wkoll tal- prodott innifsu .
+1	Ma	Ma	PART	PART	_	2	advmod:neg	_	highlight=green|span=1
+2	kellhiex	kellhiex	VERB	VERB	_	0	root	_	highlight=red
+3	ħajra	ħajra	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
+4	ttejjeb	ttejjeb	VERB	VERB	_	2	xcomp	_	highlight=green|span=17
+5	il-	il-	DET	DET	_	6	det	_	_
+6	qagħda	qagħda	NOUN	NOUN	_	4	obj	_	_
+7	tagħha	tagħha	PRON	PRON	_	6	nmod:poss	_	_
+8	f'	f'	ADP	ADP	_	11	case	_	_
+9	dik	dik	PRON	PRON	_	11	det	_	_
+10	il-	il-	DET	DET	_	11	det	_	_
+11	fabbrika	fabbrika	NOUN	NOUN	_	6	nmod	_	_
+12	magħġuna	magħġuna	VERB	VERB	_	11	amod	_	_
+13	b'	b'	ADP	ADP	_	14	case	_	_
+14	għan	għan	NOUN	NOUN	_	4	obl	_	_
+15	wieħed	wieħed	NUM	NUM	_	14	nummod	_	_
+16	ta'	ta'	ADP	ADP	_	17	case	_	_
+17	żieda	żieda	NOUN	NOUN	_	14	nmod:poss	_	_
+18	sfrenata	sfrenata	VERB	VERB	_	17	amod	_	_
+19	fil-	fil-	ADP	ADP	_	20	case:det	_	_
+20	produzzjoni	produzzjoni	NOUN	NOUN	_	17	nmod	_	_
+21	,	,	PUNCT	PUNCT	_	2	punct	_	_
+22	imqar	imqar	ADV	ADV	_	24	advmod	_	_
+23	jekk	jekk	SCONJ	SCONJ	_	24	mark	_	_
+24	spejjeż	spejjeż	NOUN	NOUN	_	2	advcl	_	highlight=green|span=12
+25	tal-	tal-	ADP	ADP	_	26	case:det	_	_
+26	ħaddiema	ħaddiema	NOUN	NOUN	_	24	nmod:poss	_	_
+27	u	u	CCONJ	CCONJ	_	32	cc	_	_
+28	xi	xi	DET	DET	_	29	det	_	_
+29	drabi	drabi	NOUN	NOUN	_	32	obl	_	_
+30	wkoll	wkoll	ADV	ADV	_	32	discourse	_	_
+31	tal-	tal-	ADP	ADP	_	32	case:det	_	_
+32	prodott	prodott	NOUN	NOUN	_	24	conj	_	_
+33	innifsu	innifsu	PRON	PRON	_	32	nmod	_	_
+34	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: mt_mudt-ud-train.conllu · this verb has L=3, R=1 (mean span = 1.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ix- xhud saħaq li huwa ma kienx se jagħti karozzi b' xejn u ried l- approvazzjoni ta' ħutu u semma kif eventwalment il- vettura kienet imħallsa mill- Power Plan u reġistrata fuq iben Sammut .
+1	Ix-	Ix-	DET	DET	_	2	det	_	_
+2	xhud	xhud	NOUN	NOUN	_	3	nsubj	_	_
+3	saħaq	saħaq	VERB	VERB	_	0	root	_	_
+4	li	li	SCONJ	SCONJ	_	9	mark	_	_
+5	huwa	huwa	PRON	PRON	_	9	nsubj	_	_
+6	ma	ma	PART	PART	_	9	advmod:neg	_	_
+7	kienx	kienx	AUX	AUX	_	9	aux	_	_
+8	se	se	AUX	AUX	_	9	aux:part	_	_
+9	jagħti	jagħti	VERB	VERB	_	3	ccomp	_	_
+10	karozzi	karozzi	NOUN	NOUN	_	9	obj	_	_
+11	b'	b'	ADP	ADP	_	12	case	_	_
+12	xejn	xejn	PRON	PRON	_	9	obl	_	_
+13	u	u	CCONJ	CCONJ	_	14	cc	_	_
+14	ried	ried	VERB	VERB	_	9	conj	_	_
+15	l-	l-	DET	DET	_	16	det	_	_
+16	approvazzjoni	approvazzjoni	NOUN	NOUN	_	14	obj	_	_
+17	ta'	ta'	ADP	ADP	_	18	case	_	_
+18	ħutu	ħutu	NOUN	NOUN	_	16	nmod:poss	_	_
+19	u	u	CCONJ	CCONJ	_	20	cc	_	_
+20	semma	semma	VERB	VERB	_	3	conj	_	_
+21	kif	kif	ADV	ADV	_	26	advmod	_	highlight=green|span=1
+22	eventwalment	eventwalment	ADV	ADV	_	26	advmod	_	highlight=green|span=1
+23	il-	il-	DET	DET	_	24	det	_	_
+24	vettura	vettura	NOUN	NOUN	_	26	nsubj:pass	_	highlight=green|span=2
+25	kienet	kienet	AUX	AUX	_	26	cop	_	_
+26	imħallsa	imħallsa	VERB	VERB	_	20	ccomp	_	highlight=red
+27	mill-	mill-	ADP	ADP	_	29	case:det	_	_
+28	Power	Power	ADJ	ADJ	_	29	amod	_	_
+29	Plan	Plan	NOUN	NOUN	_	26	obl:agent	_	highlight=green|span=3
+30	u	u	CCONJ	CCONJ	_	31	cc	_	_
+31	reġistrata	reġistrata	VERB	VERB	_	26	conj	_	_
+32	fuq	fuq	ADP	ADP	_	33	case	_	_
+33	iben	iben	NOUN	NOUN	_	31	obl	_	_
+34	Sammut	Sammut	PROPN	PROPN	_	33	nmod:poss	_	_
+35	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: mt_mudt-ud-train.conllu · this verb has L=1, R=3 (mean span = 10.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = It- tama tiegħi hi li llum induru ftit il- partijiet li ġew mgħottija sabiex nifhmu għalfejn ġew mgħottija , għax jista' ikun li kif għedt tajjeb inti , Onor . Bonnici , nitolbu lill- iSpeaker jara jekk ir- raġunijiet li ngħataw fuq li klawsola partikolari tiġi mgħottija , tkunx aċċettabbli jew le .
+1	It-	It-	DET	DET	_	2	det	_	_
+2	tama	tama	NOUN	NOUN	_	4	nsubj	_	_
+3	tiegħi	tiegħi	PRON	PRON	_	2	nmod:poss	_	_
+4	hi	hi	PRON	PRON	_	0	root	_	_
+5	li	li	SCONJ	SCONJ	_	7	mark	_	_
+6	llum	llum	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+7	induru	induru	VERB	VERB	_	4	ccomp	_	highlight=red
+8	ftit	ftit	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+9	il-	il-	DET	DET	_	10	det	_	_
+10	partijiet	partijiet	NOUN	NOUN	_	7	obj	_	highlight=green|span=5
+11	li	li	SCONJ	SCONJ	_	13	mark	_	_
+12	ġew	ġew	AUX	AUX	_	13	aux:pass	_	_
+13	mgħottija	mgħottija	VERB	VERB	_	10	acl	_	_
+14	sabiex	sabiex	SCONJ	SCONJ	_	15	mark	_	_
+15	nifhmu	nifhmu	VERB	VERB	_	7	advcl	_	highlight=green|span=34
+16	għalfejn	għalfejn	ADV	ADV	_	18	advmod	_	_
+17	ġew	ġew	AUX	AUX	_	18	aux:pass	_	_
+18	mgħottija	mgħottija	VERB	VERB	_	15	xcomp	_	_
+19	,	,	PUNCT	PUNCT	_	15	punct	_	_
+20	għax	għax	SCONJ	SCONJ	_	21	mark	_	_
+21	jista'	jista'	VERB	VERB	_	15	advcl	_	_
+22	ikun	ikun	AUX	AUX	_	21	xcomp	_	_
+23	li	li	SCONJ	SCONJ	_	33	mark	_	_
+24	kif	kif	ADV	ADV	_	25	advmod	_	_
+25	għedt	għedt	VERB	VERB	_	33	advcl	_	_
+26	tajjeb	tajjeb	ADV	ADV	_	25	advmod	_	_
+27	inti	inti	PRON	PRON	_	25	nsubj	_	_
+28	,	,	PUNCT	PUNCT	_	27	punct	_	_
+29	Onor	Onor	NOUN	NOUN	_	27	appos	_	_
+30	.	.	PUNCT	PUNCT	_	29	punct	_	_
+31	Bonnici	Bonnici	PROPN	PROPN	_	29	flat:name	_	_
+32	,	,	PUNCT	PUNCT	_	29	punct	_	_
+33	nitolbu	nitolbu	VERB	VERB	_	22	ccomp	_	_
+34	lill-	lill-	ADP	ADP	_	35	case:det	_	_
+35	iSpeaker	iSpeaker	NOUN	NOUN	_	33	nsubj	_	_
+36	jara	jara	VERB	VERB	_	33	xcomp	_	_
+37	jekk	jekk	SCONJ	SCONJ	_	50	mark	_	_
+38	ir-	ir-	DET	DET	_	39	det	_	_
+39	raġunijiet	raġunijiet	NOUN	NOUN	_	50	nsubj	_	_
+40	li	li	SCONJ	SCONJ	_	41	mark	_	_
+41	ngħataw	ngħataw	VERB	VERB	_	39	acl	_	_
+42	fuq	fuq	ADP	ADP	_	47	case	_	_
+43	li	li	SCONJ	SCONJ	_	47	mark	_	_
+44	klawsola	klawsola	NOUN	NOUN	_	47	nsubj:pass	_	_
+45	partikolari	partikolari	ADJ	ADJ	_	44	amod	_	_
+46	tiġi	tiġi	AUX	AUX	_	47	aux:pass	_	_
+47	mgħottija	mgħottija	VERB	VERB	_	41	advcl	_	_
+48	,	,	PUNCT	PUNCT	_	41	punct	_	_
+49	tkunx	tkunx	AUX	AUX	_	50	cop	_	_
+50	aċċettabbli	aċċettabbli	ADJ	ADJ	_	36	ccomp	_	_
+51	jew	jew	CCONJ	CCONJ	_	52	cc	_	_
+52	le	le	INTJ	INTJ	_	50	conj	_	_
+53	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: mt_mudt-ud-dev.conllu · this verb has L=1, R=3 (mean span = 3.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Dan qed isir bl- iskop ewlieni li jippruvaw iqajmu interess u ftit entużjażmu fost il- partitarji Laburisti u fl- istrutturi Laburisti li bħalissa jinsabu demoralizzati għall- aħħar , għaxar xhur wara t- telfa elettorali kbira ta' Settembru li għadda .
+1	Dan	Dan	PRON	PRON	_	3	nsubj	_	_
+2	qed	qed	AUX	AUX	_	3	aux:part	_	_
+3	isir	isir	VERB	VERB	_	0	root	_	_
+4	bl-	bl-	ADP	ADP	_	5	case:det	_	_
+5	iskop	iskop	NOUN	NOUN	_	3	obl	_	_
+6	ewlieni	ewlieni	ADJ	ADJ	_	5	amod	_	_
+7	li	li	SCONJ	SCONJ	_	8	mark	_	_
+8	jippruvaw	jippruvaw	VERB	VERB	_	5	acl	_	_
+9	iqajmu	iqajmu	VERB	VERB	_	8	xcomp	_	_
+10	interess	interess	NOUN	NOUN	_	9	obj	_	_
+11	u	u	CCONJ	CCONJ	_	13	cc	_	_
+12	ftit	ftit	DET	DET	_	13	det	_	_
+13	entużjażmu	entużjażmu	NOUN	NOUN	_	10	conj	_	_
+14	fost	fost	ADP	ADP	_	16	case	_	_
+15	il-	il-	DET	DET	_	16	det	_	_
+16	partitarji	partitarji	NOUN	NOUN	_	9	obl	_	_
+17	Laburisti	Laburisti	ADJ	ADJ	_	16	amod	_	_
+18	u	u	CCONJ	CCONJ	_	20	cc	_	_
+19	fl-	fl-	ADP	ADP	_	20	case:det	_	_
+20	istrutturi	istrutturi	NOUN	NOUN	_	16	conj	_	_
+21	Laburisti	Laburisti	ADJ	ADJ	_	20	amod	_	_
+22	li	li	SCONJ	SCONJ	_	24	mark	_	_
+23	bħalissa	bħalissa	ADV	ADV	_	24	advmod	_	highlight=green|span=1
+24	jinsabu	jinsabu	VERB	VERB	_	20	acl	_	highlight=red
+25	demoralizzati	demoralizzati	VERB	VERB	_	24	xcomp	_	highlight=green|span=1
+26	għall-	għall-	ADP	ADP	_	27	case:det	_	_
+27	aħħar	aħħar	ADJ	ADJ	_	24	obl	_	highlight=green|span=2
+28	,	,	PUNCT	PUNCT	_	27	punct	_	_
+29	għaxar	għaxar	NUM	NUM	_	30	nummod	_	_
+30	xhur	xhur	NOUN	NOUN	_	33	nmod	_	_
+31	wara	wara	ADP	ADP	_	33	case	_	_
+32	t-	t-	DET	DET	_	33	det	_	_
+33	telfa	telfa	NOUN	NOUN	_	24	obl	_	highlight=green|span=11
+34	elettorali	elettorali	ADJ	ADJ	_	33	amod	_	_
+35	kbira	kbira	ADJ	ADJ	_	33	amod	_	_
+36	ta'	ta'	ADP	ADP	_	37	case	_	_
+37	Settembru	Settembru	PROPN	PROPN	_	33	nmod:poss	_	_
+38	li	li	SCONJ	SCONJ	_	39	mark	_	_
+39	għadda	għadda	VERB	VERB	_	37	acl	_	_
+40	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: mt_mudt-ud-dev.conllu · this verb has L=3, R=1 (mean span = 4.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Filwaqt li Malta qatt ma setgħet tinjora r- relazzjonijiet mal- Libja , pajjiż ġar tagħha , meta ġie l- mument tal- verita' ma qagħditx lura milli tgħid li hu abjad , abjad u iswed , iswed .
+1	Filwaqt	Filwaqt	SCONJ	SCONJ	_	6	mark	_	_
+2	li	li	SCONJ	SCONJ	_	1	fixed	_	_
+3	Malta	Malta	PROPN	PROPN	_	6	nsubj	_	highlight=green|span=1
+4	qatt	qatt	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+5	ma	ma	PART	PART	_	6	advmod:neg	_	highlight=green|span=1
+6	setgħet	setgħet	VERB	VERB	_	24	advcl	_	highlight=red
+7	tinjora	tinjora	VERB	VERB	_	6	xcomp	_	highlight=green|span=14
+8	r-	r-	DET	DET	_	9	det	_	_
+9	relazzjonijiet	relazzjonijiet	NOUN	NOUN	_	7	obj	_	_
+10	mal-	mal-	ADP	ADP	_	11	case:det	_	_
+11	Libja	Libja	PROPN	PROPN	_	9	nmod	_	_
+12	,	,	PUNCT	PUNCT	_	13	punct	_	_
+13	pajjiż	pajjiż	NOUN	NOUN	_	11	appos	_	_
+14	ġar	ġar	NOUN	NOUN	_	13	acl	_	_
+15	tagħha	tagħha	PRON	PRON	_	14	nmod:poss	_	_
+16	,	,	PUNCT	PUNCT	_	13	punct	_	_
+17	meta	meta	SCONJ	SCONJ	_	18	mark	_	_
+18	ġie	ġie	VERB	VERB	_	7	advcl	_	_
+19	l-	l-	DET	DET	_	20	det	_	_
+20	mument	mument	NOUN	NOUN	_	18	nsubj	_	_
+21	tal-	tal-	ADP	ADP	_	22	case:det	_	_
+22	verita'	verita'	NOUN	NOUN	_	20	nmod:poss	_	_
+23	ma	ma	PART	PART	_	24	advmod:neg	_	_
+24	qagħditx	qagħditx	VERB	VERB	_	0	root	_	_
+25	lura	lura	ADV	ADV	_	24	advmod	_	_
+26	milli	milli	SCONJ	SCONJ	_	27	mark	_	_
+27	tgħid	tgħid	VERB	VERB	_	24	advcl	_	_
+28	li	li	SCONJ	SCONJ	_	32	mark	_	_
+29	hu	hu	PRON	PRON	_	32	cop	_	_
+30	abjad	abjad	ADJ	ADJ	_	32	nsubj	_	_
+31	,	,	PUNCT	PUNCT	_	32	punct	_	_
+32	abjad	abjad	ADJ	ADJ	_	27	ccomp	_	_
+33	u	u	CCONJ	CCONJ	_	36	cc	_	_
+34	iswed	iswed	ADJ	ADJ	_	36	nsubj	_	_
+35	,	,	PUNCT	PUNCT	_	36	punct	_	_
+36	iswed	iswed	ADJ	ADJ	_	32	conj	_	_
+37	.	.	PUNCT	PUNCT	_	24	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>

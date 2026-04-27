@@ -1,0 +1,995 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>SwissGerman — RMAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to SwissGerman examples</a> · <a href="../../index.html">← back to MAL site</a></p>
+<h1>SwissGerman <small style="color:#999;font-weight:normal">(gsw)</small> — RMAL<sub>2</sub></h1>
+<div class="info"><p><b>Bucket:</b> verbs that have exactly <b>2</b> right dependents (left side may be anything).</p><p><b>RMAL<sub>2</sub> = 4.494</b> &nbsp; <span style="color:#666">(154 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>right</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
+<div class="example">
+<div class="example-meta">Example 1 · source: gsw_divital-ud-test.conllu · this verb has L=1, R=2 (mean span = 5.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Do debi meint mr äu s Racht , Informàtione ùn Idee ze sueche , ze bekùmme ùn ze verbreite , dùrich égàl wàs fer Medie ùn ohne sich àn de Stààtsgranze ze hàlte .
+1	Do	Do	ADV	ADV	_	3	cc	_	_
+2	debi	debi	ADV	ADV	_	1	fixed	_	_
+3	meint	meint	VERB	VERB	_	0	root	_	_
+4	mr	mr	PRON	PRON	_	3	nsubj	_	_
+5	äu	äu	ADV	ADV	_	3	advmod	_	_
+6	s	s	DET	DET	_	7	det	_	_
+7	Racht	Racht	NOUN	NOUN	_	3	obj	_	_
+8	,	,	PUNCT	PUNCT	_	13	punct	_	_
+9	Informàtione	Informàtione	NOUN	NOUN	_	13	obj	_	highlight=green|span=3
+10	ùn	ùn	CCONJ	CCONJ	_	11	cc	_	_
+11	Idee	Idee	NOUN	NOUN	_	9	conj	_	_
+12	ze	ze	PART	PART	_	13	mark	_	_
+13	sueche	sueche	VERB	VERB	_	7	acl	_	highlight=red
+14	,	,	PUNCT	PUNCT	_	16	punct	_	_
+15	ze	ze	PART	PART	_	16	mark	_	_
+16	bekùmme	bekùmme	VERB	VERB	_	13	conj	_	_
+17	ùn	ùn	CCONJ	CCONJ	_	19	cc	_	_
+18	ze	ze	PART	PART	_	19	mark	_	_
+19	verbreite	verbreite	VERB	VERB	_	13	conj	_	_
+20	,	,	PUNCT	PUNCT	_	23	punct	_	_
+21	dùrich	dùrich	ADP	ADP	_	23	case	_	_
+22	égàl	égàl	ADJ	ADJ	_	23	amod	_	_
+23	wàs	wàs	PRON	PRON	_	13	obl	_	highlight=green|span=5
+24	fer	fer	ADP	ADP	_	25	case	_	_
+25	Medie	Medie	NOUN	NOUN	_	23	nmod	_	_
+26	ùn	ùn	CCONJ	CCONJ	_	33	cc	_	_
+27	ohne	ohne	ADP	ADP	_	33	mark	_	_
+28	sich	sich	PRON	PRON	_	33	expl:pv	_	_
+29	àn	àn	ADP	ADP	_	31	case	_	_
+30	de	de	DET	DET	_	31	det	_	_
+31	Stààtsgranze	Stààtsgranze	NOUN	NOUN	_	33	obl	_	_
+32	ze	ze	PART	PART	_	33	mark	_	_
+33	hàlte	hàlte	VERB	VERB	_	13	xcomp	_	highlight=green|span=8
+34	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: gsw_divital-ud-test.conllu · this verb has L=2, R=2 (mean span = 7.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = D Insee do dezue verpflichte , àss jedes Johr e recensement vùn de Sprecher vùn de Regionàlsproche gemàcht word , fer nochzelöje ob d Sprochpolitik wiriksàm isch ùn fer se eventüell korrigiere .
+1	D	D	DET	DET	_	2	det	_	_
+2	Insee	Insee	PROPN	PROPN	_	5	obj	_	highlight=green|span=2
+3	do	do	ADV	ADV	_	5	obl	_	highlight=green|span=2
+4	dezue	dezue	ADV	ADV	_	3	fixed	_	_
+5	verpflichte	verpflichte	VERB	VERB	_	0	root	_	highlight=red
+6	,	,	PUNCT	PUNCT	_	18	punct	_	_
+7	àss	àss	SCONJ	SCONJ	_	18	mark	_	_
+8	jedes	jedes	DET	DET	_	9	det	_	_
+9	Johr	Johr	NOUN	NOUN	_	18	obl:tmod	_	_
+10	e	e	DET	DET	_	11	det	_	_
+11	recensement	recensement	NOUN	NOUN	_	18	nsubj:pass	_	_
+12	vùn	vùn	ADP	ADP	_	14	case	_	_
+13	de	de	DET	DET	_	14	det	_	_
+14	Sprecher	Sprecher	NOUN	NOUN	_	11	nmod:poss	_	_
+15	vùn	vùn	ADP	ADP	_	17	case	_	_
+16	de	de	DET	DET	_	17	det	_	_
+17	Regionàlsproche	Regionàlsproche	NOUN	NOUN	_	14	nmod:poss	_	_
+18	gemàcht	gemàcht	VERB	VERB	_	5	ccomp	_	highlight=green|span=13
+19	word	word	AUX	AUX	_	18	aux:pass	_	_
+20	,	,	PUNCT	PUNCT	_	22	punct	_	_
+21	fer	fer	PART	PART	_	22	mark	_	_
+22	nochzelöje	nochzelöje	VERB	VERB	_	5	xcomp	_	highlight=green|span=12
+23	ob	ob	SCONJ	SCONJ	_	26	mark	_	_
+24	d	d	DET	DET	_	25	det	_	_
+25	Sprochpolitik	Sprochpolitik	NOUN	NOUN	_	26	nsubj	_	_
+26	wiriksàm	wiriksàm	ADJ	ADJ	_	22	ccomp	_	_
+27	isch	isch	AUX	AUX	_	26	cop	_	_
+28	ùn	ùn	CCONJ	CCONJ	_	32	cc	_	_
+29	fer	fer	ADP	ADP	_	32	mark	_	_
+30	se	se	PRON	PRON	_	32	obj	_	_
+31	eventüell	eventüell	ADV	ADV	_	32	advmod	_	_
+32	korrigiere	korrigiere	VERB	VERB	_	22	conj	_	_
+33	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: gsw_divital-ud-test.conllu · this verb has L=2, R=2 (mean span = 2.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Un no hàn mer so die Köjle ghet , hàn mer se àls uf Dreieck gsetzt , sin àls so veer , fenef wie mit hàn gspielt , no hàn mer e Dreieck gemolt mit ere Kried uf d' Stroos , un uf des Dreieck , do sin hiwe un diwe esch eins gsetzt wore , un owe uf 's Eck , un no hiwe un diwe , wàs dezwische gewaan esch , do sin a noch dezwische , un no het mer gewessi Màsse Streck genumme , ich wod sàje , ebene fenef , sechs Meter devon esch mer gebliewe , un no het mer so Köjle g'het , so üs Stein gedrajt , oder Holzköjle , oder Bliiköjle , un no het mer geworfe , het mer de Ding gezeilt , uf die Springkejele , un der wie se no getroffe het , der het no àls widdersch derffe spiele , bis dàs er kenni meh getroffe het , un no esch de Nachscht dràn kumme , un no esch 's àls noch de Reje gànge , un die het mer ö gepàlte .
+1	Un	Un	CCONJ	CCONJ	_	8	cc	_	_
+2	no	no	ADV	ADV	_	8	cc	_	_
+3	hàn	hàn	AUX	AUX	_	8	aux	_	_
+4	mer	mer	PRON	PRON	_	8	nsubj	_	_
+5	so	so	ADV	ADV	_	8	advmod	_	_
+6	die	die	DET	DET	_	7	det	_	_
+7	Köjle	Köjle	NOUN	NOUN	_	8	obj	_	_
+8	ghet	ghet	VERB	VERB	_	0	root	_	_
+9	,	,	PUNCT	PUNCT	_	16	punct	_	_
+10	hàn	hàn	AUX	AUX	_	16	aux	_	_
+11	mer	mer	PRON	PRON	_	16	nsubj	_	_
+12	se	se	PRON	PRON	_	16	obj	_	_
+13	àls	àls	ADV	ADV	_	16	advmod:tmod	_	_
+14	uf	uf	ADP	ADP	_	15	case	_	_
+15	Dreieck	Dreieck	NOUN	NOUN	_	16	obl	_	_
+16	gsetzt	gsetzt	VERB	VERB	_	8	conj	_	_
+17	,	,	PUNCT	PUNCT	_	21	punct	_	_
+18	sin	sin	AUX	AUX	_	21	cop	_	_
+19	àls	àls	ADV	ADV	_	21	advmod:tmod	_	_
+20	so	so	ADV	ADV	_	21	advmod	_	_
+21	veer	veer	NUM	NUM	_	16	parataxis	_	_
+22	,	,	PUNCT	PUNCT	_	23	punct	_	_
+23	fenef	fenef	NUM	NUM	_	21	conj	_	_
+24	wie	wie	PRON	PRON	_	27	nsubj	_	_
+25	mit	mit	ADP	ADP	_	27	compound:prt	_	_
+26	hàn	hàn	AUX	AUX	_	27	aux	_	_
+27	gspielt	gspielt	VERB	VERB	_	21	acl:relcl	_	_
+28	,	,	PUNCT	PUNCT	_	34	punct	_	_
+29	no	no	ADV	ADV	_	34	cc	_	_
+30	hàn	hàn	AUX	AUX	_	34	aux	_	_
+31	mer	mer	PRON	PRON	_	34	nsubj	_	highlight=green|span=1
+32	e	e	DET	DET	_	33	det	_	_
+33	Dreieck	Dreieck	NOUN	NOUN	_	34	obj	_	highlight=green|span=2
+34	gemolt	gemolt	VERB	VERB	_	16	conj	_	highlight=red
+35	mit	mit	ADP	ADP	_	37	case	_	_
+36	ere	ere	DET	DET	_	37	det	_	_
+37	Kried	Kried	NOUN	NOUN	_	34	obl	_	highlight=green|span=3
+38	uf	uf	ADP	ADP	_	40	case	_	_
+39	d'	d'	DET	DET	_	40	det	_	_
+40	Stroos	Stroos	NOUN	NOUN	_	34	obl:lmod	_	highlight=green|span=3
+41	,	,	PUNCT	PUNCT	_	54	punct	_	_
+42	un	un	CCONJ	CCONJ	_	54	cc	_	_
+43	uf	uf	ADP	ADP	_	45	case	_	_
+44	des	des	DET	DET	_	45	det	_	_
+45	Dreieck	Dreieck	NOUN	NOUN	_	54	obl:lmod	_	_
+46	,	,	PUNCT	PUNCT	_	54	punct	_	_
+47	do	do	ADV	ADV	_	54	advmod:lmod	_	_
+48	sin	sin	AUX	AUX	_	52	reparandum	_	_
+49	hiwe	hiwe	ADV	ADV	_	54	advmod:lmod	_	_
+50	un	un	CCONJ	CCONJ	_	51	cc	_	_
+51	diwe	diwe	ADV	ADV	_	49	conj	_	_
+52	esch	esch	AUX	AUX	_	54	aux	_	_
+53	eins	eins	NUM	NUM	_	54	nsubj:pass	_	_
+54	gsetzt	gsetzt	VERB	VERB	_	34	conj	_	_
+55	wore	wore	AUX	AUX	_	54	aux:pass	_	_
+56	,	,	PUNCT	PUNCT	_	58	punct	_	_
+57	un	un	CCONJ	CCONJ	_	58	cc	_	_
+58	owe	owe	ADV	ADV	_	54	conj	_	_
+59	uf	uf	ADP	ADP	_	61	case	_	_
+60	's	's	DET	DET	_	61	det	_	_
+61	Eck	Eck	NOUN	NOUN	_	58	obl:lmod	_	_
+62	,	,	PUNCT	PUNCT	_	78	punct	_	_
+63	un	un	CCONJ	CCONJ	_	78	cc	_	_
+64	no	no	ADV	ADV	_	78	cc	_	_
+65	hiwe	hiwe	ADP	ADP	_	70	case	_	_
+66	un	un	CCONJ	CCONJ	_	67	cc	_	_
+67	diwe	diwe	ADP	ADP	_	65	conj	_	_
+68	,	,	PUNCT	PUNCT	_	70	punct	_	_
+69	wàs	wàs	PRON	PRON	_	70	nsubj	_	_
+70	dezwische	dezwische	ADV	ADV	_	78	dislocated	_	_
+71	gewaan	gewaan	AUX	AUX	_	70	cop	_	_
+72	esch	esch	AUX	AUX	_	70	aux	_	_
+73	,	,	PUNCT	PUNCT	_	78	punct	_	_
+74	do	do	ADV	ADV	_	78	advmod:lmod	_	_
+75	sin	sin	AUX	AUX	_	78	cop	_	_
+76	a	a	ADV	ADV	_	77	advmod:emph	_	_
+77	noch	noch	ADV	ADV	_	78	advmod	_	_
+78	dezwische	dezwische	ADV	ADV	_	54	conj	_	_
+79	,	,	PUNCT	PUNCT	_	87	punct	_	_
+80	un	un	CCONJ	CCONJ	_	87	cc	_	_
+81	no	no	ADV	ADV	_	87	cc	_	_
+82	het	het	AUX	AUX	_	87	aux	_	_
+83	mer	mer	PRON	PRON	_	87	nsubj	_	_
+84	gewessi	gewessi	ADJ	ADJ	_	85	amod	_	_
+85	Màsse	Màsse	NOUN	NOUN	_	86	nmod	_	_
+86	Streck	Streck	NOUN	NOUN	_	87	obj	_	_
+87	genumme	genumme	VERB	VERB	_	78	conj	_	_
+88	,	,	PUNCT	PUNCT	_	91	punct	_	_
+89	ich	ich	PRON	PRON	_	91	nsubj	_	_
+90	wod	wod	AUX	AUX	_	91	aux	_	_
+91	sàje	sàje	VERB	VERB	_	101	advcl	_	_
+92	,	,	PUNCT	PUNCT	_	94	punct	_	_
+93	ebene	ebene	ADV	ADV	_	94	advmod	_	_
+94	fenef	fenef	VERB	VERB	_	96	reparandum	_	_
+95	,	,	PUNCT	PUNCT	_	94	punct	_	_
+96	sechs	sechs	NUM	NUM	_	97	nummod	_	_
+97	Meter	Meter	NOUN	NOUN	_	101	nsubj	_	_
+98	devon	devon	ADV	ADV	_	97	nmod	_	_
+99	esch	esch	AUX	AUX	_	101	aux	_	_
+100	mer	mer	PRON	PRON	_	101	obl:arg	_	_
+101	gebliewe	gebliewe	VERB	VERB	_	87	conj	_	_
+102	,	,	PUNCT	PUNCT	_	109	punct	_	_
+103	un	un	CCONJ	CCONJ	_	109	cc	_	_
+104	no	no	ADV	ADV	_	109	cc	_	_
+105	het	het	AUX	AUX	_	109	aux	_	_
+106	mer	mer	PRON	PRON	_	109	nsubj	_	_
+107	so	so	ADV	ADV	_	108	advmod	_	_
+108	Köjle	Köjle	NOUN	NOUN	_	109	obj	_	_
+109	g'het	g'het	VERB	VERB	_	101	conj	_	_
+110	,	,	PUNCT	PUNCT	_	114	punct	_	_
+111	so	so	ADV	ADV	_	114	advmod	_	_
+112	üs	üs	ADP	ADP	_	113	case	_	_
+113	Stein	Stein	NOUN	NOUN	_	114	obl	_	_
+114	gedrajt	gedrajt	VERB	VERB	_	108	acl	_	_
+115	,	,	PUNCT	PUNCT	_	117	punct	_	_
+116	oder	oder	CCONJ	CCONJ	_	117	cc	_	_
+117	Holzköjle	Holzköjle	NOUN	NOUN	_	109	conj	_	_
+118	,	,	PUNCT	PUNCT	_	120	punct	_	_
+119	oder	oder	CCONJ	CCONJ	_	120	cc	_	_
+120	Bliiköjle	Bliiköjle	NOUN	NOUN	_	109	conj	_	_
+121	,	,	PUNCT	PUNCT	_	126	punct	_	_
+122	un	un	CCONJ	CCONJ	_	126	cc	_	_
+123	no	no	ADV	ADV	_	126	cc	_	_
+124	het	het	AUX	AUX	_	126	aux	_	_
+125	mer	mer	PRON	PRON	_	126	nsubj	_	_
+126	geworfe	geworfe	VERB	VERB	_	109	conj	_	_
+127	,	,	PUNCT	PUNCT	_	132	punct	_	_
+128	het	het	AUX	AUX	_	132	aux	_	_
+129	mer	mer	PRON	PRON	_	132	nsubj	_	_
+130	de	de	DET	DET	_	131	det	_	_
+131	Ding	Ding	NOUN	NOUN	_	132	obj	_	_
+132	gezeilt	gezeilt	VERB	VERB	_	126	conj	_	_
+133	,	,	PUNCT	PUNCT	_	136	punct	_	_
+134	uf	uf	ADP	ADP	_	136	case	_	_
+135	die	die	DET	DET	_	136	det	_	_
+136	Springkejele	Springkejele	NOUN	NOUN	_	132	obl	_	_
+137	,	,	PUNCT	PUNCT	_	152	punct	_	_
+138	un	un	CCONJ	CCONJ	_	152	cc	_	_
+139	der	der	PRON	PRON	_	152	dislocated	_	_
+140	wie	wie	PRON	PRON	_	143	nsubj	_	_
+141	se	se	PRON	PRON	_	143	obj	_	_
+142	no	no	ADV	ADV	_	143	cc	_	_
+143	getroffe	getroffe	VERB	VERB	_	139	acl:relcl	_	_
+144	het	het	AUX	AUX	_	143	aux	_	_
+145	,	,	PUNCT	PUNCT	_	152	punct	_	_
+146	der	der	PRON	PRON	_	152	nsubj	_	_
+147	het	het	AUX	AUX	_	152	aux	_	_
+148	no	no	ADV	ADV	_	152	cc	_	_
+149	àls	àls	ADV	ADV	_	150	advmod:emph	_	_
+150	widdersch	widdersch	ADV	ADV	_	152	advmod:tmod	_	_
+151	derffe	derffe	AUX	AUX	_	152	aux	_	_
+152	spiele	spiele	VERB	VERB	_	132	conj	_	_
+153	,	,	PUNCT	PUNCT	_	159	punct	_	_
+154	bis	bis	ADP	ADP	_	159	mark	_	_
+155	dàs	dàs	SCONJ	SCONJ	_	159	mark	_	_
+156	er	er	PRON	PRON	_	159	nsubj	_	_
+157	kenni	kenni	DET	DET	_	159	obj	_	_
+158	meh	meh	DET	DET	_	157	advmod	_	_
+159	getroffe	getroffe	VERB	VERB	_	152	advcl	_	_
+160	het	het	AUX	AUX	_	159	aux	_	_
+161	,	,	PUNCT	PUNCT	_	168	punct	_	_
+162	un	un	CCONJ	CCONJ	_	168	cc	_	_
+163	no	no	ADV	ADV	_	168	cc	_	_
+164	esch	esch	AUX	AUX	_	168	aux	_	_
+165	de	de	DET	DET	_	166	det	_	_
+166	Nachscht	Nachscht	NOUN	NOUN	_	168	nsubj	_	_
+167	dràn	dràn	ADV	ADV	_	168	compound:prt	_	_
+168	kumme	kumme	VERB	VERB	_	152	conj	_	_
+169	,	,	PUNCT	PUNCT	_	178	punct	_	_
+170	un	un	CCONJ	CCONJ	_	178	cc	_	_
+171	no	no	ADV	ADV	_	178	cc	_	_
+172	esch	esch	AUX	AUX	_	178	aux	_	_
+173	's	's	PRON	PRON	_	178	obj	_	_
+174	àls	àls	ADV	ADV	_	178	advmod:tmod	_	_
+175	noch	noch	ADP	ADP	_	177	case	_	_
+176	de	de	DET	DET	_	177	det	_	_
+177	Reje	Reje	NOUN	NOUN	_	178	obl	_	_
+178	gànge	gànge	VERB	VERB	_	152	conj	_	_
+179	,	,	PUNCT	PUNCT	_	185	punct	_	_
+180	un	un	CCONJ	CCONJ	_	185	cc	_	_
+181	die	die	DET	DET	_	185	obj	_	_
+182	het	het	AUX	AUX	_	185	aux	_	_
+183	mer	mer	PRON	PRON	_	185	nsubj	_	_
+184	ö	ö	ADV	ADV	_	185	advmod	_	_
+185	gepàlte	gepàlte	VERB	VERB	_	178	conj	_	_
+186	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: gsw_divital-ud-test.conllu · this verb has L=1, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ja , wie macht m'r diß , Babbe ?
+1	Ja	Ja	INTJ	INTJ	_	4	discourse	_	_
+2	,	,	PUNCT	PUNCT	_	4	punct	_	_
+3	wie	wie	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+4	macht	macht	VERB	VERB	_	0	root	_	highlight=red
+5	m'r	m'r	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+6	diß	diß	DET	DET	_	4	obj	_	highlight=green|span=1
+7	,	,	PUNCT	PUNCT	_	8	punct	_	_
+8	Babbe	Babbe	PROPN	PROPN	_	4	vocative	_	_
+9	?	?	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: gsw_divital-ud-test.conllu · this verb has L=1, R=2 (mean span = 2.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ech wäiss gur nit , was m'r du mache sell .
+1	Ech	Ech	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	wäiss	wäiss	VERB	VERB	_	0	root	_	highlight=red
+3	gur	gur	ADV	ADV	_	4	advmod:emph	_	_
+4	nit	nit	PART	PART	_	2	advmod	_	highlight=green|span=2
+5	,	,	PUNCT	PUNCT	_	9	punct	_	_
+6	was	was	PRON	PRON	_	9	obj	_	_
+7	m'r	m'r	PRON	PRON	_	9	nsubj	_	_
+8	du	du	ADV	ADV	_	9	advmod	_	_
+9	mache	mache	VERB	VERB	_	2	ccomp	_	highlight=green|span=5
+10	sell	sell	AUX	AUX	_	9	aux	_	_
+11	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: gsw_divital-ud-test.conllu · this verb has L=0, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Wie dü witt , David , rüehj⸗ di numme⸗n⸗ üs .
+1	Wie	Wie	ADV	ADV	_	3	advmod	_	_
+2	dü	dü	PRON	PRON	_	3	nsubj	_	_
+3	witt	witt	VERB	VERB	_	0	root	_	_
+4	,	,	PUNCT	PUNCT	_	5	punct	_	_
+5	David	David	PROPN	PROPN	_	3	vocative	_	_
+6	,	,	PUNCT	PUNCT	_	5	punct	_	_
+7	rüehj⸗	rüehj⸗	VERB	VERB	_	3	parataxis	_	highlight=red
+8	di	di	PRON	PRON	_	7	obj	_	highlight=green|span=1
+9	numme⸗n⸗	numme⸗n⸗	ADV	ADV	_	7	advmod	_	highlight=green|span=1
+10	üs	üs	ADP	ADP	_	7	compound:prt	_	_
+11	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: gsw_divital-ud-test.conllu · this verb has L=1, R=2 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Wenn ich drowe ankùmm , isch s Vaijele schùn fort &quot;
+1	Wenn	Wenn	SCONJ	SCONJ	_	4	mark	_	_
+2	ich	ich	PRON	PRON	_	4	nsubj	_	_
+3	drowe	drowe	ADV	ADV	_	4	advmod:lmod	_	_
+4	ankùmm	ankùmm	VERB	VERB	_	6	advcl	_	highlight=green|span=4
+5	,	,	PUNCT	PUNCT	_	4	punct	_	_
+6	isch	isch	VERB	VERB	_	0	root	_	highlight=red
+7	s	s	DET	DET	_	8	det	_	_
+8	Vaijele	Vaijele	NOUN	NOUN	_	6	nsubj	_	highlight=green|span=2
+9	schùn	schùn	ADV	ADV	_	6	advmod:tmod	_	highlight=green|span=1
+10	fort	fort	ADV	ADV	_	6	compound:prt	_	_
+11	&quot;	&quot;	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: gsw_divital-ud-test.conllu · this verb has L=1, R=2 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Noch sinere Uffàssùng verhindert der Grùndsàtz , àss kollektivi Rachte irgendwellere Grùpp ànerkànnt ware .
+1	Noch	Noch	ADP	ADP	_	3	case	_	_
+2	sinere	sinere	DET	DET	_	3	det:poss	_	_
+3	Uffàssùng	Uffàssùng	NOUN	NOUN	_	4	obl	_	highlight=green|span=3
+4	verhindert	verhindert	VERB	VERB	_	0	root	_	highlight=red
+5	der	der	DET	DET	_	6	det	_	_
+6	Grùndsàtz	Grùndsàtz	NOUN	NOUN	_	4	nsubj	_	highlight=green|span=2
+7	,	,	PUNCT	PUNCT	_	13	punct	_	_
+8	àss	àss	SCONJ	SCONJ	_	13	mark	_	_
+9	kollektivi	kollektivi	ADJ	ADJ	_	10	amod	_	_
+10	Rachte	Rachte	NOUN	NOUN	_	13	nsubj:pass	_	_
+11	irgendwellere	irgendwellere	DET	DET	_	12	det	_	_
+12	Grùpp	Grùpp	NOUN	NOUN	_	13	obl:arg	_	_
+13	ànerkànnt	ànerkànnt	VERB	VERB	_	4	advcl	_	highlight=green|span=7
+14	ware	ware	AUX	AUX	_	13	aux:pass	_	_
+15	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: gsw_uzh-ud-test.conllu · this verb has L=1, R=2 (mean span = 6.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = so beschribt d Vita vom hailige Columban e Bieropfer an Gott Wodan , wo i de Nöchi vo Bregenz abghalte woren isch .
+1	so	so	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+2	beschribt	beschribt	VERB	VERB	_	0	root	_	highlight=red
+3	d	d	DET	DET	_	4	det	_	_
+4	Vita	Vita	PROPN	PROPN	_	2	nsubj	_	highlight=green|span=5
+5	vom	vom	ADP	ADP	_	7	case	_	_
+6	hailige	hailige	ADJ	ADJ	_	7	amod	_	_
+7	Columban	Columban	PROPN	PROPN	_	4	nmod	_	_
+8	e	e	DET	DET	_	9	det	_	_
+9	Bieropfer	Bieropfer	NOUN	NOUN	_	2	obj	_	highlight=green|span=14
+10	an	an	ADP	ADP	_	11	case	_	_
+11	Gott	Gott	NOUN	NOUN	_	9	nmod	_	_
+12	Wodan	Wodan	PROPN	PROPN	_	11	flat	_	_
+13	,	,	PUNCT	PUNCT	_	20	punct	_	_
+14	wo	wo	PRON	PRON	_	20	nsubj:pass	_	_
+15	i	i	ADP	ADP	_	17	case	_	_
+16	de	de	DET	DET	_	17	det	_	_
+17	Nöchi	Nöchi	NOUN	NOUN	_	20	obl	_	_
+18	vo	vo	ADP	ADP	_	19	case	_	_
+19	Bregenz	Bregenz	PROPN	PROPN	_	17	nmod	_	_
+20	abghalte	abghalte	VERB	VERB	_	9	acl:relcl	_	_
+21	woren	woren	AUX	AUX	_	20	aux:pass	_	_
+22	isch	isch	AUX	AUX	_	20	aux	_	_
+23	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: gsw_divital-ud-test.conllu · this verb has L=0, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Àfàngs Oktower dernüo , wenn 's kàlt word , vielmols fàngt 's schu bàl à ze schneje , bis ràà so ùf die duisig Meter , wo die Veh Malker derno Schwierikeite ha mi' m Veh , un hoiptsachlig de Michelsdàà , esch derno de Àbstelldàà fer die Bari Ferme , net wüor , à m Michelsdàà gheert 's Veh widder in de Eigetemer , un no gehn se widder ràb , àwer vielmol driwe se 's no nüs , wenn schee Watter esch , bis zu m dritte , zu m vierte , eder sogàr bis zu m àchte , niinte Oktower , dàs heisst , wenn 's scheen Watter esch , net wüor
+1	Àfàngs	Àfàngs	ADV	ADV	_	2	advmod:tmod	_	_
+2	Oktower	Oktower	NOUN	NOUN	_	11	obl:tmod	_	_
+3	dernüo	dernüo	ADV	ADV	_	11	cc	_	_
+4	,	,	PUNCT	PUNCT	_	8	punct	_	_
+5	wenn	wenn	SCONJ	SCONJ	_	8	mark	_	_
+6	's	's	PRON	PRON	_	8	expl	_	_
+7	kàlt	kàlt	ADJ	ADJ	_	8	xcomp	_	_
+8	word	word	VERB	VERB	_	11	advcl	_	_
+9	,	,	PUNCT	PUNCT	_	8	punct	_	_
+10	vielmols	vielmols	ADV	ADV	_	11	advmod:tmod	_	_
+11	fàngt	fàngt	VERB	VERB	_	0	root	_	_
+12	's	's	PRON	PRON	_	11	expl	_	_
+13	schu	schu	ADV	ADV	_	11	advmod:tmod	_	_
+14	bàl	bàl	ADV	ADV	_	11	advmod	_	_
+15	à	à	ADP	ADP	_	11	compound:prt	_	_
+16	ze	ze	PART	PART	_	17	mark	_	_
+17	schneje	schneje	VERB	VERB	_	11	xcomp	_	_
+18	,	,	PUNCT	PUNCT	_	20	punct	_	_
+19	bis	bis	ADP	ADP	_	20	case	_	_
+20	ràà	ràà	ADV	ADV	_	11	obl:lmod	_	_
+21	so	so	ADV	ADV	_	25	advmod	_	_
+22	ùf	ùf	ADP	ADP	_	25	case	_	_
+23	die	die	DET	DET	_	25	det	_	_
+24	duisig	duisig	NUM	NUM	_	25	nummod	_	_
+25	Meter	Meter	NOUN	NOUN	_	20	obl	_	_
+26	,	,	PUNCT	PUNCT	_	33	punct	_	_
+27	wo	wo	PRON	PRON	_	33	obl:lmod	_	_
+28	die	die	DET	DET	_	30	det	_	_
+29	Veh	Veh	NOUN	NOUN	_	30	reparandum	_	_
+30	Malker	Malker	NOUN	NOUN	_	33	nsubj	_	_
+31	derno	derno	ADV	ADV	_	33	advmod:tmod	_	_
+32	Schwierikeite	Schwierikeite	NOUN	NOUN	_	33	obj	_	_
+33	ha	ha	VERB	VERB	_	20	acl:relcl	_	_
+34	mi'	mi'	ADP	ADP	_	36	case	_	_
+35	m	m	DET	DET	_	36	det	_	_
+36	Veh	Veh	NOUN	NOUN	_	33	obl	_	_
+37	,	,	PUNCT	PUNCT	_	46	punct	_	_
+38	un	un	CCONJ	CCONJ	_	46	cc	_	_
+39	hoiptsachlig	hoiptsachlig	ADJ	ADJ	_	41	advmod:emph	_	_
+40	de	de	DET	DET	_	41	det	_	_
+41	Michelsdàà	Michelsdàà	NOUN	NOUN	_	46	nsubj	_	_
+42	,	,	PUNCT	PUNCT	_	46	punct	_	_
+43	esch	esch	AUX	AUX	_	46	cop	_	_
+44	derno	derno	ADV	ADV	_	46	cc	_	_
+45	de	de	DET	DET	_	46	det	_	_
+46	Àbstelldàà	Àbstelldàà	NOUN	NOUN	_	11	conj	_	_
+47	fer	fer	ADP	ADP	_	49	case	_	_
+48	die	die	DET	DET	_	49	det	_	_
+49	Bari	Bari	NOUN	NOUN	_	46	obl	_	_
+50	Ferme	Ferme	NOUN	NOUN	_	49	compound	_	_
+51	,	,	PUNCT	PUNCT	_	53	punct	_	_
+52	net	net	PART	PART	_	53	advmod	_	_
+53	wüor	wüor	ADJ	ADJ	_	46	discourse	_	_
+54	,	,	PUNCT	PUNCT	_	58	punct	_	_
+55	à	à	ADP	ADP	_	57	case	_	_
+56	m	m	DET	DET	_	57	det	_	_
+57	Michelsdàà	Michelsdàà	NOUN	NOUN	_	58	obl:tmod	_	_
+58	gheert	gheert	VERB	VERB	_	46	parataxis	_	_
+59	's	's	DET	DET	_	60	det	_	_
+60	Veh	Veh	NOUN	NOUN	_	58	nsubj	_	_
+61	widder	widder	ADV	ADV	_	58	advmod:tmod	_	_
+62	in	in	ADP	ADP	_	64	case	_	_
+63	de	de	DET	DET	_	64	det	_	_
+64	Eigetemer	Eigetemer	NOUN	NOUN	_	58	obl:lmod	_	_
+65	,	,	PUNCT	PUNCT	_	68	punct	_	_
+66	un	un	CCONJ	CCONJ	_	68	cc	_	_
+67	no	no	ADV	ADV	_	68	cc	_	_
+68	gehn	gehn	VERB	VERB	_	58	conj	_	highlight=red
+69	se	se	PRON	PRON	_	68	nsubj	_	highlight=green|span=1
+70	widder	widder	ADV	ADV	_	68	advmod:tmod	_	highlight=green|span=1
+71	ràb	ràb	ADV	ADV	_	68	compound:prt	_	_
+72	,	,	PUNCT	PUNCT	_	75	punct	_	_
+73	àwer	àwer	CCONJ	CCONJ	_	75	cc	_	_
+74	vielmol	vielmol	ADV	ADV	_	75	advmod:tmod	_	_
+75	driwe	driwe	VERB	VERB	_	68	conj	_	_
+76	se	se	PRON	PRON	_	75	nsubj	_	_
+77	's	's	PRON	PRON	_	75	expl	_	_
+78	no	no	ADV	ADV	_	75	advmod	_	_
+79	nüs	nüs	ADV	ADV	_	75	compound:prt	_	_
+80	,	,	PUNCT	PUNCT	_	83	punct	_	_
+81	wenn	wenn	SCONJ	SCONJ	_	83	mark	_	_
+82	schee	schee	ADJ	ADJ	_	83	amod	_	_
+83	Watter	Watter	NOUN	NOUN	_	75	advcl	_	_
+84	esch	esch	AUX	AUX	_	83	cop	_	_
+85	,	,	PUNCT	PUNCT	_	89	punct	_	_
+86	bis	bis	ADP	ADP	_	89	case	_	_
+87	zu	zu	ADP	ADP	_	89	case	_	_
+88	m	m	DET	DET	_	89	det	_	_
+89	dritte	dritte	ADJ	ADJ	_	75	obl:tmod	_	_
+90	,	,	PUNCT	PUNCT	_	93	punct	_	_
+91	zu	zu	ADP	ADP	_	93	case	_	_
+92	m	m	DET	DET	_	93	det	_	_
+93	vierte	vierte	ADJ	ADJ	_	89	conj	_	_
+94	,	,	PUNCT	PUNCT	_	103	punct	_	_
+95	eder	eder	CCONJ	CCONJ	_	103	cc	_	_
+96	sogàr	sogàr	ADV	ADV	_	103	advmod	_	_
+97	bis	bis	ADP	ADP	_	103	case	_	_
+98	zu	zu	ADP	ADP	_	103	case	_	_
+99	m	m	DET	DET	_	103	det	_	_
+100	àchte	àchte	ADJ	ADJ	_	103	amod	_	_
+101	,	,	PUNCT	PUNCT	_	102	punct	_	_
+102	niinte	niinte	ADJ	ADJ	_	100	conj	_	_
+103	Oktower	Oktower	NOUN	NOUN	_	89	conj	_	_
+104	,	,	PUNCT	PUNCT	_	106	punct	_	_
+105	dàs	dàs	DET	DET	_	106	nsubj	_	_
+106	heisst	heisst	VERB	VERB	_	75	parataxis	_	_
+107	,	,	PUNCT	PUNCT	_	111	punct	_	_
+108	wenn	wenn	SCONJ	SCONJ	_	111	mark	_	_
+109	's	's	PRON	PRON	_	111	expl	_	_
+110	scheen	scheen	ADJ	ADJ	_	111	amod	_	_
+111	Watter	Watter	NOUN	NOUN	_	106	ccomp	_	_
+112	esch	esch	AUX	AUX	_	111	cop	_	_
+113	,	,	PUNCT	PUNCT	_	115	punct	_	_
+114	net	net	PART	PART	_	115	advmod	_	_
+115	wüor	wüor	ADJ	ADJ	_	106	discourse	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: gsw_divital-ud-test.conllu · this verb has L=1, R=2 (mean span = 4.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ìch bìn ì m trùckene Gràs vù m Stroßegrawel gelaje , mìt de Faldhìehner , wie sìch enànder vùn einem Fald ìn s àndere geruefe hàn , ùn mìr hàn s wehmuetiche Hin-ùn-Har vùn de Làndstroß ìwwer ùns gheert : s Fluechwort vù me Kütscher , e Gléckel , de Kràch vùn ere Achs , de Pìckel vù me Steinbracher , de prassìerte Gàlopp vù me Schàndàrm , wie e Gansehard verschreckt , Hüssìerer , erschépft ùnter ìhrem Rùckkorb , ùn de Brìefbott ìn sinem blöie Kìttel mìt rote Bérdle , wie ìn einem Wìtsch d’ Häuptstroß verlosst ùn ìn e Nawewaj mìt wìlde Hecke süst , wo mr devùn àhnt , ’s gìbt e pààr Hiser , e Bürehoft , e àbgelajenes Lawe gànz à m And …
+1	Ìch	Ìch	PRON	PRON	_	10	nsubj	_	_
+2	bìn	bìn	AUX	AUX	_	10	aux	_	_
+3	ì	ì	ADP	ADP	_	6	case	_	_
+4	m	m	DET	DET	_	6	det	_	_
+5	trùckene	trùckene	ADJ	ADJ	_	6	amod	_	_
+6	Gràs	Gràs	NOUN	NOUN	_	10	obl:lmod	_	_
+7	vù	vù	ADP	ADP	_	9	case	_	_
+8	m	m	DET	DET	_	9	det	_	_
+9	Stroßegrawel	Stroßegrawel	NOUN	NOUN	_	6	nmod:poss	_	_
+10	gelaje	gelaje	VERB	VERB	_	0	root	_	_
+11	,	,	PUNCT	PUNCT	_	14	punct	_	_
+12	mìt	mìt	ADP	ADP	_	14	case	_	_
+13	de	de	DET	DET	_	14	det	_	_
+14	Faldhìehner	Faldhìehner	NOUN	NOUN	_	10	obl	_	_
+15	,	,	PUNCT	PUNCT	_	25	punct	_	_
+16	wie	wie	PRON	PRON	_	25	nsubj	_	_
+17	sìch	sìch	PRON	PRON	_	25	obj	_	_
+18	enànder	enànder	PRON	PRON	_	25	expl:pv	_	_
+19	vùn	vùn	ADP	ADP	_	21	case	_	_
+20	einem	einem	DET	DET	_	21	det	_	_
+21	Fald	Fald	NOUN	NOUN	_	25	obl:lmod	_	_
+22	ìn	ìn	ADP	ADP	_	24	case	_	_
+23	s	s	DET	DET	_	24	det	_	_
+24	àndere	àndere	DET	DET	_	25	obl:lmod	_	_
+25	geruefe	geruefe	VERB	VERB	_	14	acl:relcl	_	_
+26	hàn	hàn	AUX	AUX	_	25	aux	_	_
+27	,	,	PUNCT	PUNCT	_	39	punct	_	_
+28	ùn	ùn	CCONJ	CCONJ	_	39	cc	_	_
+29	mìr	mìr	PRON	PRON	_	39	nsubj	_	_
+30	hàn	hàn	AUX	AUX	_	39	aux	_	_
+31	s	s	DET	DET	_	33	det	_	_
+32	wehmuetiche	wehmuetiche	ADJ	ADJ	_	33	amod	_	_
+33	Hin-ùn-Har	Hin-ùn-Har	NOUN	NOUN	_	39	obj	_	_
+34	vùn	vùn	ADP	ADP	_	36	case	_	_
+35	de	de	DET	DET	_	36	det	_	_
+36	Làndstroß	Làndstroß	NOUN	NOUN	_	33	nmod:poss	_	_
+37	ìwwer	ìwwer	ADP	ADP	_	38	case	_	_
+38	ùns	ùns	PRON	PRON	_	39	obl	_	_
+39	gheert	gheert	VERB	VERB	_	10	conj	_	_
+40	:	:	PUNCT	PUNCT	_	39	punct	_	_
+41	s	s	DET	DET	_	42	det	_	_
+42	Fluechwort	Fluechwort	NOUN	NOUN	_	33	appos	_	_
+43	vù	vù	ADP	ADP	_	45	case	_	_
+44	me	me	DET	DET	_	45	det	_	_
+45	Kütscher	Kütscher	NOUN	NOUN	_	42	nmod:poss	_	_
+46	,	,	PUNCT	PUNCT	_	48	punct	_	_
+47	e	e	DET	DET	_	48	det	_	_
+48	Gléckel	Gléckel	NOUN	NOUN	_	42	conj	_	_
+49	,	,	PUNCT	PUNCT	_	51	punct	_	_
+50	de	de	DET	DET	_	51	det	_	_
+51	Kràch	Kràch	NOUN	NOUN	_	42	conj	_	_
+52	vùn	vùn	ADP	ADP	_	54	case	_	_
+53	ere	ere	DET	DET	_	54	det	_	_
+54	Achs	Achs	NOUN	NOUN	_	51	nmod:poss	_	_
+55	,	,	PUNCT	PUNCT	_	57	punct	_	_
+56	de	de	DET	DET	_	57	det	_	_
+57	Pìckel	Pìckel	NOUN	NOUN	_	42	conj	_	_
+58	vù	vù	ADP	ADP	_	60	case	_	_
+59	me	me	DET	DET	_	60	det	_	_
+60	Steinbracher	Steinbracher	NOUN	NOUN	_	57	nmod:poss	_	_
+61	,	,	PUNCT	PUNCT	_	64	punct	_	_
+62	de	de	DET	DET	_	64	det	_	_
+63	prassìerte	prassìerte	ADJ	ADJ	_	64	amod	_	_
+64	Gàlopp	Gàlopp	NOUN	NOUN	_	42	conj	_	_
+65	vù	vù	ADP	ADP	_	67	case	_	_
+66	me	me	DET	DET	_	67	det	_	_
+67	Schàndàrm	Schàndàrm	NOUN	NOUN	_	64	nmod:poss	_	_
+68	,	,	PUNCT	PUNCT	_	72	punct	_	_
+69	wie	wie	PRON	PRON	_	72	nsubj	_	_
+70	e	e	DET	DET	_	71	det	_	_
+71	Gansehard	Gansehard	NOUN	NOUN	_	72	obj	_	_
+72	verschreckt	verschreckt	VERB	VERB	_	64	acl:relcl	_	_
+73	,	,	PUNCT	PUNCT	_	74	punct	_	_
+74	Hüssìerer	Hüssìerer	NOUN	NOUN	_	42	conj	_	_
+75	,	,	PUNCT	PUNCT	_	76	punct	_	_
+76	erschépft	erschépft	VERB	VERB	_	74	acl	_	_
+77	ùnter	ùnter	ADP	ADP	_	79	case	_	_
+78	ìhrem	ìhrem	DET	DET	_	79	det:poss	_	_
+79	Rùckkorb	Rùckkorb	NOUN	NOUN	_	76	obl:lmod	_	_
+80	,	,	PUNCT	PUNCT	_	83	punct	_	_
+81	ùn	ùn	CCONJ	CCONJ	_	83	cc	_	_
+82	de	de	DET	DET	_	83	det	_	_
+83	Brìefbott	Brìefbott	NOUN	NOUN	_	42	conj	_	_
+84	ìn	ìn	ADP	ADP	_	87	case	_	_
+85	sinem	sinem	DET	DET	_	87	det:poss	_	_
+86	blöie	blöie	ADJ	ADJ	_	87	amod	_	_
+87	Kìttel	Kìttel	NOUN	NOUN	_	83	nmod	_	_
+88	mìt	mìt	ADP	ADP	_	90	case	_	_
+89	rote	rote	ADJ	ADJ	_	90	amod	_	_
+90	Bérdle	Bérdle	NOUN	NOUN	_	87	nmod	_	_
+91	,	,	PUNCT	PUNCT	_	98	punct	_	_
+92	wie	wie	PRON	PRON	_	98	nsubj	_	_
+93	ìn	ìn	ADP	ADP	_	95	case	_	_
+94	einem	einem	DET	DET	_	95	det	_	_
+95	Wìtsch	Wìtsch	NOUN	NOUN	_	98	obl	_	_
+96	d’	d’	DET	DET	_	97	det	_	_
+97	Häuptstroß	Häuptstroß	NOUN	NOUN	_	98	obj	_	_
+98	verlosst	verlosst	VERB	VERB	_	83	acl:relcl	_	_
+99	ùn	ùn	CCONJ	CCONJ	_	106	cc	_	_
+100	ìn	ìn	ADP	ADP	_	102	case	_	_
+101	e	e	DET	DET	_	102	det	_	_
+102	Nawewaj	Nawewaj	NOUN	NOUN	_	106	obl:lmod	_	_
+103	mìt	mìt	ADP	ADP	_	105	case	_	_
+104	wìlde	wìlde	ADJ	ADJ	_	105	amod	_	_
+105	Hecke	Hecke	NOUN	NOUN	_	102	nmod	_	_
+106	süst	süst	VERB	VERB	_	98	conj	_	_
+107	,	,	PUNCT	PUNCT	_	111	punct	_	_
+108	wo	wo	PRON	PRON	_	111	obl	_	_
+109	mr	mr	PRON	PRON	_	111	nsubj	_	_
+110	devùn	devùn	ADV	ADV	_	111	obl	_	_
+111	àhnt	àhnt	VERB	VERB	_	102	acl:relcl	_	_
+112	,	,	PUNCT	PUNCT	_	114	punct	_	_
+113	’s	’s	PRON	PRON	_	114	expl	_	highlight=green|span=1
+114	gìbt	gìbt	VERB	VERB	_	111	ccomp	_	highlight=red
+115	e	e	DET	DET	_	117	det	_	_
+116	pààr	pààr	NOUN	NOUN	_	115	fixed	_	_
+117	Hiser	Hiser	NOUN	NOUN	_	114	obj	_	highlight=green|span=8
+118	,	,	PUNCT	PUNCT	_	120	punct	_	_
+119	e	e	DET	DET	_	120	det	_	_
+120	Bürehoft	Bürehoft	NOUN	NOUN	_	117	conj	_	_
+121	,	,	PUNCT	PUNCT	_	124	punct	_	_
+122	e	e	DET	DET	_	124	det	_	_
+123	àbgelajenes	àbgelajenes	ADJ	ADJ	_	124	amod	_	_
+124	Lawe	Lawe	NOUN	NOUN	_	117	conj	_	_
+125	gànz	gànz	ADJ	ADJ	_	128	advmod	_	_
+126	à	à	ADP	ADP	_	128	case	_	_
+127	m	m	DET	DET	_	128	det	_	_
+128	And	And	NOUN	NOUN	_	114	obl:lmod	_	highlight=green|span=4
+129	…	…	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: gsw_divital-ud-test.conllu · this verb has L=1, R=2 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Diss g´heert hit zue r Region Pays de la Loire .
+1	Diss	Diss	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	g´heert	g´heert	VERB	VERB	_	0	root	_	highlight=red
+3	hit	hit	ADV	ADV	_	2	advmod:tmod	_	highlight=green|span=1
+4	zue	zue	ADP	ADP	_	6	case	_	_
+5	r	r	DET	DET	_	6	det	_	_
+6	Region	Region	NOUN	NOUN	_	2	obl	_	highlight=green|span=7
+7	Pays	Pays	NOUN	NOUN	_	6	appos	_	_
+8	de	de	ADP	ADP	_	10	case	_	_
+9	la	la	DET	DET	_	10	det	_	_
+10	Loire	Loire	PROPN	PROPN	_	7	obl	_	_
+11	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: gsw_divital-ud-test.conllu · this verb has L=1, R=2 (mean span = 4.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Viel internàtionàle Texte bewiese s – ùn es fàngt mit em Artikel 2 vùn de Déclaration universelle àn , wie de salb Nàmme draat :
+1	Viel	Viel	DET	DET	_	3	det	_	_
+2	internàtionàle	internàtionàle	ADJ	ADJ	_	3	amod	_	_
+3	Texte	Texte	NOUN	NOUN	_	4	nsubj	_	_
+4	bewiese	bewiese	VERB	VERB	_	0	root	_	_
+5	s	s	PRON	PRON	_	4	obj	_	_
+6	–	–	PUNCT	PUNCT	_	9	punct	_	_
+7	ùn	ùn	CCONJ	CCONJ	_	9	cc	_	_
+8	es	es	PRON	PRON	_	9	expl	_	highlight=green|span=1
+9	fàngt	fàngt	VERB	VERB	_	4	conj	_	highlight=red
+10	mit	mit	ADP	ADP	_	12	case	_	_
+11	em	em	DET	DET	_	12	det	_	_
+12	Artikel	Artikel	NOUN	NOUN	_	9	obl	_	highlight=green|span=8
+13	2	2	NUM	NUM	_	12	flat	_	_
+14	vùn	vùn	ADP	ADP	_	16	case	_	_
+15	de	de	DET	DET	_	16	det	_	_
+16	Déclaration	Déclaration	NOUN	NOUN	_	12	nmod:poss	_	_
+17	universelle	universelle	ADJ	ADJ	_	16	amod	_	_
+18	àn	àn	ADP	ADP	_	9	compound:prt	_	_
+19	,	,	PUNCT	PUNCT	_	24	punct	_	_
+20	wie	wie	PRON	PRON	_	24	nsubj	_	_
+21	de	de	DET	DET	_	23	det	_	_
+22	salb	salb	DET	DET	_	23	det	_	_
+23	Nàmme	Nàmme	NOUN	NOUN	_	24	obj	_	_
+24	draat	draat	VERB	VERB	_	12	acl:relcl	_	highlight=green|span=5
+25	:	:	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: gsw_divital-ud-test.conllu · this verb has L=1, R=2 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Un sonige han o ihre Schrulle , wie andere Wîbervelker ! “ – “ Jo , dü Pläudere ! “ meint druf d' Mariurs un lacht .
+1	Un	Un	CCONJ	CCONJ	_	3	cc	_	_
+2	sonige	sonige	DET	DET	_	3	nsubj	_	highlight=green|span=1
+3	han	han	VERB	VERB	_	0	root	_	highlight=red
+4	o	o	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+5	ihre	ihre	DET	DET	_	6	det:poss	_	_
+6	Schrulle	Schrulle	NOUN	NOUN	_	3	obj	_	highlight=green|span=5
+7	,	,	PUNCT	PUNCT	_	10	punct	_	_
+8	wie	wie	SCONJ	SCONJ	_	10	case	_	_
+9	andere	andere	DET	DET	_	10	det	_	_
+10	Wîbervelker	Wîbervelker	NOUN	NOUN	_	6	obl	_	_
+11	!	!	PUNCT	PUNCT	_	3	punct	_	_
+12	“	“	PUNCT	PUNCT	_	3	punct	_	_
+13	–	–	PUNCT	PUNCT	_	3	punct	_	_
+14	“	“	PUNCT	PUNCT	_	18	punct	_	_
+15	Jo	Jo	INTJ	INTJ	_	18	discourse	_	_
+16	,	,	PUNCT	PUNCT	_	18	punct	_	_
+17	dü	dü	DET	DET	_	18	det	_	_
+18	Pläudere	Pläudere	NOUN	NOUN	_	21	ccomp	_	_
+19	!	!	PUNCT	PUNCT	_	18	punct	_	_
+20	“	“	PUNCT	PUNCT	_	18	punct	_	_
+21	meint	meint	VERB	VERB	_	3	parataxis	_	_
+22	druf	druf	ADV	ADV	_	21	advmod	_	_
+23	d'	d'	DET	DET	_	24	det	_	_
+24	Mariurs	Mariurs	PROPN	PROPN	_	21	nsubj	_	_
+25	un	un	CCONJ	CCONJ	_	26	cc	_	_
+26	lacht	lacht	VERB	VERB	_	21	conj	_	_
+27	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: gsw_divital-ud-test.conllu · this verb has L=0, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ja , sall schoo , kenne mer Soodernàhditsch
+1	ja	ja	INTJ	INTJ	_	3	discourse	_	_
+2	,	,	PUNCT	PUNCT	_	1	punct	_	_
+3	sall	sall	DET	DET	_	0	root	_	_
+4	schoo	schoo	ADV	ADV	_	3	advmod	_	_
+5	,	,	PUNCT	PUNCT	_	4	punct	_	_
+6	kenne	kenne	VERB	VERB	_	3	parataxis	_	highlight=red
+7	mer	mer	DET	DET	_	6	nsubj	_	highlight=green|span=1
+8	Soodernàhditsch	Soodernàhditsch	NOUN	NOUN	_	6	obj	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: gsw_divital-ud-test.conllu · this verb has L=1, R=2 (mean span = 4.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Mr weiss au , àss d' Gare Matabiau in Toulouse eso heisst , waje me àlte Schlaahüss ( matar heisst &quot; totschlawe &quot; ùn bueu &quot; Ochs &quot; ) .
+1	Mr	Mr	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	weiss	weiss	VERB	VERB	_	0	root	_	highlight=red
+3	au	au	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+4	,	,	PUNCT	PUNCT	_	12	punct	_	_
+5	àss	àss	SCONJ	SCONJ	_	12	mark	_	_
+6	d'	d'	DET	DET	_	7	det	_	_
+7	Gare	Gare	NOUN	NOUN	_	12	nsubj	_	_
+8	Matabiau	Matabiau	PROPN	PROPN	_	7	flat	_	_
+9	in	in	ADP	ADP	_	10	case	_	_
+10	Toulouse	Toulouse	PROPN	PROPN	_	7	nmod:lmod	_	_
+11	eso	eso	ADV	ADV	_	12	advmod	_	_
+12	heisst	heisst	VERB	VERB	_	2	ccomp	_	highlight=green|span=12
+13	,	,	PUNCT	PUNCT	_	17	punct	_	_
+14	waje	waje	ADP	ADP	_	17	case	_	_
+15	me	me	DET	DET	_	17	det	_	_
+16	àlte	àlte	ADJ	ADJ	_	17	amod	_	_
+17	Schlaahüss	Schlaahüss	NOUN	NOUN	_	12	obl	_	_
+18	(	(	PUNCT	PUNCT	_	20	punct	_	_
+19	matar	matar	VERB	VERB	_	20	nsubj	_	_
+20	heisst	heisst	VERB	VERB	_	2	parataxis	_	_
+21	&quot;	&quot;	PUNCT	PUNCT	_	22	punct	_	_
+22	totschlawe	totschlawe	VERB	VERB	_	20	obj	_	_
+23	&quot;	&quot;	PUNCT	PUNCT	_	22	punct	_	_
+24	ùn	ùn	CCONJ	CCONJ	_	25	cc	_	_
+25	bueu	bueu	NOUN	NOUN	_	20	conj	_	_
+26	&quot;	&quot;	PUNCT	PUNCT	_	27	punct	_	_
+27	Ochs	Ochs	NOUN	NOUN	_	25	orphan	_	_
+28	&quot;	&quot;	PUNCT	PUNCT	_	27	punct	_	_
+29	)	)	PUNCT	PUNCT	_	20	punct	_	_
+30	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: gsw_divital-ud-test.conllu · this verb has L=2, R=2 (mean span = 14.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Àwwer àll dìe Dérfer gliche sìch doch eso vìel , bsùndersch ì m Owwerlànd , ùn ìch bìn dùrich so vìel devùn geloffe , ze jedere Stùnd , àss ìch mein , ìch hàb nùmme eins devùn gsahn : d’ Häuptgàss , d’ Bùtzeschiwe ì m Bléi ingefàsst ùn mìt Hopfe ùn Rose verzìert , d’ Làttetor , wo d’ Àlte sìch dràn lahne ùn dìcki Pfiffe räuche ùn wo d’ Fräue sìch drìwwer bùcke , fer d’ Kìnder ùff de Gàss ze ruefe …
+1	Àwwer	Àwwer	CCONJ	CCONJ	_	5	cc	_	_
+2	àll	àll	DET	DET	_	4	det:predet	_	_
+3	dìe	dìe	DET	DET	_	4	det	_	_
+4	Dérfer	Dérfer	NOUN	NOUN	_	5	nsubj	_	_
+5	gliche	gliche	VERB	VERB	_	0	root	_	_
+6	sìch	sìch	PRON	PRON	_	5	obj	_	_
+7	doch	doch	ADV	ADV	_	5	advmod	_	_
+8	eso	eso	ADV	ADV	_	9	advmod:emph	_	_
+9	vìel	vìel	DET	DET	_	5	advmod	_	_
+10	,	,	PUNCT	PUNCT	_	14	punct	_	_
+11	bsùndersch	bsùndersch	ADV	ADV	_	14	advmod:emph	_	_
+12	ì	ì	ADP	ADP	_	14	case	_	_
+13	m	m	DET	DET	_	14	det	_	_
+14	Owwerlànd	Owwerlànd	PROPN	PROPN	_	5	obl:lmod	_	_
+15	,	,	PUNCT	PUNCT	_	23	punct	_	_
+16	ùn	ùn	CCONJ	CCONJ	_	23	cc	_	_
+17	ìch	ìch	PRON	PRON	_	23	nsubj	_	highlight=green|span=1
+18	bìn	bìn	AUX	AUX	_	23	aux	_	_
+19	dùrich	dùrich	ADP	ADP	_	22	case	_	_
+20	so	so	ADV	ADV	_	21	advmod:emph	_	_
+21	vìel	vìel	DET	DET	_	22	det	_	_
+22	devùn	devùn	ADV	ADV	_	23	obl	_	highlight=green|span=4
+23	geloffe	geloffe	VERB	VERB	_	5	conj	_	highlight=red
+24	,	,	PUNCT	PUNCT	_	27	punct	_	_
+25	ze	ze	ADP	ADP	_	27	case	_	_
+26	jedere	jedere	DET	DET	_	27	det	_	_
+27	Stùnd	Stùnd	NOUN	NOUN	_	23	obl:tmod	_	highlight=green|span=3
+28	,	,	PUNCT	PUNCT	_	31	punct	_	_
+29	àss	àss	SCONJ	SCONJ	_	31	mark	_	_
+30	ìch	ìch	PRON	PRON	_	31	nsubj	_	_
+31	mein	mein	VERB	VERB	_	23	ccomp	_	highlight=green|span=50
+32	,	,	PUNCT	PUNCT	_	38	punct	_	_
+33	ìch	ìch	PRON	PRON	_	38	nsubj	_	_
+34	hàb	hàb	AUX	AUX	_	38	aux	_	_
+35	nùmme	nùmme	ADV	ADV	_	36	advmod	_	_
+36	eins	eins	NUM	NUM	_	38	obj	_	_
+37	devùn	devùn	ADV	ADV	_	36	nmod:poss	_	_
+38	gsahn	gsahn	VERB	VERB	_	31	ccomp	_	_
+39	:	:	PUNCT	PUNCT	_	38	punct	_	_
+40	d’	d’	DET	DET	_	41	det	_	_
+41	Häuptgàss	Häuptgàss	NOUN	NOUN	_	38	parataxis	_	_
+42	,	,	PUNCT	PUNCT	_	44	punct	_	_
+43	d’	d’	DET	DET	_	44	det	_	_
+44	Bùtzeschiwe	Bùtzeschiwe	NOUN	NOUN	_	41	conj	_	_
+45	ì	ì	ADP	ADP	_	47	case	_	_
+46	m	m	DET	DET	_	47	det	_	_
+47	Bléi	Bléi	NOUN	NOUN	_	48	obl	_	_
+48	ingefàsst	ingefàsst	VERB	VERB	_	44	acl	_	_
+49	ùn	ùn	CCONJ	CCONJ	_	54	cc	_	_
+50	mìt	mìt	ADP	ADP	_	51	case	_	_
+51	Hopfe	Hopfe	NOUN	NOUN	_	54	obl	_	_
+52	ùn	ùn	CCONJ	CCONJ	_	53	cc	_	_
+53	Rose	Rose	NOUN	NOUN	_	51	conj	_	_
+54	verzìert	verzìert	VERB	VERB	_	48	conj	_	_
+55	,	,	PUNCT	PUNCT	_	57	punct	_	_
+56	d’	d’	DET	DET	_	57	det	_	_
+57	Làttetor	Làttetor	NOUN	NOUN	_	41	conj	_	_
+58	,	,	PUNCT	PUNCT	_	64	punct	_	_
+59	wo	wo	PRON	PRON	_	64	obl:lmod	_	_
+60	d’	d’	DET	DET	_	61	det	_	_
+61	Àlte	Àlte	ADJ	ADJ	_	64	nsubj	_	_
+62	sìch	sìch	PRON	PRON	_	64	expl:pv	_	_
+63	dràn	dràn	ADV	ADV	_	64	obl:lmod	_	_
+64	lahne	lahne	VERB	VERB	_	57	acl:relcl	_	_
+65	ùn	ùn	CCONJ	CCONJ	_	68	cc	_	_
+66	dìcki	dìcki	ADJ	ADJ	_	67	amod	_	_
+67	Pfiffe	Pfiffe	NOUN	NOUN	_	68	obj	_	_
+68	räuche	räuche	VERB	VERB	_	64	conj	_	_
+69	ùn	ùn	CCONJ	CCONJ	_	75	cc	_	_
+70	wo	wo	PRON	PRON	_	75	obl:lmod	_	_
+71	d’	d’	DET	DET	_	72	det	_	_
+72	Fräue	Fräue	NOUN	NOUN	_	75	nsubj	_	_
+73	sìch	sìch	PRON	PRON	_	75	expl:pv	_	_
+74	drìwwer	drìwwer	ADV	ADV	_	75	obl:lmod	_	_
+75	bùcke	bùcke	VERB	VERB	_	64	conj	_	_
+76	,	,	PUNCT	PUNCT	_	84	punct	_	_
+77	fer	fer	ADP	ADP	_	84	mark	_	_
+78	d’	d’	DET	DET	_	79	det	_	_
+79	Kìnder	Kìnder	NOUN	NOUN	_	84	obj	_	_
+80	ùff	ùff	ADP	ADP	_	82	case	_	_
+81	de	de	DET	DET	_	82	det	_	_
+82	Gàss	Gàss	NOUN	NOUN	_	79	nmod:lmod	_	_
+83	ze	ze	ADP	ADP	_	84	mark	_	_
+84	ruefe	ruefe	VERB	VERB	_	75	xcomp	_	_
+85	…	…	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: gsw_divital-ud-test.conllu · this verb has L=1, R=2 (mean span = 11.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ONU , Pacte international relatif à les droits civils et politiques , article 26 : s Gsetz gewährt alle Lit de salb ùn effektiv Schùtz geje alli Diskriminàtion , wie ùf Ràss , Fàrb , Gschlacht , Sproch , Religion , politischi Meinunge oder ànderi Meinùnge , Nàtionàl- oder Soziàlharkùnft , Richtùm , Gebùrt oder noch e àndere Statüs berueje .
+1	ONU	ONU	PROPN	PROPN	_	0	root	_	_
+2	,	,	PUNCT	PUNCT	_	3	punct	_	_
+3	Pacte	Pacte	NOUN	NOUN	_	1	appos	_	_
+4	international	international	ADJ	ADJ	_	3	amod	_	_
+5	relatif	relatif	ADJ	ADJ	_	3	amod	_	_
+6	à	à	ADP	ADP	_	8	case	_	_
+7	les	les	DET	DET	_	8	det	_	_
+8	droits	droits	NOUN	NOUN	_	5	obl:arg	_	_
+9	civils	civils	ADJ	ADJ	_	8	amod	_	_
+10	et	et	CCONJ	CCONJ	_	11	cc	_	_
+11	politiques	politiques	ADJ	ADJ	_	9	conj	_	_
+12	,	,	PUNCT	PUNCT	_	13	punct	_	_
+13	article	article	NOUN	NOUN	_	3	nmod	_	_
+14	26	26	NUM	NUM	_	13	flat	_	_
+15	:	:	PUNCT	PUNCT	_	18	punct	_	_
+16	s	s	DET	DET	_	17	det	_	_
+17	Gsetz	Gsetz	NOUN	NOUN	_	18	nsubj	_	highlight=green|span=2
+18	gewährt	gewährt	VERB	VERB	_	1	parataxis	_	highlight=red
+19	alle	alle	DET	DET	_	20	det	_	_
+20	Lit	Lit	NOUN	NOUN	_	18	obl:arg	_	highlight=green|span=2
+21	de	de	DET	DET	_	25	det	_	_
+22	salb	salb	DET	DET	_	25	amod	_	_
+23	ùn	ùn	CCONJ	CCONJ	_	24	cc	_	_
+24	effektiv	effektiv	ADJ	ADJ	_	22	conj	_	_
+25	Schùtz	Schùtz	NOUN	NOUN	_	18	obj	_	highlight=green|span=31
+26	geje	geje	ADP	ADP	_	28	case	_	_
+27	alli	alli	DET	DET	_	28	det	_	_
+28	Diskriminàtion	Diskriminàtion	NOUN	NOUN	_	25	nmod	_	_
+29	,	,	PUNCT	PUNCT	_	60	punct	_	_
+30	wie	wie	PRON	PRON	_	60	nsubj	_	_
+31	ùf	ùf	ADP	ADP	_	32	case	_	_
+32	Ràss	Ràss	NOUN	NOUN	_	60	obl	_	_
+33	,	,	PUNCT	PUNCT	_	34	punct	_	_
+34	Fàrb	Fàrb	NOUN	NOUN	_	32	conj	_	_
+35	,	,	PUNCT	PUNCT	_	36	punct	_	_
+36	Gschlacht	Gschlacht	NOUN	NOUN	_	32	conj	_	_
+37	,	,	PUNCT	PUNCT	_	38	punct	_	_
+38	Sproch	Sproch	NOUN	NOUN	_	32	conj	_	_
+39	,	,	PUNCT	PUNCT	_	40	punct	_	_
+40	Religion	Religion	NOUN	NOUN	_	32	conj	_	_
+41	,	,	PUNCT	PUNCT	_	43	punct	_	_
+42	politischi	politischi	ADJ	ADJ	_	43	amod	_	_
+43	Meinunge	Meinunge	NOUN	NOUN	_	32	conj	_	_
+44	oder	oder	CCONJ	CCONJ	_	46	cc	_	_
+45	ànderi	ànderi	DET	DET	_	46	det	_	_
+46	Meinùnge	Meinùnge	NOUN	NOUN	_	43	conj	_	_
+47	,	,	PUNCT	PUNCT	_	48	punct	_	_
+48	Nàtionàl-	Nàtionàl-	NOUN	NOUN	_	32	conj	_	_
+49	oder	oder	CCONJ	CCONJ	_	50	cc	_	_
+50	Soziàlharkùnft	Soziàlharkùnft	NOUN	NOUN	_	48	conj	_	_
+51	,	,	PUNCT	PUNCT	_	52	punct	_	_
+52	Richtùm	Richtùm	NOUN	NOUN	_	32	conj	_	_
+53	,	,	PUNCT	PUNCT	_	54	punct	_	_
+54	Gebùrt	Gebùrt	NOUN	NOUN	_	32	conj	_	_
+55	oder	oder	CCONJ	CCONJ	_	59	cc	_	_
+56	noch	noch	ADV	ADV	_	59	advmod:emph	_	_
+57	e	e	DET	DET	_	59	det	_	_
+58	àndere	àndere	DET	DET	_	59	det	_	_
+59	Statüs	Statüs	NOUN	NOUN	_	32	conj	_	_
+60	berueje	berueje	VERB	VERB	_	28	acl:relcl	_	_
+61	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: gsw_divital-ud-test.conllu · this verb has L=1, R=2 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Àfàngs Mei schecke mer se nüss , un ands Mei fàhre mer widder met de Kej ùf die Hochweide nùf , ùf die häregelaje Àlp , eder welle mer sàge Bariweide , un dàs esch àls gewähnlig e so n e klei Fescht fer die Dàlbüre , wo s' Veh ùfdriewe .
+1	Àfàngs	Àfàngs	ADV	ADV	_	2	advmod:tmod	_	_
+2	Mei	Mei	NOUN	NOUN	_	3	obl:tmod	_	highlight=green|span=2
+3	schecke	schecke	VERB	VERB	_	0	root	_	highlight=red
+4	mer	mer	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+5	se	se	PRON	PRON	_	3	obj	_	highlight=green|span=1
+6	nüss	nüss	ADV	ADV	_	3	compound:prt	_	_
+7	,	,	PUNCT	PUNCT	_	11	punct	_	_
+8	un	un	CCONJ	CCONJ	_	11	cc	_	_
+9	ands	ands	ADV	ADV	_	10	advmod:tmod	_	_
+10	Mei	Mei	PRON	PRON	_	11	obl:tmod	_	_
+11	fàhre	fàhre	VERB	VERB	_	3	conj	_	_
+12	mer	mer	PRON	PRON	_	11	nsubj	_	_
+13	widder	widder	ADV	ADV	_	11	advmod:tmod	_	_
+14	met	met	ADP	ADP	_	16	case	_	_
+15	de	de	DET	DET	_	16	det	_	_
+16	Kej	Kej	NOUN	NOUN	_	11	obl	_	_
+17	ùf	ùf	ADP	ADP	_	19	case	_	_
+18	die	die	DET	DET	_	19	det	_	_
+19	Hochweide	Hochweide	NOUN	NOUN	_	11	obl:lmod	_	_
+20	nùf	nùf	ADP	ADP	_	11	compound:prt	_	_
+21	,	,	PUNCT	PUNCT	_	25	punct	_	_
+22	ùf	ùf	ADP	ADP	_	25	case	_	_
+23	die	die	DET	DET	_	25	det	_	_
+24	häregelaje	häregelaje	ADJ	ADJ	_	25	amod	_	_
+25	Àlp	Àlp	NOUN	NOUN	_	19	conj	_	_
+26	,	,	PUNCT	PUNCT	_	30	punct	_	_
+27	eder	eder	CCONJ	CCONJ	_	30	cc	_	_
+28	welle	welle	AUX	AUX	_	30	aux	_	_
+29	mer	mer	PRON	PRON	_	30	nsubj	_	_
+30	sàge	sàge	VERB	VERB	_	19	conj	_	_
+31	Bariweide	Bariweide	NOUN	NOUN	_	30	obj	_	_
+32	,	,	PUNCT	PUNCT	_	43	punct	_	_
+33	un	un	CCONJ	CCONJ	_	43	cc	_	_
+34	dàs	dàs	DET	DET	_	43	nsubj	_	_
+35	esch	esch	AUX	AUX	_	43	cop	_	_
+36	àls	àls	ADV	ADV	_	43	advmod:tmod	_	_
+37	gewähnlig	gewähnlig	ADJ	ADJ	_	43	advmod:tmod	_	_
+38	e	e	DET	DET	_	43	advmod:emph	_	_
+39	so	so	ADV	ADV	_	38	fixed	_	_
+40	n	n	X	X	_	39	goeswith	_	_
+41	e	e	DET	DET	_	43	det	_	_
+42	klei	klei	ADJ	ADJ	_	43	amod	_	_
+43	Fescht	Fescht	NOUN	NOUN	_	11	conj	_	_
+44	fer	fer	ADP	ADP	_	46	case	_	_
+45	die	die	DET	DET	_	46	det	_	_
+46	Dàlbüre	Dàlbüre	NOUN	NOUN	_	43	nmod	_	_
+47	,	,	PUNCT	PUNCT	_	51	punct	_	_
+48	wo	wo	PRON	PRON	_	51	nsubj	_	_
+49	s'	s'	DET	DET	_	50	det	_	_
+50	Veh	Veh	NOUN	NOUN	_	51	obj	_	_
+51	ùfdriewe	ùfdriewe	VERB	VERB	_	46	acl:relcl	_	_
+52	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: gsw_uzh-ud-test.conllu · this verb has L=1, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = I weiss nid worum , aber i stoh eifach gärn i Bahnhöf ume .
+1	I	I	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	weiss	weiss	VERB	VERB	_	0	root	_	highlight=red
+3	nid	nid	PART	PART	_	2	advmod	_	highlight=green|span=1
+4	worum	worum	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+5	,	,	PUNCT	PUNCT	_	8	punct	_	_
+6	aber	aber	CCONJ	CCONJ	_	8	cc	_	_
+7	i	i	PRON	PRON	_	8	nsubj	_	_
+8	stoh	stoh	VERB	VERB	_	2	conj	_	_
+9	eifach	eifach	ADV	ADV	_	8	advmod	_	_
+10	gärn	gärn	ADJ	ADJ	_	8	advmod	_	_
+11	i	i	ADP	ADP	_	12	case	_	_
+12	Bahnhöf	Bahnhöf	NOUN	NOUN	_	8	obl	_	_
+13	ume	ume	PART	PART	_	8	compound:prt	_	_
+14	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+</body></html>
