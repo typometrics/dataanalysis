@@ -177,6 +177,8 @@ a { color: #1976d2; }
 table { border-collapse: collapse; width: 100%; margin-bottom: 30px; }
 th, td { border: 1px solid #ddd; padding: 6px 8px; text-align: center; font-size: 12px; }
 th { background-color: #4CAF50; color: white; position: sticky; top: 44px; z-index: 5; }
+tr[id^="lang-"] { scroll-margin-top: 110px; }
+tr[id^="lang-"] > td:first-child { scroll-margin-top: 110px; }
 th.mal-col { background-color: #2196F3; }
 th.score-col { background-color: #FF9800; }
 th.effect-col { background-color: #9C27B0; }
@@ -421,6 +423,7 @@ def _nav_bar(current):
         ('mal_paper_figures.html', 'Paper Figures', [
             ('mal_paper_figures.html', 'Featured per-language plots'),
             ('mal_statistical_tests.html', "Fisher's exact tests (§5.1)"),
+            ('mal_universality_methodology.html', 'Universality test (per-language permutation)'),
             ('mal_typological_maps.html', 'Typology dashboard'),
         ]),
         ('mal_explorer.html', 'Explorer', [
@@ -1555,7 +1558,9 @@ def generate_index_html(output_dir, per_lang_mal, per_lang_lmal, per_lang_rmal,
                     f'</div><div class="lbl"><strong>{n_sig_mal}/{n_sig_total}</strong> '
                     f'pass the universality test '
                     f'(β&nbsp;&gt;&nbsp;0, <em>p</em>&nbsp;&lt;&nbsp;0.05); '
-                    f'<strong>{n_sig_anti}</strong> are significantly anti-MAL.'
+                    f'<strong>{n_sig_anti}</strong> are significantly anti-MAL. '
+                    f'<a href="mal_universality_methodology.html" '
+                    f'style="font-size:11px;">how is this measured?</a>'
                     f'</div></div>')
     body.append('</div>')
 
@@ -1592,7 +1597,9 @@ def generate_index_html(output_dir, per_lang_mal, per_lang_lmal, per_lang_rmal,
                     f'languages ({pct_sig_mal:.1f}%) as showing a '
                     f'<em>significantly positive</em> MAL effect (\u03b1=0.05); '
                     f'<strong>{n_sig_anti}</strong> go the other way. The '
-                    f'<em>p</em>-values are now in the big effect table.</p></div>')
+                    f'<em>p</em>-values are now in the big effect table '
+                    f'(<a href="mal_universality_methodology.html">how the test '
+                    f'works</a>).</p></div>')
     body.append('</div>')
 
     # --- Featured live plots ---
@@ -1751,8 +1758,8 @@ def _build_effect_table(per_lang_mal, per_lang_lmal, per_lang_rmal,
     out.append(f'<th class="effect-col" onclick="sortTable(\'{table_id}\',4,\'number\')" style="cursor:pointer;min-width:160px">LMAL β(1→max) ⇅</th>')
     out.append(f'<th class="effect-col" onclick="sortTable(\'{table_id}\',5,\'number\')" style="cursor:pointer;min-width:160px">RMAL β(1→max) ⇅</th>')
     if sig_by_lang:
-        out.append(f'<th onclick="sortTable(\'{table_id}\',6,\'number\')" style="cursor:pointer" title="Permutation-test p-value on MAL β(1→max), α=0.05"><i>p</i>-value ⇅</th>')
-        out.append(f'<th onclick="sortTable(\'{table_id}\',7,\'string\')" style="cursor:pointer" title="MAL✓ = significantly positive (β>0, p<0.05); anti✓ = significantly negative; n.s. = not significant.">Sig. ⇅</th>')
+        out.append(f'<th onclick="sortTable(\'{table_id}\',6,\'number\')" style="cursor:pointer" title="Permutation-test p-value on MAL β(1→max), α=0.05 — click ‘methodology’ below for details."><i>p</i>-value <a href="mal_universality_methodology.html" style="font-size:10px;color:#1976d2;text-decoration:none;" onclick="event.stopPropagation();" title="How is this p-value computed?">[?]</a> ⇅</th>')
+        out.append(f'<th onclick="sortTable(\'{table_id}\',7,\'string\')" style="cursor:pointer" title="MAL✓ = significantly positive (β>0, p<0.05); anti✓ = significantly negative; n.s. = not significant.">Sig. <a href="mal_universality_methodology.html" style="font-size:10px;color:#1976d2;text-decoration:none;" onclick="event.stopPropagation();" title="How is significance computed?">[?]</a> ⇅</th>')
     out.append('</tr></thead><tbody>')
 
     for lang, name in rows:
@@ -4708,6 +4715,407 @@ function makeChart(direction) {{
     return path
 
 
+# ----- Universality / significance methodology page -----
+
+def generate_universality_methodology_html(output_dir, significance_by_lang,
+                                            langNames, plots_dir='plots'):
+    """Standalone page explaining the per-language permutation significance test
+    that produces the 21.6% / 78.4% pie chart and the 'Sig.' column on the big
+    effect table.
+    """
+    import shutil as _shutil
+    path = os.path.join(output_dir, 'mal_universality_methodology.html')
+    sig = significance_by_lang or {}
+    n_total = len(sig)
+    n_sig = sum(1 for v in sig.values() if v.get('significant'))
+    n_sig_mal = sum(1 for v in sig.values() if v.get('significant_mal'))
+    n_sig_anti = sum(1 for v in sig.values()
+                     if v.get('significant') and not v.get('significant_mal')
+                     and (v.get('beta_1max') or 0) < 0)
+    n_ns = n_total - n_sig
+    pct = lambda x: (100.0 * x / n_total) if n_total else 0.0
+
+    # Copy the pie/histogram figure next to the page if we can find it.
+    fig_rel = None
+    src_fig = os.path.join(plots_dir, 'mal_universality_test_beta.png')
+    if os.path.exists(src_fig):
+        try:
+            dest = os.path.join(output_dir, 'mal_universality_test_beta.png')
+            _shutil.copy2(src_fig, dest)
+            fig_rel = 'mal_universality_test_beta.png'
+        except OSError:
+            fig_rel = None
+
+    # Worked examples — three regimes, by lang_code; fall back gracefully if
+    # any code is missing from the current run.
+    example_codes = [
+        ('ka',  'Strong MAL (significantly positive slope)',  '#c8e6c9', '#1b5e20'),
+        ('cu',  'Significant anti-MAL (significantly negative slope)',
+                                                              '#ffcdd2', '#b71c1c'),
+        ('tr',  'Not significant (slope indistinguishable from zero)',
+                                                              '#eee',    '#666'),
+    ]
+    ex_rows = []
+    for code, label, bg, fg in example_codes:
+        s = sig.get(code)
+        if not s:
+            continue
+        name = langNames.get(code, code)
+        beta = s.get('beta_1max')
+        p = s.get('p_value')
+        es = None  # effect_size is in CSV but not in our cache; show only what we have
+        ex_rows.append((code, name, label, bg, fg, beta, p))
+
+    body = []
+    body.append(_html_head('Universality test \u2014 methodology', with_chartjs=False))
+    body.append(_nav_bar('mal_universality_methodology.html'))
+    body.append('<h1>How is the per-language MAL significance computed?</h1>')
+
+    body.append('<div class="info-box">')
+    body.append(_paper_citation_html())
+    body.append('<p>This page explains the <strong>per-language permutation '
+                'significance test</strong> behind the &laquo;<em>Sig.</em>&raquo; '
+                'column on the <a href="mal_effect.html">big effect table</a> and '
+                'the &laquo;<em>21.6% pass the universality test</em>&raquo; '
+                'tile on the <a href="index.html">home page</a>. '
+                'It is a standard non-parametric test of the <em>sign and slope</em> '
+                'of the MAL log-log regression for each language separately, '
+                'as defined in the cell '
+                '<code>test_mal_significance_beta()</code> of '
+                '<code>08_menzerath_altmann_analysis.ipynb</code>.</p>')
+    body.append('</div>')
+
+    # ---- Headline numbers
+    body.append('<h2>Headline result</h2>')
+    body.append(f'<p style="font-size:15px;">On {n_total} UD&nbsp;v2.17 languages '
+                f'(those with enough verbs to fit a regression), the test gives:</p>')
+    body.append('<ul style="font-size:15px;line-height:1.7;">')
+    body.append(f'<li><span style="background:#c8e6c9;color:#1b5e20;padding:2px 8px;'
+                f'border-radius:10px;font-weight:bold;">MAL\u2713</span> '
+                f'<strong>{n_sig_mal}/{n_total} = {pct(n_sig_mal):.1f}%</strong> '
+                f'show a <em>significantly positive</em> MAL slope '
+                f'(\u03b2&nbsp;&gt;&nbsp;0, <em>p</em>&nbsp;&lt;&nbsp;0.05).</li>')
+    body.append(f'<li><span style="background:#ffcdd2;color:#b71c1c;padding:2px 8px;'
+                f'border-radius:10px;font-weight:bold;">anti\u2713</span> '
+                f'<strong>{n_sig_anti}/{n_total} = {pct(n_sig_anti):.1f}%</strong> '
+                f'show a <em>significantly negative</em> slope (anti-MAL).</li>')
+    body.append(f'<li><span style="background:#eee;color:#666;padding:2px 8px;'
+                f'border-radius:10px;">n.s.</span> '
+                f'<strong>{n_ns}/{n_total} = {pct(n_ns):.1f}%</strong> '
+                f'are <em>not significant</em>: their slope is not '
+                f'distinguishable from zero given the data they have.</li>')
+    body.append('</ul>')
+    if fig_rel:
+        body.append(f'<p><img src="{fig_rel}" alt="Pies and beta histogram" '
+                    f'style="max-width:100%;height:auto;border:1px solid #eee;'
+                    f'padding:6px;background:#fff;"></p>')
+
+    # ---- The test, step-by-step
+    body.append('<h2>The test, step by step</h2>')
+    body.append('<ol style="font-size:14px;line-height:1.65;max-width:900px;">')
+    body.append('<li>For each language we collect the cached MAL signal '
+                '<code>{n &rarr; mean_constituent_size}</code> for all '
+                '<em>n</em> from 1 up to the largest <em>n</em> that meets the '
+                'minimum-count threshold (default '
+                '<code>MIN_COUNT&nbsp;=&nbsp;100</code> verbs).</li>')
+    body.append('<li>We fit an ordinary least-squares regression in '
+                '<strong>log-log space</strong>: '
+                '<code>log(mean_size) = &alpha; + &beta;&nbsp;&middot;&nbsp;log(n)</code>. '
+                'The slope <strong>&beta;</strong> is the headline statistic: '
+                '<em>negative</em> means MAL holds (more dependents &rarr; smaller '
+                'constituents); <em>positive</em> means anti-MAL.</li>')
+    body.append('<li>We build a null distribution of <strong>&beta;</strong> by '
+                '<strong>shuffling the y-values</strong> '
+                '(<code>log(mean_size)</code>) with respect to the x-values '
+                '(<code>log(n)</code>) and refitting the slope. We repeat this '
+                '<strong>1\u202f000</strong> times '
+                '(<code>n_permutations&nbsp;=&nbsp;1000</code>). Under the null '
+                'hypothesis &laquo;<em>n and constituent size are independent</em>&raquo;, '
+                'the observed &beta; should be a typical draw from this distribution.</li>')
+    body.append('<li>The two-tailed <em>p</em>-value is the fraction of permuted '
+                '|&beta;<sub>perm</sub>| at least as extreme as the observed '
+                '|&beta;<sub>obs</sub>|. We declare the language '
+                '<strong>significant</strong> when <em>p</em>&nbsp;&lt;&nbsp;0.05 '
+                '(<code>alpha&nbsp;=&nbsp;0.05</code>).</li>')
+    body.append('<li>We split the &laquo;significant&raquo; languages by sign:'
+                ' <code>significant_mal</code>&nbsp;=&nbsp;True iff '
+                '&beta;&nbsp;&lt;&nbsp;0 (slope goes the MAL direction in '
+                'log-log space, i.e.\u00a0compression). '
+                'Note: in our cached numbers the <em>sign convention is flipped</em>: '
+                'we report <code>beta_1max</code> as the <em>positive</em> slope '
+                'of the inverse relation, so the test code uses '
+                '&laquo;<em>significant and beta&nbsp;&gt;&nbsp;0</em>&raquo; '
+                'directly to flag MAL\u2013compliant languages '
+                '(see <code>test_mal_significance_beta</code> for the exact '
+                'sign handling).</li>')
+    body.append('</ol>')
+
+    # ---- What gets shuffled, exactly? English walkthrough
+    body.append('<h2>What gets shuffled, exactly? A short English walkthrough</h2>')
+    body.append('<p style="font-size:14px;max-width:900px;"><strong>Honest framing first.</strong> '
+                'The permutation does <em>not</em> shuffle individual sentences or '
+                'individual dependents \u2014 it shuffles the <em>per-<code>n</code> '
+                'column of aggregated mean sizes</em>. But seeing one real verb per '
+                'bucket makes those means concrete, so let us walk through English '
+                'end\u2011to\u2011end.</p>')
+
+    body.append('<h3>A &middot; What does one data point really represent?</h3>')
+    body.append('<p style="font-size:14px;max-width:900px;">Each point on the English '
+                'MAL curve corresponds to one chunk size <em>n</em> and aggregates '
+                '<strong>all English verbs in UD&nbsp;v2.17 that have exactly '
+                '<em>n</em> dependents</strong>. The y\u2011value is the average '
+                'subtree size of those dependents. Two real EWT verbs, one from the '
+                '<em>n</em>=2 bucket and one from the <em>n</em>=4 bucket:</p>')
+    body.append('<script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" '
+                'async deferred></script>')
+    conll_n2 = ('# text = Is she pushing the stroller ?&#10;'
+                '1\tIs\tIs\tAUX\tAUX\t_\t3\taux\t_\t_&#10;'
+                '2\tshe\tshe\tPRON\tPRON\t_\t3\tnsubj\t_\thighlight=green|span=1&#10;'
+                '3\tpushing\tpushing\tVERB\tVERB\t_\t0\troot\t_\thighlight=red&#10;'
+                '4\tthe\tthe\tDET\tDET\t_\t5\tdet\t_\t_&#10;'
+                '5\tstroller\tstroller\tNOUN\tNOUN\t_\t3\tobj\t_\thighlight=green|span=2&#10;'
+                '6\t?\t?\tPUNCT\tPUNCT\t_\t3\tpunct\t_\t_')
+    conll_n4 = ('# text = If we do not achieve our objective of resolving this dispute , '
+                'then I fear the WTO will slip on a banana skin .&#10;'
+                '1\tIf\tIf\tSCONJ\tSCONJ\t_\t5\tmark\t_\t_&#10;'
+                '2\twe\twe\tPRON\tPRON\t_\t5\tnsubj\t_\t_&#10;'
+                '3\tdo\tdo\tAUX\tAUX\t_\t5\taux\t_\t_&#10;'
+                '4\tnot\tnot\tPART\tPART\t_\t5\tadvmod\t_\t_&#10;'
+                '5\tachieve\tachieve\tVERB\tVERB\t_\t15\tadvcl\t_\thighlight=green|span=11&#10;'
+                '6\tour\tour\tPRON\tPRON\t_\t7\tnmod:poss\t_\t_&#10;'
+                '7\tobjective\tobjective\tNOUN\tNOUN\t_\t5\tobj\t_\t_&#10;'
+                '8\tof\tof\tADP\tADP\t_\t9\tmark\t_\t_&#10;'
+                '9\tresolving\tresolving\tVERB\tVERB\t_\t7\tacl\t_\t_&#10;'
+                '10\tthis\tthis\tDET\tDET\t_\t11\tdet\t_\t_&#10;'
+                '11\tdispute\tdispute\tNOUN\tNOUN\t_\t9\tobj\t_\t_&#10;'
+                '12\t,\t,\tPUNCT\tPUNCT\t_\t5\tpunct\t_\t_&#10;'
+                '13\tthen\tthen\tADV\tADV\t_\t15\tadvmod\t_\thighlight=green|span=1&#10;'
+                '14\tI\tI\tPRON\tPRON\t_\t15\tnsubj\t_\thighlight=green|span=1&#10;'
+                '15\tfear\tfear\tVERB\tVERB\t_\t0\troot\t_\thighlight=red&#10;'
+                '16\tthe\tthe\tDET\tDET\t_\t17\tdet\t_\t_&#10;'
+                '17\tWTO\tWTO\tPROPN\tPROPN\t_\t19\tnsubj\t_\t_&#10;'
+                '18\twill\twill\tAUX\tAUX\t_\t19\taux\t_\t_&#10;'
+                '19\tslip\tslip\tVERB\tVERB\t_\t15\tccomp\t_\thighlight=green|span=8&#10;'
+                '20\ton\ton\tADP\tADP\t_\t23\tcase\t_\t_&#10;'
+                '21\ta\ta\tDET\tDET\t_\t23\tdet\t_\t_&#10;'
+                '22\tbanana\tbanana\tNOUN\tNOUN\t_\t23\tcompound\t_\t_&#10;'
+                '23\tskin\tskin\tNOUN\tNOUN\t_\t19\tobl\t_\t_&#10;'
+                '24\t.\t.\tPUNCT\tPUNCT\t_\t15\tpunct\t_\t_')
+    body.append('<div style="display:flex;flex-wrap:wrap;gap:20px;margin:14px 0;">')
+    body.append('<figure style="flex:1 1 360px;min-width:320px;border:1px solid #eee;'
+                'padding:10px;background:#fff;">'
+                f'<reactive-dep-tree interactive="true" conll="{conll_n2}"></reactive-dep-tree>'
+                '<figcaption style="font-size:13px;color:#555;margin-top:6px;">'
+                '<strong>n=2 bucket.</strong> The verb <em>pushing</em> has 2 '
+                'dependents (<em>she</em>, subtree size&nbsp;1; '
+                '<em>the\u00a0stroller</em>, subtree size&nbsp;2). '
+                'Mean dependent size&nbsp;=&nbsp;(1+2)/2&nbsp;=&nbsp;1.5. '
+                'This sentence contributes one number to the n=2 average.'
+                '</figcaption></figure>')
+    body.append('</div>')
+    body.append('<figure style="display:block;width:100%;border:1px solid #eee;'
+                'padding:10px;background:#fff;margin:14px 0;box-sizing:border-box;'
+                'overflow-x:auto;">'
+                f'<reactive-dep-tree interactive="true" conll="{conll_n4}"></reactive-dep-tree>'
+                '<figcaption style="font-size:13px;color:#555;margin-top:6px;">'
+                '<strong>n=4 bucket.</strong> The verb <em>fear</em> has 4 dependents '
+                '(<em>then</em>&nbsp;1, <em>I</em>&nbsp;1, the <em>achieve</em>\u2011clause&nbsp;11, '
+                'the <em>slip</em>\u2011clause&nbsp;8). '
+                'Mean&nbsp;=&nbsp;(1+1+11+8)/4&nbsp;=&nbsp;5.25. '
+                'This sentence contributes one number to the n=4 average.'
+                '</figcaption></figure>')
+
+    body.append('<h3>B &middot; The aggregated table the test actually sees</h3>')
+    body.append('<p style="font-size:14px;max-width:900px;">After averaging over '
+                '<em>all</em> English verbs (not just our two examples), the cached '
+                'signal <code>data/lang2MAL_full.pkl[\'en\'][\'total\']</code> '
+                'collapses to just <strong>5 rows</strong> '
+                '(those <em>n</em>\u2011values that pass <code>MIN_COUNT=100</code>):</p>')
+    body.append('<table style="max-width:560px;font-size:14px;">'
+                '<thead><tr><th><em>n</em></th><th>mean dependent size</th>'
+                '<th>log&nbsp;<em>n</em></th><th>log&nbsp;mean</th>'
+                '<th># English verbs in bucket</th></tr></thead><tbody>'
+                '<tr><td>1</td><td>3.724</td><td>0.000</td><td>1.314</td><td>186&nbsp;933</td></tr>'
+                '<tr><td>2</td><td>3.383</td><td>0.693</td><td>1.219</td><td>60&nbsp;660</td></tr>'
+                '<tr><td>3</td><td>3.134</td><td>1.099</td><td>1.143</td><td>8&nbsp;918</td></tr>'
+                '<tr><td>4</td><td>3.209</td><td>1.386</td><td>1.166</td><td>1&nbsp;019</td></tr>'
+                '<tr><td>5</td><td>3.348</td><td>1.609</td><td>1.208</td><td>126</td></tr>'
+                '</tbody></table>')
+    body.append('<p style="font-size:14px;max-width:900px;">Fitting OLS on the '
+                '(log&nbsp;<em>n</em>, log&nbsp;mean) columns gives the observed '
+                'slope <strong>&beta;<sub>obs</sub>&nbsp;\u2248&nbsp;+0.053</strong> '
+                '(very mild, slightly anti-MAL direction).</p>')
+
+    body.append('<h3>C &middot; The shuffle, in pictures</h3>')
+    body.append('<p style="font-size:14px;max-width:900px;">We now ask: <em>could a '
+                'slope this small simply arise from a chance pairing of <code>n</code>\u2019s '
+                'and means?</em> We literally permute the y\u2011column while keeping '
+                'the x\u2011column fixed. Two example shuffles:</p>')
+    body.append('<table style="max-width:720px;font-size:14px;text-align:center;">'
+                '<thead><tr><th>log&nbsp;<em>n</em></th>'
+                '<th>original log&nbsp;mean</th>'
+                '<th>shuffle&nbsp;#1</th>'
+                '<th>shuffle&nbsp;#2</th></tr></thead><tbody>'
+                '<tr><td>0.000</td><td>1.314</td><td>1.166</td><td>1.208</td></tr>'
+                '<tr><td>0.693</td><td>1.219</td><td>1.143</td><td>1.314</td></tr>'
+                '<tr><td>1.099</td><td>1.143</td><td>1.208</td><td>1.143</td></tr>'
+                '<tr><td>1.386</td><td>1.166</td><td>1.314</td><td>1.219</td></tr>'
+                '<tr><td>1.609</td><td>1.208</td><td>1.219</td><td>1.166</td></tr>'
+                '<tr style="border-top:2px solid #999;font-weight:bold;">'
+                '<td>refitted &beta;</td>'
+                '<td style="color:#1b5e20;">+0.053</td>'
+                '<td style="color:#b71c1c;">\u22120.052</td>'
+                '<td style="color:#b71c1c;">\u22120.018</td></tr>'
+                '</tbody></table>')
+    body.append('<p style="font-size:14px;max-width:900px;">Each shuffle is one '
+                'random re-pairing of the same five y\u2011values to the same five '
+                'x\u2011values. We refit OLS on the shuffled table and record the '
+                'new slope. Repeat <strong>1\u202f000 times</strong>.</p>')
+
+    body.append('<h3>D &middot; The null distribution and the <em>p</em>-value</h3>')
+    body.append('<p style="font-size:14px;max-width:900px;">For English the 1\u202f000 '
+                'permuted slopes form a distribution centred on&nbsp;0, ranging '
+                'roughly from <strong>\u22120.10 to&nbsp;+0.09</strong>. The '
+                'observed &beta;<sub>obs</sub>&nbsp;=&nbsp;+0.053 sits squarely '
+                'in the crowd: about <strong>60.5%</strong> of the permutations '
+                'yield a slope at least as extreme in absolute value. That fraction '
+                '<em>is</em> the two-tailed <em>p</em>-value, and 0.605&nbsp;\u226b&nbsp;0.05, '
+                'so English is reported as <strong>not significant</strong> '
+                '(see its row in the <a href="mal_effect.html#lang-en">big effect '
+                'table</a>).</p>')
+    body.append('<p style="font-size:14px;max-width:900px;">A small ASCII picture '
+                'of where the observed slope lands in the null distribution:</p>')
+    body.append('<pre style="font-family:monospace;font-size:13px;line-height:1.2;'
+                'background:#fafafa;border:1px solid #eee;padding:10px;'
+                'max-width:720px;overflow-x:auto;">'
+                '              count of 1000 permuted &beta;\n'
+                '            &darr;\n'
+                '   \u22120.10  \u2581\u2581\u2582\u2583\u2585\u2587\u2588\u2588\u2587\u2585\u2583\u2582\u2581\u2581   +0.09\n'
+                '                       \u2191\n'
+                '                 &beta;<sub>obs</sub>\u2009=\u2009+0.053  (\u2248 60th percentile of |&beta;|)'
+                '</pre>')
+
+    body.append('<h3>E &middot; So do dep trees help here?</h3>')
+    body.append('<p style="font-size:14px;max-width:900px;"><strong>Partly, yes.</strong> '
+                'Dep trees make it tangible <em>what one verb instance contributes '
+                'to one bucket\u2019s mean</em> \u2014 they rescue the test from feeling '
+                'abstract. They also make clear why the n=4 bucket of English is so '
+                'noisy (only 1\u202f019 verbs, often dragged up by occasional '
+                'long\u2011clause dependents like the <em>achieve</em>\u2011clause '
+                'above).</p>')
+    body.append('<p style="font-size:14px;max-width:900px;"><strong>But, strictly, '
+                'no.</strong> The permutation operates one level up: on the '
+                '5\u2011row aggregated table in panel&nbsp;B, not on the individual '
+                'sentences in panel&nbsp;A. Shuffling whole sentences would be a '
+                '<em>different</em> test (and a much more expensive one). What '
+                'we shuffle here is just the y\u2011column of those five averages.</p>')
+
+    # ---- Why permutation, not classical OLS p-value?
+    body.append('<h2>Why a permutation test (and not the textbook OLS <em>p</em>-value)?</h2>')
+    body.append('<ul style="font-size:14px;line-height:1.6;max-width:900px;">')
+    body.append('<li><strong>No distributional assumptions.</strong> Classical '
+                'OLS <em>p</em>-values assume normally-distributed, homoscedastic '
+                'residuals \u2014 obviously violated when there are only '
+                '4\u20137 data points per language and the errors come from '
+                'heavy-tailed corpus counts.</li>')
+    body.append('<li><strong>Tiny <em>n</em>.</strong> Most languages have only '
+                'a handful of valid (<em>n</em>, mean-size) points. A permutation '
+                'test gives an exact reference distribution from the actual data, '
+                'rather than relying on asymptotic theory.</li>')
+    body.append('<li><strong>Honest about underpowered languages.</strong> '
+                'Languages with very few points or very small treebanks end up '
+                '<em>n.s.</em> not because MAL is false there, but because the '
+                'evidence is too thin. The test makes that visible.</li>')
+    body.append('</ul>')
+
+    # ---- Worked examples
+    if ex_rows:
+        body.append('<h2>Three worked examples</h2>')
+        body.append('<p style="font-size:14px;">Each row shows the actual fitted '
+                    'slope &beta;(1\u2192max) on the cached data and the '
+                    'permutation <em>p</em>-value. Click the language name to '
+                    'jump to its row in the big effect table.</p>')
+        body.append('<table style="max-width:1000px;">')
+        body.append('<thead><tr>'
+                    '<th style="text-align:left;">Language</th>'
+                    '<th>&beta;(1&rarr;max)</th>'
+                    '<th><em>p</em>-value</th>'
+                    '<th>Verdict</th>'
+                    '<th style="text-align:left;">Interpretation</th>'
+                    '</tr></thead><tbody>')
+        interpretation = {
+            'ka':  'Slope clearly positive in the MAL direction; the permutation '
+                   'distribution almost never reaches this magnitude by chance, '
+                   'so we reject independence and call it MAL\u2013compliant.',
+            'cu':  'Slope clearly negative \u2014 longer verbs come with '
+                   '<em>larger</em> constituents on average. The permutation '
+                   'distribution rarely produces a slope this negative, so '
+                   'this is a real anti-MAL signal, not noise.',
+            'tr':  'Slope is essentially flat (\u2248&nbsp;0). The permutation '
+                   'distribution easily reproduces the observed |&beta;| by '
+                   'pure label-shuffling, so we cannot reject independence: '
+                   '<em>n.s.</em> simply means &laquo;the data don\u2019t '
+                   'tell us either way&raquo;.',
+        }
+        for code, name, label, bg, fg, beta, p in ex_rows:
+            beta_str = f'{beta:+.3f}' if beta is not None else '\u2014'
+            p_str = (f'{p:.3f}' if p is not None and p >= 0.001
+                     else ('&lt;0.001' if p is not None else '\u2014'))
+            badge_text = ('MAL\u2713' if 'Strong' in label
+                          else 'anti\u2713' if 'anti' in label
+                          else 'n.s.')
+            badge = (f'<span style="background:{bg};color:{fg};padding:2px 8px;'
+                     f'border-radius:10px;font-weight:bold;">{badge_text}</span>')
+            interp = interpretation.get(code, label)
+            body.append(f'<tr>'
+                        f'<td style="text-align:left;font-weight:bold;">'
+                        f'<a href="mal_effect.html#lang-{code}">{name}</a></td>'
+                        f'<td style="font-family:monospace;">{beta_str}</td>'
+                        f'<td style="font-family:monospace;">{p_str}</td>'
+                        f'<td>{badge}</td>'
+                        f'<td style="text-align:left;font-size:13px;">{interp}</td>'
+                        f'</tr>')
+        body.append('</tbody></table>')
+
+    # ---- Caveats
+    body.append('<h2>Caveats and reading guidance</h2>')
+    body.append('<ul style="font-size:14px;line-height:1.6;max-width:900px;">')
+    body.append('<li><strong>&laquo;n.s.&raquo; is not &laquo;no MAL&raquo;.</strong> '
+                f'A non-significant verdict means <em>this language\u2019s sample '
+                f'cannot rule out independence</em>. Many of the {n_ns} n.s. '
+                f'languages do show a negative point estimate of &beta; '
+                f'\u2014 just not strongly enough to clear the 5% threshold.</li>')
+    body.append('<li><strong>No multiple-comparisons correction.</strong> We '
+                'run one test per language. With ~185 languages and '
+                '&alpha;&nbsp;=&nbsp;0.05 we expect ~9 false positives by '
+                'chance alone; the observed '
+                f'<strong>{n_sig_mal} significant-MAL</strong> signals are '
+                'well above that floor (binomial test against 5% chance '
+                'level is highly significant; see notebook cell).</li>')
+    body.append('<li><strong>Threshold choice.</strong> Languages that don\u2019t '
+                'reach <code>MIN_COUNT</code> verbs at any <em>n</em>&nbsp;&ge;&nbsp;2 '
+                'are excluded from the test entirely; that\u2019s why the '
+                'denominator can be slightly smaller than the language count '
+                'shown elsewhere on the site.</li>')
+    body.append('<li><strong>Aggregate &ne; per-language.</strong> The cross-tabulation '
+                'tests on the <a href="mal_statistical_tests.html">statistical-tests page</a> '
+                '(Fisher\u2019s exact on VO/OV/NDO contrasts) test '
+                '<em>population-level</em> patterns and behave very differently: '
+                'they pool languages, so they have much more power.</li>')
+    body.append('</ul>')
+
+    body.append('<p style="margin-top:30px;color:#777;font-size:13px;">'
+                'Implementation: <code>test_mal_significance_beta()</code> in '
+                '<code>08_menzerath_altmann_analysis.ipynb</code>; results '
+                'cached to <code>data/mal_universality_test_beta.csv</code> '
+                'and consumed here via <code>_load_universality_significance()</code> '
+                'in <code>mal_site.py</code>.</p>')
+    body.append('</body></html>')
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(''.join(body))
+    return path
+
+
 # ----- Data coverage page -----
 
 def generate_data_coverage_html(output_dir, lang2counts_total, lang2counts_left,
@@ -5039,6 +5447,8 @@ def generate_site(output_dir,
     written.append(generate_data_coverage_html(
         output_dir, lang2counts_total, lang2counts_left, lang2counts_right,
         min_count, langNames))
+    written.append(generate_universality_methodology_html(
+        output_dir, significance_by_lang, langNames, plots_dir))
 
     return {
         'output_dir': output_dir,

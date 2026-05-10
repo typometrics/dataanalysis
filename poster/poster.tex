@@ -1,56 +1,52 @@
-% =====================================================================
-% UDW @ LREC 2026 - TABLOID POSTER
-%   "Verifying the Menzerath-Altmann law in the verbal domain"
-%
-% Build:    lualatex poster.tex
-% Format:   A0 portrait, vector PDF.
-% Style:    sans-serif throughout (Topic Bold for headlines, Latin
-%           Modern Sans for body), pure black on white with red kickers,
-%           tabloid headlines literally stretched to the page edges,
-%           fat black underlines, light grey panels, left-aligned text.
-% =====================================================================
-\documentclass[25pt, a0paper, portrait, margin=0mm,
-               innermargin=8mm, blockverticalspace=8mm,
-               colspace=10mm, subcolspace=6mm]{tikzposter}
+\documentclass[17pt, a0paper, portrait]{tikzposter}
 
-\usepackage{graphicx}
-\usepackage{xcolor}
-\usepackage{qrcode}
-\usepackage{tikz}
 \usepackage{anyfontsize}
 \usepackage{fontspec}
+\usepackage{qrcode}
+\usepackage{amsmath}
+\usepackage{tikz-dependency}
 
-% --- Tabloid headline face: Topic Bold (1001fonts.com).
-\newfontfamily\topicbold{Topic-Bold.ttf}[Path=topic-font/]
-\newfontfamily\topicreg{Topic.ttf}[Path=topic-font/]
-% Same face but with squashed word spacing -- used for the giant
-% scaled-up tabloid headline so the inter-word gap doesn't look
-% comically wide once the font is blown up to A0 size.
-\newfontfamily\topicboldtight{Topic-Bold.ttf}[Path=topic-font/, WordSpace={0.55,0,0}]
-\newcommand{\tabhead}[1]{{\topicbold #1}}
-\newcommand{\tabheadtight}[1]{{\topicboldtight #1}}
+\setmainfont{Topic}[
+    Path = ./topic-font/,
+    Extension = .ttf,
+    BoldFont = *-Bold,
+]
 
-% --- Body: Latin Modern Sans for everything that isn't a headline.
-\setmainfont{Latin Modern Sans}
-\setsansfont{Latin Modern Sans}
-\renewcommand{\familydefault}{\sfdefault}
+\setsansfont{Topic}[
+    Path = ./topic-font/,
+    Extension = .ttf,
+    BoldFont = *-Bold,
+]
 
-\graphicspath{{../latex/}{../plots/}}
+\newcommand{\tabhead}[1]{\textsf{\textbf{#1}}}
+\newcommand{\tabheadtight}[1]{%
+  {\addfontfeatures{LetterSpace=-3}\tabhead{#1}}%
+}
+\newcommand{\tabkicker}[1]{%
+  {\fontsize{32}{38}\selectfont\textcolor{tabred}{\tabhead{\uppercase{#1}}}}\\[2mm]%
+}
+\newcommand{\tabkickerL}[1]{%
+  {\fontsize{44}{50}\selectfont\textcolor{tabred}{\tabhead{\uppercase{#1}}}}\\[2mm]%
+}
 
-% --- Colours: black ink on white, with red for tabloid kickers and
-%     light grey for fill panels.
-\definecolor{tabink}{HTML}{000000}
-\definecolor{tabmute}{HTML}{555555}
-\definecolor{tabgrey}{HTML}{ececec}
+% A tight horizontal line that fills the block width.
+\newcommand{\tablineTightH}[2]{%
+  {\fontsize{#1}{#1}\selectfont\tabheadtight{#2}}%
+}
+
+% A tight vertical stack of big text.
+\newcommand{\tablineTightV}[2]{%
+  \parbox{\linewidth}{\raggedright\fontsize{#1}{#1}\selectfont\tabheadtight{#2}}%
+}
+
 \definecolor{tabred}{HTML}{cc0000}
+\definecolor{tabink}{HTML}{111111}
+\definecolor{tabgrey}{HTML}{e5e5e5}
+\definecolor{tabmute}{HTML}{666666}
 
-% --- Background.
-\usebackgroundstyle{Empty}
 \colorlet{backgroundcolor}{white}
 \colorlet{framecolor}{white}
 
-% --- Title style: collapsed to nothing. We render the masthead
-%     ourselves as the first body block.
 \definetitlestyle{tabnone}{
     width=0pt, roundedcorners=0, linewidth=0pt, innersep=0pt,
     titletotopverticalspace=0pt, titletoblockverticalspace=0pt,
@@ -60,11 +56,10 @@
 \colorlet{titlefgcolor}{tabink}
 \colorlet{titlebgcolor}{white}
 
-% --- Tabloid block: title text with a FAT 6pt rule under it.
 \defineblockstyle{tabloid}{titlewidthscale=1, bodywidthscale=1,
         titleleft, titleoffsetx=0pt, titleoffsety=0pt,
         bodyoffsetx=0pt, bodyoffsety=0pt,
-        bodyverticalshift=-2mm, roundedcorners=0,
+        bodyverticalshift=2mm, roundedcorners=0,
         linewidth=0pt, titleinnersep=2pt, bodyinnersep=6pt}{
     \ifBlockHasTitle
         \draw[draw=tabink, line width=6pt]
@@ -73,19 +68,16 @@
 }
 \useblockstyle{tabloid}
 
-% --- Masthead block: no title, no fill, no decoration. Just a body
-%     spanning the full column.
 \defineblockstyle{masthead}{titlewidthscale=1, bodywidthscale=1,
         titleleft, titleoffsetx=0pt, titleoffsety=0pt,
         bodyoffsetx=0pt, bodyoffsety=0pt,
         bodyverticalshift=0mm, roundedcorners=0,
         linewidth=0pt, titleinnersep=0pt, bodyinnersep=0pt}{}
 
-% --- Tabloid block on a grey wash.
 \defineblockstyle{tabgrey}{titlewidthscale=1, bodywidthscale=1,
         titleleft, titleoffsetx=0pt, titleoffsety=0pt,
         bodyoffsetx=0pt, bodyoffsety=0pt,
-        bodyverticalshift=-2mm, roundedcorners=0,
+        bodyverticalshift=2mm, roundedcorners=0,
         linewidth=0pt, titleinnersep=4pt, bodyinnersep=14pt}{
     \draw[fill=tabgrey, draw=tabgrey]
         (blockbody.south west) rectangle (blocktitle.north east);
@@ -99,223 +91,190 @@
 \colorlet{blocktitlefgcolor}{tabink}
 \colorlet{blockbodybgcolor}{white}
 \colorlet{blockbodyfgcolor}{tabink}
-\colorlet{innerblocktitlebgcolor}{white}
-\colorlet{innerblocktitlefgcolor}{tabink}
-\colorlet{innerblockbodybgcolor}{white}
-\colorlet{innerblockbodyfgcolor}{tabink}
-\colorlet{notebgcolor}{white}
-\colorlet{notefrcolor}{tabink}
-
-\AtBeginDocument{\color{tabink}}
-
-% --- Page-wide width helper: tikzposter centres blocks at \linewidth,
-%     but the masthead and the title pieces want to use the full
-%     printable width. \pagewidth is the column width inside the title.
-\newlength{\fullwidth}
-\setlength{\fullwidth}{\paperwidth}
-\addtolength{\fullwidth}{-32mm}  % keep safe margin away from physical edge
-
-% --- Tabloid stretched headline: scales the text to fill the given
-%     width. Spread across both edges, like a tabloid front page.
-%     The giant variant uses tight inter-word spacing.
-\newcommand{\tabline}[1]{\noindent\resizebox{\linewidth}{!}{\tabhead{#1}}}
-\newcommand{\tablineTight}[1]{\noindent\resizebox{\linewidth}{!}{\tabheadtight{#1}}}
-\newcommand{\tablineFW}[1]{\noindent\resizebox{\fullwidth}{!}{\tabhead{#1}}}
-% Cap the height so a wide-but-short string doesn't grow huge vertically.
-\newcommand{\tablineH}[2]{\noindent\resizebox{\linewidth}{#1}{\tabhead{#2}}}
-\newcommand{\tablineTightH}[2]{\noindent\resizebox{\linewidth}{#1}{\tabheadtight{#2}}}
-\newcommand{\tablineFWH}[2]{\noindent\resizebox{\fullwidth}{#1}{\tabhead{#2}}}
-
-% --- Tabloid kicker: red all-caps, fixed size, used in front of every
-%     section title.
-\newcommand{\tabkicker}[1]{{\fontsize{40}{44}\selectfont\tabhead{\textcolor{tabred}{\MakeUppercase{#1}}}}}
-\newcommand{\tabkickerL}[1]{{\fontsize{55}{60}\selectfont\tabhead{\textcolor{tabred}{\MakeUppercase{#1}}}}}
-
-% =====================================================================
-% TITLE / MASTHEAD - rendered as a full-width body-area block so it
-% reaches both edges of the printable area without surprise centring.
-% =====================================================================
-\title{ }
-\author{ }
-\institute{ }
-\settitle{\vspace*{-50mm}}
 
 \begin{document}
-\maketitle[titletotopverticalspace=0pt, titletoblockverticalspace=0pt]
-\vspace*{-30mm}
-% Bypass tikzposter's title machinery entirely.
+
+\title{}
+\author{}
+\maketitle
+
 \useblockstyle{masthead}
-\block{}{%
-  \raggedright
+\block{}{
+  \vspace{-2cm}
   % --- Dateline bar.
   \rule{\linewidth}{2pt}\\[2mm]
   \makebox[\linewidth]{%
-    {\fontsize{34}{40}\selectfont\tabhead{May 16, 2026}}\hfill
-    {\fontsize{30}{36}\selectfont\topicreg Universal Dependencies Workshop \;\textbar\; LREC 2026 \;\textbar\; Vol.~26 \;\textbar\; Exclusive}}\\[2mm]
+    {\fontsize{42}{48}\selectfont\tabhead{May 16, 2026}}\hfill
+    {\fontsize{38}{44}\selectfont Universal Dependencies Workshop \;\textbar\; LREC 2026 \;\textbar\; Vol.~26 \;\textbar\; Exclusive}}\\[2mm]
   \rule{\linewidth}{2pt}\\[10mm]
 
   % --- RED KICKER, all caps, left-aligned. Conspiratorial parody.
-  {\fontsize{75}{82}\selectfont\tabhead{\textcolor{tabred}{BIG SYNTAX DOESN'T WANT YOU TO KNOW}}}\\[6mm]
+  {\fontsize{96}{104}\selectfont\tabhead{\textcolor{tabred}{BIG SYNTAX DOESN'T WANT YOU TO KNOW}}}\\[6mm]
 
   % --- HEADLINE: edge-to-edge giant tabloid scream, with tight word spacing.
-  \tablineTightH{260pt}{MAL is universal? Hardly.}\\[-25mm]
-  \rule{\linewidth}{56pt}\\[10mm]
+  \tablineTightH{340pt}{MAL is universal? Hardly.}\\[-25mm]
+  \rule{\linewidth}{30pt}\\[10mm]
 
-  % --- Sub-deck: also stretched edge-to-edge, capped height, tight spacing.
-  \tablineTightH{60pt}{The Menzerath-Altmann law on all 180 UD treebanks}\\[10mm]
-
-  % --- Byline + affiliations (sans-serif superscripts).
-  {\fontsize{32}{38}\selectfont\tabhead{%
-    Pegah Faghiri\textsuperscript{1,2} \quad
-    Kim Gerdes\textsuperscript{2} \quad
-    Sylvain Kahane\textsuperscript{1,3}}}\\[4mm]
-  {\fontsize{22}{28}\selectfont
-    \textsuperscript{1}Modyco, CNRS \& Paris Nanterre University \quad
-    \textsuperscript{2}LISN, CNRS \& Paris-Saclay University \quad
-    \textsuperscript{3}Institut Universitaire de France}\\[5mm]
+  % --- Sub-deck + authors + QR in one horizontal band
+  \begin{minipage}[c]{0.82\linewidth}
+    \tablineTightH{96pt}{The Menzerath-Altmann law on all 180 UD treebanks}\par\vspace{8mm}
+    \begin{center}
+    {\fontsize{38}{44}\selectfont\textbf{%
+      Pegah Faghiri\textsuperscript{1,2} \quad
+      Kim Gerdes\textsuperscript{2} \quad
+      Sylvain Kahane\textsuperscript{1,3}}}\\[4mm]
+    {\fontsize{30}{36}\selectfont
+      \textsuperscript{1}Modyco, CNRS \& Paris Nanterre University \quad
+      \textsuperscript{2}LISN, CNRS \& Paris-Saclay University \quad
+      \textsuperscript{3}Institut Universitaire de France}
+    \end{center}
+  \end{minipage}\hfill
+  \begin{minipage}[c]{0.16\linewidth}\centering
+    \qrcode[height=6cm, level=H]{https://typometrics.elizia.net/menzerath}\par\vspace{4mm}
+    {\fontsize{30}{34}\selectfont \textbf{typometrics.elizia.net}}\par\vspace{2mm}
+    {\Large Interactive maps \& curves}
+  \end{minipage}\par\vspace{5mm}
   \rule{\linewidth}{2pt}
 }
 \useblockstyle{tabloid}
 
 % =====================================================================
-% TEASER ROW - four big questions on grey: three originals + PCA.
+% SECTION 1: HOW MAL IS COMPUTED
 % =====================================================================
 \begin{columns}
-\column{0.25}
+\column{0.50}
 \useblockstyle{tabgrey}
 \block{%
-  \tabkicker{Linguists hate this trick}\\[2mm]
-  \tablineTightH{75pt}{Got more dependents? Just make them smaller!}}{
+  \tabkicker{How we compute MAL}
+
+  \tablineTightH{70pt}{Real constituents only. Fake dependents eliminated!}}{
   \raggedright
-  \includegraphics[width=\linewidth]{../plots/mal_n_total_curves}\\[3mm]
-  {\normalsize In \textbf{most languages, yes.} The average size of
-   a verb's dependents drops as the dependent count \textbf{n} grows
-   --- exactly what Menzerath-Altmann predicts. \textbf{Each thin line
-   = one of 186 languages}; the bold line is the cross-linguistic mean.}
+  \vspace{4pt}
+  {\huge The \textbf{Menzerath-Altmann law} (MAL) predicts that ``the greater the number of components of a given unit, the shorter their respective length'' (Menzerath, 1928). In the verbal domain: as the number of dependents $n$ grows, their average size decreases.}\par\vspace{5mm}
+
+  {\huge Altmann (1980) formalised this as a \textbf{power law}: $\text{MAL}_n \approx n^{-\beta}$, i.e.\ $\log(\text{MAL}_n) \approx -\beta \cdot \log(n)$. The slope $\beta$ measures the \textbf{MAL effect}. Previous studies: Macutek et al.\ (2017) for Czech; Tanaka-Ishii (2021) for UD~2.3 without filtering.}\par\vspace{5mm}
+
+  {\huge \textbf{NEW!}\ Our data extraction is filtered: we exclude \texttt{punct, discourse, parataxis, conj, cc, vocative, aux, compound:prt, mark, case} from the verbal construction. Only \textbf{real syntactic constituents} are retained.}\par\vspace{5mm}
+
+  {\huge \textbf{What about ``bastards''?} A constituent's subtree may spill across the verb. We count the spilled part as a separate dependent of the verb:}\par\vspace{4mm}
+
+  % --- Dependency tree: 'Vogel' comes from German which means bird
+  % UD_English-GUM, GUM_whow_languages-17 — rendered with reactive-dep-tree
+  \begin{center}
+  \includegraphics[width=0.85\linewidth]{bastard_tree.png}
+  \end{center}
+  \vspace{2mm}
+  {\huge The relative clause ``which means bird'' (\textbf{acl:relcl}) syntactically depends on `Vogel' (left of verb) but appears right of verb --- a \textbf{bastard}. It is counted as a right-side constituent of \textbf{comes}. Source: \textit{en\_gum}.}\par\vspace{3mm}
 }
 
-\column{0.25}
+\column{0.50}
 \block{%
-  \tabkicker{The truth they are hiding from you}\\[2mm]
-  \tablineTightH{75pt}{Left and right are not equal!}}{
-  \raggedright
-  \includegraphics[width=\linewidth]{../plots/mal_directional_curves}\\[3mm]
-  {\normalsize Left dependents (top) stay \textbf{flat} as $n$ grows;
-   right dependents (bottom) \textbf{collapse} from 5.2 down to 2.3.
-   \textbf{Same law, two different worlds.} The verb is not
-   ambidextrous --- it leans right.}
-}
+  \tabkicker{NEW! Left vs.\ right}
 
-\column{0.25}
-\block{%
-  \tabkicker{Wake up, Indo-European!}\\[2mm]
-  \tablineTightH{75pt}{Some families fail the test!}}{
+  \tablineTightH{90pt}{Two sides of the verb, two different worlds}}{
   \raggedright
-  \includegraphics[width=\linewidth]{../plots/mal_compliance_categories}\\[3mm]
-  {\normalsize \textbf{Only 38\% of languages} are fully MAL-conformant.
-   \textbf{6.5\% are openly anti-MAL} --- and every family hides at
-   least one rebel. Indo-European is no model student.}
-}
+  \vspace{4pt}
+  {\huge We compute three variants of the MAL effect:}\par\vspace{8mm}
 
-\column{0.25}
-\block{%
-  \tabkicker{The dots they don't want you to connect}\\[2mm]
-  \tablineTightH{75pt}{tiny points, BIG secrets!}}{
-  \raggedright
-  \includegraphics[width=\linewidth]{../plots/mal_pca_map}\\[3mm]
-  {\normalsize Every language projected onto a 2D map of its MAL
-   profile (PCA on 12 features: MAL/LMAL/RMAL at \(n=2..5\)).
-   \textbf{PC1 = 65\%, PC2 = 13\%.} Indo-European clusters tightly;
-   Japanese, Esperanto and Old Proven\c{c}al drift out as outliers.}
+  \begin{minipage}[t]{0.48\linewidth}
+    {\fontsize{44}{50}\selectfont\tabhead{MAL}}\par\vspace{4mm}
+    {\huge $\text{MAL}_n(L)$ = mean size of constituents in all verbal constructions of L with $n$ constituents (left + right combined). Standard MAL as in the literature.}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.48\linewidth}
+    {\fontsize{44}{50}\selectfont\tabhead{LMAL \& RMAL\quad\textcolor{tabred}{NEW!}}}\par\vspace{4mm}
+    {\huge $\text{LMAL}_n(L)$ = mean size of constituents in constructions with $n$ \textbf{preverbal} (left) constituents, regardless of the right side.}\par\vspace{5mm}
+    {\huge $\text{RMAL}_n(L)$ = mean size of constituents in constructions with $n$ \textbf{postverbal} (right) constituents, regardless of the left side.}
+  \end{minipage}\par\vspace{12mm}
+
+  {\huge \textbf{MAL effect} $= \beta$, the slope of the regression line in log-log space. $\beta > 0.1$: \textbf{MAL language}. $\beta < -0.1$: \textbf{Anti-MAL}. In between: \textbf{grey zone}.}\par\vspace{8mm}
+
+  {\huge \textbf{Why does this matter?} DLM (Dependency Length Minimization) predicts short-before-long postverbally and long-before-short preverbally. Unlike DLM, MAL is direction-free. So: \textbf{does MAL hold equally on both sides?} Spoiler: \textbf{no.}}\par\vspace{3mm}
 }
 \useblockstyle{tabloid}
 \end{columns}
 
 % =====================================================================
-% SMOKING-GUN BAND - the chart that proves the masthead.
+% SECTION 2: CASE STUDIES
 % =====================================================================
-\useblockstyle{tabgrey}
 \block{%
-  \tabkickerL{The 78\% nobody talks about}\\[2mm]
-  {\fontsize{60}{66}\selectfont\tabhead{Most languages flunk the test.}}}{
-  \raggedright
-  \begin{minipage}[c]{0.66\linewidth}\centering
-    \includegraphics[width=\linewidth,height=14cm,keepaspectratio]{../plots/mal_universality_test_beta}
-  \end{minipage}\hfill
-  \begin{minipage}[c]{0.32\linewidth}\raggedright
-    {\large \textbf{Only 21.6\%} of UD languages show a
-     statistically significant MAL effect. \textbf{5.9\%} go the
-     \emph{wrong} way (anti-MAL). The rest are flat: noise where the
-     textbooks promised a law.}\\[4mm]
-    {\large If MAL were a \textbf{linguistic universal}, this pie
-     would be one big green slice. It isn't. Welcome to the
-     post-universal era.}
-  \end{minipage}
-}
-\useblockstyle{tabloid}
+  \tabkicker{As usual}
 
-% =====================================================================
-% MIDDLE BAND - three case studies + QR call-to-action, in 4 columns.
-% =====================================================================
-\block{%
-  \tabkicker{As usual}\\[-2mm]
-  {\fontsize{60}{66}\selectfont\tabhead{German nails it. Naija wobbles. Arabic surprises. You?}}}{
+  {\fontsize{78}{86}\selectfont\tabhead{German nails it. Naija wobbles. Arabic surprises. You?}}}{
   \raggedright
-  \begin{minipage}[t]{0.235\linewidth}\raggedright
-    \includegraphics[width=\linewidth]{German}\\[3mm]
-    {\fontsize{30}{34}\selectfont\tabhead{German -- textbook MAL}}\\[3mm]
-    {\normalsize \textbf{slope = -0.17, R\textsuperscript{2} \textasciitilde\ 0.99}
+  \begin{minipage}[t]{0.31\linewidth}\raggedright
+    \vspace{0pt}
+    \includegraphics[width=\linewidth]{../plots/German_loglog}\par\vspace{3mm}
+    {\fontsize{38}{44}\selectfont\tabhead{German -- textbook MAL}}\par\vspace{3mm}
+    {\huge \textbf{slope = --0.17, R\textsuperscript{2} \textasciitilde\ 0.89}
      on the log-log fit. A near-perfect power law: every extra
-     dependent shrinks the average constituent. \textbf{The cleanest
-     fit in the sample} --- not the strongest slope, but the most
-     orderly one. Is anyone surprised?}
+     dependent shrinks the average constituent. German is MAL,
+     RMAL and LMAL as expected. Is anyone surprised?}
   \end{minipage}\hfill
-  \begin{minipage}[t]{0.235\linewidth}\raggedright
-    \includegraphics[width=\linewidth]{Naija}\\[3mm]
-    {\fontsize{30}{34}\selectfont\tabhead{Naija -- mixed, asymmetric}}\\[3mm]
-    {\normalsize Left and right dependents diverge wildly. A young
+  \begin{minipage}[t]{0.31\linewidth}\raggedright
+    \vspace{0pt}
+    \includegraphics[width=\linewidth]{../plots/Naija_loglog}\par\vspace{3mm}
+    {\fontsize{38}{44}\selectfont\tabhead{Naija -- mixed, asymmetric}}\par\vspace{3mm}
+    {\huge Left and right dependents diverge wildly. A young
      pidgincreole refusing to fit one curve --- in fact the
      \textbf{strongest Anti-LMAL in the whole sample}
      ($\beta=+0.73$ preverbally).}
   \end{minipage}\hfill
-  \begin{minipage}[t]{0.235\linewidth}\raggedright
-    \includegraphics[width=\linewidth]{Arabic}\\[3mm]
-    {\fontsize{30}{34}\selectfont\tabhead{Arabic -- near-textbook}}\\[3mm]
-    {\normalsize Despite VSO order and rich morphology,
-     Arabic lands close to German on the MAL map.}
-  \end{minipage}\hfill
-  \begin{minipage}[t]{0.235\linewidth}\raggedright
-    \includegraphics[width=\linewidth,height=14cm,keepaspectratio]{../plots/mal_step_compliance_heatmap}\\[3mm]
-    {\fontsize{30}{34}\selectfont\tabhead{The wall of shame}}\\[3mm]
-    {\normalsize Every row is a language, every column a transition
-     $n\to n{+}1$. \textbf{Red = MAL holds, blue = MAL breaks down.}
-     Mostly red --- but the blue streaks tell you exactly where the
-     law quietly fails.}
-  \end{minipage}
+  \begin{minipage}[t]{0.31\linewidth}\raggedright
+    \vspace{0pt}
+    \includegraphics[width=\linewidth]{../plots/Arabic_loglog}\par\vspace{3mm}
+    {\fontsize{38}{44}\selectfont\tabhead{Arabic -- complex behavior}}\par\vspace{3mm}
+    {\huge Arabic has a particularly low R\textsuperscript{2}. It follows MAL from $n=1$ to $3$, but becomes Anti-MAL from $n=3$ onwards.\\[3mm]
+    \textbf{And you?} Check your language at \textbf{typometrics.elizia.net}!}
+  \end{minipage}\par
 
   \vspace{4mm}
 }
 
 % =====================================================================
-% CALL TO ACTION - QR row, full width below.
+% SECTION 3: RESULTS (Bar charts from paper tables)
+% =====================================================================
+\useblockstyle{tabgrey}
+\block{%
+  \tabkickerL{The numbers nobody talks about}
+
+  {\fontsize{72}{80}\selectfont\tabhead{MAL is not ambidextrous. The verb leans right.}}}{
+  \raggedright
+  \begin{minipage}[t]{0.30\linewidth}\raggedright
+    \vspace{0pt}
+    {\centering\includegraphics[width=\linewidth]{../plots/poster_strip_mal}\par}
+    \vspace{3mm}
+    {\fontsize{38}{44}\selectfont\tabhead{MAL by word order}}\par\vspace{3mm}
+    {\huge MAL is stronger for \textbf{VO languages} (56\%) than OV (42\%), but RMAL and LMAL are \textbf{stronger for OV}! Where does the paradox come from?}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.30\linewidth}\raggedright
+    \vspace{0pt}
+    {\centering\includegraphics[width=\linewidth]{../plots/poster_strip_rmal}\par}
+    \vspace{3mm}
+    {\fontsize{38}{44}\selectfont\tabhead{RMAL: postverbal domain}}\par\vspace{3mm}
+    {\huge \textbf{79\% of UD languages are RMAL} (81/103) and only \textbf{7\% are Anti-RMAL} (7/103). The right side of the verb strongly compresses constituent size as $n$ grows. VO languages lead: 84\% are RMAL vs.\ 63\% for OV.}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.30\linewidth}\raggedright
+    \vspace{0pt}
+    {\centering\includegraphics[width=\linewidth]{../plots/poster_strip_lmal}\par}
+    \vspace{3mm}
+    {\fontsize{38}{44}\selectfont\tabhead{LMAL: preverbal domain}}\par\vspace{3mm}
+    {\huge Only \textbf{31\% are LMAL} (39/124) and \textbf{23\% are Anti-LMAL} (29/124). The left side of the verb resists compression --- or even reverses it. OV languages are better: 39\% are LMAL vs.\ 29\% for VO. VO languages are \textbf{3$\times$} more likely to be Anti-LMAL.}
+  \end{minipage}\par
+  \vspace{4mm}
+}
+\useblockstyle{tabloid}
+
+% =====================================================================
+% CALL TO ACTION - compact footer
 % =====================================================================
 \block{%
-  \tabkicker{It's 100\% free\textsuperscript{\textcolor{tabred}{*}}}\\[-2mm]
-  {\fontsize{40}{44}\selectfont\tabhead{Come and find out how your UD language is doing!}}}{
+  \tabkicker{It's 100\% free*}
+  {\fontsize{62}{70}\selectfont\tabhead{Come and find out how your UD language is doing!}}}{
   \raggedright
-  \begin{minipage}[c]{0.15\linewidth}\centering
-    \qrcode[height=5.5cm, level=H]{https://typometrics.elizia.net/menzerath}
-  \end{minipage}\hfill
-  \begin{minipage}[c]{0.83\linewidth}\raggedright
-    \tablineTightH{55pt}{Scan, or come over to the laptop $\rightarrow$ \;\; \textmd{typometrics.elizia.net/menzerath}}\\[2mm]
-    {\large \textbf{180 treebanks}, interactive PCA + family map +
-      per-language curves + compliance ridgeline --- all online.
-      \textcolor{tabmute}{\textcolor{tabred}{*}~\itshape Free as in
-      beer, free as in speech, free as in dependency. Side effects
-      may include sudden curiosity about Sanskrit verb valency and
-      the unsettling realisation that left and right are not the
-      same.}}
-  \end{minipage}
+  {\huge \textbf{180 treebanks}, interactive PCA + family map +
+    per-language curves + compliance ridgeline --- all at \textbf{typometrics.elizia.net/menzerath}.
+    \textcolor{tabmute}{*~\itshape Free as in
+    beer, free as in speech, free as in dependency.}}
 }
 
 \end{document}

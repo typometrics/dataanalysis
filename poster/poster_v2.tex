@@ -1,0 +1,332 @@
+\documentclass[17pt, a0paper, portrait]{tikzposter}
+
+\usepackage{anyfontsize}
+\usepackage{fontspec}
+\usepackage{qrcode}
+
+\setmainfont{Topic}[
+    Path = ./topic-font/,
+    Extension = .ttf,
+    BoldFont = *-Bold,
+]
+
+\setsansfont{Topic}[
+    Path = ./topic-font/,
+    Extension = .ttf,
+    BoldFont = *-Bold,
+]
+
+\newcommand{\tabhead}[1]{\textsf{\textbf{#1}}}
+\newcommand{\tabheadtight}[1]{%
+  {\addfontfeatures{LetterSpace=-3}\tabhead{#1}}%
+}
+\newcommand{\tabkicker}[1]{%
+  {\fontsize{24}{28}\selectfont\textcolor{tabred}{\tabhead{\uppercase{#1}}}}\\[2mm]%
+}
+\newcommand{\tabkickerL}[1]{%
+  {\fontsize{36}{42}\selectfont\textcolor{tabred}{\tabhead{\uppercase{#1}}}}\\[2mm]%
+}
+
+% A tight horizontal line that fills the block width.
+\newcommand{\tablineTightH}[2]{%
+  {\fontsize{#1}{#1}\selectfont\tabheadtight{#2}}%
+}
+
+% A tight vertical stack of big text.
+\newcommand{\tablineTightV}[2]{%
+  \parbox{\linewidth}{\raggedright\fontsize{#1}{#1}\selectfont\tabheadtight{#2}}%
+}
+
+\definecolor{tabred}{HTML}{cc0000}
+\definecolor{tabink}{HTML}{111111}
+\definecolor{tabgrey}{HTML}{e5e5e5}
+\definecolor{tabmute}{HTML}{666666}
+
+\colorlet{backgroundcolor}{white}
+\colorlet{framecolor}{white}
+
+\definetitlestyle{tabnone}{
+    width=0pt, roundedcorners=0, linewidth=0pt, innersep=0pt,
+    titletotopverticalspace=0pt, titletoblockverticalspace=0pt,
+    titlegraphictotitledistance=0pt, titletextscale=0.001
+}{}
+\usetitlestyle{tabnone}
+\colorlet{titlefgcolor}{tabink}
+\colorlet{titlebgcolor}{white}
+
+\defineblockstyle{tabloid}{titlewidthscale=1, bodywidthscale=1,
+        titleleft, titleoffsetx=0pt, titleoffsety=0pt,
+        bodyoffsetx=0pt, bodyoffsety=0pt,
+        bodyverticalshift=2mm, roundedcorners=0,
+        linewidth=0pt, titleinnersep=2pt, bodyinnersep=6pt}{
+    \ifBlockHasTitle
+        \draw[draw=tabink, line width=6pt]
+            (blocktitle.south west) -- (blocktitle.south east);
+    \fi
+}
+\useblockstyle{tabloid}
+
+\defineblockstyle{masthead}{titlewidthscale=1, bodywidthscale=1,
+        titleleft, titleoffsetx=0pt, titleoffsety=0pt,
+        bodyoffsetx=0pt, bodyoffsety=0pt,
+        bodyverticalshift=0mm, roundedcorners=0,
+        linewidth=0pt, titleinnersep=0pt, bodyinnersep=0pt}{}
+
+\defineblockstyle{tabgrey}{titlewidthscale=1, bodywidthscale=1,
+        titleleft, titleoffsetx=0pt, titleoffsety=0pt,
+        bodyoffsetx=0pt, bodyoffsety=0pt,
+        bodyverticalshift=2mm, roundedcorners=0,
+        linewidth=0pt, titleinnersep=4pt, bodyinnersep=14pt}{
+    \draw[fill=tabgrey, draw=tabgrey]
+        (blockbody.south west) rectangle (blocktitle.north east);
+    \ifBlockHasTitle
+        \draw[draw=tabink, line width=6pt]
+            (blocktitle.south west) -- (blocktitle.south east);
+    \fi
+}
+
+\colorlet{blocktitlebgcolor}{white}
+\colorlet{blocktitlefgcolor}{tabink}
+\colorlet{blockbodybgcolor}{white}
+\colorlet{blockbodyfgcolor}{tabink}
+
+\begin{document}
+
+\title{}
+\author{}
+\maketitle
+
+\useblockstyle{masthead}
+\block{}{
+  \vspace{-2cm}
+  % --- Dateline bar.
+  \rule{\linewidth}{2pt}\\[2mm]
+  \makebox[\linewidth]{%
+    {\fontsize{34}{40}\selectfont\tabhead{May 16, 2026}}\hfill
+    {\fontsize{30}{36}\selectfont Universal Dependencies Workshop \;\textbar\; LREC 2026 \;\textbar\; Vol.~26 \;\textbar\; Exclusive}}\\[2mm]
+  \rule{\linewidth}{2pt}\\[10mm]
+
+  % --- RED KICKER, all caps, left-aligned. Conspiratorial parody.
+  {\fontsize{80}{88}\selectfont\tabhead{\textcolor{tabred}{BIG SYNTAX DOESN'T WANT YOU TO KNOW}}}\\[6mm]
+
+  % --- HEADLINE: edge-to-edge giant tabloid scream, with tight word spacing.
+  \tablineTightH{340pt}{MAL is universal? Hardly.}\\[-25mm]
+  \rule{\linewidth}{60pt}\\[10mm]
+
+  % --- Sub-deck + authors + QR in one horizontal band
+  \begin{minipage}[c]{0.82\linewidth}
+    \tablineTightH{80pt}{The Menzerath-Altmann law on all 180 UD treebanks}\par\vspace{8mm}
+    \begin{center}
+    {\fontsize{30}{36}\selectfont\textbf{%
+      Pegah Faghiri\textsuperscript{1,2} \quad
+      Kim Gerdes\textsuperscript{2} \quad
+      Sylvain Kahane\textsuperscript{1,3}}}\\[4mm]
+    {\fontsize{22}{28}\selectfont
+      \textsuperscript{1}Modyco, CNRS \& Paris Nanterre University \quad
+      \textsuperscript{2}LISN, CNRS \& Paris-Saclay University \quad
+      \textsuperscript{3}Institut Universitaire de France}
+    \end{center}
+  \end{minipage}\hfill
+  \begin{minipage}[c]{0.16\linewidth}
+    \begin{minipage}[c]{0.38\linewidth}\centering
+      \qrcode[height=3.5cm, level=H]{https://typometrics.elizia.net/menzerath}
+    \end{minipage}\hfill
+    \begin{minipage}[c]{0.58\linewidth}\raggedright
+      {\fontsize{20}{24}\selectfont \textbf{typometrics.elizia.net}}\par\vspace{2mm}
+      {\normalsize Scan for interactive maps \& curves online.}
+    \end{minipage}
+  \end{minipage}\par\vspace{5mm}
+  \rule{\linewidth}{2pt}
+}
+\useblockstyle{tabloid}
+
+% =====================================================================
+% TEASER ROW - four big questions on grey: three originals + PCA.
+% =====================================================================
+\begin{columns}
+\column{0.48}
+\useblockstyle{tabgrey}
+\block{%
+  \tabkicker{Linguists hate this trick}
+
+  \tablineTightH{75pt}{Got more dependents? Just make them smaller!}}{
+  \raggedright
+  \vspace{0pt}
+  \includegraphics[width=\linewidth]{../plots/mal_combined_curves_1x3}\par\vspace{3mm}
+  \begin{minipage}[t]{0.48\linewidth}\raggedright
+    \vspace{0pt}
+    {\fontsize{30}{34}\selectfont\tabhead{Wait, it's not a universal?}}\par\vspace{3mm}
+    {\normalsize In \textbf{most languages, yes.} The average size of a verb's dependents drops as $n$ grows --- exactly what Menzerath-Altmann predicts. \textbf{Each thin line = one of 186 languages}; the bold line is the cross-linguistic mean.}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.48\linewidth}\raggedright
+    \vspace{0pt}
+    {\fontsize{30}{34}\selectfont\tabhead{Left vs right asymmetry}}\par\vspace{3mm}
+    {\normalsize Left dependents stay \textbf{flat} as $n$ grows; right dependents \textbf{collapse} from 5.2 down to 2.3. \textbf{Same law, two different worlds.} The verb is not ambidextrous --- it leans right.}
+  \end{minipage}\par
+}
+
+\column{0.26}
+\block{%
+  \tabkicker{Wake up, Indo-European!}
+
+  \tablineTightH{75pt}{Some families fail the test!}}{
+  \raggedright
+  \vspace{0pt}
+  \includegraphics[width=\linewidth]{../plots/mal_compliance_categories}\\[3mm]
+  {\fontsize{30}{34}\selectfont\tabhead{Where do the laws break?}}\\[3mm]
+  {\normalsize \textbf{Only 38\% of languages} are fully MAL-conformant.
+   \textbf{6.5\% are openly anti-MAL} --- and every family hides at least one rebel. Indo-European is no model student.}
+}
+
+\column{0.26}
+\block{%
+  \tabkicker{The dots they don't want you to connect}
+
+  \tablineTightH{75pt}{tiny points, BIG secrets!}}{
+  \raggedright
+  \vspace{0pt}
+  {\centering \includegraphics[width=0.6\linewidth]{../plots/mal_pca_map}\par}
+  \vspace{3mm}
+  {\fontsize{30}{34}\selectfont\tabhead{Typological PCA clustering}}\\[3mm]
+  {\normalsize Every language projected onto a 2D map of its MAL
+   profile (PCA on 12 features: MAL/LMAL/RMAL at \(n=2..5\)).
+   \textbf{PC1 = 65\%, PC2 = 13\%.} Indo-European clusters tightly;
+   Japanese, Esperanto and Old Proven\c{c}al drift out as outliers.}
+}
+\useblockstyle{tabloid}
+\end{columns}
+
+% =====================================================================
+% SMOKING-GUN BAND - the chart that proves the masthead.
+% =====================================================================
+\useblockstyle{tabgrey}
+\block{%
+  \tabkickerL{The 78\% nobody talks about}
+
+  {\fontsize{60}{66}\selectfont\tabhead{Most languages flunk the test.}}}{
+  \raggedright
+  \begin{minipage}[c]{0.66\linewidth}\centering
+    \includegraphics[width=\linewidth]{../plots/mal_universality_test_beta}
+  \end{minipage}\hfill
+  \begin{minipage}[c]{0.32\linewidth}\raggedright
+    {\large \textbf{Only 21.6\%} of UD languages show a
+     statistically significant MAL effect. \textbf{5.9\%} go the
+     \emph{wrong} way (anti-MAL). The rest are flat: noise where the
+     textbooks promised a law.}\\[4mm]
+    {\large If MAL were a \textbf{linguistic universal}, this pie
+     would be one big green slice. It isn't. Welcome to the
+     post-universal era.}
+  \end{minipage}
+}
+\useblockstyle{tabloid}
+
+% =====================================================================
+% DISTRIBUTIONS AND DIRECTIONALITY 
+% =====================================================================
+\begin{columns}
+\column{0.25}
+\block{%
+  \tabkicker{Family Matters}
+
+  \tablineTightH{60pt}{Is MAL just a European bias?}}{
+  \raggedright
+  \includegraphics[width=\linewidth]{../plots/poster_mal_effect_by_family}\\[3mm]
+  {\normalsize Distribution of the MAL effect ($\beta$) across language families. Indo-European clearly dominates the MAL-compliant zone.}
+}
+
+\column{0.25}
+\block{%
+  \tabkicker{The Euro-Centric Law}
+
+  \tablineTightH{60pt}{IE vs. The Rest}}{
+  \raggedright
+  \includegraphics[width=\linewidth]{../plots/poster_ie_vs_non_ie}\\[3mm]
+  {\normalsize Indo-European languages exhibit a significantly stronger and more consistent MAL effect compared to all other families combined.}
+}
+
+\column{0.25}
+\block{%
+  \tabkicker{Before and After}
+
+  \tablineTightH{60pt}{Why left and right differ}}{
+  \raggedright
+  \includegraphics[width=\linewidth]{../plots/poster_directional_vs_vo}\\[3mm]
+  {\normalsize RMAL vs VO/OV order. The right-side collapse is strongest when verbs precede objects. The syntax restricts dependent sizes asymmetrically.}
+}
+
+\column{0.25}
+\block{%
+  \tabkicker{Universal truth or statistical artifact?}
+
+  \tablineTightH{60pt}{The Beta spectrum}}{
+  \raggedright
+  \includegraphics[width=\linewidth]{../plots/mal_universality_test_beta}\\[3mm]
+  {\normalsize Most $\beta$ values are indeed negative (MAL-compliant), but a massive chunk straddles zero. Is it a law, or just a heavy statistical lean?}
+}
+\end{columns}
+
+% =====================================================================
+% CASE STUDIES - three plots + wall of shame
+% =====================================================================
+\block{%
+  \tabkicker{As usual}
+
+  {\fontsize{66}{72}\selectfont\tabhead{German nails it. Naija wobbles. Arabic surprises. You?}}}{
+  \raggedright
+  \begin{minipage}[t]{0.235\linewidth}\raggedright
+    \vspace{0pt}
+    \includegraphics[width=\linewidth]{../plots/German_loglog}\par\vspace{3mm}
+    {\fontsize{30}{34}\selectfont\tabhead{German -- textbook MAL}}\par\vspace{3mm}
+    {\normalsize \textbf{slope = -0.17, R\textsuperscript{2} \textasciitilde\ 0.99}
+     on the log-log fit. A near-perfect power law: every extra
+     dependent shrinks the average constituent. \textbf{The cleanest
+     fit in the sample} --- not the strongest slope, but the most
+     orderly one. Is anyone surprised?}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.235\linewidth}\raggedright
+    \vspace{0pt}
+    \includegraphics[width=\linewidth]{../plots/Naija_loglog}\par\vspace{3mm}
+    {\fontsize{30}{34}\selectfont\tabhead{Naija -- mixed, asymmetric}}\par\vspace{3mm}
+    {\normalsize Left and right dependents diverge wildly. A young
+     pidgincreole refusing to fit one curve --- in fact the
+     \textbf{strongest Anti-LMAL in the whole sample}
+     ($\beta=+0.73$ preverbally).}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.235\linewidth}\raggedright
+    \vspace{0pt}
+    \includegraphics[width=\linewidth]{../plots/Arabic_loglog}\par\vspace{3mm}
+    {\fontsize{30}{34}\selectfont\tabhead{Arabic -- complex behavior}}\par\vspace{3mm}
+    {\normalsize Arabic has a particularly low R\textsuperscript{2}. It follows MAL from $n=1$ to $3$, but becomes Anti-MAL from $n=3$ onwards.}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.235\linewidth}\raggedright
+    \vspace{0pt}
+    \begin{minipage}[t]{0.48\linewidth}\raggedright
+      \vspace{0pt}
+      \includegraphics[width=\linewidth]{../plots/mal_step_compliance_heatmap}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.48\linewidth}\raggedright
+      \vspace{0pt}
+      {\fontsize{30}{34}\selectfont\tabhead{The wall of shame}}\par\vspace{3mm}
+      {\normalsize Every row is a language, every column is the number of dependents $n$. 
+       \textbf{Color intensity} shows average constituent size (red is larger, blue is smaller). 
+       The arrows ($\downarrow$, $\uparrow$) tell you exactly where the law holds or quietly fails.}
+    \end{minipage}
+  \end{minipage}\par
+
+  \vspace{4mm}
+}
+
+% =====================================================================
+% CALL TO ACTION - compact footer
+% =====================================================================
+\block{%
+  \tabkicker{It's 100\% free*}
+  {\fontsize{50}{56}\selectfont\tabhead{Come and find out how your UD language is doing!}}}{
+  \raggedright
+  {\large \textbf{180 treebanks}, interactive PCA + family map +
+    per-language curves + compliance ridgeline --- all at \textbf{typometrics.elizia.net/menzerath}.
+    \textcolor{tabmute}{*~\itshape Free as in
+    beer, free as in speech, free as in dependency.}}
+}
+
+\end{document}
