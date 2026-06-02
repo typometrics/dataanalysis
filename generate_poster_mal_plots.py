@@ -74,16 +74,14 @@ def compute_regression(data_dict, start_n=1):
     y = np.array([p[1] for p in points])
     w = np.array(weights)
     
-    # Weighted polyfit: w is the inverse standard error.
-    # In np.polyfit, we minimize sum((w * (y - y_pred))**2).
-    # Since we want to weight by count, we pass np.sqrt(w).
-    slope, intercept = np.polyfit(x, y, 1, w=np.sqrt(w))
+    # Unweighted polyfit to match the website (mal_html_report.py)
+    slope, intercept = np.polyfit(x, y, 1)
     
-    # R^2 weighted
+    # R^2 unweighted
     y_pred = slope * x + intercept
-    y_mean = np.average(y, weights=w)
-    ss_tot = np.sum(w * (y - y_mean)**2)
-    ss_res = np.sum(w * (y - y_pred)**2)
+    y_mean = np.mean(y)
+    ss_tot = np.sum((y - y_mean)**2)
+    ss_res = np.sum((y - y_pred)**2)
     r2 = 1 - (ss_res / ss_tot) if ss_tot > 0 else 0
     
     return {'slope': slope, 'intercept': intercept, 'r2': r2, 'points': points}
@@ -110,11 +108,10 @@ def plot_lang(lang_code, lang_name, mal_data, ax):
         ax.scatter(ns, vals, label=label, color=color, marker=marker, s=80, alpha=0.7)
         
         # Add regression line (start from n=1)
-        reg = compute_regression(d, start_n=1)
+        # Compute regression only on the points we actually plot
+        filtered_d = {n: d[n] for n in ns}
+        reg = compute_regression(filtered_d, start_n=1)
         if reg:
-            # We want to plot the regression line in log-log space, which is a power law curve in linear space
-            # or just a straight line on log-log axis.
-            # y = exp(intercept) * x^slope
             x_vals = np.linspace(1, max(ns), 100)
             y_vals = np.exp(reg['intercept']) * (x_vals ** reg['slope'])
             ax.plot(x_vals, y_vals, color=color, linestyle='--', linewidth=2, alpha=0.5)

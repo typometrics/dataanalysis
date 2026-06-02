@@ -1,5 +1,6 @@
-<!DOCTYPE html><html><head>
-  <style>:root{color-scheme:light}html,body{background:#fff;color:#222}</style><meta charset="utf-8"><title>Maghrebi — MAL_1</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Maghrebi — MAL_1</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+:root { color-scheme: light; }
+html, body { background: #fff; }
 body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
        padding: 0 20px; color: #222; }
 h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
@@ -24,46 +25,325 @@ table.mal-table a:hover { text-decoration: underline; }
 <h1>Maghrebi <small style="color:#999;font-weight:normal">(qaf)</small> — MAL<sub>1</sub></h1>
 <div class="info"><p><b>Bucket:</b> verbs that have exactly <b>1</b> dependents in total (left + right combined).</p><p><b>MAL<sub>1</sub> = 2.638</b> &nbsp; <span style="color:#666">(239 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over all dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
 <div class="example">
-<div class="example-meta">Example 1 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 2.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = me3ak ya el khadra deri hala et vive l algerie
-1	me3ak	me3ak	PRON	PRON	_	4	nmod	_	_
-2	ya	ya	INTJ	INTJ	_	4	discourse	_	_
-3	el	el	DET	DET	_	4	det	_	_
-4	khadra	khadra	PROPN	PROPN	_	5	nsubj	_	_
-5	deri	deri	VERB	VERB	_	0	root	_	_
-6	hala	hala	NOUN	NOUN	_	5	obj	_	_
-7	et	et	CCONJ	CCONJ	_	8	cc	_	_
-8	vive	vive	VERB	VERB	_	5	parataxis	_	highlight=red
-9	l	l	DET	DET	_	10	det	_	_
-10	algerie	algerie	PROPN	PROPN	_	8	nsubj	_	highlight=green|span=2"></reactive-dep-tree>
+<div class="example-meta">Example 1 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = rak le meilleur entraineur 3arfettou l' equipe nationale ya saadane lahi yachafik Bouaza ida kane saadan darha wa ma3ayatlakche walah ma yesthal bach ykoune moudarab de l' equipe nationale )))))
+1	rak	rak	VERB	VERB	_	0	root	_	_
+2	le	le	DET	DET	_	3	det	_	_
+3	meilleur	meilleur	ADJ	ADJ	_	4	amod	_	_
+4	entraineur	entraineur	NOUN	NOUN	_	1	obj	_	_
+5	3arfettou	3arfettou	VERB	VERB	_	1	ccomp	_	_
+6	l'	l'	DET	DET	_	7	det	_	_
+7	equipe	equipe	NOUN	NOUN	_	5	obj	_	_
+8	nationale	nationale	ADJ	ADJ	_	7	amod	_	_
+9	ya	ya	INTJ	INTJ	_	10	discourse	_	_
+10	saadane	saadane	PROPN	PROPN	_	12	vocative	_	_
+11	lahi	lahi	PROPN	PROPN	_	12	nsubj	_	_
+12	yachafik	yachafik	VERB	VERB	_	1	parataxis	_	_
+13	Bouaza	Bouaza	PROPN	PROPN	_	12	obj	_	_
+14	ida	ida	SCONJ	SCONJ	_	15	mark	_	_
+15	kane	kane	VERB	VERB	_	1	parataxis	_	highlight=red
+16	saadan	saadan	PROPN	PROPN	_	17	nsubj	_	_
+17	darha	darha	VERB	VERB	_	15	xcomp	_	highlight=green|span=4
+18	wa	wa	CCONJ	CCONJ	_	19	cc	_	_
+19	ma3ayatlakche	ma3ayatlakche	VERB	VERB	_	17	conj	_	_
+20	walah	walah	INTJ	INTJ	_	15	discourse	_	_
+21	ma	ma	PART	PART	_	22	advmod	_	_
+22	yesthal	yesthal	VERB	VERB	_	1	parataxis	_	_
+23	bach	bach	ADP	ADP	_	24	case	_	_
+24	ykoune	ykoune	VERB	VERB	_	22	xcomp	_	_
+25	moudarab	moudarab	NOUN	NOUN	_	24	obj	_	_
+26	de	de	ADP	ADP	_	28	case	_	_
+27	l'	l'	DET	DET	_	28	det	_	_
+28	equipe	equipe	NOUN	NOUN	_	24	obl	_	_
+29	nationale	nationale	ADJ	ADJ	_	28	amod	_	_
+30	)))))	)))))	PUNCT	PUNCT	_	22	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 2 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 3.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Kanet fond monumental , darou sah fawda mentale
-1	Kanet	Kanet	VERB	VERB	_	0	root	_	_
-2	fond	fond	NOUN	NOUN	_	1	obj	_	_
-3	monumental	monumental	ADJ	ADJ	_	2	amod	_	_
-4	,	,	PUNCT	PUNCT	_	1	punct	_	_
-5	darou	darou	VERB	VERB	_	1	parataxis	_	highlight=red
-6	sah	sah	ADJ	ADJ	_	7	amod	_	_
-7	fawda	fawda	NOUN	NOUN	_	5	obj	_	highlight=green|span=3
-8	mentale	mentale	ADJ	ADJ	_	7	amod	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 2 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Mon cher frére Rayan inchallah que dieu te guérise soubhanahoo allahooma echfika w echfi mardha moosslimine allahooma ab3id 3anka el alama w a ssakama allahooma inaka kadir wa bi l ijabatti jadir mes chers lecteurs dou3aa a notre cher frére Rayan et aux musilmans amine ya rabbi
+1	Mon	Mon	DET	DET	_	3	det	_	_
+2	cher	cher	ADJ	ADJ	_	3	amod	_	_
+3	frére	frére	NOUN	NOUN	_	9	nmod	_	_
+4	Rayan	Rayan	PROPN	PROPN	_	3	appos	_	_
+5	inchallah	inchallah	INTJ	INTJ	_	9	discourse	_	_
+6	que	que	SCONJ	SCONJ	_	7	mark	_	_
+7	dieu	dieu	PROPN	PROPN	_	9	nsubj	_	_
+8	te	te	PRON	PRON	_	9	obj	_	_
+9	guérise	guérise	VERB	VERB	_	0	root	_	_
+10	soubhanahoo	soubhanahoo	NOUN	NOUN	_	9	discourse	_	_
+11	allahooma	allahooma	PROPN	PROPN	_	12	nsubj	_	_
+12	echfika	echfika	VERB	VERB	_	9	parataxis	_	_
+13	w	w	CCONJ	CCONJ	_	14	cc	_	_
+14	echfi	echfi	VERB	VERB	_	12	conj	_	highlight=red
+15	mardha	mardha	NOUN	NOUN	_	14	obj	_	highlight=green|span=2
+16	moosslimine	moosslimine	NOUN	NOUN	_	15	nmod	_	_
+17	allahooma	allahooma	PROPN	PROPN	_	18	nsubj	_	_
+18	ab3id	ab3id	VERB	VERB	_	9	parataxis	_	_
+19	3anka	3anka	PRON	PRON	_	18	obl	_	_
+20	el	el	DET	DET	_	21	det	_	_
+21	alama	alama	NOUN	NOUN	_	18	obj	_	_
+22	w	w	CCONJ	CCONJ	_	24	cc	_	_
+23	a	a	DET	DET	_	24	det	_	_
+24	ssakama	ssakama	NOUN	NOUN	_	21	conj	_	_
+25	allahooma	allahooma	PROPN	PROPN	_	9	parataxis	_	_
+26	inaka	inaka	SCONJ	SCONJ	_	27	mark	_	_
+27	kadir	kadir	ADJ	ADJ	_	25	amod	_	_
+28	wa	wa	CCONJ	CCONJ	_	32	cc	_	_
+29	bi	bi	ADP	ADP	_	31	case	_	_
+30	l	l	DET	DET	_	31	det	_	_
+31	ijabatti	ijabatti	NOUN	NOUN	_	32	nmod	_	_
+32	jadir	jadir	ADJ	ADJ	_	27	conj	_	_
+33	mes	mes	DET	DET	_	35	det	_	_
+34	chers	chers	ADJ	ADJ	_	35	amod	_	_
+35	lecteurs	lecteurs	NOUN	NOUN	_	36	nmod	_	_
+36	dou3aa	dou3aa	NOUN	NOUN	_	9	parataxis	_	_
+37	a	a	ADP	ADP	_	40	case	_	_
+38	notre	notre	DET	DET	_	40	det	_	_
+39	cher	cher	ADJ	ADJ	_	40	amod	_	_
+40	frére	frére	NOUN	NOUN	_	36	nmod	_	_
+41	Rayan	Rayan	PROPN	PROPN	_	40	appos	_	_
+42	et	et	CCONJ	CCONJ	_	44	cc	_	_
+43	aux	aux	ADP	ADP	_	44	case	_	_
+44	musilmans	musilmans	NOUN	NOUN	_	40	conj	_	_
+45	amine	amine	INTJ	INTJ	_	36	discourse	_	_
+46	ya	ya	INTJ	INTJ	_	47	discourse	_	_
+47	rabbi	rabbi	PROPN	PROPN	_	36	vocative	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
 <div class="example-meta">Example 3 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 2.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = yehadro al 2ayate tgoul yahder ghir b al 3ibriya
-1	yehadro	yehadro	VERB	VERB	_	0	root	_	highlight=red
-2	al	al	DET	DET	_	3	det	_	_
-3	2ayate	2ayate	NOUN	NOUN	_	1	obj	_	highlight=green|span=2
-4	tgoul	tgoul	VERB	VERB	_	1	parataxis	_	_
-5	yahder	yahder	VERB	VERB	_	4	xcomp	_	_
-6	ghir	ghir	PART	PART	_	9	advmod	_	_
-7	b	b	ADP	ADP	_	9	case	_	_
-8	al	al	DET	DET	_	9	det	_	_
-9	3ibriya	3ibriya	NOUN	NOUN	_	5	obj	_	_"></reactive-dep-tree>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ou nchalah masar tarbah bach nala3bo m3aha ou nchoufo l ballon ta3 a sah ou ichouf le monde
+1	ou	ou	CCONJ	CCONJ	_	3	cc	_	_
+2	nchalah	nchalah	INTJ	INTJ	_	3	discourse	_	_
+3	masar	masar	PROPN	PROPN	_	4	nsubj	_	_
+4	tarbah	tarbah	VERB	VERB	_	0	root	_	_
+5	bach	bach	ADP	ADP	_	6	case	_	_
+6	nala3bo	nala3bo	VERB	VERB	_	4	xcomp	_	_
+7	m3aha	m3aha	PRON	PRON	_	6	obl	_	_
+8	ou	ou	CCONJ	CCONJ	_	9	cc	_	_
+9	nchoufo	nchoufo	VERB	VERB	_	6	conj	_	_
+10	l	l	DET	DET	_	11	det	_	_
+11	ballon	ballon	NOUN	NOUN	_	9	obj	_	_
+12	ta3	ta3	ADP	ADP	_	14	case	_	_
+13	a	a	DET	DET	_	14	det	_	_
+14	sah	sah	NOUN	NOUN	_	9	obl	_	_
+15	ou	ou	CCONJ	CCONJ	_	16	cc	_	_
+16	ichouf	ichouf	VERB	VERB	_	4	parataxis	_	highlight=red
+17	le	le	DET	DET	_	18	det	_	_
+18	monde	monde	NOUN	NOUN	_	16	obj	_	highlight=green|span=2"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 4 · source: qaf_arabizi-ud-dev.conllu · this verb has L=0, R=1 (mean span = 5.00)</div>
+<div class="example-meta">Example 4 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = vive el khala w rabi m3akom w yfarahkom kima farahto ga3 el djazayer
+1	vive	vive	VERB	VERB	_	8	parataxis	_	_
+2	el	el	DET	DET	_	3	det	_	_
+3	khala	khala	NOUN	NOUN	_	1	nsubj	_	_
+4	w	w	CCONJ	CCONJ	_	6	cc	_	_
+5	rabi	rabi	PROPN	PROPN	_	6	nsubj	_	_
+6	m3akom	m3akom	PRON	PRON	_	8	parataxis	_	_
+7	w	w	CCONJ	CCONJ	_	8	cc	_	_
+8	yfarahkom	yfarahkom	VERB	VERB	_	0	root	_	_
+9	kima	kima	ADP	ADP	_	10	case	_	_
+10	farahto	farahto	VERB	VERB	_	8	ccomp	_	highlight=red
+11	ga3	ga3	ADJ	ADJ	_	13	amod	_	_
+12	el	el	DET	DET	_	13	det	_	_
+13	djazayer	djazayer	PROPN	PROPN	_	10	obj	_	highlight=green|span=3"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: qaf_arabizi-ud-train.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = wache had tmaskhir goul venger ma khallache saifi yal3ab wallah tmaskhir
+1	wache	wache	PRON	PRON	_	3	obj	_	_
+2	had	had	PRON	PRON	_	3	det	_	_
+3	tmaskhir	tmaskhir	NOUN	NOUN	_	4	nsubj	_	_
+4	goul	goul	VERB	VERB	_	0	root	_	_
+5	venger	venger	PROPN	PROPN	_	4	obj	_	_
+6	ma	ma	PART	PART	_	7	advmod	_	_
+7	khallache	khallache	VERB	VERB	_	4	parataxis	_	_
+8	saifi	saifi	PROPN	PROPN	_	9	nsubj	_	highlight=green|span=1
+9	yal3ab	yal3ab	VERB	VERB	_	7	xcomp	_	highlight=red
+10	wallah	wallah	INTJ	INTJ	_	11	discourse	_	_
+11	tmaskhir	tmaskhir	NOUN	NOUN	_	4	parataxis	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = vive les cip national et vive ziani belhaje; antare yahya w ma nansawche gazal li frahna w mazal yfarahna ktare m3a egthept nchalah
+1	vive	vive	VERB	VERB	_	0	root	_	highlight=red
+2	les	les	DET	DET	_	3	det	_	_
+3	cip	cip	NOUN	NOUN	_	1	nsubj	_	highlight=green|span=3
+4	national	national	ADJ	ADJ	_	3	amod	_	_
+5	et	et	CCONJ	CCONJ	_	6	cc	_	_
+6	vive	vive	VERB	VERB	_	1	parataxis	_	_
+7	ziani	ziani	PROPN	PROPN	_	6	nsubj	_	_
+8	belhaje;	belhaje;	PROPN	PROPN	_	7	flat	_	_
+9	antare	antare	PROPN	PROPN	_	7	conj	_	_
+10	yahya	yahya	PROPN	PROPN	_	9	flat	_	_
+11	w	w	CCONJ	CCONJ	_	13	cc	_	_
+12	ma	ma	PART	PART	_	13	advmod	_	_
+13	nansawche	nansawche	VERB	VERB	_	1	parataxis	_	_
+14	gazal	gazal	PROPN	PROPN	_	13	obj	_	_
+15	li	li	PRON	PRON	_	16	nsubj	_	_
+16	frahna	frahna	VERB	VERB	_	14	acl:relcl	_	_
+17	w	w	CCONJ	CCONJ	_	19	cc	_	_
+18	mazal	mazal	ADV	ADV	_	19	advmod	_	_
+19	yfarahna	yfarahna	VERB	VERB	_	16	conj	_	_
+20	ktare	ktare	ADV	ADV	_	19	advmod	_	_
+21	m3a	m3a	ADP	ADP	_	22	case	_	_
+22	egthept	egthept	PROPN	PROPN	_	19	obl	_	_
+23	nchalah	nchalah	INTJ	INTJ	_	19	discourse	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Chaque fin 6 mois zid 3awed had l’ affaire
+1	Chaque	Chaque	DET	DET	_	2	det	_	_
+2	fin	fin	NOUN	NOUN	_	5	nmod	_	_
+3	6	6	NUM	NUM	_	4	nummod	_	_
+4	mois	mois	NOUN	NOUN	_	2	nmod	_	_
+5	zid	zid	VERB	VERB	_	0	root	_	_
+6	3awed	3awed	VERB	VERB	_	5	xcomp	_	highlight=red
+7	had	had	PRON	PRON	_	9	det	_	_
+8	l’	l’	DET	DET	_	9	det	_	_
+9	affaire	affaire	NOUN	NOUN	_	6	obj	_	highlight=green|span=3"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = yerham ldikom fahmona hada sa3dan wach ykon howa tani hab yahkemha 3ohda tania khalina menek ya sa3dan walah rak raiah tkrahelna hiatna bezaf rak kbir ma3andek mattma3
+1	yerham	yerham	VERB	VERB	_	0	root	_	_
+2	ldikom	ldikom	NOUN	NOUN	_	1	obj	_	_
+3	fahmona	fahmona	VERB	VERB	_	1	ccomp	_	_
+4	hada	hada	PRON	PRON	_	5	det	_	_
+5	sa3dan	sa3dan	PROPN	PROPN	_	3	obj	_	_
+6	wach	wach	PRON	PRON	_	7	obj	_	_
+7	ykon	ykon	VERB	VERB	_	1	parataxis	_	_
+8	howa	howa	PRON	PRON	_	7	nsubj	_	_
+9	tani	tani	ADV	ADV	_	8	advmod	_	_
+10	hab	hab	VERB	VERB	_	7	xcomp	_	_
+11	yahkemha	yahkemha	VERB	VERB	_	10	xcomp	_	_
+12	3ohda	3ohda	NOUN	NOUN	_	11	obj	_	_
+13	tania	tania	ADJ	ADJ	_	12	amod	_	_
+14	khalina	khalina	VERB	VERB	_	1	parataxis	_	_
+15	menek	menek	PRON	PRON	_	14	obl	_	_
+16	ya	ya	INTJ	INTJ	_	17	discourse	_	_
+17	sa3dan	sa3dan	PROPN	PROPN	_	14	vocative	_	_
+18	walah	walah	INTJ	INTJ	_	19	discourse	_	_
+19	rak	rak	VERB	VERB	_	1	parataxis	_	_
+20	raiah	raiah	ADJ	ADJ	_	19	obj	_	_
+21	tkrahelna	tkrahelna	VERB	VERB	_	19	xcomp	_	_
+22	hiatna	hiatna	NOUN	NOUN	_	21	obj	_	_
+23	bezaf	bezaf	ADV	ADV	_	22	advmod	_	_
+24	rak	rak	VERB	VERB	_	1	parataxis	_	highlight=red
+25	kbir	kbir	ADJ	ADJ	_	24	obj	_	highlight=green|span=3
+26	ma3andek	ma3andek	ADP	ADP	_	27	case	_	_
+27	mattma3	mattma3	NOUN	NOUN	_	25	nmod	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ziani howa li hab la bagar lazem idir rejlih fi le ma bared malgri yal3ab melih besah il faux controli roho bach mayadich carton g wela rouge
+1	ziani	ziani	PROPN	PROPN	_	0	root	_	_
+2	howa	howa	PRON	PRON	_	1	nsubj	_	_
+3	li	li	PRON	PRON	_	4	nsubj	_	_
+4	hab	hab	VERB	VERB	_	2	acl:relcl	_	_
+5	la	la	DET	DET	_	6	det	_	_
+6	bagar	bagar	NOUN	NOUN	_	4	obj	_	_
+7	lazem	lazem	VERB	VERB	_	1	parataxis	_	_
+8	idir	idir	VERB	VERB	_	7	xcomp	_	_
+9	rejlih	rejlih	NOUN	NOUN	_	8	obj	_	_
+10	fi	fi	ADP	ADP	_	12	case	_	_
+11	le	le	DET	DET	_	12	det	_	_
+12	ma	ma	NOUN	NOUN	_	8	obl	_	_
+13	bared	bared	ADJ	ADJ	_	12	amod	_	_
+14	malgri	malgri	ADP	ADP	_	15	case	_	_
+15	yal3ab	yal3ab	VERB	VERB	_	1	parataxis	_	_
+16	melih	melih	ADV	ADV	_	15	advmod	_	_
+17	besah	besah	CCONJ	CCONJ	_	19	cc	_	_
+18	il	il	PRON	PRON	_	19	nsubj	_	_
+19	faux	faux	VERB	VERB	_	15	ccomp	_	_
+20	controli	controli	VERB	VERB	_	19	xcomp	_	_
+21	roho	roho	NOUN	NOUN	_	20	obj	_	_
+22	bach	bach	ADP	ADP	_	23	case	_	_
+23	mayadich	mayadich	VERB	VERB	_	20	xcomp	_	highlight=red
+24	carton	carton	NOUN	NOUN	_	23	obj	_	highlight=green|span=4
+25	g	g	ADJ	ADJ	_	24	amod	_	_
+26	wela	wela	CCONJ	CCONJ	_	27	cc	_	_
+27	rouge	rouge	ADJ	ADJ	_	25	conj	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: qaf_arabizi-ud-test.conllu · this verb has L=0, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = mlih algerie ki hakmat khayn kbir semouh alhaycha psq kan haghar dahayah bzf kan ykhalas al manouvria 500 da wa na khdamt 3andah
+1	mlih	mlih	ADV	ADV	_	4	advmod	_	_
+2	algerie	algerie	PROPN	PROPN	_	4	nsubj	_	_
+3	ki	ki	ADV	ADV	_	4	advmod	_	_
+4	hakmat	hakmat	VERB	VERB	_	0	root	_	_
+5	khayn	khayn	ADJ	ADJ	_	4	obj	_	_
+6	kbir	kbir	ADJ	ADJ	_	5	amod	_	_
+7	semouh	semouh	VERB	VERB	_	4	ccomp	_	highlight=red
+8	alhaycha	alhaycha	PROPN	PROPN	_	7	obj	_	highlight=green|span=1
+9	psq	psq	SCONJ	SCONJ	_	10	mark	_	_
+10	kan	kan	VERB	VERB	_	4	ccomp	_	_
+11	haghar	haghar	ADJ	ADJ	_	10	obj	_	_
+12	dahayah	dahayah	NOUN	NOUN	_	11	nmod	_	_
+13	bzf	bzf	ADV	ADV	_	10	advmod	_	_
+14	kan	kan	VERB	VERB	_	10	xcomp	_	_
+15	ykhalas	ykhalas	VERB	VERB	_	14	xcomp	_	_
+16	al	al	DET	DET	_	17	det	_	_
+17	manouvria	manouvria	NOUN	NOUN	_	15	obj	_	_
+18	500	500	NUM	NUM	_	19	nummod	_	_
+19	da	da	NOUN	NOUN	_	17	nmod	_	_
+20	wa	wa	CCONJ	CCONJ	_	22	cc	_	_
+21	na	na	PRON	PRON	_	22	nsubj	_	_
+22	khdamt	khdamt	VERB	VERB	_	4	parataxis	_	_
+23	3andah	3andah	PRON	PRON	_	22	obl	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: qaf_arabizi-ud-train.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = aya les jeunes efferhou w farhouna m3akom rebi yensorkom w eykoun m3akom
+1	aya	aya	VERB	VERB	_	0	root	_	_
+2	les	les	DET	DET	_	3	det	_	_
+3	jeunes	jeunes	NOUN	NOUN	_	1	obj	_	_
+4	efferhou	efferhou	VERB	VERB	_	1	ccomp	_	_
+5	w	w	CCONJ	CCONJ	_	6	cc	_	_
+6	farhouna	farhouna	VERB	VERB	_	4	conj	_	_
+7	m3akom	m3akom	PRON	PRON	_	6	obl	_	_
+8	rebi	rebi	PROPN	PROPN	_	9	nsubj	_	highlight=green|span=1
+9	yensorkom	yensorkom	VERB	VERB	_	1	parataxis	_	highlight=red
+10	w	w	CCONJ	CCONJ	_	11	cc	_	_
+11	eykoun	eykoun	VERB	VERB	_	9	conj	_	_
+12	m3akom	m3akom	PRON	PRON	_	11	obl	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 11.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = habt na3ref had la cocat li dafe3 3lih wach men wjeh 3andou ?!?!??!
+1	habt	habt	VERB	VERB	_	0	root	_	highlight=red
+2	na3ref	na3ref	VERB	VERB	_	1	xcomp	_	highlight=green|span=11
+3	had	had	PRON	PRON	_	5	det	_	_
+4	la	la	DET	DET	_	5	det	_	_
+5	cocat	cocat	PROPN	PROPN	_	12	nsubj	_	_
+6	li	li	PRON	PRON	_	7	nsubj	_	_
+7	dafe3	dafe3	VERB	VERB	_	5	acl:relcl	_	_
+8	3lih	3lih	PRON	PRON	_	7	obl	_	_
+9	wach	wach	DET	DET	_	11	det	_	_
+10	men	men	ADP	ADP	_	11	case	_	_
+11	wjeh	wjeh	NOUN	NOUN	_	12	obj	_	_
+12	3andou	3andou	PRON	PRON	_	2	ccomp	_	_
+13	?!?!??!	?!?!??!	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 5.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = vive el khala w rabi m3akom w yfarahkom kima farahto ga3 el djazayer
+1	vive	vive	VERB	VERB	_	8	parataxis	_	_
+2	el	el	DET	DET	_	3	det	_	_
+3	khala	khala	NOUN	NOUN	_	1	nsubj	_	_
+4	w	w	CCONJ	CCONJ	_	6	cc	_	_
+5	rabi	rabi	PROPN	PROPN	_	6	nsubj	_	_
+6	m3akom	m3akom	PRON	PRON	_	8	parataxis	_	_
+7	w	w	CCONJ	CCONJ	_	8	cc	_	_
+8	yfarahkom	yfarahkom	VERB	VERB	_	0	root	_	highlight=red
+9	kima	kima	ADP	ADP	_	10	case	_	_
+10	farahto	farahto	VERB	VERB	_	8	ccomp	_	highlight=green|span=5
+11	ga3	ga3	ADJ	ADJ	_	13	amod	_	_
+12	el	el	DET	DET	_	13	det	_	_
+13	djazayer	djazayer	PROPN	PROPN	_	10	obj	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: qaf_arabizi-ud-dev.conllu · this verb has L=1, R=0 (mean span = 2.00)</div>
 <reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = nasta3raf bihom bassah kribe intikhabat 3asso rohkom ( les bomb ) itartgokom yak mayhabouch l khir el l ablade est vive boutaflika
 1	nasta3raf	nasta3raf	VERB	VERB	_	0	root	_	_
 2	bihom	bihom	PRON	PRON	_	1	obl	_	_
@@ -74,13 +354,13 @@ table.mal-table a:hover { text-decoration: underline; }
 7	rohkom	rohkom	NOUN	NOUN	_	6	obj	_	_
 8	(	(	PUNCT	PUNCT	_	10	punct	_	_
 9	les	les	DET	DET	_	10	det	_	_
-10	bomb	bomb	NOUN	NOUN	_	12	nsubj	_	_
+10	bomb	bomb	NOUN	NOUN	_	12	nsubj	_	highlight=green|span=2
 11	)	)	PUNCT	PUNCT	_	10	punct	_	_
-12	itartgokom	itartgokom	VERB	VERB	_	1	parataxis	_	_
+12	itartgokom	itartgokom	VERB	VERB	_	1	parataxis	_	highlight=red
 13	yak	yak	INTJ	INTJ	_	14	vocative	_	_
-14	mayhabouch	mayhabouch	VERB	VERB	_	1	parataxis	_	highlight=red
+14	mayhabouch	mayhabouch	VERB	VERB	_	1	parataxis	_	_
 15	l	l	DET	DET	_	16	det	_	_
-16	khir	khir	NOUN	NOUN	_	14	obj	_	highlight=green|span=5
+16	khir	khir	NOUN	NOUN	_	14	obj	_	_
 17	el	el	DET	DET	_	19	det	_	_
 18	l	l	DET	DET	_	19	det	_	_
 19	ablade	ablade	NOUN	NOUN	_	16	iobj	_	_
@@ -89,410 +369,125 @@ table.mal-table a:hover { text-decoration: underline; }
 22	boutaflika	boutaflika	PROPN	PROPN	_	21	nsubj	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 5 · source: qaf_arabizi-ud-dev.conllu · this verb has L=0, R=1 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Est- ce que Rassoul sala llahou 3alayhi wa sellem applique cette bureaucratie ? et y a -t-il un khalifa qui mettait des bâtons dans dans roues à ceux que Dieu leur a ouvert les yeux ittaqi Llah ya Ghoulam
-1	Est-	Est-	VERB	VERB	_	0	root	_	_
-2	ce	ce	PRON	PRON	_	1	nsubj	_	_
-3	que	que	SCONJ	SCONJ	_	10	mark	_	_
-4	Rassoul	Rassoul	NOUN	NOUN	_	10	nsubj	_	_
-5	sala	sala	VERB	VERB	_	4	parataxis	_	_
-6	llahou	llahou	PROPN	PROPN	_	5	nsubj	_	_
-7	3alayhi	3alayhi	PRON	PRON	_	5	obl	_	_
-8	wa	wa	CCONJ	CCONJ	_	9	cc	_	_
-9	sellem	sellem	VERB	VERB	_	5	conj	_	_
-10	applique	applique	VERB	VERB	_	1	parataxis	_	_
-11	cette	cette	DET	DET	_	12	det	_	_
-12	bureaucratie	bureaucratie	NOUN	NOUN	_	10	obj	_	_
-13	?	?	PUNCT	PUNCT	_	1	punct	_	_
-14	et	et	CCONJ	CCONJ	_	16	cc	_	_
-15	y	y	PRON	PRON	_	16	obl	_	_
-16	a	a	VERB	VERB	_	1	parataxis	_	_
-17	-t-il	-t-il	PRON	PRON	_	16	expl	_	_
-18	un	un	DET	DET	_	19	det	_	_
-19	khalifa	khalifa	PROPN	PROPN	_	16	obj	_	_
-20	qui	qui	PRON	PRON	_	21	nsubj	_	_
-21	mettait	mettait	VERB	VERB	_	19	acl:relcl	_	_
-22	des	des	DET	DET	_	23	det	_	_
-23	bâtons	bâtons	NOUN	NOUN	_	21	obj	_	_
-24	dans	dans	ADP	ADP	_	26	case	_	_
-25	dans	dans	ADP	ADP	_	26	case	_	_
-26	roues	roues	NOUN	NOUN	_	21	obl	_	_
-27	à	à	ADP	ADP	_	28	case	_	_
-28	ceux	ceux	PRON	PRON	_	21	obl	_	_
-29	que	que	PRON	PRON	_	33	iobj	_	_
-30	Dieu	Dieu	PROPN	PROPN	_	33	nsubj	_	_
-31	leur	leur	PRON	PRON	_	33	iobj	_	_
-32	a	a	AUX	AUX	_	33	aux	_	_
-33	ouvert	ouvert	VERB	VERB	_	28	acl:relcl	_	_
-34	les	les	DET	DET	_	35	det	_	_
-35	yeux	yeux	NOUN	NOUN	_	33	obj	_	_
-36	ittaqi	ittaqi	VERB	VERB	_	1	parataxis	_	highlight=red
-37	Llah	Llah	PROPN	PROPN	_	36	obj	_	highlight=green|span=1
-38	ya	ya	INTJ	INTJ	_	39	discourse	_	_
-39	Ghoulam	Ghoulam	NOUN	NOUN	_	36	vocative	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 15 · source: qaf_arabizi-ud-test.conllu · this verb has L=0, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Allahouma achfi akhana rayane Allahouma khafif anhou Allahouma zidhou sabran Allahouma arziqhou el kafa oua al 3affaf Allahouma arzouq ahlahou al sebr Allahouma 3adjil bi chiffaihi
+1	Allahouma	Allahouma	PROPN	PROPN	_	2	vocative	_	_
+2	achfi	achfi	VERB	VERB	_	0	root	_	_
+3	akhana	akhana	NOUN	NOUN	_	2	obj	_	_
+4	rayane	rayane	PROPN	PROPN	_	3	nmod	_	_
+5	Allahouma	Allahouma	PROPN	PROPN	_	6	vocative	_	_
+6	khafif	khafif	VERB	VERB	_	2	parataxis	_	_
+7	anhou	anhou	PRON	PRON	_	6	obj	_	_
+8	Allahouma	Allahouma	PROPN	PROPN	_	9	vocative	_	_
+9	zidhou	zidhou	VERB	VERB	_	2	parataxis	_	highlight=red
+10	sabran	sabran	NOUN	NOUN	_	9	obj	_	highlight=green|span=1
+11	Allahouma	Allahouma	PROPN	PROPN	_	12	vocative	_	_
+12	arziqhou	arziqhou	VERB	VERB	_	2	parataxis	_	_
+13	el	el	DET	DET	_	14	det	_	_
+14	kafa	kafa	NOUN	NOUN	_	12	obj	_	_
+15	oua	oua	CCONJ	CCONJ	_	17	cc	_	_
+16	al	al	DET	DET	_	17	det	_	_
+17	3affaf	3affaf	NOUN	NOUN	_	14	conj	_	_
+18	Allahouma	Allahouma	PROPN	PROPN	_	19	vocative	_	_
+19	arzouq	arzouq	VERB	VERB	_	2	parataxis	_	_
+20	ahlahou	ahlahou	NOUN	NOUN	_	19	obj	_	_
+21	al	al	DET	DET	_	22	det	_	_
+22	sebr	sebr	NOUN	NOUN	_	20	nmod	_	_
+23	Allahouma	Allahouma	PROPN	PROPN	_	24	vocative	_	_
+24	3adjil	3adjil	VERB	VERB	_	2	parataxis	_	_
+25	bi	bi	ADP	ADP	_	26	case	_	_
+26	chiffaihi	chiffaihi	NOUN	NOUN	_	24	obl	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 6 · source: qaf_arabizi-ud-test.conllu · this verb has L=0, R=1 (mean span = 2.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = rouh ya habibo nchallah rabi ykoun m3ak 123 viva la algerie
-1	rouh	rouh	VERB	VERB	_	0	root	_	highlight=red
-2	ya	ya	INTJ	INTJ	_	3	discourse	_	_
-3	habibo	habibo	PROPN	PROPN	_	1	obj	_	highlight=green|span=2
-4	nchallah	nchallah	INTJ	INTJ	_	6	discourse	_	_
-5	rabi	rabi	PROPN	PROPN	_	6	nsubj	_	_
-6	ykoun	ykoun	VERB	VERB	_	1	parataxis	_	_
-7	m3ak	m3ak	PRON	PRON	_	6	obl	_	_
-8	123	123	INTJ	INTJ	_	9	discourse	_	_
-9	viva	viva	VERB	VERB	_	1	parataxis	_	_
-10	la	la	DET	DET	_	11	det	_	_
-11	algerie	algerie	PROPN	PROPN	_	9	nsubj	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 16 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 6.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = vive Algérie malgré tous et j' esper kon va battre surtout egypte 3ayana welade chatahate
+1	vive	vive	VERB	VERB	_	7	parataxis	_	_
+2	Algérie	Algérie	PROPN	PROPN	_	1	nsubj	_	_
+3	malgré	malgré	ADP	ADP	_	4	case	_	_
+4	tous	tous	PRON	PRON	_	1	obl	_	_
+5	et	et	CCONJ	CCONJ	_	6	cc	_	_
+6	j'	j'	PRON	PRON	_	7	nsubj	_	_
+7	esper	esper	VERB	VERB	_	0	root	_	_
+8	kon	kon	PRON	PRON	_	7	obj	_	_
+9	va	va	VERB	VERB	_	7	xcomp	_	highlight=red
+10	battre	battre	VERB	VERB	_	9	xcomp	_	highlight=green|span=6
+11	surtout	surtout	ADV	ADV	_	12	advmod	_	_
+12	egypte	egypte	PROPN	PROPN	_	10	obj	_	_
+13	3ayana	3ayana	ADJ	ADJ	_	12	amod	_	_
+14	welade	welade	NOUN	NOUN	_	12	appos	_	_
+15	chatahate	chatahate	PROPN	PROPN	_	14	nmod	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 7 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 2.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = machi en 2005 rahoum ghir ykhaltou c en 2001 et wellah hada wlid 3ami ou na3arfou bien est en plus il a un diplôme d' informatique si vous vouller savoir plus
-1	machi	machi	PART	PART	_	3	advmod	_	_
-2	en	en	ADP	ADP	_	3	case	_	_
-3	2005	2005	NUM	NUM	_	4	nmod	_	_
-4	rahoum	rahoum	VERB	VERB	_	0	root	_	_
-5	ghir	ghir	PART	PART	_	6	advmod	_	_
-6	ykhaltou	ykhaltou	VERB	VERB	_	4	ccomp	_	_
-7	c	c	VERB	VERB	_	4	parataxis	_	highlight=red
-8	en	en	ADP	ADP	_	9	case	_	_
-9	2001	2001	NUM	NUM	_	7	obl	_	highlight=green|span=2
-10	et	et	CCONJ	CCONJ	_	11	cc	_	_
-11	wellah	wellah	INTJ	INTJ	_	12	discourse	_	_
-12	hada	hada	PRON	PRON	_	13	det	_	_
-13	wlid	wlid	NOUN	NOUN	_	16	obj	_	_
-14	3ami	3ami	NOUN	NOUN	_	13	nmod	_	_
-15	ou	ou	CCONJ	CCONJ	_	16	cc	_	_
-16	na3arfou	na3arfou	VERB	VERB	_	4	parataxis	_	_
-17	bien	bien	ADV	ADV	_	16	advmod	_	_
-18	est	est	CCONJ	CCONJ	_	21	cc	_	_
-19	en	en	ADP	ADP	_	22	advmod	_	_
-20	plus	plus	ADV	ADV	_	19	fixed	_	_
-21	il	il	PRON	PRON	_	22	nsubj	_	_
-22	a	a	VERB	VERB	_	4	parataxis	_	_
-23	un	un	DET	DET	_	24	det	_	_
-24	diplôme	diplôme	NOUN	NOUN	_	22	obj	_	_
-25	d'	d'	ADP	ADP	_	26	case	_	_
-26	informatique	informatique	NOUN	NOUN	_	24	nmod	_	_
-27	si	si	SCONJ	SCONJ	_	29	mark	_	_
-28	vous	vous	PRON	PRON	_	29	nsubj	_	_
-29	vouller	vouller	VERB	VERB	_	4	parataxis	_	_
-30	savoir	savoir	VERB	VERB	_	29	xcomp	_	_
-31	plus	plus	ADV	ADV	_	30	advmod	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 17 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = krahna ou rana m3awline on vous baisserai jusk au s ke vou nou aimé vive el heda khir man nweliw des kamikaz
+1	krahna	krahna	VERB	VERB	_	0	root	_	_
+2	ou	ou	CCONJ	CCONJ	_	3	cc	_	_
+3	rana	rana	VERB	VERB	_	1	conj	_	_
+4	m3awline	m3awline	ADJ	ADJ	_	3	obj	_	_
+5	on	on	PRON	PRON	_	7	nsubj	_	_
+6	vous	vous	PRON	PRON	_	7	obj	_	_
+7	baisserai	baisserai	VERB	VERB	_	1	parataxis	_	_
+8	jusk	jusk	ADP	ADP	_	10	case	_	_
+9	au	au	ADP	ADP	_	10	case	_	_
+10	s	s	PRON	PRON	_	7	obl	_	_
+11	ke	ke	SCONJ	SCONJ	_	14	mark	_	_
+12	vou	vou	PRON	PRON	_	14	nsubj	_	_
+13	nou	nou	PRON	PRON	_	14	obj	_	_
+14	aimé	aimé	VERB	VERB	_	10	acl	_	_
+15	vive	vive	VERB	VERB	_	1	parataxis	_	_
+16	el	el	DET	DET	_	17	det	_	_
+17	heda	heda	NOUN	NOUN	_	15	nsubj	_	_
+18	khir	khir	ADJ	ADJ	_	1	parataxis	_	_
+19	man	man	SCONJ	SCONJ	_	20	mark	_	_
+20	nweliw	nweliw	VERB	VERB	_	18	advcl	_	highlight=red
+21	des	des	DET	DET	_	22	det	_	_
+22	kamikaz	kamikaz	NOUN	NOUN	_	20	obj	_	highlight=green|span=2"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 8 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = salam 3likoum khawti les algeriens nchallah ya rabi les verts yfarhouna f l a frique du sud w nroho le 2ème tour b rabi nchallah ad3ou m3ana ya r abi amine
-1	salam	salam	INTJ	INTJ	_	11	discourse	_	_
-2	3likoum	3likoum	PRON	PRON	_	1	obl	_	_
-3	khawti	khawti	NOUN	NOUN	_	2	appos	_	_
-4	les	les	DET	DET	_	5	det	_	_
-5	algeriens	algeriens	NOUN	NOUN	_	3	amod	_	_
-6	nchallah	nchallah	INTJ	INTJ	_	9	discourse	_	_
-7	ya	ya	INTJ	INTJ	_	8	discourse	_	_
-8	rabi	rabi	PROPN	PROPN	_	11	vocative	_	_
-9	les	les	DET	DET	_	10	det	_	_
-10	verts	verts	PROPN	PROPN	_	11	nsubj	_	_
-11	yfarhouna	yfarhouna	VERB	VERB	_	0	root	_	_
-12	f	f	ADP	ADP	_	14	case	_	_
-13	l	l	DET	DET	_	14	det	_	_
-14	a	a	PROPN	PROPN	_	11	obl	_	_
-15	frique	frique	X	X	_	14	goeswith	_	_
-16	du	du	PROPN	PROPN	_	14	flat	_	_
-17	sud	sud	PROPN	PROPN	_	16	flat	_	_
-18	w	w	CCONJ	CCONJ	_	19	cc	_	_
-19	nroho	nroho	VERB	VERB	_	11	parataxis	_	_
-20	le	le	DET	DET	_	21	det	_	_
-21	2ème	2ème	ADJ	ADJ	_	22	amod	_	_
-22	tour	tour	NOUN	NOUN	_	19	obj	_	_
-23	b	b	ADP	ADP	_	24	case	_	_
-24	rabi	rabi	PROPN	PROPN	_	19	obl	_	_
-25	nchallah	nchallah	INTJ	INTJ	_	19	discourse	_	_
-26	ad3ou	ad3ou	VERB	VERB	_	11	parataxis	_	highlight=red
-27	m3ana	m3ana	PRON	PRON	_	26	obl	_	highlight=green|span=1
-28	ya	ya	INTJ	INTJ	_	26	discourse	_	_
-29	r	r	PROPN	PROPN	_	26	vocative	_	_
-30	abi	abi	X	X	_	29	goeswith	_	_
-31	amine	amine	INTJ	INTJ	_	26	discourse	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 18 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = C’ est bien ana kane qader yasrali haka
+1	C’	C’	PRON	PRON	_	2	expl	_	_
+2	est	est	VERB	VERB	_	0	root	_	_
+3	bien	bien	ADV	ADV	_	2	advmod	_	_
+4	ana	ana	PRON	PRON	_	5	nsubj	_	_
+5	kane	kane	VERB	VERB	_	2	parataxis	_	_
+6	qader	qader	ADJ	ADJ	_	5	obj	_	_
+7	yasrali	yasrali	VERB	VERB	_	5	xcomp	_	highlight=red
+8	haka	haka	PRON	PRON	_	7	obj	_	highlight=green|span=1"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 9 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = hada blastah machi madrasa hadi hata fe tanawiya hata krahna kol wahd yegoul 3askar wela harse 3ame met wache bari dire sebor
-1	hada	hada	PRON	PRON	_	2	det	_	_
-2	blastah	blastah	NOUN	NOUN	_	5	parataxis	_	_
-3	machi	machi	PART	PART	_	4	advmod	_	_
-4	madrasa	madrasa	NOUN	NOUN	_	2	nmod	_	_
-5	hadi	hadi	PRON	PRON	_	8	nsubj	_	_
-6	hata	hata	ADP	ADP	_	8	case	_	_
-7	fe	fe	ADP	ADP	_	8	case	_	_
-8	tanawiya	tanawiya	NOUN	NOUN	_	10	parataxis	_	_
-9	hata	hata	ADP	ADP	_	10	case	_	_
-10	krahna	krahna	VERB	VERB	_	0	root	_	_
-11	kol	kol	DET	DET	_	12	det	_	_
-12	wahd	wahd	NOUN	NOUN	_	10	obj	_	_
-13	yegoul	yegoul	VERB	VERB	_	10	ccomp	_	_
-14	3askar	3askar	NOUN	NOUN	_	13	obj	_	_
-15	wela	wela	CCONJ	CCONJ	_	16	cc	_	_
-16	harse	harse	NOUN	NOUN	_	14	conj	_	_
-17	3ame	3ame	ADJ	ADJ	_	16	amod	_	_
-18	met	met	VERB	VERB	_	13	ccomp	_	_
-19	wache	wache	ADV	ADV	_	20	advmod	_	_
-20	bari	bari	VERB	VERB	_	10	parataxis	_	_
-21	dire	dire	VERB	VERB	_	20	xcomp	_	highlight=red
-22	sebor	sebor	NOUN	NOUN	_	21	obj	_	highlight=green|span=1"></reactive-dep-tree>
+<div class="example-meta">Example 19 · source: qaf_arabizi-ud-dev.conllu · this verb has L=0, R=1 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = CHkoune li galek ma3andneche la taille fi dzair rak atchouf fi el photo
+1	CHkoune	CHkoune	ADV	ADV	_	3	advmod	_	_
+2	li	li	PRON	PRON	_	3	nsubj	_	_
+3	galek	galek	VERB	VERB	_	0	root	_	_
+4	ma3andneche	ma3andneche	ADP	ADP	_	3	iobj	_	_
+5	la	la	DET	DET	_	6	det	_	_
+6	taille	taille	NOUN	NOUN	_	3	obj	_	_
+7	fi	fi	ADP	ADP	_	8	case	_	_
+8	dzair	dzair	PROPN	PROPN	_	3	obl	_	_
+9	rak	rak	VERB	VERB	_	3	parataxis	_	highlight=red
+10	atchouf	atchouf	VERB	VERB	_	9	xcomp	_	highlight=green|span=4
+11	fi	fi	ADP	ADP	_	13	case	_	_
+12	el	el	DET	DET	_	13	det	_	_
+13	photo	photo	NOUN	NOUN	_	10	obl	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 10 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 3.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = y al 7aja al ghna maghadich yanf3ek f la fin yaw salatek w zakatek hia li tanf3ak
-1	y	y	INTJ	INTJ	_	3	discourse	_	_
-2	al	al	DET	DET	_	3	det	_	_
-3	7aja	7aja	NOUN	NOUN	_	6	parataxis	_	_
-4	al	al	DET	DET	_	5	det	_	_
-5	ghna	ghna	NOUN	NOUN	_	3	nmod	_	_
-6	maghadich	maghadich	VERB	VERB	_	0	root	_	_
-7	yanf3ek	yanf3ek	VERB	VERB	_	6	xcomp	_	highlight=red
-8	f	f	ADP	ADP	_	10	case	_	_
-9	la	la	DET	DET	_	10	det	_	_
-10	fin	fin	NOUN	NOUN	_	7	obl	_	highlight=green|span=3
-11	yaw	yaw	INTJ	INTJ	_	12	discourse	_	_
-12	salatek	salatek	NOUN	NOUN	_	15	dislocated	_	_
-13	w	w	CCONJ	CCONJ	_	14	cc	_	_
-14	zakatek	zakatek	NOUN	NOUN	_	12	conj	_	_
-15	hia	hia	PRON	PRON	_	6	parataxis	_	_
-16	li	li	PRON	PRON	_	17	nsubj	_	_
-17	tanf3ak	tanf3ak	VERB	VERB	_	12	acl:relcl	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 11 · source: qaf_arabizi-ud-train.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = rabi ychafik w yaghfarlak donoubak w y3awadhalak hassanat fi mizanek 3alaika bi a ssabr wa kowat al imane
-1	rabi	rabi	PROPN	PROPN	_	2	nsubj	_	highlight=green|span=1
-2	ychafik	ychafik	VERB	VERB	_	0	root	_	highlight=red
-3	w	w	CCONJ	CCONJ	_	4	cc	_	_
-4	yaghfarlak	yaghfarlak	VERB	VERB	_	2	conj	_	_
-5	donoubak	donoubak	NOUN	NOUN	_	4	obj	_	_
-6	w	w	CCONJ	CCONJ	_	7	cc	_	_
-7	y3awadhalak	y3awadhalak	VERB	VERB	_	4	conj	_	_
-8	hassanat	hassanat	NOUN	NOUN	_	7	obj	_	_
-9	fi	fi	ADP	ADP	_	10	case	_	_
-10	mizanek	mizanek	NOUN	NOUN	_	7	obl	_	_
-11	3alaika	3alaika	PRON	PRON	_	2	parataxis	_	_
-12	bi	bi	ADP	ADP	_	14	case	_	_
-13	a	a	DET	DET	_	14	det	_	_
-14	ssabr	ssabr	NOUN	NOUN	_	11	nmod	_	_
-15	wa	wa	CCONJ	CCONJ	_	16	cc	_	_
-16	kowat	kowat	NOUN	NOUN	_	14	conj	_	_
-17	al	al	DET	DET	_	18	det	_	_
-18	imane	imane	NOUN	NOUN	_	16	nmod	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 12 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 2.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Salem 3alaikom occupe toi de l' équipe de ton pays et laissez nous tranquille on a un mondial à jouer
-1	Salem	Salem	NOUN	NOUN	_	3	nmod	_	_
-2	3alaikom	3alaikom	PRON	PRON	_	1	nsubj	_	_
-3	occupe	occupe	VERB	VERB	_	0	root	_	_
-4	toi	toi	PRON	PRON	_	3	obj	_	_
-5	de	de	ADP	ADP	_	7	case	_	_
-6	l'	l'	DET	DET	_	7	det	_	_
-7	équipe	équipe	NOUN	NOUN	_	3	obl	_	_
-8	de	de	ADP	ADP	_	10	case	_	_
-9	ton	ton	DET	DET	_	10	det	_	_
-10	pays	pays	NOUN	NOUN	_	7	nmod	_	_
-11	et	et	CCONJ	CCONJ	_	12	cc	_	_
-12	laissez	laissez	VERB	VERB	_	3	parataxis	_	highlight=red
-13	nous	nous	PRON	PRON	_	12	obj	_	highlight=green|span=2
-14	tranquille	tranquille	ADJ	ADJ	_	13	amod	_	_
-15	on	on	PRON	PRON	_	16	nsubj	_	_
-16	a	a	VERB	VERB	_	3	parataxis	_	_
-17	un	un	DET	DET	_	18	det	_	_
-18	mondial	mondial	NOUN	NOUN	_	16	obj	_	_
-19	à	à	ADP	ADP	_	20	case	_	_
-20	jouer	jouer	VERB	VERB	_	16	ccomp	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 13 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 3.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Habou ytelfouli el rai , yeguelbouni racaille
-1	Habou	Habou	VERB	VERB	_	0	root	_	highlight=red
-2	ytelfouli	ytelfouli	VERB	VERB	_	1	xcomp	_	highlight=green|span=3
-3	el	el	DET	DET	_	4	det	_	_
-4	rai	rai	NOUN	NOUN	_	2	obj	_	_
-5	,	,	PUNCT	PUNCT	_	1	punct	_	_
-6	yeguelbouni	yeguelbouni	VERB	VERB	_	1	parataxis	_	_
-7	racaille	racaille	NOUN	NOUN	_	6	obj	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 14 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 3.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = sa3dan sa y é c bn fin d contra ha bezaf allah ya3tik el saha waseltna l el mondial w chekeltha w ga3 mai ma3lich rabi ykhalik sa fait un gro plaisir min l3abna
-1	sa3dan	sa3dan	PROPN	PROPN	_	4	dislocated	_	_
-2	sa	sa	PRON	PRON	_	4	nsubj	_	_
-3	y	y	PRON	PRON	_	4	obl	_	_
-4	é	é	VERB	VERB	_	0	root	_	_
-5	c	c	VERB	VERB	_	4	parataxis	_	_
-6	bn	bn	ADJ	ADJ	_	5	obj	_	_
-7	fin	fin	NOUN	NOUN	_	9	nmod	_	_
-8	d	d	ADP	ADP	_	9	case	_	_
-9	contra	contra	NOUN	NOUN	_	4	parataxis	_	_
-10	ha	ha	INTJ	INTJ	_	13	discourse	_	_
-11	bezaf	bezaf	ADV	ADV	_	13	advmod	_	_
-12	allah	allah	PROPN	PROPN	_	13	nsubj	_	_
-13	ya3tik	ya3tik	VERB	VERB	_	4	parataxis	_	_
-14	el	el	DET	DET	_	15	det	_	_
-15	saha	saha	NOUN	NOUN	_	13	obj	_	_
-16	waseltna	waseltna	VERB	VERB	_	4	parataxis	_	highlight=red
-17	l	l	ADP	ADP	_	19	case	_	_
-18	el	el	DET	DET	_	19	det	_	_
-19	mondial	mondial	NOUN	NOUN	_	16	obl	_	highlight=green|span=3
-20	w	w	CCONJ	CCONJ	_	21	cc	_	_
-21	chekeltha	chekeltha	VERB	VERB	_	16	conj	_	_
-22	w	w	CCONJ	CCONJ	_	23	cc	_	_
-23	ga3	ga3	ADV	ADV	_	21	advmod	_	_
-24	mai	mai	CCONJ	CCONJ	_	25	cc	_	_
-25	ma3lich	ma3lich	INTJ	INTJ	_	4	parataxis	_	_
-26	rabi	rabi	PROPN	PROPN	_	27	nsubj	_	_
-27	ykhalik	ykhalik	VERB	VERB	_	4	parataxis	_	_
-28	sa	sa	PRON	PRON	_	29	nsubj	_	_
-29	fait	fait	VERB	VERB	_	4	parataxis	_	_
-30	un	un	DET	DET	_	31	det	_	_
-31	gro	gro	ADJ	ADJ	_	32	amod	_	_
-32	plaisir	plaisir	NOUN	NOUN	_	29	obj	_	_
-33	min	min	ADV	ADV	_	34	mark	_	_
-34	l3abna	l3abna	VERB	VERB	_	29	ccomp	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 15 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 9.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = dir fi rohek grand plaisir w ista9il yrehem waldik rak karehtena f l 9raia khatrach wladek khalso 9raitehom 3liha bdit tekhalet 3lina w syaset - copier coller - mn 3and l europe
-1	dir	dir	VERB	VERB	_	0	root	_	_
-2	fi	fi	ADP	ADP	_	3	case	_	_
-3	rohek	rohek	NOUN	NOUN	_	1	obl	_	_
-4	grand	grand	ADJ	ADJ	_	5	amod	_	_
-5	plaisir	plaisir	NOUN	NOUN	_	1	obj	_	_
-6	w	w	CCONJ	CCONJ	_	7	cc	_	_
-7	ista9il	ista9il	VERB	VERB	_	1	parataxis	_	_
-8	yrehem	yrehem	VERB	VERB	_	7	xcomp	_	_
-9	waldik	waldik	NOUN	NOUN	_	8	obj	_	_
-10	rak	rak	VERB	VERB	_	1	parataxis	_	highlight=red
-11	karehtena	karehtena	VERB	VERB	_	10	xcomp	_	highlight=green|span=9
-12	f	f	ADP	ADP	_	14	case	_	_
-13	l	l	DET	DET	_	14	det	_	_
-14	9raia	9raia	NOUN	NOUN	_	11	obl	_	_
-15	khatrach	khatrach	SCONJ	SCONJ	_	17	mark	_	_
-16	wladek	wladek	NOUN	NOUN	_	17	nsubj	_	_
-17	khalso	khalso	VERB	VERB	_	11	ccomp	_	_
-18	9raitehom	9raitehom	NOUN	NOUN	_	17	obj	_	_
-19	3liha	3liha	PRON	PRON	_	17	obl	_	_
-20	bdit	bdit	VERB	VERB	_	1	parataxis	_	_
-21	tekhalet	tekhalet	VERB	VERB	_	20	xcomp	_	_
-22	3lina	3lina	PRON	PRON	_	21	obl	_	_
-23	w	w	CCONJ	CCONJ	_	26	cc	_	_
-24	syaset	syaset	NOUN	NOUN	_	26	nsubj	_	_
-25	-	-	PUNCT	PUNCT	_	26	punct	_	_
-26	copier	copier	VERB	VERB	_	1	parataxis	_	_
-27	coller	coller	VERB	VERB	_	26	xcomp	_	_
-28	-	-	PUNCT	PUNCT	_	26	punct	_	_
-29	mn	mn	ADP	ADP	_	32	case	_	_
-30	3and	3and	ADP	ADP	_	32	case	_	_
-31	l	l	DET	DET	_	32	det	_	_
-32	europe	europe	PROPN	PROPN	_	26	obl	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 16 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 8.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = voila lazem les algerien ya3arfou beli masrienne ta3 sah khawetena el fahem yefham
-1	voila	voila	INTJ	INTJ	_	2	discourse	_	_
-2	lazem	lazem	VERB	VERB	_	0	root	_	highlight=red
-3	les	les	DET	DET	_	4	det	_	_
-4	algerien	algerien	NOUN	NOUN	_	5	nsubj	_	_
-5	ya3arfou	ya3arfou	VERB	VERB	_	2	ccomp	_	highlight=green|span=8
-6	beli	beli	SCONJ	SCONJ	_	10	mark	_	_
-7	masrienne	masrienne	NOUN	NOUN	_	10	nsubj	_	_
-8	ta3	ta3	ADP	ADP	_	9	case	_	_
-9	sah	sah	NOUN	NOUN	_	10	nmod	_	_
-10	khawetena	khawetena	NOUN	NOUN	_	5	ccomp	_	_
-11	el	el	DET	DET	_	12	det	_	_
-12	fahem	fahem	NOUN	NOUN	_	13	nsubj	_	_
-13	yefham	yefham	VERB	VERB	_	2	parataxis	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 17 · source: qaf_arabizi-ud-test.conllu · this verb has L=1, R=0 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = alhe yarhamha oi ya g3alha mina al moaminine oi mine ashabe al janhe
-1	alhe	alhe	PROPN	PROPN	_	2	nsubj	_	highlight=green|span=1
-2	yarhamha	yarhamha	VERB	VERB	_	0	root	_	highlight=red
-3	oi	oi	CCONJ	CCONJ	_	4	cc	_	_
-4	ya	ya	VERB	VERB	_	2	conj	_	_
-5	g3alha	g3alha	X	X	_	4	goeswith	_	_
-6	mina	mina	ADP	ADP	_	8	case	_	_
-7	al	al	DET	DET	_	8	det	_	_
-8	moaminine	moaminine	NOUN	NOUN	_	4	obl	_	_
-9	oi	oi	CCONJ	CCONJ	_	11	cc	_	_
-10	mine	mine	ADP	ADP	_	11	case	_	_
-11	ashabe	ashabe	NOUN	NOUN	_	8	conj	_	_
-12	al	al	DET	DET	_	13	det	_	_
-13	janhe	janhe	NOUN	NOUN	_	11	nmod	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 18 · source: qaf_arabizi-ud-test.conllu · this verb has L=0, R=1 (mean span = 2.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = mala taherab m dar w tro7 l trotoire ti7 fi batard yedaha tol l les bars
-1	mala	mala	ADV	ADV	_	2	advmod	_	_
-2	taherab	taherab	VERB	VERB	_	0	root	_	_
-3	m	m	ADP	ADP	_	4	case	_	_
-4	dar	dar	NOUN	NOUN	_	2	obl	_	_
-5	w	w	CCONJ	CCONJ	_	6	cc	_	_
-6	tro7	tro7	VERB	VERB	_	2	conj	_	highlight=red
-7	l	l	ADP	ADP	_	8	case	_	_
-8	trotoire	trotoire	NOUN	NOUN	_	6	obl	_	highlight=green|span=2
-9	ti7	ti7	VERB	VERB	_	2	parataxis	_	_
-10	fi	fi	ADP	ADP	_	11	case	_	_
-11	batard	batard	NOUN	NOUN	_	9	obl	_	_
-12	yedaha	yedaha	VERB	VERB	_	2	parataxis	_	_
-13	tol	tol	ADV	ADV	_	12	advmod	_	_
-14	l	l	ADP	ADP	_	16	case	_	_
-15	les	les	DET	DET	_	16	det	_	_
-16	bars	bars	NOUN	NOUN	_	12	obl	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 19 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 2.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = vive l' algerie rana m3ak ya saadane w ya3tik es saha ya zianni
-1	vive	vive	VERB	VERB	_	4	parataxis	_	_
-2	l'	l'	DET	DET	_	3	det	_	_
-3	algerie	algerie	PROPN	PROPN	_	1	nsubj	_	_
-4	rana	rana	VERB	VERB	_	0	root	_	_
-5	m3ak	m3ak	PRON	PRON	_	4	obl	_	_
-6	ya	ya	INTJ	INTJ	_	7	discourse	_	_
-7	saadane	saadane	PROPN	PROPN	_	4	vocative	_	_
-8	w	w	CCONJ	CCONJ	_	9	cc	_	_
-9	ya3tik	ya3tik	VERB	VERB	_	4	parataxis	_	highlight=red
-10	es	es	DET	DET	_	11	det	_	_
-11	saha	saha	NOUN	NOUN	_	9	obj	_	highlight=green|span=2
-12	ya	ya	INTJ	INTJ	_	13	discourse	_	_
-13	zianni	zianni	PROPN	PROPN	_	9	vocative	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 20 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ya khoya kimha wéla batél ntta inssan fachél ya sa3dan madabik téstakil baki ghi ntta li mahali yék koulna nkamlou m3a el mahaliyine ntta 3lah bkit
-1	ya	ya	INTJ	INTJ	_	2	discourse	_	_
-2	khoya	khoya	NOUN	NOUN	_	4	vocative	_	_
-3	kimha	kimha	SCONJ	SCONJ	_	4	mark	_	_
-4	wéla	wéla	VERB	VERB	_	0	root	_	highlight=red
-5	batél	batél	NOUN	NOUN	_	4	obj	_	highlight=green|span=1
-6	ntta	ntta	PRON	PRON	_	7	nsubj	_	_
-7	inssan	inssan	NOUN	NOUN	_	4	parataxis	_	_
-8	fachél	fachél	ADJ	ADJ	_	7	amod	_	_
-9	ya	ya	INTJ	INTJ	_	10	discourse	_	_
-10	sa3dan	sa3dan	PROPN	PROPN	_	11	nsubj	_	_
-11	madabik	madabik	VERB	VERB	_	4	parataxis	_	_
-12	téstakil	téstakil	VERB	VERB	_	11	xcomp	_	_
-13	baki	baki	ADJ	ADJ	_	15	amod	_	_
-14	ghi	ghi	PART	PART	_	15	advmod	_	_
-15	ntta	ntta	PRON	PRON	_	4	parataxis	_	_
-16	li	li	PRON	PRON	_	17	nsubj	_	_
-17	mahali	mahali	ADJ	ADJ	_	15	amod	_	_
-18	yék	yék	INTJ	INTJ	_	20	discourse	_	_
-19	koulna	koulna	PRON	PRON	_	20	nsubj	_	_
-20	nkamlou	nkamlou	VERB	VERB	_	4	parataxis	_	_
-21	m3a	m3a	ADP	ADP	_	23	case	_	_
-22	el	el	DET	DET	_	23	det	_	_
-23	mahaliyine	mahaliyine	ADJ	ADJ	_	20	obl	_	_
-24	ntta	ntta	PRON	PRON	_	26	nsubj	_	_
-25	3lah	3lah	ADV	ADV	_	26	advmod	_	_
-26	bkit	bkit	VERB	VERB	_	4	parataxis	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 20 · source: qaf_arabizi-ud-train.conllu · this verb has L=0, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = c la hontte domage 3adama alaho ajrakoum ina li lah wa ina ilayhi raji3ine
+1	c	c	VERB	VERB	_	0	root	_	_
+2	la	la	DET	DET	_	3	det	_	_
+3	hontte	hontte	NOUN	NOUN	_	1	obj	_	_
+4	domage	domage	NOUN	NOUN	_	1	nmod	_	_
+5	3adama	3adama	VERB	VERB	_	1	parataxis	_	highlight=red
+6	alaho	alaho	PROPN	PROPN	_	5	obj	_	highlight=green|span=2
+7	ajrakoum	ajrakoum	NOUN	NOUN	_	6	obj	_	_
+8	ina	ina	VERB	VERB	_	1	parataxis	_	_
+9	li	li	ADP	ADP	_	10	case	_	_
+10	lah	lah	PROPN	PROPN	_	8	obl	_	_
+11	wa	wa	CCONJ	CCONJ	_	12	cc	_	_
+12	ina	ina	VERB	VERB	_	8	conj	_	_
+13	ilayhi	ilayhi	PRON	PRON	_	12	obl	_	_
+14	raji3ine	raji3ine	ADJ	ADJ	_	12	obj	_	_"></reactive-dep-tree>
 </div>
 </body></html>

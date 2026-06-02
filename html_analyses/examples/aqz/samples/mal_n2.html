@@ -1,5 +1,6 @@
-<!DOCTYPE html><html><head>
-  <style>:root{color-scheme:light}html,body{background:#fff;color:#222}</style><meta charset="utf-8"><title>Akuntsu — MAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Akuntsu — MAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+:root { color-scheme: light; }
+html, body { background: #fff; }
 body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
        padding: 0 20px; color: #222; }
 h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
@@ -24,7 +25,99 @@ table.mal-table a:hover { text-decoration: underline; }
 <h1>Akuntsu <small style="color:#999;font-weight:normal">(aqz)</small> — MAL<sub>2</sub></h1>
 <div class="info"><p><b>Bucket:</b> verbs that have exactly <b>2</b> dependents in total (left + right combined).</p><p><b>MAL<sub>2</sub> = 1.146</b> &nbsp; <span style="color:#666">(96 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over all dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
 <div class="example">
-<div class="example-meta">Example 1 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<div class="example-meta">Example 1 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ep koa jẽ
+1	ep	ep	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
+2	koa	koa	VERB	VERB	_	0	root	_	highlight=red
+3	jẽ	jẽ	DET	DET	_	2	nsubj	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = apara tep tʃopa jẽ
+1	apara	apara	NOUN	NOUN	_	2	nmod	_	_
+2	tep	tep	NOUN	NOUN	_	3	obj	_	highlight=green|span=2
+3	tʃopa	tʃopa	VERB	VERB	_	0	root	_	highlight=red
+4	jẽ	jẽ	DET	DET	_	3	nsubj	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: aqz_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = on eni erepe , on terepe
+1	on	on	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+2	eni	eni	NOUN	NOUN	_	3	obj	_	highlight=green|span=1
+3	erepe	erepe	VERB	VERB	_	0	root	_	highlight=red
+4	,	,	PUNCT	PUNCT	_	5	punct	_	_
+5	on	on	PRON	PRON	_	6	nsubj	_	_
+6	terepe	terepe	VERB	VERB	_	3	parataxis	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ariano teita kɨrẽ
+1	Ariano	Ariano	PROPN	PROPN	_	2	nsubj	_	highlight=green|span=1
+2	teita	teita	VERB	VERB	_	0	root	_	highlight=red
+3	kɨrẽ	kɨrẽ	ADV	ADV	_	2	advmod	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = epo ɨka kwiri ɨ .
+1	epo	epo	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
+2	ɨka	ɨka	VERB	VERB	_	0	root	_	highlight=red
+3	kwiri	kwiri	NOUN	NOUN	_	4	amod	_	_
+4	ɨ	ɨ	NOUN	NOUN	_	2	dislocated	_	highlight=green|span=2
+5	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: aqz_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = kwako kɨpek koa
+1	kwako	kwako	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=1
+2	kɨpek	kɨpek	NOUN	NOUN	_	3	obj	_	highlight=green|span=1
+3	koa	koa	VERB	VERB	_	0	root	_	highlight=red"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = pi maã en
+1	pi	pi	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
+2	maã	maã	VERB	VERB	_	0	root	_	highlight=red
+3	en	en	PRON	PRON	_	2	nsubj	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: aqz_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = akataba nom at .
+1	akataba	akataba	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=1
+2	nom	nom	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+3	at	at	VERB	VERB	_	0	root	_	highlight=red
+4	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = pero õpa Konibu .
+1	pero	pero	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
+2	õpa	õpa	VERB	VERB	_	0	root	_	highlight=red
+3	Konibu	Konibu	PROPN	PROPN	_	2	nsubj	_	highlight=green|span=1
+4	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: aqz_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Kwai put ahh mãpara , kwai te epi õpa .
+1	Kwai	Kwai	NOUN	NOUN	_	2	nsubj	_	_
+2	put	put	VERB	VERB	_	0	root	_	_
+3	ahh	ahh	INTJ	INTJ	_	2	discourse	_	_
+4	mãpara	mãpara	VERB	VERB	_	2	parataxis	_	_
+5	,	,	PUNCT	PUNCT	_	4	punct	_	_
+6	kwai	kwai	NOUN	NOUN	_	9	nsubj	_	highlight=green|span=1
+7	te	te	PART	PART	_	9	discourse	_	_
+8	epi	epi	NOUN	NOUN	_	9	obj	_	highlight=green|span=1
+9	õpa	õpa	VERB	VERB	_	4	parataxis	_	highlight=red
+10	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = kopiba mõatʃoa on
+1	kopiba	kopiba	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
+2	mõatʃoa	mõatʃoa	VERB	VERB	_	0	root	_	highlight=red
+3	on	on	PRON	PRON	_	2	nsubj	_	highlight=green|span=1"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
 <reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ameko tʃaro erekka kete .
 1	ameko	ameko	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=2
 2	tʃaro	tʃaro	NOUN	NOUN	_	1	nmod	_	_
@@ -33,112 +126,7 @@ table.mal-table a:hover { text-decoration: underline; }
 5	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 2 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = kwiri peropka tip itʃãkwa .
-1	kwiri	kwiri	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
-2	peropka	peropka	VERB	VERB	_	0	root	_	highlight=red
-3	tip	tip	NOUN	NOUN	_	2	dislocated	_	highlight=green|span=1
-4	itʃãkwa	itʃãkwa	VERB	VERB	_	2	parataxis	_	_
-5	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 3 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = aramĩra nõm , aramĩra , aparapia dow , nako ata ãka , ɨkɨ ape dow aparapiat
-1	aramĩra	aramĩra	NOUN	NOUN	_	7	parataxis	_	_
-2	nõm	nõm	ADV	ADV	_	1	nsubj	_	_
-3	,	,	PUNCT	PUNCT	_	2	punct	_	_
-4	aramĩra	aramĩra	NOUN	NOUN	_	7	obj	_	_
-5	,	,	PUNCT	PUNCT	_	4	punct	_	_
-6	aparapia	aparapia	NOUN	NOUN	_	7	nsubj	_	_
-7	dow	dow	VERB	VERB	_	0	root	_	_
-8	,	,	PUNCT	PUNCT	_	7	punct	_	_
-9	nako	nako	NOUN	NOUN	_	10	obj	_	_
-10	ata	ata	VERB	VERB	_	7	parataxis	_	_
-11	ãka	ãka	PART	PART	_	7	discourse	_	_
-12	,	,	PUNCT	PUNCT	_	7	punct	_	_
-13	ɨkɨ	ɨkɨ	NOUN	NOUN	_	14	nmod	_	_
-14	ape	ape	NOUN	NOUN	_	15	nmod	_	highlight=green|span=2
-15	dow	dow	VERB	VERB	_	7	parataxis	_	highlight=red
-16	aparapiat	aparapiat	NOUN	NOUN	_	15	nsubj	_	highlight=green|span=1"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 4 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = mapi ata kom iko .
-1	mapi	mapi	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
-2	ata	ata	VERB	VERB	_	0	root	_	highlight=red
-3	kom	kom	PART	PART	_	2	advmod	_	highlight=green|span=1
-4	iko	iko	AUX	AUX	_	2	aux	_	_
-5	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 5 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = tawtʃe tʃopa te Konibu .
-1	tawtʃe	tawtʃe	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
-2	tʃopa	tʃopa	VERB	VERB	_	0	root	_	highlight=red
-3	te	te	PART	PART	_	2	discourse	_	_
-4	Konibu	Konibu	PROPN	PROPN	_	2	nsubj	_	highlight=green|span=1
-5	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 6 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = tɨrɨtɨrɨtɨrɨ tʃe ma , ima en .
-1	tɨrɨtɨrɨtɨrɨ	tɨrɨtɨrɨtɨrɨ	NUM	NUM	_	2	nummod	_	highlight=green|span=1
-2	tʃe	tʃe	VERB	VERB	_	0	root	_	highlight=red
-3	ma	ma	VERB	VERB	_	2	xcomp	_	highlight=green|span=1
-4	,	,	PUNCT	PUNCT	_	2	punct	_	_
-5	ima	ima	VERB	VERB	_	2	parataxis	_	_
-6	en	en	PRON	PRON	_	5	nsubj	_	_
-7	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 7 · source: aqz_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = kwamoa mãtʃero õjpe ko otʃeta õjpe ko pe matʃero .
-1	kwamoa	kwamoa	NOUN	NOUN	_	2	nmod	_	_
-2	mãtʃero	mãtʃero	PROPN	PROPN	_	4	nsubj	_	highlight=green|span=2
-3	õjpe	õjpe	NOUN	NOUN	_	4	obj	_	highlight=green|span=1
-4	ko	ko	VERB	VERB	_	0	root	_	highlight=red
-5	otʃeta	otʃeta	VERB	VERB	_	4	parataxis	_	_
-6	õjpe	õjpe	NOUN	NOUN	_	7	obj	_	_
-7	ko	ko	VERB	VERB	_	5	xcomp	_	_
-8	pe	pe	PART	PART	_	7	discourse	_	_
-9	matʃero	matʃero	PROPN	PROPN	_	7	obl	_	_
-10	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 8 · source: aqz_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = otʃipap tabɨtõ ka .
-1	otʃipap	otʃipap	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=1
-2	tabɨtõ	tabɨtõ	NOUN	NOUN	_	3	obj	_	highlight=green|span=1
-3	ka	ka	VERB	VERB	_	0	root	_	highlight=red
-4	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 9 · source: aqz_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ẽromri kwatin ikoa te ?
-1	ẽromri	ẽromri	PRON	PRON	_	3	obl	_	highlight=green|span=1
-2	kwatin	kwatin	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=1
-3	ikoa	ikoa	VERB	VERB	_	0	root	_	highlight=red
-4	te	te	PART	PART	_	3	discourse	_	_
-5	?	?	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 10 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = pero õpa Konibu .
-1	pero	pero	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
-2	õpa	õpa	VERB	VERB	_	0	root	_	highlight=red
-3	Konibu	Konibu	PROPN	PROPN	_	2	nsubj	_	highlight=green|span=1
-4	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 11 · source: aqz_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = porakɨ ɨkɨ apeka .
-1	porakɨ	porakɨ	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=1
-2	ɨkɨ	ɨkɨ	NOUN	NOUN	_	3	obj	_	highlight=green|span=1
-3	apeka	apeka	VERB	VERB	_	0	root	_	highlight=red
-4	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 12 · source: aqz_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<div class="example-meta">Example 13 · source: aqz_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
 <reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = en kwai ʧe put mãpara , ahaha , iwej , iwej mãpa , epi piro pi õba , put mãpara .
 1	en	en	PRON	PRON	_	3	nsubj	_	_
 2	kwai	kwai	NOUN	NOUN	_	3	obl	_	_
@@ -163,89 +151,63 @@ table.mal-table a:hover { text-decoration: underline; }
 21	.	.	PUNCT	PUNCT	_	20	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 13 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = apaw itet nom .
-1	apaw	apaw	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
-2	itet	itet	VERB	VERB	_	0	root	_	highlight=red
-3	nom	nom	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+<div class="example-meta">Example 14 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = kojõpibõ iat kom .
+1	kojõpibõ	kojõpibõ	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
+2	iat	iat	VERB	VERB	_	0	root	_	highlight=red
+3	kom	kom	PART	PART	_	2	advmod	_	highlight=green|span=1
 4	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 14 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 3.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = aparapia te teimaj ɨkwaj iko kwak tʃopa on kom .
-1	aparapia	aparapia	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=1
-2	te	te	PART	PART	_	3	discourse	_	_
-3	teimaj	teimaj	VERB	VERB	_	0	root	_	highlight=red
-4	ɨkwaj	ɨkwaj	NOUN	NOUN	_	5	nmod	_	_
-5	iko	iko	VERB	VERB	_	6	nmod	_	_
-6	kwak	kwak	NOUN	NOUN	_	7	obj	_	_
-7	tʃopa	tʃopa	VERB	VERB	_	3	ccomp	_	highlight=green|span=6
-8	on	on	PRON	PRON	_	7	nsubj	_	_
-9	kom	kom	PART	PART	_	7	discourse	_	_
-10	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 15 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = oiko mokwa on .
+1	oiko	oiko	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
+2	mokwa	mokwa	VERB	VERB	_	0	root	_	highlight=red
+3	on	on	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+4	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 15 · source: aqz_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = otʃipap tabɨtõ ka .
-1	otʃipap	otʃipap	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=1
-2	tabɨtõ	tabɨtõ	NOUN	NOUN	_	3	obl	_	highlight=green|span=1
-3	ka	ka	VERB	VERB	_	0	root	_	highlight=red
+<div class="example-meta">Example 16 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = kopiba mõatʃoa on .
+1	kopiba	kopiba	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
+2	mõatʃoa	mõatʃoa	VERB	VERB	_	0	root	_	highlight=red
+3	on	on	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+4	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: aqz_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = nako kwiri tʃãka .
+1	nako	nako	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=1
+2	kwiri	kwiri	NOUN	NOUN	_	3	obj	_	highlight=green|span=1
+3	tʃãka	tʃãka	VERB	VERB	_	0	root	_	highlight=red
 4	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 16 · source: aqz_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = otʃipap tabɨtõ ka
-1	otʃipap	otʃipap	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=1
-2	tabɨtõ	tabɨtõ	NOUN	NOUN	_	3	obl	_	highlight=green|span=1
-3	ka	ka	VERB	VERB	_	0	root	_	highlight=red"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 17 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = pabapebõ ɨkɨ kiramka en
-1	pabapebõ	pabapebõ	NOUN	NOUN	_	2	case	_	_
-2	ɨkɨ	ɨkɨ	NOUN	NOUN	_	3	obj	_	highlight=green|span=2
-3	kiramka	kiramka	VERB	VERB	_	0	root	_	highlight=red
-4	en	en	PRON	PRON	_	3	nsubj	_	highlight=green|span=1"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 18 · source: aqz_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = kɨrẽri ta paja , kiwkiw
-1	kɨrẽri	kɨrẽri	NOUN	NOUN	_	3	obl	_	highlight=green|span=1
-2	ta	ta	DET	DET	_	3	nsubj	_	highlight=green|span=1
-3	paja	paja	VERB	VERB	_	0	root	_	highlight=red
-4	,	,	PUNCT	PUNCT	_	3	punct	_	_
-5	kiwkiw	kiwkiw	VERB	VERB	_	3	parataxis	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 19 · source: aqz_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
+<div class="example-meta">Example 18 · source: aqz_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
 <reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = jẽrom Moẽ kwiri boja jõ ape ojã .
-1	jẽrom	jẽrom	DET	DET	_	4	advmod	_	highlight=green|span=2
-2	Moẽ	Moẽ	NOUN	NOUN	_	1	dislocated	_	_
+1	jẽrom	jẽrom	DET	DET	_	2	det	_	_
+2	Moẽ	Moẽ	ADV	ADV	_	4	advmod	_	highlight=green|span=2
 3	kwiri	kwiri	NOUN	NOUN	_	4	obj	_	highlight=green|span=1
 4	boja	boja	VERB	VERB	_	0	root	_	highlight=red
-5	jõ	jõ	DET	DET	_	7	advmod	_	_
-6	ape	ape	NOUN	NOUN	_	5	dislocated	_	_
-7	ojã	ojã	VERB	VERB	_	4	parataxis	_	_
+5	jõ	jõ	DET	DET	_	6	det	_	_
+6	ape	ape	NOUN	NOUN	_	4	parataxis	_	_
+7	ojã	ojã	AUX	AUX	_	4	aux	_	_
 8	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 20 · source: aqz_tudet-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = aramĩra nõm , aramĩra , aparapia dow , nako ata ãka , ɨkɨ ape dow aparapiat
-1	aramĩra	aramĩra	NOUN	NOUN	_	7	parataxis	_	_
-2	nõm	nõm	ADV	ADV	_	1	nsubj	_	_
-3	,	,	PUNCT	PUNCT	_	2	punct	_	_
-4	aramĩra	aramĩra	NOUN	NOUN	_	7	obj	_	highlight=green|span=1
-5	,	,	PUNCT	PUNCT	_	4	punct	_	_
-6	aparapia	aparapia	NOUN	NOUN	_	7	nsubj	_	highlight=green|span=1
-7	dow	dow	VERB	VERB	_	0	root	_	highlight=red
-8	,	,	PUNCT	PUNCT	_	7	punct	_	_
-9	nako	nako	NOUN	NOUN	_	10	obj	_	_
-10	ata	ata	VERB	VERB	_	7	parataxis	_	_
-11	ãka	ãka	PART	PART	_	7	discourse	_	_
-12	,	,	PUNCT	PUNCT	_	7	punct	_	_
-13	ɨkɨ	ɨkɨ	NOUN	NOUN	_	14	nmod	_	_
-14	ape	ape	NOUN	NOUN	_	15	nmod	_	_
-15	dow	dow	VERB	VERB	_	7	parataxis	_	_
-16	aparapiat	aparapiat	NOUN	NOUN	_	15	nsubj	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 19 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = tara itʃe eerekkwa ?
+1	tara	tara	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	itʃe	itʃe	VERB	VERB	_	0	root	_	highlight=red
+3	eerekkwa	eerekkwa	VERB	VERB	_	2	xcomp	_	highlight=green|span=1
+4	?	?	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: aqz_tudet-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = aroperi eipa ete ?
+1	aroperi	aroperi	PRON	PRON	_	2	obl	_	highlight=green|span=1
+2	eipa	eipa	VERB	VERB	_	0	root	_	highlight=red
+3	ete	ete	ADP	ADP	_	2	obl	_	highlight=green|span=1
+4	?	?	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
 </div>
 </body></html>

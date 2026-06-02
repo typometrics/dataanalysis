@@ -319,7 +319,7 @@ def _samples_page_html(lang_name, lang_code, direction, n,
     return '\n'.join(parts)
 
 
-def _index_page_html(lang_name, lang_code, mal_data, counts_data, max_n=8):
+def _index_page_html(lang_name, lang_code, mal_data, counts_data, max_n=8, has_bastards=False):
     """Per-language landing page with the MAL_n / LMAL_n / RMAL_n table."""
     title = f'{lang_name} ({lang_code}) — MAL examples'
     parts = [_page_head(title)]
@@ -372,6 +372,10 @@ def _index_page_html(lang_name, lang_code, mal_data, counts_data, max_n=8):
         parts.append('</tr>')
     parts.append('</tbody></table>')
 
+    if has_bastards:
+        parts.append(f'<p><a href="samples/bastards.html" style="font-weight:bold;color:#d32f2f;">'
+                     f'→ View Bastard Examples for {html.escape(lang_name)}</a></p>')
+
     parts.append('<p style="font-size:12px;color:#666">'
                  'Note: cells link to a reservoir sample of sentences for that '
                  'bucket; sample size is bounded by '
@@ -386,7 +390,7 @@ def _index_page_html(lang_name, lang_code, mal_data, counts_data, max_n=8):
 
 def _process_language(args):
     (lang_code, lang_name, conll_files, mal_data, counts_data,
-     output_dir, max_per_bucket, max_sentences, max_n) = args
+     output_dir, max_per_bucket, max_sentences, max_n, data_dir) = args
 
     lang_dir = os.path.join(output_dir, lang_code)
     samples_dir = os.path.join(lang_dir, 'samples')
@@ -396,10 +400,57 @@ def _process_language(args):
         conll_files, max_per_bucket=max_per_bucket,
         max_sentences=max_sentences, seed=hash(lang_code) & 0xFFFF)
 
+    import glob
+    bastard_pattern = os.path.join(data_dir, 'bastard_examples', f"{lang_code}_*_examples.conllu")
+    bastard_files = glob.glob(bastard_pattern)
+    has_bastards = False
+    if bastard_files:
+        from conll import conllFile2trees
+        parts = [_page_head(f'{lang_name} — Bastard Examples')]
+        parts.append(f'<p class="back"><a href="../index.html">← back to {html.escape(lang_name)} examples</a></p>')
+        parts.append(f'<h1>{html.escape(lang_name)} — Bastard Examples</h1>')
+        parts.append('<div class="info"><p>Bastard dependencies (non-projective or cross-clausal links) are highlighted in <b>orange</b> below.</p></div>')
+        
+        has_any_valid_trees = False
+        example_idx = 1
+        for bastard_file in bastard_files:
+            trees = conllFile2trees(bastard_file)
+            for tree in trees:
+                if not any(isinstance(i, int) for i in tree):
+                    continue  # Skip header-only blocks
+                    
+                has_any_valid_trees = True
+                tree.addspan(exclude=['punct'], compute_bastards=True)
+                
+                # Find all bastard IDs in this tree
+                all_bastard_ids = set()
+                for i in tree:
+                    if isinstance(i, int):
+                        all_bastard_ids.update(tree[i].get('bastards', []))
+                
+                # Add highlighting to bastard tokens
+                for b_id in all_bastard_ids:
+                    if b_id in tree:
+                        tree[b_id]['highlight'] = 'orange'
+                
+                conll_str = tree.conllu().replace('"', '&quot;')
+                parts.append(f'<div class="example">')
+                parts.append(f'<div class="example-meta">Bastard Example {example_idx}</div>')
+                parts.append(f'<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span,MISC.highlight" conll="{conll_str}"></reactive-dep-tree>')
+                parts.append('</div>')
+                example_idx += 1
+                
+        parts.append('</body></html>')
+        if has_any_valid_trees:
+            has_bastards = True
+            bastard_html = '\n'.join(parts)
+            with open(os.path.join(samples_dir, 'bastards.html'), 'w', encoding='utf-8') as fh:
+                fh.write(bastard_html)
+
     # Index page
     with open(os.path.join(lang_dir, 'index.html'), 'w', encoding='utf-8') as fh:
         fh.write(_index_page_html(lang_name, lang_code, mal_data,
-                                  counts_data, max_n=max_n))
+                                  counts_data, max_n=max_n, has_bastards=has_bastards))
 
     # Sample pages — one per (direction, n) for which we have either a MAL value
     # or actual collected examples.
@@ -496,7 +547,7 @@ def generate_examples(data_dir='data',
         }
         work.append((lang, langNames.get(lang, lang), files, mal_data,
                      counts_data, output_dir, max_per_bucket, max_sentences,
-                     max_n))
+                     max_n, data_dir))
 
     if n_workers is None:
         n_workers = max(1, (multiprocessing.cpu_count() or 2) // 2)

@@ -1,5 +1,6 @@
-<!DOCTYPE html><html><head>
-  <style>:root{color-scheme:light}html,body{background:#fff;color:#222}</style><meta charset="utf-8"><title>Hungarian — LMAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Hungarian — LMAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+:root { color-scheme: light; }
+html, body { background: #fff; }
 body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
        padding: 0 20px; color: #222; }
 h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
@@ -24,103 +25,364 @@ table.mal-table a:hover { text-decoration: underline; }
 <h1>Hungarian <small style="color:#999;font-weight:normal">(hu)</small> — LMAL<sub>2</sub></h1>
 <div class="info"><p><b>Bucket:</b> verbs that have exactly <b>2</b> left dependents (right side may be anything).</p><p><b>LMAL<sub>2</sub> = 2.682</b> &nbsp; <span style="color:#666">(1,247 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>left</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
 <div class="example">
-<div class="example-meta">Example 1 · source: hu_szeged-ud-dev.conllu · this verb has L=2, R=1 (mean span = 2.33)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Miután a munkavállalók 4 éven keresztül fizetik a munkanélküli-járulékot , ha eltörlik a jövedelempótló támogatást , sokaknak 4 éves befizetése megy veszendőbe .
-1	Miután	Miután	SCONJ	SCONJ	_	7	mark	_	_
-2	a	a	DET	DET	_	3	det	_	_
-3	munkavállalók	munkavállalók	NOUN	NOUN	_	7	nsubj	_	highlight=green|span=2
-4	4	4	NUM	NUM	_	5	nummod	_	_
-5	éven	éven	NOUN	NOUN	_	7	obl	_	highlight=green|span=3
-6	keresztül	keresztül	ADP	ADP	_	5	case	_	_
-7	fizetik	fizetik	VERB	VERB	_	21	advcl	_	highlight=red
-8	a	a	DET	DET	_	9	det	_	_
-9	munkanélküli-járulékot	munkanélküli-járulékot	NOUN	NOUN	_	7	obj	_	highlight=green|span=2
-10	,	,	PUNCT	PUNCT	_	7	punct	_	_
-11	ha	ha	SCONJ	SCONJ	_	12	mark	_	_
-12	eltörlik	eltörlik	VERB	VERB	_	21	advcl	_	_
-13	a	a	DET	DET	_	15	det	_	_
-14	jövedelempótló	jövedelempótló	ADJ	ADJ	_	15	amod:att	_	_
-15	támogatást	támogatást	NOUN	NOUN	_	12	obj	_	_
-16	,	,	PUNCT	PUNCT	_	12	punct	_	_
-17	sokaknak	sokaknak	DET	DET	_	20	nmod:obl	_	_
-18	4	4	NUM	NUM	_	19	nummod	_	_
-19	éves	éves	ADJ	ADJ	_	20	amod:att	_	_
-20	befizetése	befizetése	NOUN	NOUN	_	21	nsubj	_	_
-21	megy	megy	VERB	VERB	_	0	root	_	_
-22	veszendőbe	veszendőbe	NOUN	NOUN	_	21	obl	_	_
-23	.	.	PUNCT	PUNCT	_	21	punct	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 1 · source: hu_szeged-ud-train.conllu · this verb has L=2, R=0 (mean span = 8.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = A kiállítás ( és vásár ) szín- és formagazdagsága a tárgyak kézi megmunkálásának mesterségbeli biztonságáról , a manufakturális módszer gondosságáról vall .
+1	A	A	DET	DET	_	2	det	_	_
+2	kiállítás	kiállítás	NOUN	NOUN	_	7	nmod:att	_	_
+3	(	(	PUNCT	PUNCT	_	4	punct	_	_
+4	és	és	CCONJ	CCONJ	_	2	parataxis	_	_
+5	vásár	vásár	NOUN	NOUN	_	4	conj	_	_
+6	)	)	PUNCT	PUNCT	_	4	punct	_	_
+7	szín-	szín-	NOUN	NOUN	_	21	nsubj	_	highlight=green|span=7
+8	és	és	CCONJ	CCONJ	_	9	cc	_	_
+9	formagazdagsága	formagazdagsága	NOUN	NOUN	_	7	conj	_	_
+10	a	a	DET	DET	_	11	det	_	_
+11	tárgyak	tárgyak	NOUN	NOUN	_	13	nmod:att	_	_
+12	kézi	kézi	ADJ	ADJ	_	13	amod:att	_	_
+13	megmunkálásának	megmunkálásának	NOUN	NOUN	_	15	nmod:att	_	_
+14	mesterségbeli	mesterségbeli	ADJ	ADJ	_	15	amod:att	_	_
+15	biztonságáról	biztonságáról	NOUN	NOUN	_	21	obl	_	highlight=green|span=10
+16	,	,	PUNCT	PUNCT	_	20	punct	_	_
+17	a	a	DET	DET	_	19	det	_	_
+18	manufakturális	manufakturális	ADJ	ADJ	_	19	amod:att	_	_
+19	módszer	módszer	NOUN	NOUN	_	20	nmod:att	_	_
+20	gondosságáról	gondosságáról	NOUN	NOUN	_	15	conj	_	_
+21	vall	vall	VERB	VERB	_	0	root	_	highlight=red
+22	.	.	PUNCT	PUNCT	_	21	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 2 · source: hu_szeged-ud-train.conllu · this verb has L=2, R=1 (mean span = 6.67)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Jan Kavan külügyminiszter azt mondta , hogy ha nem történik gyors intézkedés az ügyben , akkor a fal a cseh EU-csatlakozás akadálya lehet .
-1	Jan	Jan	PROPN	PROPN	_	5	nsubj	_	highlight=green|span=3
-2	Kavan	Kavan	PROPN	PROPN	_	1	flat:name	_	_
-3	külügyminiszter	külügyminiszter	NOUN	NOUN	_	1	appos	_	_
-4	azt	azt	PRON	PRON	_	5	obj	_	highlight=green|span=1
-5	mondta	mondta	VERB	VERB	_	0	root	_	highlight=red
-6	,	,	PUNCT	PUNCT	_	22	punct	_	_
-7	hogy	hogy	SCONJ	SCONJ	_	22	mark	_	_
-8	ha	ha	SCONJ	SCONJ	_	10	mark	_	_
-9	nem	nem	ADV	ADV	_	10	advmod	_	_
-10	történik	történik	VERB	VERB	_	22	advcl	_	_
-11	gyors	gyors	ADJ	ADJ	_	12	amod:att	_	_
-12	intézkedés	intézkedés	NOUN	NOUN	_	10	nsubj	_	_
-13	az	az	DET	DET	_	14	det	_	_
-14	ügyben	ügyben	NOUN	NOUN	_	10	obl	_	_
-15	,	,	PUNCT	PUNCT	_	10	punct	_	_
-16	akkor	akkor	ADV	ADV	_	22	advmod:tlocy	_	_
+<div class="example-meta">Example 2 · source: hu_szeged-ud-dev.conllu · this verb has L=2, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = A hazai élelmiszeriparban javában zajlik az átalakulás és a koncentráció .
+1	A	A	DET	DET	_	3	det	_	_
+2	hazai	hazai	ADJ	ADJ	_	3	amod:att	_	_
+3	élelmiszeriparban	élelmiszeriparban	NOUN	NOUN	_	5	obl	_	highlight=green|span=3
+4	javában	javában	ADV	ADV	_	5	advmod:mode	_	highlight=green|span=1
+5	zajlik	zajlik	VERB	VERB	_	0	root	_	highlight=red
+6	az	az	DET	DET	_	7	det	_	_
+7	átalakulás	átalakulás	NOUN	NOUN	_	5	nsubj	_	highlight=green|span=5
+8	és	és	CCONJ	CCONJ	_	10	cc	_	_
+9	a	a	DET	DET	_	10	det	_	_
+10	koncentráció	koncentráció	NOUN	NOUN	_	7	conj	_	_
+11	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: hu_szeged-ud-dev.conllu · this verb has L=2, R=0 (mean span = 7.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Bakó Lajos ezzel jogerős módon a kuratórium elnöke , a másik három elnökségi tag nyilvántartásba vétele és a tavaly nyáron leköszönt tagok törlése pedig folyamatban van .
+1	Bakó	Bakó	PROPN	PROPN	_	8	nsubj	_	_
+2	Lajos	Lajos	PROPN	PROPN	_	1	flat:name	_	_
+3	ezzel	ezzel	PRON	PRON	_	8	nmod:obl	_	_
+4	jogerős	jogerős	ADJ	ADJ	_	5	amod:att	_	_
+5	módon	módon	NOUN	NOUN	_	8	nmod:obl	_	_
+6	a	a	DET	DET	_	7	det	_	_
+7	kuratórium	kuratórium	NOUN	NOUN	_	8	nmod:att	_	_
+8	elnöke	elnöke	NOUN	NOUN	_	0	root	_	_
+9	,	,	PUNCT	PUNCT	_	26	punct	_	_
+10	a	a	DET	DET	_	14	det	_	_
+11	másik	másik	DET	DET	_	14	det	_	_
+12	három	három	NUM	NUM	_	14	nummod	_	_
+13	elnökségi	elnökségi	ADJ	ADJ	_	14	amod:att	_	_
+14	tag	tag	NOUN	NOUN	_	16	nmod:att	_	_
+15	nyilvántartásba	nyilvántartásba	NOUN	NOUN	_	16	nmod	_	_
+16	vétele	vétele	NOUN	NOUN	_	26	nsubj	_	highlight=green|span=14
+17	és	és	CCONJ	CCONJ	_	23	cc	_	_
+18	a	a	DET	DET	_	22	det	_	_
+19	tavaly	tavaly	ADV	ADV	_	20	advmod:tlocy	_	_
+20	nyáron	nyáron	NOUN	NOUN	_	21	obl	_	_
+21	leköszönt	leköszönt	ADJ	ADJ	_	22	amod:att	_	_
+22	tagok	tagok	NOUN	NOUN	_	23	nmod:att	_	_
+23	törlése	törlése	NOUN	NOUN	_	16	conj	_	_
+24	pedig	pedig	CCONJ	CCONJ	_	26	cc	_	_
+25	folyamatban	folyamatban	NOUN	NOUN	_	26	obl	_	highlight=green|span=1
+26	van	van	VERB	VERB	_	8	conj	_	highlight=red
+27	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: hu_szeged-ud-train.conllu · this verb has L=2, R=1 (mean span = 6.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = A kegytárgyak , műtárgyak sajátos szépsége és történeti értéke mellett az anyag finomsága és a megformálás egyedisége is megragadhatja az érdeklődőket .
+1	A	A	DET	DET	_	2	det	_	_
+2	kegytárgyak	kegytárgyak	NOUN	NOUN	_	6	nmod:att	_	_
+3	,	,	PUNCT	PUNCT	_	4	punct	_	_
+4	műtárgyak	műtárgyak	NOUN	NOUN	_	2	conj	_	_
+5	sajátos	sajátos	ADJ	ADJ	_	6	amod:att	_	_
+6	szépsége	szépsége	NOUN	NOUN	_	19	obl	_	highlight=green|span=9
+7	és	és	CCONJ	CCONJ	_	9	cc	_	_
+8	történeti	történeti	ADJ	ADJ	_	9	amod:att	_	_
+9	értéke	értéke	NOUN	NOUN	_	6	conj	_	_
+10	mellett	mellett	ADP	ADP	_	6	case	_	_
+11	az	az	DET	DET	_	12	det	_	_
+12	anyag	anyag	NOUN	NOUN	_	13	nmod:att	_	_
+13	finomsága	finomsága	NOUN	NOUN	_	19	nsubj	_	highlight=green|span=8
+14	és	és	CCONJ	CCONJ	_	17	cc	_	_
+15	a	a	DET	DET	_	16	det	_	_
+16	megformálás	megformálás	NOUN	NOUN	_	17	nmod:att	_	_
+17	egyedisége	egyedisége	NOUN	NOUN	_	13	conj	_	_
+18	is	is	CCONJ	CCONJ	_	13	cc	_	_
+19	megragadhatja	megragadhatja	VERB	VERB	_	0	root	_	highlight=red
+20	az	az	DET	DET	_	21	det	_	_
+21	érdeklődőket	érdeklődőket	NOUN	NOUN	_	19	obj	_	highlight=green|span=2
+22	.	.	PUNCT	PUNCT	_	19	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: hu_szeged-ud-dev.conllu · this verb has L=2, R=1 (mean span = 3.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = A jelentés összegzésül megállapítja , hogy az átadási jegyzőkönyv aláírása súlyos hiba volt .
+1	A	A	DET	DET	_	2	det	_	_
+2	jelentés	jelentés	NOUN	NOUN	_	4	nsubj	_	highlight=green|span=2
+3	összegzésül	összegzésül	NOUN	NOUN	_	4	obl	_	highlight=green|span=1
+4	megállapítja	megállapítja	VERB	VERB	_	0	root	_	highlight=red
+5	,	,	PUNCT	PUNCT	_	12	punct	_	_
+6	hogy	hogy	SCONJ	SCONJ	_	12	mark	_	_
+7	az	az	DET	DET	_	9	det	_	_
+8	átadási	átadási	ADJ	ADJ	_	9	amod:att	_	_
+9	jegyzőkönyv	jegyzőkönyv	NOUN	NOUN	_	10	nmod:att	_	_
+10	aláírása	aláírása	NOUN	NOUN	_	12	nsubj	_	_
+11	súlyos	súlyos	ADJ	ADJ	_	12	amod:att	_	_
+12	hiba	hiba	NOUN	NOUN	_	4	ccomp:obj	_	highlight=green|span=8
+13	volt	volt	AUX	AUX	_	12	cop	_	_
+14	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: hu_szeged-ud-train.conllu · this verb has L=2, R=0 (mean span = 5.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = A mostani reformok a nyolcvanas évek elején megkezdett gazdasági liberalizáció folytatását jelentik .
+1	A	A	DET	DET	_	3	det	_	_
+2	mostani	mostani	ADJ	ADJ	_	3	amod:att	_	_
+3	reformok	reformok	NOUN	NOUN	_	12	nsubj	_	highlight=green|span=3
+4	a	a	DET	DET	_	6	det	_	_
+5	nyolcvanas	nyolcvanas	ADJ	ADJ	_	6	amod:att	_	_
+6	évek	évek	NOUN	NOUN	_	7	nmod:att	_	_
+7	elején	elején	NOUN	NOUN	_	8	obl	_	_
+8	megkezdett	megkezdett	ADJ	ADJ	_	10	amod:att	_	_
+9	gazdasági	gazdasági	ADJ	ADJ	_	10	amod:att	_	_
+10	liberalizáció	liberalizáció	NOUN	NOUN	_	11	nmod:att	_	_
+11	folytatását	folytatását	NOUN	NOUN	_	12	obj	_	highlight=green|span=8
+12	jelentik	jelentik	VERB	VERB	_	0	root	_	highlight=red
+13	.	.	PUNCT	PUNCT	_	12	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: hu_szeged-ud-train.conllu · this verb has L=2, R=2 (mean span = 1.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Az ellenzéki pártok képviselői az alkotmányerejű törvény ellen szavaztak , egyebek között arra hivatkozva , hogy a kormánypárt nem tartja tiszteletben az alkotmányban foglaltakat , és nem hajlandó megállapodni a parlamenti választások időpontjáról sem .
+1	Az	Az	DET	DET	_	3	det	_	_
+2	ellenzéki	ellenzéki	ADJ	ADJ	_	3	amod:att	_	_
+3	pártok	pártok	NOUN	NOUN	_	4	nmod:att	_	_
+4	képviselői	képviselői	NOUN	NOUN	_	9	nsubj	_	_
+5	az	az	DET	DET	_	7	det	_	_
+6	alkotmányerejű	alkotmányerejű	ADJ	ADJ	_	7	amod:att	_	_
+7	törvény	törvény	NOUN	NOUN	_	9	obl	_	_
+8	ellen	ellen	ADP	ADP	_	7	case	_	_
+9	szavaztak	szavaztak	VERB	VERB	_	0	root	_	_
+10	,	,	PUNCT	PUNCT	_	14	punct	_	_
+11	egyebek	egyebek	PRON	PRON	_	14	obl	_	_
+12	között	között	ADP	ADP	_	11	case	_	_
+13	arra	arra	PRON	PRON	_	14	obl	_	_
+14	hivatkozva	hivatkozva	ADV	ADV	_	9	advmod:mode	_	_
+15	,	,	PUNCT	PUNCT	_	20	punct	_	_
+16	hogy	hogy	SCONJ	SCONJ	_	20	mark	_	_
 17	a	a	DET	DET	_	18	det	_	_
-18	fal	fal	NOUN	NOUN	_	22	nsubj	_	_
-19	a	a	DET	DET	_	21	det	_	_
-20	cseh	cseh	ADJ	ADJ	_	21	amod:att	_	_
-21	EU-csatlakozás	EU-csatlakozás	NOUN	NOUN	_	22	nmod:att	_	_
-22	akadálya	akadálya	NOUN	NOUN	_	5	ccomp:obj	_	highlight=green|span=16
-23	lehet	lehet	AUX	AUX	_	22	cop	_	_
-24	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+18	kormánypárt	kormánypárt	NOUN	NOUN	_	20	nsubj	_	highlight=green|span=2
+19	nem	nem	ADV	ADV	_	20	advmod	_	highlight=green|span=1
+20	tartja	tartja	VERB	VERB	_	14	ccomp:obl	_	highlight=red
+21	tiszteletben	tiszteletben	NOUN	NOUN	_	20	obl	_	highlight=green|span=1
+22	az	az	DET	DET	_	23	det	_	_
+23	alkotmányban	alkotmányban	NOUN	NOUN	_	24	nmod:obl	_	_
+24	foglaltakat	foglaltakat	NOUN	NOUN	_	20	obj	_	highlight=green|span=3
+25	,	,	PUNCT	PUNCT	_	28	punct	_	_
+26	és	és	CCONJ	CCONJ	_	28	cc	_	_
+27	nem	nem	ADV	ADV	_	28	advmod	_	_
+28	hajlandó	hajlandó	ADJ	ADJ	_	20	conj	_	_
+29	megállapodni	megállapodni	VERB	VERB	_	28	xcomp	_	_
+30	a	a	DET	DET	_	32	det	_	_
+31	parlamenti	parlamenti	ADJ	ADJ	_	32	amod:att	_	_
+32	választások	választások	NOUN	NOUN	_	33	nmod:att	_	_
+33	időpontjáról	időpontjáról	NOUN	NOUN	_	29	obl	_	_
+34	sem	sem	CCONJ	CCONJ	_	33	cc	_	_
+35	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 3 · source: hu_szeged-ud-dev.conllu · this verb has L=2, R=2 (mean span = 3.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Az elmúlt nyolc hónapban , amelyből összesen hatot kényszerűségből szabadságon töltött a parlamenti ellenzék , megváltozott itthon a hatalommegosztás 1990-ben kialakított rendszere : az e héten audienciát tartó kormányfő gyakorlatilag kivonta magát az Országgyűlés ellenőrzése alól .
-1	Az	Az	DET	DET	_	4	det	_	_
-2	elmúlt	elmúlt	ADJ	ADJ	_	4	amod:att	_	_
-3	nyolc	nyolc	NUM	NUM	_	4	amod:att	_	_
-4	hónapban	hónapban	NOUN	NOUN	_	16	obl	_	_
-5	,	,	PUNCT	PUNCT	_	11	punct	_	_
-6	amelyből	amelyből	PRON	PRON	_	11	obl	_	_
-7	összesen	összesen	ADV	ADV	_	8	advmod:mode	_	_
-8	hatot	hatot	NUM	NUM	_	11	obj	_	_
-9	kényszerűségből	kényszerűségből	NOUN	NOUN	_	11	obl	_	_
-10	szabadságon	szabadságon	NOUN	NOUN	_	11	obl	_	_
-11	töltött	töltött	VERB	VERB	_	4	acl	_	_
-12	a	a	DET	DET	_	14	det	_	_
-13	parlamenti	parlamenti	ADJ	ADJ	_	14	amod:att	_	_
-14	ellenzék	ellenzék	NOUN	NOUN	_	11	nsubj	_	_
-15	,	,	PUNCT	PUNCT	_	4	punct	_	_
-16	megváltozott	megváltozott	VERB	VERB	_	0	root	_	_
-17	itthon	itthon	ADV	ADV	_	16	advmod:locy	_	_
-18	a	a	DET	DET	_	19	det	_	_
-19	hatalommegosztás	hatalommegosztás	NOUN	NOUN	_	22	nmod:att	_	_
-20	1990-ben	1990-ben	NUM	NUM	_	21	obl	_	_
-21	kialakított	kialakított	ADJ	ADJ	_	22	amod:att	_	_
-22	rendszere	rendszere	NOUN	NOUN	_	16	nsubj	_	_
-23	:	:	PUNCT	PUNCT	_	31	punct	_	_
-24	az	az	DET	DET	_	26	det	_	_
-25	e	e	PRON	PRON	_	26	det	_	_
-26	héten	héten	NOUN	NOUN	_	28	obl	_	_
-27	audienciát	audienciát	NOUN	NOUN	_	28	obj	_	_
-28	tartó	tartó	ADJ	ADJ	_	29	amod:att	_	_
-29	kormányfő	kormányfő	NOUN	NOUN	_	31	nsubj	_	highlight=green|span=6
-30	gyakorlatilag	gyakorlatilag	ADJ	ADJ	_	31	obl	_	highlight=green|span=1
-31	kivonta	kivonta	VERB	VERB	_	16	advcl	_	highlight=red
-32	magát	magát	PRON	PRON	_	31	obj	_	highlight=green|span=1
-33	az	az	DET	DET	_	34	det	_	_
-34	Országgyűlés	Országgyűlés	PROPN	PROPN	_	35	nmod:att	_	_
-35	ellenőrzése	ellenőrzése	NOUN	NOUN	_	31	obl	_	highlight=green|span=4
-36	alól	alól	ADP	ADP	_	35	case	_	_
-37	.	.	PUNCT	PUNCT	_	16	punct	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 8 · source: hu_szeged-ud-train.conllu · this verb has L=2, R=1 (mean span = 3.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = A tőkeemelésben mindazonáltal a kisbefektetők nem vehetnek részt , mivel egyúttal az Erste átalakul zártkörű társasággá , amelynek viszont tagjai maradnak azok , akik nem élnek a pénzintézet visszavásárlási ajánlatával .
+1	A	A	DET	DET	_	2	det	_	_
+2	tőkeemelésben	tőkeemelésben	NOUN	NOUN	_	7	obl	_	_
+3	mindazonáltal	mindazonáltal	CCONJ	CCONJ	_	7	cc	_	_
+4	a	a	DET	DET	_	5	det	_	_
+5	kisbefektetők	kisbefektetők	NOUN	NOUN	_	7	nsubj	_	_
+6	nem	nem	ADV	ADV	_	7	advmod	_	_
+7	vehetnek	vehetnek	VERB	VERB	_	0	root	_	_
+8	részt	részt	NOUN	NOUN	_	7	obj	_	_
+9	,	,	PUNCT	PUNCT	_	14	punct	_	_
+10	mivel	mivel	SCONJ	SCONJ	_	14	mark	_	_
+11	egyúttal	egyúttal	ADV	ADV	_	14	advmod:mode	_	_
+12	az	az	DET	DET	_	13	det	_	_
+13	Erste	Erste	PROPN	PROPN	_	14	nsubj	_	_
+14	átalakul	átalakul	VERB	VERB	_	7	advcl	_	_
+15	zártkörű	zártkörű	ADJ	ADJ	_	16	amod:att	_	_
+16	társasággá	társasággá	NOUN	NOUN	_	14	obl	_	_
+17	,	,	PUNCT	PUNCT	_	21	punct	_	_
+18	amelynek	amelynek	PRON	PRON	_	20	nmod:att	_	highlight=green|span=1
+19	viszont	viszont	CCONJ	CCONJ	_	21	cc	_	_
+20	tagjai	tagjai	NOUN	NOUN	_	21	nsubj	_	highlight=green|span=1
+21	maradnak	maradnak	VERB	VERB	_	16	acl	_	highlight=red
+22	azok	azok	PRON	PRON	_	21	xcomp	_	highlight=green|span=8
+23	,	,	PUNCT	PUNCT	_	26	punct	_	_
+24	akik	akik	PRON	PRON	_	26	nsubj	_	_
+25	nem	nem	ADV	ADV	_	26	advmod	_	_
+26	élnek	élnek	VERB	VERB	_	22	acl	_	_
+27	a	a	DET	DET	_	28	det	_	_
+28	pénzintézet	pénzintézet	NOUN	NOUN	_	30	nmod:att	_	_
+29	visszavásárlási	visszavásárlási	ADJ	ADJ	_	30	amod:att	_	_
+30	ajánlatával	ajánlatával	NOUN	NOUN	_	26	obl	_	_
+31	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 4 · source: hu_szeged-ud-train.conllu · this verb has L=2, R=1 (mean span = 4.00)</div>
+<div class="example-meta">Example 9 · source: hu_szeged-ud-train.conllu · this verb has L=2, R=2 (mean span = 3.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Mitrohin azt írja Babiucról , hogy a KGB annak idején kompromittáló anyagok alapján szervezte be őt Moszkvában .
+1	Mitrohin	Mitrohin	PROPN	PROPN	_	3	nsubj	_	highlight=green|span=1
+2	azt	azt	PRON	PRON	_	3	obj	_	highlight=green|span=1
+3	írja	írja	VERB	VERB	_	0	root	_	highlight=red
+4	Babiucról	Babiucról	PROPN	PROPN	_	3	obl	_	highlight=green|span=1
+5	,	,	PUNCT	PUNCT	_	14	punct	_	_
+6	hogy	hogy	SCONJ	SCONJ	_	14	mark	_	_
+7	a	a	DET	DET	_	8	det	_	_
+8	KGB	KGB	PROPN	PROPN	_	14	nsubj	_	_
+9	annak	annak	PRON	PRON	_	10	nmod:att	_	_
+10	idején	idején	NOUN	NOUN	_	14	obl	_	_
+11	kompromittáló	kompromittáló	ADJ	ADJ	_	12	amod:att	_	_
+12	anyagok	anyagok	NOUN	NOUN	_	13	nmod:att	_	_
+13	alapján	alapján	NOUN	NOUN	_	14	obl	_	_
+14	szervezte	szervezte	VERB	VERB	_	3	ccomp:obj	_	highlight=green|span=12
+15	be	be	ADV	ADV	_	14	compound:preverb	_	_
+16	őt	őt	PRON	PRON	_	14	obj	_	_
+17	Moszkvában	Moszkvában	PROPN	PROPN	_	14	obl	_	_
+18	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: hu_szeged-ud-dev.conllu · this verb has L=2, R=1 (mean span = 5.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Az iraki vezetés azért függesztette fel a nyersanyag-kivitelt , mert az ENSZ Biztonsági Tanácsa múlt hét pénteki ülésén úgy határozott , hogy a szokásos hat hónap helyett csak két hétre hosszabbítja meg az iraki kereskedelmet szabályozó , úgynevezett &quot; olajért élelmiszert &quot; programot .
+1	Az	Az	DET	DET	_	3	det	_	_
+2	iraki	iraki	ADJ	ADJ	_	3	amod:att	_	_
+3	vezetés	vezetés	NOUN	NOUN	_	5	nsubj	_	_
+4	azért	azért	ADV	ADV	_	5	advmod:mode	_	_
+5	függesztette	függesztette	VERB	VERB	_	0	root	_	_
+6	fel	fel	ADV	ADV	_	5	compound:preverb	_	_
+7	a	a	DET	DET	_	8	det	_	_
+8	nyersanyag-kivitelt	nyersanyag-kivitelt	NOUN	NOUN	_	5	obj	_	_
+9	,	,	PUNCT	PUNCT	_	20	punct	_	_
+10	mert	mert	SCONJ	SCONJ	_	20	mark	_	_
+11	az	az	DET	DET	_	14	det	_	_
+12	ENSZ	ENSZ	PROPN	PROPN	_	13	nmod:att	_	_
+13	Biztonsági	Biztonsági	PROPN	PROPN	_	20	nsubj	_	_
+14	Tanácsa	Tanácsa	PROPN	PROPN	_	13	flat:name	_	_
+15	múlt	múlt	ADJ	ADJ	_	16	amod:att	_	_
+16	hét	hét	NOUN	NOUN	_	17	nmod:att	_	_
+17	pénteki	pénteki	ADJ	ADJ	_	18	amod:att	_	_
+18	ülésén	ülésén	NOUN	NOUN	_	20	obl	_	_
+19	úgy	úgy	ADV	ADV	_	20	advmod:mode	_	_
+20	határozott	határozott	VERB	VERB	_	5	advcl	_	_
+21	,	,	PUNCT	PUNCT	_	31	punct	_	_
+22	hogy	hogy	SCONJ	SCONJ	_	31	mark	_	_
+23	a	a	DET	DET	_	26	det	_	_
+24	szokásos	szokásos	ADJ	ADJ	_	26	amod:att	_	_
+25	hat	hat	NUM	NUM	_	26	nummod	_	_
+26	hónap	hónap	NOUN	NOUN	_	31	obl	_	highlight=green|span=5
+27	helyett	helyett	ADP	ADP	_	26	case	_	_
+28	csak	csak	ADV	ADV	_	30	advmod:mode	_	_
+29	két	két	NUM	NUM	_	30	nummod	_	_
+30	hétre	hétre	NOUN	NOUN	_	31	obl	_	highlight=green|span=3
+31	hosszabbítja	hosszabbítja	VERB	VERB	_	20	ccomp:obl	_	highlight=red
+32	meg	meg	PART	PART	_	31	compound:preverb	_	_
+33	az	az	DET	DET	_	35	det	_	_
+34	iraki	iraki	ADJ	ADJ	_	35	amod:att	_	_
+35	kereskedelmet	kereskedelmet	NOUN	NOUN	_	36	obj	_	_
+36	szabályozó	szabályozó	ADJ	ADJ	_	43	amod:att	_	_
+37	,	,	PUNCT	PUNCT	_	36	punct	_	_
+38	úgynevezett	úgynevezett	ADJ	ADJ	_	41	amod:att	_	_
+39	&quot;	&quot;	PUNCT	PUNCT	_	41	punct	_	_
+40	olajért	olajért	NOUN	NOUN	_	41	nmod:obl	_	_
+41	élelmiszert	élelmiszert	NOUN	NOUN	_	43	nmod:att	_	_
+42	&quot;	&quot;	PUNCT	PUNCT	_	41	punct	_	_
+43	programot	programot	NOUN	NOUN	_	31	obj	_	highlight=green|span=8
+44	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: hu_szeged-ud-train.conllu · this verb has L=2, R=0 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = A világgazdaság gyors , országhatárokon átívelő fejlődését több tényező idézi elő .
+1	A	A	DET	DET	_	2	det	_	_
+2	világgazdaság	világgazdaság	NOUN	NOUN	_	7	nmod:att	_	_
+3	gyors	gyors	ADJ	ADJ	_	7	amod:att	_	_
+4	,	,	PUNCT	PUNCT	_	6	punct	_	_
+5	országhatárokon	országhatárokon	NOUN	NOUN	_	6	obl	_	_
+6	átívelő	átívelő	ADJ	ADJ	_	3	conj	_	_
+7	fejlődését	fejlődését	NOUN	NOUN	_	10	obj	_	highlight=green|span=6
+8	több	több	DET	DET	_	9	det	_	_
+9	tényező	tényező	NOUN	NOUN	_	10	nsubj	_	highlight=green|span=2
+10	idézi	idézi	VERB	VERB	_	0	root	_	highlight=red
+11	elő	elő	ADV	ADV	_	10	compound:preverb	_	_
+12	.	.	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: hu_szeged-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Személyi sérülés nem történt , a keletkezés okait , körülményeit a rendőrség mellett a büntetés-végrehajtás szakemberei is vizsgálják .
+1	Személyi	Személyi	ADJ	ADJ	_	2	amod:att	_	_
+2	sérülés	sérülés	NOUN	NOUN	_	4	nsubj	_	highlight=green|span=2
+3	nem	nem	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+4	történt	történt	VERB	VERB	_	0	root	_	highlight=red
+5	,	,	PUNCT	PUNCT	_	18	punct	_	_
+6	a	a	DET	DET	_	7	det	_	_
+7	keletkezés	keletkezés	NOUN	NOUN	_	8	nmod:att	_	_
+8	okait	okait	NOUN	NOUN	_	18	obj	_	_
+9	,	,	PUNCT	PUNCT	_	10	punct	_	_
+10	körülményeit	körülményeit	NOUN	NOUN	_	8	conj	_	_
+11	a	a	DET	DET	_	12	det	_	_
+12	rendőrség	rendőrség	NOUN	NOUN	_	18	obl	_	_
+13	mellett	mellett	ADP	ADP	_	12	case	_	_
+14	a	a	DET	DET	_	15	det	_	_
+15	büntetés-végrehajtás	büntetés-végrehajtás	NOUN	NOUN	_	16	nmod:att	_	_
+16	szakemberei	szakemberei	NOUN	NOUN	_	18	nsubj	_	_
+17	is	is	CCONJ	CCONJ	_	16	cc	_	_
+18	vizsgálják	vizsgálják	VERB	VERB	_	4	conj	_	_
+19	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: hu_szeged-ud-train.conllu · this verb has L=2, R=1 (mean span = 3.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Tavaly az állami gabonatanács 8 millió tonna szemes terményt vett át , s a mennyiséget az idén 4,5 millióban szeretné korlátozni , mert tavaly például előfordult , hogy olcsón beszerzett iraki búzát adtak tovább a hatóságoknak .
+1	Tavaly	Tavaly	ADV	ADV	_	10	advmod:tlocy	_	_
+2	az	az	DET	DET	_	4	det	_	_
+3	állami	állami	ADJ	ADJ	_	4	amod:att	_	_
+4	gabonatanács	gabonatanács	NOUN	NOUN	_	10	nsubj	_	_
+5	8	8	NUM	NUM	_	6	compound	_	_
+6	millió	millió	NUM	NUM	_	7	amod:att	_	_
+7	tonna	tonna	NOUN	NOUN	_	9	nmod:att	_	_
+8	szemes	szemes	ADJ	ADJ	_	9	amod:att	_	_
+9	terményt	terményt	NOUN	NOUN	_	10	obj	_	_
+10	vett	vett	VERB	VERB	_	0	root	_	_
+11	át	át	ADV	ADV	_	10	compound:preverb	_	_
+12	,	,	PUNCT	PUNCT	_	20	punct	_	_
+13	s	s	CCONJ	CCONJ	_	20	cc	_	_
+14	a	a	DET	DET	_	15	det	_	_
+15	mennyiséget	mennyiséget	NOUN	NOUN	_	21	obj	_	_
+16	az	az	DET	DET	_	17	det	_	_
+17	idén	idén	ADV	ADV	_	21	advmod:tlocy	_	_
+18	4,5	4,5	NUM	NUM	_	19	compound	_	_
+19	millióban	millióban	NUM	NUM	_	21	obl	_	_
+20	szeretné	szeretné	VERB	VERB	_	10	conj	_	_
+21	korlátozni	korlátozni	VERB	VERB	_	20	xcomp	_	_
+22	,	,	PUNCT	PUNCT	_	26	punct	_	_
+23	mert	mert	SCONJ	SCONJ	_	26	mark	_	_
+24	tavaly	tavaly	ADV	ADV	_	26	advmod:tlocy	_	highlight=green|span=1
+25	például	például	ADV	ADV	_	26	advmod:mode	_	highlight=green|span=1
+26	előfordult	előfordult	VERB	VERB	_	20	advcl	_	highlight=red
+27	,	,	PUNCT	PUNCT	_	33	punct	_	_
+28	hogy	hogy	SCONJ	SCONJ	_	33	mark	_	_
+29	olcsón	olcsón	ADJ	ADJ	_	30	obl	_	_
+30	beszerzett	beszerzett	ADJ	ADJ	_	32	amod:att	_	_
+31	iraki	iraki	ADJ	ADJ	_	32	amod:att	_	_
+32	búzát	búzát	NOUN	NOUN	_	33	obj	_	_
+33	adtak	adtak	VERB	VERB	_	26	csubj	_	highlight=green|span=9
+34	tovább	tovább	ADV	ADV	_	33	advmod:to	_	_
+35	a	a	DET	DET	_	36	det	_	_
+36	hatóságoknak	hatóságoknak	NOUN	NOUN	_	33	iobj	_	_
+37	.	.	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: hu_szeged-ud-train.conllu · this verb has L=2, R=1 (mean span = 4.00)</div>
 <reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Richard Holbrooke , az Egyesült Államok múlt szerdán beiktatott új ENSZ-nagykövete , aki jelentős szerepet játszott mind a boszniai , mind pedig a koszovói rendezési erőfeszítésekben , mindenesetre elvetette a Koszovó felosztásával kapcsolatos elképzeléseket , s hét eleji pristinai látogatása során kijelentette : tovább kell folytatni a demokratikus intézményrendszer kiépítését , az ENSZ-nek pedig be kell bizonyítania , hogy képes célkitűzéseinek megvalósítására .
 1	Richard	Richard	PROPN	PROPN	_	29	nsubj	_	_
 2	Holbrooke	Holbrooke	PROPN	PROPN	_	1	flat:name	_	_
@@ -187,130 +449,135 @@ table.mal-table a:hover { text-decoration: underline; }
 63	.	.	PUNCT	PUNCT	_	29	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 5 · source: hu_szeged-ud-test.conllu · this verb has L=2, R=1 (mean span = 1.33)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Hiába dobott a vendégek sztárja , Ballabio triplát , szerzett labdát a saját térfelén , lepattanót a mieink palánkja alatt , még ezt is elviselte válogatottunk .
-1	Hiába	Hiába	ADV	ADV	_	2	advmod:mode	_	_
-2	dobott	dobott	VERB	VERB	_	0	root	_	_
-3	a	a	DET	DET	_	4	det	_	_
-4	vendégek	vendégek	NOUN	NOUN	_	5	nmod:att	_	_
-5	sztárja	sztárja	NOUN	NOUN	_	2	nsubj	_	_
-6	,	,	PUNCT	PUNCT	_	7	punct	_	_
-7	Ballabio	Ballabio	PROPN	PROPN	_	5	appos	_	_
-8	triplát	triplát	NOUN	NOUN	_	2	obj	_	_
-9	,	,	PUNCT	PUNCT	_	10	punct	_	_
-10	szerzett	szerzett	VERB	VERB	_	2	conj	_	_
-11	labdát	labdát	NOUN	NOUN	_	10	obj	_	_
-12	a	a	DET	DET	_	14	det	_	_
-13	saját	saját	DET	DET	_	14	det	_	_
-14	térfelén	térfelén	NOUN	NOUN	_	10	obl	_	_
-15	,	,	PUNCT	PUNCT	_	16	punct	_	_
-16	lepattanót	lepattanót	ADJ	ADJ	_	10	conj	_	_
-17	a	a	DET	DET	_	18	det	_	_
-18	mieink	mieink	NOUN	NOUN	_	19	nmod:att	_	_
-19	palánkja	palánkja	NOUN	NOUN	_	16	orphan	_	_
-20	alatt	alatt	ADP	ADP	_	19	case	_	_
-21	,	,	PUNCT	PUNCT	_	10	punct	_	_
-22	még	még	ADV	ADV	_	25	advmod:tlocy	_	highlight=green|span=1
-23	ezt	ezt	PRON	PRON	_	25	obj	_	highlight=green|span=2
-24	is	is	CCONJ	CCONJ	_	23	cc	_	_
-25	elviselte	elviselte	VERB	VERB	_	2	conj	_	highlight=red
-26	válogatottunk	válogatottunk	NOUN	NOUN	_	25	nsubj	_	highlight=green|span=1
-27	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 15 · source: hu_szeged-ud-dev.conllu · this verb has L=2, R=2 (mean span = 2.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = A kisgazdák , miközben ellene vannak például a biztosítási adó jövő évi bevezetésének , állítólag támogatnák az MDF javaslatát háromszázalékos kamatadóra , amellyel a kormánykoalíció legkisebb pártja a múlt hét végi országos választmányi ülésén állt elő .
+1	A	A	DET	DET	_	2	det	_	_
+2	kisgazdák	kisgazdák	NOUN	NOUN	_	16	nsubj	_	_
+3	,	,	PUNCT	PUNCT	_	2	punct	_	_
+4	miközben	miközben	ADV	ADV	_	6	advmod:tlocy	_	highlight=green|span=1
+5	ellene	ellene	PRON	PRON	_	6	obl	_	highlight=green|span=1
+6	vannak	vannak	VERB	VERB	_	16	advcl	_	highlight=red
+7	például	például	ADV	ADV	_	6	advmod:mode	_	highlight=green|span=1
+8	a	a	DET	DET	_	10	det	_	_
+9	biztosítási	biztosítási	ADJ	ADJ	_	10	amod:att	_	_
+10	adó	adó	NOUN	NOUN	_	13	nmod:att	_	_
+11	jövő	jövő	ADJ	ADJ	_	12	amod:att	_	_
+12	évi	évi	ADJ	ADJ	_	13	amod:att	_	_
+13	bevezetésének	bevezetésének	NOUN	NOUN	_	5	nmod:att	_	highlight=green|span=6
+14	,	,	PUNCT	PUNCT	_	6	punct	_	_
+15	állítólag	állítólag	ADV	ADV	_	16	advmod:mode	_	_
+16	támogatnák	támogatnák	VERB	VERB	_	0	root	_	_
+17	az	az	DET	DET	_	18	det	_	_
+18	MDF	MDF	PROPN	PROPN	_	19	nmod:att	_	_
+19	javaslatát	javaslatát	NOUN	NOUN	_	16	obj	_	_
+20	háromszázalékos	háromszázalékos	ADJ	ADJ	_	21	amod:att	_	_
+21	kamatadóra	kamatadóra	NOUN	NOUN	_	16	obl	_	_
+22	,	,	PUNCT	PUNCT	_	35	punct	_	_
+23	amellyel	amellyel	PRON	PRON	_	35	obl	_	_
+24	a	a	DET	DET	_	25	det	_	_
+25	kormánykoalíció	kormánykoalíció	NOUN	NOUN	_	27	nmod:att	_	_
+26	legkisebb	legkisebb	ADJ	ADJ	_	27	amod:att	_	_
+27	pártja	pártja	NOUN	NOUN	_	35	nsubj	_	_
+28	a	a	DET	DET	_	34	det	_	_
+29	múlt	múlt	ADJ	ADJ	_	30	amod:att	_	_
+30	hét	hét	NOUN	NOUN	_	31	nmod:att	_	_
+31	végi	végi	ADJ	ADJ	_	34	amod:att	_	_
+32	országos	országos	ADJ	ADJ	_	33	amod:att	_	_
+33	választmányi	választmányi	ADJ	ADJ	_	34	amod:att	_	_
+34	ülésén	ülésén	NOUN	NOUN	_	35	obl	_	_
+35	állt	állt	VERB	VERB	_	21	acl	_	_
+36	elő	elő	ADV	ADV	_	35	compound:preverb	_	_
+37	.	.	PUNCT	PUNCT	_	16	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 6 · source: hu_szeged-ud-train.conllu · this verb has L=2, R=1 (mean span = 10.67)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Nemcsak azért , mert az akkori történések döntő lökést adtak a német egység megteremtéséhez — amit a szociáldemokraták támogattak , hiszen már az SPD 1959-es Bad Godesberg-i programjában is &quot; életfontosságúnak &quot; nevezte a megosztottság felszámolását és az egységes Németország létrehozását — , hanem mert az ünneplés kapcsán , ha csak egy fél napra is , de elfelejtheti otthoni gondjait .
-1	Nemcsak	Nemcsak	CCONJ	CCONJ	_	2	cc	_	_
-2	azért	azért	PRON	PRON	_	0	root	_	_
-3	,	,	PUNCT	PUNCT	_	10	punct	_	_
-4	mert	mert	SCONJ	SCONJ	_	10	mark	_	_
-5	az	az	DET	DET	_	7	det	_	_
-6	akkori	akkori	ADJ	ADJ	_	7	amod:att	_	_
-7	történések	történések	NOUN	NOUN	_	10	nsubj	_	highlight=green|span=3
-8	döntő	döntő	ADJ	ADJ	_	9	amod:att	_	_
-9	lökést	lökést	NOUN	NOUN	_	10	obj	_	highlight=green|span=2
-10	adtak	adtak	VERB	VERB	_	2	advcl	_	highlight=red
-11	a	a	DET	DET	_	13	det	_	_
-12	német	német	ADJ	ADJ	_	13	amod:att	_	_
-13	egység	egység	NOUN	NOUN	_	14	nmod:att	_	_
-14	megteremtéséhez	megteremtéséhez	NOUN	NOUN	_	10	obl	_	highlight=green|span=27
-15	—	—	PUNCT	PUNCT	_	19	punct	_	_
-16	amit	amit	PRON	PRON	_	19	obj	_	_
-17	a	a	DET	DET	_	18	det	_	_
-18	szociáldemokraták	szociáldemokraták	NOUN	NOUN	_	19	nsubj	_	_
-19	támogattak	támogattak	VERB	VERB	_	14	acl	_	_
-20	,	,	PUNCT	PUNCT	_	33	punct	_	_
-21	hiszen	hiszen	CCONJ	CCONJ	_	33	cc	_	_
-22	már	már	ADV	ADV	_	33	advmod:mode	_	_
-23	az	az	DET	DET	_	24	det	_	_
-24	SPD	SPD	PROPN	PROPN	_	28	nmod:att	_	_
-25	1959-es	1959-es	ADJ	ADJ	_	28	amod:att	_	_
-26	Bad	Bad	PROPN	PROPN	_	28	amod:att	_	_
-27	Godesberg-i	Godesberg-i	ADJ	ADJ	_	26	flat:name	_	_
-28	programjában	programjában	NOUN	NOUN	_	33	obl	_	_
-29	is	is	CCONJ	CCONJ	_	33	cc	_	_
-30	&quot;	&quot;	PUNCT	PUNCT	_	31	punct	_	_
-31	életfontosságúnak	életfontosságúnak	ADJ	ADJ	_	33	obl	_	_
-32	&quot;	&quot;	PUNCT	PUNCT	_	31	punct	_	_
-33	nevezte	nevezte	VERB	VERB	_	19	conj	_	_
-34	a	a	DET	DET	_	35	det	_	_
-35	megosztottság	megosztottság	NOUN	NOUN	_	36	nmod:att	_	_
-36	felszámolását	felszámolását	NOUN	NOUN	_	33	obj	_	_
-37	és	és	CCONJ	CCONJ	_	41	cc	_	_
-38	az	az	DET	DET	_	40	det	_	_
-39	egységes	egységes	ADJ	ADJ	_	40	amod:att	_	_
-40	Németország	Németország	PROPN	PROPN	_	41	nmod:att	_	_
-41	létrehozását	létrehozását	NOUN	NOUN	_	36	conj	_	_
-42	—	—	PUNCT	PUNCT	_	19	punct	_	_
-43	,	,	PUNCT	PUNCT	_	44	punct	_	_
-44	hanem	hanem	CCONJ	CCONJ	_	2	cc	_	_
-45	mert	mert	SCONJ	SCONJ	_	58	mark	_	_
-46	az	az	DET	DET	_	47	det	_	_
-47	ünneplés	ünneplés	NOUN	NOUN	_	58	obl	_	_
-48	kapcsán	kapcsán	ADP	ADP	_	47	case	_	_
-49	,	,	PUNCT	PUNCT	_	47	punct	_	_
-50	ha	ha	SCONJ	SCONJ	_	54	mark	_	_
-51	csak	csak	ADV	ADV	_	54	advmod:mode	_	_
-52	egy	egy	DET	DET	_	53	det	_	_
-53	fél	fél	NUM	NUM	_	54	amod:att	_	_
-54	napra	napra	NOUN	NOUN	_	58	advcl	_	_
-55	is	is	SCONJ	SCONJ	_	54	mark	_	_
-56	,	,	PUNCT	PUNCT	_	54	punct	_	_
-57	de	de	CCONJ	CCONJ	_	58	cc	_	_
-58	elfelejtheti	elfelejtheti	VERB	VERB	_	2	advcl	_	_
-59	otthoni	otthoni	ADJ	ADJ	_	60	amod:att	_	_
-60	gondjait	gondjait	NOUN	NOUN	_	58	obj	_	_
-61	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 16 · source: hu_szeged-ud-test.conllu · this verb has L=2, R=0 (mean span = 8.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ez utóbbi megfogalmazása érdekében az idén a Time Warner médiabirodalommal együtt a kávébárjaiban 3 dollárért kapható , kéthavonta megjelenő magazint indított Joe néven , s a szolgáltatásaival és mondandójával a jól szituált nőket megcélzó Oxygen Media televíziós és internetes vállalkozással is szövetségre lépett .
+1	Ez	Ez	PRON	PRON	_	2	det	_	_
+2	utóbbi	utóbbi	NOUN	NOUN	_	3	nmod:att	_	_
+3	megfogalmazása	megfogalmazása	NOUN	NOUN	_	4	nmod:att	_	_
+4	érdekében	érdekében	NOUN	NOUN	_	21	obl	_	_
+5	az	az	DET	DET	_	6	det	_	_
+6	idén	idén	ADV	ADV	_	21	advmod:tlocy	_	_
+7	a	a	DET	DET	_	10	det	_	_
+8	Time	Time	PROPN	PROPN	_	10	nmod:att	_	_
+9	Warner	Warner	PROPN	PROPN	_	8	flat:name	_	_
+10	médiabirodalommal	médiabirodalommal	NOUN	NOUN	_	21	obl	_	_
+11	együtt	együtt	ADP	ADP	_	10	case	_	_
+12	a	a	DET	DET	_	13	det	_	_
+13	kávébárjaiban	kávébárjaiban	NOUN	NOUN	_	21	obl	_	_
+14	3	3	NUM	NUM	_	15	amod:att	_	_
+15	dollárért	dollárért	NOUN	NOUN	_	16	obl	_	_
+16	kapható	kapható	ADJ	ADJ	_	20	amod:att	_	_
+17	,	,	PUNCT	PUNCT	_	16	punct	_	_
+18	kéthavonta	kéthavonta	ADV	ADV	_	19	advmod:mode	_	_
+19	megjelenő	megjelenő	ADJ	ADJ	_	20	amod:att	_	_
+20	magazint	magazint	NOUN	NOUN	_	21	obj	_	_
+21	indított	indított	VERB	VERB	_	0	root	_	_
+22	Joe	Joe	PROPN	PROPN	_	23	nmod:att	_	_
+23	néven	néven	NOUN	NOUN	_	21	obl	_	_
+24	,	,	PUNCT	PUNCT	_	43	punct	_	_
+25	s	s	CCONJ	CCONJ	_	43	cc	_	_
+26	a	a	DET	DET	_	27	det	_	_
+27	szolgáltatásaival	szolgáltatásaival	NOUN	NOUN	_	34	obl	_	_
+28	és	és	CCONJ	CCONJ	_	29	cc	_	_
+29	mondandójával	mondandójával	NOUN	NOUN	_	27	conj	_	_
+30	a	a	DET	DET	_	33	det	_	_
+31	jól	jól	ADJ	ADJ	_	33	amod:att	_	_
+32	szituált	szituált	X	X	_	31	goeswith	_	_
+33	nőket	nőket	NOUN	NOUN	_	34	obj	_	_
+34	megcélzó	megcélzó	ADJ	ADJ	_	40	amod:att	_	_
+35	Oxygen	Oxygen	PROPN	PROPN	_	40	nmod:att	_	_
+36	Media	Media	PROPN	PROPN	_	35	flat:name	_	_
+37	televíziós	televíziós	ADJ	ADJ	_	40	amod:att	_	_
+38	és	és	CCONJ	CCONJ	_	39	cc	_	_
+39	internetes	internetes	ADJ	ADJ	_	37	conj	_	_
+40	vállalkozással	vállalkozással	NOUN	NOUN	_	43	obl	_	highlight=green|span=16
+41	is	is	CCONJ	CCONJ	_	40	cc	_	_
+42	szövetségre	szövetségre	NOUN	NOUN	_	43	obl	_	highlight=green|span=1
+43	lépett	lépett	VERB	VERB	_	21	conj	_	highlight=red
+44	.	.	PUNCT	PUNCT	_	21	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 7 · source: hu_szeged-ud-dev.conllu · this verb has L=2, R=5 (mean span = 2.86)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Várhatóan több ezer fő részvételével tart tiltakozó demonstrációt a Fiatal Baloldal elnevezésű ifjúsági szervezet ma este , hat órakor a Kossuth téren .
-1	Várhatóan	Várhatóan	ADJ	ADJ	_	6	advmod:mode	_	highlight=green|span=1
-2	több	több	DET	DET	_	3	det	_	_
-3	ezer	ezer	NUM	NUM	_	4	nummod	_	_
-4	fő	fő	NOUN	NOUN	_	5	nmod:att	_	_
-5	részvételével	részvételével	NOUN	NOUN	_	6	obl	_	highlight=green|span=4
-6	tart	tart	VERB	VERB	_	0	root	_	highlight=red
-7	tiltakozó	tiltakozó	ADJ	ADJ	_	8	amod:att	_	_
-8	demonstrációt	demonstrációt	NOUN	NOUN	_	6	obj	_	highlight=green|span=2
-9	a	a	DET	DET	_	14	det	_	_
-10	Fiatal	Fiatal	PROPN	PROPN	_	12	nmod:att	_	_
-11	Baloldal	Baloldal	PROPN	PROPN	_	10	flat:name	_	_
-12	elnevezésű	elnevezésű	ADJ	ADJ	_	14	amod:att	_	_
-13	ifjúsági	ifjúsági	ADJ	ADJ	_	14	amod:att	_	_
-14	szervezet	szervezet	NOUN	NOUN	_	6	nsubj	_	highlight=green|span=6
-15	ma	ma	ADV	ADV	_	16	advmod:tlocy	_	_
-16	este	este	ADV	ADV	_	6	advmod:tlocy	_	highlight=green|span=2
-17	,	,	PUNCT	PUNCT	_	19	punct	_	_
-18	hat	hat	NUM	NUM	_	19	nummod	_	_
-19	órakor	órakor	NOUN	NOUN	_	6	obl	_	highlight=green|span=2
-20	a	a	DET	DET	_	21	det	_	_
-21	Kossuth	Kossuth	PROPN	PROPN	_	6	obl	_	highlight=green|span=3
-22	téren	téren	PROPN	PROPN	_	21	flat:name	_	_
-23	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 17 · source: hu_szeged-ud-test.conllu · this verb has L=2, R=1 (mean span = 5.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Az ATP-világbajnokság második napjára Steffi Graf , akit éppen tegnap választottak meg az évszázad legjobb német sportolónőjének , megérkezett Hannoverbe .
+1	Az	Az	DET	DET	_	2	det	_	_
+2	ATP-világbajnokság	ATP-világbajnokság	NOUN	NOUN	_	4	nmod:att	_	_
+3	második	második	ADJ	ADJ	_	4	amod:att	_	_
+4	napjára	napjára	NOUN	NOUN	_	19	obl	_	highlight=green|span=4
+5	Steffi	Steffi	PROPN	PROPN	_	19	nsubj	_	highlight=green|span=12
+6	Graf	Graf	PROPN	PROPN	_	5	flat:name	_	_
+7	,	,	PUNCT	PUNCT	_	11	punct	_	_
+8	akit	akit	PRON	PRON	_	11	obj	_	_
+9	éppen	éppen	ADV	ADV	_	11	advmod:mode	_	_
+10	tegnap	tegnap	ADV	ADV	_	11	advmod:tlocy	_	_
+11	választottak	választottak	VERB	VERB	_	5	acl	_	_
+12	meg	meg	PART	PART	_	11	compound:preverb	_	_
+13	az	az	DET	DET	_	14	det	_	_
+14	évszázad	évszázad	NOUN	NOUN	_	17	nmod:att	_	_
+15	legjobb	legjobb	ADJ	ADJ	_	17	amod:att	_	_
+16	német	német	ADJ	ADJ	_	17	amod:att	_	_
+17	sportolónőjének	sportolónőjének	NOUN	NOUN	_	11	obl	_	_
+18	,	,	PUNCT	PUNCT	_	5	punct	_	_
+19	megérkezett	megérkezett	VERB	VERB	_	0	root	_	highlight=red
+20	Hannoverbe	Hannoverbe	PROPN	PROPN	_	19	obl	_	highlight=green|span=1
+21	.	.	PUNCT	PUNCT	_	19	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 8 · source: hu_szeged-ud-dev.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
+<div class="example-meta">Example 18 · source: hu_szeged-ud-test.conllu · this verb has L=2, R=1 (mean span = 2.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Elemzők vitathatónak tartják a Gazprom számos pénzügyi befektetését is .
+1	Elemzők	Elemzők	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=1
+2	vitathatónak	vitathatónak	ADJ	ADJ	_	3	obl	_	highlight=green|span=1
+3	tartják	tartják	VERB	VERB	_	0	root	_	highlight=red
+4	a	a	DET	DET	_	5	det	_	_
+5	Gazprom	Gazprom	PROPN	PROPN	_	8	nmod:att	_	_
+6	számos	számos	NUM	NUM	_	8	amod:att	_	_
+7	pénzügyi	pénzügyi	ADJ	ADJ	_	8	amod:att	_	_
+8	befektetését	befektetését	NOUN	NOUN	_	3	obj	_	highlight=green|span=6
+9	is	is	CCONJ	CCONJ	_	8	cc	_	_
+10	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: hu_szeged-ud-dev.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
 <reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Más kérdés , hogy a határőrség egyelőre új státusokat sem kapott az új feladatok mellé ; a több munkát — mint Krisán Attila mondta — rugalmas helyi munkaszervezéssel kívánják ellátni .
 1	Más	Más	PRON	PRON	_	2	amod:att	_	_
 2	kérdés	kérdés	NOUN	NOUN	_	0	root	_	_
@@ -345,444 +612,17 @@ table.mal-table a:hover { text-decoration: underline; }
 31	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 9 · source: hu_szeged-ud-train.conllu · this verb has L=2, R=1 (mean span = 6.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Az utóbbi évtized balkáni történelme alapján valószínűnek tűnik , hogy az otthonuk mellett kitartóknak hamarosan fegyveres látogatókra is számítaniuk kell .
-1	Az	Az	DET	DET	_	3	det	_	_
-2	utóbbi	utóbbi	ADJ	ADJ	_	3	amod:att	_	_
-3	évtized	évtized	NOUN	NOUN	_	5	nmod:att	_	_
-4	balkáni	balkáni	ADJ	ADJ	_	5	amod:att	_	_
-5	történelme	történelme	NOUN	NOUN	_	6	nmod:att	_	_
-6	alapján	alapján	NOUN	NOUN	_	8	obl	_	highlight=green|span=6
-7	valószínűnek	valószínűnek	ADJ	ADJ	_	8	obl	_	highlight=green|span=1
-8	tűnik	tűnik	VERB	VERB	_	0	root	_	highlight=red
-9	,	,	PUNCT	PUNCT	_	20	punct	_	_
-10	hogy	hogy	SCONJ	SCONJ	_	20	mark	_	_
-11	az	az	DET	DET	_	12	det	_	_
-12	otthonuk	otthonuk	NOUN	NOUN	_	14	obl	_	_
-13	mellett	mellett	ADP	ADP	_	12	case	_	_
-14	kitartóknak	kitartóknak	ADJ	ADJ	_	20	obl	_	_
-15	hamarosan	hamarosan	ADV	ADV	_	19	advmod:mode	_	_
-16	fegyveres	fegyveres	ADJ	ADJ	_	17	amod:att	_	_
-17	látogatókra	látogatókra	NOUN	NOUN	_	19	obl	_	_
-18	is	is	CCONJ	CCONJ	_	17	cc	_	_
-19	számítaniuk	számítaniuk	VERB	VERB	_	20	xcomp	_	_
-20	kell	kell	VERB	VERB	_	8	csubj	_	highlight=green|span=11
-21	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 10 · source: hu_szeged-ud-test.conllu · this verb has L=2, R=0 (mean span = 2.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = A mentők , a tűzoltók és a rendőrség hagyományos , ingyenes , 104 ; 105 ; 107 számú - illetve a nemrég bevezetett 112-es segélyhívó központjai , ha átmenetileg valamennyi kezelőjük , diszpécserük foglalt , automatikusan sorrendbe állítják a várakozó hívásokat , aki tehát a gépi fogadószöveg hallatán nem vár , hanem türelmetlenül újra tárcsáz , ismételten a sor végére kerül .
-1	A	A	DET	DET	_	2	det	_	_
-2	mentők	mentők	NOUN	NOUN	_	26	nmod:att	_	_
-3	,	,	PUNCT	PUNCT	_	5	punct	_	_
-4	a	a	DET	DET	_	5	det	_	_
-5	tűzoltók	tűzoltók	NOUN	NOUN	_	2	conj	_	_
-6	és	és	CCONJ	CCONJ	_	8	cc	_	_
-7	a	a	DET	DET	_	8	det	_	_
-8	rendőrség	rendőrség	NOUN	NOUN	_	2	conj	_	_
-9	hagyományos	hagyományos	ADJ	ADJ	_	26	amod:att	_	_
-10	,	,	PUNCT	PUNCT	_	9	punct	_	_
-11	ingyenes	ingyenes	ADJ	ADJ	_	26	amod:att	_	_
-12	,	,	PUNCT	PUNCT	_	11	punct	_	_
-13	104	104	NUM	NUM	_	18	nummod	_	_
-14	;	;	PUNCT	PUNCT	_	15	punct	_	_
-15	105	105	NUM	NUM	_	13	conj	_	_
-16	;	;	PUNCT	PUNCT	_	17	punct	_	_
-17	107	107	NUM	NUM	_	13	conj	_	_
-18	számú	számú	ADJ	ADJ	_	26	amod:att	_	_
-19	-	-	PUNCT	PUNCT	_	25	punct	_	_
-20	illetve	illetve	CCONJ	CCONJ	_	25	cc	_	_
-21	a	a	DET	DET	_	25	det	_	_
-22	nemrég	nemrég	ADV	ADV	_	23	advmod:tlocy	_	_
-23	bevezetett	bevezetett	ADJ	ADJ	_	25	amod:att	_	_
-24	112-es	112-es	ADJ	ADJ	_	25	amod:att	_	_
-25	segélyhívó	segélyhívó	ADJ	ADJ	_	18	conj	_	_
-26	központjai	központjai	NOUN	NOUN	_	38	nsubj	_	_
-27	,	,	PUNCT	PUNCT	_	26	punct	_	_
-28	ha	ha	SCONJ	SCONJ	_	34	mark	_	_
-29	átmenetileg	átmenetileg	ADJ	ADJ	_	34	advmod:mode	_	_
-30	valamennyi	valamennyi	DET	DET	_	31	det	_	_
-31	kezelőjük	kezelőjük	NOUN	NOUN	_	34	nsubj	_	_
-32	,	,	PUNCT	PUNCT	_	33	punct	_	_
-33	diszpécserük	diszpécserük	NOUN	NOUN	_	31	conj	_	_
-34	foglalt	foglalt	ADJ	ADJ	_	38	advcl	_	_
-35	,	,	PUNCT	PUNCT	_	34	punct	_	_
-36	automatikusan	automatikusan	ADJ	ADJ	_	38	advmod:mode	_	_
-37	sorrendbe	sorrendbe	NOUN	NOUN	_	38	obl	_	_
-38	állítják	állítják	VERB	VERB	_	0	root	_	_
-39	a	a	DET	DET	_	41	det	_	_
-40	várakozó	várakozó	ADJ	ADJ	_	41	amod:att	_	_
-41	hívásokat	hívásokat	NOUN	NOUN	_	38	obj	_	_
-42	,	,	PUNCT	PUNCT	_	61	punct	_	_
-43	aki	aki	PRON	PRON	_	50	nsubj	_	_
-44	tehát	tehát	CCONJ	CCONJ	_	61	cc	_	_
-45	a	a	DET	DET	_	47	det	_	_
-46	gépi	gépi	ADJ	ADJ	_	47	amod:att	_	_
-47	fogadószöveg	fogadószöveg	NOUN	NOUN	_	48	nmod:att	_	_
-48	hallatán	hallatán	NOUN	NOUN	_	50	obl	_	highlight=green|span=4
-49	nem	nem	ADV	ADV	_	50	advmod	_	highlight=green|span=1
-50	vár	vár	VERB	VERB	_	61	csubj	_	highlight=red
-51	,	,	PUNCT	PUNCT	_	55	punct	_	_
-52	hanem	hanem	CCONJ	CCONJ	_	55	cc	_	_
-53	türelmetlenül	türelmetlenül	ADJ	ADJ	_	55	advmod:mode	_	_
-54	újra	újra	ADV	ADV	_	55	advmod:mode	_	_
-55	tárcsáz	tárcsáz	VERB	VERB	_	50	conj	_	_
-56	,	,	PUNCT	PUNCT	_	50	punct	_	_
-57	ismételten	ismételten	ADJ	ADJ	_	61	advmod:mode	_	_
-58	a	a	DET	DET	_	59	det	_	_
-59	sor	sor	NOUN	NOUN	_	60	nmod:att	_	_
-60	végére	végére	NOUN	NOUN	_	61	obl	_	_
-61	kerül	kerül	VERB	VERB	_	38	conj	_	_
-62	.	.	PUNCT	PUNCT	_	38	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 11 · source: hu_szeged-ud-dev.conllu · this verb has L=2, R=2 (mean span = 4.25)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = A szociális és munkaügyi törvények módosítása lehetőséget ad arra , hogy a munkavállalókat akár a minimálbérnél kevesebb pénzért dolgoztassák .
-1	A	A	DET	DET	_	5	det	_	_
-2	szociális	szociális	ADJ	ADJ	_	5	amod:att	_	_
-3	és	és	CCONJ	CCONJ	_	4	cc	_	_
-4	munkaügyi	munkaügyi	ADJ	ADJ	_	2	conj	_	_
-5	törvények	törvények	NOUN	NOUN	_	6	nmod:att	_	_
-6	módosítása	módosítása	NOUN	NOUN	_	8	nsubj	_	highlight=green|span=6
-7	lehetőséget	lehetőséget	NOUN	NOUN	_	8	obj:lvc	_	highlight=green|span=1
-8	ad	ad	VERB	VERB	_	0	root	_	highlight=red
-9	arra	arra	PRON	PRON	_	8	obl	_	highlight=green|span=1
-10	,	,	PUNCT	PUNCT	_	19	punct	_	_
-11	hogy	hogy	SCONJ	SCONJ	_	19	mark	_	_
-12	a	a	DET	DET	_	13	det	_	_
-13	munkavállalókat	munkavállalókat	NOUN	NOUN	_	19	obj	_	_
-14	akár	akár	ADV	ADV	_	19	advmod:mode	_	_
-15	a	a	DET	DET	_	16	det	_	_
-16	minimálbérnél	minimálbérnél	NOUN	NOUN	_	18	nmod:obl	_	_
-17	kevesebb	kevesebb	DET	DET	_	18	det	_	_
-18	pénzért	pénzért	NOUN	NOUN	_	19	obl	_	_
-19	dolgoztassák	dolgoztassák	VERB	VERB	_	8	ccomp:obl	_	highlight=green|span=9
-20	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 12 · source: hu_szeged-ud-train.conllu · this verb has L=2, R=2 (mean span = 4.25)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = A Volánbusz Rt. távolsági járatai közül nem indulnak a Bakonyba és Tolna, Baranya, Bács-Kiskun megye egyes településeire buszok .
-1	A	A	DET	DET	_	2	det	_	_
-2	Volánbusz	Volánbusz	PROPN	PROPN	_	5	nmod:att	_	_
-3	Rt.	Rt.	PROPN	PROPN	_	2	flat:name	_	_
-4	távolsági	távolsági	ADJ	ADJ	_	5	amod:att	_	_
-5	járatai	járatai	NOUN	NOUN	_	8	obl	_	highlight=green|span=6
-6	közül	közül	ADP	ADP	_	5	case	_	_
-7	nem	nem	ADV	ADV	_	8	advmod	_	highlight=green|span=1
-8	indulnak	indulnak	VERB	VERB	_	0	root	_	highlight=red
-9	a	a	DET	DET	_	10	det	_	_
-10	Bakonyba	Bakonyba	PROPN	PROPN	_	8	obl	_	highlight=green|span=9
-11	és	és	CCONJ	CCONJ	_	17	cc	_	_
-12	Tolna,	Tolna,	PROPN	PROPN	_	17	nmod:att	_	_
-13	Baranya,	Baranya,	PROPN	PROPN	_	12	conj	_	_
-14	Bács-Kiskun	Bács-Kiskun	PROPN	PROPN	_	12	conj	_	_
-15	megye	megye	PROPN	PROPN	_	12	flat:name	_	_
-16	egyes	egyes	ADJ	ADJ	_	17	amod:att	_	_
-17	településeire	településeire	NOUN	NOUN	_	10	conj	_	_
-18	buszok	buszok	NOUN	NOUN	_	8	nsubj	_	highlight=green|span=1
-19	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 13 · source: hu_szeged-ud-train.conllu · this verb has L=2, R=0 (mean span = 3.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = A müncheni repülőtéren jelentősen csökkent a forgalom , a légitársaság vezetői több mint 100 járatot töröltek .
-1	A	A	DET	DET	_	3	det	_	_
-2	müncheni	müncheni	ADJ	ADJ	_	3	amod:att	_	_
-3	repülőtéren	repülőtéren	NOUN	NOUN	_	5	obl	_	_
-4	jelentősen	jelentősen	ADJ	ADJ	_	5	advmod:mode	_	_
-5	csökkent	csökkent	VERB	VERB	_	0	root	_	_
+<div class="example-meta">Example 20 · source: hu_szeged-ud-train.conllu · this verb has L=2, R=1 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Tegnap újabb házak dőltek össze a hó súlya alatt .
+1	Tegnap	Tegnap	ADV	ADV	_	4	advmod:tlocy	_	highlight=green|span=1
+2	újabb	újabb	ADJ	ADJ	_	3	amod:att	_	_
+3	házak	házak	NOUN	NOUN	_	4	nsubj	_	highlight=green|span=2
+4	dőltek	dőltek	VERB	VERB	_	0	root	_	highlight=red
+5	össze	össze	ADV	ADV	_	4	compound:preverb	_	_
 6	a	a	DET	DET	_	7	det	_	_
-7	forgalom	forgalom	NOUN	NOUN	_	5	nsubj	_	_
-8	,	,	PUNCT	PUNCT	_	16	punct	_	_
-9	a	a	DET	DET	_	10	det	_	_
-10	légitársaság	légitársaság	NOUN	NOUN	_	11	nmod:att	_	_
-11	vezetői	vezetői	NOUN	NOUN	_	16	nsubj	_	highlight=green|span=3
-12	több	több	ADV	ADV	_	15	advmod	_	_
-13	mint	mint	SCONJ	SCONJ	_	14	mark	_	_
-14	100	100	NUM	NUM	_	12	advcl	_	_
-15	járatot	járatot	NOUN	NOUN	_	16	obj	_	highlight=green|span=4
-16	töröltek	töröltek	VERB	VERB	_	5	conj	_	highlight=red
-17	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 14 · source: hu_szeged-ud-train.conllu · this verb has L=2, R=2 (mean span = 2.75)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = A német kormány múlt héten tartott első berlini ülésén fogadta el végleg a Hans Eichel pénzügyminiszter nevével fémjelzett takarékossági csomagtervet , amelyet körülbelül akkora lelkesedés kísér ott , mint 1995-ben Magyarországon Bokros Lajos megszorításait .
-1	A	A	DET	DET	_	3	det	_	_
-2	német	német	ADJ	ADJ	_	3	amod:att	_	_
-3	kormány	kormány	NOUN	NOUN	_	10	nsubj	_	_
-4	múlt	múlt	ADJ	ADJ	_	5	amod:att	_	_
-5	héten	héten	NOUN	NOUN	_	6	obl	_	_
-6	tartott	tartott	ADJ	ADJ	_	9	amod:att	_	_
-7	első	első	ADJ	ADJ	_	9	amod:att	_	_
-8	berlini	berlini	ADJ	ADJ	_	9	amod:att	_	_
-9	ülésén	ülésén	NOUN	NOUN	_	10	obl	_	_
-10	fogadta	fogadta	VERB	VERB	_	0	root	_	_
-11	el	el	ADV	ADV	_	10	compound:preverb	_	_
-12	végleg	végleg	ADV	ADV	_	10	advmod:mode	_	_
-13	a	a	DET	DET	_	17	det	_	_
-14	Hans	Hans	PROPN	PROPN	_	16	nmod:att	_	_
-15	Eichel	Eichel	PROPN	PROPN	_	14	flat:name	_	_
-16	pénzügyminiszter	pénzügyminiszter	NOUN	NOUN	_	17	nmod:att	_	_
-17	nevével	nevével	NOUN	NOUN	_	18	obl	_	_
-18	fémjelzett	fémjelzett	ADJ	ADJ	_	20	amod:att	_	_
-19	takarékossági	takarékossági	ADJ	ADJ	_	20	amod:att	_	_
-20	csomagtervet	csomagtervet	NOUN	NOUN	_	10	obj	_	_
-21	,	,	PUNCT	PUNCT	_	26	punct	_	_
-22	amelyet	amelyet	PRON	PRON	_	26	obj	_	highlight=green|span=1
-23	körülbelül	körülbelül	ADV	ADV	_	24	advmod:mode	_	_
-24	akkora	akkora	PRON	PRON	_	25	nmod:att	_	_
-25	lelkesedés	lelkesedés	NOUN	NOUN	_	26	nsubj	_	highlight=green|span=3
-26	kísér	kísér	VERB	VERB	_	10	acl	_	highlight=red
-27	ott	ott	ADV	ADV	_	26	advmod:locy	_	highlight=green|span=1
-28	,	,	PUNCT	PUNCT	_	34	punct	_	_
-29	mint	mint	SCONJ	SCONJ	_	34	mark	_	_
-30	1995-ben	1995-ben	NUM	NUM	_	34	nmod:obl	_	_
-31	Magyarországon	Magyarországon	PROPN	PROPN	_	34	nmod:obl	_	_
-32	Bokros	Bokros	PROPN	PROPN	_	34	nmod:att	_	_
-33	Lajos	Lajos	PROPN	PROPN	_	32	flat:name	_	_
-34	megszorításait	megszorításait	NOUN	NOUN	_	26	advcl	_	highlight=green|span=6
-35	.	.	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 15 · source: hu_szeged-ud-train.conllu · this verb has L=2, R=2 (mean span = 10.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = A kiadványban a két város hasonlóságát és különbözőségét két alkotópáros mutatja be : Bécset Hernádi Gyula író és Szebeni András fotóművész láttatja magyar szemmel , míg Budapestről Gerhard Tötschinger osztrák író-rendező mondja el a véleményét , s az immár 43 éve az osztrák fővárosban élő Kalmár János fotóművész fedezi fel a maga és az olvasók számára .
-1	A	A	DET	DET	_	2	det	_	_
-2	kiadványban	kiadványban	NOUN	NOUN	_	11	obl	_	_
-3	a	a	DET	DET	_	5	det	_	_
-4	két	két	NUM	NUM	_	5	nummod	_	_
-5	város	város	NOUN	NOUN	_	6	nmod:att	_	_
-6	hasonlóságát	hasonlóságát	NOUN	NOUN	_	11	obj	_	_
-7	és	és	CCONJ	CCONJ	_	8	cc	_	_
-8	különbözőségét	különbözőségét	NOUN	NOUN	_	6	conj	_	_
-9	két	két	NUM	NUM	_	10	nummod	_	_
-10	alkotópáros	alkotópáros	NOUN	NOUN	_	11	nsubj	_	_
-11	mutatja	mutatja	VERB	VERB	_	0	root	_	_
-12	be	be	ADV	ADV	_	11	compound:preverb	_	_
-13	:	:	PUNCT	PUNCT	_	22	punct	_	_
-14	Bécset	Bécset	PROPN	PROPN	_	22	obj	_	highlight=green|span=1
-15	Hernádi	Hernádi	PROPN	PROPN	_	22	nmod:att	_	highlight=green|span=7
-16	Gyula	Gyula	PROPN	PROPN	_	15	flat:name	_	_
-17	író	író	NOUN	NOUN	_	15	appos	_	_
-18	és	és	CCONJ	CCONJ	_	19	cc	_	_
-19	Szebeni	Szebeni	PROPN	PROPN	_	15	conj	_	_
-20	András	András	PROPN	PROPN	_	19	flat:name	_	_
-21	fotóművész	fotóművész	NOUN	NOUN	_	19	appos	_	_
-22	láttatja	láttatja	VERB	VERB	_	11	parataxis	_	highlight=red
-23	magyar	magyar	ADJ	ADJ	_	24	amod:att	_	_
-24	szemmel	szemmel	NOUN	NOUN	_	22	obl	_	highlight=green|span=2
-25	,	,	PUNCT	PUNCT	_	32	punct	_	_
-26	míg	míg	ADV	ADV	_	32	advmod:mode	_	_
-27	Budapestről	Budapestről	PROPN	PROPN	_	32	obl	_	_
-28	Gerhard	Gerhard	PROPN	PROPN	_	32	nsubj	_	_
-29	Tötschinger	Tötschinger	PROPN	PROPN	_	28	flat:name	_	_
-30	osztrák	osztrák	ADJ	ADJ	_	28	amod:att	_	_
-31	író-rendező	író-rendező	NOUN	NOUN	_	28	appos	_	_
-32	mondja	mondja	VERB	VERB	_	22	advcl	_	highlight=green|span=30
-33	el	el	ADV	ADV	_	32	compound:preverb	_	_
-34	a	a	DET	DET	_	35	det	_	_
-35	véleményét	véleményét	NOUN	NOUN	_	32	obj	_	_
-36	,	,	PUNCT	PUNCT	_	49	punct	_	_
-37	s	s	CCONJ	CCONJ	_	49	cc	_	_
-38	az	az	DET	DET	_	46	det	_	_
-39	immár	immár	ADV	ADV	_	41	advmod:mode	_	_
-40	43	43	NUM	NUM	_	41	nummod	_	_
-41	éve	éve	NOUN	NOUN	_	45	nmod:att	_	_
-42	az	az	DET	DET	_	44	det	_	_
-43	osztrák	osztrák	ADJ	ADJ	_	44	amod:att	_	_
-44	fővárosban	fővárosban	NOUN	NOUN	_	45	obl	_	_
-45	élő	élő	ADJ	ADJ	_	46	amod:att	_	_
-46	Kalmár	Kalmár	PROPN	PROPN	_	49	nsubj	_	_
-47	János	János	PROPN	PROPN	_	46	flat:name	_	_
-48	fotóművész	fotóművész	NOUN	NOUN	_	46	appos	_	_
-49	fedezi	fedezi	VERB	VERB	_	32	conj	_	_
-50	fel	fel	ADV	ADV	_	49	compound:preverb	_	_
-51	a	a	DET	DET	_	52	det	_	_
-52	maga	maga	PRON	PRON	_	49	obl	_	_
-53	és	és	CCONJ	CCONJ	_	55	cc	_	_
-54	az	az	DET	DET	_	55	det	_	_
-55	olvasók	olvasók	NOUN	NOUN	_	52	conj	_	_
-56	számára	számára	ADP	ADP	_	52	case	_	_
-57	.	.	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 16 · source: hu_szeged-ud-dev.conllu · this verb has L=2, R=0 (mean span = 4.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Az üzemanyag belföldi fogyasztói árának növekedése azonban növelheti az állam bevételeit , ugyanis a hajtóanyag árának csaknem 70 százalékát a különböző adófajták teszik ki .
-1	Az	Az	DET	DET	_	2	det	_	_
-2	üzemanyag	üzemanyag	NOUN	NOUN	_	5	nmod:att	_	_
-3	belföldi	belföldi	ADJ	ADJ	_	5	amod:att	_	_
-4	fogyasztói	fogyasztói	ADJ	ADJ	_	5	amod:att	_	_
-5	árának	árának	NOUN	NOUN	_	6	nmod:att	_	_
-6	növekedése	növekedése	NOUN	NOUN	_	8	nsubj	_	_
-7	azonban	azonban	CCONJ	CCONJ	_	8	cc	_	_
-8	növelheti	növelheti	VERB	VERB	_	0	root	_	_
-9	az	az	DET	DET	_	10	det	_	_
-10	állam	állam	NOUN	NOUN	_	11	nmod:att	_	_
-11	bevételeit	bevételeit	NOUN	NOUN	_	8	obj	_	_
-12	,	,	PUNCT	PUNCT	_	23	punct	_	_
-13	ugyanis	ugyanis	CCONJ	CCONJ	_	23	cc	_	_
-14	a	a	DET	DET	_	15	det	_	_
-15	hajtóanyag	hajtóanyag	NOUN	NOUN	_	16	nmod:att	_	_
-16	árának	árának	NOUN	NOUN	_	19	nmod:att	_	_
-17	csaknem	csaknem	ADV	ADV	_	19	advmod:mode	_	_
-18	70	70	NUM	NUM	_	19	nummod	_	_
-19	százalékát	százalékát	NOUN	NOUN	_	23	obj	_	highlight=green|span=6
-20	a	a	DET	DET	_	22	det	_	_
-21	különböző	különböző	ADJ	ADJ	_	22	amod:att	_	_
-22	adófajták	adófajták	NOUN	NOUN	_	23	nsubj	_	highlight=green|span=3
-23	teszik	teszik	VERB	VERB	_	8	conj	_	highlight=red
-24	ki	ki	ADV	ADV	_	23	compound:preverb	_	_
-25	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 17 · source: hu_szeged-ud-train.conllu · this verb has L=2, R=0 (mean span = 4.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = A kormány máris törvénytervezetet nyújtott be a parlamentnek , hogy a katasztrófa sújtotta tartományok kivételével egyszeri adót vessenek ki , amiből több mint 100 millió dollárnak megfelelő összeg is befolyhat .
-1	A	A	DET	DET	_	2	det	_	_
-2	kormány	kormány	NOUN	NOUN	_	5	nsubj	_	_
-3	máris	máris	ADV	ADV	_	5	advmod:mode	_	_
-4	törvénytervezetet	törvénytervezetet	NOUN	NOUN	_	5	obj	_	_
-5	nyújtott	nyújtott	VERB	VERB	_	0	root	_	_
-6	be	be	ADV	ADV	_	5	compound:preverb	_	_
-7	a	a	DET	DET	_	8	det	_	_
-8	parlamentnek	parlamentnek	NOUN	NOUN	_	5	iobj	_	_
-9	,	,	PUNCT	PUNCT	_	18	punct	_	_
-10	hogy	hogy	SCONJ	SCONJ	_	18	mark	_	_
-11	a	a	DET	DET	_	14	det	_	_
-12	katasztrófa	katasztrófa	NOUN	NOUN	_	13	nmod:att	_	_
-13	sújtotta	sújtotta	ADJ	ADJ	_	14	amod:att	_	_
-14	tartományok	tartományok	NOUN	NOUN	_	15	nmod:att	_	_
-15	kivételével	kivételével	NOUN	NOUN	_	18	obl	_	_
-16	egyszeri	egyszeri	ADJ	ADJ	_	17	amod:att	_	_
-17	adót	adót	NOUN	NOUN	_	18	obj	_	_
-18	vessenek	vessenek	VERB	VERB	_	5	advcl	_	_
-19	ki	ki	ADV	ADV	_	18	compound:preverb	_	_
-20	,	,	PUNCT	PUNCT	_	30	punct	_	_
-21	amiből	amiből	PRON	PRON	_	30	obl	_	highlight=green|span=1
-22	több	több	ADV	ADV	_	26	advmod	_	_
-23	mint	mint	SCONJ	SCONJ	_	25	mark	_	_
-24	100	100	NUM	NUM	_	25	compound	_	_
-25	millió	millió	NUM	NUM	_	22	amod:att	_	_
-26	dollárnak	dollárnak	NOUN	NOUN	_	27	obl	_	_
-27	megfelelő	megfelelő	ADJ	ADJ	_	28	amod:att	_	_
-28	összeg	összeg	NOUN	NOUN	_	30	nsubj	_	highlight=green|span=7
-29	is	is	CCONJ	CCONJ	_	30	cc	_	_
-30	befolyhat	befolyhat	VERB	VERB	_	17	acl	_	highlight=red
-31	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 18 · source: hu_szeged-ud-dev.conllu · this verb has L=2, R=1 (mean span = 6.33)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Lapunk úgy tudja , Katona Kálmán közlekedési miniszter tegnap este bekérette magához az LRI igazgatóját , de Kovács Péter nem ment el .
-1	Lapunk	Lapunk	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=1
-2	úgy	úgy	ADV	ADV	_	3	advmod:mode	_	highlight=green|span=1
-3	tudja	tudja	VERB	VERB	_	0	root	_	highlight=red
-4	,	,	PUNCT	PUNCT	_	11	punct	_	_
-5	Katona	Katona	PROPN	PROPN	_	11	nsubj	_	_
-6	Kálmán	Kálmán	PROPN	PROPN	_	5	flat:name	_	_
-7	közlekedési	közlekedési	ADJ	ADJ	_	5	amod:att	_	_
-8	miniszter	miniszter	NOUN	NOUN	_	5	appos	_	_
-9	tegnap	tegnap	ADV	ADV	_	10	advmod:mode	_	_
-10	este	este	ADV	ADV	_	11	advmod:tlocy	_	_
-11	bekérette	bekérette	VERB	VERB	_	3	ccomp:obl	_	highlight=green|span=17
-12	magához	magához	PRON	PRON	_	11	obl	_	_
-13	az	az	DET	DET	_	14	det	_	_
-14	LRI	LRI	PROPN	PROPN	_	15	nmod:att	_	_
-15	igazgatóját	igazgatóját	NOUN	NOUN	_	11	obj	_	_
-16	,	,	PUNCT	PUNCT	_	21	punct	_	_
-17	de	de	CCONJ	CCONJ	_	21	cc	_	_
-18	Kovács	Kovács	PROPN	PROPN	_	21	nsubj	_	_
-19	Péter	Péter	PROPN	PROPN	_	18	flat:name	_	_
-20	nem	nem	ADV	ADV	_	21	advmod	_	_
-21	ment	ment	VERB	VERB	_	11	conj	_	_
-22	el	el	ADV	ADV	_	21	compound:preverb	_	_
-23	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 19 · source: hu_szeged-ud-test.conllu · this verb has L=2, R=2 (mean span = 10.75)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ez pedig könnyen megrendítheti a válságból éppen kilábaló gazdaságot , ahogy történt 1997-ben , amikor a közepes chaebolnak számító Kia vált fizetésképtelenné , nyomában cégek egész sora kényszerült térdre , s végül Dél-Koreát az a megaláztatás érte , hogy el kellett fogadnia az IMF által közvetített 58 milliárd dolláros hitelcsomagot .
-1	Ez	Ez	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
-2	pedig	pedig	CCONJ	CCONJ	_	4	cc	_	_
-3	könnyen	könnyen	ADJ	ADJ	_	4	obl	_	highlight=green|span=1
-4	megrendítheti	megrendítheti	VERB	VERB	_	0	root	_	highlight=red
-5	a	a	DET	DET	_	6	det	_	_
-6	válságból	válságból	NOUN	NOUN	_	8	obl	_	_
-7	éppen	éppen	ADV	ADV	_	8	advmod:mode	_	_
-8	kilábaló	kilábaló	ADJ	ADJ	_	9	amod:att	_	_
-9	gazdaságot	gazdaságot	NOUN	NOUN	_	4	obj	_	highlight=green|span=5
-10	,	,	PUNCT	PUNCT	_	12	punct	_	_
-11	ahogy	ahogy	ADV	ADV	_	12	advmod:mode	_	_
-12	történt	történt	VERB	VERB	_	4	acl	_	highlight=green|span=36
-13	1997-ben	1997-ben	NUM	NUM	_	12	obl	_	_
-14	,	,	PUNCT	PUNCT	_	21	punct	_	_
-15	amikor	amikor	ADV	ADV	_	21	advmod:tlocy	_	_
-16	a	a	DET	DET	_	20	det	_	_
-17	közepes	közepes	ADJ	ADJ	_	18	amod:att	_	_
-18	chaebolnak	chaebolnak	NOUN	NOUN	_	19	obl	_	_
-19	számító	számító	ADJ	ADJ	_	20	amod:att	_	_
-20	Kia	Kia	PROPN	PROPN	_	21	nsubj	_	_
-21	vált	vált	VERB	VERB	_	13	acl	_	_
-22	fizetésképtelenné	fizetésképtelenné	ADJ	ADJ	_	21	obl	_	_
-23	,	,	PUNCT	PUNCT	_	28	punct	_	_
-24	nyomában	nyomában	NOUN	NOUN	_	28	obl	_	_
-25	cégek	cégek	NOUN	NOUN	_	27	nmod:att	_	_
-26	egész	egész	ADJ	ADJ	_	27	amod:att	_	_
-27	sora	sora	NOUN	NOUN	_	28	nsubj	_	_
-28	kényszerült	kényszerült	VERB	VERB	_	21	conj	_	_
-29	térdre	térdre	NOUN	NOUN	_	28	obl	_	_
-30	,	,	PUNCT	PUNCT	_	28	punct	_	_
-31	s	s	CCONJ	CCONJ	_	37	cc	_	_
-32	végül	végül	ADV	ADV	_	37	advmod:mode	_	_
-33	Dél-Koreát	Dél-Koreát	PROPN	PROPN	_	37	obj	_	_
-34	az	az	PRON	PRON	_	36	nmod:att	_	_
-35	a	a	DET	DET	_	36	det	_	_
-36	megaláztatás	megaláztatás	NOUN	NOUN	_	37	nsubj	_	_
-37	érte	érte	VERB	VERB	_	21	conj	_	_
-38	,	,	PUNCT	PUNCT	_	41	punct	_	_
-39	hogy	hogy	SCONJ	SCONJ	_	41	mark	_	_
-40	el	el	ADV	ADV	_	41	compound:preverb	_	_
-41	kellett	kellett	VERB	VERB	_	36	acl	_	_
-42	fogadnia	fogadnia	VERB	VERB	_	41	xcomp	_	_
-43	az	az	DET	DET	_	44	det	_	_
-44	IMF	IMF	PROPN	PROPN	_	46	obl	_	_
-45	által	által	ADP	ADP	_	44	case	_	_
-46	közvetített	közvetített	ADJ	ADJ	_	50	amod:att	_	_
-47	58	58	NUM	NUM	_	48	compound	_	_
-48	milliárd	milliárd	NUM	NUM	_	49	amod:att	_	_
-49	dolláros	dolláros	ADJ	ADJ	_	50	amod:att	_	_
-50	hitelcsomagot	hitelcsomagot	NOUN	NOUN	_	42	obj	_	_
-51	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 20 · source: hu_szeged-ud-dev.conllu · this verb has L=2, R=1 (mean span = 4.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = A tanárok fizetésének pedig ismét el kellene érnie az egy főre jutó GDP értékét ( jelenleg 0,7 ) , későbbiekben pedig az európai uniós átlagnak megfelelően az 1,4-1,5-ös értéken kellene állandósulnia .
-1	A	A	DET	DET	_	2	det	_	_
-2	tanárok	tanárok	NOUN	NOUN	_	3	nmod:att	_	_
-3	fizetésének	fizetésének	NOUN	NOUN	_	7	obl	_	highlight=green|span=3
-4	pedig	pedig	CCONJ	CCONJ	_	7	cc	_	_
-5	ismét	ismét	ADV	ADV	_	8	advmod:tlocy	_	highlight=green|span=1
-6	el	el	ADV	ADV	_	8	compound:preverb	_	_
-7	kellene	kellene	VERB	VERB	_	0	root	_	highlight=red
-8	érnie	érnie	VERB	VERB	_	7	xcomp	_	highlight=green|span=8
-9	az	az	DET	DET	_	13	det	_	_
-10	egy	egy	NUM	NUM	_	11	nummod	_	_
-11	főre	főre	NOUN	NOUN	_	12	obl	_	_
-12	jutó	jutó	ADJ	ADJ	_	13	amod:att	_	_
-13	GDP	GDP	NOUN	NOUN	_	14	nmod:att	_	_
-14	értékét	értékét	NOUN	NOUN	_	8	obj	_	_
-15	(	(	PUNCT	PUNCT	_	17	punct	_	_
-16	jelenleg	jelenleg	ADV	ADV	_	17	advmod:tlocy	_	_
-17	0,7	0,7	NUM	NUM	_	7	parataxis	_	_
-18	)	)	PUNCT	PUNCT	_	17	punct	_	_
-19	,	,	PUNCT	PUNCT	_	30	punct	_	_
-20	későbbiekben	későbbiekben	NOUN	NOUN	_	31	obl	_	_
-21	pedig	pedig	CCONJ	CCONJ	_	30	cc	_	_
-22	az	az	DET	DET	_	25	det	_	_
-23	európai	európai	ADJ	ADJ	_	24	amod:att	_	_
-24	uniós	uniós	ADJ	ADJ	_	25	amod:att	_	_
-25	átlagnak	átlagnak	NOUN	NOUN	_	26	obl	_	_
-26	megfelelően	megfelelően	ADJ	ADJ	_	31	advmod:mode	_	_
-27	az	az	DET	DET	_	29	det	_	_
-28	1,4-1,5-ös	1,4-1,5-ös	ADJ	ADJ	_	29	amod:att	_	_
-29	értéken	értéken	NOUN	NOUN	_	31	obl	_	_
-30	kellene	kellene	VERB	VERB	_	7	conj	_	_
-31	állandósulnia	állandósulnia	VERB	VERB	_	30	xcomp	_	_
-32	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+7	hó	hó	NOUN	NOUN	_	8	nmod:att	_	_
+8	súlya	súlya	NOUN	NOUN	_	4	obl	_	highlight=green|span=4
+9	alatt	alatt	ADP	ADP	_	8	case	_	_
+10	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
 </div>
 </body></html>

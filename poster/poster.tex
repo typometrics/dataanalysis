@@ -5,6 +5,7 @@
 \usepackage{qrcode}
 \usepackage{amsmath}
 \usepackage{tikz-dependency}
+\usetikzlibrary{arrows.meta}
 
 \setmainfont{Topic}[
     Path = ./topic-font/,
@@ -116,9 +117,8 @@
   \rule{\linewidth}{30pt}\\[10mm]
 
   % --- Sub-deck + authors + QR in one horizontal band
-  \begin{minipage}[c]{0.82\linewidth}
+  \begin{minipage}[c]{0.72\linewidth}
     \tablineTightH{96pt}{The Menzerath-Altmann law on all 180 UD treebanks}\par\vspace{8mm}
-    \begin{center}
     {\fontsize{38}{44}\selectfont\textbf{%
       Pegah Faghiri\textsuperscript{1,2} \quad
       Kim Gerdes\textsuperscript{2} \quad
@@ -127,12 +127,34 @@
       \textsuperscript{1}Modyco, CNRS \& Paris Nanterre University \quad
       \textsuperscript{2}LISN, CNRS \& Paris-Saclay University \quad
       \textsuperscript{3}Institut Universitaire de France}
-    \end{center}
   \end{minipage}\hfill
-  \begin{minipage}[c]{0.16\linewidth}\centering
-    \qrcode[height=6cm, level=H]{https://typometrics.elizia.net/menzerath}\par\vspace{4mm}
-    {\fontsize{30}{34}\selectfont \textbf{typometrics.elizia.net}}\par\vspace{2mm}
-    {\Large Interactive maps \& curves}
+  % --- Teaser box ---
+  \begin{minipage}[c]{0.07\linewidth}\centering
+    \textcolor{tabred}{%
+    \parbox{4.8cm}{%
+      \tabhead{%
+      \resizebox{4.8cm}{!}{YOUR}\\[0.5mm]
+      \resizebox{4.8cm}{!}{LANGUAGE}\\[0.5mm]
+      \resizebox{4.8cm}{!}{SECRETS}\\[0.5mm]
+      \resizebox{4.8cm}{!}{ARE HERE}}}}
+  \end{minipage}\hfill
+  % --- Fat arrow ---
+  \begin{minipage}[c]{0.02\linewidth}\centering
+    \textcolor{tabred}{%
+    \begin{tikzpicture}
+      \draw[-{Triangle[length=18pt,width=20pt]}, line width=6pt, tabred]
+        (0,0) -- (1.8,0);
+    \end{tikzpicture}}
+  \end{minipage}\hfill
+  % --- QR + URL ---
+  \begin{minipage}[c]{0.16\linewidth}
+    \begin{minipage}[c]{0.48\linewidth}\centering
+      \qrcode[height=6cm, level=H]{https://typometrics.elizia.net/menzerath}
+    \end{minipage}\hfill
+    \begin{minipage}[c]{0.48\linewidth}\raggedright
+      {\fontsize{28}{32}\selectfont \textbf{typometrics.elizia.net\slash menzerath}}\par\vspace{2mm}
+      {\Large Interactive maps \& curves}
+    \end{minipage}
   \end{minipage}\par\vspace{5mm}
   \rule{\linewidth}{2pt}
 }
@@ -154,14 +176,14 @@
 
   {\huge Altmann (1980) formalised this as a \textbf{power law}: $\text{MAL}_n \approx n^{-\beta}$, i.e.\ $\log(\text{MAL}_n) \approx -\beta \cdot \log(n)$. The slope $\beta$ measures the \textbf{MAL effect}. Previous studies: Macutek et al.\ (2017) for Czech; Tanaka-Ishii (2021) for UD~2.3 without filtering.}\par\vspace{5mm}
 
-  {\huge \textbf{NEW!}\ Our data extraction is filtered: we exclude \texttt{punct, discourse, parataxis, conj, cc, vocative, aux, compound:prt, mark, case} from the verbal construction. Only \textbf{real syntactic constituents} are retained.}\par\vspace{5mm}
+  {\huge \textcolor{tabred}{\textbf{NEW!}}\ Our data extraction is filtered: we exclude {\large\texttt{punct, discourse, parataxis, conj, cc, vocative, aux, compound:prt, mark, case}} from the verbal construction. Only \textbf{real syntactic constituents} are retained.}\par\vspace{5mm}
 
   {\huge \textbf{What about ``bastards''?} A constituent's subtree may spill across the verb. We count the spilled part as a separate dependent of the verb:}\par\vspace{4mm}
 
   % --- Dependency tree: 'Vogel' comes from German which means bird
   % UD_English-GUM, GUM_whow_languages-17 — rendered with reactive-dep-tree
   \begin{center}
-  \includegraphics[width=0.85\linewidth]{bastard_tree.png}
+  \includegraphics[width=0.85\linewidth]{vogel.png}
   \end{center}
   \vspace{2mm}
   {\huge The relative clause ``which means bird'' (\textbf{acl:relcl}) syntactically depends on `Vogel' (left of verb) but appears right of verb --- a \textbf{bastard}. It is counted as a right-side constituent of \textbf{comes}. Source: \textit{en\_gum}.}\par\vspace{3mm}
@@ -174,11 +196,9 @@
   \tablineTightH{90pt}{Two sides of the verb, two different worlds}}{
   \raggedright
   \vspace{4pt}
-  {\huge We compute three variants of the MAL effect:}\par\vspace{8mm}
-
   \begin{minipage}[t]{0.48\linewidth}
     {\fontsize{44}{50}\selectfont\tabhead{MAL}}\par\vspace{4mm}
-    {\huge $\text{MAL}_n(L)$ = mean size of constituents in all verbal constructions of L with $n$ constituents (left + right combined). Standard MAL as in the literature.}
+    {\huge We compute three variants of the MAL effect. $\text{MAL}_n(L)$ = mean size of constituents in all verbal constructions of L with $n$ constituents (left + right combined). Standard MAL as in the literature.}
   \end{minipage}\hfill
   \begin{minipage}[t]{0.48\linewidth}
     {\fontsize{44}{50}\selectfont\tabhead{LMAL \& RMAL\quad\textcolor{tabred}{NEW!}}}\par\vspace{4mm}
@@ -186,9 +206,24 @@
     {\huge $\text{RMAL}_n(L)$ = mean size of constituents in constructions with $n$ \textbf{postverbal} (right) constituents, regardless of the left side.}
   \end{minipage}\par\vspace{12mm}
 
-  {\huge \textbf{MAL effect} $= \beta$, the slope of the regression line in log-log space. $\beta > 0.1$: \textbf{MAL language}. $\beta < -0.1$: \textbf{Anti-MAL}. In between: \textbf{grey zone}.}\par\vspace{8mm}
+  {\huge \textbf{MAL effect} $= \beta$, the slope of the regression line in log-log space.}\par\vspace{4mm}
+  {\huge $\beta > 0.1$: \textbf{MAL language}. \quad $\beta < -0.1$: \textbf{Anti-MAL}. \quad In between: \textbf{grey zone}.}\par\vspace{8mm}
 
   {\huge \textbf{Why does this matter?} DLM (Dependency Length Minimization) predicts short-before-long postverbally and long-before-short preverbally. Unlike DLM, MAL is direction-free. So: \textbf{does MAL hold equally on both sides?} Spoiler: \textbf{no.}}\par\vspace{3mm}
+}
+
+% --- Small world map below the definitions ---
+\block{}{%
+  \raggedright
+  \begin{minipage}[c]{0.17\linewidth}\raggedright
+    \tabkicker{Menzerath is everywhere}
+    {\fontsize{38}{44}\selectfont\tabhead{MAL Effect}}\par\vspace{3mm}
+    \rule{\linewidth}{3pt}\par\vspace{3mm}
+    {\huge  $-\beta(1{\to}\text{max})$ \\ 171 languages}
+  \end{minipage}\hfill
+  \begin{minipage}[c]{0.81\linewidth}
+    \includegraphics[width=\linewidth]{../plots/poster_world_map_v4}
+  \end{minipage}
 }
 \useblockstyle{tabloid}
 \end{columns}
@@ -199,13 +234,13 @@
 \block{%
   \tabkicker{As usual}
 
-  {\fontsize{78}{86}\selectfont\tabhead{German nails it. Naija wobbles. Arabic surprises. You?}}}{
+  {\fontsize{78}{86}\selectfont\tabhead{German nails it. Naija wobbles. Arabic surprises.}}}{
   \raggedright
   \begin{minipage}[t]{0.31\linewidth}\raggedright
     \vspace{0pt}
     \includegraphics[width=\linewidth]{../plots/German_loglog}\par\vspace{3mm}
     {\fontsize{38}{44}\selectfont\tabhead{German -- textbook MAL}}\par\vspace{3mm}
-    {\huge \textbf{slope = --0.17, R\textsuperscript{2} \textasciitilde\ 0.89}
+    {\huge \textbf{slope = --0.19, R\textsuperscript{2} \textasciitilde\ 0.89}
      on the log-log fit. A near-perfect power law: every extra
      dependent shrinks the average constituent. German is MAL,
      RMAL and LMAL as expected. Is anyone surprised?}
@@ -217,14 +252,14 @@
     {\huge Left and right dependents diverge wildly. A young
      pidgincreole refusing to fit one curve --- in fact the
      \textbf{strongest Anti-LMAL in the whole sample}
-     ($\beta=+0.73$ preverbally).}
+     ($\beta=-0.73$ preverbally).}
   \end{minipage}\hfill
   \begin{minipage}[t]{0.31\linewidth}\raggedright
     \vspace{0pt}
     \includegraphics[width=\linewidth]{../plots/Arabic_loglog}\par\vspace{3mm}
     {\fontsize{38}{44}\selectfont\tabhead{Arabic -- complex behavior}}\par\vspace{3mm}
     {\huge Arabic has a particularly low R\textsuperscript{2}. It follows MAL from $n=1$ to $3$, but becomes Anti-MAL from $n=3$ onwards.\\[3mm]
-    \textbf{And you?} Check your language at \textbf{typometrics.elizia.net}!}
+    \textcolor{tabred}{\textbf{And you?} Check your language at \textbf{typometrics.elizia.net/menzerath}!}}
   \end{minipage}\par
 
   \vspace{4mm}
@@ -241,21 +276,21 @@
   \raggedright
   \begin{minipage}[t]{0.30\linewidth}\raggedright
     \vspace{0pt}
-    {\centering\includegraphics[width=\linewidth]{../plots/poster_strip_mal}\par}
+    {\centering\includegraphics[width=\linewidth]{../plots/poster_strip_mal_v4}\par}
     \vspace{3mm}
-    {\fontsize{38}{44}\selectfont\tabhead{MAL by word order}}\par\vspace{3mm}
-    {\huge MAL is stronger for \textbf{VO languages} (56\%) than OV (42\%), but RMAL and LMAL are \textbf{stronger for OV}! Where does the paradox come from?}
+    {\fontsize{38}{44}\selectfont\tabhead{The Word Order Illusion}}\par\vspace{3mm}
+    {\huge They want you to think word order is irrelevant. Look at the global averages: MAL and Anti-MAL types are distributed with eerie equality across VO and OV languages. It's the perfect cover-up. But once you split the verb in half, their entire symmetry falls apart...}
   \end{minipage}\hfill
   \begin{minipage}[t]{0.30\linewidth}\raggedright
     \vspace{0pt}
-    {\centering\includegraphics[width=\linewidth]{../plots/poster_strip_rmal}\par}
+    {\centering\includegraphics[width=\linewidth]{../plots/poster_strip_rmal_v4}\par}
     \vspace{3mm}
     {\fontsize{38}{44}\selectfont\tabhead{RMAL: postverbal domain}}\par\vspace{3mm}
     {\huge \textbf{79\% of UD languages are RMAL} (81/103) and only \textbf{7\% are Anti-RMAL} (7/103). The right side of the verb strongly compresses constituent size as $n$ grows. VO languages lead: 84\% are RMAL vs.\ 63\% for OV.}
   \end{minipage}\hfill
   \begin{minipage}[t]{0.30\linewidth}\raggedright
     \vspace{0pt}
-    {\centering\includegraphics[width=\linewidth]{../plots/poster_strip_lmal}\par}
+    {\centering\includegraphics[width=\linewidth]{../plots/poster_strip_lmal_v4}\par}
     \vspace{3mm}
     {\fontsize{38}{44}\selectfont\tabhead{LMAL: preverbal domain}}\par\vspace{3mm}
     {\huge Only \textbf{31\% are LMAL} (39/124) and \textbf{23\% are Anti-LMAL} (29/124). The left side of the verb resists compression --- or even reverses it. OV languages are better: 39\% are LMAL vs.\ 29\% for VO. VO languages are \textbf{3$\times$} more likely to be Anti-LMAL.}
@@ -263,18 +298,5 @@
   \vspace{4mm}
 }
 \useblockstyle{tabloid}
-
-% =====================================================================
-% CALL TO ACTION - compact footer
-% =====================================================================
-\block{%
-  \tabkicker{It's 100\% free*}
-  {\fontsize{62}{70}\selectfont\tabhead{Come and find out how your UD language is doing!}}}{
-  \raggedright
-  {\huge \textbf{180 treebanks}, interactive PCA + family map +
-    per-language curves + compliance ridgeline --- all at \textbf{typometrics.elizia.net/menzerath}.
-    \textcolor{tabmute}{*~\itshape Free as in
-    beer, free as in speech, free as in dependency.}}
-}
 
 \end{document}

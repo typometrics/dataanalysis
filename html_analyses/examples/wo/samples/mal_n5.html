@@ -1,5 +1,6 @@
-<!DOCTYPE html><html><head>
-  <style>:root{color-scheme:light}html,body{background:#fff;color:#222}</style><meta charset="utf-8"><title>Wolof — MAL_5</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Wolof — MAL_5</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+:root { color-scheme: light; }
+html, body { background: #fff; }
 body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
        padding: 0 20px; color: #222; }
 h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
@@ -24,24 +25,616 @@ table.mal-table a:hover { text-decoration: underline; }
 <h1>Wolof <small style="color:#999;font-weight:normal">(wo)</small> — MAL<sub>5</sub></h1>
 <div class="info"><p><b>Bucket:</b> verbs that have exactly <b>5</b> dependents in total (left + right combined).</p><p><b>MAL<sub>5</sub> = 3.636</b> &nbsp; <span style="color:#666">(121 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over all dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
 <div class="example">
-<div class="example-meta">Example 1 · source: wo_wtb-ud-dev.conllu · this verb has L=4, R=1 (mean span = 2.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ñoom nag ñu ngi leen taxawal ci xarnub fukk ak ñeent g.j .
-1	Ñoom	Ñoom	PRON	PRON	_	6	dislocated	_	highlight=green|span=1
-2	nag	nag	ADV	ADV	_	6	advmod	_	highlight=green|span=1
-3	ñu	ñu	PRON	PRON	_	6	nsubj	_	highlight=green|span=1
-4	ngi	ngi	AUX	AUX	_	6	aux	_	_
-5	leen	leen	PRON	PRON	_	6	obj:caus	_	highlight=green|span=1
-6	taxawal	taxawal	VERB	VERB	_	0	root	_	highlight=red
-7	ci	ci	ADP	ADP	_	8	case	_	_
-8	xarnub	xarnub	NOUN	NOUN	_	6	obl	_	highlight=green|span=6
-9	fukk	fukk	NUM	NUM	_	8	nummod	_	_
-10	ak	ak	CCONJ	CCONJ	_	11	cc	_	_
-11	ñeent	ñeent	NUM	NUM	_	9	conj	_	_
-12	g.j	g.j	NOUN	NOUN	_	9	nmod	_	_
-13	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 1 · source: wo_wtb-ud-train.conllu · this verb has L=2, R=3 (mean span = 3.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Nit ku ne , ci ag yemale gu mat sëkk , am na sañ-sañ ci , layam , ab àtteekaay bu moom boppam te maandu déglu ko déglu bu sell , ci biir mbooloo , sog a jël dogal yoy , mu a xam ñu ngi jëm ci feeñal i àqam ak i wareefam , mu a xam ñu ngi jëm ci dëgëral bépp tuuma ju ñu ko teg ci wàllu jëyya .
+1	Nit	Nit	NOUN	NOUN	_	12	nsubj	_	_
+2	ku	ku	PRON	PRON	_	3	nsubj	_	_
+3	ne	ne	VERB	VERB	_	1	acl:relcl	_	_
+4	,	,	PUNCT	PUNCT	_	12	punct	_	_
+5	ci	ci	ADP	ADP	_	7	case	_	_
+6	ag	ag	DET	DET	_	7	det	_	_
+7	yemale	yemale	NOUN	NOUN	_	12	obl	_	_
+8	gu	gu	PRON	PRON	_	9	nsubj	_	_
+9	mat	mat	VERB	VERB	_	7	acl:relcl	_	_
+10	sëkk	sëkk	ADV	ADV	_	9	advmod	_	_
+11	,	,	PUNCT	PUNCT	_	12	punct	_	_
+12	am	am	VERB	VERB	_	0	root	_	_
+13	na	na	AUX	AUX	_	12	aux	_	_
+14	sañ-sañ	sañ-sañ	NOUN	NOUN	_	12	obj	_	_
+15	ci	ci	ADP	ADP	_	17	case	_	_
+16	,	,	PUNCT	PUNCT	_	17	punct	_	_
+17	layam	layam	NOUN	NOUN	_	26	obl	_	highlight=green|span=2
+18	,	,	PUNCT	PUNCT	_	17	punct	_	_
+19	ab	ab	DET	DET	_	20	det	_	_
+20	àtteekaay	àtteekaay	NOUN	NOUN	_	26	nsubj	_	highlight=green|span=7
+21	bu	bu	PRON	PRON	_	22	nsubj	_	_
+22	moom	moom	VERB	VERB	_	20	acl:relcl	_	_
+23	boppam	boppam	PRON	PRON	_	22	obj	_	_
+24	te	te	CCONJ	CCONJ	_	25	cc	_	_
+25	maandu	maandu	VERB	VERB	_	22	conj	_	_
+26	déglu	déglu	VERB	VERB	_	14	acl	_	highlight=red
+27	ko	ko	PRON	PRON	_	26	obj	_	highlight=green|span=1
+28	déglu	déglu	NOUN	NOUN	_	26	iobj	_	highlight=green|span=3
+29	bu	bu	PRON	PRON	_	30	nsubj	_	_
+30	sell	sell	VERB	VERB	_	28	acl:relcl	_	_
+31	,	,	PUNCT	PUNCT	_	34	punct	_	_
+32	ci	ci	ADP	ADP	_	34	case	_	_
+33	biir	biir	ADP	ADP	_	34	case	_	_
+34	mbooloo	mbooloo	NOUN	NOUN	_	26	obl	_	highlight=green|span=3
+35	,	,	PUNCT	PUNCT	_	36	punct	_	_
+36	sog	sog	VERB	VERB	_	26	conj	_	_
+37	a	a	PART	PART	_	38	mark	_	_
+38	jël	jël	VERB	VERB	_	36	xcomp	_	_
+39	dogal	dogal	NOUN	NOUN	_	38	obj	_	_
+40	yoy	yoy	PRON	PRON	_	44	obj	_	_
+41	,	,	PUNCT	PUNCT	_	44	punct	_	_
+42	mu	mu	PRON	PRON	_	44	nsubj	_	_
+43	a	a	AUX	AUX	_	44	aux	_	_
+44	xam	xam	VERB	VERB	_	39	acl:relcl	_	_
+45	ñu	ñu	PRON	PRON	_	47	nsubj	_	_
+46	ngi	ngi	AUX	AUX	_	47	aux	_	_
+47	jëm	jëm	VERB	VERB	_	44	ccomp	_	_
+48	ci	ci	ADP	ADP	_	49	mark	_	_
+49	feeñal	feeñal	VERB	VERB	_	47	xcomp	_	_
+50	i	i	DET	DET	_	51	det	_	_
+51	àqam	àqam	NOUN	NOUN	_	49	obj:caus	_	_
+52	ak	ak	CCONJ	CCONJ	_	54	cc	_	_
+53	i	i	DET	DET	_	54	det	_	_
+54	wareefam	wareefam	NOUN	NOUN	_	51	conj	_	_
+55	,	,	PUNCT	PUNCT	_	58	punct	_	_
+56	mu	mu	PRON	PRON	_	58	nsubj	_	_
+57	a	a	AUX	AUX	_	58	aux	_	_
+58	xam	xam	VERB	VERB	_	44	conj	_	_
+59	ñu	ñu	PRON	PRON	_	61	nsubj	_	_
+60	ngi	ngi	AUX	AUX	_	61	aux	_	_
+61	jëm	jëm	VERB	VERB	_	58	ccomp	_	_
+62	ci	ci	ADP	ADP	_	63	mark	_	_
+63	dëgëral	dëgëral	VERB	VERB	_	61	xcomp	_	_
+64	bépp	bépp	DET	DET	_	65	det	_	_
+65	tuuma	tuuma	NOUN	NOUN	_	63	obj:caus	_	_
+66	ju	ju	PRON	PRON	_	69	iobj	_	_
+67	ñu	ñu	PRON	PRON	_	69	nsubj	_	_
+68	ko	ko	PRON	PRON	_	69	obj	_	_
+69	teg	teg	VERB	VERB	_	65	acl:relcl	_	_
+70	ci	ci	ADP	ADP	_	71	case	_	_
+71	wàllu	wàllu	NOUN	NOUN	_	69	obl	_	_
+72	jëyya	jëyya	NOUN	NOUN	_	71	nmod	_	_
+73	.	.	PUNCT	PUNCT	_	12	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 2 · source: wo_wtb-ud-dev.conllu · this verb has L=3, R=2 (mean span = 5.60)</div>
+<div class="example-meta">Example 2 · source: wo_wtb-ud-train.conllu · this verb has L=2, R=3 (mean span = 7.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Su lay yooyu yépp nag doyul , kon may naa téeré bi xale ba waa jooju masoon a doon , ndax mag ñi ngeen di gis doonoon nañu ay xale , wante ñi ci di fàtteliku loolu ñu neew lañu .
+1	Su	Su	SCONJ	SCONJ	_	6	mark	_	_
+2	lay	lay	NOUN	NOUN	_	6	nsubj	_	_
+3	yooyu	yooyu	DET	DET	_	2	det	_	_
+4	yépp	yépp	DET	DET	_	2	det	_	_
+5	nag	nag	ADV	ADV	_	6	advmod	_	_
+6	doyul	doyul	VERB	VERB	_	9	advcl	_	highlight=green|span=6
+7	,	,	PUNCT	PUNCT	_	9	punct	_	_
+8	kon	kon	ADV	ADV	_	9	advmod	_	highlight=green|span=1
+9	may	may	VERB	VERB	_	0	root	_	highlight=red
+10	naa	naa	AUX	AUX	_	9	aux	_	_
+11	téeré	téeré	NOUN	NOUN	_	9	obj	_	highlight=green|span=2
+12	bi	bi	DET	DET	_	11	det	_	_
+13	xale	xale	NOUN	NOUN	_	9	iobj	_	highlight=green|span=7
+14	ba	ba	PRON	PRON	_	17	obj	_	_
+15	waa	waa	NOUN	NOUN	_	17	nsubj	_	_
+16	jooju	jooju	DET	DET	_	15	det	_	_
+17	masoon	masoon	VERB	VERB	_	13	acl:relcl	_	_
+18	a	a	PART	PART	_	17	mark	_	_
+19	doon	doon	AUX	AUX	_	17	cop	_	_
+20	,	,	PUNCT	PUNCT	_	27	punct	_	_
+21	ndax	ndax	SCONJ	SCONJ	_	27	mark	_	_
+22	mag	mag	NOUN	NOUN	_	27	nsubj	_	_
+23	ñi	ñi	PRON	PRON	_	26	obj	_	_
+24	ngeen	ngeen	PRON	PRON	_	26	nsubj	_	_
+25	di	di	AUX	AUX	_	26	aux	_	_
+26	gis	gis	VERB	VERB	_	22	acl:relcl	_	_
+27	doonoon	doonoon	VERB	VERB	_	9	advcl	_	highlight=green|span=19
+28	nañu	nañu	AUX	AUX	_	27	aux	_	_
+29	ay	ay	DET	DET	_	30	det	_	_
+30	xale	xale	NOUN	NOUN	_	27	xcomp	_	_
+31	,	,	PUNCT	PUNCT	_	38	punct	_	_
+32	wante	wante	CCONJ	CCONJ	_	38	cc	_	_
+33	ñi	ñi	PRON	PRON	_	38	nsubj	_	_
+34	ci	ci	ADP	ADP	_	36	obl	_	_
+35	di	di	AUX	AUX	_	36	aux	_	_
+36	fàtteliku	fàtteliku	VERB	VERB	_	33	acl:relcl	_	_
+37	loolu	loolu	PRON	PRON	_	36	obj	_	_
+38	ñu	ñu	PRON	PRON	_	27	conj	_	_
+39	neew	neew	VERB	VERB	_	38	acl:relcl	_	_
+40	lañu	lañu	AUX	AUX	_	38	cop	_	_
+41	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: wo_wtb-ud-dev.conllu · this verb has L=1, R=4 (mean span = 2.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Bari na ay nettali yu ko di saxal sax , waaye nu tànn ci rekk bu Sëriñ Abdu Lahad Mbàkke ngir ag dëggoom .
+1	Bari	Bari	VERB	VERB	_	0	root	_	_
+2	na	na	AUX	AUX	_	1	aux	_	_
+3	ay	ay	DET	DET	_	4	det	_	_
+4	nettali	nettali	NOUN	NOUN	_	1	obj	_	_
+5	yu	yu	PRON	PRON	_	8	nsubj	_	_
+6	ko	ko	PRON	PRON	_	8	obj	_	_
+7	di	di	AUX	AUX	_	8	aux	_	_
+8	saxal	saxal	VERB	VERB	_	4	acl:relcl	_	_
+9	sax	sax	ADV	ADV	_	8	advmod	_	_
+10	,	,	PUNCT	PUNCT	_	13	punct	_	_
+11	waaye	waaye	CCONJ	CCONJ	_	13	cc	_	_
+12	nu	nu	PRON	PRON	_	13	nsubj	_	highlight=green|span=1
+13	tànn	tànn	VERB	VERB	_	1	conj	_	highlight=red
+14	ci	ci	ADP	ADP	_	13	obl	_	highlight=green|span=1
+15	rekk	rekk	ADV	ADV	_	13	advmod	_	highlight=green|span=1
+16	bu	bu	ADP	ADP	_	17	case	_	_
+17	Sëriñ	Sëriñ	PROPN	PROPN	_	13	obj	_	highlight=green|span=5
+18	Abdu	Abdu	PROPN	PROPN	_	17	flat	_	_
+19	Lahad	Lahad	PROPN	PROPN	_	17	flat	_	_
+20	Mbàkke	Mbàkke	PROPN	PROPN	_	17	flat	_	_
+21	ngir	ngir	ADP	ADP	_	23	case	_	_
+22	ag	ag	DET	DET	_	23	det	_	_
+23	dëggoom	dëggoom	NOUN	NOUN	_	13	obl	_	highlight=green|span=3
+24	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: wo_wtb-ud-train.conllu · this verb has L=1, R=4 (mean span = 1.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Natalu suuf si nag , dëgg la gaa , amal na ma njëriñ lool foofu .
+1	Natalu	Natalu	NOUN	NOUN	_	10	dislocated	_	highlight=green|span=4
+2	suuf	suuf	NOUN	NOUN	_	1	nmod	_	_
+3	si	si	DET	DET	_	2	det	_	_
+4	nag	nag	ADV	ADV	_	1	advmod	_	_
+5	,	,	PUNCT	PUNCT	_	6	punct	_	_
+6	dëgg	dëgg	NOUN	NOUN	_	10	parataxis	_	_
+7	la	la	AUX	AUX	_	6	cop	_	_
+8	gaa	gaa	ADV	ADV	_	6	advmod	_	_
+9	,	,	PUNCT	PUNCT	_	10	punct	_	_
+10	amal	amal	VERB	VERB	_	0	root	_	highlight=red
+11	na	na	AUX	AUX	_	10	aux	_	_
+12	ma	ma	PRON	PRON	_	10	obj	_	highlight=green|span=1
+13	njëriñ	njëriñ	NOUN	NOUN	_	10	iobj	_	highlight=green|span=1
+14	lool	lool	ADV	ADV	_	10	advmod	_	highlight=green|span=1
+15	foofu	foofu	ADV	ADV	_	10	advmod	_	highlight=green|span=1
+16	.	.	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: wo_wtb-ud-train.conllu · this verb has L=4, R=1 (mean span = 1.80)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ginnaaw bi yàggul dara dammeelu Kajoor di leen jéem a sanc .
+1	Ginnaaw	Ginnaaw	NOUN	NOUN	_	9	obl	_	highlight=green|span=2
+2	bi	bi	DET	DET	_	1	det	_	_
+3	yàggul	yàggul	VERB	VERB	_	9	advcl	_	highlight=green|span=2
+4	dara	dara	NOUN	NOUN	_	3	obj	_	_
+5	dammeelu	dammeelu	NOUN	NOUN	_	9	nsubj	_	highlight=green|span=2
+6	Kajoor	Kajoor	PROPN	PROPN	_	5	nmod	_	_
+7	di	di	AUX	AUX	_	9	aux	_	_
+8	leen	leen	PRON	PRON	_	9	obj	_	highlight=green|span=1
+9	jéem	jéem	VERB	VERB	_	0	root	_	highlight=red
+10	a	a	PART	PART	_	11	mark	_	_
+11	sanc	sanc	VERB	VERB	_	9	xcomp	_	highlight=green|span=2
+12	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: wo_wtb-ud-train.conllu · this verb has L=4, R=1 (mean span = 4.80)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Gaaral googu njiitul Microsoft Stef Balma mu a ko jiite , ngir wone ni seen nosteg doxiin bu bees bi da mu nekk lu taaru te yéeme .
+1	Gaaral	Gaaral	NOUN	NOUN	_	10	dislocated	_	highlight=green|span=2
+2	googu	googu	DET	DET	_	1	det	_	_
+3	njiitul	njiitul	NOUN	NOUN	_	10	dislocated	_	highlight=green|span=4
+4	Microsoft	Microsoft	PROPN	PROPN	_	3	nmod	_	_
+5	Stef	Stef	PROPN	PROPN	_	3	appos	_	_
+6	Balma	Balma	PROPN	PROPN	_	5	flat	_	_
+7	mu	mu	PRON	PRON	_	10	nsubj	_	highlight=green|span=1
+8	a	a	AUX	AUX	_	10	aux	_	_
+9	ko	ko	PRON	PRON	_	10	obj	_	highlight=green|span=1
+10	jiite	jiite	VERB	VERB	_	0	root	_	highlight=red
+11	,	,	PUNCT	PUNCT	_	13	punct	_	_
+12	ngir	ngir	ADP	ADP	_	13	mark	_	_
+13	wone	wone	VERB	VERB	_	10	advcl	_	highlight=green|span=16
+14	ni	ni	SCONJ	SCONJ	_	23	mark	_	_
+15	seen	seen	DET	DET	_	16	det	_	_
+16	nosteg	nosteg	NOUN	NOUN	_	23	dislocated	_	_
+17	doxiin	doxiin	NOUN	NOUN	_	16	nmod	_	_
+18	bu	bu	PRON	PRON	_	19	nsubj	_	_
+19	bees	bees	VERB	VERB	_	16	acl:relcl	_	_
+20	bi	bi	DET	DET	_	16	det	_	_
+21	da	da	AUX	AUX	_	23	aux	_	_
+22	mu	mu	PRON	PRON	_	23	nsubj	_	_
+23	nekk	nekk	VERB	VERB	_	13	ccomp	_	_
+24	lu	lu	PRON	PRON	_	23	obj	_	_
+25	taaru	taaru	VERB	VERB	_	24	acl:relcl	_	_
+26	te	te	CCONJ	CCONJ	_	27	cc	_	_
+27	yéeme	yéeme	VERB	VERB	_	25	conj	_	_
+28	.	.	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: wo_wtb-ud-train.conllu · this verb has L=2, R=3 (mean span = 2.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Yàlla ju ci mel ne Amoon Ra ( yàllay jant ji ) benn la ci ak Isis ( yàllay weer wi ) .
+1	Yàlla	Yàlla	PROPN	PROPN	_	13	nsubj	_	_
+2	ju	ju	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+3	ci	ci	ADP	ADP	_	4	obl	_	highlight=green|span=1
+4	mel	mel	VERB	VERB	_	1	acl:relcl	_	highlight=red
+5	ne	ne	ADP	ADP	_	6	case	_	_
+6	Amoon	Amoon	PROPN	PROPN	_	4	obl	_	highlight=green|span=3
+7	Ra	Ra	PROPN	PROPN	_	6	flat	_	_
+8	(	(	PUNCT	PUNCT	_	9	punct	_	_
+9	yàllay	yàllay	NOUN	NOUN	_	6	appos	_	highlight=green|span=3
+10	jant	jant	NOUN	NOUN	_	9	nmod	_	_
+11	ji	ji	DET	DET	_	10	det	_	_
+12	)	)	PUNCT	PUNCT	_	9	punct	_	_
+13	benn	benn	NUM	NUM	_	0	root	_	_
+14	la	la	AUX	AUX	_	13	cop	_	_
+15	ci	ci	ADP	ADP	_	13	obl	_	_
+16	ak	ak	CCONJ	CCONJ	_	17	cc	_	_
+17	Isis	Isis	PROPN	PROPN	_	6	conj	_	highlight=green|span=5
+18	(	(	PUNCT	PUNCT	_	19	punct	_	_
+19	yàllay	yàllay	NOUN	NOUN	_	17	appos	_	_
+20	weer	weer	NOUN	NOUN	_	19	nmod	_	_
+21	wi	wi	DET	DET	_	20	det	_	_
+22	)	)	PUNCT	PUNCT	_	19	punct	_	_
+23	.	.	PUNCT	PUNCT	_	13	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: wo_wtb-ud-test.conllu · this verb has L=2, R=3 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ci 1989 , Nasaa sànni woon na ci jawwu ji satalit bii di Kob , ngir def ay gëstu ci ceññeeri mbëj-bijjaakon yu Big Bang .
+1	Ci	Ci	ADP	ADP	_	2	case	_	_
+2	1989	1989	NUM	NUM	_	5	obl	_	highlight=green|span=2
+3	,	,	PUNCT	PUNCT	_	5	punct	_	_
+4	Nasaa	Nasaa	PROPN	PROPN	_	5	nsubj	_	highlight=green|span=1
+5	sànni	sànni	VERB	VERB	_	0	root	_	highlight=red
+6	woon	woon	AUX	AUX	_	5	aux	_	_
+7	na	na	AUX	AUX	_	5	aux	_	_
+8	ci	ci	ADP	ADP	_	9	case	_	_
+9	jawwu	jawwu	NOUN	NOUN	_	5	obl	_	highlight=green|span=3
+10	ji	ji	DET	DET	_	9	det	_	_
+11	satalit	satalit	NOUN	NOUN	_	5	obj	_	highlight=green|span=4
+12	bii	bii	PRON	PRON	_	14	nsubj	_	_
+13	di	di	AUX	AUX	_	14	cop	_	_
+14	Kob	Kob	PROPN	PROPN	_	11	acl:relcl	_	_
+15	,	,	PUNCT	PUNCT	_	17	punct	_	_
+16	ngir	ngir	ADP	ADP	_	17	mark	_	_
+17	def	def	VERB	VERB	_	5	advcl	_	highlight=green|span=10
+18	ay	ay	DET	DET	_	19	det	_	_
+19	gëstu	gëstu	NOUN	NOUN	_	17	obj	_	_
+20	ci	ci	ADP	ADP	_	21	case	_	_
+21	ceññeeri	ceññeeri	NOUN	NOUN	_	17	obl	_	_
+22	mbëj-bijjaakon	mbëj-bijjaakon	NOUN	NOUN	_	21	nmod	_	_
+23	yu	yu	ADP	ADP	_	24	case	_	_
+24	Big	Big	PROPN	PROPN	_	21	nmod	_	_
+25	Bang	Bang	PROPN	PROPN	_	24	flat	_	_
+26	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: wo_wtb-ud-test.conllu · this verb has L=3, R=2 (mean span = 6.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Lii nga xam ne ci ñaar fukkeelu xarnu rekk la ko xam-xamu jëmm bu jamonoo bi wuññi , Alquraan moom saxaloon na ko booba ak léegi tollu na ci fukk ak ñeenti xarnu .
+1	Lii	Lii	PRON	PRON	_	21	dislocated	_	highlight=green|span=17
+2	nga	nga	PRON	PRON	_	3	nsubj	_	_
+3	xam	xam	VERB	VERB	_	1	acl:relcl	_	_
+4	ne	ne	SCONJ	SCONJ	_	17	mark	_	_
+5	ci	ci	ADP	ADP	_	8	case	_	_
+6	ñaar	ñaar	NUM	NUM	_	7	compound	_	_
+7	fukkeelu	fukkeelu	NUM	NUM	_	8	nummod	_	_
+8	xarnu	xarnu	NOUN	NOUN	_	17	obl	_	_
+9	rekk	rekk	ADV	ADV	_	8	advmod	_	_
+10	la	la	AUX	AUX	_	17	aux	_	_
+11	ko	ko	PRON	PRON	_	17	obj	_	_
+12	xam-xamu	xam-xamu	NOUN	NOUN	_	17	nsubj	_	_
+13	jëmm	jëmm	NOUN	NOUN	_	12	nmod	_	_
+14	bu	bu	ADP	ADP	_	15	case	_	_
+15	jamonoo	jamonoo	NOUN	NOUN	_	12	nmod	_	_
+16	bi	bi	DET	DET	_	15	det	_	_
+17	wuññi	wuññi	VERB	VERB	_	3	ccomp	_	_
+18	,	,	PUNCT	PUNCT	_	21	punct	_	_
+19	Alquraan	Alquraan	PROPN	PROPN	_	21	dislocated	_	highlight=green|span=1
+20	moom	moom	PRON	PRON	_	21	nsubj	_	highlight=green|span=1
+21	saxaloon	saxaloon	VERB	VERB	_	0	root	_	highlight=red
+22	na	na	AUX	AUX	_	21	aux	_	_
+23	ko	ko	PRON	PRON	_	21	obj	_	highlight=green|span=1
+24	booba	booba	ADV	ADV	_	27	advmod	_	_
+25	ak	ak	CCONJ	CCONJ	_	26	cc	_	_
+26	léegi	léegi	ADV	ADV	_	24	conj	_	_
+27	tollu	tollu	VERB	VERB	_	21	advcl	_	highlight=green|span=10
+28	na	na	AUX	AUX	_	27	aux	_	_
+29	ci	ci	ADP	ADP	_	33	case	_	_
+30	fukk	fukk	NUM	NUM	_	33	nummod	_	_
+31	ak	ak	CCONJ	CCONJ	_	32	cc	_	_
+32	ñeenti	ñeenti	NUM	NUM	_	30	conj	_	_
+33	xarnu	xarnu	NOUN	NOUN	_	27	obl	_	_
+34	.	.	PUNCT	PUNCT	_	21	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: wo_wtb-ud-train.conllu · this verb has L=2, R=3 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Leegi nag Bavar bokksi na ci ak Saksoni ci atum 1934 g , ca saa sa tam , nga tàmbali a gis lu la di won ne Solofrayn moom tàmbli na a naat ak a am ag yokkute .
+1	Leegi	Leegi	ADV	ADV	_	4	advmod	_	highlight=green|span=2
+2	nag	nag	ADV	ADV	_	1	advmod	_	_
+3	Bavar	Bavar	PROPN	PROPN	_	4	nsubj	_	highlight=green|span=1
+4	bokksi	bokksi	VERB	VERB	_	0	root	_	highlight=red
+5	na	na	AUX	AUX	_	4	aux	_	_
+6	ci	ci	ADP	ADP	_	4	obl	_	highlight=green|span=1
+7	ak	ak	CCONJ	CCONJ	_	8	cc	_	_
+8	Saksoni	Saksoni	PROPN	PROPN	_	3	conj	_	highlight=green|span=2
+9	ci	ci	ADP	ADP	_	10	case	_	_
+10	atum	atum	NOUN	NOUN	_	4	obl	_	highlight=green|span=4
+11	1934	1934	NUM	NUM	_	10	nummod	_	_
+12	g	g	NUM	NUM	_	10	nummod	_	_
+13	,	,	PUNCT	PUNCT	_	20	punct	_	_
+14	ca	ca	ADP	ADP	_	15	case	_	_
+15	saa	saa	NOUN	NOUN	_	20	obl	_	_
+16	sa	sa	DET	DET	_	15	det	_	_
+17	tam	tam	ADV	ADV	_	15	advmod	_	_
+18	,	,	PUNCT	PUNCT	_	20	punct	_	_
+19	nga	nga	PRON	PRON	_	20	nsubj	_	_
+20	tàmbali	tàmbali	VERB	VERB	_	4	parataxis	_	_
+21	a	a	PART	PART	_	22	mark	_	_
+22	gis	gis	VERB	VERB	_	20	xcomp	_	_
+23	lu	lu	PRON	PRON	_	22	obj	_	_
+24	la	la	PRON	PRON	_	26	obj	_	_
+25	di	di	AUX	AUX	_	26	aux	_	_
+26	won	won	VERB	VERB	_	23	acl:relcl	_	_
+27	ne	ne	SCONJ	SCONJ	_	30	mark	_	_
+28	Solofrayn	Solofrayn	PROPN	PROPN	_	30	dislocated	_	_
+29	moom	moom	PRON	PRON	_	30	nsubj	_	_
+30	tàmbli	tàmbli	VERB	VERB	_	26	ccomp	_	_
+31	na	na	AUX	AUX	_	30	aux	_	_
+32	a	a	PART	PART	_	33	mark	_	_
+33	naat	naat	VERB	VERB	_	30	xcomp	_	_
+34	ak	ak	CCONJ	CCONJ	_	36	cc	_	_
+35	a	a	PART	PART	_	36	mark	_	_
+36	am	am	VERB	VERB	_	33	conj	_	_
+37	ag	ag	DET	DET	_	38	det	_	_
+38	yokkute	yokkute	NOUN	NOUN	_	36	obj	_	_
+39	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: wo_wtb-ud-dev.conllu · this verb has L=1, R=4 (mean span = 5.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Soxna Mariyaama Buso ñu ko di dàkkantale , ci jikko , Jaaratu-l-Laah ( dëkkandoob Yàlla bi ) gane àdduna ci atum 1833 ci as ndëkk su tudd Gollere ca Fuuta , génn àdduna ci atum 1866 ca Poroxaan .
+1	Soxna	Soxna	PROPN	PROPN	_	18	nsubj	_	highlight=green|span=13
+2	Mariyaama	Mariyaama	PROPN	PROPN	_	1	flat	_	_
+3	Buso	Buso	PROPN	PROPN	_	1	flat	_	_
+4	ñu	ñu	PRON	PRON	_	7	nsubj	_	_
+5	ko	ko	PRON	PRON	_	7	obj	_	_
+6	di	di	AUX	AUX	_	7	aux	_	_
+7	dàkkantale	dàkkantale	VERB	VERB	_	1	acl	_	_
+8	,	,	PUNCT	PUNCT	_	10	punct	_	_
+9	ci	ci	ADP	ADP	_	10	case	_	_
+10	jikko	jikko	NOUN	NOUN	_	7	obl	_	_
+11	,	,	PUNCT	PUNCT	_	7	punct	_	_
+12	Jaaratu-l-Laah	Jaaratu-l-Laah	PROPN	PROPN	_	7	iobj	_	_
+13	(	(	PUNCT	PUNCT	_	14	punct	_	_
+14	dëkkandoob	dëkkandoob	NOUN	NOUN	_	12	appos	_	_
+15	Yàlla	Yàlla	PROPN	PROPN	_	14	nmod	_	_
+16	bi	bi	DET	DET	_	14	det	_	_
+17	)	)	PUNCT	PUNCT	_	18	punct	_	_
+18	gane	gane	VERB	VERB	_	0	root	_	highlight=red
+19	àdduna	àdduna	NOUN	NOUN	_	18	obj	_	highlight=green|span=1
+20	ci	ci	ADP	ADP	_	21	case	_	_
+21	atum	atum	NOUN	NOUN	_	18	obl	_	highlight=green|span=3
+22	1833	1833	NUM	NUM	_	21	nummod	_	_
+23	ci	ci	ADP	ADP	_	25	case	_	_
+24	as	as	DET	DET	_	25	det	_	_
+25	ndëkk	ndëkk	NOUN	NOUN	_	18	obl	_	highlight=green|span=6
+26	su	su	PRON	PRON	_	27	nsubj	_	_
+27	tudd	tudd	VERB	VERB	_	25	acl:relcl	_	_
+28	Gollere	Gollere	PROPN	PROPN	_	27	obj	_	_
+29	ca	ca	ADP	ADP	_	30	case	_	_
+30	Fuuta	Fuuta	PROPN	PROPN	_	18	obl	_	highlight=green|span=2
+31	,	,	PUNCT	PUNCT	_	32	punct	_	_
+32	génn	génn	VERB	VERB	_	18	conj	_	_
+33	àdduna	àdduna	NOUN	NOUN	_	32	obj	_	_
+34	ci	ci	ADP	ADP	_	35	case	_	_
+35	atum	atum	NOUN	NOUN	_	32	obl	_	_
+36	1866	1866	NUM	NUM	_	35	nummod	_	_
+37	ca	ca	ADP	ADP	_	38	case	_	_
+38	Poroxaan	Poroxaan	PROPN	PROPN	_	32	obl	_	_
+39	.	.	PUNCT	PUNCT	_	18	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: wo_wtb-ud-train.conllu · this verb has L=2, R=3 (mean span = 6.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Mu daldi bind Imbraatoor bu Otris bi ne ko : &quot; Na la wóor ne nguuri Almaañ yi - bi lii amee de – dinanu nekki wenn yaram wu jàppaloo , ci ron kerug doxaliin gu Brusiya , te dina jàppeji Brusiya mu di - moom - aw yaram wu di doxandeem , wu tumbrànke wu bokkul ci aw yaramam &quot; .
+1	Mu	Mu	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+2	daldi	daldi	ADV	ADV	_	3	advmod	_	highlight=green|span=1
+3	bind	bind	VERB	VERB	_	0	root	_	highlight=red
+4	Imbraatoor	Imbraatoor	PROPN	PROPN	_	3	obj	_	highlight=green|span=4
+5	bu	bu	ADP	ADP	_	6	case	_	_
+6	Otris	Otris	PROPN	PROPN	_	4	nmod	_	_
+7	bi	bi	DET	DET	_	4	det	_	_
+8	ne	ne	VERB	VERB	_	3	advcl	_	highlight=green|span=11
+9	ko	ko	PRON	PRON	_	8	obj	_	_
+10	:	:	PUNCT	PUNCT	_	14	punct	_	_
+11	&quot;	&quot;	PUNCT	PUNCT	_	14	punct	_	_
+12	Na	Na	AUX	AUX	_	14	aux	_	_
+13	la	la	PRON	PRON	_	14	obj	_	_
+14	wóor	wóor	VERB	VERB	_	8	parataxis	_	highlight=green|span=14
+15	ne	ne	SCONJ	SCONJ	_	26	mark	_	_
+16	nguuri	nguuri	NOUN	NOUN	_	26	dislocated	_	_
+17	Almaañ	Almaañ	PROPN	PROPN	_	16	nmod	_	_
+18	yi	yi	DET	DET	_	16	det	_	_
+19	-	-	PUNCT	PUNCT	_	22	punct	_	_
+20	bi	bi	SCONJ	SCONJ	_	22	mark	_	_
+21	lii	lii	PRON	PRON	_	22	nsubj	_	_
+22	amee	amee	VERB	VERB	_	26	advcl	_	_
+23	de	de	ADV	ADV	_	22	advmod	_	_
+24	–	–	PUNCT	PUNCT	_	22	punct	_	_
+25	dinanu	dinanu	AUX	AUX	_	26	aux	_	_
+26	nekki	nekki	VERB	VERB	_	14	ccomp	_	_
+27	wenn	wenn	DET	DET	_	28	det	_	_
+28	yaram	yaram	NOUN	NOUN	_	26	obj	_	_
+29	wu	wu	PRON	PRON	_	30	nsubj	_	_
+30	jàppaloo	jàppaloo	VERB	VERB	_	28	acl:relcl	_	_
+31	,	,	PUNCT	PUNCT	_	33	punct	_	_
+32	ci	ci	ADP	ADP	_	33	case	_	_
+33	ron	ron	NOUN	NOUN	_	30	obl	_	_
+34	kerug	kerug	NOUN	NOUN	_	33	compound	_	_
+35	doxaliin	doxaliin	NOUN	NOUN	_	34	nmod	_	_
+36	gu	gu	ADP	ADP	_	37	case	_	_
+37	Brusiya	Brusiya	PROPN	PROPN	_	35	nmod	_	_
+38	,	,	PUNCT	PUNCT	_	41	punct	_	_
+39	te	te	CCONJ	CCONJ	_	41	cc	_	_
+40	dina	dina	AUX	AUX	_	41	aux	_	_
+41	jàppeji	jàppeji	VERB	VERB	_	26	conj	_	_
+42	Brusiya	Brusiya	PROPN	PROPN	_	41	obj	_	_
+43	mu	mu	PRON	PRON	_	49	nsubj	_	_
+44	di	di	AUX	AUX	_	49	cop	_	_
+45	-	-	PUNCT	PUNCT	_	46	punct	_	_
+46	moom	moom	PRON	PRON	_	42	appos	_	_
+47	-	-	PUNCT	PUNCT	_	46	punct	_	_
+48	aw	aw	DET	DET	_	49	det	_	_
+49	yaram	yaram	NOUN	NOUN	_	41	ccomp	_	_
+50	wu	wu	PRON	PRON	_	52	nsubj	_	_
+51	di	di	AUX	AUX	_	52	cop	_	_
+52	doxandeem	doxandeem	NOUN	NOUN	_	49	acl:relcl	_	_
+53	,	,	PUNCT	PUNCT	_	55	punct	_	_
+54	wu	wu	PRON	PRON	_	55	nsubj	_	_
+55	tumbrànke	tumbrànke	VERB	VERB	_	49	acl:relcl	_	_
+56	wu	wu	PRON	PRON	_	57	nsubj	_	_
+57	bokkul	bokkul	VERB	VERB	_	49	acl:relcl	_	_
+58	ci	ci	ADP	ADP	_	60	case	_	_
+59	aw	aw	ADP	ADP	_	60	case	_	_
+60	yaramam	yaramam	NOUN	NOUN	_	57	obl	_	_
+61	&quot;	&quot;	PUNCT	PUNCT	_	14	punct	_	_
+62	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: wo_wtb-ud-test.conllu · this verb has L=3, R=2 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ci seen tuur yi , &quot; ndëpp &quot; la nit ñi gën a xam , ngiir faj febaru ñooñu ñu xam ne , jiine a leen jàpp .
+1	Ci	Ci	ADP	ADP	_	3	case	_	_
+2	seen	seen	DET	DET	_	3	det	_	_
+3	tuur	tuur	NOUN	NOUN	_	12	obl	_	highlight=green|span=4
+4	yi	yi	DET	DET	_	3	det	_	_
+5	,	,	PUNCT	PUNCT	_	12	punct	_	_
+6	&quot;	&quot;	PUNCT	PUNCT	_	7	punct	_	_
+7	ndëpp	ndëpp	NOUN	NOUN	_	12	obj	_	highlight=green|span=1
+8	&quot;	&quot;	PUNCT	PUNCT	_	7	punct	_	_
+9	la	la	AUX	AUX	_	12	aux	_	_
+10	nit	nit	NOUN	NOUN	_	12	nsubj	_	highlight=green|span=2
+11	ñi	ñi	DET	DET	_	10	det	_	_
+12	gën	gën	VERB	VERB	_	0	root	_	highlight=red
+13	a	a	PART	PART	_	14	mark	_	_
+14	xam	xam	VERB	VERB	_	12	xcomp	_	highlight=green|span=2
+15	,	,	PUNCT	PUNCT	_	17	punct	_	_
+16	ngiir	ngiir	ADP	ADP	_	17	mark	_	_
+17	faj	faj	VERB	VERB	_	12	advcl	_	highlight=green|span=11
+18	febaru	febaru	NOUN	NOUN	_	17	obj	_	_
+19	ñooñu	ñooñu	PRON	PRON	_	18	nmod	_	_
+20	ñu	ñu	PRON	PRON	_	21	nsubj	_	_
+21	xam	xam	VERB	VERB	_	19	acl:relcl	_	_
+22	ne	ne	SCONJ	SCONJ	_	27	mark	_	_
+23	,	,	PUNCT	PUNCT	_	27	punct	_	_
+24	jiine	jiine	NOUN	NOUN	_	27	nsubj	_	_
+25	a	a	AUX	AUX	_	27	aux	_	_
+26	leen	leen	PRON	PRON	_	27	obj	_	_
+27	jàpp	jàpp	VERB	VERB	_	21	ccomp	_	_
+28	.	.	PUNCT	PUNCT	_	12	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: wo_wtb-ud-dev.conllu · this verb has L=1, R=4 (mean span = 4.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Mu jàngal ko it xam-xamu diineem niki jennal Yàlla ( Tawhiid ) , àttey Lislaam ak aw yoonam ( Fiq ) , séllal ak jaamu ngir Yàlla doŋŋ ( Tassawuuf ) , ba mu wattu leen na mu ware .
+1	Mu	Mu	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	jàngal	jàngal	VERB	VERB	_	0	root	_	highlight=red
+3	ko	ko	PRON	PRON	_	2	obj	_	highlight=green|span=1
+4	it	it	ADV	ADV	_	2	advmod	_	highlight=green|span=1
+5	xam-xamu	xam-xamu	NOUN	NOUN	_	2	iobj	_	highlight=green|span=2
+6	diineem	diineem	NOUN	NOUN	_	5	nmod	_	_
+7	niki	niki	ADP	ADP	_	8	case	_	_
+8	jennal	jennal	NOUN	NOUN	_	2	obl	_	highlight=green|span=17
+9	Yàlla	Yàlla	PROPN	PROPN	_	8	nmod	_	_
+10	(	(	PUNCT	PUNCT	_	11	punct	_	_
+11	Tawhiid	Tawhiid	PROPN	PROPN	_	8	appos	_	_
+12	)	)	PUNCT	PUNCT	_	11	punct	_	_
+13	,	,	PUNCT	PUNCT	_	14	punct	_	_
+14	àttey	àttey	NOUN	NOUN	_	8	conj	_	_
+15	Lislaam	Lislaam	PROPN	PROPN	_	14	compound	_	_
+16	ak	ak	CCONJ	CCONJ	_	18	cc	_	_
+17	aw	aw	DET	DET	_	18	det	_	_
+18	yoonam	yoonam	NOUN	NOUN	_	14	conj	_	_
+19	(	(	PUNCT	PUNCT	_	20	punct	_	_
+20	Fiq	Fiq	PROPN	PROPN	_	14	appos	_	_
+21	)	)	PUNCT	PUNCT	_	20	punct	_	_
+22	,	,	PUNCT	PUNCT	_	23	punct	_	_
+23	séllal	séllal	NOUN	NOUN	_	8	conj	_	_
+24	ak	ak	CCONJ	CCONJ	_	25	cc	_	_
+25	jaamu	jaamu	NOUN	NOUN	_	8	conj	_	_
+26	ngir	ngir	ADP	ADP	_	27	case	_	_
+27	Yàlla	Yàlla	PROPN	PROPN	_	25	nmod	_	_
+28	doŋŋ	doŋŋ	ADV	ADV	_	27	advmod	_	_
+29	(	(	PUNCT	PUNCT	_	30	punct	_	_
+30	Tassawuuf	Tassawuuf	PROPN	PROPN	_	27	appos	_	_
+31	)	)	PUNCT	PUNCT	_	30	punct	_	_
+32	,	,	PUNCT	PUNCT	_	35	punct	_	_
+33	ba	ba	SCONJ	SCONJ	_	35	mark	_	_
+34	mu	mu	PRON	PRON	_	35	nsubj	_	_
+35	wattu	wattu	VERB	VERB	_	2	conj	_	_
+36	leen	leen	PRON	PRON	_	35	obj	_	_
+37	na	na	ADV	ADV	_	39	advmod	_	_
+38	mu	mu	PRON	PRON	_	39	nsubj	_	_
+39	ware	ware	VERB	VERB	_	35	advcl	_	_
+40	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: wo_wtb-ud-train.conllu · this verb has L=5, R=0 (mean span = 3.20)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Rax-ci-dolli , pal moomu su ko 25 ci téeméeri nit yu nekk falee rekk , pal ga da mu di wéy .
+1	Rax-ci-dolli	Rax-ci-dolli	ADV	ADV	_	21	advmod	_	highlight=green|span=1
+2	,	,	PUNCT	PUNCT	_	21	punct	_	_
+3	pal	pal	NOUN	NOUN	_	21	dislocated	_	highlight=green|span=2
+4	moomu	moomu	DET	DET	_	3	det	_	_
+5	su	su	SCONJ	SCONJ	_	13	mark	_	_
+6	ko	ko	PRON	PRON	_	13	obj	_	_
+7	25	25	NOUN	NOUN	_	13	nsubj	_	_
+8	ci	ci	ADP	ADP	_	9	case	_	_
+9	téeméeri	téeméeri	NUM	NUM	_	10	nummod	_	_
+10	nit	nit	NOUN	NOUN	_	7	nmod	_	_
+11	yu	yu	PRON	PRON	_	12	nsubj	_	_
+12	nekk	nekk	VERB	VERB	_	10	acl:relcl	_	_
+13	falee	falee	VERB	VERB	_	21	advcl	_	highlight=green|span=10
+14	rekk	rekk	ADV	ADV	_	13	advmod	_	_
+15	,	,	PUNCT	PUNCT	_	21	punct	_	_
+16	pal	pal	NOUN	NOUN	_	21	dislocated	_	highlight=green|span=2
+17	ga	ga	DET	DET	_	16	det	_	_
+18	da	da	AUX	AUX	_	21	aux	_	_
+19	mu	mu	PRON	PRON	_	21	nsubj	_	highlight=green|span=1
+20	di	di	AUX	AUX	_	21	aux	_	_
+21	wéy	wéy	VERB	VERB	_	0	root	_	highlight=red
+22	.	.	PUNCT	PUNCT	_	21	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: wo_wtb-ud-train.conllu · this verb has L=3, R=2 (mean span = 2.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Séy bi mëneesu ko fas lu dul ñi nar a nekk way-dencante da ñu ci a ànd ànd bu wér , ci seen coobare .
+1	Séy	Séy	NOUN	NOUN	_	3	dislocated	_	_
+2	bi	bi	DET	DET	_	1	det	_	_
+3	mëneesu	mëneesu	VERB	VERB	_	0	root	_	_
+4	ko	ko	PRON	PRON	_	3	obj	_	_
+5	fas	fas	VERB	VERB	_	3	xcomp	_	_
+6	lu	lu	ADP	ADP	_	17	mark	_	_
+7	dul	dul	ADP	ADP	_	6	fixed	_	_
+8	ñi	ñi	PRON	PRON	_	17	dislocated	_	highlight=green|span=5
+9	nar	nar	VERB	VERB	_	8	acl:relcl	_	_
+10	a	a	PART	PART	_	11	mark	_	_
+11	nekk	nekk	VERB	VERB	_	9	xcomp	_	_
+12	way-dencante	way-dencante	NOUN	NOUN	_	11	obj	_	_
+13	da	da	AUX	AUX	_	17	aux	_	_
+14	ñu	ñu	PRON	PRON	_	17	nsubj	_	highlight=green|span=1
+15	ci	ci	ADP	ADP	_	17	obl	_	highlight=green|span=1
+16	a	a	AUX	AUX	_	17	aux	_	_
+17	ànd	ànd	VERB	VERB	_	3	advcl	_	highlight=red
+18	ànd	ànd	NOUN	NOUN	_	17	obj	_	highlight=green|span=3
+19	bu	bu	PRON	PRON	_	20	nsubj	_	_
+20	wér	wér	VERB	VERB	_	18	acl:relcl	_	_
+21	,	,	PUNCT	PUNCT	_	24	punct	_	_
+22	ci	ci	ADP	ADP	_	24	case	_	_
+23	seen	seen	DET	DET	_	24	det	_	_
+24	coobare	coobare	NOUN	NOUN	_	17	obl	_	highlight=green|span=3
+25	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: wo_wtb-ud-train.conllu · this verb has L=3, R=2 (mean span = 1.40)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Bis bi nag ñu séddale ko 24 waxtu .
+1	Bis	Bis	NOUN	NOUN	_	5	dislocated	_	highlight=green|span=2
+2	bi	bi	DET	DET	_	1	det	_	_
+3	nag	nag	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+4	ñu	ñu	PRON	PRON	_	5	nsubj	_	highlight=green|span=1
+5	séddale	séddale	VERB	VERB	_	0	root	_	highlight=red
+6	ko	ko	PRON	PRON	_	5	obj	_	highlight=green|span=1
+7	24	24	NUM	NUM	_	8	nummod	_	_
+8	waxtu	waxtu	NOUN	NOUN	_	5	iobj	_	highlight=green|span=2
+9	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: wo_wtb-ud-dev.conllu · this verb has L=3, R=2 (mean span = 5.60)</div>
 <reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Wax dëgg kii ak lu mu jàmbaare-jàmbaare matul royuwaay ñeel sunu soxnay jullit yi ngir ab pas-pas mu a war a jëkk ci ag roy , te wuute nañu ci .
 1	Wax	Wax	VERB	VERB	_	8	advmod	_	highlight=green|span=2
 2	dëgg	dëgg	NOUN	NOUN	_	1	fixed	_	_
@@ -76,242 +669,44 @@ table.mal-table a:hover { text-decoration: underline; }
 31	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 3 · source: wo_wtb-ud-train.conllu · this verb has L=2, R=3 (mean span = 4.40)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Buur-ba boobu mu a tase ci xare ak doomu Decce Fu Njogu , di Amari Ngone Sobel FAAL , ca benn dëkk bu ñu naan DANKI .
-1	Buur-ba	Buur-ba	PROPN	PROPN	_	5	dislocated	_	highlight=green|span=2
-2	boobu	boobu	DET	DET	_	1	det	_	_
-3	mu	mu	PRON	PRON	_	5	nsubj	_	highlight=green|span=1
-4	a	a	AUX	AUX	_	5	aux	_	_
-5	tase	tase	VERB	VERB	_	0	root	_	highlight=red
-6	ci	ci	ADP	ADP	_	7	case	_	_
-7	xare	xare	NOUN	NOUN	_	5	obl	_	highlight=green|span=2
-8	ak	ak	ADP	ADP	_	9	case	_	_
-9	doomu	doomu	NOUN	NOUN	_	5	obl	_	highlight=green|span=10
-10	Decce	Decce	PROPN	PROPN	_	9	nmod	_	_
-11	Fu	Fu	PROPN	PROPN	_	10	flat	_	_
-12	Njogu	Njogu	PROPN	PROPN	_	10	flat	_	_
-13	,	,	PUNCT	PUNCT	_	15	punct	_	_
-14	di	di	AUX	AUX	_	15	cop	_	_
-15	Amari	Amari	PROPN	PROPN	_	9	appos	_	_
-16	Ngone	Ngone	PROPN	PROPN	_	15	flat	_	_
-17	Sobel	Sobel	PROPN	PROPN	_	15	flat	_	_
-18	FAAL	FAAL	PROPN	PROPN	_	15	flat	_	_
-19	,	,	PUNCT	PUNCT	_	5	punct	_	_
-20	ca	ca	ADP	ADP	_	22	case	_	_
-21	benn	benn	NUM	NUM	_	22	nummod	_	_
-22	dëkk	dëkk	NOUN	NOUN	_	5	obl	_	highlight=green|span=7
-23	bu	bu	PRON	PRON	_	25	obj	_	_
-24	ñu	ñu	PRON	PRON	_	25	nsubj	_	_
-25	naan	naan	VERB	VERB	_	22	acl:relcl	_	_
-26	DANKI	DANKI	PROPN	PROPN	_	25	iobj	_	_
-27	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 4 · source: wo_wtb-ud-dev.conllu · this verb has L=3, R=2 (mean span = 1.80)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Waaye ginnaaw diine yooyu nag nu a ko tànnal sunu bopp ginnaaw bi , nanu ci farlu te roye ci ñi ci nekkoon waliif keneen .
-1	Waaye	Waaye	CCONJ	CCONJ	_	17	cc	_	_
-2	ginnaaw	ginnaaw	SCONJ	SCONJ	_	9	mark	_	_
-3	diine	diine	NOUN	NOUN	_	9	dislocated	_	highlight=green|span=3
-4	yooyu	yooyu	DET	DET	_	3	det	_	_
-5	nag	nag	ADV	ADV	_	3	advmod	_	_
-6	nu	nu	PRON	PRON	_	9	nsubj	_	highlight=green|span=1
-7	a	a	AUX	AUX	_	9	aux	_	_
-8	ko	ko	PRON	PRON	_	9	obj	_	highlight=green|span=1
-9	tànnal	tànnal	VERB	VERB	_	17	advcl	_	highlight=red
-10	sunu	sunu	DET	DET	_	11	det	_	_
-11	bopp	bopp	NOUN	NOUN	_	9	iobj:appl	_	highlight=green|span=2
-12	ginnaaw	ginnaaw	NOUN	NOUN	_	9	obl	_	highlight=green|span=2
-13	bi	bi	DET	DET	_	12	det	_	_
-14	,	,	PUNCT	PUNCT	_	17	punct	_	_
-15	nanu	nanu	AUX	AUX	_	17	aux	_	_
-16	ci	ci	ADP	ADP	_	17	mark	_	_
-17	farlu	farlu	VERB	VERB	_	0	root	_	_
-18	te	te	CCONJ	CCONJ	_	19	cc	_	_
-19	roye	roye	VERB	VERB	_	17	conj	_	_
-20	ci	ci	ADP	ADP	_	21	case	_	_
-21	ñi	ñi	PRON	PRON	_	19	obl	_	_
-22	ci	ci	ADP	ADP	_	23	obl	_	_
-23	nekkoon	nekkoon	VERB	VERB	_	21	acl:relcl	_	_
-24	waliif	waliif	ADP	ADP	_	25	case	_	_
-25	keneen	keneen	PRON	PRON	_	23	obl	_	_
-26	.	.	PUNCT	PUNCT	_	17	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 5 · source: wo_wtb-ud-train.conllu · this verb has L=3, R=2 (mean span = 1.60)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ginnaaw bi moom Amadu Sayxu nanguwaat ko ci 1870 , yor ko ba ci atum 1875 .
-1	Ginnaaw	Ginnaaw	NOUN	NOUN	_	6	obl	_	highlight=green|span=2
-2	bi	bi	DET	DET	_	1	det	_	_
-3	moom	moom	PRON	PRON	_	6	dislocated	_	highlight=green|span=1
-4	Amadu	Amadu	PROPN	PROPN	_	6	nsubj	_	highlight=green|span=2
-5	Sayxu	Sayxu	PROPN	PROPN	_	4	flat	_	_
-6	nanguwaat	nanguwaat	VERB	VERB	_	0	root	_	highlight=red
-7	ko	ko	PRON	PRON	_	6	obj	_	highlight=green|span=1
-8	ci	ci	ADP	ADP	_	9	case	_	_
-9	1870	1870	NUM	NUM	_	6	obl	_	highlight=green|span=2
-10	,	,	PUNCT	PUNCT	_	11	punct	_	_
-11	yor	yor	VERB	VERB	_	6	conj	_	_
-12	ko	ko	PRON	PRON	_	11	obj	_	_
-13	ba	ba	ADP	ADP	_	15	case	_	_
-14	ci	ci	ADP	ADP	_	15	case	_	_
-15	atum	atum	NOUN	NOUN	_	11	obl	_	_
-16	1875	1875	NUM	NUM	_	15	nummod	_	_
-17	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 6 · source: wo_wtb-ud-train.conllu · this verb has L=4, R=1 (mean span = 4.40)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Rawatina ci réewi Afrik yi nga xam ne daanaka ya ca ëpp ba ñu tàbbee ci &quot; kolonisation &quot; ba téy jii ñu moomee seen bopp , da ñu xeeb seeni làkk yi ñu nàmp .
-1	Rawatina	Rawatina	CCONJ	CCONJ	_	3	cc	_	_
-2	ci	ci	ADP	ADP	_	3	case	_	_
-3	réewi	réewi	NOUN	NOUN	_	0	root	_	_
-4	Afrik	Afrik	PROPN	PROPN	_	3	nmod	_	_
-5	yi	yi	PRON	PRON	_	7	obj	_	_
-6	nga	nga	PRON	PRON	_	7	nsubj	_	_
-7	xam	xam	VERB	VERB	_	3	acl:relcl	_	_
-8	ne	ne	SCONJ	SCONJ	_	30	mark	_	_
-9	daanaka	daanaka	ADV	ADV	_	30	advmod	_	highlight=green|span=1
-10	ya	ya	PRON	PRON	_	30	dislocated	_	highlight=green|span=3
-11	ca	ca	ADP	ADP	_	12	obl	_	_
-12	ëpp	ëpp	VERB	VERB	_	10	acl:relcl	_	_
-13	ba	ba	SCONJ	SCONJ	_	15	mark	_	_
-14	ñu	ñu	PRON	PRON	_	15	nsubj	_	_
-15	tàbbee	tàbbee	VERB	VERB	_	30	advcl	_	highlight=green|span=12
-16	ci	ci	ADP	ADP	_	18	case	_	_
-17	&quot;	&quot;	PUNCT	PUNCT	_	18	punct	_	_
-18	kolonisation	kolonisation	NOUN	NOUN	_	15	obl	_	_
-19	&quot;	&quot;	PUNCT	PUNCT	_	18	punct	_	_
-20	ba	ba	ADP	ADP	_	21	case	_	_
-21	téy	téy	NOUN	NOUN	_	15	obl	_	_
-22	jii	jii	PRON	PRON	_	24	obl	_	_
-23	ñu	ñu	PRON	PRON	_	24	nsubj	_	_
-24	moomee	moomee	VERB	VERB	_	21	acl:relcl	_	_
-25	seen	seen	DET	DET	_	26	det	_	_
-26	bopp	bopp	NOUN	NOUN	_	24	obj	_	_
-27	,	,	PUNCT	PUNCT	_	30	punct	_	_
-28	da	da	AUX	AUX	_	30	aux	_	_
-29	ñu	ñu	PRON	PRON	_	30	nsubj	_	highlight=green|span=1
-30	xeeb	xeeb	VERB	VERB	_	7	ccomp	_	highlight=red
-31	seeni	seeni	DET	DET	_	32	det	_	_
-32	làkk	làkk	NOUN	NOUN	_	30	obj	_	highlight=green|span=5
-33	yi	yi	PRON	PRON	_	35	obj	_	_
-34	ñu	ñu	PRON	PRON	_	35	nsubj	_	_
-35	nàmp	nàmp	VERB	VERB	_	32	acl:relcl	_	_
-36	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 7 · source: wo_wtb-ud-dev.conllu · this verb has L=1, R=4 (mean span = 2.20)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Bari na ay nettali yu ko di saxal sax , waaye nu tànn ci rekk bu Sëriñ Abdu Lahad Mbàkke ngir ag dëggoom .
-1	Bari	Bari	VERB	VERB	_	0	root	_	_
-2	na	na	AUX	AUX	_	1	aux	_	_
-3	ay	ay	DET	DET	_	4	det	_	_
-4	nettali	nettali	NOUN	NOUN	_	1	obj	_	_
-5	yu	yu	PRON	PRON	_	8	nsubj	_	_
-6	ko	ko	PRON	PRON	_	8	obj	_	_
-7	di	di	AUX	AUX	_	8	aux	_	_
-8	saxal	saxal	VERB	VERB	_	4	acl:relcl	_	_
-9	sax	sax	ADV	ADV	_	8	advmod	_	_
+<div class="example-meta">Example 19 · source: wo_wtb-ud-dev.conllu · this verb has L=3, R=2 (mean span = 4.60)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Wante su nga leen nee &quot; CAP 21 &quot; , walla nga ne leen &quot; Coalition pour l' Aternative &quot; ñu bari da mu di mel ci ñoom ni ay waxi picc !
+1	Wante	Wante	CCONJ	CCONJ	_	26	cc	_	_
+2	su	su	SCONJ	SCONJ	_	5	mark	_	_
+3	nga	nga	PRON	PRON	_	5	nsubj	_	_
+4	leen	leen	PRON	PRON	_	5	obj	_	_
+5	nee	nee	VERB	VERB	_	26	advcl	_	highlight=green|span=14
+6	&quot;	&quot;	PUNCT	PUNCT	_	7	punct	_	_
+7	CAP	CAP	PROPN	PROPN	_	5	iobj	_	_
+8	21	21	NUM	NUM	_	7	nummod	_	_
+9	&quot;	&quot;	PUNCT	PUNCT	_	7	punct	_	_
 10	,	,	PUNCT	PUNCT	_	13	punct	_	_
-11	waaye	waaye	CCONJ	CCONJ	_	13	cc	_	_
-12	nu	nu	PRON	PRON	_	13	nsubj	_	highlight=green|span=1
-13	tànn	tànn	VERB	VERB	_	1	conj	_	highlight=red
-14	ci	ci	ADP	ADP	_	13	obl	_	highlight=green|span=1
-15	rekk	rekk	ADV	ADV	_	13	advmod	_	highlight=green|span=1
-16	bu	bu	ADP	ADP	_	17	case	_	_
-17	Sëriñ	Sëriñ	PROPN	PROPN	_	13	obj	_	highlight=green|span=5
-18	Abdu	Abdu	PROPN	PROPN	_	17	flat	_	_
-19	Lahad	Lahad	PROPN	PROPN	_	17	flat	_	_
-20	Mbàkke	Mbàkke	PROPN	PROPN	_	17	flat	_	_
-21	ngir	ngir	ADP	ADP	_	23	case	_	_
-22	ag	ag	DET	DET	_	23	det	_	_
-23	dëggoom	dëggoom	NOUN	NOUN	_	13	obl	_	highlight=green|span=3
-24	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+11	walla	walla	CCONJ	CCONJ	_	13	cc	_	_
+12	nga	nga	PRON	PRON	_	13	nsubj	_	_
+13	ne	ne	VERB	VERB	_	5	conj	_	_
+14	leen	leen	PRON	PRON	_	13	obj	_	_
+15	&quot;	&quot;	PUNCT	PUNCT	_	16	punct	_	_
+16	Coalition	Coalition	NOUN	NOUN	_	13	iobj	_	_
+17	pour	pour	ADP	ADP	_	19	case	_	_
+18	l'	l'	DET	DET	_	19	det	_	_
+19	Aternative	Aternative	NOUN	NOUN	_	16	nmod	_	_
+20	&quot;	&quot;	PUNCT	PUNCT	_	16	punct	_	_
+21	ñu	ñu	PRON	PRON	_	26	dislocated	_	highlight=green|span=2
+22	bari	bari	VERB	VERB	_	21	acl:relcl	_	_
+23	da	da	AUX	AUX	_	26	aux	_	_
+24	mu	mu	PRON	PRON	_	26	nsubj	_	highlight=green|span=1
+25	di	di	AUX	AUX	_	26	aux	_	_
+26	mel	mel	VERB	VERB	_	0	root	_	highlight=red
+27	ci	ci	ADP	ADP	_	28	case	_	_
+28	ñoom	ñoom	PRON	PRON	_	26	obl	_	highlight=green|span=2
+29	ni	ni	ADP	ADP	_	31	case	_	_
+30	ay	ay	DET	DET	_	31	det	_	_
+31	waxi	waxi	NOUN	NOUN	_	26	obl	_	highlight=green|span=4
+32	picc	picc	NOUN	NOUN	_	31	nmod	_	_
+33	!	!	PUNCT	PUNCT	_	26	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 8 · source: wo_wtb-ud-train.conllu · this verb has L=2, R=3 (mean span = 2.60)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Yàlla ju ci mel ne Amoon Ra ( yàllay jant ji ) benn la ci ak Isis ( yàllay weer wi ) .
-1	Yàlla	Yàlla	PROPN	PROPN	_	13	nsubj	_	_
-2	ju	ju	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
-3	ci	ci	ADP	ADP	_	4	obl	_	highlight=green|span=1
-4	mel	mel	VERB	VERB	_	1	acl:relcl	_	highlight=red
-5	ne	ne	ADP	ADP	_	6	case	_	_
-6	Amoon	Amoon	PROPN	PROPN	_	4	obl	_	highlight=green|span=3
-7	Ra	Ra	PROPN	PROPN	_	6	flat	_	_
-8	(	(	PUNCT	PUNCT	_	9	punct	_	_
-9	yàllay	yàllay	NOUN	NOUN	_	6	appos	_	highlight=green|span=3
-10	jant	jant	NOUN	NOUN	_	9	nmod	_	_
-11	ji	ji	DET	DET	_	10	det	_	_
-12	)	)	PUNCT	PUNCT	_	9	punct	_	_
-13	benn	benn	NUM	NUM	_	0	root	_	_
-14	la	la	AUX	AUX	_	13	cop	_	_
-15	ci	ci	ADP	ADP	_	13	obl	_	_
-16	ak	ak	CCONJ	CCONJ	_	17	cc	_	_
-17	Isis	Isis	PROPN	PROPN	_	6	conj	_	highlight=green|span=5
-18	(	(	PUNCT	PUNCT	_	19	punct	_	_
-19	yàllay	yàllay	NOUN	NOUN	_	17	appos	_	_
-20	weer	weer	NOUN	NOUN	_	19	nmod	_	_
-21	wi	wi	DET	DET	_	20	det	_	_
-22	)	)	PUNCT	PUNCT	_	19	punct	_	_
-23	.	.	PUNCT	PUNCT	_	13	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 9 · source: wo_wtb-ud-train.conllu · this verb has L=5, R=0 (mean span = 3.20)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Rax-ci-dolli , pal moomu su ko 25 ci téeméeri nit yu nekk falee rekk , pal ga da mu di wéy .
-1	Rax-ci-dolli	Rax-ci-dolli	ADV	ADV	_	21	advmod	_	highlight=green|span=1
-2	,	,	PUNCT	PUNCT	_	21	punct	_	_
-3	pal	pal	NOUN	NOUN	_	21	dislocated	_	highlight=green|span=2
-4	moomu	moomu	DET	DET	_	3	det	_	_
-5	su	su	SCONJ	SCONJ	_	13	mark	_	_
-6	ko	ko	PRON	PRON	_	13	obj	_	_
-7	25	25	NOUN	NOUN	_	13	nsubj	_	_
-8	ci	ci	ADP	ADP	_	9	case	_	_
-9	téeméeri	téeméeri	NUM	NUM	_	10	nummod	_	_
-10	nit	nit	NOUN	NOUN	_	7	nmod	_	_
-11	yu	yu	PRON	PRON	_	12	nsubj	_	_
-12	nekk	nekk	VERB	VERB	_	10	acl:relcl	_	_
-13	falee	falee	VERB	VERB	_	21	advcl	_	highlight=green|span=10
-14	rekk	rekk	ADV	ADV	_	13	advmod	_	_
-15	,	,	PUNCT	PUNCT	_	21	punct	_	_
-16	pal	pal	NOUN	NOUN	_	21	dislocated	_	highlight=green|span=2
-17	ga	ga	DET	DET	_	16	det	_	_
-18	da	da	AUX	AUX	_	21	aux	_	_
-19	mu	mu	PRON	PRON	_	21	nsubj	_	highlight=green|span=1
-20	di	di	AUX	AUX	_	21	aux	_	_
-21	wéy	wéy	VERB	VERB	_	0	root	_	highlight=red
-22	.	.	PUNCT	PUNCT	_	21	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 10 · source: wo_wtb-ud-dev.conllu · this verb has L=3, R=2 (mean span = 4.40)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ci lu gën a leer , ca Isipt gu yàgg ga la nit ku ñuul yóbboo ag nite ( l' humanité ) ba àggale ko ci xam-xam .
-1	Ci	Ci	ADP	ADP	_	2	case	_	_
-2	lu	lu	PRON	PRON	_	16	obl	_	highlight=green|span=5
-3	gën	gën	VERB	VERB	_	2	acl:relcl	_	_
-4	a	a	PART	PART	_	5	mark	_	_
-5	leer	leer	VERB	VERB	_	3	xcomp	_	_
-6	,	,	PUNCT	PUNCT	_	16	punct	_	_
-7	ca	ca	ADP	ADP	_	8	case	_	_
-8	Isipt	Isipt	PROPN	PROPN	_	16	obl:appl	_	highlight=green|span=5
-9	gu	gu	PRON	PRON	_	10	nsubj	_	_
-10	yàgg	yàgg	VERB	VERB	_	8	acl:relcl	_	_
-11	ga	ga	DET	DET	_	8	det	_	_
-12	la	la	AUX	AUX	_	16	aux	_	_
-13	nit	nit	NOUN	NOUN	_	16	nsubj	_	highlight=green|span=3
-14	ku	ku	PRON	PRON	_	15	nsubj	_	_
-15	ñuul	ñuul	VERB	VERB	_	13	acl:relcl	_	_
-16	yóbboo	yóbboo	VERB	VERB	_	0	root	_	highlight=red
-17	ag	ag	DET	DET	_	18	det	_	_
-18	nite	nite	NOUN	NOUN	_	16	obj	_	highlight=green|span=4
-19	(	(	PUNCT	PUNCT	_	21	punct	_	_
-20	l'	l'	DET	DET	_	21	det	_	_
-21	humanité	humanité	NOUN	NOUN	_	18	appos	_	_
-22	)	)	PUNCT	PUNCT	_	21	punct	_	_
-23	ba	ba	ADP	ADP	_	24	mark	_	_
-24	àggale	àggale	VERB	VERB	_	16	advcl	_	highlight=green|span=5
-25	ko	ko	PRON	PRON	_	24	obj	_	_
-26	ci	ci	ADP	ADP	_	27	case	_	_
-27	xam-xam	xam-xam	NOUN	NOUN	_	24	obl	_	_
-28	.	.	PUNCT	PUNCT	_	16	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 11 · source: wo_wtb-ud-test.conllu · this verb has L=4, R=1 (mean span = 9.20)</div>
+<div class="example-meta">Example 20 · source: wo_wtb-ud-test.conllu · this verb has L=4, R=1 (mean span = 9.20)</div>
 <reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Bu tàmbalig jamono tolloo ak tàmbalig àdduna bi ni ko layal wu féex gi saxale , kon li sabab àdduna bi da mu war a nekk ag nekkte gu di jëfe ci tolluwaayu jamono bu temb ci anam gu mat , ba noppi jiitu fi tooluwaayu jamono bu àdduna bi .
 1	Bu	Bu	ADP	ADP	_	4	mark	_	_
 2	tàmbalig	tàmbalig	NOUN	NOUN	_	4	nsubj	_	_
@@ -364,294 +759,5 @@ table.mal-table a:hover { text-decoration: underline; }
 49	àdduna	àdduna	NOUN	NOUN	_	46	nmod	_	_
 50	bi	bi	DET	DET	_	49	det	_	_
 51	.	.	PUNCT	PUNCT	_	24	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 12 · source: wo_wtb-ud-dev.conllu · this verb has L=3, R=2 (mean span = 4.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Li am daal , ay waxtoom ci jàng Alxuraan ak tari ko la dëkke woon mbaa julli ci Yonent bi , ngir ndigalul Yàlla la .
-1	Li	Li	PRON	PRON	_	14	dislocated	_	highlight=green|span=3
-2	am	am	VERB	VERB	_	1	acl:relcl	_	_
-3	daal	daal	ADV	ADV	_	2	advmod	_	_
-4	,	,	PUNCT	PUNCT	_	6	punct	_	_
-5	ay	ay	DET	DET	_	6	det	_	_
-6	waxtoom	waxtoom	NOUN	NOUN	_	14	dislocated	_	highlight=green|span=2
-7	ci	ci	ADP	ADP	_	8	mark	_	_
-8	jàng	jàng	VERB	VERB	_	14	ccomp	_	highlight=green|span=6
-9	Alxuraan	Alxuraan	PROPN	PROPN	_	8	obj	_	_
-10	ak	ak	CCONJ	CCONJ	_	11	cc	_	_
-11	tari	tari	VERB	VERB	_	8	conj	_	_
-12	ko	ko	PRON	PRON	_	11	obj	_	_
-13	la	la	AUX	AUX	_	14	aux	_	_
-14	dëkke	dëkke	VERB	VERB	_	0	root	_	highlight=red
-15	woon	woon	AUX	AUX	_	14	aux	_	_
-16	mbaa	mbaa	CCONJ	CCONJ	_	17	cc	_	_
-17	julli	julli	VERB	VERB	_	8	conj	_	highlight=green|span=5
-18	ci	ci	ADP	ADP	_	19	case	_	_
-19	Yonent	Yonent	PROPN	PROPN	_	17	obl	_	_
-20	bi	bi	DET	DET	_	19	det	_	_
-21	,	,	PUNCT	PUNCT	_	23	punct	_	_
-22	ngir	ngir	ADP	ADP	_	23	mark	_	_
-23	ndigalul	ndigalul	NOUN	NOUN	_	14	advcl	_	highlight=green|span=4
-24	Yàlla	Yàlla	PROPN	PROPN	_	23	nmod	_	_
-25	la	la	AUX	AUX	_	23	cop	_	_
-26	.	.	PUNCT	PUNCT	_	14	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 13 · source: wo_wtb-ud-test.conllu · this verb has L=3, R=2 (mean span = 4.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ci seen tuur yi , &quot; ndëpp &quot; la nit ñi gën a xam , ngiir faj febaru ñooñu ñu xam ne , jiine a leen jàpp .
-1	Ci	Ci	ADP	ADP	_	3	case	_	_
-2	seen	seen	DET	DET	_	3	det	_	_
-3	tuur	tuur	NOUN	NOUN	_	12	obl	_	highlight=green|span=4
-4	yi	yi	DET	DET	_	3	det	_	_
-5	,	,	PUNCT	PUNCT	_	12	punct	_	_
-6	&quot;	&quot;	PUNCT	PUNCT	_	7	punct	_	_
-7	ndëpp	ndëpp	NOUN	NOUN	_	12	obj	_	highlight=green|span=1
-8	&quot;	&quot;	PUNCT	PUNCT	_	7	punct	_	_
-9	la	la	AUX	AUX	_	12	aux	_	_
-10	nit	nit	NOUN	NOUN	_	12	nsubj	_	highlight=green|span=2
-11	ñi	ñi	DET	DET	_	10	det	_	_
-12	gën	gën	VERB	VERB	_	0	root	_	highlight=red
-13	a	a	PART	PART	_	14	mark	_	_
-14	xam	xam	VERB	VERB	_	12	xcomp	_	highlight=green|span=2
-15	,	,	PUNCT	PUNCT	_	17	punct	_	_
-16	ngiir	ngiir	ADP	ADP	_	17	mark	_	_
-17	faj	faj	VERB	VERB	_	12	advcl	_	highlight=green|span=11
-18	febaru	febaru	NOUN	NOUN	_	17	obj	_	_
-19	ñooñu	ñooñu	PRON	PRON	_	18	nmod	_	_
-20	ñu	ñu	PRON	PRON	_	21	nsubj	_	_
-21	xam	xam	VERB	VERB	_	19	acl:relcl	_	_
-22	ne	ne	SCONJ	SCONJ	_	27	mark	_	_
-23	,	,	PUNCT	PUNCT	_	27	punct	_	_
-24	jiine	jiine	NOUN	NOUN	_	27	nsubj	_	_
-25	a	a	AUX	AUX	_	27	aux	_	_
-26	leen	leen	PRON	PRON	_	27	obj	_	_
-27	jàpp	jàpp	VERB	VERB	_	21	ccomp	_	_
-28	.	.	PUNCT	PUNCT	_	12	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 14 · source: wo_wtb-ud-train.conllu · this verb has L=5, R=0 (mean span = 4.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Su ñu wesaare woon ngëneel yi nekk ci nebedaay ba ñépp jot ci , kon tey febaru xale yu bare dootu fi amati .
-1	Su	Su	SCONJ	SCONJ	_	3	mark	_	_
-2	ñu	ñu	PRON	PRON	_	3	nsubj	_	_
-3	wesaare	wesaare	VERB	VERB	_	23	advcl	_	highlight=green|span=13
-4	woon	woon	AUX	AUX	_	3	aux	_	_
-5	ngëneel	ngëneel	NOUN	NOUN	_	3	obj	_	_
-6	yi	yi	PRON	PRON	_	7	nsubj	_	_
-7	nekk	nekk	VERB	VERB	_	5	acl:relcl	_	_
-8	ci	ci	ADP	ADP	_	9	case	_	_
-9	nebedaay	nebedaay	NOUN	NOUN	_	7	obl	_	_
-10	ba	ba	SCONJ	SCONJ	_	12	mark	_	_
-11	ñépp	ñépp	PRON	PRON	_	12	nsubj	_	_
-12	jot	jot	VERB	VERB	_	3	advcl	_	_
-13	ci	ci	ADP	ADP	_	12	obl	_	_
-14	,	,	PUNCT	PUNCT	_	23	punct	_	_
-15	kon	kon	ADV	ADV	_	23	advmod	_	highlight=green|span=1
-16	tey	tey	ADV	ADV	_	23	advmod	_	highlight=green|span=1
-17	febaru	febaru	NOUN	NOUN	_	23	nsubj	_	highlight=green|span=4
-18	xale	xale	NOUN	NOUN	_	17	nmod	_	_
-19	yu	yu	PRON	PRON	_	20	nsubj	_	_
-20	bare	bare	VERB	VERB	_	17	acl:relcl	_	_
-21	dootu	dootu	AUX	AUX	_	23	aux	_	_
-22	fi	fi	ADV	ADV	_	23	advmod	_	highlight=green|span=1
-23	amati	amati	VERB	VERB	_	0	root	_	highlight=red
-24	.	.	PUNCT	PUNCT	_	23	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 15 · source: wo_wtb-ud-dev.conllu · this verb has L=2, R=3 (mean span = 3.40)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Mu ni ma : Xanaa nga yobbu ko Saalum ngir man ci a am dara , - lu man a jëm ci kër gi .
-1	Mu	Mu	PRON	PRON	_	2	nsubj	_	_
-2	ni	ni	VERB	VERB	_	0	root	_	_
-3	ma	ma	PRON	PRON	_	2	obj	_	_
-4	:	:	PUNCT	PUNCT	_	7	punct	_	_
-5	Xanaa	Xanaa	ADV	ADV	_	7	advmod	_	highlight=green|span=1
-6	nga	nga	PRON	PRON	_	7	nsubj	_	highlight=green|span=1
-7	yobbu	yobbu	VERB	VERB	_	2	parataxis	_	highlight=red
-8	ko	ko	PRON	PRON	_	7	obj	_	highlight=green|span=1
-9	Saalum	Saalum	PROPN	PROPN	_	7	iobj	_	highlight=green|span=1
-10	ngir	ngir	ADP	ADP	_	11	mark	_	_
-11	man	man	VERB	VERB	_	7	xcomp	_	highlight=green|span=13
-12	ci	ci	ADP	ADP	_	11	obl	_	_
-13	a	a	PART	PART	_	14	mark	_	_
-14	am	am	VERB	VERB	_	11	xcomp	_	_
-15	dara	dara	NOUN	NOUN	_	14	obj	_	_
-16	,	,	PUNCT	PUNCT	_	19	punct	_	_
-17	-	-	PUNCT	PUNCT	_	19	punct	_	_
-18	lu	lu	PRON	PRON	_	19	nsubj	_	_
-19	man	man	VERB	VERB	_	15	acl:relcl	_	_
-20	a	a	PART	PART	_	21	mark	_	_
-21	jëm	jëm	VERB	VERB	_	19	xcomp	_	_
-22	ci	ci	ADP	ADP	_	23	case	_	_
-23	kër	kër	NOUN	NOUN	_	21	obl	_	_
-24	gi	gi	DET	DET	_	23	det	_	_
-25	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 16 · source: wo_wtb-ud-train.conllu · this verb has L=4, R=1 (mean span = 6.80)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ndax kat Otris moom da mu tàmbli woon di genne ay saxal ak i ndigal yu di kontar tas-xibaar gu gore , te wéeroodi fenn , te di kontar mboolooy Almaañ yi daan sàkku ag bennoo te daan ko woote .
-1	Ndax	Ndax	CCONJ	CCONJ	_	7	cc	_	_
-2	kat	kat	ADV	ADV	_	7	advmod	_	highlight=green|span=1
-3	Otris	Otris	PROPN	PROPN	_	7	dislocated	_	highlight=green|span=1
-4	moom	moom	PRON	PRON	_	7	dislocated	_	highlight=green|span=1
-5	da	da	AUX	AUX	_	7	aux	_	_
-6	mu	mu	PRON	PRON	_	7	nsubj	_	highlight=green|span=1
-7	tàmbli	tàmbli	VERB	VERB	_	0	root	_	highlight=red
-8	woon	woon	AUX	AUX	_	7	aux	_	_
-9	di	di	AUX	AUX	_	10	aux	_	_
-10	genne	genne	VERB	VERB	_	7	xcomp	_	highlight=green|span=30
-11	ay	ay	DET	DET	_	12	det	_	_
-12	saxal	saxal	NOUN	NOUN	_	10	obj:caus	_	_
-13	ak	ak	CCONJ	CCONJ	_	15	cc	_	_
-14	i	i	DET	DET	_	15	det	_	_
-15	ndigal	ndigal	NOUN	NOUN	_	12	conj	_	_
-16	yu	yu	PRON	PRON	_	18	nsubj	_	_
-17	di	di	AUX	AUX	_	18	aux	_	_
-18	kontar	kontar	VERB	VERB	_	12	acl:relcl	_	_
-19	tas-xibaar	tas-xibaar	NOUN	NOUN	_	18	obj	_	_
-20	gu	gu	PRON	PRON	_	21	nsubj	_	_
-21	gore	gore	VERB	VERB	_	19	acl:relcl	_	_
-22	,	,	PUNCT	PUNCT	_	24	punct	_	_
-23	te	te	CCONJ	CCONJ	_	24	cc	_	_
-24	wéeroodi	wéeroodi	VERB	VERB	_	18	conj	_	_
-25	fenn	fenn	ADV	ADV	_	24	advmod	_	_
-26	,	,	PUNCT	PUNCT	_	29	punct	_	_
-27	te	te	CCONJ	CCONJ	_	29	cc	_	_
-28	di	di	AUX	AUX	_	29	aux	_	_
-29	kontar	kontar	VERB	VERB	_	18	conj	_	_
-30	mboolooy	mboolooy	NOUN	NOUN	_	29	obj	_	_
-31	Almaañ	Almaañ	PROPN	PROPN	_	30	nmod	_	_
-32	yi	yi	PRON	PRON	_	34	nsubj	_	_
-33	daan	daan	AUX	AUX	_	34	aux	_	_
-34	sàkku	sàkku	VERB	VERB	_	30	acl:relcl	_	_
-35	ag	ag	DET	DET	_	36	det	_	_
-36	bennoo	bennoo	NOUN	NOUN	_	34	obj	_	_
-37	te	te	CCONJ	CCONJ	_	40	cc	_	_
-38	daan	daan	AUX	AUX	_	40	aux	_	_
-39	ko	ko	PRON	PRON	_	40	obj	_	_
-40	woote	woote	VERB	VERB	_	34	conj	_	_
-41	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 17 · source: wo_wtb-ud-test.conllu · this verb has L=3, R=2 (mean span = 6.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Lii nga xam ne ci ñaar fukkeelu xarnu rekk la ko xam-xamu jëmm bu jamonoo bi wuññi , Alquraan moom saxaloon na ko booba ak léegi tollu na ci fukk ak ñeenti xarnu .
-1	Lii	Lii	PRON	PRON	_	21	dislocated	_	highlight=green|span=17
-2	nga	nga	PRON	PRON	_	3	nsubj	_	_
-3	xam	xam	VERB	VERB	_	1	acl:relcl	_	_
-4	ne	ne	SCONJ	SCONJ	_	17	mark	_	_
-5	ci	ci	ADP	ADP	_	8	case	_	_
-6	ñaar	ñaar	NUM	NUM	_	7	compound	_	_
-7	fukkeelu	fukkeelu	NUM	NUM	_	8	nummod	_	_
-8	xarnu	xarnu	NOUN	NOUN	_	17	obl	_	_
-9	rekk	rekk	ADV	ADV	_	8	advmod	_	_
-10	la	la	AUX	AUX	_	17	aux	_	_
-11	ko	ko	PRON	PRON	_	17	obj	_	_
-12	xam-xamu	xam-xamu	NOUN	NOUN	_	17	nsubj	_	_
-13	jëmm	jëmm	NOUN	NOUN	_	12	nmod	_	_
-14	bu	bu	ADP	ADP	_	15	case	_	_
-15	jamonoo	jamonoo	NOUN	NOUN	_	12	nmod	_	_
-16	bi	bi	DET	DET	_	15	det	_	_
-17	wuññi	wuññi	VERB	VERB	_	3	ccomp	_	_
-18	,	,	PUNCT	PUNCT	_	21	punct	_	_
-19	Alquraan	Alquraan	PROPN	PROPN	_	21	dislocated	_	highlight=green|span=1
-20	moom	moom	PRON	PRON	_	21	nsubj	_	highlight=green|span=1
-21	saxaloon	saxaloon	VERB	VERB	_	0	root	_	highlight=red
-22	na	na	AUX	AUX	_	21	aux	_	_
-23	ko	ko	PRON	PRON	_	21	obj	_	highlight=green|span=1
-24	booba	booba	ADV	ADV	_	27	advmod	_	_
-25	ak	ak	CCONJ	CCONJ	_	26	cc	_	_
-26	léegi	léegi	ADV	ADV	_	24	conj	_	_
-27	tollu	tollu	VERB	VERB	_	21	advcl	_	highlight=green|span=10
-28	na	na	AUX	AUX	_	27	aux	_	_
-29	ci	ci	ADP	ADP	_	33	case	_	_
-30	fukk	fukk	NUM	NUM	_	33	nummod	_	_
-31	ak	ak	CCONJ	CCONJ	_	32	cc	_	_
-32	ñeenti	ñeenti	NUM	NUM	_	30	conj	_	_
-33	xarnu	xarnu	NOUN	NOUN	_	27	obl	_	_
-34	.	.	PUNCT	PUNCT	_	21	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 18 · source: wo_wtb-ud-train.conllu · this verb has L=1, R=4 (mean span = 5.40)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Jabet 1 , tuddees na ko yitam jabetu ndaw ( diabète juvénile ) , ndax li mu di dal nit ki ci ag ndawam , diggante ba mu amee ay weer ba 35 at .
-1	Jabet	Jabet	NOUN	NOUN	_	4	dislocated	_	highlight=green|span=2
-2	1	1	NUM	NUM	_	1	nummod	_	_
-3	,	,	PUNCT	PUNCT	_	4	punct	_	_
-4	tuddees	tuddees	VERB	VERB	_	0	root	_	highlight=red
-5	na	na	AUX	AUX	_	4	aux	_	_
-6	ko	ko	PRON	PRON	_	4	obj	_	highlight=green|span=1
-7	yitam	yitam	ADV	ADV	_	4	advmod	_	highlight=green|span=1
-8	jabetu	jabetu	NOUN	NOUN	_	4	iobj	_	highlight=green|span=4
-9	ndaw	ndaw	NOUN	NOUN	_	8	nmod	_	_
-10	(	(	PUNCT	PUNCT	_	11	punct	_	_
-11	diabète	diabète	NOUN	NOUN	_	8	appos	_	_
-12	juvénile	juvénile	ADJ	ADJ	_	11	amod	_	_
-13	)	)	PUNCT	PUNCT	_	11	punct	_	_
-14	,	,	PUNCT	PUNCT	_	16	punct	_	_
-15	ndax	ndax	ADP	ADP	_	16	case	_	_
-16	li	li	PRON	PRON	_	4	obl	_	highlight=green|span=19
-17	mu	mu	PRON	PRON	_	19	nsubj	_	_
-18	di	di	AUX	AUX	_	19	aux	_	_
-19	dal	dal	VERB	VERB	_	16	acl:relcl	_	_
-20	nit	nit	NOUN	NOUN	_	19	obj	_	_
-21	ki	ki	DET	DET	_	20	det	_	_
-22	ci	ci	ADP	ADP	_	24	case	_	_
-23	ag	ag	DET	DET	_	24	det	_	_
-24	ndawam	ndawam	NOUN	NOUN	_	19	obl	_	_
-25	,	,	PUNCT	PUNCT	_	29	punct	_	_
-26	diggante	diggante	ADP	ADP	_	29	mark	_	_
-27	ba	ba	SCONJ	SCONJ	_	29	mark	_	_
-28	mu	mu	PRON	PRON	_	29	nsubj	_	_
-29	amee	amee	VERB	VERB	_	24	acl	_	_
-30	ay	ay	DET	DET	_	31	det	_	_
-31	weer	weer	NOUN	NOUN	_	29	obj	_	_
-32	ba	ba	ADP	ADP	_	34	case	_	_
-33	35	35	NUM	NUM	_	34	nummod	_	_
-34	at	at	NOUN	NOUN	_	29	obl	_	_
-35	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 19 · source: wo_wtb-ud-train.conllu · this verb has L=3, R=2 (mean span = 2.80)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Bari ga ñu bari ak na ñu toftalantee , fu mu ne , ñu fekk ko fa .
-1	Bari	Bari	NOUN	NOUN	_	15	dislocated	_	highlight=green|span=8
-2	ga	ga	PRON	PRON	_	4	obj	_	_
-3	ñu	ñu	PRON	PRON	_	4	nsubj	_	_
-4	bari	bari	VERB	VERB	_	1	acl:relcl	_	_
-5	ak	ak	CCONJ	CCONJ	_	8	cc	_	_
-6	na	na	ADV	ADV	_	8	advmod	_	_
-7	ñu	ñu	PRON	PRON	_	8	nsubj	_	_
-8	toftalantee	toftalantee	VERB	VERB	_	1	conj	_	_
-9	,	,	PUNCT	PUNCT	_	15	punct	_	_
-10	fu	fu	ADV	ADV	_	12	advmod	_	_
-11	mu	mu	PRON	PRON	_	12	nsubj	_	_
-12	ne	ne	VERB	VERB	_	15	advcl	_	highlight=green|span=3
-13	,	,	PUNCT	PUNCT	_	15	punct	_	_
-14	ñu	ñu	PRON	PRON	_	15	nsubj	_	highlight=green|span=1
-15	fekk	fekk	VERB	VERB	_	0	root	_	highlight=red
-16	ko	ko	PRON	PRON	_	15	obj	_	highlight=green|span=1
-17	fa	fa	ADV	ADV	_	15	advmod	_	highlight=green|span=1
-18	.	.	PUNCT	PUNCT	_	15	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 20 · source: wo_wtb-ud-test.conllu · this verb has L=2, R=3 (mean span = 3.80)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Kuréel yi di tàggat askan wi da ñu bàyyi ñi jàngul ak seen bopp ndax làkk frãse lañu fa di tàggate .
-1	Kuréel	Kuréel	NOUN	NOUN	_	9	dislocated	_	highlight=green|span=6
-2	yi	yi	PRON	PRON	_	4	nsubj	_	_
-3	di	di	AUX	AUX	_	4	aux	_	_
-4	tàggat	tàggat	VERB	VERB	_	1	acl:relcl	_	_
-5	askan	askan	NOUN	NOUN	_	4	obj	_	_
-6	wi	wi	DET	DET	_	5	det	_	_
-7	da	da	AUX	AUX	_	9	aux	_	_
-8	ñu	ñu	PRON	PRON	_	9	nsubj	_	highlight=green|span=1
-9	bàyyi	bàyyi	VERB	VERB	_	0	root	_	highlight=red
-10	ñi	ñi	PRON	PRON	_	9	obj	_	highlight=green|span=2
-11	jàngul	jàngul	VERB	VERB	_	10	acl:relcl	_	_
-12	ak	ak	ADP	ADP	_	14	case	_	_
-13	seen	seen	DET	DET	_	14	det	_	_
-14	bopp	bopp	NOUN	NOUN	_	9	obl	_	highlight=green|span=3
-15	ndax	ndax	ADP	ADP	_	21	mark	_	_
-16	làkk	làkk	NOUN	NOUN	_	21	obj	_	_
-17	frãse	frãse	PROPN	PROPN	_	16	compound	_	_
-18	lañu	lañu	AUX	AUX	_	21	aux	_	_
-19	fa	fa	ADV	ADV	_	21	advmod	_	_
-20	di	di	AUX	AUX	_	21	aux	_	_
-21	tàggate	tàggate	VERB	VERB	_	9	advcl	_	highlight=green|span=7
-22	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
 </div>
 </body></html>

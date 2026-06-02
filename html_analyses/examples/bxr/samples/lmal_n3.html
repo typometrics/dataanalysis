@@ -1,5 +1,6 @@
-<!DOCTYPE html><html><head>
-  <style>:root{color-scheme:light}html,body{background:#fff;color:#222}</style><meta charset="utf-8"><title>Buryat — LMAL_3</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Buryat — LMAL_3</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+:root { color-scheme: light; }
+html, body { background: #fff; }
 body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
        padding: 0 20px; color: #222; }
 h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
@@ -24,7 +25,184 @@ table.mal-table a:hover { text-decoration: underline; }
 <h1>Buryat <small style="color:#999;font-weight:normal">(bxr)</small> — LMAL<sub>3</sub></h1>
 <div class="info"><p><b>Bucket:</b> verbs that have exactly <b>3</b> left dependents (right side may be anything).</p><p><b>LMAL<sub>3</sub> = 2.389</b> &nbsp; <span style="color:#666">(198 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>left</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
 <div class="example">
-<div class="example-meta">Example 1 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 4.00)</div>
+<div class="example-meta">Example 1 · source: bxr_bdt-ud-train.conllu · this verb has L=3, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Басаган нүхэртөө бэшэг бэшэбэ .
+1	Басаган	Басаган	NOUN	NOUN	_	4	nsubj	_	highlight=green|span=1
+2	нүхэртөө	нүхэртөө	NOUN	NOUN	_	4	obl	_	highlight=green|span=1
+3	бэшэг	бэшэг	NOUN	NOUN	_	4	obj	_	highlight=green|span=1
+4	бэшэбэ	бэшэбэ	VERB	VERB	_	0	root	_	highlight=red
+5	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Урдын урда сагта Хоридой гэжэ нэрэтэй мэргэн 11 хүбүүдтэй байһан байгаа юм .
+1	Урдын	Урдын	ADJ	ADJ	_	2	compound	_	_
+2	урда	урда	ADP	ADP	_	3	nmod	_	_
+3	сагта	сагта	NOUN	NOUN	_	10	nmod	_	highlight=green|span=3
+4	Хоридой	Хоридой	PROPN	PROPN	_	5	compound	_	_
+5	гэжэ	гэжэ	VERB	VERB	_	6	compound	_	_
+6	нэрэтэй	нэрэтэй	NOUN	NOUN	_	7	compound	_	_
+7	мэргэн	мэргэн	NOUN	NOUN	_	10	nsubj	_	highlight=green|span=4
+8	11	11	NUM	NUM	_	9	nummod	_	_
+9	хүбүүдтэй	хүбүүдтэй	NOUN	NOUN	_	10	obj	_	highlight=green|span=2
+10	байһан	байһан	VERB	VERB	_	0	root	_	highlight=red
+11	байгаа	байгаа	AUX	AUX	_	10	aux	_	_
+12	юм	юм	PART	PART	_	10	discourse	_	_
+13	.	.	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=1 (mean span = 2.25)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = 90-ээд онуудта хүдөөгэй хүбүүд , басагад Улаан-Үдэ ерээд , хотын хүүгэдтэй адлихан һуража эхилхэдээ , ород хэлэ муутай , ядалсадаг бэлэй .
+1	90-ээд	90-ээд	NUM	NUM	_	2	nummod	_	_
+2	онуудта	онуудта	NOUN	NOUN	_	8	nmod	_	_
+3	хүдөөгэй	хүдөөгэй	ADJ	ADJ	_	4	amod	_	_
+4	хүбүүд	хүбүүд	NOUN	NOUN	_	8	nsubj	_	_
+5	,	,	PUNCT	PUNCT	_	6	punct	_	_
+6	басагад	басагад	NOUN	NOUN	_	4	conj	_	_
+7	Улаан-Үдэ	Улаан-Үдэ	PROPN	PROPN	_	8	nmod	_	_
+8	ерээд	ерээд	VERB	VERB	_	0	root	_	_
+9	,	,	PUNCT	PUNCT	_	14	punct	_	_
+10	хотын	хотын	ADJ	ADJ	_	11	amod	_	_
+11	хүүгэдтэй	хүүгэдтэй	NOUN	NOUN	_	13	nmod	_	highlight=green|span=2
+12	адлихан	адлихан	ADJ	ADJ	_	14	advmod	_	highlight=green|span=1
+13	һуража	һуража	VERB	VERB	_	14	xcomp	_	highlight=green|span=1
+14	эхилхэдээ	эхилхэдээ	VERB	VERB	_	8	advcl	_	highlight=red
+15	,	,	PUNCT	PUNCT	_	18	punct	_	_
+16	ород	ород	ADJ	ADJ	_	17	amod	_	_
+17	хэлэ	хэлэ	NOUN	NOUN	_	18	nsubj	_	_
+18	муутай	муутай	ADJ	ADJ	_	14	advcl	_	highlight=green|span=5
+19	,	,	PUNCT	PUNCT	_	20	punct	_	_
+20	ядалсадаг	ядалсадаг	VERB	VERB	_	18	parataxis	_	_
+21	бэлэй	бэлэй	VERB	VERB	_	20	discourse	_	_
+22	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=2 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Матти ажалаа мүүнөөдэр хэжэ дууһаха еһотой .
+1	Матти	Матти	PROPN	PROPN	_	4	nsubj	_	highlight=green|span=1
+2	ажалаа	ажалаа	NOUN	NOUN	_	4	obj	_	highlight=green|span=1
+3	мүүнөөдэр	мүүнөөдэр	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+4	хэжэ	хэжэ	VERB	VERB	_	0	root	_	highlight=red
+5	дууһаха	дууһаха	VERB	VERB	_	4	xcomp	_	highlight=green|span=1
+6	еһотой	еһотой	ADJ	ADJ	_	4	xcomp	_	highlight=green|span=1
+7	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Тиин таниие гэр бүлынгөө зүгһөө ехэ мүнгэ үргөө гэжэ дуулааб ...
+1	Тиин	Тиин	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+2	таниие	таниие	PRON	PRON	_	4	det	_	_
+3	гэр	гэр	NOUN	NOUN	_	4	nmod	_	_
+4	бүлынгөө	бүлынгөө	NOUN	NOUN	_	5	nmod	_	_
+5	зүгһөө	зүгһөө	NOUN	NOUN	_	8	nmod	_	highlight=green|span=4
+6	ехэ	ехэ	ADV	ADV	_	7	amod	_	_
+7	мүнгэ	мүнгэ	NOUN	NOUN	_	8	obj	_	highlight=green|span=2
+8	үргөө	үргөө	VERB	VERB	_	0	root	_	highlight=red
+9	гэжэ	гэжэ	VERB	VERB	_	10	discourse	_	_
+10	дуулааб	дуулааб	VERB	VERB	_	8	parataxis	_	_
+11	...	...	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 3.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Вячеслав түрүүн дүүргээд , Улаан-Үдэдэ ажал олонгүй , « Тарбагатайская нива » сониндо хүдэлжэ эхилээ .
+1	Вячеслав	Вячеслав	PROPN	PROPN	_	15	nsubj	_	highlight=green|span=1
+2	түрүүн	түрүүн	ADV	ADV	_	3	advmod	_	_
+3	дүүргээд	дүүргээд	VERB	VERB	_	15	advcl	_	highlight=green|span=5
+4	,	,	PUNCT	PUNCT	_	7	punct	_	_
+5	Улаан-Үдэдэ	Улаан-Үдэдэ	PROPN	PROPN	_	7	nmod	_	_
+6	ажал	ажал	NOUN	NOUN	_	7	obj	_	_
+7	олонгүй	олонгүй	VERB	VERB	_	3	conj	_	_
+8	,	,	PUNCT	PUNCT	_	3	punct	_	_
+9	«	«	PUNCT	PUNCT	_	10	punct	_	_
+10	Тарбагатайская	Тарбагатайская	ADJ	ADJ	_	13	compound	_	_
+11	нива	нива	NOUN	NOUN	_	10	flat	_	_
+12	»	»	PUNCT	PUNCT	_	10	punct	_	_
+13	сониндо	сониндо	NOUN	NOUN	_	14	nmod	_	_
+14	хүдэлжэ	хүдэлжэ	VERB	VERB	_	15	xcomp	_	highlight=green|span=4
+15	эхилээ	эхилээ	VERB	VERB	_	0	root	_	highlight=red
+16	.	.	PUNCT	PUNCT	_	15	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=1 (mean span = 5.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Булад Раднаев гүрэн түрын хэмжээнэй хэдэн харалга-наадануудта хабаадажа , амжалта туйлаһан , түрэл театрайнгаа тайзан дээрэ « Лебединое озеро » , “ Жизель ” , “ Дон Кихот ” , “ Тысяча и одна ночь ” болон бусад балетнэ зүжэгүүдтэ гол парти гүйсэдхэжэ , харагшадай үндэр сэгнэлтэдэ хүртэнхэй .
+1	Булад	Булад	PROPN	PROPN	_	8	nsubj	_	_
+2	Раднаев	Раднаев	PROPN	PROPN	_	1	flat	_	_
+3	гүрэн	гүрэн	NOUN	NOUN	_	4	nmod	_	_
+4	түрын	түрын	NOUN	NOUN	_	5	nmod	_	_
+5	хэмжээнэй	хэмжээнэй	NOUN	NOUN	_	7	nmod	_	_
+6	хэдэн	хэдэн	DET	DET	_	7	det	_	_
+7	харалга-наадануудта	харалга-наадануудта	NOUN	NOUN	_	8	nmod	_	_
+8	хабаадажа	хабаадажа	VERB	VERB	_	0	root	_	_
+9	,	,	PUNCT	PUNCT	_	11	punct	_	_
+10	амжалта	амжалта	NOUN	NOUN	_	11	nmod	_	_
+11	туйлаһан	туйлаһан	VERB	VERB	_	8	advcl	_	_
+12	,	,	PUNCT	PUNCT	_	15	punct	_	_
+13	түрэл	түрэл	ADJ	ADJ	_	14	amod	_	_
+14	театрайнгаа	театрайнгаа	NOUN	NOUN	_	15	nmod	_	_
+15	тайзан	тайзан	NOUN	NOUN	_	43	nmod	_	highlight=green|span=4
+16	дээрэ	дээрэ	ADP	ADP	_	15	case	_	_
+17	«	«	PUNCT	PUNCT	_	19	punct	_	_
+18	Лебединое	Лебединое	ADJ	ADJ	_	19	amod	_	_
+19	озеро	озеро	NOUN	NOUN	_	43	nmod	_	highlight=green|span=13
+20	»	»	PUNCT	PUNCT	_	19	punct	_	_
+21	,	,	PUNCT	PUNCT	_	23	punct	_	_
+22	“	“	PUNCT	PUNCT	_	23	punct	_	_
+23	Жизель	Жизель	NOUN	NOUN	_	19	conj	_	_
+24	”	”	PUNCT	PUNCT	_	23	punct	_	_
+25	,	,	PUNCT	PUNCT	_	27	punct	_	_
+26	“	“	PUNCT	PUNCT	_	27	punct	_	_
+27	Дон	Дон	PROPN	PROPN	_	19	conj	_	_
+28	Кихот	Кихот	PROPN	PROPN	_	27	flat	_	_
+29	”	”	PUNCT	PUNCT	_	27	punct	_	_
+30	,	,	PUNCT	PUNCT	_	35	punct	_	_
+31	“	“	PUNCT	PUNCT	_	35	punct	_	_
+32	Тысяча	Тысяча	NUM	NUM	_	35	nmod	_	_
+33	и	и	CCONJ	CCONJ	_	32	cc	_	_
+34	одна	одна	NUM	NUM	_	32	conj	_	_
+35	ночь	ночь	NOUN	NOUN	_	19	conj	_	_
+36	”	”	PUNCT	PUNCT	_	35	punct	_	_
+37	болон	болон	CCONJ	CCONJ	_	19	cc	_	_
+38	бусад	бусад	DET	DET	_	40	det	_	_
+39	балетнэ	балетнэ	ADJ	ADJ	_	40	amod	_	_
+40	зүжэгүүдтэ	зүжэгүүдтэ	NOUN	NOUN	_	19	conj	_	_
+41	гол	гол	NOUN	NOUN	_	42	amod	_	_
+42	парти	парти	NOUN	NOUN	_	43	obj	_	highlight=green|span=2
+43	гүйсэдхэжэ	гүйсэдхэжэ	VERB	VERB	_	11	parataxis	_	highlight=red
+44	,	,	PUNCT	PUNCT	_	48	punct	_	_
+45	харагшадай	харагшадай	NOUN	NOUN	_	48	obj	_	_
+46	үндэр	үндэр	ADJ	ADJ	_	47	amod	_	_
+47	сэгнэлтэдэ	сэгнэлтэдэ	NOUN	NOUN	_	48	nmod	_	_
+48	хүртэнхэй	хүртэнхэй	VERB	VERB	_	43	advcl	_	highlight=green|span=4
+49	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Үнэндөө хэлээ һаа , тэрэшни үшөө үсэгэлдэртөө ерэнхэй .
+1	Үнэндөө	Үнэндөө	NOUN	NOUN	_	8	obl	_	highlight=green|span=3
+2	хэлээ	хэлээ	VERB	VERB	_	1	compound	_	_
+3	һаа	һаа	PART	PART	_	2	discourse	_	_
+4	,	,	PUNCT	PUNCT	_	1	punct	_	_
+5	тэрэшни	тэрэшни	PRON	PRON	_	8	nsubj	_	highlight=green|span=1
+6	үшөө	үшөө	ADV	ADV	_	7	advmod	_	_
+7	үсэгэлдэртөө	үсэгэлдэртөө	ADV	ADV	_	8	advmod	_	highlight=green|span=2
+8	ерэнхэй	ерэнхэй	VERB	VERB	_	0	root	_	highlight=red
+9	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Үшөө нэгэ шүлэгдэмэл зохёол баһал уншагшадай һонирхол түрүүлнэ .
+1	Үшөө	Үшөө	ADV	ADV	_	2	advmod	_	_
+2	нэгэ	нэгэ	NUM	NUM	_	4	nummod	_	_
+3	шүлэгдэмэл	шүлэгдэмэл	NOUN	NOUN	_	4	nmod	_	_
+4	зохёол	зохёол	NOUN	NOUN	_	8	nsubj	_	highlight=green|span=4
+5	баһал	баһал	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+6	уншагшадай	уншагшадай	NOUN	NOUN	_	7	nmod	_	_
+7	һонирхол	һонирхол	NOUN	NOUN	_	8	obj	_	highlight=green|span=2
+8	түрүүлнэ	түрүүлнэ	VERB	VERB	_	0	root	_	highlight=red
+9	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 4.00)</div>
 <reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Тулалдаанай дүүрэтэр 30 секундын үлөөд бай үедэ залуу хүбүүн 1 баллаар шүүжэ ябаба .
 1	Тулалдаанай	Тулалдаанай	NOUN	NOUN	_	2	nmod	_	_
 2	дүүрэтэр	дүүрэтэр	NOUN	NOUN	_	5	nmod	_	_
@@ -40,174 +218,6 @@ table.mal-table a:hover { text-decoration: underline; }
 12	шүүжэ	шүүжэ	VERB	VERB	_	13	xcomp	_	highlight=green|span=3
 13	ябаба	ябаба	VERB	VERB	_	0	root	_	highlight=red
 14	.	.	PUNCT	PUNCT	_	13	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 2 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.67)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Хаанашье дээдын зургаанда гү , али юрэ хөөрэлдөөндэ буряад хэлэн тухай асуудал эхилхэдээл , буряад хэлэнэй шанар һургуулиин багшанарһаа дулдыдана гэжэ хэлсэдэг .
-1	Хаанашье	Хаанашье	ADV	ADV	_	13	advmod	_	highlight=green|span=1
-2	дээдын	дээдын	ADJ	ADJ	_	3	amod	_	_
-3	зургаанда	зургаанда	NOUN	NOUN	_	10	nmod	_	_
-4	гү	гү	PART	PART	_	3	discourse	_	_
-5	,	,	PUNCT	PUNCT	_	6	punct	_	_
-6	али	али	CCONJ	CCONJ	_	3	cc	_	_
-7	юрэ	юрэ	ADV	ADV	_	13	advmod	_	highlight=green|span=1
-8	хөөрэлдөөндэ	хөөрэлдөөндэ	NOUN	NOUN	_	3	conj	_	_
-9	буряад	буряад	ADJ	ADJ	_	10	amod	_	_
-10	хэлэн	хэлэн	NOUN	NOUN	_	12	nmod	_	_
-11	тухай	тухай	ADP	ADP	_	10	case	_	_
-12	асуудал	асуудал	NOUN	NOUN	_	13	nsubj	_	highlight=green|span=6
-13	эхилхэдээл	эхилхэдээл	VERB	VERB	_	22	ccomp	_	highlight=red
-14	,	,	PUNCT	PUNCT	_	20	punct	_	_
-15	буряад	буряад	ADJ	ADJ	_	16	amod	_	_
-16	хэлэнэй	хэлэнэй	NOUN	NOUN	_	17	nmod	_	_
-17	шанар	шанар	NOUN	NOUN	_	20	nsubj	_	_
-18	һургуулиин	һургуулиин	NOUN	NOUN	_	19	nmod	_	_
-19	багшанарһаа	багшанарһаа	NOUN	NOUN	_	20	iobj	_	_
-20	дулдыдана	дулдыдана	VERB	VERB	_	13	parataxis	_	_
-21	гэжэ	гэжэ	VERB	VERB	_	22	discourse	_	_
-22	хэлсэдэг	хэлсэдэг	VERB	VERB	_	0	root	_	_
-23	.	.	PUNCT	PUNCT	_	22	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 3 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Абаахайн шүлһэ һубиһандал , аглаг дэлхэйе алтаар шэмэглэжэрхёо .
-1	Абаахайн	Абаахайн	NOUN	NOUN	_	2	compound	_	_
-2	шүлһэ	шүлһэ	NOUN	NOUN	_	3	compound	_	_
-3	һубиһандал	һубиһандал	NOUN	NOUN	_	8	nmod	_	highlight=green|span=3
-4	,	,	PUNCT	PUNCT	_	3	punct	_	_
-5	аглаг	аглаг	ADJ	ADJ	_	6	amod	_	_
-6	дэлхэйе	дэлхэйе	NOUN	NOUN	_	8	obj	_	highlight=green|span=2
-7	алтаар	алтаар	NOUN	NOUN	_	8	nmod	_	highlight=green|span=1
-8	шэмэглэжэрхёо	шэмэглэжэрхёо	VERB	VERB	_	0	root	_	highlight=red
-9	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 4 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.33)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Үшөө нэгэ шүлэгдэмэл зохёол баһал уншагшадай һонирхол түрүүлнэ .
-1	Үшөө	Үшөө	ADV	ADV	_	2	advmod	_	_
-2	нэгэ	нэгэ	NUM	NUM	_	4	nummod	_	_
-3	шүлэгдэмэл	шүлэгдэмэл	NOUN	NOUN	_	4	nmod	_	_
-4	зохёол	зохёол	NOUN	NOUN	_	8	nsubj	_	highlight=green|span=4
-5	баһал	баһал	ADV	ADV	_	8	advmod	_	highlight=green|span=1
-6	уншагшадай	уншагшадай	NOUN	NOUN	_	7	nmod	_	_
-7	һонирхол	һонирхол	NOUN	NOUN	_	8	obj	_	highlight=green|span=2
-8	түрүүлнэ	түрүүлнэ	VERB	VERB	_	0	root	_	highlight=red
-9	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 5 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 1.33)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ямар онтохон шэнги газар байдаг юм !
-1	Ямар	Ямар	DET	DET	_	2	det	_	_
-2	онтохон	онтохон	NOUN	NOUN	_	5	nmod	_	highlight=green|span=2
-3	шэнги	шэнги	ADV	ADV	_	5	advmod	_	highlight=green|span=1
-4	газар	газар	NOUN	NOUN	_	5	nsubj	_	highlight=green|span=1
-5	байдаг	байдаг	VERB	VERB	_	0	root	_	highlight=red
-6	юм	юм	PART	PART	_	5	discourse	_	_
-7	!	!	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 6 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=1 (mean span = 1.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Би мэтэр тиишээ ошохоб , арга шадал олоһоор .
-1	Би	Би	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
-2	мэтэр	мэтэр	ADV	ADV	_	4	advmod	_	highlight=green|span=1
-3	тиишээ	тиишээ	ADV	ADV	_	4	advmod	_	highlight=green|span=1
-4	ошохоб	ошохоб	VERB	VERB	_	0	root	_	highlight=red
-5	,	,	PUNCT	PUNCT	_	8	punct	_	_
-6	арга	арга	NOUN	NOUN	_	7	nmod	_	_
-7	шадал	шадал	NOUN	NOUN	_	8	obj	_	_
-8	олоһоор	олоһоор	VERB	VERB	_	4	xcomp	_	highlight=green|span=3
-9	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 7 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 3.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Тэндэ ябахадаа , ехэ һонин , һалбаран хүгжэһэн Моголнуудай соёлтой дүтэ танилсаа .
-1	Тэндэ	Тэндэ	ADV	ADV	_	2	advmod	_	_
-2	ябахадаа	ябахадаа	VERB	VERB	_	12	advcl	_	highlight=green|span=2
-3	,	,	PUNCT	PUNCT	_	2	punct	_	_
-4	ехэ	ехэ	ADV	ADV	_	5	advmod	_	_
-5	һонин	һонин	ADJ	ADJ	_	10	amod	_	_
-6	,	,	PUNCT	PUNCT	_	5	punct	_	_
-7	һалбаран	һалбаран	NOUN	NOUN	_	8	nmod	_	_
-8	хүгжэһэн	хүгжэһэн	VERB	VERB	_	9	acl	_	_
-9	Моголнуудай	Моголнуудай	NOUN	NOUN	_	10	nmod	_	_
-10	соёлтой	соёлтой	NOUN	NOUN	_	12	nmod	_	highlight=green|span=6
-11	дүтэ	дүтэ	ADV	ADV	_	12	advmod	_	highlight=green|span=1
-12	танилсаа	танилсаа	VERB	VERB	_	0	root	_	highlight=red
-13	.	.	PUNCT	PUNCT	_	12	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 8 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Библиотекарь Роза Гавриловна Бузинаева « Буряад соёлтой танилсалга » гэһэн факультативна хэшээл ябуулжа , арадайнгаа һайндэрнүүдые эмхидхэдэг заншалтай .
-1	Библиотекарь	Библиотекарь	NOUN	NOUN	_	4	compound	_	_
-2	Роза	Роза	PROPN	PROPN	_	13	nsubj	_	_
-3	Гавриловна	Гавриловна	PROPN	PROPN	_	2	flat	_	_
-4	Бузинаева	Бузинаева	PROPN	PROPN	_	3	flat	_	_
-5	«	«	PUNCT	PUNCT	_	6	punct	_	_
-6	Буряад	Буряад	ADJ	ADJ	_	12	compound	_	highlight=green|span=3
-7	соёлтой	соёлтой	NOUN	NOUN	_	6	flat	_	_
-8	танилсалга	танилсалга	NOUN	NOUN	_	7	flat	_	_
-9	»	»	PUNCT	PUNCT	_	6	punct	_	_
-10	гэһэн	гэһэн	ADV	ADV	_	13	advmod	_	highlight=green|span=1
-11	факультативна	факультативна	ADJ	ADJ	_	12	amod	_	_
-12	хэшээл	хэшээл	NOUN	NOUN	_	13	obj	_	highlight=green|span=2
-13	ябуулжа	ябуулжа	VERB	VERB	_	18	advcl	_	highlight=red
-14	,	,	PUNCT	PUNCT	_	13	punct	_	_
-15	арадайнгаа	арадайнгаа	NOUN	NOUN	_	16	nmod	_	_
-16	һайндэрнүүдые	һайндэрнүүдые	NOUN	NOUN	_	17	obj	_	_
-17	эмхидхэдэг	эмхидхэдэг	VERB	VERB	_	18	xcomp	_	_
-18	заншалтай	заншалтай	VERB	VERB	_	0	root	_	_
-19	.	.	PUNCT	PUNCT	_	18	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 9 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.33)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Зүгөөр мүнөө хэн нэгэндэ тиимэш-иимэш гэжэ хэлэхэеэ яарадаггүйб , ходо бэеэ барихаш , хүниие шоо үзэдэггүйб .
-1	Зүгөөр	Зүгөөр	ADV	ADV	_	8	advmod	_	highlight=green|span=1
-2	мүнөө	мүнөө	ADV	ADV	_	8	advmod	_	highlight=green|span=1
-3	хэн	хэн	NOUN	NOUN	_	7	obj	_	_
-4	нэгэндэ	нэгэндэ	NUM	NUM	_	3	nummod	_	_
-5	тиимэш-иимэш	тиимэш-иимэш	ADV	ADV	_	7	advmod	_	_
-6	гэжэ	гэжэ	VERB	VERB	_	7	discourse	_	_
-7	хэлэхэеэ	хэлэхэеэ	VERB	VERB	_	8	xcomp	_	highlight=green|span=5
-8	яарадаггүйб	яарадаггүйб	VERB	VERB	_	0	root	_	highlight=red
-9	,	,	PUNCT	PUNCT	_	12	punct	_	_
-10	ходо	ходо	ADV	ADV	_	12	advmod	_	_
-11	бэеэ	бэеэ	NOUN	NOUN	_	12	nmod	_	_
-12	барихаш	барихаш	VERB	VERB	_	8	parataxis	_	_
-13	,	,	PUNCT	PUNCT	_	16	punct	_	_
-14	хүниие	хүниие	NOUN	NOUN	_	16	iobj	_	_
-15	шоо	шоо	NOUN	NOUN	_	16	obj	_	_
-16	үзэдэггүйб	үзэдэггүйб	VERB	VERB	_	12	parataxis	_	_
-17	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 10 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.33)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = « Угайм сүлдэ » , « Баргажан Түхэм » гэһэн зүжэг мэтээр энэ проект бэелүүлэгдэхэ аад , мүнгэн зөөриин хомор шалтагһаа энэ концерт боложо тодорбо .
-1	«	«	PUNCT	PUNCT	_	3	punct	_	_
-2	Угайм	Угайм	NOUN	NOUN	_	3	nmod	_	_
-3	сүлдэ	сүлдэ	NOUN	NOUN	_	11	compound	_	_
-4	»	»	PUNCT	PUNCT	_	3	punct	_	_
-5	,	,	PUNCT	PUNCT	_	7	punct	_	_
-6	«	«	PUNCT	PUNCT	_	7	punct	_	_
-7	Баргажан	Баргажан	PROPN	PROPN	_	3	conj	_	_
-8	Түхэм	Түхэм	PROPN	PROPN	_	7	flat	_	_
-9	»	»	PUNCT	PUNCT	_	7	punct	_	_
-10	гэһэн	гэһэн	ADV	ADV	_	11	discourse	_	_
-11	зүжэг	зүжэг	NOUN	NOUN	_	15	nmod	_	_
-12	мэтээр	мэтээр	ADV	ADV	_	15	advmod	_	_
-13	энэ	энэ	DET	DET	_	14	det	_	_
-14	проект	проект	NOUN	NOUN	_	15	nsubj	_	_
-15	бэелүүлэгдэхэ	бэелүүлэгдэхэ	VERB	VERB	_	0	root	_	_
-16	аад	аад	CCONJ	CCONJ	_	15	mark	_	_
-17	,	,	PUNCT	PUNCT	_	25	punct	_	_
-18	мүнгэн	мүнгэн	NOUN	NOUN	_	19	nmod	_	_
-19	зөөриин	зөөриин	NOUN	NOUN	_	20	nmod	_	_
-20	хомор	хомор	NOUN	NOUN	_	21	nmod	_	_
-21	шалтагһаа	шалтагһаа	NOUN	NOUN	_	25	nmod	_	highlight=green|span=4
-22	энэ	энэ	DET	DET	_	23	det	_	_
-23	концерт	концерт	NOUN	NOUN	_	25	nsubj	_	highlight=green|span=2
-24	боложо	боложо	VERB	VERB	_	25	xcomp	_	highlight=green|span=1
-25	тодорбо	тодорбо	VERB	VERB	_	15	advcl	_	highlight=red
-26	.	.	PUNCT	PUNCT	_	25	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
 <div class="example-meta">Example 11 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.00)</div>
@@ -239,91 +249,92 @@ table.mal-table a:hover { text-decoration: underline; }
 25	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 12 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 1.33)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Үшөө нэгэ һанал бодол гэхэдэ , мүнөө фермернүүдтэ тэдхэмжэ мүнгэн үгтэдэг .
-1	Үшөө	Үшөө	ADV	ADV	_	5	advmod	_	_
-2	нэгэ	нэгэ	NUM	NUM	_	4	nummod	_	_
-3	һанал	һанал	NOUN	NOUN	_	4	compound	_	_
-4	бодол	бодол	NOUN	NOUN	_	5	obj	_	_
-5	гэхэдэ	гэхэдэ	VERB	VERB	_	0	root	_	_
-6	,	,	PUNCT	PUNCT	_	11	punct	_	_
-7	мүнөө	мүнөө	ADV	ADV	_	11	advmod	_	highlight=green|span=1
-8	фермернүүдтэ	фермернүүдтэ	NOUN	NOUN	_	11	iobj	_	highlight=green|span=1
-9	тэдхэмжэ	тэдхэмжэ	NOUN	NOUN	_	10	nmod	_	_
-10	мүнгэн	мүнгэн	NOUN	NOUN	_	11	obj	_	highlight=green|span=2
-11	үгтэдэг	үгтэдэг	VERB	VERB	_	5	parataxis	_	highlight=red
-12	.	.	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 13 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 6.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Магданай эгээл аха заха , дайнай ветеран , 91 наһатай Валерий Секретаревич Хамарханов наһанайнгаа хани нүхэр Ксения Ханхареевнатай 8 үхибүүдые хүмүүжүүлжэ , мүнөө 18 ашанар , 11 гушанартай болонхой .
-1	Магданай	Магданай	PROPN	PROPN	_	4	nmod	_	_
-2	эгээл	эгээл	ADV	ADV	_	3	advmod	_	_
-3	аха	аха	NOUN	NOUN	_	4	amod	_	_
-4	заха	заха	NOUN	NOUN	_	21	nsubj	_	highlight=green|span=11
-5	,	,	PUNCT	PUNCT	_	7	punct	_	_
-6	дайнай	дайнай	NOUN	NOUN	_	7	nmod	_	_
-7	ветеран	ветеран	NOUN	NOUN	_	4	conj	_	_
-8	,	,	PUNCT	PUNCT	_	11	punct	_	_
-9	91	91	NUM	NUM	_	10	nummod	_	_
-10	наһатай	наһатай	NOUN	NOUN	_	13	nmod	_	_
-11	Валерий	Валерий	PROPN	PROPN	_	7	appos	_	_
-12	Секретаревич	Секретаревич	PROPN	PROPN	_	11	flat	_	_
-13	Хамарханов	Хамарханов	PROPN	PROPN	_	12	flat	_	_
-14	наһанайнгаа	наһанайнгаа	NOUN	NOUN	_	16	nmod	_	_
-15	хани	хани	NOUN	NOUN	_	16	compound	_	_
-16	нүхэр	нүхэр	NOUN	NOUN	_	21	nmod	_	highlight=green|span=5
-17	Ксения	Ксения	PROPN	PROPN	_	16	appos	_	_
-18	Ханхареевнатай	Ханхареевнатай	PROPN	PROPN	_	17	flat	_	_
-19	8	8	NUM	NUM	_	20	nummod	_	_
-20	үхибүүдые	үхибүүдые	NOUN	NOUN	_	21	nmod	_	highlight=green|span=2
-21	хүмүүжүүлжэ	хүмүүжүүлжэ	VERB	VERB	_	0	root	_	highlight=red
-22	,	,	PUNCT	PUNCT	_	29	punct	_	_
-23	мүнөө	мүнөө	ADV	ADV	_	29	advmod	_	_
-24	18	18	NUM	NUM	_	25	nummod	_	_
-25	ашанар	ашанар	NOUN	NOUN	_	29	obj	_	_
-26	,	,	PUNCT	PUNCT	_	28	punct	_	_
-27	11	11	NUM	NUM	_	28	nummod	_	_
-28	гушанартай	гушанартай	NOUN	NOUN	_	25	conj	_	_
-29	болонхой	болонхой	VERB	VERB	_	21	parataxis	_	_
-30	.	.	PUNCT	PUNCT	_	29	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 14 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 3.67)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Һайн гэр бодхоогоод , хамһабариин ажахы эмхидхээ һаамни , тэндэмни хүдэлхэ уладууд заатагүй олдохо .
-1	Һайн	Һайн	ADJ	ADJ	_	2	amod	_	_
-2	гэр	гэр	NOUN	NOUN	_	3	obj	_	_
-3	бодхоогоод	бодхоогоод	VERB	VERB	_	7	advcl	_	_
-4	,	,	PUNCT	PUNCT	_	3	punct	_	_
-5	хамһабариин	хамһабариин	ADJ	ADJ	_	6	amod	_	_
-6	ажахы	ажахы	NOUN	NOUN	_	7	obj	_	_
-7	эмхидхээ	эмхидхээ	VERB	VERB	_	14	advcl	_	highlight=green|span=7
-8	һаамни	һаамни	PART	PART	_	7	discourse	_	_
-9	,	,	PUNCT	PUNCT	_	7	punct	_	_
-10	тэндэмни	тэндэмни	ADV	ADV	_	11	advmod	_	_
-11	хүдэлхэ	хүдэлхэ	VERB	VERB	_	12	acl	_	_
-12	уладууд	уладууд	NOUN	NOUN	_	14	nsubj	_	highlight=green|span=3
-13	заатагүй	заатагүй	ADV	ADV	_	14	advmod	_	highlight=green|span=1
-14	олдохо	олдохо	VERB	VERB	_	0	root	_	highlight=red
-15	.	.	PUNCT	PUNCT	_	14	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 15 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 1.67)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Жэл бүри минии һурагшад аймагтаа түрүүлжэ , республикын олимпиадада хабаададагбди .
-1	Жэл	Жэл	NOUN	NOUN	_	6	nmod	_	highlight=green|span=2
-2	бүри	бүри	ADV	ADV	_	1	amod	_	_
-3	минии	минии	PRON	PRON	_	4	det	_	_
-4	һурагшад	һурагшад	NOUN	NOUN	_	6	nsubj	_	highlight=green|span=2
-5	аймагтаа	аймагтаа	NOUN	NOUN	_	6	nmod	_	highlight=green|span=1
-6	түрүүлжэ	түрүүлжэ	VERB	VERB	_	0	root	_	highlight=red
-7	,	,	PUNCT	PUNCT	_	10	punct	_	_
-8	республикын	республикын	NOUN	NOUN	_	9	nmod	_	_
-9	олимпиадада	олимпиадада	NOUN	NOUN	_	10	nmod	_	_
-10	хабаададагбди	хабаададагбди	VERB	VERB	_	6	parataxis	_	_
+<div class="example-meta">Example 12 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=1 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Би мэтэр наашаа ерэхэб , тооһо хородог машинаар сэбэрлэлтэ ябуулгаад .
+1	Би	Би	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
+2	мэтэр	мэтэр	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+3	наашаа	наашаа	ADV	ADV	_	4	advmod	_	highlight=green|span=1
+4	ерэхэб	ерэхэб	VERB	VERB	_	0	root	_	highlight=red
+5	,	,	PUNCT	PUNCT	_	10	punct	_	_
+6	тооһо	тооһо	NOUN	NOUN	_	9	nmod	_	_
+7	хородог	хородог	NOUN	NOUN	_	6	compound	_	_
+8	машинаар	машинаар	NOUN	NOUN	_	7	compound	_	_
+9	сэбэрлэлтэ	сэбэрлэлтэ	NOUN	NOUN	_	10	obj	_	_
+10	ябуулгаад	ябуулгаад	VERB	VERB	_	4	advcl	_	highlight=green|span=5
 11	.	.	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
+<div class="example-meta">Example 13 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Бурхад һүни болотор Донна Тартай ажал найрлаа .
+1	Бурхад	Бурхад	NOUN	NOUN	_	7	nsubj	_	highlight=green|span=1
+2	һүни	һүни	NOUN	NOUN	_	7	nmod	_	highlight=green|span=2
+3	болотор	болотор	ADP	ADP	_	2	case	_	_
+4	Донна	Донна	PROPN	PROPN	_	6	nmod	_	_
+5	Тартай	Тартай	PROPN	PROPN	_	4	flat	_	_
+6	ажал	ажал	NOUN	NOUN	_	7	obj	_	highlight=green|span=3
+7	найрлаа	найрлаа	VERB	VERB	_	0	root	_	highlight=red
+8	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Намда гэртээ ошохо гэһэн уялга бии .
+1	Намда	Намда	PRON	PRON	_	6	nmod	_	highlight=green|span=1
+2	гэртээ	гэртээ	NOUN	NOUN	_	3	nmod	_	_
+3	ошохо	ошохо	VERB	VERB	_	5	acl	_	highlight=green|span=2
+4	гэһэн	гэһэн	ADV	ADV	_	6	discourse	_	_
+5	уялга	уялга	NOUN	NOUN	_	6	nsubj	_	highlight=green|span=1
+6	бии	бии	VERB	VERB	_	0	root	_	highlight=red
+7	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = - Залуудаа өөрөө хатарааб , мүнөө эдиршүүлдэ хатар заажа байхадаа , ехэ баяртайб , - гэжэ тэрэ мэдэрнэ .
+1	-	-	PUNCT	PUNCT	_	2	punct	_	_
+2	Залуудаа	Залуудаа	NOUN	NOUN	_	4	nmod	_	_
+3	өөрөө	өөрөө	PRON	PRON	_	4	nsubj	_	_
+4	хатарааб	хатарааб	VERB	VERB	_	0	root	_	_
+5	,	,	PUNCT	PUNCT	_	13	punct	_	_
+6	мүнөө	мүнөө	ADV	ADV	_	9	advmod	_	highlight=green|span=1
+7	эдиршүүлдэ	эдиршүүлдэ	NOUN	NOUN	_	9	nmod	_	highlight=green|span=1
+8	хатар	хатар	NOUN	NOUN	_	9	obj	_	highlight=green|span=1
+9	заажа	заажа	VERB	VERB	_	10	xcomp	_	highlight=red
+10	байхадаа	байхадаа	VERB	VERB	_	13	advcl	_	_
+11	,	,	PUNCT	PUNCT	_	10	punct	_	_
+12	ехэ	ехэ	ADV	ADV	_	13	advmod	_	_
+13	баяртайб	баяртайб	VERB	VERB	_	4	parataxis	_	_
+14	,	,	PUNCT	PUNCT	_	13	punct	_	_
+15	-	-	PUNCT	PUNCT	_	18	punct	_	_
+16	гэжэ	гэжэ	VERB	VERB	_	18	discourse	_	_
+17	тэрэ	тэрэ	PRON	PRON	_	18	nsubj	_	_
+18	мэдэрнэ	мэдэрнэ	VERB	VERB	_	13	parataxis	_	_
+19	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
 <div class="example-meta">Example 16 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Мүнөө Екатерина Дамдиновна дүшэн наһанайнгаа даба дабажа ябана .
+1	Мүнөө	Мүнөө	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+2	Екатерина	Екатерина	PROPN	PROPN	_	8	nsubj	_	highlight=green|span=2
+3	Дамдиновна	Дамдиновна	PROPN	PROPN	_	2	flat	_	_
+4	дүшэн	дүшэн	NUM	NUM	_	5	nummod	_	_
+5	наһанайнгаа	наһанайнгаа	NOUN	NOUN	_	6	nmod	_	_
+6	даба	даба	NOUN	NOUN	_	7	obl	_	_
+7	дабажа	дабажа	VERB	VERB	_	8	xcomp	_	highlight=green|span=4
+8	ябана	ябана	VERB	VERB	_	0	root	_	highlight=red
+9	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Би мүнөө эхэ эсэгынгээл буянгаар ажаһуунаб .
+1	Би	Би	PRON	PRON	_	6	nsubj	_	highlight=green|span=1
+2	мүнөө	мүнөө	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+3	эхэ	эхэ	NOUN	NOUN	_	4	compound	_	_
+4	эсэгынгээл	эсэгынгээл	NOUN	NOUN	_	5	nmod	_	_
+5	буянгаар	буянгаар	NOUN	NOUN	_	6	nmod	_	highlight=green|span=3
+6	ажаһуунаб	ажаһуунаб	VERB	VERB	_	0	root	_	highlight=red
+7	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.33)</div>
 <reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Тиимэл хадаа хүн зон , уг гарбалынь һайнууд байна .
 1	Тиимэл	Тиимэл	ADV	ADV	_	9	advmod	_	highlight=green|span=2
 2	хадаа	хадаа	ADV	ADV	_	1	discourse	_	_
@@ -337,72 +348,28 @@ table.mal-table a:hover { text-decoration: underline; }
 10	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 17 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 1.33)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ши намда өөрын хүн болонхой байналши .
-1	Ши	Ши	PRON	PRON	_	5	nsubj	_	highlight=green|span=1
-2	намда	намда	PRON	PRON	_	5	nmod	_	highlight=green|span=1
-3	өөрын	өөрын	ADJ	ADJ	_	4	amod	_	_
-4	хүн	хүн	NOUN	NOUN	_	5	nmod	_	highlight=green|span=2
-5	болонхой	болонхой	VERB	VERB	_	0	root	_	highlight=red
-6	байналши	байналши	AUX	AUX	_	5	aux	_	_
-7	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 19 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 1.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ехэнхидээ энэшни һонирхолой зэргэдэ нүлөөлэлгдэнэ .
+1	Ехэнхидээ	Ехэнхидээ	ADV	ADV	_	5	advmod	_	highlight=green|span=1
+2	энэшни	энэшни	PRON	PRON	_	5	nsubj	_	highlight=green|span=1
+3	һонирхолой	һонирхолой	NOUN	NOUN	_	4	nmod	_	_
+4	зэргэдэ	зэргэдэ	NOUN	NOUN	_	5	obj	_	highlight=green|span=2
+5	нүлөөлэлгдэнэ	нүлөөлэлгдэнэ	VERB	VERB	_	0	root	_	highlight=red
+6	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 18 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=2 (mean span = 3.80)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Буряад хэлэнэй хүгжэлтын хүшэрхэн байдал ганса багшанар дээрэ тохожорхихо бэшэ , харин бүгэдэ , засаг түрэ , ниитэ зон булта нэгэдэн шиидхэхэ хэрэгтэй .
-1	Буряад	Буряад	ADJ	ADJ	_	2	amod	_	_
-2	хэлэнэй	хэлэнэй	NOUN	NOUN	_	3	nmod	_	_
-3	хүгжэлтын	хүгжэлтын	NOUN	NOUN	_	5	nmod	_	_
-4	хүшэрхэн	хүшэрхэн	ADJ	ADJ	_	5	amod	_	_
-5	байдал	байдал	NOUN	NOUN	_	9	nsubj	_	highlight=green|span=5
-6	ганса	ганса	ADV	ADV	_	9	advmod	_	highlight=green|span=1
-7	багшанар	багшанар	NOUN	NOUN	_	9	nmod	_	highlight=green|span=2
-8	дээрэ	дээрэ	ADP	ADP	_	7	case	_	_
-9	тохожорхихо	тохожорхихо	VERB	VERB	_	0	root	_	highlight=red
-10	бэшэ	бэшэ	ADV	ADV	_	9	advmod:neg	_	highlight=green|span=1
-11	,	,	PUNCT	PUNCT	_	22	punct	_	_
-12	харин	харин	ADP	ADP	_	22	mark	_	_
-13	бүгэдэ	бүгэдэ	PRON	PRON	_	16	nmod	_	_
-14	,	,	PUNCT	PUNCT	_	13	punct	_	_
-15	засаг	засаг	NOUN	NOUN	_	16	compound	_	_
-16	түрэ	түрэ	NOUN	NOUN	_	22	nsubj	_	_
-17	,	,	PUNCT	PUNCT	_	19	punct	_	_
-18	ниитэ	ниитэ	ADJ	ADJ	_	19	amod	_	_
-19	зон	зон	NOUN	NOUN	_	16	appos	_	_
-20	булта	булта	DET	DET	_	21	det	_	_
-21	нэгэдэн	нэгэдэн	VERB	VERB	_	19	conj	_	_
-22	шиидхэхэ	шиидхэхэ	VERB	VERB	_	9	ccomp	_	highlight=green|span=10
-23	хэрэгтэй	хэрэгтэй	NOUN	NOUN	_	22	obl	_	_
-24	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 19 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 1.67)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Би тэрэ хүүндэ эрэһэн номыень үгөөб .
-1	Би	Би	PRON	PRON	_	6	nsubj	_	highlight=green|span=1
-2	тэрэ	тэрэ	DET	DET	_	3	det	_	_
-3	хүүндэ	хүүндэ	NOUN	NOUN	_	6	iobj	_	highlight=green|span=2
-4	эрэһэн	эрэһэн	ADJ	ADJ	_	5	amod	_	_
-5	номыень	номыень	NOUN	NOUN	_	6	obj	_	highlight=green|span=2
-6	үгөөб	үгөөб	VERB	VERB	_	0	root	_	highlight=red
-7	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 20 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.33)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = - Соёлма Баяртуевна , та эсэбэритэй , сүлөөгүй ажалтайт , олониитын ажабайдалда эдэбхитэйгээр хабаададагта .
-1	-	-	PUNCT	PUNCT	_	2	punct	_	_
-2	Соёлма	Соёлма	PROPN	PROPN	_	14	vocative	_	_
-3	Баяртуевна	Баяртуевна	PROPN	PROPN	_	2	flat	_	_
-4	,	,	PUNCT	PUNCT	_	3	punct	_	_
-5	та	та	PRON	PRON	_	14	nsubj	_	highlight=green|span=4
-6	эсэбэритэй	эсэбэритэй	ADJ	ADJ	_	5	amod	_	_
-7	,	,	PUNCT	PUNCT	_	9	punct	_	_
-8	сүлөөгүй	сүлөөгүй	ADJ	ADJ	_	9	amod	_	_
-9	ажалтайт	ажалтайт	NOUN	NOUN	_	5	nmod	_	_
-10	,	,	PUNCT	PUNCT	_	5	punct	_	_
-11	олониитын	олониитын	NOUN	NOUN	_	12	nmod	_	_
-12	ажабайдалда	ажабайдалда	NOUN	NOUN	_	14	nmod	_	highlight=green|span=2
-13	эдэбхитэйгээр	эдэбхитэйгээр	ADV	ADV	_	14	advmod	_	highlight=green|span=1
-14	хабаададагта	хабаададагта	VERB	VERB	_	0	root	_	highlight=red
-15	.	.	PUNCT	PUNCT	_	14	punct	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 20 · source: bxr_bdt-ud-test.conllu · this verb has L=3, R=0 (mean span = 2.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Гансал тиихэдэ 70-аад наһатай ябаһан үбгэд , хүгшэд бурхандаа мордоо .
+1	Гансал	Гансал	ADV	ADV	_	10	advmod	_	highlight=green|span=1
+2	тиихэдэ	тиихэдэ	ADV	ADV	_	5	advmod	_	_
+3	70-аад	70-аад	NUM	NUM	_	4	nummod	_	_
+4	наһатай	наһатай	NOUN	NOUN	_	5	nmod	_	_
+5	ябаһан	ябаһан	VERB	VERB	_	6	acl	_	_
+6	үбгэд	үбгэд	NOUN	NOUN	_	10	nsubj	_	highlight=green|span=6
+7	,	,	PUNCT	PUNCT	_	8	punct	_	_
+8	хүгшэд	хүгшэд	NOUN	NOUN	_	6	conj	_	_
+9	бурхандаа	бурхандаа	NOUN	NOUN	_	10	nmod	_	highlight=green|span=1
+10	мордоо	мордоо	VERB	VERB	_	0	root	_	highlight=red
+11	.	.	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
 </div>
 </body></html>

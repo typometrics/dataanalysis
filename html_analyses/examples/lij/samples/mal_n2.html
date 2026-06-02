@@ -1,5 +1,6 @@
-<!DOCTYPE html><html><head>
-  <style>:root{color-scheme:light}html,body{background:#fff;color:#222}</style><meta charset="utf-8"><title>Ligurian — MAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Ligurian — MAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+:root { color-scheme: light; }
+html, body { background: #fff; }
 body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
        padding: 0 20px; color: #222; }
 h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
@@ -24,16 +25,322 @@ table.mal-table a:hover { text-decoration: underline; }
 <h1>Ligurian <small style="color:#999;font-weight:normal">(lij)</small> — MAL<sub>2</sub></h1>
 <div class="info"><p><b>Bucket:</b> verbs that have exactly <b>2</b> dependents in total (left + right combined).</p><p><b>MAL<sub>2</sub> = 3.460</b> &nbsp; <span style="color:#666">(153 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over all dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
 <div class="example">
-<div class="example-meta">Example 1 · source: lij_glt-ud-test.conllu · this verb has L=0, R=2 (mean span = 2.00)</div>
+<div class="example-meta">Example 1 · source: lij_glt-ud-test.conllu · this verb has L=1, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Diascoa , gh' ò o cheu inte a goa .
+1	Diascoa	Diascoa	INTJ	INTJ	_	4	discourse	_	_
+2	,	,	PUNCT	PUNCT	_	1	punct	_	_
+3	gh'	gh'	PRON	PRON	_	4	expl:pv	_	highlight=green|span=1
+4	ò	ò	VERB	VERB	_	0	root	_	highlight=red
+5	o	o	DET	DET	_	6	det	_	_
+6	cheu	cheu	NOUN	NOUN	_	4	obj	_	highlight=green|span=5
+7	inte	inte	ADP	ADP	_	9	case	_	_
+8	a	a	DET	DET	_	9	det	_	_
+9	goa	goa	NOUN	NOUN	_	6	nmod	_	_
+10	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: lij_glt-ud-test.conllu · this verb has L=2, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = E ti capivi che sti paixi cian cianin moivan , e che e gente se ne rendeivan conto , ma che no renonçiavan à ëse quello ch' ean .
+1	E	E	CCONJ	CCONJ	_	3	cc	_	_
+2	ti	ti	PRON	PRON	_	3	nsubj	_	_
+3	capivi	capivi	VERB	VERB	_	0	root	_	_
+4	che	che	SCONJ	SCONJ	_	9	mark	_	_
+5	sti	sti	DET	DET	_	6	det	_	_
+6	paixi	paixi	NOUN	NOUN	_	9	nsubj	_	highlight=green|span=2
+7	cian	cian	ADV	ADV	_	9	advmod	_	highlight=green|span=2
+8	cianin	cianin	ADV	ADV	_	7	advmod	_	_
+9	moivan	moivan	VERB	VERB	_	3	ccomp	_	highlight=red
+10	,	,	PUNCT	PUNCT	_	17	punct	_	_
+11	e	e	CCONJ	CCONJ	_	17	cc	_	_
+12	che	che	SCONJ	SCONJ	_	17	mark	_	_
+13	e	e	DET	DET	_	14	det	_	_
+14	gente	gente	NOUN	NOUN	_	17	nsubj	_	_
+15	se	se	PRON	PRON	_	17	expl:pv	_	_
+16	ne	ne	PRON	PRON	_	17	expl:pv	_	_
+17	rendeivan	rendeivan	VERB	VERB	_	9	conj	_	_
+18	conto	conto	NOUN	NOUN	_	17	obj	_	_
+19	,	,	PUNCT	PUNCT	_	23	punct	_	_
+20	ma	ma	CCONJ	CCONJ	_	23	cc	_	_
+21	che	che	SCONJ	SCONJ	_	23	mark	_	_
+22	no	no	ADV	ADV	_	23	advmod	_	_
+23	renonçiavan	renonçiavan	VERB	VERB	_	9	conj	_	_
+24	à	à	ADP	ADP	_	25	mark	_	_
+25	ëse	ëse	VERB	VERB	_	23	xcomp	_	_
+26	quello	quello	PRON	PRON	_	25	xcomp	_	_
+27	ch'	ch'	PRON	PRON	_	28	nsubj	_	_
+28	ean	ean	VERB	VERB	_	26	acl:relcl	_	_
+29	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: lij_glt-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = O commanda fiña à i spriti sossi , e ghe dan a mente ! » .
+1	O	O	PRON	PRON	_	2	nsubj	_	_
+2	commanda	commanda	VERB	VERB	_	0	root	_	_
+3	fiña	fiña	ADV	ADV	_	2	advmod	_	_
+4	à	à	ADP	ADP	_	6	case	_	_
+5	i	i	DET	DET	_	6	det	_	_
+6	spriti	spriti	NOUN	NOUN	_	2	obl	_	_
+7	sossi	sossi	ADJ	ADJ	_	6	amod	_	_
+8	,	,	PUNCT	PUNCT	_	11	punct	_	_
+9	e	e	CCONJ	CCONJ	_	11	cc	_	_
+10	ghe	ghe	PRON	PRON	_	11	iobj	_	highlight=green|span=1
+11	dan	dan	VERB	VERB	_	2	conj	_	highlight=red
+12	a	a	DET	DET	_	13	det	_	_
+13	mente	mente	NOUN	NOUN	_	11	obj	_	highlight=green|span=2
+14	!	!	PUNCT	PUNCT	_	2	punct	_	_
+15	»	»	PUNCT	PUNCT	_	2	punct	_	_
+16	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 4 · source: lij_glt-ud-test.conllu · this verb has L=0, R=2 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Voî , bell' òmmo , piggiæ chì pe beive .
+1	Voî	Voî	PRON	PRON	_	6	vocative	_	_
+2	,	,	PUNCT	PUNCT	_	4	punct	_	_
+3	bell'	bell'	ADJ	ADJ	_	4	amod	_	_
+4	òmmo	òmmo	NOUN	NOUN	_	1	appos	_	_
+5	,	,	PUNCT	PUNCT	_	4	punct	_	_
+6	piggiæ	piggiæ	VERB	VERB	_	0	root	_	highlight=red
+7	chì	chì	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+8	pe	pe	ADP	ADP	_	9	mark	_	_
+9	beive	beive	VERB	VERB	_	6	advcl	_	highlight=green|span=2
+10	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 5 · source: lij_glt-ud-test.conllu · this verb has L=1, R=1 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Quelle föto parlan da pe liatre , perché no lasciâ se tentâ da l' inscinstensa de o camê ?
+1	Quelle	Quelle	DET	DET	_	2	det	_	_
+2	föto	föto	NOUN	NOUN	_	3	nsubj	_	highlight=green|span=2
+3	parlan	parlan	VERB	VERB	_	0	root	_	highlight=red
+4	da	da	ADP	ADP	_	6	case	_	_
+5	pe	pe	ADP	ADP	_	6	case	_	_
+6	liatre	liatre	PRON	PRON	_	3	obl	_	highlight=green|span=3
+7	,	,	PUNCT	PUNCT	_	10	punct	_	_
+8	perché	perché	ADV	ADV	_	10	advmod	_	_
+9	no	no	ADV	ADV	_	10	advmod	_	_
+10	lasciâ	lasciâ	VERB	VERB	_	3	parataxis	_	_
+11	se	se	PRON	PRON	_	10	obj	_	_
+12	tentâ	tentâ	VERB	VERB	_	10	xcomp	_	_
+13	da	da	ADP	ADP	_	15	case	_	_
+14	l'	l'	DET	DET	_	15	det	_	_
+15	inscinstensa	inscinstensa	NOUN	NOUN	_	12	obl	_	_
+16	de	de	ADP	ADP	_	18	case	_	_
+17	o	o	DET	DET	_	18	det	_	_
+18	camê	camê	NOUN	NOUN	_	15	nmod	_	_
+19	?	?	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 6 · source: lij_glt-ud-test.conllu · this verb has L=1, R=1 (mean span = 6.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = I volummi de a colleçion en stæti traduti inte un çentanâ de lengue , anche de minoransa , e an conosciuo ben ben d' adattaçioin pe o cine , a televixon e o tiatro .
+1	I	I	DET	DET	_	2	det	_	_
+2	volummi	volummi	NOUN	NOUN	_	8	nsubj	_	highlight=green|span=5
+3	de	de	ADP	ADP	_	5	case	_	_
+4	a	a	DET	DET	_	5	det	_	_
+5	colleçion	colleçion	NOUN	NOUN	_	2	nmod	_	_
+6	en	en	AUX	AUX	_	8	aux	_	_
+7	stæti	stæti	AUX	AUX	_	8	aux	_	_
+8	traduti	traduti	VERB	VERB	_	0	root	_	highlight=red
+9	inte	inte	ADP	ADP	_	11	case	_	_
+10	un	un	DET	DET	_	11	det	_	_
+11	çentanâ	çentanâ	NOUN	NOUN	_	8	obl	_	highlight=green|span=8
+12	de	de	ADP	ADP	_	13	case	_	_
+13	lengue	lengue	NOUN	NOUN	_	11	nmod	_	_
+14	,	,	PUNCT	PUNCT	_	17	punct	_	_
+15	anche	anche	ADV	ADV	_	17	advmod	_	_
+16	de	de	ADP	ADP	_	17	case	_	_
+17	minoransa	minoransa	NOUN	NOUN	_	13	nmod	_	_
+18	,	,	PUNCT	PUNCT	_	17	punct	_	_
+19	e	e	CCONJ	CCONJ	_	21	cc	_	_
+20	an	an	AUX	AUX	_	21	aux	_	_
+21	conosciuo	conosciuo	VERB	VERB	_	8	conj	_	_
+22	ben	ben	ADV	ADV	_	25	det	_	_
+23	ben	ben	ADV	ADV	_	22	fixed	_	_
+24	d'	d'	ADP	ADP	_	22	fixed	_	_
+25	adattaçioin	adattaçioin	NOUN	NOUN	_	21	obj	_	_
+26	pe	pe	ADP	ADP	_	28	case	_	_
+27	o	o	DET	DET	_	28	det	_	_
+28	cine	cine	NOUN	NOUN	_	25	nmod	_	_
+29	,	,	PUNCT	PUNCT	_	31	punct	_	_
+30	a	a	DET	DET	_	31	det	_	_
+31	televixon	televixon	NOUN	NOUN	_	28	conj	_	_
+32	e	e	CCONJ	CCONJ	_	34	cc	_	_
+33	o	o	DET	DET	_	34	det	_	_
+34	tiatro	tiatro	NOUN	NOUN	_	28	conj	_	_
+35	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: lij_glt-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Se perde conoscensa .
+1	Se	Se	PRON	PRON	_	2	expl:impers	_	highlight=green|span=1
+2	perde	perde	VERB	VERB	_	0	root	_	highlight=red
+3	conoscensa	conoscensa	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
+4	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: lij_glt-ud-test.conllu · this verb has L=0, R=2 (mean span = 5.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Co o mette me i dinæ da parte , ò ammuggiou tanto da poei vestî in mainea dignitosa con de a röba de segonda man ; m' ea accattou un vegio giachê de fustagno , unna camixa un pö frusta , ma recammâ e co e maneghe co o spacco , un mantello che da neuvo o l' aiva avuo de i aggibbi , e unna vegia spâ , uña de e primme che l' ea stæto fabricou inte o paise de Cuéllar .
+1	Co	Co	ADP	ADP	_	3	case	_	_
+2	o	o	DET	DET	_	3	det	_	_
+3	mette	mette	VERB	VERB	_	11	advcl	_	_
+4	me	me	PRON	PRON	_	3	expl:pv	_	_
+5	i	i	DET	DET	_	6	det	_	_
+6	dinæ	dinæ	NOUN	NOUN	_	3	obj	_	_
+7	da	da	ADP	ADP	_	8	case	_	_
+8	parte	parte	NOUN	NOUN	_	3	obl	_	_
+9	,	,	PUNCT	PUNCT	_	3	punct	_	_
+10	ò	ò	AUX	AUX	_	11	aux	_	_
+11	ammuggiou	ammuggiou	VERB	VERB	_	0	root	_	_
+12	tanto	tanto	PRON	PRON	_	11	obj	_	_
+13	da	da	ADP	ADP	_	15	mark	_	_
+14	poei	poei	AUX	AUX	_	15	aux	_	_
+15	vestî	vestî	VERB	VERB	_	12	acl	_	highlight=red
+16	in	in	ADP	ADP	_	17	case	_	_
+17	mainea	mainea	NOUN	NOUN	_	15	obl	_	highlight=green|span=3
+18	dignitosa	dignitosa	ADJ	ADJ	_	17	amod	_	_
+19	con	con	ADP	ADP	_	22	case	_	_
+20	de	de	ADP	ADP	_	21	case	_	_
+21	a	a	DET	DET	_	22	det	_	_
+22	röba	röba	NOUN	NOUN	_	15	obl	_	highlight=green|span=7
+23	de	de	ADP	ADP	_	25	case	_	_
+24	segonda	segonda	ADJ	ADJ	_	25	amod	_	_
+25	man	man	NOUN	NOUN	_	22	nmod	_	_
+26	;	;	PUNCT	PUNCT	_	29	punct	_	_
+27	m'	m'	PRON	PRON	_	29	expl:pv	_	_
+28	ea	ea	AUX	AUX	_	29	aux	_	_
+29	accattou	accattou	VERB	VERB	_	11	parataxis	_	_
+30	un	un	DET	DET	_	32	det	_	_
+31	vegio	vegio	ADJ	ADJ	_	32	amod	_	_
+32	giachê	giachê	NOUN	NOUN	_	29	obj	_	_
+33	de	de	ADP	ADP	_	34	case	_	_
+34	fustagno	fustagno	NOUN	NOUN	_	32	nmod	_	_
+35	,	,	PUNCT	PUNCT	_	37	punct	_	_
+36	unna	unna	DET	DET	_	37	det	_	_
+37	camixa	camixa	NOUN	NOUN	_	32	conj	_	_
+38	un	un	DET	DET	_	39	det	_	_
+39	pö	pö	NOUN	NOUN	_	40	obl	_	_
+40	frusta	frusta	ADJ	ADJ	_	37	amod	_	_
+41	,	,	PUNCT	PUNCT	_	43	punct	_	_
+42	ma	ma	CCONJ	CCONJ	_	43	cc	_	_
+43	recammâ	recammâ	ADJ	ADJ	_	40	conj	_	_
+44	e	e	CCONJ	CCONJ	_	47	cc	_	_
+45	co	co	ADP	ADP	_	47	case	_	_
+46	e	e	DET	DET	_	47	det	_	_
+47	maneghe	maneghe	NOUN	NOUN	_	40	conj	_	_
+48	co	co	ADP	ADP	_	50	case	_	_
+49	o	o	DET	DET	_	50	det	_	_
+50	spacco	spacco	NOUN	NOUN	_	47	nmod	_	_
+51	,	,	PUNCT	PUNCT	_	53	punct	_	_
+52	un	un	DET	DET	_	53	det	_	_
+53	mantello	mantello	NOUN	NOUN	_	32	conj	_	_
+54	che	che	PRON	PRON	_	60	nsubj	_	_
+55	da	da	ADP	ADP	_	56	case	_	_
+56	neuvo	neuvo	ADJ	ADJ	_	60	obl	_	_
+57	o	o	PRON	PRON	_	60	expl	_	_
+58	l'	l'	PART	PART	_	60	dep	_	_
+59	aiva	aiva	AUX	AUX	_	60	aux	_	_
+60	avuo	avuo	VERB	VERB	_	53	acl:relcl	_	_
+61	de	de	ADP	ADP	_	62	case	_	_
+62	i	i	DET	DET	_	63	det	_	_
+63	aggibbi	aggibbi	NOUN	NOUN	_	60	obj	_	_
+64	,	,	PUNCT	PUNCT	_	68	punct	_	_
+65	e	e	CCONJ	CCONJ	_	68	cc	_	_
+66	unna	unna	DET	DET	_	68	det	_	_
+67	vegia	vegia	ADJ	ADJ	_	68	amod	_	_
+68	spâ	spâ	NOUN	NOUN	_	32	conj	_	_
+69	,	,	PUNCT	PUNCT	_	70	punct	_	_
+70	uña	uña	PRON	PRON	_	68	appos	_	_
+71	de	de	ADP	ADP	_	72	case	_	_
+72	e	e	DET	DET	_	73	det	_	_
+73	primme	primme	ADJ	ADJ	_	70	nmod	_	_
+74	che	che	PRON	PRON	_	78	nsubj	_	_
+75	l'	l'	PART	PART	_	78	dep	_	_
+76	ea	ea	AUX	AUX	_	78	aux	_	_
+77	stæto	stæto	AUX	AUX	_	78	aux	_	_
+78	fabricou	fabricou	VERB	VERB	_	70	acl:relcl	_	_
+79	inte	inte	ADP	ADP	_	81	case	_	_
+80	o	o	DET	DET	_	81	det	_	_
+81	paise	paise	NOUN	NOUN	_	78	obl	_	_
+82	de	de	ADP	ADP	_	83	case	_	_
+83	Cuéllar	Cuéllar	PROPN	PROPN	_	81	nmod	_	_
+84	.	.	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: lij_glt-ud-test.conllu · this verb has L=1, R=1 (mean span = 3.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = De i atri propoñan &quot; Trilli Trilli &quot; e pægi .
+1	De	De	ADP	ADP	_	2	case	_	_
+2	i	i	DET	DET	_	3	det	_	_
+3	atri	atri	PRON	PRON	_	4	nsubj	_	highlight=green|span=3
+4	propoñan	propoñan	VERB	VERB	_	0	root	_	highlight=red
+5	&quot;	&quot;	PUNCT	PUNCT	_	6	punct	_	_
+6	Trilli	Trilli	PROPN	PROPN	_	4	obj	_	highlight=green|span=4
+7	Trilli	Trilli	PROPN	PROPN	_	6	flat	_	_
+8	&quot;	&quot;	PUNCT	PUNCT	_	6	punct	_	_
+9	e	e	CCONJ	CCONJ	_	10	cc	_	_
+10	pægi	pægi	PRON	PRON	_	6	conj	_	_
+11	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: lij_glt-ud-test.conllu · this verb has L=0, R=2 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ma pe uña ch' a se peu vedde ( e arrestan e ciù avvoxæ , se capisce ) , ghe n' é da dexe de che nisciun o s' arregòrda , e che intanto che son serræ van in roiña cian cianin con tutto quello che contëgnan .
+1	Ma	Ma	CCONJ	CCONJ	_	22	cc	_	_
+2	pe	pe	ADP	ADP	_	3	case	_	_
+3	uña	uña	PRON	PRON	_	22	obl	_	_
+4	ch'	ch'	PRON	PRON	_	8	nsubj	_	_
+5	a	a	PRON	PRON	_	8	expl	_	_
+6	se	se	PRON	PRON	_	8	iobj	_	_
+7	peu	peu	AUX	AUX	_	8	aux	_	_
+8	vedde	vedde	VERB	VERB	_	3	acl:relcl	_	_
+9	(	(	PUNCT	PUNCT	_	11	punct	_	_
+10	e	e	CCONJ	CCONJ	_	11	cc	_	_
+11	arrestan	arrestan	VERB	VERB	_	3	parataxis	_	highlight=red
+12	e	e	DET	DET	_	14	det	_	_
+13	ciù	ciù	ADV	ADV	_	14	advmod	_	_
+14	avvoxæ	avvoxæ	ADJ	ADJ	_	11	xcomp	_	highlight=green|span=3
+15	,	,	PUNCT	PUNCT	_	17	punct	_	_
+16	se	se	PRON	PRON	_	17	expl:impers	_	_
+17	capisce	capisce	VERB	VERB	_	11	advcl	_	highlight=green|span=2
+18	)	)	PUNCT	PUNCT	_	11	punct	_	_
+19	,	,	PUNCT	PUNCT	_	22	punct	_	_
+20	ghe	ghe	PRON	PRON	_	22	expl:pv	_	_
+21	n'	n'	PRON	PRON	_	22	expl:pv	_	_
+22	é	é	VERB	VERB	_	0	root	_	_
+23	da	da	ADP	ADP	_	24	case	_	_
+24	dexe	dexe	NUM	NUM	_	22	obj	_	_
+25	de	de	ADP	ADP	_	26	case	_	_
+26	che	che	PRON	PRON	_	30	obl	_	_
+27	nisciun	nisciun	PRON	PRON	_	30	nsubj	_	_
+28	o	o	PRON	PRON	_	30	expl	_	_
+29	s'	s'	PRON	PRON	_	30	expl:pv	_	_
+30	arregòrda	arregòrda	VERB	VERB	_	24	acl:relcl	_	_
+31	,	,	PUNCT	PUNCT	_	38	punct	_	_
+32	e	e	CCONJ	CCONJ	_	38	cc	_	_
+33	che	che	PRON	PRON	_	38	nsubj	_	_
+34	intanto	intanto	ADV	ADV	_	37	mark	_	_
+35	che	che	SCONJ	SCONJ	_	34	fixed	_	_
+36	son	son	AUX	AUX	_	37	cop	_	_
+37	serræ	serræ	ADJ	ADJ	_	38	advcl	_	_
+38	van	van	VERB	VERB	_	30	conj	_	_
+39	in	in	ADP	ADP	_	40	case	_	_
+40	roiña	roiña	NOUN	NOUN	_	38	obl	_	_
+41	cian	cian	ADV	ADV	_	38	advmod	_	_
+42	cianin	cianin	ADV	ADV	_	41	advmod	_	_
+43	con	con	ADP	ADP	_	45	case	_	_
+44	tutto	tutto	DET	DET	_	45	det	_	_
+45	quello	quello	PRON	PRON	_	38	obl	_	_
+46	che	che	PRON	PRON	_	47	obj	_	_
+47	contëgnan	contëgnan	VERB	VERB	_	45	acl:relcl	_	_
+48	.	.	PUNCT	PUNCT	_	22	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: lij_glt-ud-test.conllu · this verb has L=0, R=2 (mean span = 5.00)</div>
 <reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Da quand' ò posciuo anâ in gio vestio comme un òmmo ch' o se respetta , ò dito à o patron ch' o se piggesse torna a seu bestia , perché no aiva ciù coæ d' anâ avanti con quello mestê .
 1	Da	Da	ADP	ADP	_	5	mark	_	_
 2	quand'	quand'	SCONJ	SCONJ	_	1	fixed	_	_
 3	ò	ò	AUX	AUX	_	5	aux	_	_
 4	posciuo	posciuo	AUX	AUX	_	5	aux	_	_
-5	anâ	anâ	VERB	VERB	_	18	advcl	_	_
+5	anâ	anâ	VERB	VERB	_	18	advcl	_	highlight=red
 6	in	in	ADP	ADP	_	7	case	_	_
-7	gio	gio	NOUN	NOUN	_	5	obl	_	_
-8	vestio	vestio	VERB	VERB	_	5	advcl	_	_
+7	gio	gio	NOUN	NOUN	_	5	obl	_	highlight=green|span=2
+8	vestio	vestio	VERB	VERB	_	5	advcl	_	highlight=green|span=8
 9	comme	comme	ADP	ADP	_	11	case	_	_
 10	un	un	DET	DET	_	11	det	_	_
 11	òmmo	òmmo	NOUN	NOUN	_	8	obl	_	_
@@ -62,486 +369,218 @@ table.mal-table a:hover { text-decoration: underline; }
 34	ciù	ciù	ADV	ADV	_	33	advmod	_	_
 35	coæ	coæ	NOUN	NOUN	_	33	obj	_	_
 36	d'	d'	ADP	ADP	_	37	mark	_	_
-37	anâ	anâ	VERB	VERB	_	35	acl	_	highlight=red
-38	avanti	avanti	ADV	ADV	_	37	advmod	_	highlight=green|span=1
+37	anâ	anâ	VERB	VERB	_	35	acl	_	_
+38	avanti	avanti	ADV	ADV	_	37	advmod	_	_
 39	con	con	ADP	ADP	_	41	case	_	_
 40	quello	quello	DET	DET	_	41	det	_	_
-41	mestê	mestê	NOUN	NOUN	_	37	obl	_	highlight=green|span=3
+41	mestê	mestê	NOUN	NOUN	_	37	obl	_	_
 42	.	.	PUNCT	PUNCT	_	18	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 2 · source: lij_glt-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Comm' a l' é che no t' ê vegnua ?
-1	Comm'	Comm'	SCONJ	SCONJ	_	9	mark	_	_
-2	a	a	PRON	PRON	_	1	fixed	_	_
-3	l'	l'	PART	PART	_	1	fixed	_	_
-4	é	é	VERB	VERB	_	1	fixed	_	_
-5	che	che	SCONJ	SCONJ	_	1	fixed	_	_
-6	no	no	ADV	ADV	_	9	advmod	_	highlight=green|span=1
-7	t'	t'	PRON	PRON	_	9	nsubj	_	highlight=green|span=1
-8	ê	ê	AUX	AUX	_	9	aux	_	_
-9	vegnua	vegnua	VERB	VERB	_	0	root	_	highlight=red
-10	?	?	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 12 · source: lij_glt-ud-test.conllu · this verb has L=0, R=2 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = T' ê ancon lesto de frigognâ lì inte o presepio ?
+1	T'	T'	PRON	PRON	_	4	nsubj	_	_
+2	ê	ê	AUX	AUX	_	4	cop	_	_
+3	ancon	ancon	ADV	ADV	_	4	advmod	_	_
+4	lesto	lesto	ADJ	ADJ	_	0	root	_	_
+5	de	de	ADP	ADP	_	6	case	_	_
+6	frigognâ	frigognâ	VERB	VERB	_	4	ccomp	_	highlight=red
+7	lì	lì	ADV	ADV	_	6	advmod	_	highlight=green|span=1
+8	inte	inte	ADP	ADP	_	10	case	_	_
+9	o	o	DET	DET	_	10	det	_	_
+10	presepio	presepio	NOUN	NOUN	_	6	obl	_	highlight=green|span=3
+11	?	?	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 3 · source: lij_glt-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Se perde conoscensa .
-1	Se	Se	PRON	PRON	_	2	expl:impers	_	highlight=green|span=1
-2	perde	perde	VERB	VERB	_	0	root	_	highlight=red
-3	conoscensa	conoscensa	NOUN	NOUN	_	2	obj	_	highlight=green|span=1
-4	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 13 · source: lij_glt-ud-test.conllu · this verb has L=1, R=1 (mean span = 2.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Se semmo impegnæ à trovâ unna soluçion .
+1	Se	Se	PRON	PRON	_	3	nsubj	_	highlight=green|span=1
+2	semmo	semmo	AUX	AUX	_	3	aux	_	_
+3	impegnæ	impegnæ	VERB	VERB	_	0	root	_	highlight=red
+4	à	à	ADP	ADP	_	5	mark	_	_
+5	trovâ	trovâ	VERB	VERB	_	3	xcomp	_	highlight=green|span=4
+6	unna	unna	DET	DET	_	7	det	_	_
+7	soluçion	soluçion	NOUN	NOUN	_	5	obj	_	_
+8	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 4 · source: lij_glt-ud-test.conllu · this verb has L=0, R=2 (mean span = 1.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Quande an misso Zane in prexon , Gexù o l' é andæto à predicâ l' evangëio de o Segnô inte a Galilea , e o diva : « O tempo o l' é finio e o regno de o Segnô o l' é da a vexin ; convertî ve e creddei inte l' evangëio » .
-1	Quande	Quande	SCONJ	SCONJ	_	3	mark	_	_
-2	an	an	AUX	AUX	_	3	aux	_	_
-3	misso	misso	VERB	VERB	_	12	advcl	_	highlight=red
-4	Zane	Zane	PROPN	PROPN	_	3	obj	_	highlight=green|span=1
-5	in	in	ADP	ADP	_	6	case	_	_
-6	prexon	prexon	NOUN	NOUN	_	3	obl	_	highlight=green|span=2
-7	,	,	PUNCT	PUNCT	_	3	punct	_	_
-8	Gexù	Gexù	PROPN	PROPN	_	12	nsubj	_	_
-9	o	o	PRON	PRON	_	12	expl	_	_
-10	l'	l'	PART	PART	_	12	dep	_	_
-11	é	é	AUX	AUX	_	12	aux	_	_
-12	andæto	andæto	VERB	VERB	_	0	root	_	_
-13	à	à	ADP	ADP	_	14	mark	_	_
-14	predicâ	predicâ	VERB	VERB	_	12	xcomp	_	_
-15	l'	l'	DET	DET	_	16	det	_	_
-16	evangëio	evangëio	NOUN	NOUN	_	14	obj	_	_
-17	de	de	ADP	ADP	_	19	case	_	_
-18	o	o	DET	DET	_	19	det	_	_
-19	Segnô	Segnô	PROPN	PROPN	_	16	nmod	_	_
-20	inte	inte	ADP	ADP	_	22	case	_	_
-21	a	a	DET	DET	_	22	det	_	_
-22	Galilea	Galilea	PROPN	PROPN	_	14	obl	_	_
-23	,	,	PUNCT	PUNCT	_	26	punct	_	_
-24	e	e	CCONJ	CCONJ	_	26	cc	_	_
-25	o	o	PRON	PRON	_	26	nsubj	_	_
-26	diva	diva	VERB	VERB	_	12	conj	_	_
-27	:	:	PUNCT	PUNCT	_	34	punct	_	_
-28	«	«	PUNCT	PUNCT	_	34	punct	_	_
-29	O	O	DET	DET	_	30	det	_	_
-30	tempo	tempo	NOUN	NOUN	_	34	nsubj	_	_
-31	o	o	PRON	PRON	_	34	expl	_	_
-32	l'	l'	PART	PART	_	34	dep	_	_
-33	é	é	AUX	AUX	_	34	cop	_	_
-34	finio	finio	VERB	VERB	_	26	parataxis	_	_
-35	e	e	CCONJ	CCONJ	_	46	cc	_	_
-36	o	o	DET	DET	_	37	det	_	_
-37	regno	regno	NOUN	NOUN	_	46	nsubj	_	_
-38	de	de	ADP	ADP	_	40	case	_	_
-39	o	o	DET	DET	_	40	det	_	_
-40	Segnô	Segnô	PROPN	PROPN	_	37	nmod	_	_
-41	o	o	PRON	PRON	_	46	expl	_	_
-42	l'	l'	PART	PART	_	46	dep	_	_
-43	é	é	AUX	AUX	_	46	cop	_	_
-44	da	da	ADP	ADP	_	46	case	_	_
-45	a	a	DET	DET	_	46	det	_	_
-46	vexin	vexin	NOUN	NOUN	_	34	conj	_	_
-47	;	;	PUNCT	PUNCT	_	48	punct	_	_
-48	convertî	convertî	VERB	VERB	_	34	parataxis	_	_
-49	ve	ve	PRON	PRON	_	48	obj	_	_
-50	e	e	CCONJ	CCONJ	_	51	cc	_	_
-51	creddei	creddei	VERB	VERB	_	48	conj	_	_
-52	inte	inte	ADP	ADP	_	54	case	_	_
-53	l'	l'	DET	DET	_	54	det	_	_
-54	evangëio	evangëio	NOUN	NOUN	_	51	obl	_	_
-55	»	»	PUNCT	PUNCT	_	34	punct	_	_
-56	.	.	PUNCT	PUNCT	_	12	punct	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 14 · source: lij_glt-ud-test.conllu · this verb has L=2, R=0 (mean span = 7.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = À un bello momento manco mi poeiva ciù comportâ i seu dafæ , e pe questo – in azzonta à de e atre cöse che no staggo à contâ – l' ò abbandonou .
+1	À	À	ADP	ADP	_	4	case	_	_
+2	un	un	DET	DET	_	4	det	_	_
+3	bello	bello	ADJ	ADJ	_	4	amod	_	_
+4	momento	momento	NOUN	NOUN	_	9	obl	_	_
+5	manco	manco	ADV	ADV	_	6	advmod	_	_
+6	mi	mi	PRON	PRON	_	9	nsubj	_	_
+7	poeiva	poeiva	AUX	AUX	_	9	aux	_	_
+8	ciù	ciù	ADV	ADV	_	9	advmod	_	_
+9	comportâ	comportâ	VERB	VERB	_	0	root	_	_
+10	i	i	DET	DET	_	12	det	_	_
+11	seu	seu	DET	DET	_	12	det	_	_
+12	dafæ	dafæ	NOUN	NOUN	_	9	obj	_	_
+13	,	,	PUNCT	PUNCT	_	33	punct	_	_
+14	e	e	CCONJ	CCONJ	_	33	cc	_	_
+15	pe	pe	ADP	ADP	_	16	case	_	_
+16	questo	questo	PRON	PRON	_	33	obl	_	highlight=green|span=14
+17	–	–	PUNCT	PUNCT	_	19	punct	_	_
+18	in	in	ADP	ADP	_	19	case	_	_
+19	azzonta	azzonta	NOUN	NOUN	_	16	parataxis	_	_
+20	à	à	ADP	ADP	_	24	case	_	_
+21	de	de	ADP	ADP	_	22	case	_	_
+22	e	e	DET	DET	_	24	det	_	_
+23	atre	atre	DET	DET	_	24	det	_	_
+24	cöse	cöse	NOUN	NOUN	_	19	obl	_	_
+25	che	che	PRON	PRON	_	27	obj	_	_
+26	no	no	ADV	ADV	_	27	advmod	_	_
+27	staggo	staggo	VERB	VERB	_	24	acl:relcl	_	_
+28	à	à	ADP	ADP	_	29	mark	_	_
+29	contâ	contâ	VERB	VERB	_	27	xcomp	_	_
+30	–	–	PUNCT	PUNCT	_	19	punct	_	_
+31	l'	l'	PRON	PRON	_	33	obj	_	highlight=green|span=1
+32	ò	ò	AUX	AUX	_	33	aux	_	_
+33	abbandonou	abbandonou	VERB	VERB	_	9	conj	_	highlight=red
+34	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 5 · source: lij_glt-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ti gh' æ visto che o bibin che t' æ accattou o l' à o göscio pin d' ænin ?
-1	Ti	Ti	PRON	PRON	_	4	nsubj	_	_
-2	gh'	gh'	ADV	ADV	_	4	advmod	_	_
-3	æ	æ	AUX	AUX	_	4	aux	_	_
-4	visto	visto	VERB	VERB	_	0	root	_	_
-5	che	che	SCONJ	SCONJ	_	14	mark	_	_
-6	o	o	DET	DET	_	7	det	_	_
-7	bibin	bibin	NOUN	NOUN	_	14	nsubj	_	_
-8	che	che	PRON	PRON	_	11	obj	_	highlight=green|span=1
-9	t'	t'	PRON	PRON	_	11	nsubj	_	highlight=green|span=1
-10	æ	æ	AUX	AUX	_	11	aux	_	_
-11	accattou	accattou	VERB	VERB	_	7	acl:relcl	_	highlight=red
-12	o	o	PRON	PRON	_	14	expl	_	_
-13	l'	l'	PART	PART	_	14	dep	_	_
-14	à	à	VERB	VERB	_	4	ccomp	_	_
-15	o	o	DET	DET	_	16	det	_	_
-16	göscio	göscio	NOUN	NOUN	_	14	obj	_	_
-17	pin	pin	ADJ	ADJ	_	16	amod	_	_
-18	d'	d'	ADP	ADP	_	19	case	_	_
-19	ænin	ænin	NOUN	NOUN	_	17	obl	_	_
-20	?	?	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 15 · source: lij_glt-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Òh , no , che quest' anno o l' à studiou !
+1	Òh	Òh	INTJ	INTJ	_	11	discourse	_	_
+2	,	,	PUNCT	PUNCT	_	1	punct	_	_
+3	no	no	INTJ	INTJ	_	11	discourse	_	_
+4	,	,	PUNCT	PUNCT	_	3	punct	_	_
+5	che	che	SCONJ	SCONJ	_	11	mark	_	_
+6	quest'	quest'	DET	DET	_	7	det	_	_
+7	anno	anno	NOUN	NOUN	_	11	obl	_	highlight=green|span=2
+8	o	o	PRON	PRON	_	11	nsubj	_	highlight=green|span=1
+9	l'	l'	PART	PART	_	11	dep	_	_
+10	à	à	AUX	AUX	_	11	aux	_	_
+11	studiou	studiou	VERB	VERB	_	0	root	_	highlight=red
+12	!	!	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 6 · source: lij_glt-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Î ò ciantæ in gio , oua beseugna che me pöse un pittin .
-1	Î	Î	PRON	PRON	_	3	obj	_	_
-2	ò	ò	AUX	AUX	_	3	aux	_	_
-3	ciantæ	ciantæ	VERB	VERB	_	0	root	_	_
-4	in	in	ADP	ADP	_	5	case	_	_
-5	gio	gio	NOUN	NOUN	_	3	obl	_	_
-6	,	,	PUNCT	PUNCT	_	8	punct	_	_
-7	oua	oua	ADV	ADV	_	8	advmod	_	_
-8	beseugna	beseugna	VERB	VERB	_	3	conj	_	_
-9	che	che	SCONJ	SCONJ	_	11	mark	_	_
-10	me	me	PRON	PRON	_	11	iobj	_	highlight=green|span=1
-11	pöse	pöse	VERB	VERB	_	8	ccomp	_	highlight=red
-12	un	un	DET	DET	_	13	det	_	_
-13	pittin	pittin	ADV	ADV	_	11	advmod	_	highlight=green|span=2
-14	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 16 · source: lij_glt-ud-test.conllu · this verb has L=1, R=1 (mean span = 3.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = O l' é stæto o primmo scæn ch' ò montou verso unna vitta ciù còmmoda , perché lì arriesciva à stâ co o steumago pin .
+1	O	O	PRON	PRON	_	7	nsubj	_	_
+2	l'	l'	PART	PART	_	7	dep	_	_
+3	é	é	AUX	AUX	_	7	aux	_	_
+4	stæto	stæto	AUX	AUX	_	7	cop	_	_
+5	o	o	DET	DET	_	7	det	_	_
+6	primmo	primmo	ADJ	ADJ	_	7	amod	_	_
+7	scæn	scæn	NOUN	NOUN	_	0	root	_	_
+8	ch'	ch'	PRON	PRON	_	10	obj	_	_
+9	ò	ò	AUX	AUX	_	10	aux	_	_
+10	montou	montou	VERB	VERB	_	7	acl:relcl	_	_
+11	verso	verso	ADP	ADP	_	13	case	_	_
+12	unna	unna	DET	DET	_	13	det	_	_
+13	vitta	vitta	NOUN	NOUN	_	10	obl	_	_
+14	ciù	ciù	ADV	ADV	_	15	advmod	_	_
+15	còmmoda	còmmoda	ADJ	ADJ	_	13	amod	_	_
+16	,	,	PUNCT	PUNCT	_	19	punct	_	_
+17	perché	perché	SCONJ	SCONJ	_	19	mark	_	_
+18	lì	lì	ADV	ADV	_	19	advmod	_	highlight=green|span=1
+19	arriesciva	arriesciva	VERB	VERB	_	7	advcl	_	highlight=red
+20	à	à	ADP	ADP	_	21	mark	_	_
+21	stâ	stâ	VERB	VERB	_	19	xcomp	_	highlight=green|span=6
+22	co	co	ADP	ADP	_	24	case	_	_
+23	o	o	DET	DET	_	24	det	_	_
+24	steumago	steumago	NOUN	NOUN	_	21	obl	_	_
+25	pin	pin	ADJ	ADJ	_	24	amod	_	_
+26	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 7 · source: lij_glt-ud-test.conllu · this verb has L=1, R=1 (mean span = 4.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Se perde a memöia , se desperde o paisaggio , se renonçia à dâ a mente à o territöio .
-1	Se	Se	PRON	PRON	_	2	expl:impers	_	_
-2	perde	perde	VERB	VERB	_	0	root	_	_
-3	a	a	DET	DET	_	4	det	_	_
-4	memöia	memöia	NOUN	NOUN	_	2	obj	_	_
-5	,	,	PUNCT	PUNCT	_	7	punct	_	_
-6	se	se	PRON	PRON	_	7	expl:impers	_	_
-7	desperde	desperde	VERB	VERB	_	2	conj	_	_
-8	o	o	DET	DET	_	9	det	_	_
-9	paisaggio	paisaggio	NOUN	NOUN	_	7	obj	_	_
-10	,	,	PUNCT	PUNCT	_	12	punct	_	_
-11	se	se	PRON	PRON	_	12	expl:impers	_	highlight=green|span=1
-12	renonçia	renonçia	VERB	VERB	_	2	conj	_	highlight=red
-13	à	à	ADP	ADP	_	14	mark	_	_
-14	dâ	dâ	VERB	VERB	_	12	xcomp	_	highlight=green|span=7
+<div class="example-meta">Example 17 · source: lij_glt-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Seguo , gh' é de quelle gexe che restan averte , e gh' é a poscibilitæ de vixitâ le : neuvamente m' é intravegnuo à Montegraçie derê à o pòrto , e n' é vasciuo a peña .
+1	Seguo	Seguo	INTJ	INTJ	_	4	discourse	_	_
+2	,	,	PUNCT	PUNCT	_	1	punct	_	_
+3	gh'	gh'	ADV	ADV	_	4	advmod	_	_
+4	é	é	VERB	VERB	_	0	root	_	_
+5	de	de	ADP	ADP	_	7	case	_	_
+6	quelle	quelle	DET	DET	_	7	det	_	_
+7	gexe	gexe	NOUN	NOUN	_	4	nsubj	_	_
+8	che	che	PRON	PRON	_	9	nsubj	_	highlight=green|span=1
+9	restan	restan	VERB	VERB	_	7	acl:relcl	_	highlight=red
+10	averte	averte	ADJ	ADJ	_	9	xcomp	_	highlight=green|span=1
+11	,	,	PUNCT	PUNCT	_	14	punct	_	_
+12	e	e	CCONJ	CCONJ	_	14	cc	_	_
+13	gh'	gh'	PRON	PRON	_	14	expl:pv	_	_
+14	é	é	VERB	VERB	_	4	conj	_	_
 15	a	a	DET	DET	_	16	det	_	_
-16	mente	mente	NOUN	NOUN	_	14	obj	_	_
-17	à	à	ADP	ADP	_	19	case	_	_
-18	o	o	DET	DET	_	19	det	_	_
-19	territöio	territöio	NOUN	NOUN	_	14	obl	_	_
-20	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+16	poscibilitæ	poscibilitæ	NOUN	NOUN	_	14	nsubj	_	_
+17	de	de	ADP	ADP	_	18	mark	_	_
+18	vixitâ	vixitâ	VERB	VERB	_	16	acl	_	_
+19	le	le	PRON	PRON	_	18	obj	_	_
+20	:	:	PUNCT	PUNCT	_	24	punct	_	_
+21	neuvamente	neuvamente	ADV	ADV	_	24	advmod	_	_
+22	m'	m'	PRON	PRON	_	24	iobj	_	_
+23	é	é	AUX	AUX	_	24	aux	_	_
+24	intravegnuo	intravegnuo	VERB	VERB	_	4	parataxis	_	_
+25	à	à	ADP	ADP	_	26	case	_	_
+26	Montegraçie	Montegraçie	PROPN	PROPN	_	24	obl	_	_
+27	derê	derê	ADV	ADV	_	30	case	_	_
+28	à	à	ADP	ADP	_	27	fixed	_	_
+29	o	o	DET	DET	_	30	det	_	_
+30	pòrto	pòrto	NOUN	NOUN	_	24	obl	_	_
+31	,	,	PUNCT	PUNCT	_	35	punct	_	_
+32	e	e	CCONJ	CCONJ	_	35	cc	_	_
+33	n'	n'	PRON	PRON	_	35	expl:pv	_	_
+34	é	é	AUX	AUX	_	35	aux	_	_
+35	vasciuo	vasciuo	VERB	VERB	_	24	conj	_	_
+36	a	a	DET	DET	_	37	det	_	_
+37	peña	peña	NOUN	NOUN	_	35	obj	_	_
+38	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 8 · source: lij_glt-ud-test.conllu · this verb has L=0, R=2 (mean span = 5.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = N' é passou pe coscì de i anni da quande gïava pe e valladde de o ponente à sentî parlâ e gente .
-1	N'	N'	ADV	ADV	_	3	dislocated	_	_
-2	é	é	AUX	AUX	_	3	aux	_	_
-3	passou	passou	VERB	VERB	_	0	root	_	_
-4	pe	pe	ADP	ADP	_	5	case	_	_
-5	coscì	coscì	ADV	ADV	_	3	advmod	_	_
-6	de	de	ADP	ADP	_	8	case	_	_
-7	i	i	DET	DET	_	8	det	_	_
-8	anni	anni	NOUN	NOUN	_	3	obl	_	_
-9	da	da	ADP	ADP	_	11	mark	_	_
-10	quande	quande	SCONJ	SCONJ	_	9	fixed	_	_
-11	gïava	gïava	VERB	VERB	_	8	acl	_	highlight=red
-12	pe	pe	ADP	ADP	_	14	case	_	_
-13	e	e	DET	DET	_	14	det	_	_
-14	valladde	valladde	NOUN	NOUN	_	11	obl	_	highlight=green|span=6
-15	de	de	ADP	ADP	_	17	case	_	_
-16	o	o	DET	DET	_	17	det	_	_
-17	ponente	ponente	NOUN	NOUN	_	14	nmod	_	_
-18	à	à	ADP	ADP	_	19	mark	_	_
-19	sentî	sentî	VERB	VERB	_	11	xcomp	_	highlight=green|span=5
-20	parlâ	parlâ	VERB	VERB	_	19	ccomp	_	_
-21	e	e	DET	DET	_	22	det	_	_
-22	gente	gente	NOUN	NOUN	_	20	obj	_	_
-23	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 18 · source: lij_glt-ud-test.conllu · this verb has L=0, R=2 (mean span = 4.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Tutti i giorni dava à o mæ patron trenta maravedís de guägno ; o resto m' ô tegniva pe mi , insemme à quante arriesciva à arrecampâ à o sabbo graçie à quello mæximo travaggio .
+1	Tutti	Tutti	DET	DET	_	3	det	_	_
+2	i	i	DET	DET	_	3	det	_	_
+3	giorni	giorni	NOUN	NOUN	_	4	obl	_	_
+4	dava	dava	VERB	VERB	_	0	root	_	_
+5	à	à	ADP	ADP	_	8	case	_	_
+6	o	o	DET	DET	_	8	det	_	_
+7	mæ	mæ	DET	DET	_	8	det	_	_
+8	patron	patron	NOUN	NOUN	_	4	obl	_	_
+9	trenta	trenta	NUM	NUM	_	10	nummod	_	_
+10	maravedís	maravedís	X	X	_	4	obj	_	_
+11	de	de	ADP	ADP	_	12	case	_	_
+12	guägno	guägno	NOUN	NOUN	_	10	nmod	_	_
+13	;	;	PUNCT	PUNCT	_	18	punct	_	_
+14	o	o	DET	DET	_	15	det	_	_
+15	resto	resto	NOUN	NOUN	_	18	dislocated	_	_
+16	m'	m'	PRON	PRON	_	18	expl:pv	_	_
+17	ô	ô	PRON	PRON	_	18	obj	_	_
+18	tegniva	tegniva	VERB	VERB	_	4	parataxis	_	_
+19	pe	pe	ADP	ADP	_	20	case	_	_
+20	mi	mi	PRON	PRON	_	18	obl	_	_
+21	,	,	PUNCT	PUNCT	_	24	punct	_	_
+22	insemme	insemme	ADV	ADV	_	24	case	_	_
+23	à	à	ADP	ADP	_	22	fixed	_	_
+24	quante	quante	PRON	PRON	_	18	obj	_	_
+25	arriesciva	arriesciva	VERB	VERB	_	24	acl	_	_
+26	à	à	ADP	ADP	_	27	mark	_	_
+27	arrecampâ	arrecampâ	VERB	VERB	_	25	xcomp	_	highlight=red
+28	à	à	ADP	ADP	_	30	case	_	_
+29	o	o	DET	DET	_	30	det	_	_
+30	sabbo	sabbo	NOUN	NOUN	_	27	obl	_	highlight=green|span=3
+31	graçie	graçie	ADV	ADV	_	35	advmod	_	_
+32	à	à	ADP	ADP	_	31	fixed	_	_
+33	quello	quello	DET	DET	_	35	det	_	_
+34	mæximo	mæximo	ADJ	ADJ	_	35	amod	_	_
+35	travaggio	travaggio	NOUN	NOUN	_	27	obl	_	highlight=green|span=5
+36	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 9 · source: lij_glt-ud-test.conllu · this verb has L=1, R=1 (mean span = 3.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = M' avieivan piggiou à mi che vegniva da feua , ma guao à parlâ con quelli de o Castê !
-1	M'	M'	PRON	PRON	_	3	iobj	_	highlight=green|span=1
-2	avieivan	avieivan	AUX	AUX	_	3	aux	_	_
-3	piggiou	piggiou	VERB	VERB	_	0	root	_	highlight=red
-4	à	à	ADP	ADP	_	5	case	_	_
-5	mi	mi	PRON	PRON	_	3	obl	_	highlight=green|span=6
-6	che	che	PRON	PRON	_	7	nsubj	_	_
-7	vegniva	vegniva	VERB	VERB	_	5	acl:relcl	_	_
-8	da	da	ADP	ADP	_	9	case	_	_
-9	feua	feua	ADV	ADV	_	7	advmod	_	_
-10	,	,	PUNCT	PUNCT	_	12	punct	_	_
-11	ma	ma	CCONJ	CCONJ	_	12	cc	_	_
-12	guao	guao	INTJ	INTJ	_	3	conj	_	_
-13	à	à	ADP	ADP	_	14	mark	_	_
-14	parlâ	parlâ	VERB	VERB	_	12	advcl	_	_
-15	con	con	ADP	ADP	_	16	case	_	_
-16	quelli	quelli	PRON	PRON	_	14	obl	_	_
-17	de	de	ADP	ADP	_	19	case	_	_
-18	o	o	DET	DET	_	19	det	_	_
-19	Castê	Castê	PROPN	PROPN	_	16	nmod	_	_
-20	!	!	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 10 · source: lij_glt-ud-test.conllu · this verb has L=0, R=2 (mean span = 1.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = No ve saviæ dî se quello comercio , sorviatutto de sti tempi , o pòsse dâ bon fruto : quella scignoa lombarda che oua a l' é à Nervi à passâ l' inverno e ch' a v' à dæto l' idea , e che quand' a vëgne à Milan a s' incarrega de tegnî vòstra figgia in cà sò , de dâ ghe a mente e de fâ ghe da moæ , a saià unna braviscima scignoa , no me n' indubito , e a l' avià de seguo e megio intençioin ; in sce o comercio , ançi , peu dâ se ch' a l' agge raxon .
-1	No	No	ADV	ADV	_	4	advmod	_	_
-2	ve	ve	PRON	PRON	_	4	iobj	_	_
-3	saviæ	saviæ	AUX	AUX	_	4	aux	_	_
-4	dî	dî	VERB	VERB	_	0	root	_	_
-5	se	se	SCONJ	SCONJ	_	16	mark	_	_
-6	quello	quello	DET	DET	_	7	det	_	_
-7	comercio	comercio	NOUN	NOUN	_	16	nsubj	_	_
-8	,	,	PUNCT	PUNCT	_	12	punct	_	_
-9	sorviatutto	sorviatutto	ADV	ADV	_	12	advmod	_	_
-10	de	de	ADP	ADP	_	12	case	_	_
-11	sti	sti	DET	DET	_	12	det	_	_
-12	tempi	tempi	NOUN	NOUN	_	16	obl	_	_
-13	,	,	PUNCT	PUNCT	_	12	punct	_	_
-14	o	o	PRON	PRON	_	16	expl	_	_
-15	pòsse	pòsse	AUX	AUX	_	16	aux	_	_
-16	dâ	dâ	VERB	VERB	_	4	ccomp	_	_
-17	bon	bon	ADJ	ADJ	_	18	amod	_	_
-18	fruto	fruto	NOUN	NOUN	_	16	obj	_	_
-19	:	:	PUNCT	PUNCT	_	82	punct	_	_
-20	quella	quella	DET	DET	_	21	det	_	_
-21	scignoa	scignoa	NOUN	NOUN	_	77	nsubj	_	_
-22	lombarda	lombarda	ADJ	ADJ	_	21	amod	_	_
-23	che	che	PRON	PRON	_	27	nsubj	_	_
-24	oua	oua	ADV	ADV	_	27	advmod	_	_
-25	a	a	PRON	PRON	_	27	expl	_	_
-26	l'	l'	PART	PART	_	27	dep	_	_
-27	é	é	VERB	VERB	_	21	acl:relcl	_	_
-28	à	à	ADP	ADP	_	29	case	_	_
-29	Nervi	Nervi	PROPN	PROPN	_	27	obl	_	_
-30	à	à	ADP	ADP	_	31	case	_	_
-31	passâ	passâ	VERB	VERB	_	27	advcl	_	_
-32	l'	l'	DET	DET	_	33	det	_	_
-33	inverno	inverno	NOUN	NOUN	_	31	obj	_	_
-34	e	e	CCONJ	CCONJ	_	39	cc	_	_
-35	ch'	ch'	PRON	PRON	_	39	nsubj	_	_
-36	a	a	PRON	PRON	_	39	expl	_	_
-37	v'	v'	PRON	PRON	_	39	iobj	_	_
-38	à	à	AUX	AUX	_	39	aux	_	_
-39	dæto	dæto	VERB	VERB	_	27	conj	_	_
-40	l'	l'	DET	DET	_	41	det	_	_
-41	idea	idea	NOUN	NOUN	_	39	obj	_	_
-42	,	,	PUNCT	PUNCT	_	52	punct	_	_
-43	e	e	CCONJ	CCONJ	_	52	cc	_	_
-44	che	che	PRON	PRON	_	52	dislocated	_	_
-45	quand'	quand'	SCONJ	SCONJ	_	47	mark	_	_
-46	a	a	PRON	PRON	_	47	nsubj	_	_
-47	vëgne	vëgne	VERB	VERB	_	52	advcl	_	_
-48	à	à	ADP	ADP	_	49	case	_	_
-49	Milan	Milan	PROPN	PROPN	_	47	obl	_	_
-50	a	a	PRON	PRON	_	52	nsubj	_	_
-51	s'	s'	PRON	PRON	_	52	obj	_	_
-52	incarrega	incarrega	VERB	VERB	_	27	conj	_	_
-53	de	de	ADP	ADP	_	54	case	_	_
-54	tegnî	tegnî	VERB	VERB	_	52	advcl	_	_
-55	vòstra	vòstra	DET	DET	_	56	det	_	_
-56	figgia	figgia	NOUN	NOUN	_	54	obj	_	_
-57	in	in	ADP	ADP	_	58	case	_	_
-58	cà	cà	NOUN	NOUN	_	54	obl	_	_
-59	sò	sò	DET	DET	_	58	det	_	_
-60	,	,	PUNCT	PUNCT	_	54	punct	_	_
-61	de	de	ADP	ADP	_	62	case	_	_
-62	dâ	dâ	VERB	VERB	_	54	conj	_	highlight=red
-63	ghe	ghe	PRON	PRON	_	62	iobj	_	highlight=green|span=1
-64	a	a	DET	DET	_	65	det	_	_
-65	mente	mente	NOUN	NOUN	_	62	obj	_	highlight=green|span=2
-66	e	e	CCONJ	CCONJ	_	68	cc	_	_
-67	de	de	ADP	ADP	_	68	case	_	_
-68	fâ	fâ	VERB	VERB	_	54	conj	_	_
-69	ghe	ghe	PRON	PRON	_	68	iobj	_	_
-70	da	da	ADP	ADP	_	71	case	_	_
-71	moæ	moæ	NOUN	NOUN	_	68	obl	_	_
-72	,	,	PUNCT	PUNCT	_	77	punct	_	_
-73	a	a	PRON	PRON	_	77	expl	_	_
-74	saià	saià	AUX	AUX	_	77	cop	_	_
-75	unna	unna	DET	DET	_	77	det	_	_
-76	braviscima	braviscima	ADJ	ADJ	_	77	amod	_	_
-77	scignoa	scignoa	NOUN	NOUN	_	82	advcl	_	_
-78	,	,	PUNCT	PUNCT	_	82	punct	_	_
-79	no	no	ADV	ADV	_	82	advmod	_	_
-80	me	me	PRON	PRON	_	82	expl:pv	_	_
-81	n'	n'	PRON	PRON	_	82	obl	_	_
-82	indubito	indubito	VERB	VERB	_	4	parataxis	_	_
-83	,	,	PUNCT	PUNCT	_	82	punct	_	_
-84	e	e	CCONJ	CCONJ	_	87	cc	_	_
-85	a	a	PRON	PRON	_	87	nsubj	_	_
-86	l'	l'	PART	PART	_	87	dep	_	_
-87	avià	avià	VERB	VERB	_	82	conj	_	_
-88	de	de	ADP	ADP	_	89	case	_	_
-89	seguo	seguo	ADJ	ADJ	_	87	obl	_	_
-90	e	e	DET	DET	_	92	det	_	_
-91	megio	megio	ADJ	ADJ	_	92	amod	_	_
-92	intençioin	intençioin	NOUN	NOUN	_	87	obj	_	_
-93	;	;	PUNCT	PUNCT	_	102	punct	_	_
-94	in	in	ADP	ADP	_	97	case	_	_
-95	sce	sce	ADP	ADP	_	94	fixed	_	_
-96	o	o	DET	DET	_	97	det	_	_
-97	comercio	comercio	NOUN	NOUN	_	102	obl	_	_
-98	,	,	PUNCT	PUNCT	_	99	punct	_	_
-99	ançi	ançi	ADV	ADV	_	102	amod	_	_
-100	,	,	PUNCT	PUNCT	_	99	punct	_	_
-101	peu	peu	AUX	AUX	_	102	aux	_	_
-102	dâ	dâ	VERB	VERB	_	4	parataxis	_	_
-103	se	se	PRON	PRON	_	102	expl:pv	_	_
-104	ch'	ch'	SCONJ	SCONJ	_	107	mark	_	_
-105	a	a	PRON	PRON	_	107	nsubj	_	_
-106	l'	l'	PART	PART	_	107	dep	_	_
-107	agge	agge	VERB	VERB	_	102	ccomp	_	_
-108	raxon	raxon	NOUN	NOUN	_	107	obj	_	_
-109	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 11 · source: lij_glt-ud-test.conllu · this verb has L=1, R=1 (mean span = 10.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Dòppo quell' atro mæ patron son anæto à vive con un artexan ch' o pittuava tambuetti , pe o quæ maxinava i coî ; ma con lê ascì ò dovuo patî mille peñe .
-1	Dòppo	Dòppo	ADP	ADP	_	5	case	_	_
-2	quell'	quell'	DET	DET	_	5	det	_	_
-3	atro	atro	DET	DET	_	5	det	_	_
-4	mæ	mæ	DET	DET	_	5	det	_	_
-5	patron	patron	NOUN	NOUN	_	7	obl	_	highlight=green|span=5
-6	son	son	AUX	AUX	_	7	aux	_	_
-7	anæto	anæto	VERB	VERB	_	0	root	_	highlight=red
-8	à	à	ADP	ADP	_	9	mark	_	_
-9	vive	vive	VERB	VERB	_	7	xcomp	_	highlight=green|span=15
-10	con	con	ADP	ADP	_	12	case	_	_
-11	un	un	DET	DET	_	12	det	_	_
-12	artexan	artexan	NOUN	NOUN	_	9	obl	_	_
-13	ch'	ch'	PRON	PRON	_	15	nsubj	_	_
-14	o	o	PRON	PRON	_	15	expl	_	_
-15	pittuava	pittuava	VERB	VERB	_	12	acl:relcl	_	_
-16	tambuetti	tambuetti	NOUN	NOUN	_	15	obj	_	_
-17	,	,	PUNCT	PUNCT	_	21	punct	_	_
-18	pe	pe	ADP	ADP	_	20	case	_	_
-19	o	o	DET	DET	_	20	det	_	_
-20	quæ	quæ	PRON	PRON	_	21	obl	_	_
-21	maxinava	maxinava	VERB	VERB	_	12	acl:relcl	_	_
-22	i	i	DET	DET	_	23	det	_	_
-23	coî	coî	NOUN	NOUN	_	21	obj	_	_
-24	;	;	PUNCT	PUNCT	_	31	punct	_	_
-25	ma	ma	CCONJ	CCONJ	_	31	cc	_	_
-26	con	con	ADP	ADP	_	27	case	_	_
-27	lê	lê	PRON	PRON	_	31	obl	_	_
-28	ascì	ascì	ADV	ADV	_	27	advmod	_	_
-29	ò	ò	AUX	AUX	_	31	aux	_	_
-30	dovuo	dovuo	AUX	AUX	_	31	aux	_	_
-31	patî	patî	VERB	VERB	_	7	parataxis	_	_
-32	mille	mille	NUM	NUM	_	33	nummod	_	_
-33	peñe	peñe	NOUN	NOUN	_	31	obj	_	_
-34	.	.	PUNCT	PUNCT	_	31	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 12 · source: lij_glt-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Se m' appenso quelli momenti , m' accòrzo che no l' é scangiou ninte .
-1	Se	Se	SCONJ	SCONJ	_	3	mark	_	_
-2	m'	m'	PRON	PRON	_	3	iobj	_	_
-3	appenso	appenso	VERB	VERB	_	8	advcl	_	_
-4	quelli	quelli	DET	DET	_	5	det	_	_
-5	momenti	momenti	NOUN	NOUN	_	3	obj	_	_
-6	,	,	PUNCT	PUNCT	_	3	punct	_	_
-7	m'	m'	PRON	PRON	_	8	iobj	_	_
-8	accòrzo	accòrzo	VERB	VERB	_	0	root	_	_
-9	che	che	SCONJ	SCONJ	_	13	mark	_	_
-10	no	no	ADV	ADV	_	13	advmod	_	highlight=green|span=1
-11	l'	l'	PART	PART	_	13	dep	_	_
-12	é	é	AUX	AUX	_	13	aux	_	_
-13	scangiou	scangiou	VERB	VERB	_	8	ccomp	_	highlight=red
-14	ninte	ninte	PRON	PRON	_	13	nsubj	_	highlight=green|span=1
-15	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 13 · source: lij_glt-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = O destende a man , ô tocca e o ghe dixe : « Öscì che veuggio , stanni ben ! » .
-1	O	O	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
-2	destende	destende	VERB	VERB	_	0	root	_	highlight=red
-3	a	a	DET	DET	_	4	det	_	_
-4	man	man	NOUN	NOUN	_	2	obj	_	highlight=green|span=2
-5	,	,	PUNCT	PUNCT	_	7	punct	_	_
-6	ô	ô	PRON	PRON	_	7	obj	_	_
-7	tocca	tocca	VERB	VERB	_	2	conj	_	_
-8	e	e	CCONJ	CCONJ	_	11	cc	_	_
-9	o	o	PRON	PRON	_	11	nsubj	_	_
-10	ghe	ghe	PRON	PRON	_	11	iobj	_	_
-11	dixe	dixe	VERB	VERB	_	2	conj	_	_
-12	:	:	PUNCT	PUNCT	_	14	punct	_	_
-13	«	«	PUNCT	PUNCT	_	14	punct	_	_
-14	Öscì	Öscì	INTJ	INTJ	_	11	parataxis	_	_
-15	che	che	SCONJ	SCONJ	_	16	mark	_	_
-16	veuggio	veuggio	VERB	VERB	_	14	advcl	_	_
-17	,	,	PUNCT	PUNCT	_	19	punct	_	_
-18	stanni	stanni	AUX	AUX	_	19	cop	_	_
-19	ben	ben	ADV	ADV	_	14	parataxis	_	_
-20	!	!	PUNCT	PUNCT	_	14	punct	_	_
-21	»	»	PUNCT	PUNCT	_	14	punct	_	_
-22	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 14 · source: lij_glt-ud-test.conllu · this verb has L=0, R=2 (mean span = 3.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Arrivan in Cafarnao pròpio à o sabbo , e Gexù o l' intra inte a scinagöga e o se mette à dâ leçion .
-1	Arrivan	Arrivan	VERB	VERB	_	0	root	_	highlight=red
-2	in	in	ADP	ADP	_	3	case	_	_
-3	Cafarnao	Cafarnao	PROPN	PROPN	_	1	obl	_	highlight=green|span=2
-4	pròpio	pròpio	ADV	ADV	_	7	advmod	_	_
-5	à	à	ADP	ADP	_	7	case	_	_
-6	o	o	DET	DET	_	7	det	_	_
-7	sabbo	sabbo	NOUN	NOUN	_	1	obl	_	highlight=green|span=4
-8	,	,	PUNCT	PUNCT	_	13	punct	_	_
-9	e	e	CCONJ	CCONJ	_	13	cc	_	_
-10	Gexù	Gexù	PROPN	PROPN	_	13	nsubj	_	_
-11	o	o	PRON	PRON	_	13	expl	_	_
-12	l'	l'	PART	PART	_	13	dep	_	_
-13	intra	intra	VERB	VERB	_	1	conj	_	_
-14	inte	inte	ADP	ADP	_	16	case	_	_
-15	a	a	DET	DET	_	16	det	_	_
-16	scinagöga	scinagöga	NOUN	NOUN	_	13	obl	_	_
-17	e	e	CCONJ	CCONJ	_	20	cc	_	_
-18	o	o	PRON	PRON	_	20	nsubj	_	_
-19	se	se	PRON	PRON	_	20	expl:pv	_	_
-20	mette	mette	VERB	VERB	_	13	conj	_	_
-21	à	à	ADP	ADP	_	22	mark	_	_
-22	dâ	dâ	VERB	VERB	_	20	xcomp	_	_
-23	leçion	leçion	NOUN	NOUN	_	22	obj	_	_
-24	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 15 · source: lij_glt-ud-test.conllu · this verb has L=1, R=1 (mean span = 2.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Dòppo quell' atro mæ patron son anæto à vive con un artexan ch' o pittuava tambuetti , pe o quæ maxinava i coî ; ma con lê ascì ò dovuo patî mille peñe .
-1	Dòppo	Dòppo	ADP	ADP	_	5	case	_	_
-2	quell'	quell'	DET	DET	_	5	det	_	_
-3	atro	atro	DET	DET	_	5	det	_	_
-4	mæ	mæ	DET	DET	_	5	det	_	_
-5	patron	patron	NOUN	NOUN	_	7	obl	_	_
-6	son	son	AUX	AUX	_	7	aux	_	_
-7	anæto	anæto	VERB	VERB	_	0	root	_	_
-8	à	à	ADP	ADP	_	9	mark	_	_
-9	vive	vive	VERB	VERB	_	7	xcomp	_	_
-10	con	con	ADP	ADP	_	12	case	_	_
-11	un	un	DET	DET	_	12	det	_	_
-12	artexan	artexan	NOUN	NOUN	_	9	obl	_	_
-13	ch'	ch'	PRON	PRON	_	15	nsubj	_	_
-14	o	o	PRON	PRON	_	15	expl	_	_
-15	pittuava	pittuava	VERB	VERB	_	12	acl:relcl	_	_
-16	tambuetti	tambuetti	NOUN	NOUN	_	15	obj	_	_
-17	,	,	PUNCT	PUNCT	_	21	punct	_	_
-18	pe	pe	ADP	ADP	_	20	case	_	_
-19	o	o	DET	DET	_	20	det	_	_
-20	quæ	quæ	PRON	PRON	_	21	obl	_	highlight=green|span=3
-21	maxinava	maxinava	VERB	VERB	_	12	acl:relcl	_	highlight=red
-22	i	i	DET	DET	_	23	det	_	_
-23	coî	coî	NOUN	NOUN	_	21	obj	_	highlight=green|span=2
-24	;	;	PUNCT	PUNCT	_	31	punct	_	_
-25	ma	ma	CCONJ	CCONJ	_	31	cc	_	_
-26	con	con	ADP	ADP	_	27	case	_	_
-27	lê	lê	PRON	PRON	_	31	obl	_	_
-28	ascì	ascì	ADV	ADV	_	27	advmod	_	_
-29	ò	ò	AUX	AUX	_	31	aux	_	_
-30	dovuo	dovuo	AUX	AUX	_	31	aux	_	_
-31	patî	patî	VERB	VERB	_	7	parataxis	_	_
-32	mille	mille	NUM	NUM	_	33	nummod	_	_
-33	peñe	peñe	NOUN	NOUN	_	31	obj	_	_
-34	.	.	PUNCT	PUNCT	_	31	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 16 · source: lij_glt-ud-test.conllu · this verb has L=0, R=2 (mean span = 7.50)</div>
+<div class="example-meta">Example 19 · source: lij_glt-ud-test.conllu · this verb has L=1, R=1 (mean span = 53.50)</div>
 <reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Anche e avventue pubricæ ciù tardi an da fâ con de i contesti de realtæ , comme o Congo de o 1930 ( che alantô a l' ea colònia de o Belgio ) , l' America de o nòrd de o 1933 , a Ciña occupâ da i giapponeixi de o 1934 , l' Inghiltæra , o Belgio e a Scòçia de o 1937 , un stato de fantaxia de l' Euröpa de l' est ch' o se peu identificâ con l' antigo Regno de a Iugoslavia de o 1940 e l' Austria dòppo l' invaxon de i todeschi , pe arrivâ fiña in sce a Luña , à o desvio d' arioplen e à i dittatoî sudamerichen .
 1	Anche	Anche	ADV	ADV	_	3	advmod	_	_
 2	e	e	DET	DET	_	3	det	_	_
-3	avventue	avventue	NOUN	NOUN	_	7	nsubj	_	_
+3	avventue	avventue	NOUN	NOUN	_	7	nsubj	_	highlight=green|span=6
 4	pubricæ	pubricæ	VERB	VERB	_	3	amod	_	_
 5	ciù	ciù	ADV	ADV	_	6	advmod	_	_
 6	tardi	tardi	ADV	ADV	_	4	advmod	_	_
-7	an	an	VERB	VERB	_	0	root	_	_
+7	an	an	VERB	VERB	_	0	root	_	highlight=red
 8	da	da	ADP	ADP	_	9	mark	_	_
-9	fâ	fâ	VERB	VERB	_	7	xcomp	_	_
+9	fâ	fâ	VERB	VERB	_	7	xcomp	_	highlight=green|span=101
 10	con	con	ADP	ADP	_	13	case	_	_
 11	de	de	ADP	ADP	_	12	case	_	_
 12	i	i	DET	DET	_	13	det	_	_
@@ -634,12 +673,12 @@ table.mal-table a:hover { text-decoration: underline; }
 99	todeschi	todeschi	NOUN	NOUN	_	96	nmod	_	_
 100	,	,	PUNCT	PUNCT	_	102	punct	_	_
 101	pe	pe	ADP	ADP	_	102	mark	_	_
-102	arrivâ	arrivâ	VERB	VERB	_	9	conj	_	highlight=red
-103	fiña	fiña	ADV	ADV	_	102	advmod	_	highlight=green|span=1
+102	arrivâ	arrivâ	VERB	VERB	_	9	conj	_	_
+103	fiña	fiña	ADV	ADV	_	102	advmod	_	_
 104	in	in	ADP	ADP	_	107	case	_	_
 105	sce	sce	ADP	ADP	_	104	fixed	_	_
 106	a	a	DET	DET	_	107	det	_	_
-107	Luña	Luña	PROPN	PROPN	_	102	obl	_	highlight=green|span=14
+107	Luña	Luña	PROPN	PROPN	_	102	obl	_	_
 108	,	,	PUNCT	PUNCT	_	111	punct	_	_
 109	à	à	ADP	ADP	_	111	case	_	_
 110	o	o	DET	DET	_	111	det	_	_
@@ -654,129 +693,91 @@ table.mal-table a:hover { text-decoration: underline; }
 119	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 17 · source: lij_glt-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = M' avieivan piggiou à mi che vegniva da feua , ma guao à parlâ con quelli de o Castê !
-1	M'	M'	PRON	PRON	_	3	iobj	_	_
-2	avieivan	avieivan	AUX	AUX	_	3	aux	_	_
-3	piggiou	piggiou	VERB	VERB	_	0	root	_	_
-4	à	à	ADP	ADP	_	5	case	_	_
-5	mi	mi	PRON	PRON	_	3	obl	_	_
-6	che	che	PRON	PRON	_	7	nsubj	_	highlight=green|span=1
-7	vegniva	vegniva	VERB	VERB	_	5	acl:relcl	_	highlight=red
-8	da	da	ADP	ADP	_	9	case	_	_
-9	feua	feua	ADV	ADV	_	7	advmod	_	highlight=green|span=2
-10	,	,	PUNCT	PUNCT	_	12	punct	_	_
-11	ma	ma	CCONJ	CCONJ	_	12	cc	_	_
-12	guao	guao	INTJ	INTJ	_	3	conj	_	_
-13	à	à	ADP	ADP	_	14	mark	_	_
-14	parlâ	parlâ	VERB	VERB	_	12	advcl	_	_
-15	con	con	ADP	ADP	_	16	case	_	_
-16	quelli	quelli	PRON	PRON	_	14	obl	_	_
-17	de	de	ADP	ADP	_	19	case	_	_
-18	o	o	DET	DET	_	19	det	_	_
-19	Castê	Castê	PROPN	PROPN	_	16	nmod	_	_
-20	!	!	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 18 · source: lij_glt-ud-test.conllu · this verb has L=1, R=1 (mean span = 2.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = E comm' o sciòrte d' inte l' ægua , o vedde o çê ch' o s' arve e o Sprito ch' o ven zù in sce de lê comme unna comba .
-1	E	E	CCONJ	CCONJ	_	4	cc	_	_
-2	comm'	comm'	SCONJ	SCONJ	_	4	mark	_	_
-3	o	o	PRON	PRON	_	4	nsubj	_	highlight=green|span=1
-4	sciòrte	sciòrte	VERB	VERB	_	11	advcl	_	highlight=red
-5	d'	d'	ADP	ADP	_	8	case	_	_
-6	inte	inte	ADP	ADP	_	8	case	_	_
-7	l'	l'	DET	DET	_	8	det	_	_
-8	ægua	ægua	NOUN	NOUN	_	4	obl	_	highlight=green|span=4
-9	,	,	PUNCT	PUNCT	_	4	punct	_	_
-10	o	o	PRON	PRON	_	11	nsubj	_	_
-11	vedde	vedde	VERB	VERB	_	0	root	_	_
-12	o	o	DET	DET	_	13	det	_	_
-13	çê	çê	NOUN	NOUN	_	11	obj	_	_
-14	ch'	ch'	PRON	PRON	_	17	nsubj	_	_
-15	o	o	PRON	PRON	_	17	expl	_	_
-16	s'	s'	PRON	PRON	_	17	obj	_	_
-17	arve	arve	VERB	VERB	_	13	acl:relcl	_	_
-18	e	e	CCONJ	CCONJ	_	20	cc	_	_
-19	o	o	DET	DET	_	20	det	_	_
-20	Sprito	Sprito	NOUN	NOUN	_	13	conj	_	_
-21	ch'	ch'	PRON	PRON	_	23	nsubj	_	_
-22	o	o	PRON	PRON	_	23	expl	_	_
-23	ven	ven	VERB	VERB	_	20	acl:relcl	_	_
-24	zù	zù	ADV	ADV	_	23	advmod	_	_
-25	in	in	ADP	ADP	_	28	case	_	_
-26	sce	sce	ADP	ADP	_	25	fixed	_	_
-27	de	de	ADP	ADP	_	28	case	_	_
-28	lê	lê	PRON	PRON	_	23	obl	_	_
-29	comme	comme	ADP	ADP	_	31	case	_	_
-30	unna	unna	DET	DET	_	31	det	_	_
-31	comba	comba	NOUN	NOUN	_	23	obl	_	_
-32	.	.	PUNCT	PUNCT	_	11	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 19 · source: lij_glt-ud-test.conllu · this verb has L=2, R=0 (mean span = 7.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = À un bello momento manco mi poeiva ciù comportâ i seu dafæ , e pe questo – in azzonta à de e atre cöse che no staggo à contâ – l' ò abbandonou .
-1	À	À	ADP	ADP	_	4	case	_	_
-2	un	un	DET	DET	_	4	det	_	_
-3	bello	bello	ADJ	ADJ	_	4	amod	_	_
-4	momento	momento	NOUN	NOUN	_	9	obl	_	_
-5	manco	manco	ADV	ADV	_	6	advmod	_	_
-6	mi	mi	PRON	PRON	_	9	nsubj	_	_
-7	poeiva	poeiva	AUX	AUX	_	9	aux	_	_
-8	ciù	ciù	ADV	ADV	_	9	advmod	_	_
-9	comportâ	comportâ	VERB	VERB	_	0	root	_	_
-10	i	i	DET	DET	_	12	det	_	_
-11	seu	seu	DET	DET	_	12	det	_	_
-12	dafæ	dafæ	NOUN	NOUN	_	9	obj	_	_
-13	,	,	PUNCT	PUNCT	_	33	punct	_	_
-14	e	e	CCONJ	CCONJ	_	33	cc	_	_
-15	pe	pe	ADP	ADP	_	16	case	_	_
-16	questo	questo	PRON	PRON	_	33	obl	_	highlight=green|span=14
-17	–	–	PUNCT	PUNCT	_	19	punct	_	_
-18	in	in	ADP	ADP	_	19	case	_	_
-19	azzonta	azzonta	NOUN	NOUN	_	16	parataxis	_	_
-20	à	à	ADP	ADP	_	24	case	_	_
-21	de	de	ADP	ADP	_	22	case	_	_
-22	e	e	DET	DET	_	24	det	_	_
-23	atre	atre	DET	DET	_	24	det	_	_
-24	cöse	cöse	NOUN	NOUN	_	19	obl	_	_
-25	che	che	PRON	PRON	_	27	obj	_	_
-26	no	no	ADV	ADV	_	27	advmod	_	_
-27	staggo	staggo	VERB	VERB	_	24	acl:relcl	_	_
-28	à	à	ADP	ADP	_	29	mark	_	_
-29	contâ	contâ	VERB	VERB	_	27	xcomp	_	_
-30	–	–	PUNCT	PUNCT	_	19	punct	_	_
-31	l'	l'	PRON	PRON	_	33	obj	_	highlight=green|span=1
-32	ò	ò	AUX	AUX	_	33	aux	_	_
-33	abbandonou	abbandonou	VERB	VERB	_	9	conj	_	highlight=red
-34	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 20 · source: lij_glt-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Investimenti raxonæ e coæ de fâ marciâ torna , co a coltua , o destin de a nòstra montagna : no serviæ atro .
-1	Investimenti	Investimenti	NOUN	NOUN	_	0	root	_	_
-2	raxonæ	raxonæ	ADJ	ADJ	_	1	amod	_	_
-3	e	e	CCONJ	CCONJ	_	4	cc	_	_
-4	coæ	coæ	NOUN	NOUN	_	1	conj	_	_
-5	de	de	ADP	ADP	_	6	mark	_	_
-6	fâ	fâ	VERB	VERB	_	4	acl	_	_
-7	marciâ	marciâ	VERB	VERB	_	6	xcomp	_	_
-8	torna	torna	ADV	ADV	_	7	advmod	_	_
-9	,	,	PUNCT	PUNCT	_	12	punct	_	_
-10	co	co	ADP	ADP	_	12	case	_	_
-11	a	a	DET	DET	_	12	det	_	_
-12	coltua	coltua	NOUN	NOUN	_	7	obl	_	_
-13	,	,	PUNCT	PUNCT	_	12	punct	_	_
-14	o	o	DET	DET	_	15	det	_	_
-15	destin	destin	NOUN	NOUN	_	7	obj	_	_
-16	de	de	ADP	ADP	_	19	case	_	_
-17	a	a	DET	DET	_	19	det	_	_
-18	nòstra	nòstra	DET	DET	_	19	det	_	_
-19	montagna	montagna	NOUN	NOUN	_	15	nmod	_	_
-20	:	:	PUNCT	PUNCT	_	22	punct	_	_
-21	no	no	ADV	ADV	_	22	advmod	_	highlight=green|span=1
-22	serviæ	serviæ	VERB	VERB	_	1	parataxis	_	highlight=red
-23	atro	atro	PRON	PRON	_	22	nsubj	_	highlight=green|span=1
-24	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 20 · source: lij_glt-ud-test.conllu · this verb has L=1, R=1 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Se conoscemmo d' antigo , voî ve fiæ ben ben de mi , e aloa ve parlo sccetto : à sto mondo , mascime à a giornâ d' ancheu , quande gh' é unna bella figgia comme a vòstra , de loî in gio no n' ammanca , satan feua da tutte e parte co a bocca averta ; e se un o no ghe stà ben attento , finisce che a figgia se â mangian , e aloa gh' é da cianze .
+1	Se	Se	PRON	PRON	_	2	nsubj	_	highlight=green|span=1
+2	conoscemmo	conoscemmo	VERB	VERB	_	0	root	_	highlight=red
+3	d'	d'	ADP	ADP	_	4	case	_	_
+4	antigo	antigo	ADJ	ADJ	_	2	obl	_	highlight=green|span=2
+5	,	,	PUNCT	PUNCT	_	8	punct	_	_
+6	voî	voî	PRON	PRON	_	8	nsubj	_	_
+7	ve	ve	PRON	PRON	_	8	expl:pv	_	_
+8	fiæ	fiæ	VERB	VERB	_	2	conj	_	_
+9	ben	ben	ADV	ADV	_	12	advmod	_	_
+10	ben	ben	ADV	ADV	_	9	advmod	_	_
+11	de	de	ADP	ADP	_	12	case	_	_
+12	mi	mi	PRON	PRON	_	8	obl	_	_
+13	,	,	PUNCT	PUNCT	_	17	punct	_	_
+14	e	e	CCONJ	CCONJ	_	17	cc	_	_
+15	aloa	aloa	ADV	ADV	_	17	advmod	_	_
+16	ve	ve	PRON	PRON	_	17	iobj	_	_
+17	parlo	parlo	VERB	VERB	_	2	conj	_	_
+18	sccetto	sccetto	ADV	ADV	_	17	advmod	_	_
+19	:	:	PUNCT	PUNCT	_	47	punct	_	_
+20	à	à	ADP	ADP	_	22	case	_	_
+21	sto	sto	DET	DET	_	22	det	_	_
+22	mondo	mondo	NOUN	NOUN	_	47	obl	_	_
+23	,	,	PUNCT	PUNCT	_	22	punct	_	_
+24	mascime	mascime	ADV	ADV	_	27	advmod	_	_
+25	à	à	ADP	ADP	_	27	case	_	_
+26	a	a	DET	DET	_	27	det	_	_
+27	giornâ	giornâ	NOUN	NOUN	_	47	obl	_	_
+28	d'	d'	ADP	ADP	_	29	case	_	_
+29	ancheu	ancheu	NOUN	NOUN	_	27	nmod	_	_
+30	,	,	PUNCT	PUNCT	_	27	punct	_	_
+31	quande	quande	SCONJ	SCONJ	_	33	mark	_	_
+32	gh'	gh'	PRON	PRON	_	33	expl:pv	_	_
+33	é	é	VERB	VERB	_	47	advcl	_	_
+34	unna	unna	DET	DET	_	36	det	_	_
+35	bella	bella	ADJ	ADJ	_	36	amod	_	_
+36	figgia	figgia	NOUN	NOUN	_	33	obj	_	_
+37	comme	comme	ADP	ADP	_	39	case	_	_
+38	a	a	DET	DET	_	39	det	_	_
+39	vòstra	vòstra	PRON	PRON	_	36	nmod	_	_
+40	,	,	PUNCT	PUNCT	_	33	punct	_	_
+41	de	de	ADP	ADP	_	42	case	_	_
+42	loî	loî	NOUN	NOUN	_	47	dislocated	_	_
+43	in	in	ADP	ADP	_	44	case	_	_
+44	gio	gio	NOUN	NOUN	_	47	obl	_	_
+45	no	no	ADV	ADV	_	47	advmod	_	_
+46	n'	n'	PRON	PRON	_	47	obl	_	_
+47	ammanca	ammanca	VERB	VERB	_	2	parataxis	_	_
+48	,	,	PUNCT	PUNCT	_	49	punct	_	_
+49	satan	satan	VERB	VERB	_	47	parataxis	_	_
+50	feua	feua	ADV	ADV	_	49	advmod	_	_
+51	da	da	ADP	ADP	_	54	case	_	_
+52	tutte	tutte	DET	DET	_	54	det	_	_
+53	e	e	DET	DET	_	54	det	_	_
+54	parte	parte	NOUN	NOUN	_	49	obl	_	_
+55	co	co	ADP	ADP	_	57	case	_	_
+56	a	a	DET	DET	_	57	det	_	_
+57	bocca	bocca	NOUN	NOUN	_	49	obl	_	_
+58	averta	averta	ADJ	ADJ	_	57	nmod	_	_
+59	;	;	PUNCT	PUNCT	_	70	punct	_	_
+60	e	e	CCONJ	CCONJ	_	70	cc	_	_
+61	se	se	SCONJ	SCONJ	_	68	mark	_	_
+62	un	un	PRON	PRON	_	68	nsubj	_	_
+63	o	o	PRON	PRON	_	68	expl	_	_
+64	no	no	ADV	ADV	_	68	advmod	_	_
+65	ghe	ghe	PRON	PRON	_	68	expl:pv	_	_
+66	stà	stà	AUX	AUX	_	68	cop	_	_
+67	ben	ben	ADV	ADV	_	68	advmod	_	_
+68	attento	attento	ADJ	ADJ	_	70	advcl	_	_
+69	,	,	PUNCT	PUNCT	_	68	punct	_	_
+70	finisce	finisce	VERB	VERB	_	49	conj	_	_
+71	che	che	SCONJ	SCONJ	_	76	mark	_	_
+72	a	a	DET	DET	_	73	det	_	_
+73	figgia	figgia	NOUN	NOUN	_	76	dislocated	_	_
+74	se	se	PRON	PRON	_	76	nsubj	_	_
+75	â	â	PRON	PRON	_	76	obj	_	_
+76	mangian	mangian	VERB	VERB	_	70	ccomp	_	_
+77	,	,	PUNCT	PUNCT	_	81	punct	_	_
+78	e	e	CCONJ	CCONJ	_	81	cc	_	_
+79	aloa	aloa	ADV	ADV	_	81	advmod	_	_
+80	gh'	gh'	PRON	PRON	_	81	expl:pv	_	_
+81	é	é	VERB	VERB	_	70	conj	_	_
+82	da	da	ADP	ADP	_	83	mark	_	_
+83	cianze	cianze	VERB	VERB	_	81	ccomp	_	_
+84	.	.	PUNCT	PUNCT	_	83	punct	_	_"></reactive-dep-tree>
 </div>
 </body></html>

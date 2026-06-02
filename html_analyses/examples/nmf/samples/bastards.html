@@ -1,0 +1,75 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Tangkhul — Bastard Examples</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+:root { color-scheme: light; }
+html, body { background: #fff; }
+body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
+       padding: 0 20px; color: #222; }
+h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+h2 { color: #34495e; margin-top: 28px; border-left: 4px solid #3498db; padding-left: 10px; }
+.info { background: #f0f8ff; border: 1px solid #d0e0f0; padding: 12px 16px;
+        border-radius: 5px; margin: 14px 0 22px 0; font-size: 14px; }
+.info code, .info b { font-family: Consolas, monospace; }
+.example { margin-bottom: 28px; padding: 16px; border: 1px solid #ddd;
+           border-radius: 5px; background: #fff; }
+.example-meta { color: #666; font-size: 12px; margin-bottom: 8px; }
+.back { font-size: 13px; }
+table.mal-table { border-collapse: collapse; margin: 10px 0 20px 0; }
+table.mal-table th, table.mal-table td { border: 1px solid #ddd; padding: 6px 10px;
+                                          text-align: center; font-size: 13px; }
+table.mal-table th { background: #4CAF50; color: white; }
+table.mal-table td.lang-label { background: #f5f5f5; font-weight: bold; }
+table.mal-table a { text-decoration: none; color: #1976d2; }
+table.mal-table a:hover { text-decoration: underline; }
+.no-data { color: #999; font-style: italic; padding: 20px 0; }
+</style></head><body>
+<p class="back"><a href="../index.html">← back to Tangkhul examples</a></p>
+<h1>Tangkhul — Bastard Examples</h1>
+<div class="info"><p>Bastard dependencies (non-projective or cross-clausal links) are highlighted in <b>orange</b> below.</p></div>
+<div class="example">
+<div class="example-meta">Bastard Example 1</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span,MISC.highlight" conll="#  Example 1
+# english = All right, search the mattress, the bed, the floorboards, his chair.
+# sent_id = film_Bridge_37
+# text = Szuraire kapiu mattresspha la, bikpha la, floorboardspha la, chokeypha la
+1	Szuraire	szuraire	ADV	_	_	2	advmod	2:advmod	_
+2	kapiu	kapiu	VERB	_	VerbForm=Inf	0	root	0:root	_
+3	mattresspha	mattress	NOUN	_	Number=Plur	2	obj	2:obj	_
+4	la	la	AUX	_	VerbForm=Inf	2	aux	2:aux	SpaceAfter=No
+5	,	,	PUNCT	_	_	6	punct	6:punct	_
+6	bikpha	bik	NOUN	_	Number=Plur	3	conj	2:obj|3:conj	highlight=orange
+7	la	la	AUX	_	VerbForm=Inf	6	aux	6:aux	SpaceAfter=No
+8	,	,	PUNCT	_	_	9	punct	9:punct	_
+9	floorboardspha	floorboards	NOUN	_	Number=Plur	3	conj	2:obj|3:conj	OrigLang=en|highlight=orange
+10	la	la	AUX	_	VerbForm=Inf	9	aux	9:aux	SpaceAfter=No
+11	,	,	PUNCT	_	_	12	punct	12:punct	_
+12	chokeypha	chokey	NOUN	_	Number=Plur	3	conj	2:obj|3:conj	highlight=orange
+13	la	la	AUX	_	VerbForm=Inf	12	aux	12:aux	SpacesAfter=\n
+"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Bastard Example 2</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span,MISC.highlight" conll="#  Example 2
+# english = If your house is insured for $100,000 and a tornado carries it away, it carried away one house.
+# sent_id = film_Bridge_89
+# text = Nahn rhui hadi insurance policy $100,000 laganan, tornadonan thekhia danan, didi rhui ska daichu thekhiaha dai.
+1	Nahn	nahn	PRON	_	Number=Sing|Person=2|PronType=Prs	3	nmod	3:nmod	_
+2	rhui	rhui	NOUN	_	Number=Sing	3	reparandum	3:reparandum	_
+3	hadi	hadi	PRON	_	Number=Sing|PronType=Dem	7	nsubj	7:nsubj	Deixis=Prox
+4	insurance	insurance	NOUN	_	Number=Sing	6	nmod	6:nmod	OrigLang=en
+5	policy	policy	NOUN	_	Number=Sing	4	flat	4:flat	OrigLang=en
+6	$100,000	$100,000	NUM	_	NumForm=Word|NumType=Card	7	obj	7:obj	_
+7	laganan	la	VERB	_	VerbForm=Conv	17	advcl	17:advcl	SpaceAfter=No
+8	,	,	PUNCT	_	_	7	punct	7:punct	_
+9	tornadonan	tornado	NOUN	_	Case=Erg|Number=Sing	10	nsubj	10:nsubj	OrigLang=en
+10	thekhia	thekhia	VERB	_	VerbForm=Inf	6	conj	6:conj	highlight=orange
+11	danan	danan	ADV	_	_	10	cc	10:cc	SpaceAfter=No
+12	,	,	PUNCT	_	_	10	punct	10:punct	_
+13	didi	didi	PRON	_	Number=Sing|PronType=Dem	14	reparandum	14:reparandum	Deixis=Remt
+14	rhui	rhui	NOUN	_	Number=Sing	17	obj	17:obj	_
+15	ska	ska	NUM	_	NumForm=Word|NumType=Card	14	nummod	14:nummod	_
+16	daichu	daichu	ADV	_	_	15	advmod	15:advmod	_
+17	thekhiaha	thekhia	VERB	_	Aspect=Imp|Mood=Ind|Tense=Pqp|VerbForm=Fin	0	root	0:root	_
+18	dai	dai	AUX	_	Mood=Jus	17	aux	17:aux	SpaceAfter=No
+19	.	.	PUNCT	_	_	17	punct	17:punct	SpacesAfter=\n
+"></reactive-dep-tree>
+</div>
+</body></html>

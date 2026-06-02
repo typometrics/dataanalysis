@@ -1,5 +1,6 @@
-<!DOCTYPE html><html><head>
-  <style>:root{color-scheme:light}html,body{background:#fff;color:#222}</style><meta charset="utf-8"><title>Dutch — LMAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Dutch — LMAL_2</title><script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script><style>
+:root { color-scheme: light; }
+html, body { background: #fff; }
 body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto;
        padding: 0 20px; color: #222; }
 h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
@@ -24,457 +25,644 @@ table.mal-table a:hover { text-decoration: underline; }
 <h1>Dutch <small style="color:#999;font-weight:normal">(nl)</small> — LMAL<sub>2</sub></h1>
 <div class="info"><p><b>Bucket:</b> verbs that have exactly <b>2</b> left dependents (right side may be anything).</p><p><b>LMAL<sub>2</sub> = 2.541</b> &nbsp; <span style="color:#666">(8,651 verb tokens in this bucket)</span></p><p style="font-size:13px;color:#555">Definition: mean of subtree sizes (in tokens) over the <i>left</i> dependents of all verbs in this bucket. Below: a reservoir sample of up to 20 sentences from this bucket; the verb is highlighted in red, its qualifying dependents in green, and each dependent shows its subtree size (field <code>MISC.span</code>).</p></div>
 <div class="example">
-<div class="example-meta">Example 1 · source: nl_lassysmall-ud-train.conllu · this verb has L=2, R=0 (mean span = 3.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Dylan had de bedoeling om met een soort karavaan door de States te trekken en her en der kleine plaatsen aan te doen .
-1	Dylan	Dylan	PROPN	PROPN	_	2	nsubj	_	_
-2	had	had	VERB	VERB	_	0	root	_	_
+<div class="example-meta">Example 1 · source: nl_alpino-ud-train.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = spijtig is het echter dat we nooit weten waaraan we toe zijn .
+1	spijtig	spijtig	ADJ	ADJ	_	0	root	_	_
+2	is	is	AUX	AUX	_	1	cop	_	_
+3	het	het	PRON	PRON	_	1	expl	_	_
+4	echter	echter	ADV	ADV	_	1	advmod	_	_
+5	dat	dat	SCONJ	SCONJ	_	8	mark	_	_
+6	we	we	PRON	PRON	_	8	nsubj	_	_
+7	nooit	nooit	ADV	ADV	_	8	advmod	_	_
+8	weten	weten	VERB	VERB	_	1	csubj	_	_
+9	waaraan	waaraan	ADV	ADV	_	12	advmod	_	highlight=green|span=1
+10	we	we	PRON	PRON	_	12	nsubj	_	highlight=green|span=1
+11	toe	toe	ADP	ADP	_	12	compound:prt	_	_
+12	zijn	zijn	VERB	VERB	_	8	ccomp	_	highlight=red
+13	.	.	PUNCT	PUNCT	_	1	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 2 · source: nl_lassysmall-ud-train.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = De IJzer ( Frans : « Yser » ) is de kortste van de drie Belgische rivieren die in zee uitmonden ( de andere twee zijn de Maas en de Schelde ) .
+1	De	De	DET	DET	_	2	det	_	_
+2	IJzer	IJzer	PROPN	PROPN	_	12	nsubj	_	_
+3	(	(	PUNCT	PUNCT	_	4	punct	_	_
+4	Frans	Frans	PROPN	PROPN	_	2	acl	_	_
+5	:	:	PUNCT	PUNCT	_	7	punct	_	_
+6	«	«	PUNCT	PUNCT	_	7	punct	_	_
+7	Yser	Yser	PROPN	PROPN	_	4	parataxis	_	_
+8	»	»	PUNCT	PUNCT	_	7	punct	_	_
+9	)	)	PUNCT	PUNCT	_	4	punct	_	_
+10	is	is	AUX	AUX	_	12	cop	_	_
+11	de	de	DET	DET	_	12	det	_	_
+12	kortste	kortste	ADJ	ADJ	_	0	root	_	_
+13	van	van	ADP	ADP	_	17	case	_	_
+14	de	de	DET	DET	_	17	det	_	_
+15	drie	drie	NUM	NUM	_	17	nummod	_	_
+16	Belgische	Belgische	ADJ	ADJ	_	17	amod	_	_
+17	rivieren	rivieren	NOUN	NOUN	_	12	nmod	_	_
+18	die	die	PRON	PRON	_	21	nsubj	_	highlight=green|span=1
+19	in	in	ADP	ADP	_	20	case	_	_
+20	zee	zee	NOUN	NOUN	_	21	obl	_	highlight=green|span=2
+21	uitmonden	uitmonden	VERB	VERB	_	17	acl:relcl	_	highlight=red
+22	(	(	PUNCT	PUNCT	_	28	punct	_	_
+23	de	de	DET	DET	_	25	det	_	_
+24	andere	andere	ADJ	ADJ	_	25	amod	_	_
+25	twee	twee	NUM	NUM	_	28	nsubj	_	_
+26	zijn	zijn	AUX	AUX	_	28	cop	_	_
+27	de	de	DET	DET	_	28	det	_	_
+28	Maas	Maas	PROPN	PROPN	_	17	acl	_	_
+29	en	en	CCONJ	CCONJ	_	31	cc	_	_
+30	de	de	DET	DET	_	31	det	_	_
+31	Schelde	Schelde	PROPN	PROPN	_	28	conj	_	_
+32	)	)	PUNCT	PUNCT	_	28	punct	_	_
+33	.	.	PUNCT	PUNCT	_	12	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 3 · source: nl_lassysmall-ud-test.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Slakhoorn had de fles cadeau gekregen , en wilde hem op zijn beurt cadeau geven aan Albus Perkamentus maar besloot hem toch te houden .
+1	Slakhoorn	Slakhoorn	PROPN	PROPN	_	6	nsubj	_	_
+2	had	had	AUX	AUX	_	6	aux	_	_
 3	de	de	DET	DET	_	4	det	_	_
-4	bedoeling	bedoeling	NOUN	NOUN	_	2	obj	_	_
-5	om	om	ADP	ADP	_	14	mark	_	_
-6	met	met	ADP	ADP	_	9	case	_	_
-7	een	een	DET	DET	_	8	det	_	_
-8	soort	soort	NOUN	NOUN	_	9	nmod	_	_
-9	karavaan	karavaan	NOUN	NOUN	_	14	obl	_	highlight=green|span=4
-10	door	door	ADP	ADP	_	12	case	_	_
-11	de	de	DET	DET	_	12	det	_	_
-12	States	States	PROPN	PROPN	_	14	obl	_	highlight=green|span=3
-13	te	te	ADP	ADP	_	14	mark	_	_
-14	trekken	trekken	VERB	VERB	_	4	acl	_	highlight=red
-15	en	en	CCONJ	CCONJ	_	23	cc	_	_
-16	her	her	ADV	ADV	_	23	obl	_	_
-17	en	en	CCONJ	CCONJ	_	16	fixed	_	_
-18	der	der	ADV	ADV	_	16	fixed	_	_
-19	kleine	kleine	ADJ	ADJ	_	20	amod	_	_
-20	plaatsen	plaatsen	NOUN	NOUN	_	23	obj	_	_
-21	aan	aan	ADP	ADP	_	23	compound:prt	_	_
-22	te	te	ADP	ADP	_	23	mark	_	_
-23	doen	doen	VERB	VERB	_	14	conj	_	_
-24	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+4	fles	fles	NOUN	NOUN	_	6	obj	_	_
+5	cadeau	cadeau	NOUN	NOUN	_	6	compound:prt	_	_
+6	gekregen	gekregen	VERB	VERB	_	0	root	_	_
+7	,	,	PUNCT	PUNCT	_	9	punct	_	_
+8	en	en	CCONJ	CCONJ	_	9	cc	_	_
+9	wilde	wilde	VERB	VERB	_	6	conj	_	_
+10	hem	hem	PRON	PRON	_	15	obj	_	_
+11	op	op	ADP	ADP	_	13	case	_	_
+12	zijn	zijn	PRON	PRON	_	13	nmod:poss	_	_
+13	beurt	beurt	NOUN	NOUN	_	15	obl	_	_
+14	cadeau	cadeau	NOUN	NOUN	_	15	compound:prt	_	_
+15	geven	geven	VERB	VERB	_	9	xcomp	_	_
+16	aan	aan	ADP	ADP	_	17	case	_	_
+17	Albus	Albus	PROPN	PROPN	_	15	obl	_	_
+18	Perkamentus	Perkamentus	PROPN	PROPN	_	17	flat	_	_
+19	maar	maar	CCONJ	CCONJ	_	20	cc	_	_
+20	besloot	besloot	VERB	VERB	_	6	conj	_	_
+21	hem	hem	PRON	PRON	_	24	obj	_	highlight=green|span=1
+22	toch	toch	ADV	ADV	_	24	advmod	_	highlight=green|span=1
+23	te	te	ADP	ADP	_	24	mark	_	_
+24	houden	houden	VERB	VERB	_	20	xcomp	_	highlight=red
+25	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 2 · source: nl_alpino-ud-train.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ze zullen van ons geen woordspeling meer te pruimen krijgen . &quot;
-1	ze	ze	PRON	PRON	_	10	nsubj	_	_
-2	zullen	zullen	AUX	AUX	_	10	aux	_	_
-3	van	van	ADP	ADP	_	4	case	_	_
-4	ons	ons	PRON	PRON	_	10	obl	_	_
-5	geen	geen	DET	DET	_	6	det	_	_
-6	woordspeling	woordspeling	NOUN	NOUN	_	9	obj	_	highlight=green|span=2
-7	meer	meer	ADV	ADV	_	9	advmod	_	highlight=green|span=1
-8	te	te	ADP	ADP	_	9	mark	_	_
-9	pruimen	pruimen	VERB	VERB	_	10	xcomp	_	highlight=red
-10	krijgen	krijgen	VERB	VERB	_	0	root	_	_
-11	.	.	PUNCT	PUNCT	_	10	punct	_	_
-12	&quot;	&quot;	PUNCT	PUNCT	_	10	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 3 · source: nl_alpino-ud-dev.conllu · this verb has L=2, R=1 (mean span = 2.33)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ,, De rest heeft vooral gewacht totdat wij uitgebloed waren . ''
-1	,,	,,	PUNCT	PUNCT	_	6	punct	_	_
-2	De	De	DET	DET	_	3	det	_	_
-3	rest	rest	NOUN	NOUN	_	6	nsubj	_	highlight=green|span=2
-4	heeft	heeft	AUX	AUX	_	6	aux	_	_
-5	vooral	vooral	ADV	ADV	_	6	advmod	_	highlight=green|span=1
-6	gewacht	gewacht	VERB	VERB	_	0	root	_	highlight=red
-7	totdat	totdat	SCONJ	SCONJ	_	9	mark	_	_
-8	wij	wij	PRON	PRON	_	9	nsubj	_	_
-9	uitgebloed	uitgebloed	VERB	VERB	_	6	advcl	_	highlight=green|span=4
-10	waren	waren	AUX	AUX	_	9	aux	_	_
-11	.	.	PUNCT	PUNCT	_	6	punct	_	_
-12	''	''	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 4 · source: nl_lassysmall-ud-train.conllu · this verb has L=2, R=1 (mean span = 7.33)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Parijs-Roubaix wordt soms vergeleken met die andere kasseiklassieker : de Ronde van Vlaanderen die altijd de zondag voor Parijs-Roubaix op de Vlaamse wegen verreden wordt .
-1	Parijs-Roubaix	Parijs-Roubaix	PROPN	PROPN	_	4	nsubj:pass	_	highlight=green|span=1
-2	wordt	wordt	AUX	AUX	_	4	aux:pass	_	_
-3	soms	soms	ADV	ADV	_	4	advmod	_	highlight=green|span=1
-4	vergeleken	vergeleken	VERB	VERB	_	0	root	_	highlight=red
-5	met	met	ADP	ADP	_	8	case	_	_
-6	die	die	DET	DET	_	8	det	_	_
-7	andere	andere	ADJ	ADJ	_	8	amod	_	_
-8	kasseiklassieker	kasseiklassieker	NOUN	NOUN	_	4	obl:arg	_	highlight=green|span=20
-9	:	:	PUNCT	PUNCT	_	11	punct	_	_
-10	de	de	DET	DET	_	11	det	_	_
-11	Ronde	Ronde	PROPN	PROPN	_	8	appos	_	_
-12	van	van	PROPN	PROPN	_	11	flat	_	_
-13	Vlaanderen	Vlaanderen	PROPN	PROPN	_	11	flat	_	_
-14	die	die	PRON	PRON	_	24	nsubj:pass	_	_
-15	altijd	altijd	ADV	ADV	_	24	advmod	_	_
-16	de	de	DET	DET	_	17	det	_	_
-17	zondag	zondag	PROPN	PROPN	_	24	obl	_	_
-18	voor	voor	ADP	ADP	_	19	case	_	_
-19	Parijs-Roubaix	Parijs-Roubaix	PROPN	PROPN	_	17	nmod	_	_
-20	op	op	ADP	ADP	_	23	case	_	_
-21	de	de	DET	DET	_	23	det	_	_
-22	Vlaamse	Vlaamse	ADJ	ADJ	_	23	amod	_	_
-23	wegen	wegen	NOUN	NOUN	_	24	obl	_	_
-24	verreden	verreden	VERB	VERB	_	11	acl:relcl	_	_
-25	wordt	wordt	AUX	AUX	_	24	aux:pass	_	_
-26	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 5 · source: nl_lassysmall-ud-train.conllu · this verb has L=2, R=1 (mean span = 2.33)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Zowel Jordanië en Egypte trokken hun claims met betrekking tot de Westoever en Gaza uiteindelijk in ; de Sinaï werd teruggegeven op basis van de Camp David-akkoorden van 1977 en over de Golan wordt nog steeds onderhandeld met Syrië .
-1	Zowel	Zowel	ADV	ADV	_	2	cc	_	_
-2	Jordanië	Jordanië	PROPN	PROPN	_	5	nsubj	_	_
-3	en	en	CCONJ	CCONJ	_	4	cc	_	_
-4	Egypte	Egypte	PROPN	PROPN	_	2	conj	_	_
-5	trokken	trokken	VERB	VERB	_	0	root	_	_
-6	hun	hun	PRON	PRON	_	7	nmod:poss	_	_
-7	claims	claims	NOUN	NOUN	_	5	obj	_	_
-8	met	met	ADP	ADP	_	12	case	_	_
-9	betrekking	betrekking	NOUN	NOUN	_	8	fixed	_	_
-10	tot	tot	ADP	ADP	_	8	fixed	_	_
-11	de	de	DET	DET	_	12	det	_	_
-12	Westoever	Westoever	PROPN	PROPN	_	7	nmod	_	_
-13	en	en	CCONJ	CCONJ	_	14	cc	_	_
-14	Gaza	Gaza	PROPN	PROPN	_	12	conj	_	_
-15	uiteindelijk	uiteindelijk	ADJ	ADJ	_	5	advmod	_	_
-16	in	in	ADP	ADP	_	5	compound:prt	_	_
-17	;	;	PUNCT	PUNCT	_	21	punct	_	_
-18	de	de	DET	DET	_	19	det	_	_
-19	Sinaï	Sinaï	PROPN	PROPN	_	21	nsubj:pass	_	_
-20	werd	werd	AUX	AUX	_	21	aux:pass	_	_
-21	teruggegeven	teruggegeven	VERB	VERB	_	5	parataxis	_	_
-22	op	op	ADP	ADP	_	26	case	_	_
-23	basis	basis	NOUN	NOUN	_	22	fixed	_	_
-24	van	van	ADP	ADP	_	22	fixed	_	_
-25	de	de	DET	DET	_	26	det	_	_
-26	Camp	Camp	PROPN	PROPN	_	21	obl	_	_
-27	David-akkoorden	David-akkoorden	NOUN	NOUN	_	26	flat	_	_
-28	van	van	ADP	ADP	_	29	case	_	_
-29	1977	1977	NUM	NUM	_	26	nmod	_	_
-30	en	en	CCONJ	CCONJ	_	37	cc	_	_
-31	over	over	ADP	ADP	_	33	case	_	_
-32	de	de	DET	DET	_	33	det	_	_
-33	Golan	Golan	PROPN	PROPN	_	37	obl:arg	_	highlight=green|span=3
-34	wordt	wordt	AUX	AUX	_	37	aux:pass	_	_
-35	nog	nog	ADV	ADV	_	36	advmod	_	_
-36	steeds	steeds	ADV	ADV	_	37	advmod	_	highlight=green|span=2
-37	onderhandeld	onderhandeld	VERB	VERB	_	21	conj	_	highlight=red
-38	met	met	ADP	ADP	_	39	case	_	_
-39	Syrië	Syrië	PROPN	PROPN	_	37	obl	_	highlight=green|span=2
-40	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 6 · source: nl_lassysmall-ud-train.conllu · this verb has L=2, R=2 (mean span = 3.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Lilian werd op 28 november 1916 geboren in Londen , waar haar ouders naartoe waren gevlucht .
-1	Lilian	Lilian	PROPN	PROPN	_	7	nsubj:pass	_	highlight=green|span=1
-2	werd	werd	AUX	AUX	_	7	aux:pass	_	_
-3	op	op	ADP	ADP	_	4	case	_	_
-4	28	28	NUM	NUM	_	7	obl	_	highlight=green|span=4
-5	november	november	PROPN	PROPN	_	4	flat	_	_
-6	1916	1916	NUM	NUM	_	4	flat	_	_
-7	geboren	geboren	VERB	VERB	_	0	root	_	highlight=red
-8	in	in	ADP	ADP	_	9	case	_	_
-9	Londen	Londen	PROPN	PROPN	_	7	obl	_	highlight=green|span=3
-10	,	,	PUNCT	PUNCT	_	16	punct	_	_
-11	waar	waar	ADV	ADV	_	16	obl	_	_
-12	haar	haar	PRON	PRON	_	13	nmod:poss	_	_
-13	ouders	ouders	NOUN	NOUN	_	16	nsubj	_	_
-14	naartoe	naartoe	ADP	ADP	_	11	case	_	_
-15	waren	waren	AUX	AUX	_	16	aux	_	_
-16	gevlucht	gevlucht	VERB	VERB	_	9	acl:relcl	_	highlight=green|span=4
-17	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 7 · source: nl_alpino-ud-train.conllu · this verb has L=2, R=0 (mean span = 3.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Onderwijzers klagen er vaak over dat ze zoveel leerlingen in hun klas hebben , dat er eigenlijk geen tijd is om aan ieder kind afzonderlijk genoeg aandacht te besteden .
-1	Onderwijzers	Onderwijzers	NOUN	NOUN	_	2	nsubj	_	_
-2	klagen	klagen	VERB	VERB	_	0	root	_	_
-3	er	er	PRON	PRON	_	13	expl	_	_
-4	vaak	vaak	ADJ	ADJ	_	2	advmod	_	_
-5	over	over	ADP	ADP	_	13	case	_	_
-6	dat	dat	SCONJ	SCONJ	_	13	mark	_	_
-7	ze	ze	PRON	PRON	_	13	nsubj	_	_
-8	zoveel	zoveel	NUM	NUM	_	9	nummod	_	_
-9	leerlingen	leerlingen	NOUN	NOUN	_	13	obj	_	_
+<div class="example-meta">Example 4 · source: nl_lassysmall-ud-train.conllu · this verb has L=2, R=1 (mean span = 1.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Toen de Engelsen in de 19e eeuw de macht in het zuiden van Myanmar overnamen , wilden zij zich niet bemoeien met de Sangha .
+1	Toen	Toen	SCONJ	SCONJ	_	15	mark	_	_
+2	de	de	DET	DET	_	3	det	_	_
+3	Engelsen	Engelsen	PROPN	PROPN	_	15	nsubj	_	_
+4	in	in	ADP	ADP	_	7	case	_	_
+5	de	de	DET	DET	_	7	det	_	_
+6	19e	19e	ADJ	ADJ	_	7	amod	_	_
+7	eeuw	eeuw	NOUN	NOUN	_	15	obl	_	_
+8	de	de	DET	DET	_	9	det	_	_
+9	macht	macht	NOUN	NOUN	_	15	obj	_	_
 10	in	in	ADP	ADP	_	12	case	_	_
-11	hun	hun	PRON	PRON	_	12	nmod:poss	_	_
-12	klas	klas	NOUN	NOUN	_	9	nmod	_	_
-13	hebben	hebben	VERB	VERB	_	2	ccomp	_	_
-14	,	,	PUNCT	PUNCT	_	20	punct	_	_
-15	dat	dat	SCONJ	SCONJ	_	20	mark	_	_
-16	er	er	ADV	ADV	_	20	advmod	_	_
-17	eigenlijk	eigenlijk	ADJ	ADJ	_	20	advmod	_	_
-18	geen	geen	DET	DET	_	19	det	_	_
-19	tijd	tijd	NOUN	NOUN	_	20	nsubj	_	_
-20	is	is	VERB	VERB	_	8	advcl	_	_
-21	om	om	ADP	ADP	_	29	mark	_	_
-22	aan	aan	ADP	ADP	_	24	case	_	_
-23	ieder	ieder	DET	DET	_	24	det	_	_
-24	kind	kind	NOUN	NOUN	_	29	obl:arg	_	highlight=green|span=4
-25	afzonderlijk	afzonderlijk	ADJ	ADJ	_	24	amod	_	_
-26	genoeg	genoeg	ADV	ADV	_	27	nmod	_	_
-27	aandacht	aandacht	NOUN	NOUN	_	29	obj	_	highlight=green|span=2
-28	te	te	ADP	ADP	_	29	mark	_	_
-29	besteden	besteden	VERB	VERB	_	19	acl	_	highlight=red
-30	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+11	het	het	DET	DET	_	12	det	_	_
+12	zuiden	zuiden	NOUN	NOUN	_	9	nmod	_	_
+13	van	van	ADP	ADP	_	14	case	_	_
+14	Myanmar	Myanmar	PROPN	PROPN	_	12	nmod	_	_
+15	overnamen	overnamen	VERB	VERB	_	21	advcl	_	_
+16	,	,	PUNCT	PUNCT	_	15	punct	_	_
+17	wilden	wilden	VERB	VERB	_	0	root	_	_
+18	zij	zij	PRON	PRON	_	17	nsubj	_	_
+19	zich	zich	PRON	PRON	_	21	expl:pv	_	highlight=green|span=1
+20	niet	niet	ADV	ADV	_	21	advmod	_	highlight=green|span=1
+21	bemoeien	bemoeien	VERB	VERB	_	17	xcomp	_	highlight=red
+22	met	met	ADP	ADP	_	24	case	_	_
+23	de	de	DET	DET	_	24	det	_	_
+24	Sangha	Sangha	PROPN	PROPN	_	21	obl:arg	_	highlight=green|span=3
+25	.	.	PUNCT	PUNCT	_	17	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 8 · source: nl_lassysmall-ud-train.conllu · this verb has L=2, R=0 (mean span = 3.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Na het nagisten in tanks wordt het bier gefiltreerd en eventueel gepasteuriseerd , waardoor de gistcellen afsterven .
-1	Na	Na	ADP	ADP	_	3	case	_	_
-2	het	het	DET	DET	_	3	det	_	_
-3	nagisten	nagisten	VERB	VERB	_	9	obl	_	highlight=green|span=5
-4	in	in	ADP	ADP	_	5	case	_	_
-5	tanks	tanks	NOUN	NOUN	_	3	nmod	_	_
-6	wordt	wordt	AUX	AUX	_	9	aux:pass	_	_
-7	het	het	DET	DET	_	8	det	_	_
-8	bier	bier	NOUN	NOUN	_	9	nsubj:pass	_	highlight=green|span=2
-9	gefiltreerd	gefiltreerd	VERB	VERB	_	0	root	_	highlight=red
-10	en	en	CCONJ	CCONJ	_	12	cc	_	_
-11	eventueel	eventueel	ADJ	ADJ	_	12	advmod	_	_
-12	gepasteuriseerd	gepasteuriseerd	VERB	VERB	_	9	conj	_	_
-13	,	,	PUNCT	PUNCT	_	17	punct	_	_
-14	waardoor	waardoor	ADV	ADV	_	17	advmod	_	_
-15	de	de	DET	DET	_	16	det	_	_
-16	gistcellen	gistcellen	NOUN	NOUN	_	17	nsubj	_	_
-17	afsterven	afsterven	VERB	VERB	_	12	advcl	_	_
-18	.	.	PUNCT	PUNCT	_	9	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 9 · source: nl_lassysmall-ud-train.conllu · this verb has L=2, R=0 (mean span = 3.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Hun stichting uit 1480 werd in 1792 gesloopt en bevond zich in de Rosendaele ( rue Carnot ) .
-1	Hun	Hun	PRON	PRON	_	2	nmod:poss	_	_
-2	stichting	stichting	NOUN	NOUN	_	8	nsubj:pass	_	highlight=green|span=4
-3	uit	uit	ADP	ADP	_	4	case	_	_
-4	1480	1480	NUM	NUM	_	2	nmod	_	_
-5	werd	werd	AUX	AUX	_	8	aux:pass	_	_
-6	in	in	ADP	ADP	_	7	case	_	_
-7	1792	1792	NUM	NUM	_	8	obl	_	highlight=green|span=2
-8	gesloopt	gesloopt	VERB	VERB	_	0	root	_	highlight=red
-9	en	en	CCONJ	CCONJ	_	10	cc	_	_
-10	bevond	bevond	VERB	VERB	_	8	conj	_	_
-11	zich	zich	PRON	PRON	_	10	expl:pv	_	_
-12	in	in	ADP	ADP	_	14	case	_	_
-13	de	de	DET	DET	_	14	det	_	_
-14	Rosendaele	Rosendaele	PROPN	PROPN	_	10	obl	_	_
-15	(	(	PUNCT	PUNCT	_	16	punct	_	_
-16	rue	rue	PROPN	PROPN	_	14	nmod	_	_
-17	Carnot	Carnot	PROPN	PROPN	_	16	flat	_	_
-18	)	)	PUNCT	PUNCT	_	16	punct	_	_
-19	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 10 · source: nl_lassysmall-ud-dev.conllu · this verb has L=2, R=1 (mean span = 2.67)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Zijn angsten en hallucinaties werden niet begrepen bij Les XX .
-1	Zijn	Zijn	PRON	PRON	_	2	nmod:poss	_	_
-2	angsten	angsten	NOUN	NOUN	_	7	nsubj:pass	_	highlight=green|span=4
-3	en	en	CCONJ	CCONJ	_	4	cc	_	_
-4	hallucinaties	hallucinaties	NOUN	NOUN	_	2	conj	_	_
-5	werden	werden	AUX	AUX	_	7	aux:pass	_	_
-6	niet	niet	ADV	ADV	_	7	advmod	_	highlight=green|span=1
-7	begrepen	begrepen	VERB	VERB	_	0	root	_	highlight=red
-8	bij	bij	ADP	ADP	_	9	case	_	_
-9	Les	Les	PROPN	PROPN	_	7	obl	_	highlight=green|span=3
-10	XX	XX	PROPN	PROPN	_	9	flat	_	_
-11	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 11 · source: nl_lassysmall-ud-train.conllu · this verb has L=2, R=1 (mean span = 4.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Als materiaal werd dezelfde gele baksteen gebruikt waarmee ook Diksmuide en Poperinge heropgebouwd werden .
-1	Als	Als	SCONJ	SCONJ	_	2	mark	_	_
-2	materiaal	materiaal	NOUN	NOUN	_	7	xcomp	_	highlight=green|span=2
-3	werd	werd	AUX	AUX	_	7	aux:pass	_	_
-4	dezelfde	dezelfde	DET	DET	_	6	det	_	_
-5	gele	gele	ADJ	ADJ	_	6	amod	_	_
-6	baksteen	baksteen	NOUN	NOUN	_	7	nsubj:pass	_	highlight=green|span=3
-7	gebruikt	gebruikt	VERB	VERB	_	0	root	_	highlight=red
-8	waarmee	waarmee	ADV	ADV	_	13	advmod	_	_
-9	ook	ook	ADV	ADV	_	10	advmod	_	_
-10	Diksmuide	Diksmuide	PROPN	PROPN	_	13	nsubj:pass	_	_
-11	en	en	CCONJ	CCONJ	_	12	cc	_	_
-12	Poperinge	Poperinge	PROPN	PROPN	_	10	conj	_	_
-13	heropgebouwd	heropgebouwd	VERB	VERB	_	6	acl:relcl	_	highlight=green|span=7
-14	werden	werden	AUX	AUX	_	13	aux:pass	_	_
-15	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 12 · source: nl_alpino-ud-train.conllu · this verb has L=2, R=0 (mean span = 2.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Premier Koks regering wordt vandaag geinstalleerd
-1	Premier	Premier	NOUN	NOUN	_	3	nmod	_	_
-2	Koks	Koks	PROPN	PROPN	_	1	appos	_	_
-3	regering	regering	NOUN	NOUN	_	6	nsubj:pass	_	highlight=green|span=3
-4	wordt	wordt	AUX	AUX	_	6	aux:pass	_	_
-5	vandaag	vandaag	ADV	ADV	_	6	advmod	_	highlight=green|span=1
-6	geinstalleerd	geinstalleerd	VERB	VERB	_	0	root	_	highlight=red"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 13 · source: nl_alpino-ud-train.conllu · this verb has L=2, R=1 (mean span = 3.33)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Indonesiers , die in het verleden meenden dat zulk soort betalingen immoreel waren zijn nu bereid om voor aan Rusland geleverde produkten minder te ontvangen , dan de werkelijke waarde .
-1	Indonesiers	Indonesiers	NOUN	NOUN	_	16	nsubj	_	_
-2	,	,	PUNCT	PUNCT	_	7	punct	_	_
-3	die	die	PRON	PRON	_	7	nsubj	_	highlight=green|span=1
-4	in	in	ADP	ADP	_	6	case	_	_
-5	het	het	DET	DET	_	6	det	_	_
-6	verleden	verleden	NOUN	NOUN	_	7	obl	_	highlight=green|span=3
-7	meenden	meenden	VERB	VERB	_	1	acl:relcl	_	highlight=red
-8	dat	dat	SCONJ	SCONJ	_	12	mark	_	_
-9	zulk	zulk	DET	DET	_	10	det	_	_
-10	soort	soort	NOUN	NOUN	_	11	nmod	_	_
-11	betalingen	betalingen	NOUN	NOUN	_	12	nsubj	_	_
-12	immoreel	immoreel	ADJ	ADJ	_	7	ccomp	_	highlight=green|span=6
-13	waren	waren	AUX	AUX	_	12	cop	_	_
-14	zijn	zijn	AUX	AUX	_	16	cop	_	_
-15	nu	nu	ADV	ADV	_	16	advmod	_	_
-16	bereid	bereid	ADJ	ADJ	_	0	root	_	_
-17	om	om	ADP	ADP	_	25	mark	_	_
-18	voor	voor	ADP	ADP	_	22	case	_	_
-19	aan	aan	ADP	ADP	_	20	case	_	_
-20	Rusland	Rusland	PROPN	PROPN	_	21	obl	_	_
-21	geleverde	geleverde	VERB	VERB	_	22	acl	_	_
-22	produkten	produkten	NOUN	NOUN	_	25	obl	_	_
-23	minder	minder	PRON	PRON	_	25	obj	_	_
-24	te	te	ADP	ADP	_	25	mark	_	_
-25	ontvangen	ontvangen	VERB	VERB	_	16	ccomp	_	_
-26	,	,	PUNCT	PUNCT	_	30	punct	_	_
-27	dan	dan	SCONJ	SCONJ	_	30	mark	_	_
-28	de	de	DET	DET	_	30	det	_	_
-29	werkelijke	werkelijke	ADJ	ADJ	_	30	amod	_	_
-30	waarde	waarde	NOUN	NOUN	_	23	advcl	_	_
-31	.	.	PUNCT	PUNCT	_	16	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 14 · source: nl_lassysmall-ud-dev.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Hij toonde zijn eerste tekeningen en schilderwerkjes , toen hij amper 14 was , aan de toen bekende meester Louis Dubois , die hem aanmoedigde .
-1	Hij	Hij	PRON	PRON	_	2	nsubj	_	_
-2	toonde	toonde	VERB	VERB	_	0	root	_	_
-3	zijn	zijn	PRON	PRON	_	5	nmod:poss	_	_
-4	eerste	eerste	ADJ	ADJ	_	5	amod	_	_
-5	tekeningen	tekeningen	NOUN	NOUN	_	2	obj	_	_
-6	en	en	CCONJ	CCONJ	_	7	cc	_	_
-7	schilderwerkjes	schilderwerkjes	NOUN	NOUN	_	5	conj	_	_
-8	,	,	PUNCT	PUNCT	_	12	punct	_	_
-9	toen	toen	SCONJ	SCONJ	_	12	mark	_	_
-10	hij	hij	PRON	PRON	_	12	nsubj	_	_
-11	amper	amper	ADV	ADV	_	12	advmod	_	_
-12	14	14	NUM	NUM	_	2	advcl	_	_
-13	was	was	AUX	AUX	_	12	cop	_	_
-14	,	,	PUNCT	PUNCT	_	19	punct	_	_
-15	aan	aan	ADP	ADP	_	19	case	_	_
-16	de	de	DET	DET	_	19	det	_	_
-17	toen	toen	ADV	ADV	_	18	advmod	_	_
-18	bekende	bekende	ADJ	ADJ	_	19	amod	_	_
-19	meester	meester	NOUN	NOUN	_	2	obl	_	_
-20	Louis	Louis	PROPN	PROPN	_	19	appos	_	_
-21	Dubois	Dubois	PROPN	PROPN	_	20	flat	_	_
-22	,	,	PUNCT	PUNCT	_	25	punct	_	_
-23	die	die	PRON	PRON	_	25	nsubj	_	highlight=green|span=1
-24	hem	hem	PRON	PRON	_	25	obj	_	highlight=green|span=1
-25	aanmoedigde	aanmoedigde	VERB	VERB	_	19	acl:relcl	_	highlight=red
-26	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 15 · source: nl_lassysmall-ud-train.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = De eerste invasie vond plaats door de Arabische dynastie van Khulafa Rashedeen die de islam introduceerde .
-1	De	De	DET	DET	_	3	det	_	_
-2	eerste	eerste	ADJ	ADJ	_	3	amod	_	_
-3	invasie	invasie	NOUN	NOUN	_	4	nsubj	_	_
-4	vond	vond	VERB	VERB	_	0	root	_	_
-5	plaats	plaats	NOUN	NOUN	_	4	compound:prt	_	_
-6	door	door	ADP	ADP	_	9	case	_	_
-7	de	de	DET	DET	_	9	det	_	_
-8	Arabische	Arabische	ADJ	ADJ	_	9	amod	_	_
-9	dynastie	dynastie	NOUN	NOUN	_	4	obl	_	_
-10	van	van	ADP	ADP	_	11	case	_	_
-11	Khulafa	Khulafa	PROPN	PROPN	_	9	nmod	_	_
-12	Rashedeen	Rashedeen	PROPN	PROPN	_	11	flat	_	_
-13	die	die	PRON	PRON	_	16	nsubj	_	highlight=green|span=1
-14	de	de	DET	DET	_	15	det	_	_
-15	islam	islam	NOUN	NOUN	_	16	obj	_	highlight=green|span=2
-16	introduceerde	introduceerde	VERB	VERB	_	11	acl:relcl	_	highlight=red
-17	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 16 · source: nl_alpino-ud-train.conllu · this verb has L=2, R=0 (mean span = 3.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = hij vroeg met wat voor een kinderen dat lukt
-1	hij	hij	PRON	PRON	_	2	nsubj	_	_
-2	vroeg	vroeg	VERB	VERB	_	0	root	_	_
-3	met	met	ADP	ADP	_	7	case	_	_
-4	wat	wat	PRON	PRON	_	7	det	_	_
-5	voor	voor	ADP	ADP	_	4	fixed	_	_
-6	een	een	NUM	NUM	_	4	fixed	_	_
-7	kinderen	kinderen	NOUN	NOUN	_	9	obl	_	highlight=green|span=5
-8	dat	dat	PRON	PRON	_	9	nsubj	_	highlight=green|span=1
-9	lukt	lukt	VERB	VERB	_	2	ccomp	_	highlight=red"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 17 · source: nl_alpino-ud-train.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = ik heb hem gezegd dat Italie niet is te kloppen
-1	ik	ik	PRON	PRON	_	4	nsubj	_	_
-2	heb	heb	AUX	AUX	_	4	aux	_	_
-3	hem	hem	PRON	PRON	_	4	iobj	_	_
-4	gezegd	gezegd	VERB	VERB	_	0	root	_	_
-5	dat	dat	SCONJ	SCONJ	_	10	mark	_	_
-6	Italie	Italie	PROPN	PROPN	_	10	nsubj	_	highlight=green|span=1
-7	niet	niet	ADV	ADV	_	10	advmod	_	highlight=green|span=1
-8	is	is	AUX	AUX	_	10	aux	_	_
-9	te	te	ADP	ADP	_	10	mark	_	_
-10	kloppen	kloppen	VERB	VERB	_	4	ccomp	_	highlight=red"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 18 · source: nl_lassysmall-ud-dev.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Het is een vorm van combinatie voorgesteld door + ; als + een betekenis krijgt , dan zo ook het woord optelling .
-1	Het	Het	PRON	PRON	_	4	nsubj	_	_
-2	is	is	AUX	AUX	_	4	cop	_	_
-3	een	een	DET	DET	_	4	det	_	_
-4	vorm	vorm	NOUN	NOUN	_	0	root	_	_
-5	van	van	ADP	ADP	_	6	case	_	_
-6	combinatie	combinatie	NOUN	NOUN	_	4	nmod	_	_
-7	voorgesteld	voorgesteld	VERB	VERB	_	4	acl	_	_
-8	door	door	ADP	ADP	_	9	case	_	_
-9	+	+	SYM	SYM	_	7	obl	_	_
-10	;	;	PUNCT	PUNCT	_	15	punct	_	_
-11	als	als	SCONJ	SCONJ	_	15	mark	_	_
-12	+	+	SYM	SYM	_	15	nsubj	_	highlight=green|span=1
-13	een	een	DET	DET	_	14	det	_	_
-14	betekenis	betekenis	NOUN	NOUN	_	15	obj	_	highlight=green|span=2
-15	krijgt	krijgt	VERB	VERB	_	4	parataxis	_	highlight=red
-16	,	,	PUNCT	PUNCT	_	17	punct	_	_
-17	dan	dan	ADV	ADV	_	15	parataxis	_	_
-18	zo	zo	ADV	ADV	_	21	mark	_	_
-19	ook	ook	ADV	ADV	_	18	fixed	_	_
-20	het	het	DET	DET	_	21	det	_	_
-21	woord	woord	NOUN	NOUN	_	15	parataxis	_	_
-22	optelling	optelling	NOUN	NOUN	_	21	appos	_	_
-23	.	.	PUNCT	PUNCT	_	4	punct	_	_"></reactive-dep-tree>
-</div>
-<div class="example">
-<div class="example-meta">Example 19 · source: nl_lassysmall-ud-test.conllu · this verb has L=2, R=0 (mean span = 4.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Het gebied maakte deel uit van de Romeinse Rijk alvorens in een aantal feodale staten tijdens de middeleeuwen werd verdeeld .
-1	Het	Het	DET	DET	_	2	det	_	_
-2	gebied	gebied	NOUN	NOUN	_	3	nsubj	_	_
-3	maakte	maakte	VERB	VERB	_	0	root	_	_
-4	deel	deel	NOUN	NOUN	_	3	obj	_	_
-5	uit	uit	ADP	ADP	_	3	compound:prt	_	_
+<div class="example-meta">Example 5 · source: nl_alpino-ud-train.conllu · this verb has L=2, R=1 (mean span = 3.67)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = In weerwil van alle pogingen van Oostduitse zijde om de aankomst van premier Stoph in Kassel op een staatsontvangst te doen lijken , is Bonn er niet toe overgegaan staatssecretaris Kohl of Brandts parlementaire staatssecretaris Katharina Vocke ter begroeting naar het grensstation Bebra te zenden .
+1	In	In	ADP	ADP	_	5	case	_	_
+2	weerwil	weerwil	NOUN	NOUN	_	1	fixed	_	_
+3	van	van	ADP	ADP	_	1	fixed	_	_
+4	alle	alle	DET	DET	_	5	det	_	_
+5	pogingen	pogingen	NOUN	NOUN	_	29	obl	_	_
 6	van	van	ADP	ADP	_	8	case	_	_
-7	de	de	DET	DET	_	8	det	_	_
-8	Romeinse	Romeinse	PROPN	PROPN	_	3	obl:arg	_	_
-9	Rijk	Rijk	PROPN	PROPN	_	8	flat	_	_
-10	alvorens	alvorens	SCONJ	SCONJ	_	20	mark	_	_
-11	in	in	ADP	ADP	_	13	case	_	_
-12	een	een	DET	DET	_	13	det	_	_
-13	aantal	aantal	NOUN	NOUN	_	20	obl:arg	_	highlight=green|span=5
-14	feodale	feodale	ADJ	ADJ	_	15	amod	_	_
-15	staten	staten	NOUN	NOUN	_	13	nmod	_	_
-16	tijdens	tijdens	ADP	ADP	_	18	case	_	_
-17	de	de	DET	DET	_	18	det	_	_
-18	middeleeuwen	middeleeuwen	NOUN	NOUN	_	20	obl	_	highlight=green|span=3
-19	werd	werd	AUX	AUX	_	20	aux:pass	_	_
-20	verdeeld	verdeeld	VERB	VERB	_	3	advcl	_	highlight=red
-21	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+7	Oostduitse	Oostduitse	ADJ	ADJ	_	8	amod	_	_
+8	zijde	zijde	NOUN	NOUN	_	5	nmod	_	_
+9	om	om	ADP	ADP	_	21	mark	_	_
+10	de	de	DET	DET	_	11	det	_	_
+11	aankomst	aankomst	NOUN	NOUN	_	21	obj	_	highlight=green|span=7
+12	van	van	ADP	ADP	_	13	case	_	_
+13	premier	premier	NOUN	NOUN	_	11	nmod	_	_
+14	Stoph	Stoph	PROPN	PROPN	_	13	appos	_	_
+15	in	in	ADP	ADP	_	16	case	_	_
+16	Kassel	Kassel	PROPN	PROPN	_	11	nmod	_	_
+17	op	op	ADP	ADP	_	19	case	_	_
+18	een	een	DET	DET	_	19	det	_	_
+19	staatsontvangst	staatsontvangst	NOUN	NOUN	_	22	obl:arg	_	highlight=green|span=3
+20	te	te	ADP	ADP	_	21	mark	_	_
+21	doen	doen	VERB	VERB	_	5	acl	_	highlight=red
+22	lijken	lijken	VERB	VERB	_	21	xcomp	_	highlight=green|span=1
+23	,	,	PUNCT	PUNCT	_	5	punct	_	_
+24	is	is	AUX	AUX	_	29	aux	_	_
+25	Bonn	Bonn	PROPN	PROPN	_	29	nsubj	_	_
+26	er	er	PRON	PRON	_	45	expl	_	_
+27	niet	niet	ADV	ADV	_	29	advmod	_	_
+28	toe	toe	ADP	ADP	_	45	case	_	_
+29	overgegaan	overgegaan	VERB	VERB	_	0	root	_	_
+30	staatssecretaris	staatssecretaris	NOUN	NOUN	_	45	obj	_	_
+31	Kohl	Kohl	PROPN	PROPN	_	30	appos	_	_
+32	of	of	CCONJ	CCONJ	_	35	cc	_	_
+33	Brandts	Brandts	PROPN	PROPN	_	35	nmod:poss	_	_
+34	parlementaire	parlementaire	ADJ	ADJ	_	35	amod	_	_
+35	staatssecretaris	staatssecretaris	NOUN	NOUN	_	30	conj	_	_
+36	Katharina	Katharina	PROPN	PROPN	_	35	appos	_	_
+37	Vocke	Vocke	PROPN	PROPN	_	36	flat	_	_
+38	ter	ter	ADP	ADP	_	39	case	_	_
+39	begroeting	begroeting	NOUN	NOUN	_	45	obl	_	_
+40	naar	naar	ADP	ADP	_	42	case	_	_
+41	het	het	DET	DET	_	42	det	_	_
+42	grensstation	grensstation	NOUN	NOUN	_	45	obl	_	_
+43	Bebra	Bebra	PROPN	PROPN	_	42	appos	_	_
+44	te	te	ADP	ADP	_	45	mark	_	_
+45	zenden	zenden	VERB	VERB	_	29	xcomp	_	_
+46	.	.	PUNCT	PUNCT	_	29	punct	_	_"></reactive-dep-tree>
 </div>
 <div class="example">
-<div class="example-meta">Example 20 · source: nl_alpino-ud-train.conllu · this verb has L=2, R=0 (mean span = 2.00)</div>
-<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Wanneer werd de Europese Akte getekend ?
-1	Wanneer	Wanneer	ADV	ADV	_	6	advmod	_	highlight=green|span=1
-2	werd	werd	AUX	AUX	_	6	aux:pass	_	_
-3	de	de	DET	DET	_	4	det	_	_
-4	Europese	Europese	ADJ	ADJ	_	6	nsubj:pass	_	highlight=green|span=3
-5	Akte	Akte	NOUN	NOUN	_	4	flat	_	_
-6	getekend	getekend	VERB	VERB	_	0	root	_	highlight=red
-7	?	?	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+<div class="example-meta">Example 6 · source: nl_alpino-ud-train.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Zijn in 1968 opgerichte &quot; Beweging voor Rechtvaardigheid , Vrede en Actie &quot; was echter al vruchten gaan dragen .
+1	Zijn	Zijn	PRON	PRON	_	6	nmod:poss	_	_
+2	in	in	ADP	ADP	_	3	case	_	_
+3	1968	1968	NUM	NUM	_	4	obl	_	_
+4	opgerichte	opgerichte	VERB	VERB	_	6	acl	_	_
+5	&quot;	&quot;	PUNCT	PUNCT	_	6	punct	_	_
+6	Beweging	Beweging	PROPN	PROPN	_	18	nsubj	_	_
+7	voor	voor	PROPN	PROPN	_	6	flat	_	_
+8	Rechtvaardigheid	Rechtvaardigheid	PROPN	PROPN	_	6	flat	_	_
+9	,	,	SYM	SYM	_	6	flat	_	_
+10	Vrede	Vrede	PROPN	PROPN	_	6	flat	_	_
+11	en	en	PROPN	PROPN	_	6	flat	_	_
+12	Actie	Actie	PROPN	PROPN	_	6	flat	_	_
+13	&quot;	&quot;	PUNCT	PUNCT	_	6	punct	_	_
+14	was	was	AUX	AUX	_	18	aux	_	_
+15	echter	echter	ADV	ADV	_	19	advmod	_	_
+16	al	al	ADV	ADV	_	19	advmod	_	highlight=green|span=1
+17	vruchten	vruchten	NOUN	NOUN	_	19	obj	_	highlight=green|span=1
+18	gaan	gaan	VERB	VERB	_	0	root	_	_
+19	dragen	dragen	VERB	VERB	_	18	xcomp	_	highlight=red
+20	.	.	PUNCT	PUNCT	_	18	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 7 · source: nl_lassysmall-ud-train.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Op het onderste middenpaneel zijn cirkelgewijs personen gegroepeerd die het Lam aanbidden .
+1	Op	Op	ADP	ADP	_	4	case	_	_
+2	het	het	DET	DET	_	4	det	_	_
+3	onderste	onderste	ADJ	ADJ	_	4	amod	_	_
+4	middenpaneel	middenpaneel	NOUN	NOUN	_	8	obl	_	_
+5	zijn	zijn	AUX	AUX	_	8	aux:pass	_	_
+6	cirkelgewijs	cirkelgewijs	ADV	ADV	_	8	advmod	_	_
+7	personen	personen	NOUN	NOUN	_	8	nsubj:pass	_	_
+8	gegroepeerd	gegroepeerd	VERB	VERB	_	0	root	_	_
+9	die	die	PRON	PRON	_	12	nsubj	_	highlight=green|span=1
+10	het	het	DET	DET	_	11	det	_	_
+11	Lam	Lam	PROPN	PROPN	_	12	obj	_	highlight=green|span=2
+12	aanbidden	aanbidden	VERB	VERB	_	7	acl:relcl	_	highlight=red
+13	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 8 · source: nl_lassysmall-ud-test.conllu · this verb has L=2, R=1 (mean span = 2.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Tegen 04u30 op 25 september besloot hij koers te zetten naar de Sandøyfjord , beschutting zoekend in de schemer naast het strand van Ytre Rappafjord .
+1	Tegen	Tegen	ADP	ADP	_	2	case	_	_
+2	04u30	04u30	SYM	SYM	_	10	obl	_	_
+3	op	op	ADP	ADP	_	4	case	_	_
+4	25	25	NUM	NUM	_	10	obl	_	highlight=green|span=3
+5	september	september	PROPN	PROPN	_	4	flat	_	_
+6	besloot	besloot	VERB	VERB	_	0	root	_	_
+7	hij	hij	PRON	PRON	_	6	nsubj	_	_
+8	koers	koers	NOUN	NOUN	_	10	obj	_	highlight=green|span=1
+9	te	te	ADP	ADP	_	10	mark	_	_
+10	zetten	zetten	VERB	VERB	_	6	xcomp	_	highlight=red
+11	naar	naar	ADP	ADP	_	13	case	_	_
+12	de	de	DET	DET	_	13	det	_	_
+13	Sandøyfjord	Sandøyfjord	PROPN	PROPN	_	10	obl	_	highlight=green|span=3
+14	,	,	PUNCT	PUNCT	_	16	punct	_	_
+15	beschutting	beschutting	NOUN	NOUN	_	16	obj	_	_
+16	zoekend	zoekend	VERB	VERB	_	10	advcl	_	_
+17	in	in	ADP	ADP	_	19	case	_	_
+18	de	de	DET	DET	_	19	det	_	_
+19	schemer	schemer	NOUN	NOUN	_	16	obl	_	_
+20	naast	naast	ADP	ADP	_	22	case	_	_
+21	het	het	DET	DET	_	22	det	_	_
+22	strand	strand	NOUN	NOUN	_	19	nmod	_	_
+23	van	van	ADP	ADP	_	24	case	_	_
+24	Ytre	Ytre	PROPN	PROPN	_	22	nmod	_	_
+25	Rappafjord	Rappafjord	PROPN	PROPN	_	24	flat	_	_
+26	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 9 · source: nl_alpino-ud-train.conllu · this verb has L=2, R=1 (mean span = 14.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Er is een storm van verontwaardiging opgestoken nu minister Schut ( ruimtelijke ordening ) en staatssecretaris Haex ( defensie ) in hun nota over de uitbreiding van militaire oefenterreinen in ons land vast blijken te houden aan de eerder verkondigde overtuiging , dat de extra ruimte gevonden dient te worden bij Oirschot en in de Noordoostpolder .
+1	Er	Er	ADV	ADV	_	7	advmod	_	_
+2	is	is	AUX	AUX	_	7	aux	_	_
+3	een	een	DET	DET	_	4	det	_	_
+4	storm	storm	NOUN	NOUN	_	7	nsubj	_	_
+5	van	van	ADP	ADP	_	6	case	_	_
+6	verontwaardiging	verontwaardiging	NOUN	NOUN	_	4	nmod	_	_
+7	opgestoken	opgestoken	VERB	VERB	_	0	root	_	_
+8	nu	nu	SCONJ	SCONJ	_	34	mark	_	_
+9	minister	minister	NOUN	NOUN	_	34	nsubj	_	highlight=green|span=8
+10	Schut	Schut	PROPN	PROPN	_	9	appos	_	_
+11	(	(	PUNCT	PUNCT	_	13	punct	_	_
+12	ruimtelijke	ruimtelijke	ADJ	ADJ	_	13	amod	_	_
+13	ordening	ordening	NOUN	NOUN	_	9	nmod	_	_
+14	)	)	PUNCT	PUNCT	_	13	punct	_	_
+15	en	en	CCONJ	CCONJ	_	16	cc	_	_
+16	staatssecretaris	staatssecretaris	NOUN	NOUN	_	9	conj	_	_
+17	Haex	Haex	PROPN	PROPN	_	16	appos	_	_
+18	(	(	PUNCT	PUNCT	_	19	punct	_	_
+19	defensie	defensie	NOUN	NOUN	_	16	nmod	_	_
+20	)	)	PUNCT	PUNCT	_	19	punct	_	_
+21	in	in	ADP	ADP	_	23	case	_	_
+22	hun	hun	PRON	PRON	_	23	nmod:poss	_	_
+23	nota	nota	NOUN	NOUN	_	36	obl	_	highlight=green|span=12
+24	over	over	ADP	ADP	_	26	case	_	_
+25	de	de	DET	DET	_	26	det	_	_
+26	uitbreiding	uitbreiding	NOUN	NOUN	_	23	nmod	_	_
+27	van	van	ADP	ADP	_	29	case	_	_
+28	militaire	militaire	ADJ	ADJ	_	29	amod	_	_
+29	oefenterreinen	oefenterreinen	NOUN	NOUN	_	26	nmod	_	_
+30	in	in	ADP	ADP	_	32	case	_	_
+31	ons	ons	PRON	PRON	_	32	nmod:poss	_	_
+32	land	land	NOUN	NOUN	_	29	nmod	_	_
+33	vast	vast	ADJ	ADJ	_	36	compound:prt	_	_
+34	blijken	blijken	VERB	VERB	_	7	advcl	_	highlight=red
+35	te	te	ADP	ADP	_	36	mark	_	_
+36	houden	houden	VERB	VERB	_	34	xcomp	_	highlight=green|span=22
+37	aan	aan	ADP	ADP	_	41	case	_	_
+38	de	de	DET	DET	_	41	det	_	_
+39	eerder	eerder	ADJ	ADJ	_	40	advmod	_	_
+40	verkondigde	verkondigde	VERB	VERB	_	41	acl	_	_
+41	overtuiging	overtuiging	NOUN	NOUN	_	36	obl:arg	_	_
+42	,	,	PUNCT	PUNCT	_	48	punct	_	_
+43	dat	dat	SCONJ	SCONJ	_	48	mark	_	_
+44	de	de	DET	DET	_	46	det	_	_
+45	extra	extra	ADJ	ADJ	_	46	amod	_	_
+46	ruimte	ruimte	NOUN	NOUN	_	48	nsubj	_	_
+47	gevonden	gevonden	VERB	VERB	_	48	xcomp	_	_
+48	dient	dient	VERB	VERB	_	41	acl	_	_
+49	te	te	ADP	ADP	_	47	mark	_	_
+50	worden	worden	AUX	AUX	_	47	aux:pass	_	_
+51	bij	bij	ADP	ADP	_	52	case	_	_
+52	Oirschot	Oirschot	PROPN	PROPN	_	47	obl	_	_
+53	en	en	CCONJ	CCONJ	_	56	cc	_	_
+54	in	in	ADP	ADP	_	56	case	_	_
+55	de	de	DET	DET	_	56	det	_	_
+56	Noordoostpolder	Noordoostpolder	PROPN	PROPN	_	52	conj	_	_
+57	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 10 · source: nl_lassysmall-ud-train.conllu · this verb has L=2, R=0 (mean span = 2.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Sofina was een Brusselse investeringsmaatschappij die Heineman in 1905 met behulp van Duits geld ( AEG ) had overgenomen , maar daarna de Amerikaans-Engelse kant is opgevaren .
+1	Sofina	Sofina	PROPN	PROPN	_	5	nsubj	_	_
+2	was	was	AUX	AUX	_	5	cop	_	_
+3	een	een	DET	DET	_	5	det	_	_
+4	Brusselse	Brusselse	ADJ	ADJ	_	5	amod	_	_
+5	investeringsmaatschappij	investeringsmaatschappij	NOUN	NOUN	_	0	root	_	_
+6	die	die	PRON	PRON	_	19	obj	_	_
+7	Heineman	Heineman	PROPN	PROPN	_	19	nsubj	_	_
+8	in	in	ADP	ADP	_	9	case	_	_
+9	1905	1905	NUM	NUM	_	19	obl	_	_
+10	met	met	ADP	ADP	_	14	case	_	_
+11	behulp	behulp	NOUN	NOUN	_	10	fixed	_	_
+12	van	van	ADP	ADP	_	10	fixed	_	_
+13	Duits	Duits	ADJ	ADJ	_	14	amod	_	_
+14	geld	geld	NOUN	NOUN	_	19	obl	_	_
+15	(	(	PUNCT	PUNCT	_	16	punct	_	_
+16	AEG	AEG	PROPN	PROPN	_	14	nmod	_	_
+17	)	)	PUNCT	PUNCT	_	16	punct	_	_
+18	had	had	AUX	AUX	_	19	aux	_	_
+19	overgenomen	overgenomen	VERB	VERB	_	5	acl:relcl	_	_
+20	,	,	PUNCT	PUNCT	_	27	punct	_	_
+21	maar	maar	CCONJ	CCONJ	_	27	cc	_	_
+22	daarna	daarna	ADV	ADV	_	27	advmod	_	highlight=green|span=1
+23	de	de	DET	DET	_	25	det	_	_
+24	Amerikaans-Engelse	Amerikaans-Engelse	ADJ	ADJ	_	25	amod	_	_
+25	kant	kant	NOUN	NOUN	_	27	obl	_	highlight=green|span=3
+26	is	is	AUX	AUX	_	27	aux	_	_
+27	opgevaren	opgevaren	VERB	VERB	_	19	conj	_	highlight=red
+28	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 11 · source: nl_alpino-ud-train.conllu · this verb has L=2, R=1 (mean span = 5.33)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Op enkele duizenden meters hoogte komt de betrekkelijk warme vochtige lucht daar uit het noorden , wat regen doet vallen als gevolg van het feit , dat de lucht tegen de bergen wordt opgestuwd .
+1	Op	Op	ADP	ADP	_	3	case	_	_
+2	enkele	enkele	DET	DET	_	3	det	_	_
+3	duizenden	duizenden	NUM	NUM	_	6	obl	_	_
+4	meters	meters	NOUN	NOUN	_	3	nmod	_	_
+5	hoogte	hoogte	NOUN	NOUN	_	4	nmod	_	_
+6	komt	komt	VERB	VERB	_	0	root	_	_
+7	de	de	DET	DET	_	11	det	_	_
+8	betrekkelijk	betrekkelijk	ADJ	ADJ	_	9	advmod	_	_
+9	warme	warme	ADJ	ADJ	_	11	amod	_	_
+10	vochtige	vochtige	ADJ	ADJ	_	11	amod	_	_
+11	lucht	lucht	NOUN	NOUN	_	6	nsubj	_	_
+12	daar	daar	ADV	ADV	_	6	advmod	_	_
+13	uit	uit	ADP	ADP	_	15	case	_	_
+14	het	het	DET	DET	_	15	det	_	_
+15	noorden	noorden	NOUN	NOUN	_	6	obl	_	_
+16	,	,	PUNCT	PUNCT	_	19	punct	_	_
+17	wat	wat	PRON	PRON	_	19	nsubj	_	highlight=green|span=1
+18	regen	regen	NOUN	NOUN	_	19	obj	_	highlight=green|span=1
+19	doet	doet	VERB	VERB	_	6	advcl	_	highlight=red
+20	vallen	vallen	VERB	VERB	_	19	xcomp	_	highlight=green|span=14
+21	als	als	SCONJ	SCONJ	_	25	case	_	_
+22	gevolg	gevolg	NOUN	NOUN	_	21	fixed	_	_
+23	van	van	ADP	ADP	_	21	fixed	_	_
+24	het	het	DET	DET	_	25	det	_	_
+25	feit	feit	NOUN	NOUN	_	20	obl	_	_
+26	,	,	PUNCT	PUNCT	_	34	punct	_	_
+27	dat	dat	SCONJ	SCONJ	_	34	mark	_	_
+28	de	de	DET	DET	_	29	det	_	_
+29	lucht	lucht	NOUN	NOUN	_	34	nsubj:pass	_	_
+30	tegen	tegen	ADP	ADP	_	32	case	_	_
+31	de	de	DET	DET	_	32	det	_	_
+32	bergen	bergen	NOUN	NOUN	_	34	obl	_	_
+33	wordt	wordt	AUX	AUX	_	34	aux:pass	_	_
+34	opgestuwd	opgestuwd	VERB	VERB	_	25	acl	_	_
+35	.	.	PUNCT	PUNCT	_	6	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 12 · source: nl_lassysmall-ud-train.conllu · this verb has L=2, R=0 (mean span = 11.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Bij de rechtse militaristen leefde de dolkstootlegende en met name het feit dat het Duitse leger moest worden ingekrompen tot een troepenmacht van 100.000 man ( de zgn. Reichswehr ) werd als vreselijk ervaren .
+1	Bij	Bij	ADP	ADP	_	4	case	_	_
+2	de	de	DET	DET	_	4	det	_	_
+3	rechtse	rechtse	ADJ	ADJ	_	4	amod	_	_
+4	militaristen	militaristen	NOUN	NOUN	_	5	obl	_	_
+5	leefde	leefde	VERB	VERB	_	0	root	_	_
+6	de	de	DET	DET	_	7	det	_	_
+7	dolkstootlegende	dolkstootlegende	NOUN	NOUN	_	5	nsubj	_	_
+8	en	en	CCONJ	CCONJ	_	34	cc	_	_
+9	met	met	ADP	ADP	_	12	nmod	_	_
+10	name	name	NOUN	NOUN	_	9	fixed	_	_
+11	het	het	DET	DET	_	12	det	_	_
+12	feit	feit	NOUN	NOUN	_	34	nsubj:pass	_	highlight=green|span=20
+13	dat	dat	SCONJ	SCONJ	_	19	mark	_	_
+14	het	het	DET	DET	_	16	det	_	_
+15	Duitse	Duitse	ADJ	ADJ	_	16	amod	_	_
+16	leger	leger	NOUN	NOUN	_	19	nsubj:pass	_	_
+17	moest	moest	AUX	AUX	_	19	aux	_	_
+18	worden	worden	AUX	AUX	_	19	aux:pass	_	_
+19	ingekrompen	ingekrompen	VERB	VERB	_	12	acl	_	_
+20	tot	tot	ADP	ADP	_	22	case	_	_
+21	een	een	DET	DET	_	22	det	_	_
+22	troepenmacht	troepenmacht	NOUN	NOUN	_	19	xcomp	_	_
+23	van	van	ADP	ADP	_	25	case	_	_
+24	100.000	100.000	NUM	NUM	_	25	nummod	_	_
+25	man	man	NOUN	NOUN	_	22	nmod	_	_
+26	(	(	PUNCT	PUNCT	_	29	punct	_	_
+27	de	de	DET	DET	_	29	det	_	_
+28	zgn.	zgn.	X	X	_	29	nmod	_	_
+29	Reichswehr	Reichswehr	X	X	_	22	nmod	_	_
+30	)	)	PUNCT	PUNCT	_	29	punct	_	_
+31	werd	werd	AUX	AUX	_	34	aux:pass	_	_
+32	als	als	SCONJ	SCONJ	_	33	mark	_	_
+33	vreselijk	vreselijk	ADJ	ADJ	_	34	xcomp	_	highlight=green|span=2
+34	ervaren	ervaren	VERB	VERB	_	5	conj	_	highlight=red
+35	.	.	PUNCT	PUNCT	_	5	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 13 · source: nl_lassysmall-ud-train.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = In praktijk proberen de meeste Franstalige politici echter deze waarborgen systematisch uit te hollen .
+1	In	In	ADP	ADP	_	2	case	_	_
+2	praktijk	praktijk	NOUN	NOUN	_	3	obl	_	_
+3	proberen	proberen	VERB	VERB	_	0	root	_	_
+4	de	de	DET	DET	_	7	det	_	_
+5	meeste	meeste	ADV	ADV	_	7	advmod	_	_
+6	Franstalige	Franstalige	ADJ	ADJ	_	7	amod	_	_
+7	politici	politici	NOUN	NOUN	_	3	nsubj	_	_
+8	echter	echter	ADV	ADV	_	3	advmod	_	_
+9	deze	deze	DET	DET	_	10	det	_	_
+10	waarborgen	waarborgen	NOUN	NOUN	_	14	obj	_	highlight=green|span=2
+11	systematisch	systematisch	ADJ	ADJ	_	14	advmod	_	highlight=green|span=1
+12	uit	uit	ADP	ADP	_	14	compound:prt	_	_
+13	te	te	ADP	ADP	_	14	mark	_	_
+14	hollen	hollen	VERB	VERB	_	3	xcomp	_	highlight=red
+15	.	.	PUNCT	PUNCT	_	3	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 14 · source: nl_alpino-ud-train.conllu · this verb has L=2, R=1 (mean span = 7.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Zijn taak bij GVAV-FC Twente werd gisteren overgenomen door Jan de Jong , die voorlopig samen met Jaap Plenter de training van GVAV verzorgt .
+1	Zijn	Zijn	PRON	PRON	_	2	nmod:poss	_	_
+2	taak	taak	NOUN	NOUN	_	8	nsubj:pass	_	highlight=green|span=5
+3	bij	bij	ADP	ADP	_	4	case	_	_
+4	GVAV-FC	GVAV-FC	PROPN	PROPN	_	2	nmod	_	_
+5	Twente	Twente	PROPN	PROPN	_	4	flat	_	_
+6	werd	werd	AUX	AUX	_	8	aux:pass	_	_
+7	gisteren	gisteren	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+8	overgenomen	overgenomen	VERB	VERB	_	0	root	_	highlight=red
+9	door	door	ADP	ADP	_	10	case	_	_
+10	Jan	Jan	PROPN	PROPN	_	8	obl:agent	_	highlight=green|span=15
+11	de	de	PROPN	PROPN	_	10	flat	_	_
+12	Jong	Jong	PROPN	PROPN	_	10	flat	_	_
+13	,	,	PUNCT	PUNCT	_	24	punct	_	_
+14	die	die	PRON	PRON	_	24	nsubj	_	_
+15	voorlopig	voorlopig	ADJ	ADJ	_	24	advmod	_	_
+16	samen	samen	ADV	ADV	_	24	advcl	_	_
+17	met	met	ADP	ADP	_	18	case	_	_
+18	Jaap	Jaap	PROPN	PROPN	_	16	obl:arg	_	_
+19	Plenter	Plenter	PROPN	PROPN	_	18	flat	_	_
+20	de	de	DET	DET	_	21	det	_	_
+21	training	training	NOUN	NOUN	_	24	obj	_	_
+22	van	van	ADP	ADP	_	23	case	_	_
+23	GVAV	GVAV	PROPN	PROPN	_	21	nmod	_	_
+24	verzorgt	verzorgt	VERB	VERB	_	10	acl:relcl	_	_
+25	.	.	PUNCT	PUNCT	_	8	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 15 · source: nl_lassysmall-ud-dev.conllu · this verb has L=2, R=0 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Er zijn zeer veel steden die Alexandrië heten of hebben geheten .
+1	Er	Er	ADV	ADV	_	2	advmod	_	_
+2	zijn	zijn	VERB	VERB	_	0	root	_	_
+3	zeer	zeer	ADV	ADV	_	4	advmod	_	_
+4	veel	veel	DET	DET	_	5	det	_	_
+5	steden	steden	NOUN	NOUN	_	2	nsubj	_	_
+6	die	die	PRON	PRON	_	8	nsubj	_	highlight=green|span=1
+7	Alexandrië	Alexandrië	PROPN	PROPN	_	8	xcomp	_	highlight=green|span=1
+8	heten	heten	VERB	VERB	_	5	acl:relcl	_	highlight=red
+9	of	of	CCONJ	CCONJ	_	11	cc	_	_
+10	hebben	hebben	AUX	AUX	_	11	aux	_	_
+11	geheten	geheten	VERB	VERB	_	8	conj	_	_
+12	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 16 · source: nl_alpino-ud-train.conllu · this verb has L=2, R=0 (mean span = 1.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Ze maakten immers geen top-twintigplaten meer en dat was , zeker toentertijd ( het mag nu weleens wat rancuneus geconcludeerd worden ) het enige , letterlijk het enige waar dergelijke organen op letten .
+1	Ze	Ze	PRON	PRON	_	2	nsubj	_	_
+2	maakten	maakten	VERB	VERB	_	0	root	_	_
+3	immers	immers	ADV	ADV	_	2	advmod	_	_
+4	geen	geen	DET	DET	_	5	det	_	_
+5	top-twintigplaten	top-twintigplaten	NOUN	NOUN	_	2	obj	_	_
+6	meer	meer	ADV	ADV	_	2	advmod	_	_
+7	en	en	CCONJ	CCONJ	_	24	cc	_	_
+8	dat	dat	PRON	PRON	_	24	nsubj	_	_
+9	was	was	AUX	AUX	_	24	cop	_	_
+10	,	,	PUNCT	PUNCT	_	9	punct	_	_
+11	zeker	zeker	ADJ	ADJ	_	12	advmod	_	_
+12	toentertijd	toentertijd	ADV	ADV	_	24	advmod	_	_
+13	(	(	PUNCT	PUNCT	_	20	punct	_	_
+14	het	het	PRON	PRON	_	20	nsubj:pass	_	_
+15	mag	mag	AUX	AUX	_	20	aux	_	_
+16	nu	nu	ADV	ADV	_	20	advmod	_	_
+17	weleens	weleens	ADV	ADV	_	20	advmod	_	_
+18	wat	wat	PRON	PRON	_	19	obl	_	_
+19	rancuneus	rancuneus	ADJ	ADJ	_	20	advmod	_	_
+20	geconcludeerd	geconcludeerd	VERB	VERB	_	24	advcl	_	_
+21	worden	worden	AUX	AUX	_	20	aux:pass	_	_
+22	)	)	PUNCT	PUNCT	_	20	punct	_	_
+23	het	het	DET	DET	_	24	det	_	_
+24	enige	enige	PRON	PRON	_	2	conj	_	_
+25	,	,	PUNCT	PUNCT	_	28	punct	_	_
+26	letterlijk	letterlijk	ADJ	ADJ	_	28	amod	_	_
+27	het	het	DET	DET	_	28	det	_	_
+28	enige	enige	PRON	PRON	_	24	conj	_	_
+29	waar	waar	ADV	ADV	_	33	obl	_	_
+30	dergelijke	dergelijke	ADJ	ADJ	_	31	amod	_	_
+31	organen	organen	NOUN	NOUN	_	33	nsubj	_	highlight=green|span=2
+32	op	op	ADP	ADP	_	29	case	_	highlight=green|span=1
+33	letten	letten	VERB	VERB	_	24	acl:relcl	_	highlight=red
+34	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 17 · source: nl_lassysmall-ud-train.conllu · this verb has L=2, R=1 (mean span = 3.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Het betekende ook dat Lincoln Grant opmerkte als een generaal die overwinningen kon boeken - Grant kreeg de nieuwe rang van Luitenant-Generaal en het commando over alle troepen van de Verenigde Staten .
+1	Het	Het	PRON	PRON	_	2	nsubj	_	_
+2	betekende	betekende	VERB	VERB	_	0	root	_	_
+3	ook	ook	ADV	ADV	_	2	advmod	_	_
+4	dat	dat	SCONJ	SCONJ	_	7	mark	_	_
+5	Lincoln	Lincoln	PROPN	PROPN	_	7	nsubj	_	highlight=green|span=1
+6	Grant	Grant	PROPN	PROPN	_	7	obj	_	highlight=green|span=1
+7	opmerkte	opmerkte	VERB	VERB	_	2	ccomp	_	highlight=red
+8	als	als	SCONJ	SCONJ	_	10	mark	_	_
+9	een	een	DET	DET	_	10	det	_	_
+10	generaal	generaal	NOUN	NOUN	_	7	xcomp	_	highlight=green|span=7
+11	die	die	PRON	PRON	_	14	nsubj	_	_
+12	overwinningen	overwinningen	NOUN	NOUN	_	14	obj	_	_
+13	kon	kon	AUX	AUX	_	14	aux	_	_
+14	boeken	boeken	VERB	VERB	_	10	acl:relcl	_	_
+15	-	-	PUNCT	PUNCT	_	17	punct	_	_
+16	Grant	Grant	PROPN	PROPN	_	17	nsubj	_	_
+17	kreeg	kreeg	VERB	VERB	_	2	parataxis	_	_
+18	de	de	DET	DET	_	20	det	_	_
+19	nieuwe	nieuwe	ADJ	ADJ	_	20	amod	_	_
+20	rang	rang	NOUN	NOUN	_	17	obj	_	_
+21	van	van	ADP	ADP	_	22	case	_	_
+22	Luitenant-Generaal	Luitenant-Generaal	NOUN	NOUN	_	20	nmod	_	_
+23	en	en	CCONJ	CCONJ	_	25	cc	_	_
+24	het	het	DET	DET	_	25	det	_	_
+25	commando	commando	NOUN	NOUN	_	20	conj	_	_
+26	over	over	ADP	ADP	_	28	case	_	_
+27	alle	alle	DET	DET	_	28	det	_	_
+28	troepen	troepen	NOUN	NOUN	_	25	nmod	_	_
+29	van	van	ADP	ADP	_	31	case	_	_
+30	de	de	DET	DET	_	31	det	_	_
+31	Verenigde	Verenigde	PROPN	PROPN	_	28	nmod	_	_
+32	Staten	Staten	PROPN	PROPN	_	31	flat	_	_
+33	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 18 · source: nl_lassysmall-ud-dev.conllu · this verb has L=2, R=1 (mean span = 1.00)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Zo is er het varkensbesluit waarin precies omschreven staat waar een varkenshouder aan moet voldoen .
+1	Zo	Zo	ADV	ADV	_	2	advmod	_	_
+2	is	is	VERB	VERB	_	0	root	_	_
+3	er	er	ADV	ADV	_	2	advmod	_	_
+4	het	het	DET	DET	_	5	det	_	_
+5	varkensbesluit	varkensbesluit	NOUN	NOUN	_	2	nsubj	_	_
+6	waarin	waarin	ADV	ADV	_	8	advmod	_	highlight=green|span=1
+7	precies	precies	ADJ	ADJ	_	8	advmod	_	highlight=green|span=1
+8	omschreven	omschreven	VERB	VERB	_	9	ccomp	_	highlight=red
+9	staat	staat	VERB	VERB	_	5	acl:relcl	_	_
+10	waar	waar	ADV	ADV	_	15	obl	_	highlight=green|span=1
+11	een	een	DET	DET	_	12	det	_	_
+12	varkenshouder	varkenshouder	NOUN	NOUN	_	15	nsubj	_	_
+13	aan	aan	ADP	ADP	_	10	case	_	_
+14	moet	moet	AUX	AUX	_	15	aux	_	_
+15	voldoen	voldoen	VERB	VERB	_	8	ccomp	_	_
+16	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 19 · source: nl_alpino-ud-train.conllu · this verb has L=2, R=0 (mean span = 3.50)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Volgens het principe &quot; Als er geen gevaren meer zijn , moeten ze worden uitgelokt &quot; staat op het moderne vliegveld Gatwick ten zuiden van Londen een aantal ouderwetse waaghalzen klaar zoals alleen het Britse Gemenebest dat bij elkaar kan brengen .
+1	Volgens	Volgens	ADP	ADP	_	3	case	_	_
+2	het	het	DET	DET	_	3	det	_	_
+3	principe	principe	NOUN	NOUN	_	17	obl	_	_
+4	&quot;	&quot;	PUNCT	PUNCT	_	15	punct	_	_
+5	Als	Als	SCONJ	SCONJ	_	10	mark	_	_
+6	er	er	ADV	ADV	_	10	advmod	_	_
+7	geen	geen	DET	DET	_	8	det	_	_
+8	gevaren	gevaren	NOUN	NOUN	_	10	nsubj	_	_
+9	meer	meer	ADV	ADV	_	10	advmod	_	_
+10	zijn	zijn	VERB	VERB	_	15	advcl	_	highlight=green|span=6
+11	,	,	PUNCT	PUNCT	_	10	punct	_	_
+12	moeten	moeten	AUX	AUX	_	15	aux	_	_
+13	ze	ze	PRON	PRON	_	15	nsubj:pass	_	highlight=green|span=1
+14	worden	worden	AUX	AUX	_	15	aux:pass	_	_
+15	uitgelokt	uitgelokt	VERB	VERB	_	3	appos	_	highlight=red
+16	&quot;	&quot;	PUNCT	PUNCT	_	15	punct	_	_
+17	staat	staat	VERB	VERB	_	0	root	_	_
+18	op	op	ADP	ADP	_	21	case	_	_
+19	het	het	DET	DET	_	21	det	_	_
+20	moderne	moderne	ADJ	ADJ	_	21	amod	_	_
+21	vliegveld	vliegveld	NOUN	NOUN	_	17	obl	_	_
+22	Gatwick	Gatwick	PROPN	PROPN	_	21	appos	_	_
+23	ten	ten	ADP	ADP	_	26	case	_	_
+24	zuiden	zuiden	NOUN	NOUN	_	23	fixed	_	_
+25	van	van	ADP	ADP	_	23	fixed	_	_
+26	Londen	Londen	PROPN	PROPN	_	21	nmod	_	_
+27	een	een	DET	DET	_	28	det	_	_
+28	aantal	aantal	NOUN	NOUN	_	17	nsubj	_	_
+29	ouderwetse	ouderwetse	ADJ	ADJ	_	30	amod	_	_
+30	waaghalzen	waaghalzen	NOUN	NOUN	_	28	nmod	_	_
+31	klaar	klaar	ADJ	ADJ	_	17	compound:prt	_	_
+32	zoals	zoals	SCONJ	SCONJ	_	41	mark	_	_
+33	alleen	alleen	ADV	ADV	_	36	advmod	_	_
+34	het	het	DET	DET	_	36	det	_	_
+35	Britse	Britse	ADJ	ADJ	_	36	amod	_	_
+36	Gemenebest	Gemenebest	PROPN	PROPN	_	41	nsubj	_	_
+37	dat	dat	PRON	PRON	_	41	obj	_	_
+38	bij	bij	ADP	ADP	_	39	case	_	_
+39	elkaar	elkaar	PRON	PRON	_	41	obl	_	_
+40	kan	kan	AUX	AUX	_	41	aux	_	_
+41	brengen	brengen	VERB	VERB	_	17	advcl	_	_
+42	.	.	PUNCT	PUNCT	_	17	punct	_	_"></reactive-dep-tree>
+</div>
+<div class="example">
+<div class="example-meta">Example 20 · source: nl_lassysmall-ud-train.conllu · this verb has L=2, R=2 (mean span = 5.75)</div>
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = Pogingen van Ebert om Von Baden te bewegen om rijksregent te worden , werden door de laatste afgewezen omdat hij niet met de onafhankelijke sociaal-democraten wilde regeren .
+1	Pogingen	Pogingen	NOUN	NOUN	_	18	nsubj:pass	_	highlight=green|span=12
+2	van	van	ADP	ADP	_	3	case	_	_
+3	Ebert	Ebert	PROPN	PROPN	_	1	nmod	_	_
+4	om	om	ADP	ADP	_	8	mark	_	_
+5	Von	Von	PROPN	PROPN	_	8	obj	_	_
+6	Baden	Baden	PROPN	PROPN	_	5	flat	_	_
+7	te	te	ADP	ADP	_	8	mark	_	_
+8	bewegen	bewegen	VERB	VERB	_	1	acl	_	_
+9	om	om	ADP	ADP	_	12	mark	_	_
+10	rijksregent	rijksregent	NOUN	NOUN	_	12	xcomp	_	_
+11	te	te	ADP	ADP	_	12	mark	_	_
+12	worden	worden	VERB	VERB	_	8	xcomp	_	_
+13	,	,	PUNCT	PUNCT	_	1	punct	_	_
+14	werden	werden	AUX	AUX	_	18	aux:pass	_	_
+15	door	door	ADP	ADP	_	17	case	_	_
+16	de	de	DET	DET	_	17	det	_	_
+17	laatste	laatste	ADJ	ADJ	_	18	obl:agent	_	highlight=green|span=3
+18	afgewezen	afgewezen	VERB	VERB	_	0	root	_	highlight=red
+19	omdat	omdat	SCONJ	SCONJ	_	26	mark	_	highlight=green|span=1
+20	hij	hij	PRON	PRON	_	26	nsubj	_	_
+21	niet	niet	ADV	ADV	_	27	advmod	_	_
+22	met	met	ADP	ADP	_	25	case	_	_
+23	de	de	DET	DET	_	25	det	_	_
+24	onafhankelijke	onafhankelijke	ADJ	ADJ	_	25	amod	_	_
+25	sociaal-democraten	sociaal-democraten	NOUN	NOUN	_	27	obl	_	_
+26	wilde	wilde	VERB	VERB	_	18	advcl	_	highlight=green|span=7
+27	regeren	regeren	VERB	VERB	_	26	xcomp	_	_
+28	.	.	PUNCT	PUNCT	_	18	punct	_	_"></reactive-dep-tree>
 </div>
 </body></html>
