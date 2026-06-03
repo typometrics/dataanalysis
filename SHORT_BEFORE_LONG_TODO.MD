@@ -146,8 +146,8 @@ We propose creating a new generator script (e.g., `sbl_site.py`) that builds a s
   - Add navigation link to `sbl_html_utils.py` and call generation in `sbl_site.py`.
 - [x] **Modal Dialog Graph Integration**:
   - Embed the generated Left and Right graphs directly into the corresponding language's modal popup on the Interactive Explorer (`sbl_explorer.html`).
-- add dot for n=1 to the outer effect graphs.
-- instead of showing the outer effect graphs in the helix popup, show them directly in a small version in the language table. 
+- [x] add dot for n=1 to the outer effect graphs.
+- [x] instead of showing the outer effect graphs in the helix popup, show them directly in a small version in the language table. 
 
 
 -- add plot outer constituent effect vs head-initiality (look for the term in the existing code)

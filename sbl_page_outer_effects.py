@@ -31,8 +31,9 @@ def generate_language_plots(avg_sizes, lang_code, lang_name, out_dir):
     """
     os.makedirs(os.path.join(out_dir, 'outer_plots'), exist_ok=True)
     
-    # Define styles for n=2, 3, 4
+    # Define styles for n=1, 2, 3, 4
     styles = {
+        1: {'color': '#9C27B0', 'marker': 'v', 'label': 'n = 1'},
         2: {'color': '#2196F3', 'marker': 'o', 'label': 'n = 2'},
         3: {'color': '#FF9800', 'marker': 's', 'label': 'n = 3'},
         4: {'color': '#4CAF50', 'marker': 'd', 'label': 'n = 4'}
@@ -44,7 +45,7 @@ def generate_language_plots(avg_sizes, lang_code, lang_name, out_dir):
     left_data = {}
     right_data = {}
     
-    for n in [2, 3, 4]:
+    for n in [1, 2, 3, 4]:
         lx, ly = get_curve_data(avg_sizes, lang_code, 'left', n)
         rx, ry = get_curve_data(avg_sizes, lang_code, 'right', n)
         
@@ -74,7 +75,7 @@ def generate_language_plots(avg_sizes, lang_code, lang_name, out_dir):
         ax2.set_ylim(ylim_min, ylim_max)
         
         # Plot Left side
-        for n in [2, 3, 4]:
+        for n in [1, 2, 3, 4]:
             lx, ly = left_data[n]
             if lx:
                 ax1.plot(lx, ly, styles[n]['marker'] + '-', color=styles[n]['color'], 
@@ -85,7 +86,7 @@ def generate_language_plots(avg_sizes, lang_code, lang_name, out_dir):
         ax1.set_xticks([4, 3, 2, 1])
         
         # Plot Right side
-        for n in [2, 3, 4]:
+        for n in [1, 2, 3, 4]:
             rx, ry = right_data[n]
             if rx:
                 ax2.plot(rx, ry, styles[n]['marker'] + '-', color=styles[n]['color'], 

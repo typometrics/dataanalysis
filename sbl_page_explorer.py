@@ -43,6 +43,7 @@ def generate(out_dir):
         "<th onclick=\"sortTable('explorerTable', 1, 'string')\">Language Code</th>",
         "<th onclick=\"sortTable('explorerTable', 2, 'number')\" title='Right SbL Slope Beta. Positive means Compliant.'>Right SbL $\\beta$</th>",
         "<th onclick=\"sortTable('explorerTable', 3, 'number')\" title='Left SbL Slope Beta. Negative means Compliant.'>Left SbL $\\beta$</th>",
+        "<th>Outer Effects</th>",
         "<th>Action</th>",
         "</tr></thead><tbody>"
     ]
@@ -65,6 +66,8 @@ def generate(out_dir):
         html.append(f"<td>{code}</td>")
         html.append(f"<td>{beta_r:.3f}</td>" if pd.notna(beta_r) else "<td>-</td>")
         html.append(f"<td>{beta_l:.3f}</td>" if pd.notna(beta_l) else "<td>-</td>")
+        plot_url = f"outer_plots/{code}_outer_effects.svg"
+        html.append(f"<td><a href='{plot_url}' target='_blank'><img src='{plot_url}' alt='{lang} Outer Effect Curves' style='width: 300px; height: auto; border: 1px solid #eee;' title='Click to enlarge'></a></td>")
         html.append(f"<td><button onclick=\"openModal('modal_{lang}')\" style='cursor:pointer; padding: 4px 8px;'>View Raw TSVs</button></td>")
         html.append("</tr>")
         
@@ -73,11 +76,6 @@ def generate(out_dir):
         modals.append("<div class='modal-content'>")
         modals.append(f"<span class='close-modal' onclick=\"closeModal('modal_{lang}')\">&times;</span>")
         modals.append(f"<h2>{lang} Helix Analysis</h2>")
-        
-        # Embed Outer Effect Curve Plot
-        plot_url = f"outer_plots/{code}_outer_effects.svg"
-        modals.append("<h3>Outer Effect Curves</h3>")
-        modals.append(f"<div style='text-align: center; margin: 15px 0;'><img src='{plot_url}' alt='{lang} Outer Effect Curves' style='max-width: 100%; height: auto; border: 1px solid #eee;'></div>")
         
         # AnyOtherSide TSV (placed first as requested)
         any_path = f"data/helix_tables/{lang}/Helix_{lang}_AnyOtherSide.tsv"
