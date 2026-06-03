@@ -1310,9 +1310,8 @@ def _generate_svg_world_map(geo_data):
     # Convert geo_data to JSON for JavaScript
     geo_data_json = json.dumps(geo_data)
     
-    import uuid
     # Generate unique ID to avoid conflicts if multiple maps on page
-    map_id = f"worldMap_{uuid.uuid4().hex[:8]}"
+    map_id = "worldMap"
     
     return f'''
 <div id="{map_id}" style="width: 100%; max-width: 1000px; margin: 0 auto;"></div>
@@ -1421,7 +1420,7 @@ def _generate_svg_world_map(geo_data):
                 d3.select(this).attr("r", 8).attr("stroke-width", 2);
                 tooltip.style("visibility", "visible")
                     .html(`<strong>${{d.name}}</strong><br/>
-                           SbL β: ${{d.mal_score.toFixed(3)}}<br/>
+                           −β(2→max): ${{d.mal_score.toFixed(3)}}<br/>
                            Family: ${{d.family}}<br/>
                            Data points: ${{d.n_points}}`);
             }})
@@ -1436,10 +1435,10 @@ def _generate_svg_world_map(geo_data):
         
         // Add legend
         const legendData = [
-            {{ label: "Strong SbL (>0.2)", score: 0.3 }},
-            {{ label: "Moderate SbL", score: 0.15 }},
+            {{ label: "Strong MAL (>0.2)", score: 0.3 }},
+            {{ label: "Moderate MAL", score: 0.15 }},
             {{ label: "Weak/Neutral", score: 0 }},
-            {{ label: "Anti-SbL (<-0.1)", score: -0.2 }}
+            {{ label: "Anti-MAL (<-0.1)", score: -0.2 }}
         ];
         
         const legend = svg.append("g")
@@ -1460,7 +1459,7 @@ def _generate_svg_world_map(geo_data):
             .attr("y", -8)
             .attr("font-size", "11px")
             .attr("font-weight", "bold")
-            .text("SbL Score (β)");
+            .text("−β(2→max)");
         
         legendData.forEach((item, i) => {{
             legend.append("circle")

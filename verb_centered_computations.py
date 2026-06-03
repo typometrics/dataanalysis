@@ -422,6 +422,37 @@ class FactorCalculator:
             side=side
         )
     
+    def get_vertical_factor(self, side: str, pos: int, tot: int) -> Optional[FactorData]:
+        """
+        Calculate vertical factor between neighbors (tot-1 and tot).
+        """
+        if side == 'right':
+            # right: tot -> tot-1 (down to up visually, from tot to tot-1)
+            if pos >= tot or tot < 2:
+                return None
+            key_a = f'right_{pos}_totright_{tot}' # Source
+            key_b = f'right_{pos}_totright_{tot-1}' # Target
+        else:
+            # left: tot-1 -> tot (up to down visually, from tot-1 to tot)
+            if pos >= tot or tot < 2:
+                return None
+            key_a = f'left_{pos}_totleft_{tot-1}' # Source
+            key_b = f'left_{pos}_totleft_{tot}' # Target
+
+        val_b = self.position_averages.get(key_b)
+        val_a = self.position_averages.get(key_a)
+        if val_a is None or val_b is None or val_a == 0:
+            return None
+        
+        factor_val = val_b / val_a
+        return FactorData(
+            value=factor_val,
+            source_key=key_a,
+            target_key=key_b,
+            arrow_type='vertical',
+            side=side
+        )
+    
     def get_xvx_factor(self) -> Optional[FactorData]:
         """
         Calculate cross-verb factor (R1 / L1).
@@ -497,14 +528,16 @@ class OrderingStatsFormatter:
     Formats ordering statistics (triples: <, =, > percentages).
     """
     
-    def __init__(self, ordering_stats: Optional[Dict] = None):
+    def __init__(self, ordering_stats: Optional[Dict] = None, config_type: str = 'strict'):
         """
         Initialize formatter.
         
         Args:
             ordering_stats: Dictionary of ordering statistics
+            config_type: 'strict' or 'anyother' (default: 'strict')
         """
         self.ordering_stats = ordering_stats or {}
+        self.config_type = config_type
     
     def get_triple(self, side: str, tot: int, pair_idx: int) -> Optional[Tuple[float, float, float]]:
         """
@@ -521,11 +554,15 @@ class OrderingStatsFormatter:
         if not self.ordering_stats:
             return None
         
-        o_key = (side, tot, pair_idx)
+        o_key = (side, tot, pair_idx, self.config_type)
         o_data = self.ordering_stats.get(o_key)
         
         if not o_data:
-            return None
+            # Fallback for old pickles
+            o_key = (side, tot, pair_idx)
+            o_data = self.ordering_stats.get(o_key)
+            if not o_data:
+                return None
         
         total = o_data.get('lt', 0) + o_data.get('eq', 0) + o_data.get('gt', 0)
         if total == 0:
@@ -589,9 +626,13 @@ class OrderingStatsFormatter:
         
         for tot in [2, 3, 4]:
             pair_idx = tot - 2  # Last pair in each configuration
-            o_key = ('right', tot, pair_idx)
+            o_key = ('right', tot, pair_idx, self.config_type)
             o_data = self.ordering_stats.get(o_key)
             
+            if not o_data:
+                o_key = ('right', tot, pair_idx)
+                o_data = self.ordering_stats.get(o_key)
+                
             if o_data:
                 total_lt += o_data.get('lt', 0)
                 total_eq += o_data.get('eq', 0)
@@ -625,9 +666,13 @@ class OrderingStatsFormatter:
         
         for tot in [2, 3, 4]:
             pair_idx = 0  # First pair (L1 vs L2) in each configuration
-            o_key = ('left', tot, pair_idx)
+            o_key = ('left', tot, pair_idx, self.config_type)
             o_data = self.ordering_stats.get(o_key)
             
+            if not o_data:
+                o_key = ('left', tot, pair_idx)
+                o_data = self.ordering_stats.get(o_key)
+                
             if o_data:
                 total_lt += o_data.get('lt', 0)
                 total_eq += o_data.get('eq', 0)

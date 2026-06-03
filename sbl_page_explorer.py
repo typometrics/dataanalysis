@@ -72,17 +72,22 @@ def generate(out_dir):
         modals.append(f"<div id='modal_{lang}' class='modal'>")
         modals.append("<div class='modal-content'>")
         modals.append(f"<span class='close-modal' onclick=\"closeModal('modal_{lang}')\">&times;</span>")
-        modals.append(f"<h2>{lang} Helix Tables</h2>")
+        modals.append(f"<h2>{lang} Helix Analysis</h2>")
+        
+        # Embed Outer Effect Curve Plot
+        plot_url = f"outer_plots/{code}_outer_effects.svg"
+        modals.append("<h3>Outer Effect Curves</h3>")
+        modals.append(f"<div style='text-align: center; margin: 15px 0;'><img src='{plot_url}' alt='{lang} Outer Effect Curves' style='max-width: 100%; height: auto; border: 1px solid #eee;'></div>")
+        
+        # AnyOtherSide TSV (placed first as requested)
+        any_path = f"data/helix_tables/{lang}/Helix_{lang}_AnyOtherSide.tsv"
+        modals.append("<h3>unconstrained on opposite side</h3>")
+        modals.append(tsv_to_html_table(any_path))
         
         # Standard TSV
         std_path = f"data/helix_tables/{lang}/Helix_{lang}.tsv"
-        modals.append("<h3>Standard Helix Table</h3>")
+        modals.append("<h3>strict - nothing on opposite side</h3>")
         modals.append(tsv_to_html_table(std_path))
-        
-        # AnyOtherSide TSV
-        any_path = f"data/helix_tables/{lang}/Helix_{lang}_AnyOtherSide.tsv"
-        modals.append("<h3>AnyOtherSide Helix Table</h3>")
-        modals.append(tsv_to_html_table(any_path))
         
         modals.append("</div></div>")
         

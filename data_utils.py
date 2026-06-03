@@ -17,8 +17,8 @@ except ImportError:
     format_cell_range = None
 
 
-def load_google_sheets(credentials_file='typometrics-c4750cac2e21.json', 
-                       spreadsheet_url='https://docs.google.com/spreadsheets/d/1IP3ebsNNVAsQ5sxmBnfEAmZc4f0iotAL9hd4aqOOcEg/edit?usp=sharing'):
+def load_google_sheets(credentials_file='credentials.json', 
+                       spreadsheet_url=None):
     """
     Load all Google Sheets data for language metadata.
     

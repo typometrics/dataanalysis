@@ -38,14 +38,14 @@ if collect_config_examples:
      all_langs_position2logsizes, all_langs_position2logsqsizes,
      lang_bastard_stats, global_bastard_relations, 
      lang_vo_hi_scores, 
-     sentence_disorder_pct,
+     all_langs_ordering_stats,
      all_config_examples) = results
 else:
     (all_langs_position2num, all_langs_position2sizes, all_langs_average_sizes, all_langs_average_charsizes,
      all_langs_position2logsizes, all_langs_position2logsqsizes,
      lang_bastard_stats, global_bastard_relations, 
      lang_vo_hi_scores, 
-     sentence_disorder_pct) = results
+     all_langs_ordering_stats) = results
     all_config_examples = None
 
 # Save results
@@ -70,6 +70,9 @@ with open(os.path.join(DATA_DIR, 'all_langs_position2logsizes.pkl'), 'wb') as f:
 
 with open(os.path.join(DATA_DIR, 'all_langs_position2logsqsizes.pkl'), 'wb') as f:
     pickle.dump(all_langs_position2logsqsizes, f)
+
+with open(os.path.join(DATA_DIR, 'sentence_disorder_percentages.pkl'), 'wb') as f:
+    pickle.dump(all_langs_ordering_stats, f)
 
 # Save config examples if collected
 if all_config_examples is not None:

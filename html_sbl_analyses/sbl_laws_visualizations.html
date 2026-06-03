@@ -35,7 +35,7 @@ tr:hover { background-color: #f1f1f1; }
 .formula { font-family: monospace; background: #e0e0e0; padding: 2px 5px; border-radius: 3px; font-size: 14px; }
 /* Modal CSS */
 .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
-.modal-content { background-color: #fefefe; margin: 5% auto; padding: 20px; border: 1px solid #888; width: 90%; max-width: 1200px; border-radius: 5px; position: relative; }
+.modal-content { background-color: #fefefe; margin: 2% auto; padding: 20px; border: 1px solid #888; width: 98%; max-width: 1800px; border-radius: 5px; position: relative; }
 .close-modal { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; position: absolute; right: 20px; top: 10px; }
 .close-modal:hover, .close-modal:focus { color: black; text-decoration: none; cursor: pointer; }
 .tsv-table { font-size: 12px; margin-top: 20px; width: 100%; overflow-x: auto; display: block; }
@@ -52,33 +52,89 @@ MathJax = {
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 
-<script>
-var sortDirections = {};
-function sortTable(tableId, colIndex, type) {
-    const table = document.getElementById(tableId);
-    if (!table) return;
-    const tbody = table.tBodies[0];
-    const rows = Array.from(tbody.rows);
-    const k = tableId + '_' + colIndex;
-    sortDirections[k] = !sortDirections[k];
-    const asc = sortDirections[k];
-    
-    rows.sort((a, b) => {
-        let av = a.cells[colIndex].textContent.trim();
-        let bv = b.cells[colIndex].textContent.trim();
-        
-        if (type === 'number') {
-            let an = parseFloat(av);
-            let bn = parseFloat(bv);
-            if (isNaN(an)) an = -Infinity;
-            if (isNaN(bn)) bn = -Infinity;
-            return asc ? an - bn : bn - an;
-        } else {
-            return asc ? av.localeCompare(bv) : bv.localeCompare(av);
-        }
-    });
-    rows.forEach(r => tbody.appendChild(r));
+<style>
+/* Ensure sticky header remains on top and doesn't get overlapped */
+table th {
+    position: sticky;
+    top: 38px;
+    z-index: 10;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
 }
+table th:hover {
+    background-color: #45a049;
+}
+/* Sort icons */
+th.sort-asc::after {
+    content: " \25B2";
+    font-size: 0.8em;
+}
+th.sort-desc::after {
+    content: " \25BC";
+    font-size: 0.8em;
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tables = document.querySelectorAll('table');
+    tables.forEach(table => {
+        const headers = table.querySelectorAll('th');
+        headers.forEach((header, index) => {
+            header.addEventListener('click', () => {
+                const tbody = table.querySelector('tbody') || table;
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                
+                // If the table doesn't have a tbody, make sure we skip the header row
+                const startIndex = table.querySelector('tbody') ? 0 : 1;
+                const dataRows = rows.slice(startIndex);
+                
+                let isAsc = header.classList.contains('sort-asc');
+                
+                // Clear all sorting classes
+                headers.forEach(h => {
+                    h.classList.remove('sort-asc');
+                    h.classList.remove('sort-desc');
+                });
+                
+                // Toggle direction
+                isAsc = !isAsc;
+                if (isAsc) {
+                    header.classList.add('sort-asc');
+                } else {
+                    header.classList.add('sort-desc');
+                }
+                
+                // Sort the rows
+                dataRows.sort((a, b) => {
+                    const cellA = a.children[index];
+                    const cellB = b.children[index];
+                    
+                    if (!cellA || !cellB) return 0;
+                    
+                    let valA = cellA.innerText.trim();
+                    let valB = cellB.innerText.trim();
+                    
+                    // Try to parse as numbers
+                    const numA = parseFloat(valA.replace(/[^0-9.-]+/g,""));
+                    const numB = parseFloat(valB.replace(/[^0-9.-]+/g,""));
+                    
+                    const isNumA = !isNaN(numA) && valA !== '';
+                    const isNumB = !isNaN(numB) && valB !== '';
+                    
+                    if (isNumA && isNumB) {
+                        return isAsc ? numA - numB : numB - numA;
+                    }
+                    
+                    return isAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
+                });
+                
+                // Re-append rows in sorted order
+                dataRows.forEach(row => tbody.appendChild(row));
+            });
+        });
+    });
+});
 </script>
 
 
@@ -100,7 +156,7 @@ window.onclick = function(event) {
 </head>
 <body>
 
-<nav class="nav-top"><ul><li><a href="index.html">Home</a></li><li><a href="sbl_laws_explained.html">The Sy Laws</a></li><li><a href="sbl_laws_compliance.html">Laws Compliance Table</a></li><li><a href="sbl_validation.html">Validation & Diagnostics</a></li><li><a href="sbl_explorer.html">Interactive Explorer</a></li><li><a href="sbl_significance.html">Significance Analysis</a></li><li class="crumb-current"><a href="sbl_laws_visualizations.html">Visualizations</a></li><li><a href="sbl_typology.html">Typological Maps</a></li><li><a href="sbl_summary.html">Global Summary</a></li><li class="nav-spacer"></li></ul></nav>
+<nav class="nav-top"><ul><li><a href="index.html">Home</a></li><li><a href="sbl_laws_explained.html">The Sy Laws</a></li><li><a href="sbl_laws_compliance.html">Laws Compliance Table</a></li><li><a href="sbl_validation.html">Validation & Diagnostics</a></li><li><a href="sbl_explorer.html">Interactive Explorer</a></li><li><a href="sbl_significance.html">Significance Analysis</a></li><li class="crumb-current"><a href="sbl_laws_visualizations.html">Visualizations</a></li><li><a href="sbl_outer_effects.html">Outer Effect Curves</a></li><li><a href="sbl_typology.html">Typological Maps</a></li><li><a href="sbl_summary.html">Global Summary</a></li><li class="nav-spacer"></li></ul></nav>
 <h1>Sy Laws Visualizations</h1>
 <div class='explanation'>
 <p>This page visualizes the global compliance across the 180 languages for the Standard Helix tables.</p>
@@ -123,6 +179,18 @@ window.onclick = function(event) {
 <h2>3. Left vs. Right Asymmetry</h2>
 <p>This scatter plot visualizes whether the Short-Before-Long principle is applied symmetrically. The Left SbL slope is negated so that for both axes, a <strong>positive value means compliance</strong> with the SbL principle. The diagonal dotted line represents perfect symmetry.</p>
 <img src='scatter_asymmetry.svg' alt='Scatter plot of Left vs Right asymmetry' style='max-width:100%; border:1px solid #ddd;'>
+<h2>4. VO-OV Score vs. Outer Constituent Effect</h2>
+<p>These scatter plots show the relationship between the VO-OV score (0 = strongly OV, 1 = strongly VO) and the Outer Constituent Effect (ratio of outer constituent geometric mean to the rest). A ratio &gt; 1 means the outer constituents are longer on average.</p>
+<div style='display:flex; gap:20px; flex-wrap:wrap;'>
+  <div style='flex:1; min-width:400px;'>
+    <h3>Right Side</h3>
+    <img src='scatter_vo_vs_right_outer.svg' alt='Scatter plot of VO vs Right Outer Effect' style='max-width:100%; border:1px solid #ddd;'>
+  </div>
+  <div style='flex:1; min-width:400px;'>
+    <h3>Left Side</h3>
+    <img src='scatter_vo_vs_left_outer.svg' alt='Scatter plot of VO vs Left Outer Effect' style='max-width:100%; border:1px solid #ddd;'>
+  </div>
+</div>
 
 </body>
 </html>

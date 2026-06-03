@@ -31,7 +31,8 @@ class VerbCenteredTableBuilder:
                  config: TableConfig,
                  ordering_stats: Optional[Dict] = None,
                  validation_info: Optional[Dict] = None,
-                 extra_legend_items: Optional[List[str]] = None):
+                 extra_legend_items: Optional[List[str]] = None,
+                 config_type: str = 'strict'):
         """
         Initialize the table builder.
         
@@ -41,13 +42,14 @@ class VerbCenteredTableBuilder:
             ordering_stats: Optional ordering statistics for triples
             validation_info: Optional statistical validation info (sample counts, warnings)
             extra_legend_items: Optional list of additional legend strings (e.g., caveats)
+            config_type: 'strict' or 'anyotherside'
         """
         self.position_averages = position_averages
         self.config = config
         self.layout = TableLayout(config)
         self.marginals = MarginalMeansCalculator(position_averages, config)
         self.factors = FactorCalculator(position_averages, config)
-        self.ordering = OrderingStatsFormatter(ordering_stats) if ordering_stats else None
+        self.ordering = OrderingStatsFormatter(ordering_stats, config_type=config_type) if ordering_stats else None
         self.validation_info = validation_info
         self.extra_legend_items = extra_legend_items or []
     
@@ -100,6 +102,36 @@ class VerbCenteredTableBuilder:
             table.rows.extend(legend_footer)
         
         return table
+    
+    def _build_diag_vs_rest_row(self, side: str) -> Optional[List[CellData]]:
+        row = self._create_empty_row()
+        label = "Right Outer Constituent Effect" if side == 'right' else "Left Outer Constituent Effect"
+        row[self.layout.label_col_idx] = CellData(text=label, cell_type='label', rich_segments=[(label, COLOR_PURPLE if 'COLOR_PURPLE' in globals() else COLOR_ORANGE, True)])
+        
+        if side == 'right':
+            diag_keys = ['right_2_totright_2', 'right_3_totright_3', 'right_4_totright_4']
+            rest_keys = ['right_1_totright_2', 'right_1_totright_3', 'right_2_totright_3']
+        else:
+            diag_keys = ['left_2_totleft_2', 'left_3_totleft_3', 'left_4_totleft_4']
+            rest_keys = ['left_1_totleft_2', 'left_1_totleft_3', 'left_2_totleft_3']
+            
+        diag_vals = [self.position_averages.get(k) for k in diag_keys if self.position_averages.get(k) is not None and self.position_averages.get(k) > 0]
+        rest_vals = [self.position_averages.get(k) for k in rest_keys if self.position_averages.get(k) is not None and self.position_averages.get(k) > 0]
+        
+        if diag_vals and rest_vals:
+            diag_gm = np.exp(np.mean(np.log(diag_vals)))
+            rest_gm = np.exp(np.mean(np.log(rest_vals)))
+            
+            diag_gsd = np.exp(np.std(np.log(diag_vals), ddof=1)) if len(diag_vals) > 1 else np.nan
+            rest_gsd = np.exp(np.std(np.log(rest_vals), ddof=1)) if len(rest_vals) > 1 else np.nan
+            
+            ratio = diag_gm / rest_gm
+            
+            def fmt_gsd(v): return f" (GSD: {v:.3f})" if not np.isnan(v) else ""
+            text = f"Outer Const. GM: {diag_gm:.3f}{fmt_gsd(diag_gsd)} | Rest GM: {rest_gm:.3f}{fmt_gsd(rest_gsd)} | Effect Ratio: {ratio:.3f}"
+            row[self.layout.comment_col_idx] = CellData(text=text, cell_type='comment')
+            return row
+        return None
     
     def _create_empty_row(self) -> List[CellData]:
         """Create a row with empty cells."""
@@ -243,6 +275,10 @@ class VerbCenteredTableBuilder:
             agg_row = self._build_right_aggregate_ordering_row()
             if agg_row:
                 rows.append(agg_row)
+                
+        diag_rest_row = self._build_diag_vs_rest_row('right')
+        if diag_rest_row:
+            rows.append(diag_rest_row)
         
         return rows
     
@@ -253,6 +289,7 @@ class VerbCenteredTableBuilder:
             rows.append(self._build_right_row(tot))
             if self.config.show_diagonal_factors and tot > 1:
                 rows.append(self._build_right_diagonal_row(tot))
+                rows.append(self._build_right_vertical_row(tot))
         return rows
     
     def _build_right_row(self, tot: int) -> List[CellData]:
@@ -304,6 +341,28 @@ class VerbCenteredTableBuilder:
                     txt = f"×{factor.value:.2f}{arrow}"
                     color = COLOR_RED if factor.value < 1.0 else COLOR_GREY
                     row[fac_idx] = CellData(
+                        text=txt,
+                        cell_type='factor',
+                        rich_segments=[(txt, color, True)]
+                    )
+        
+        return row
+        
+    def _build_right_vertical_row(self, tot: int) -> List[CellData]:
+        """Build a vertical factor row for right side between tot and tot-1."""
+        row = self._create_empty_row()
+        
+        row[self.layout.label_col_idx] = CellData(text=f"Vert R{tot}-{tot-1}", cell_type='label')
+        
+        if self.config.show_horizontal_factors:
+            for pos in range(1, tot): # positions 1 to tot-1
+                factor = self.factors.get_vertical_factor('right', pos, tot)
+                if factor:
+                    val_idx = self.layout.get_right_column_index(pos)
+                    arrow = self.config.get_arrow_symbol('right', 'vertical')
+                    txt = f"×{factor.value:.2f}{arrow}"
+                    color = COLOR_RED if factor.value < 1.0 else COLOR_GREY
+                    row[val_idx] = CellData(
                         text=txt,
                         cell_type='factor',
                         rich_segments=[(txt, color, True)]
@@ -421,6 +480,10 @@ class VerbCenteredTableBuilder:
         
         rows.append(v_row)
         
+        diag_rest_row = self._build_diag_vs_rest_row('left')
+        if diag_rest_row:
+            rows.append(diag_rest_row)
+        
         return rows
     
     def _build_left_data_rows(self) -> List[List[CellData]]:
@@ -429,6 +492,7 @@ class VerbCenteredTableBuilder:
         for tot in [1, 2, 3, 4]:
             if self.config.show_diagonal_factors and tot > 1:
                 rows.append(self._build_left_diagonal_row(tot))
+                rows.append(self._build_left_vertical_row(tot))
             rows.append(self._build_left_row(tot))
         return rows
     
@@ -488,6 +552,31 @@ class VerbCenteredTableBuilder:
                         cell_type='factor',
                         rich_segments=[(txt, color, True)]
                     )
+        
+        return row
+        
+    def _build_left_vertical_row(self, tot: int) -> List[CellData]:
+        """Build a vertical factor row for left side between tot and tot-1."""
+        row = self._create_empty_row()
+        
+        row[self.layout.label_col_idx] = CellData(text=f"Vert L{tot}-{tot-1}", cell_type='label')
+        
+        if self.config.show_horizontal_factors:
+            for pos in range(tot, 1, -1):
+                factor = self.factors.get_vertical_factor('left', pos - 1, tot)
+                if factor:
+                    val_idx = self.layout.get_left_column_index(pos - 1)
+                    arrow = self.config.get_arrow_symbol('left', 'vertical')
+                    txt = f"×{factor.value:.2f}{arrow}"
+                    color = COLOR_RED if factor.value < 1.0 else COLOR_GREY
+                    row[val_idx] = CellData(
+                        text=txt,
+                        cell_type='factor',
+                        rich_segments=[(txt, color, True)]
+                    )
+                    
+        return row
+
     def _build_xvx_row(self) -> List[CellData]:
         """
         Build the central Mean(X*) V Mean(X*) row (formerly X V X).

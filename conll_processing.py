@@ -339,10 +339,7 @@ def get_ordering_stats(tree, include_bastards=False, head_type='verb'):
         # sorted() gives smallest first. So [close, ..., far]
         right_kids = sorted([ki for ki in relevant_kids if ki > head])
         
-        # Check ordering for right side (Right-to-Left visual order: V -> R1 -> R2)
-        # right_kids are [R1, R2, ...] (Left-to-Right)
-        
-        # Track total count for this Right configuration
+        # Check ordering for right side
         if len(right_kids) >= 1:
             key_count = ('right', len(right_kids), 'total')
             if key_count not in ordering_stats:
@@ -350,6 +347,7 @@ def get_ordering_stats(tree, include_bastards=False, head_type='verb'):
             ordering_stats[key_count] += 1
             
         if len(right_kids) >= 2:
+            is_strict = (len(left_kids) == 0)
             if include_bastards:
                 sizes = [len(tree[ki].get('direct_span', tree[ki]['span'])) for ki in right_kids]
             else:
@@ -357,24 +355,27 @@ def get_ordering_stats(tree, include_bastards=False, head_type='verb'):
             
             # Pairs (R1, R2), (R2, R3)...
             for i in range(len(sizes) - 1):
-                key = ('right', len(right_kids), i) # i is index of first element (Left one visually)
-                if key not in ordering_stats:
-                    ordering_stats[key] = {'lt': 0, 'eq': 0, 'gt': 0}
-                
                 s1 = sizes[i]
                 s2 = sizes[i+1]
                 
-                if s1 < s2:
-                    ordering_stats[key]['lt'] += 1
-                elif s1 == s2:
-                    ordering_stats[key]['eq'] += 1
-                else:
-                    ordering_stats[key]['gt'] += 1
+                # Anyother key
+                key_any = ('right', len(right_kids), i, 'anyother')
+                if key_any not in ordering_stats:
+                    ordering_stats[key_any] = {'lt': 0, 'eq': 0, 'gt': 0}
+                if s1 < s2: ordering_stats[key_any]['lt'] += 1
+                elif s1 == s2: ordering_stats[key_any]['eq'] += 1
+                else: ordering_stats[key_any]['gt'] += 1
+                
+                # Strict key
+                if is_strict:
+                    key_strict = ('right', len(right_kids), i, 'strict')
+                    if key_strict not in ordering_stats:
+                        ordering_stats[key_strict] = {'lt': 0, 'eq': 0, 'gt': 0}
+                    if s1 < s2: ordering_stats[key_strict]['lt'] += 1
+                    elif s1 == s2: ordering_stats[key_strict]['eq'] += 1
+                    else: ordering_stats[key_strict]['gt'] += 1
         
-        # Check ordering for left side (Left-to-Right visual order: Lk...L2 -> L1 -> V)
-        # left_kids are [Lk, ..., L2, L1] (Left-to-Right, IDs increasing towards head)
-        
-        # Track total count for this Left configuration
+        # Check ordering for left side
         if len(left_kids) >= 1:
             key_count = ('left', len(left_kids), 'total')
             if key_count not in ordering_stats:
@@ -382,6 +383,7 @@ def get_ordering_stats(tree, include_bastards=False, head_type='verb'):
             ordering_stats[key_count] += 1
             
         if len(left_kids) >= 2:
+            is_strict = (len(right_kids) == 0)
             if include_bastards:
                 sizes = [len(tree[ki].get('direct_span', tree[ki]['span'])) for ki in left_kids]
             else:
@@ -389,27 +391,31 @@ def get_ordering_stats(tree, include_bastards=False, head_type='verb'):
             
             # Pairs (Lk, Lk-1)...
             for i in range(len(sizes) - 1):
-                # Visually: sizes[i] is to the left of sizes[i+1]
-                # Compare sizes[i] vs sizes[i+1]
-                
-                key = ('left', len(left_kids), i)
-                if key not in ordering_stats:
-                    ordering_stats[key] = {'lt': 0, 'eq': 0, 'gt': 0}
-                
                 s1 = sizes[i]
                 s2 = sizes[i+1]
                 
-                if s1 < s2:
-                    ordering_stats[key]['lt'] += 1
-                elif s1 == s2:
-                    ordering_stats[key]['eq'] += 1
-                else:
-                    ordering_stats[key]['gt'] += 1
+                # Anyother key
+                key_any = ('left', len(left_kids), i, 'anyother')
+                if key_any not in ordering_stats:
+                    ordering_stats[key_any] = {'lt': 0, 'eq': 0, 'gt': 0}
+                if s1 < s2: ordering_stats[key_any]['lt'] += 1
+                elif s1 == s2: ordering_stats[key_any]['eq'] += 1
+                else: ordering_stats[key_any]['gt'] += 1
+                
+                # Strict key
+                if is_strict:
+                    key_strict = ('left', len(left_kids), i, 'strict')
+                    if key_strict not in ordering_stats:
+                        ordering_stats[key_strict] = {'lt': 0, 'eq': 0, 'gt': 0}
+                    if s1 < s2: ordering_stats[key_strict]['lt'] += 1
+                    elif s1 == s2: ordering_stats[key_strict]['eq'] += 1
+                    else: ordering_stats[key_strict]['gt'] += 1
                     
         # Check ordering for XVX configuration (L1 V R1)
-        if len(left_kids) == 1 and len(right_kids) == 1:
-            l_kid = left_kids[0]
-            r_kid = right_kids[0]
+        if len(left_kids) >= 1 and len(right_kids) >= 1:
+            is_strict = (len(left_kids) == 1 and len(right_kids) == 1)
+            l_kid = left_kids[-1] # L1 is closest to verb (largest ID < head)
+            r_kid = right_kids[0] # R1 is closest to verb (smallest ID > head)
             
             if include_bastards:
                 s1 = len(tree[l_kid].get('direct_span', tree[l_kid]['span']))
@@ -418,17 +424,22 @@ def get_ordering_stats(tree, include_bastards=False, head_type='verb'):
                 s1 = len(tree[l_kid]['span'])
                 s2 = len(tree[r_kid]['span'])
                 
-            # Key for XVX pair
-            key = ('xvx', 2, 0)
-            if key not in ordering_stats:
-                ordering_stats[key] = {'lt': 0, 'eq': 0, 'gt': 0}
+            # Anyother key
+            key_any = ('xvx', 2, 0, 'anyother')
+            if key_any not in ordering_stats:
+                ordering_stats[key_any] = {'lt': 0, 'eq': 0, 'gt': 0}
+            if s1 < s2: ordering_stats[key_any]['lt'] += 1
+            elif s1 == s2: ordering_stats[key_any]['eq'] += 1
+            else: ordering_stats[key_any]['gt'] += 1
             
-            if s1 < s2:
-                ordering_stats[key]['lt'] += 1
-            elif s1 == s2:
-                ordering_stats[key]['eq'] += 1
-            else:
-                ordering_stats[key]['gt'] += 1
+            # Strict key
+            if is_strict:
+                key_strict = ('xvx', 2, 0, 'strict')
+                if key_strict not in ordering_stats:
+                    ordering_stats[key_strict] = {'lt': 0, 'eq': 0, 'gt': 0}
+                if s1 < s2: ordering_stats[key_strict]['lt'] += 1
+                elif s1 == s2: ordering_stats[key_strict]['eq'] += 1
+                else: ordering_stats[key_strict]['gt'] += 1
                 
             # Track Total N for XVX
             key_count = ('xvx', 2, 'total')
@@ -791,10 +802,11 @@ def get_type_freq_all_files_parallel(allshortconll, include_bastards=False, comp
     
     # Compute averages (Geometric Mean)
     all_langs_average_charsizes = {} 
-    for lang in all_langs_position2sizes:
+    for lang in all_langs_position2logsizes:
         all_langs_average_sizes[lang] = {
-            ty: np.exp(all_langs_position2sizes[lang][ty] / all_langs_position2num[lang][ty])
-            for ty in all_langs_position2sizes[lang]
+            ty: np.exp(all_langs_position2logsizes[lang][ty] / all_langs_position2num[lang][ty])
+            for ty in all_langs_position2logsizes[lang]
+            if all_langs_position2num[lang].get(ty, 0) > 0
         }
         # Compute char averages
         if lang in all_langs_position2charsizes:
@@ -1533,10 +1545,11 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
                     all_config_examples[lang][config] = examples[:max_examples_per_config]
     
     # 1. Average sizes
-    for lang in all_langs_position2sizes:
+    for lang in all_langs_position2logsizes:
         all_langs_average_sizes[lang] = {
-            ty: np.exp(all_langs_position2sizes[lang][ty] / all_langs_position2num[lang][ty]) 
-            for ty in all_langs_position2sizes[lang]
+            ty: np.exp(all_langs_position2logsizes[lang][ty] / all_langs_position2num[lang][ty]) 
+            for ty in all_langs_position2logsizes[lang]
+            if all_langs_position2num[lang].get(ty, 0) > 0
         }
         
         # Compute char averages

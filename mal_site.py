@@ -479,25 +479,17 @@ function sortTable(tableId, colIndex, type) {
     sortDirections[k] = !sortDirections[k];
     const asc = sortDirections[k];
     rows.sort((a, b) => {
-        let av, bv;
         if (type === 'string') {
-            av = a.cells[colIndex].textContent.trim().toLowerCase();
-            bv = b.cells[colIndex].textContent.trim().toLowerCase();
+            const av = a.cells[colIndex].textContent.trim().toLowerCase();
+            const bv = b.cells[colIndex].textContent.trim().toLowerCase();
             return asc ? av.localeCompare(bv) : bv.localeCompare(av);
         }
-        av = a.cells[colIndex].getAttribute('data-value');
-        bv = b.cells[colIndex].getAttribute('data-value');
-        const aMissing = (av === '' || av === null || av === undefined);
-        const bMissing = (bv === '' || bv === null || bv === undefined);
-        if (aMissing && bMissing) return 0;
-        if (aMissing) return 1;
-        if (bMissing) return -1;
-        const an = parseFloat(av);
-        const bn = parseFloat(bv);
-        if (isNaN(an) && isNaN(bn)) return 0;
-        if (isNaN(an)) return 1;
-        if (isNaN(bn)) return -1;
-        return asc ? an - bn : bn - an;
+        let av = a.cells[colIndex].getAttribute('data-value');
+        let bv = b.cells[colIndex].getAttribute('data-value');
+        if (av === '' || av === null) return 1;
+        if (bv === '' || bv === null) return -1;
+        av = parseFloat(av); bv = parseFloat(bv);
+        return asc ? av - bv : bv - av;
     });
     rows.forEach(r => tbody.appendChild(r));
 }
@@ -835,81 +827,6 @@ anti-MAL behavior. Bin width is 0.05.</p>
             plugins: {{ legend: {{ position: 'top' }} }},
             scales: {{
                 x: {{ title: {{ display: true, text: 'β(1→max) (positive = MAL compliance)' }} }},
-                y: {{ title: {{ display: true, text: 'Number of languages' }}, beginAtZero: true }}
-            }}
-        }}
-    }});
-}}();
-</script>
-'''
-
-
-def _bastards_histogram_chart_html(lang2bastards):
-    """Return an HTML chunk with a Chart.js histogram showing the distribution of bastard %."""
-    if not lang2bastards:
-        return ''
-    
-    vals = [d['pct'] for d in lang2bastards.values() if d.get('pct', 0) > 0]
-    if not vals:
-        return ''
-        
-    bin_w = 0.5
-    lo = 0.0
-    import numpy as np
-    import json
-    hi = float(np.ceil(max(vals) / bin_w) * bin_w) + bin_w
-    edges = []
-    cur = lo
-    while cur < hi + 1e-9:
-        edges.append(cur)
-        cur += bin_w
-    centers = [(edges[i] + edges[i + 1]) / 2 for i in range(len(edges) - 1)]
-    labels = [f'{edges[i]:.1f}-{edges[i+1]:.1f}%' for i in range(len(edges) - 1)]
-
-    h = [0] * (len(edges) - 1)
-    for v in vals:
-        idx = int((v - lo) / bin_w)
-        if idx >= len(h): idx = len(h) - 1
-        if idx < 0: idx = 0
-        h[idx] += 1
-
-    data_json = json.dumps({
-        'labels': labels,
-        'series': h,
-        'count': len(vals)
-    })
-
-    return f'''
-<div class="chart-container">
-<h3>Distribution of Bastard Dependencies across Languages</h3>
-<canvas id="bastardHistogram" height="100"></canvas>
-<div class="explanation">
-<p><strong>Interpretation:</strong> This histogram shows the distribution of the percentage of 
-bastard dependencies per verb across {len(vals)} languages. A higher percentage indicates more 
-cross-clausal or non-projective dependencies that violate the single local tree assumption.</p>
-</div>
-</div>
-
-<script>
-(function() {{
-    const d = {data_json};
-    new Chart(document.getElementById('bastardHistogram'), {{
-        type: 'bar',
-        data: {{ 
-            labels: d.labels, 
-            datasets: [{{
-                label: 'Languages (n=' + d.count + ')',
-                data: d.series,
-                backgroundColor: 'rgba(76, 175, 80, 0.6)',
-                borderColor: 'rgba(56, 142, 60, 1)',
-                borderWidth: 1
-            }}] 
-        }},
-        options: {{
-            responsive: true,
-            plugins: {{ legend: {{ position: 'top' }} }},
-            scales: {{
-                x: {{ title: {{ display: true, text: 'Percentage of Bastard Dependencies (%)' }} }},
                 y: {{ title: {{ display: true, text: 'Number of languages' }}, beginAtZero: true }}
             }}
         }}
@@ -1827,11 +1744,9 @@ def generate_index_html(output_dir, per_lang_mal, per_lang_lmal, per_lang_rmal,
 def _build_effect_table(per_lang_mal, per_lang_lmal, per_lang_rmal,
                        langNames, langnameGroup, lang_to_vo,
                        global_bounds, n_axis_max, table_id='effectTable',
-                       significance_by_lang=None,
-                       lang2bastards=None):
+                       significance_by_lang=None):
     """The single big table on mal_effect.html."""
     sig_by_lang = significance_by_lang or {}
-    lang2bastards = lang2bastards or {}
     rows = sorted(((lang, langNames.get(lang, lang)) for lang in per_lang_mal),
                   key=lambda x: x[1].lower())
     out = []
@@ -1842,11 +1757,9 @@ def _build_effect_table(per_lang_mal, per_lang_lmal, per_lang_rmal,
     out.append(f'<th class="effect-col" onclick="sortTable(\'{table_id}\',3,\'number\')" style="cursor:pointer;min-width:160px">MAL β(1→max) ⇅</th>')
     out.append(f'<th class="effect-col" onclick="sortTable(\'{table_id}\',4,\'number\')" style="cursor:pointer;min-width:160px">LMAL β(1→max) ⇅</th>')
     out.append(f'<th class="effect-col" onclick="sortTable(\'{table_id}\',5,\'number\')" style="cursor:pointer;min-width:160px">RMAL β(1→max) ⇅</th>')
-    out.append(f'<th onclick="sortTable(\'{table_id}\',6,\'number\')" style="cursor:pointer" title="Raw count of bastard dependencies">Bastards ⇅</th>')
-    out.append(f'<th onclick="sortTable(\'{table_id}\',7,\'number\')" style="cursor:pointer" title="Percentage of bastards per verb">Bastard % ⇅</th>')
     if sig_by_lang:
-        out.append(f'<th onclick="sortTable(\'{table_id}\',8,\'number\')" style="cursor:pointer" title="Permutation-test p-value on MAL β(1→max), α=0.05 — click ‘methodology’ below for details."><i>p</i>-value <a href="mal_universality_methodology.html" style="font-size:10px;color:#1976d2;text-decoration:none;" onclick="event.stopPropagation();" title="How is this p-value computed?">[?]</a> ⇅</th>')
-        out.append(f'<th onclick="sortTable(\'{table_id}\',9,\'string\')" style="cursor:pointer" title="MAL✓ = significantly positive (β>0, p<0.05); anti✓ = significantly negative; n.s. = not significant.">Sig. <a href="mal_universality_methodology.html" style="font-size:10px;color:#1976d2;text-decoration:none;" onclick="event.stopPropagation();" title="How is significance computed?">[?]</a> ⇅</th>')
+        out.append(f'<th onclick="sortTable(\'{table_id}\',6,\'number\')" style="cursor:pointer" title="Permutation-test p-value on MAL β(1→max), α=0.05 — click ‘methodology’ below for details."><i>p</i>-value <a href="mal_universality_methodology.html" style="font-size:10px;color:#1976d2;text-decoration:none;" onclick="event.stopPropagation();" title="How is this p-value computed?">[?]</a> ⇅</th>')
+        out.append(f'<th onclick="sortTable(\'{table_id}\',7,\'string\')" style="cursor:pointer" title="MAL✓ = significantly positive (β>0, p<0.05); anti✓ = significantly negative; n.s. = not significant.">Sig. <a href="mal_universality_methodology.html" style="font-size:10px;color:#1976d2;text-decoration:none;" onclick="event.stopPropagation();" title="How is significance computed?">[?]</a> ⇅</th>')
     out.append('</tr></thead><tbody>')
 
     for lang, name in rows:
@@ -1866,12 +1779,6 @@ def _build_effect_table(per_lang_mal, per_lang_lmal, per_lang_rmal,
                 lang_name=name, lang_code=lang, mal_label=d_label,
                 fixed_bounds=global_bounds, n_axis_max=n_axis_max)
             out.append(_effect_cell_with_plot(svg, beta))
-            
-        b_count = lang2bastards.get(lang, {}).get('count', 0)
-        b_pct = lang2bastards.get(lang, {}).get('pct', 0.0)
-        out.append(f'<td data-value="{b_count}">{b_count:,}</td>')
-        out.append(f'<td data-value="{b_pct:.6f}">{b_pct:.1f}%</td>' if b_pct > 0 else '<td data-value="-1" style="color:#888;">—</td>')
-
         if sig_by_lang:
             sig = sig_by_lang.get(lang)
             if sig is None or sig.get('p_value') is None:
@@ -1880,17 +1787,14 @@ def _build_effect_table(per_lang_mal, per_lang_lmal, per_lang_rmal,
             else:
                 p = sig['p_value']
                 p_str = (f'{p:.3g}' if p >= 0.001 else '&lt;0.001')
-                out.append(f'<td data-value="{p:.6f}" style="font-family:monospace;">{p_str}</td>')
+                out.append(f'<td data-sort="{p:.6f}" style="font-family:monospace;">{p_str}</td>')
                 if sig.get('significant_mal'):
                     badge = '<span style="background:#c8e6c9;color:#1b5e20;padding:2px 8px;border-radius:10px;font-weight:bold;">MAL✓</span>'
-                    sig_val = 2
                 elif sig.get('significant') and (sig.get('beta_1max') or 0) < 0:
                     badge = '<span style="background:#ffcdd2;color:#b71c1c;padding:2px 8px;border-radius:10px;font-weight:bold;">anti✓</span>'
-                    sig_val = 1
                 else:
                     badge = '<span style="background:#eee;color:#666;padding:2px 8px;border-radius:10px;">n.s.</span>'
-                    sig_val = 0
-                out.append(f'<td data-value="{sig_val}">{badge}</td>')
+                out.append(f'<td>{badge}</td>')
         out.append('</tr>')
 
     out.append('</tbody></table>')
@@ -1900,8 +1804,7 @@ def _build_effect_table(per_lang_mal, per_lang_lmal, per_lang_rmal,
 def generate_mal_effect_html(output_dir, per_lang_mal, per_lang_lmal, per_lang_rmal,
                               langNames, langnameGroup, lang_to_vo,
                               global_bounds, n_axis_max, min_count,
-                              significance_by_lang=None,
-                              lang2bastards=None):
+                              significance_by_lang=None):
     path = os.path.join(output_dir, 'mal_effect.html')
     body = []
     body.append(_html_head('MAL Effect — UDW26'))
@@ -1949,8 +1852,7 @@ def generate_mal_effect_html(output_dir, per_lang_mal, per_lang_lmal, per_lang_r
     body.append(_build_effect_table(per_lang_mal, per_lang_lmal, per_lang_rmal,
                                     langNames, langnameGroup, lang_to_vo,
                                     global_bounds, n_axis_max,
-                                    significance_by_lang=significance_by_lang,
-                                    lang2bastards=lang2bastards))
+                                    significance_by_lang=significance_by_lang))
     body.append(_csv_download_button('effectTable', 'mal_effect_table.csv'))
     body.append(_table_sort_script())
 
@@ -1959,9 +1861,8 @@ def generate_mal_effect_html(output_dir, per_lang_mal, per_lang_lmal, per_lang_r
                                            langNames, langnameGroup))
     # Consistency scatter (paper §5.1 — RMAL bias / Anti-LMAL bias)
     body.append(_consistency_scatter_html(per_lang_lmal, per_lang_rmal, langNames))
-    # Histograms
+    # Histogram
     body.append(_histogram_chart_html(per_lang_mal, per_lang_lmal, per_lang_rmal))
-    body.append(_bastards_histogram_chart_html(lang2bastards))
 
     # Links to per-direction "more on X effect" pages
     body.append('<h2>More plots per direction</h2>')
@@ -4504,10 +4405,11 @@ def _simple_world_map_html(points, canvas_id, legend_field, legend_palette):
 '''
 
 
+# ----- Explorer page (interactive filters + slider) -----
+
 def generate_explorer_html(output_dir, lang2MAL_total, lang2MAL_left, lang2MAL_right,
                            lang2counts_total, lang2counts_left, lang2counts_right,
-                           langNames, langnameGroup, lang_to_vo, default_min_count,
-                           lang2bastards=None, significance_by_lang=None):
+                           langNames, langnameGroup, lang_to_vo, default_min_count):
     """Single-page interactive table where the user can:
     - filter by family (IE / Non-IE / All) and VO/OV/NDO,
     - move a min_count slider that recomputes β client-side."""
@@ -4518,7 +4420,6 @@ def generate_explorer_html(output_dir, lang2MAL_total, lang2MAL_left, lang2MAL_r
         m = mal_dict.get(lang, {})
         c = counts_dict.get(lang, {})
         return {str(n): [round(m[n], 6), int(c.get(n, 0))] for n in sorted(m)}
-    lang2bastards = lang2bastards or {}
     rows = []
     for lang in sorted(set(lang2MAL_total) | set(lang2MAL_left) | set(lang2MAL_right)):
         name = langNames.get(lang, lang)
@@ -4531,14 +4432,9 @@ def generate_explorer_html(output_dir, lang2MAL_total, lang2MAL_left, lang2MAL_r
         right = _pack(lang2MAL_right, lang2counts_right, lang)
         # MAL_1 sample size as proxy for corpus weight
         n1 = lang2counts_total.get(lang, {}).get(1, 0)
-        b_count = lang2bastards.get(lang, {}).get('count', 0)
-        b_pct = lang2bastards.get(lang, {}).get('pct', 0.0)
-        sig = significance_by_lang.get(lang, {}) if significance_by_lang else {}
         rows.append({'code': lang, 'name': name, 'family': group, 'ie': ie,
                      'vo': vo_cat or '—',
-                     'total': total, 'left': left, 'right': right, 'n1': n1,
-                     'b_count': b_count, 'b_pct': b_pct,
-                     'p': sig.get('p_value'), 'sig_mal': sig.get('significant_mal')})
+                     'total': total, 'left': left, 'right': right, 'n1': n1})
     rows_json = json.dumps(rows)
 
     body = []
@@ -4551,8 +4447,6 @@ def generate_explorer_html(output_dir, lang2MAL_total, lang2MAL_left, lang2MAL_r
                 'every time you move the slider or change a filter. This makes it possible '
                 'to test how sensitive the results presented in the paper are to the '
                 'MIN_COUNT threshold (the paper uses 100 — see §4).</p>')
-    body.append('<p>The table also includes statistics on <strong>bastard dependencies</strong> '
-                '(cross-clausal or non-projective dependencies that violate the single-tree assumption).</p>')
     body.append('</div>')
 
     body.append('<div style="background:white;padding:14px;border-radius:8px;'
@@ -4586,12 +4480,6 @@ def generate_explorer_html(output_dir, lang2MAL_total, lang2MAL_left, lang2MAL_r
                 'max n (MAL) ⇅</th>'
                 '<th class="conform-col" onclick="sortExplorer(7,\'number\')" style="cursor:pointer">'
                 'MAL_1 count ⇅</th>'
-                '<th class="conform-col" onclick="sortExplorer(8,\'number\')" style="cursor:pointer">'
-                'Bastards ⇅</th>'
-                '<th class="conform-col" onclick="sortExplorer(9,\'number\')" style="cursor:pointer">'
-                'Bastard % ⇅</th>'
-                '<th class="conform-col" onclick="sortExplorer(10,\'number\')" style="cursor:pointer">'
-                'p-value ⇅</th>'
                 '</tr></thead><tbody id="explorerBody"></tbody></table>')
     body.append(_csv_download_button('explorerTable', 'mal_explorer.csv'))
 
@@ -4621,19 +4509,6 @@ function regress(d, minCount) {{
     if (den === 0) return {{beta: null, maxN: maxN}};
     return {{beta: -(num/den), maxN: maxN}};
 }}
-function fmtBeta(b) {{
-    if (b === null || b === undefined) return '<span style="color:#bbb;">—</span>';
-    const c = colorFor(b);
-    const cat = b > 0.1 ? 'MAL' : b < -0.1 ? 'Anti-MAL' : 'gray';
-    return `<span style="color:${{c}};font-weight:bold;">${{b.toFixed(3)}}</span>`
-         + ` <span style="font-size:10px;color:${{c}};">${{cat}}</span>`;
-}}
-function fmtP(p, sigMal) {{
-    if (p === null || p === undefined) return '<span style="color:#bbb;">—</span>';
-    const pStr = p < 0.001 ? '<0.001' : p.toFixed(3);
-    const badge = sigMal ? ' <span style="background:#c8e6c9;color:#1b5e20;padding:1px 4px;border-radius:4px;font-size:9px;font-weight:bold;">MAL✓</span>' : '';
-    return `<span style="font-family:monospace;">${{pStr}}</span>${{badge}}`;
-}}
 const tbody = document.getElementById('explorerBody');
 const slider = document.getElementById('minCountSlider');
 const valLabel = document.getElementById('minCountVal');
@@ -4647,6 +4522,13 @@ function colorFor(beta) {{
     if (beta > 0.1) return '#2e7d32';
     if (beta < -0.1) return '#c62828';
     return '#f9a825';
+}}
+function fmtBeta(b) {{
+    if (b === null || b === undefined) return '<span style="color:#bbb;">—</span>';
+    const c = colorFor(b);
+    const cat = b > 0.1 ? 'MAL' : b < -0.1 ? 'Anti-MAL' : 'gray';
+    return `<span style="color:${{c}};font-weight:bold;" data-value="${{b}}">${{b.toFixed(3)}}</span>`
+         + ` <span style="font-size:10px;color:${{c}};">${{cat}}</span>`;
 }}
 
 let sortCol = 0, sortAsc = true;
@@ -4688,15 +4570,10 @@ function render() {{
         x => x.rr.beta === null ? 999 : x.rr.beta,
         x => x.tt.maxN,
         x => x.r.n1,
-        x => x.r.b_count,
-        x => x.r.b_pct,
-        x => x.r.p === null ? 999 : x.r.p,
     ];
     const kf = keyFns[sortCol];
     out.sort((a,b) => {{
         const va = kf(a), vb = kf(b);
-        if (va === 999 && vb !== 999) return 1;
-        if (va !== 999 && vb === 999) return -1;
         if (va < vb) return sortAsc ? -1 : 1;
         if (va > vb) return sortAsc ? 1 : -1;
         return 0;
@@ -4711,8 +4588,6 @@ function render() {{
         + `<td>${{fmtBeta(rr.beta)}}</td>`
         + `<td data-value="${{tt.maxN}}">${{tt.maxN || '—'}}</td>`
         + `<td data-value="${{r.n1}}">${{r.n1.toLocaleString()}}</td>`
-        + `<td data-value="${{r.b_count}}">${{r.b_count.toLocaleString()}}</td>`
-        + `<td data-value="${{r.b_pct}}">${{r.b_pct > 0 ? r.b_pct.toFixed(1) + '%' : '—'}}</td>`
         + `</tr>`).join('');
     counter.textContent = out.length + ' languages displayed · '
                        + n_with_beta + ' with computable MAL β at this MIN_COUNT';
@@ -5428,8 +5303,7 @@ def generate_site(output_dir,
                   examples_languages=None,
                   examples_max_per_bucket=20,
                   examples_max_sentences=None,
-                  examples_workers=None,
-                  lang2bastards=None):
+                  examples_workers=None):
     """Build the complete UDW26 companion site under ``output_dir``.
 
     ``examples_mode`` controls how per-language sample-sentence pages are
@@ -5531,8 +5405,7 @@ def generate_site(output_dir,
         output_dir, per_mal, per_lmal, per_rmal,
         langNames, langnameGroup, lang_to_vo,
         global_bounds, n_axis_max, min_count,
-        significance_by_lang=significance_by_lang,
-        lang2bastards=lang2bastards))
+        significance_by_lang=significance_by_lang))
     for direction, per_lang in (('mal', per_mal), ('lmal', per_lmal), ('rmal', per_rmal)):
         written.append(generate_more_effect_html(
             output_dir, direction, per_lang, langNames, langnameGroup,
@@ -5568,8 +5441,7 @@ def generate_site(output_dir,
     written.append(generate_explorer_html(
         output_dir, lang2MAL_total, lang2MAL_left, lang2MAL_right,
         lang2counts_total, lang2counts_left, lang2counts_right,
-        langNames, langnameGroup, lang_to_vo, min_count,
-        lang2bastards=lang2bastards, significance_by_lang=significance_by_lang))
+        langNames, langnameGroup, lang_to_vo, min_count))
     written.append(generate_directional_histograms_html(
         output_dir, per_mal, per_lmal, per_rmal, langNames, lang_to_vo))
     written.append(generate_data_coverage_html(
@@ -5635,21 +5507,6 @@ def _load_inputs_from_disk(data_dir='data'):
     if not os.path.exists(wals_path):
         wals_path = None
 
-    lang2bastards = {}
-    bastard_path = os.path.join(data_dir, 'bastard_stats.csv')
-    if os.path.exists(bastard_path):
-        import csv
-        with open(bastard_path, 'r', encoding='utf-8') as f:
-            for row in csv.DictReader(f):
-                if 'Code' in row and 'Bastards' in row and 'Bastards_per_Verb_Pct' in row:
-                    try:
-                        lang2bastards[row['Code']] = {
-                            'count': int(row['Bastards']),
-                            'pct': float(row['Bastards_per_Verb_Pct'])
-                        }
-                    except ValueError:
-                        pass
-
     return dict(
         lang2MAL_total=lang2MAL_total,
         lang2MAL_left=lang2MAL_left,
@@ -5661,7 +5518,6 @@ def _load_inputs_from_disk(data_dir='data'):
         langnameGroup=langnameGroup,
         lang_to_vo=lang_to_vo,
         wals_languages_path=wals_path,
-        lang2bastards=lang2bastards,
     )
 
 

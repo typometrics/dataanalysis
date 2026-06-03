@@ -67,7 +67,8 @@ def create_verb_centered_table(
             arrow_direction=kwargs.get('arrow_direction', 'outward')
         )
     
-    builder = VerbCenteredTableBuilder(position_averages, config, ordering_stats, validation_info)
+    config_type = kwargs.get('config_type', 'strict')
+    builder = VerbCenteredTableBuilder(position_averages, config, ordering_stats, validation_info, config_type=config_type)
     return builder.build()
 
 
@@ -187,6 +188,27 @@ def compute_aggregate_ordering_stats(all_langs_average_sizes_filtered):
         }
     
     return ordering_stats
+
+
+def filter_and_map_ordering_stats(order_stats, config_type):
+    """
+    Filter ordering stats by config_type ('strict' or 'anyother') and map to standard 3-tuple keys.
+    """
+    if not order_stats:
+        return None
+    mapped = {}
+    for k, v in order_stats.items():
+        if len(k) == 4:
+            if k[3] == config_type:
+                mapped[(k[0], k[1], k[2])] = v
+        elif len(k) == 3 and k[2] == 'total':
+            mapped[k] = v
+        # Keep 3-tuple keys if they match the expected format (for backwards compatibility)
+        elif len(k) == 3 and isinstance(k[2], int):
+            # Only use these if we don't have the config_type explicitly
+            if (k[0], k[1], k[2], config_type) not in order_stats:
+                mapped[k] = v
+    return mapped
 
 
 def compute_averaged_ordering_stats(langs, all_ordering_stats):
@@ -903,7 +925,7 @@ def generate_mass_tables(
         show_horizontal_factors=True,
         show_diagonal_factors=True,
         arrow_direction=arrow_direction,
-        ordering_stats=global_ordering,
+        ordering_stats=filter_and_map_ordering_stats(global_ordering, 'strict'),
         show_ordering_triples=True,
         show_row_averages=True,  # Enable Row Averages
         extra_legend_items=[aggregate_caveat], # Add Caveat
@@ -947,7 +969,7 @@ def generate_mass_tables(
             show_horizontal_factors=True,
             show_diagonal_factors=True,
             arrow_direction=arrow_direction,
-            ordering_stats=family_ordering,
+            ordering_stats=filter_and_map_ordering_stats(family_ordering, 'strict'),
             show_ordering_triples=True,
             show_row_averages=True, # Enable Row Averages
             extra_legend_items=[aggregate_caveat], # Add Caveat
@@ -971,7 +993,7 @@ def generate_mass_tables(
             show_horizontal_factors=True,
             show_diagonal_factors=True,
             arrow_direction=arrow_direction,
-            ordering_stats=non_ie_ordering,
+            ordering_stats=filter_and_map_ordering_stats(non_ie_ordering, 'strict'),
             show_ordering_triples=True,
             show_row_averages=True, # Enable Row Averages
             extra_legend_items=[aggregate_caveat], # Add Caveat
@@ -1053,7 +1075,7 @@ def generate_mass_tables(
         table = create_verb_centered_table(
             lang_avgs,
             config,
-            lang_order_stats,  # Pass ordering stats directly, not wrapped in dict
+            filter_and_map_ordering_stats(lang_order_stats, 'strict'),  # Pass ordering stats directly, not wrapped in dict
             validation_info=validation_info  # Pass the calculated validation info
         )
         
@@ -1181,7 +1203,7 @@ def generate_anyotherside_helix_tables(
         lang_ordering = ordering_stats.get(lang) if ordering_stats else None
         
         # Use the STANDARD table builder (unified!) with validation info
-        table = create_verb_centered_table(position_data, config, ordering_stats=lang_ordering, validation_info=validation_info)
+        table = create_verb_centered_table(position_data, config, ordering_stats=filter_and_map_ordering_stats(lang_ordering, 'anyother'), validation_info=validation_info, config_type='anyother')
         
         if table is None:
             continue

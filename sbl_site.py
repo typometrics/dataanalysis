@@ -9,6 +9,7 @@ import sbl_page_visualizations
 import sbl_page_typology
 import sbl_page_summary
 import sbl_page_significance
+import sbl_page_outer_effects
 
 def build_site():
     out_dir = "html_sbl_analyses"
@@ -42,6 +43,9 @@ def build_site():
     
     sbl_page_summary.generate(out_dir)
     print("  Generated sbl_summary.html")
+    
+    sbl_page_outer_effects.generate(out_dir)
+    print("  Generated sbl_outer_effects.html")
     
     # Copy examples directory
     src_examples = os.path.join("html_analyses", "examples")

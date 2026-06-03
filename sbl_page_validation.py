@@ -120,21 +120,11 @@ def generate(out_dir):
             ])
 
     html.extend([
-        "<style>",
-        "#validationTable th { position: static; }",
-        "#validationTable thead { position: sticky; top: 44px; z-index: 10; background: white; }",
-        "#validationTable thead tr:first-child th { border-bottom: none; }",
-        "</style>",
         "<div style='overflow-x:auto;'>",
         "<table id='validationTable' style='white-space: nowrap;'>",
         "<thead>",
         "<tr>",
-        "<th rowspan='2' onclick=\"sortTable('validationTable', 0, 'string')\" style='background:#4CAF50; color:white; cursor:pointer;'>Language</th>",
-        "<th colspan='6' style='text-align:center; background:#e8f5e9; color:#333;'>Horizontal Law</th>",
-        "<th colspan='6' style='text-align:center; background:#e3f2fd; color:#333;'>Vertical Law</th>",
-        "<th colspan='6' style='text-align:center; background:#fff3e0; color:#333;'>Diagonal Law</th>",
-        "</tr>",
-        "<tr>"
+        "<th onclick=\"sortTable('validationTable', 0, 'string')\" style='background:#4CAF50; color:white; cursor:pointer;' title='Sort by Language'>Language</th>"
     ])
     
     # H1-H6
@@ -142,9 +132,16 @@ def generate(out_dir):
     v_titles_r = ["R_2^1 < R_1^1", "R_3^1 < R_2^1", "R_4^1 < R_3^1", "R_3^2 < R_2^2", "R_4^2 < R_3^2", "R_4^3 < R_3^3"]
     d_titles_r = ["R_1^1 < R_2^2", "R_2^2 < R_3^3", "R_3^3 < R_4^4", "R_2^1 < R_3^2", "R_3^2 < R_4^3", "R_3^1 < R_4^2"]
     
-    for i in range(1, 7): html.append(f"<th style='background:#c8e6c9; color:#333;' title='Horizontal {i}: {h_titles_r[i-1]}'>H{i}</th>")
-    for i in range(1, 7): html.append(f"<th style='background:#bbdefb; color:#333;' title='Vertical {i}: {v_titles_r[i-1]}'>V{i}</th>")
-    for i in range(1, 7): html.append(f"<th style='background:#ffe0b2; color:#333;' title='Diagonal {i}: {d_titles_r[i-1]}'>D{i}</th>")
+    col_idx = 1
+    for i in range(1, 7): 
+        html.append(f"<th onclick=\"sortTable('validationTable', {col_idx}, 'number')\" style='background:#c8e6c9; color:#333; cursor:pointer;' title='Horizontal {i}: {h_titles_r[i-1]}'>H{i}</th>")
+        col_idx += 1
+    for i in range(1, 7): 
+        html.append(f"<th onclick=\"sortTable('validationTable', {col_idx}, 'number')\" style='background:#bbdefb; color:#333; cursor:pointer;' title='Vertical {i}: {v_titles_r[i-1]}'>V{i}</th>")
+        col_idx += 1
+    for i in range(1, 7): 
+        html.append(f"<th onclick=\"sortTable('validationTable', {col_idx}, 'number')\" style='background:#ffe0b2; color:#333; cursor:pointer;' title='Diagonal {i}: {d_titles_r[i-1]}'>D{i}</th>")
+        col_idx += 1
     
     html.append("</tr></thead><tbody>")
     
@@ -202,6 +199,29 @@ def generate(out_dir):
         
     html.append("</tbody></table></div>")
     
+    # --- Left Side French Example ---
+    if os.path.exists(fr_tsv):
+        if fdata and 'L' in fdata:
+            d_fr_l = fdata['L']
+            def val_l(n, k): return get_val(d_fr_l, n, k)
+            def _check_fr_l(v1, v2):
+                if v1 is None or v2 is None: return "<td>-</td>"
+                if v1 < v2: return f"<td style='color:green;'>✅ PASS ({v1:.3f} &lt; {v2:.3f})</td>"
+                return f"<td style='color:red;'>❌ FAIL ({v1:.3f} &ge; {v2:.3f})</td>"
+            
+            html.extend([
+                "<h3>Example: French (Left Side)</h3>",
+                "<table style='width: auto; margin-bottom: 30px;'>",
+                "<tr><th>Law</th><th>Rule</th><th>Values</th><th>Result</th></tr>",
+                f"<tr><td>Horizontal 1</td><td>$L_2^1 < L_2^2$</td><td>{val_l(2,1):.3f} vs {val_l(2,2):.3f}</td>{_check_fr_l(val_l(2,1), val_l(2,2))}</tr>",
+                f"<tr><td>Horizontal 2</td><td>$L_3^1 < L_3^2$</td><td>{val_l(3,1):.3f} vs {val_l(3,2):.3f}</td>{_check_fr_l(val_l(3,1), val_l(3,2))}</tr>",
+                f"<tr><td>Horizontal 3</td><td>$L_3^2 < L_3^3$</td><td>{val_l(3,2):.3f} vs {val_l(3,3):.3f}</td>{_check_fr_l(val_l(3,2), val_l(3,3))}</tr>",
+                f"<tr><td>Vertical 1</td><td>$L_2^1 < L_1^1$</td><td>{val_l(2,1):.3f} vs {val_l(1,1):.3f}</td>{_check_fr_l(val_l(2,1), val_l(1,1))}</tr>",
+                f"<tr><td>Vertical 2</td><td>$L_3^1 < L_2^1$</td><td>{val_l(3,1):.3f} vs {val_l(2,1):.3f}</td>{_check_fr_l(val_l(3,1), val_l(2,1))}</tr>",
+                f"<tr><td>Diagonal 1</td><td>$L_1^1 < L_2^2$</td><td>{val_l(1,1):.3f} vs {val_l(2,2):.3f}</td>{_check_fr_l(val_l(1,1), val_l(2,2))}</tr>",
+                "</table>"
+            ])
+
     # --- Left Side Matrix ---
     html.extend([
         "<h3 style='margin-top: 40px;'>Global Matrix (Left Side)</h3>",
@@ -209,21 +229,23 @@ def generate(out_dir):
         "<table id='validationTableLeft' style='white-space: nowrap;'>",
         "<thead>",
         "<tr>",
-        "<th rowspan='2' onclick=\"sortTable('validationTableLeft', 0, 'string')\" style='background:#4CAF50; color:white; cursor:pointer;'>Language</th>",
-        "<th colspan='6' style='text-align:center; background:#e8f5e9; color:#333;'>Horizontal Law</th>",
-        "<th colspan='6' style='text-align:center; background:#e3f2fd; color:#333;'>Vertical Law</th>",
-        "<th colspan='6' style='text-align:center; background:#fff3e0; color:#333;'>Diagonal Law</th>",
-        "</tr>",
-        "<tr>"
+        "<th onclick=\"sortTable('validationTableLeft', 0, 'string')\" style='background:#4CAF50; color:white; cursor:pointer;' title='Sort by Language'>Language</th>"
     ])
     
     h_titles_l = ["L_2^1 < L_2^2", "L_3^1 < L_3^2", "L_3^2 < L_3^3", "L_4^1 < L_4^2", "L_4^2 < L_4^3", "L_4^3 < L_4^4"]
     v_titles_l = ["L_2^1 < L_1^1", "L_3^1 < L_2^1", "L_4^1 < L_3^1", "L_3^2 < L_2^2", "L_4^2 < L_3^2", "L_4^3 < L_3^3"]
     d_titles_l = ["L_1^1 < L_2^2", "L_2^2 < L_3^3", "L_3^3 < L_4^4", "L_2^1 < L_3^2", "L_3^2 < L_4^3", "L_3^1 < L_4^2"]
     
-    for i in range(1, 7): html.append(f"<th style='background:#c8e6c9; color:#333;' title='Horizontal {i}: {h_titles_l[i-1]}'>H{i}</th>")
-    for i in range(1, 7): html.append(f"<th style='background:#bbdefb; color:#333;' title='Vertical {i}: {v_titles_l[i-1]}'>V{i}</th>")
-    for i in range(1, 7): html.append(f"<th style='background:#ffe0b2; color:#333;' title='Diagonal {i}: {d_titles_l[i-1]}'>D{i}</th>")
+    col_idx = 1
+    for i in range(1, 7): 
+        html.append(f"<th onclick=\"sortTable('validationTableLeft', {col_idx}, 'number')\" style='background:#c8e6c9; color:#333; cursor:pointer;' title='Horizontal {i}: {h_titles_l[i-1]}'>H{i}</th>")
+        col_idx += 1
+    for i in range(1, 7): 
+        html.append(f"<th onclick=\"sortTable('validationTableLeft', {col_idx}, 'number')\" style='background:#bbdefb; color:#333; cursor:pointer;' title='Vertical {i}: {v_titles_l[i-1]}'>V{i}</th>")
+        col_idx += 1
+    for i in range(1, 7): 
+        html.append(f"<th onclick=\"sortTable('validationTableLeft', {col_idx}, 'number')\" style='background:#ffe0b2; color:#333; cursor:pointer;' title='Diagonal {i}: {d_titles_l[i-1]}'>D{i}</th>")
+        col_idx += 1
     
     html.append("</tr></thead><tbody>")
     

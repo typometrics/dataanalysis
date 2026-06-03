@@ -32,7 +32,7 @@ tr:hover { background-color: #f1f1f1; }
 .formula { font-family: monospace; background: #e0e0e0; padding: 2px 5px; border-radius: 3px; font-size: 14px; }
 /* Modal CSS */
 .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
-.modal-content { background-color: #fefefe; margin: 5% auto; padding: 20px; border: 1px solid #888; width: 90%; max-width: 1200px; border-radius: 5px; position: relative; }
+.modal-content { background-color: #fefefe; margin: 2% auto; padding: 20px; border: 1px solid #888; width: 98%; max-width: 1800px; border-radius: 5px; position: relative; }
 .close-modal { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; position: absolute; right: 20px; top: 10px; }
 .close-modal:hover, .close-modal:focus { color: black; text-decoration: none; cursor: pointer; }
 .tsv-table { font-size: 12px; margin-top: 20px; width: 100%; overflow-x: auto; display: block; }
@@ -90,6 +90,7 @@ def get_nav(current_page):
         ('sbl_explorer.html', 'Interactive Explorer'),
         ('sbl_significance.html', 'Significance Analysis'),
         ('sbl_laws_visualizations.html', 'Visualizations'),
+        ('sbl_outer_effects.html', 'Outer Effect Curves'),
         ('sbl_typology.html', 'Typological Maps'),
         ('sbl_summary.html', 'Global Summary')
     ]
@@ -107,32 +108,88 @@ def get_footer():
 
 def get_table_sort_js():
     return r"""
-<script>
-var sortDirections = {};
-function sortTable(tableId, colIndex, type) {
-    const table = document.getElementById(tableId);
-    if (!table) return;
-    const tbody = table.tBodies[0];
-    const rows = Array.from(tbody.rows);
-    const k = tableId + '_' + colIndex;
-    sortDirections[k] = !sortDirections[k];
-    const asc = sortDirections[k];
-    
-    rows.sort((a, b) => {
-        let av = a.cells[colIndex].textContent.trim();
-        let bv = b.cells[colIndex].textContent.trim();
-        
-        if (type === 'number') {
-            let an = parseFloat(av);
-            let bn = parseFloat(bv);
-            if (isNaN(an)) an = -Infinity;
-            if (isNaN(bn)) bn = -Infinity;
-            return asc ? an - bn : bn - an;
-        } else {
-            return asc ? av.localeCompare(bv) : bv.localeCompare(av);
-        }
-    });
-    rows.forEach(r => tbody.appendChild(r));
+<style>
+/* Ensure sticky header remains on top and doesn't get overlapped */
+table th {
+    position: sticky;
+    top: 38px;
+    z-index: 10;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
 }
+table th:hover {
+    background-color: #45a049;
+}
+/* Sort icons */
+th.sort-asc::after {
+    content: " \25B2";
+    font-size: 0.8em;
+}
+th.sort-desc::after {
+    content: " \25BC";
+    font-size: 0.8em;
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tables = document.querySelectorAll('table');
+    tables.forEach(table => {
+        const headers = table.querySelectorAll('th');
+        headers.forEach((header, index) => {
+            header.addEventListener('click', () => {
+                const tbody = table.querySelector('tbody') || table;
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                
+                // If the table doesn't have a tbody, make sure we skip the header row
+                const startIndex = table.querySelector('tbody') ? 0 : 1;
+                const dataRows = rows.slice(startIndex);
+                
+                let isAsc = header.classList.contains('sort-asc');
+                
+                // Clear all sorting classes
+                headers.forEach(h => {
+                    h.classList.remove('sort-asc');
+                    h.classList.remove('sort-desc');
+                });
+                
+                // Toggle direction
+                isAsc = !isAsc;
+                if (isAsc) {
+                    header.classList.add('sort-asc');
+                } else {
+                    header.classList.add('sort-desc');
+                }
+                
+                // Sort the rows
+                dataRows.sort((a, b) => {
+                    const cellA = a.children[index];
+                    const cellB = b.children[index];
+                    
+                    if (!cellA || !cellB) return 0;
+                    
+                    let valA = cellA.innerText.trim();
+                    let valB = cellB.innerText.trim();
+                    
+                    // Try to parse as numbers
+                    const numA = parseFloat(valA.replace(/[^0-9.-]+/g,""));
+                    const numB = parseFloat(valB.replace(/[^0-9.-]+/g,""));
+                    
+                    const isNumA = !isNaN(numA) && valA !== '';
+                    const isNumB = !isNaN(numB) && valB !== '';
+                    
+                    if (isNumA && isNumB) {
+                        return isAsc ? numA - numB : numB - numA;
+                    }
+                    
+                    return isAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
+                });
+                
+                // Re-append rows in sorted order
+                dataRows.forEach(row => tbody.appendChild(row));
+            });
+        });
+    });
+});
 </script>
 """
