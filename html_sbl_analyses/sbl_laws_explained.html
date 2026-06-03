@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>The Sy Laws Explained</title>
+<style>
+:root { color-scheme: light; }
+html, body { background: #fff; }
+body { font-family: Arial, sans-serif; max-width: 1500px; margin: 0 auto; padding: 20px; color: #222; }
+h1 { color: #333; scroll-margin-top: 60px; }
+h2 { color: #555; margin-top: 30px; scroll-margin-top: 60px; }
+h3 { color: #666; margin-top: 20px; scroll-margin-top: 60px; }
+a { color: #1976d2; }
+table { border-collapse: collapse; width: 100%; margin-bottom: 30px; scroll-margin-top: 60px; }
+th, td { border: 1px solid #ddd; padding: 6px 8px; text-align: center; font-size: 13px; }
+th { background-color: #4CAF50; color: white; position: sticky; top: 38px; z-index: 5; cursor: pointer; }
+th:hover { background-color: #45a049; }
+.lang-name { text-align: left; font-weight: bold; white-space: nowrap; }
+.score-positive { background-color: #c8e6c9; }
+.score-negative { background-color: #ffcdd2; }
+.score-neutral  { background-color: #fff9c4; }
+.na-cell { color: #999; }
+tr:nth-child(even) { background-color: #f9f9f9; }
+tr:hover { background-color: #f1f1f1; }
+.info-box { background: #f0f0f0; padding: 15px; border-radius: 5px; margin: 10px 0 20px 0; }
+.nav-top { background: #333; color: white; padding: 0; margin: -20px -20px 20px -20px;
+           border-radius: 0 0 6px 6px; position: sticky; top: 0; z-index: 100; }
+.nav-top > ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; }
+.nav-top > ul > li > a { display: block; color: #fff; padding: 10px 16px; text-decoration: none; }
+.nav-top > ul > li:hover > a { background: #555; }
+.nav-top .crumb-current > a { color: #ffeb3b; font-weight: bold; }
+.nav-top .nav-spacer { flex: 1; }
+.nav-top .nav-github { padding: 10px 16px; color: #fff; text-decoration: none; opacity: 0.85; }
+.explanation { background: #fff3e0; padding: 15px; border-left: 4px solid #ff9800; margin: 20px 0; line-height: 1.5; }
+.formula { font-family: monospace; background: #e0e0e0; padding: 2px 5px; border-radius: 3px; font-size: 14px; }
+/* Modal CSS */
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
+.modal-content { background-color: #fefefe; margin: 5% auto; padding: 20px; border: 1px solid #888; width: 90%; max-width: 1200px; border-radius: 5px; position: relative; }
+.close-modal { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; position: absolute; right: 20px; top: 10px; }
+.close-modal:hover, .close-modal:focus { color: black; text-decoration: none; cursor: pointer; }
+.tsv-table { font-size: 12px; margin-top: 20px; width: 100%; overflow-x: auto; display: block; }
+.tsv-table th, .tsv-table td { padding: 4px 6px; }
+</style>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+<script>
+var sortDirections = {};
+function sortTable(tableId, colIndex, type) {
+    const table = document.getElementById(tableId);
+    if (!table) return;
+    const tbody = table.tBodies[0];
+    const rows = Array.from(tbody.rows);
+    const k = tableId + '_' + colIndex;
+    sortDirections[k] = !sortDirections[k];
+    const asc = sortDirections[k];
+    
+    rows.sort((a, b) => {
+        let av = a.cells[colIndex].textContent.trim();
+        let bv = b.cells[colIndex].textContent.trim();
+        
+        if (type === 'number') {
+            let an = parseFloat(av);
+            let bn = parseFloat(bv);
+            if (isNaN(an)) an = -Infinity;
+            if (isNaN(bn)) bn = -Infinity;
+            return asc ? an - bn : bn - an;
+        } else {
+            return asc ? av.localeCompare(bv) : bv.localeCompare(av);
+        }
+    });
+    rows.forEach(r => tbody.appendChild(r));
+}
+</script>
+
+
+<script>
+function openModal(id) {
+    document.getElementById(id).style.display = "block";
+}
+function closeModal(id) {
+    document.getElementById(id).style.display = "none";
+}
+window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+        event.target.style.display = "none";
+    }
+}
+</script>
+
+<script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script>
+</head>
+<body>
+
+<nav class="nav-top"><ul><li><a href="index.html">Home</a></li><li class="crumb-current"><a href="sbl_laws_explained.html">The Sy Laws</a></li><li><a href="sbl_laws_compliance.html">Laws Compliance Table</a></li><li><a href="sbl_validation.html">Validation & Diagnostics</a></li><li><a href="sbl_explorer.html">Interactive Explorer</a></li><li><a href="sbl_significance.html">Significance Analysis</a></li><li><a href="sbl_laws_visualizations.html">Visualizations</a></li><li><a href="sbl_typology.html">Typological Maps</a></li><li><a href="sbl_summary.html">Global Summary</a></li><li class="nav-spacer"></li></ul></nav>
+<h1>The Sy Laws Explained</h1>
+<div class='explanation'>
+<p>The traditional Short-Before-Long (SBL) principle suggests that shorter elements tend to be placed closer to the verb than longer elements. In our verb-centered Helix configurations, this principle is formalized into three distinct <strong>Sy Laws</strong>. Let $R_n^k$ be the mean size of the $k$-th dependent on the right in a configuration with $n$ total dependents on the right. Symmetrically, let $L_n^k$ be the mean size of the $k$-th dependent on the left (where $k=1$ is closest to the verb). The laws apply equally to both directions.</p>
+</div>
+<h2>1. The Horizontal Law (The Standard SBL Effect)</h2>
+<p><strong>Definition:</strong> In a fixed configuration of $n$ dependents, the inner dependents are shorter than the outer dependents.</p>
+<p class='formula'>Formula: $R_n^k < R_n^{k+1}$</p>
+<div class='info-box'>
+<strong>Example:</strong> Suppose a verb has $n=3$ dependents on the right. The law predicts that the first dependent ($k=1$) is smaller than the second ($k=2$), which is smaller than the third ($k=3$).
+<ul><li>$R_3^1 < R_3^2$</li><li>$R_3^2 < R_3^3$</li></ul>
+</div>
+<h3>Right-Side Corpus Example (English)</h3>
+<p>Notice how the first right dependent <em>strict impartiality</em> (span=2) is shorter than the second right dependent <em>in its pages</em> (span=3), which in turn is shorter than the third right dependent <em>and a reasoned assessment of various ideologies</em> (span=7). Thus $R_3^1 < R_3^2 < R_3^3$, strictly adhering to the Right Horizontal Law.</p>
+<p style="font-size: 13px; color: #666; margin-bottom: 5px;">Source Treebank: <code>en_partut-ud-train</code></p>
+<div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; background: #fff; overflow-x: auto; margin-bottom: 20px;">
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = He tried to enforce strict impartiality in its pages and a reasoned assessment of various ideologies .
+1	He	He	PRON	PRON	_	2	nsubj	_	_
+2	tried	tried	VERB	VERB	_	0	root	_	_
+3	to	to	PART	PART	_	4	mark	_	_
+4	enforce	enforce	VERB	VERB	_	2	xcomp	_	highlight=red
+5	strict	strict	ADJ	ADJ	_	6	amod	_	_
+6	impartiality	impartiality	NOUN	NOUN	_	4	obj	_	highlight=green|span=2
+7	in	in	ADP	ADP	_	9	case	_	_
+8	its	its	DET	DET	_	9	nmod:poss	_	_
+9	pages	pages	NOUN	NOUN	_	4	obl	_	highlight=green|span=3
+10	and	and	CCONJ	CCONJ	_	13	cc	_	_
+11	a	a	DET	DET	_	13	det	_	_
+12	reasoned	reasoned	VERB	VERB	_	13	acl	_	_
+13	assessment	assessment	NOUN	NOUN	_	6	conj	_	highlight=green|span=7
+14	of	of	ADP	ADP	_	16	case	_	_
+15	various	various	ADJ	ADJ	_	16	amod	_	_
+16	ideologies	ideologies	NOUN	NOUN	_	13	nmod	_	_
+17	.	.	PUNCT	PUNCT	_	2	punct	_	_"></reactive-dep-tree>
+</div>
+
+<h3>Left-Side Corpus Example (English)</h3>
+<p>The Sy Laws apply symmetrically to the left side ($L_n^k$, where $k$ is the distance from the verb to the left). Notice how the inner left dependent <em>the FBI</em> (span=2) is shorter than the outer left dependent <em>In a bulletin</em> (span=3). Thus $L_2^1 < L_2^2$, adhering to the Left Horizontal Law.</p>
+<p style="font-size: 13px; color: #666; margin-bottom: 5px;">Source Treebank: <code>en_ewt-ud-train</code></p>
+<div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; background: #fff; overflow-x: auto; margin-bottom: 20px;">
+<reactive-dep-tree interactive="true" shown-features="UPOS,LEMMA,FORM,MISC.span" conll="# text = In a bulletin , the FBI noted that the surveillance might relate to a plot to disperse a chemical or biological weapon .
+1	In	In	ADP	ADP	_	3	case	_	_
+2	a	a	DET	DET	_	3	det	_	_
+3	bulletin	bulletin	NOUN	NOUN	_	7	obl	_	highlight=green|span=3
+4	,	,	PUNCT	PUNCT	_	3	punct	_	_
+5	the	the	DET	DET	_	6	det	_	_
+6	FBI	FBI	PROPN	PROPN	_	7	nsubj	_	highlight=green|span=2
+7	noted	noted	VERB	VERB	_	0	root	_	highlight=red
+8	that	that	SCONJ	SCONJ	_	12	mark	_	_
+9	the	the	DET	DET	_	10	det	_	_
+10	surveillance	surveillance	NOUN	NOUN	_	12	nsubj	_	_
+11	might	might	AUX	AUX	_	12	aux	_	_
+12	relate	relate	VERB	VERB	_	7	ccomp	_	_
+13	to	to	ADP	ADP	_	15	case	_	_
+14	a	a	DET	DET	_	15	det	_	_
+15	plot	plot	NOUN	NOUN	_	12	obl	_	_
+16	to	to	PART	PART	_	17	mark	_	_
+17	disperse	disperse	VERB	VERB	_	15	acl	_	_
+18	a	a	DET	DET	_	22	det	_	_
+19	chemical	chemical	ADJ	ADJ	_	22	amod	_	_
+20	or	or	CCONJ	CCONJ	_	21	cc	_	_
+21	biological	biological	ADJ	ADJ	_	19	conj	_	_
+22	weapon	weapon	NOUN	NOUN	_	17	obj	_	_
+23	.	.	PUNCT	PUNCT	_	7	punct	_	_"></reactive-dep-tree>
+</div>
+<h2>2. The Vertical Law</h2>
+<p><strong>Definition:</strong> When a new dependent is added to the periphery (increasing $n$), the existing inner dependents tend to shrink in size to compensate.</p>
+<p class='formula'>Formula: $R_{n+1}^k < R_n^k$</p>
+<div class='info-box'>
+<strong>Example:</strong> Compare a verb with 2 dependents vs a verb with 3 dependents. The first dependent in the 3-dependent configuration ($R_3^1$) will typically be shorter than the first dependent in the 2-dependent configuration ($R_2^1$).
+<ul><li>$R_3^1 < R_2^1$</li><li>$R_4^2 < R_3^2$</li></ul>
+</div>
+<div class='explanation' style='border-left-color: #2196F3; background: #e3f2fd;'>
+<p><strong>Theoretical Connection:</strong> The Vertical Law can be seen as an emergent property of the co-effect between the Horizontal Law and the Menzerath-Altmann Law (MAL). Put simply: <em>Horizontal Law + MAL &approx; Vertical Law</em>.</p>
+<p style='font-size: 0.9em;'><strong>Reference:</strong> Chen, X., Gerdes, K., Kahane, S., & Courtin, M. (2022). <a href='https://kahane.fr/wp-content/uploads/2022/09/the-co-effect-of-menzerath-altmann-law-and-heavy-constituent-shift-in-natural-languages.pdf' target='_blank'>The Co-Effect of Menzerath-Altmann Law and Heavy Constituent Shift in Natural Languages</a>. In <em>Quantitative Approaches to Universality and Individuality in Language</em> (pp. 11-24). De Gruyter.</p>
+</div>
+<h2>3. The Diagonal Law</h2>
+<p><strong>Definition:</strong> A dependent at position $k$ in an $n$-dependent configuration is shorter than the dependent at position $k+1$ in an $(n+1)$-dependent configuration.</p>
+<p class='formula'>Formula: $R_n^k < R_{n+1}^{k+1}$</p>
+<div class='info-box'>
+<strong>Example:</strong> This connects the Horizontal and Vertical laws diagonally across the Helix table.
+<ul><li>$R_2^1 < R_3^2$</li><li>$R_3^2 < R_4^3$</li></ul>
+</div>
+<h2>The Complex SbL $\beta$ Regression</h2>
+<p>To summarize these effects into a single robust metric, we compute a log-log linear regression capturing how constituent size scales with distance from the absolute edge of the configuration.</p>
+<ul>
+<li><strong>Right Side Regression:</strong> We plot points at $X = -\log(n+1-k)$ and $Y = \log(R_n^k)$. The slope of this line is the Right SbL $\beta$.</li>
+<li><strong>Left Side Regression:</strong> We plot points at $X = \log(n+1-k)$ and $Y = \log(L_n^k)$. Here, $n+1-k$ represents the distance outward from the verb. Since "Short-Before-Long" on the left side implies dependents further outward (which occur earlier) should be shorter, size naturally decreases as distance increases. Thus, a perfectly compliant language will yield a <strong>negative slope</strong> ($\beta$). In comparative visualizations across this site, Left slopes are negated so that a positive value (Green) consistently indicates compliance.</li>
+</ul>
+
+</body>
+</html>

@@ -53,6 +53,7 @@ for head_type in HEAD_TYPES:
     
     # Unpack results
     (all_langs_position2num, all_langs_position2sizes, all_langs_average_sizes, all_langs_average_charsizes,
+     all_langs_position2logsizes, all_langs_position2logsqsizes,
      lang_bastard_stats, global_bastard_relations, 
      lang_vo_hi_scores, 
      sentence_disorder_pct) = results
@@ -65,6 +66,8 @@ for head_type in HEAD_TYPES:
         f'all_langs_average_charsizes{suffix}.pkl': all_langs_average_charsizes,
         f'all_langs_position2sizes{suffix}.pkl': all_langs_position2sizes,
         f'all_langs_position2num{suffix}.pkl': all_langs_position2num,
+        f'all_langs_position2logsizes{suffix}.pkl': all_langs_position2logsizes,
+        f'all_langs_position2logsqsizes{suffix}.pkl': all_langs_position2logsqsizes,
     }
     
     for filename, data in output_files.items():

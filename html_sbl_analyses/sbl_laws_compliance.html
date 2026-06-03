@@ -1,0 +1,2546 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SBL Laws Compliance Master Table</title>
+<style>
+:root { color-scheme: light; }
+html, body { background: #fff; }
+body { font-family: Arial, sans-serif; max-width: 1500px; margin: 0 auto; padding: 20px; color: #222; }
+h1 { color: #333; scroll-margin-top: 60px; }
+h2 { color: #555; margin-top: 30px; scroll-margin-top: 60px; }
+h3 { color: #666; margin-top: 20px; scroll-margin-top: 60px; }
+a { color: #1976d2; }
+table { border-collapse: collapse; width: 100%; margin-bottom: 30px; scroll-margin-top: 60px; }
+th, td { border: 1px solid #ddd; padding: 6px 8px; text-align: center; font-size: 13px; }
+th { background-color: #4CAF50; color: white; position: sticky; top: 38px; z-index: 5; cursor: pointer; }
+th:hover { background-color: #45a049; }
+.lang-name { text-align: left; font-weight: bold; white-space: nowrap; }
+.score-positive { background-color: #c8e6c9; }
+.score-negative { background-color: #ffcdd2; }
+.score-neutral  { background-color: #fff9c4; }
+.na-cell { color: #999; }
+tr:nth-child(even) { background-color: #f9f9f9; }
+tr:hover { background-color: #f1f1f1; }
+.info-box { background: #f0f0f0; padding: 15px; border-radius: 5px; margin: 10px 0 20px 0; }
+.nav-top { background: #333; color: white; padding: 0; margin: -20px -20px 20px -20px;
+           border-radius: 0 0 6px 6px; position: sticky; top: 0; z-index: 100; }
+.nav-top > ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; }
+.nav-top > ul > li > a { display: block; color: #fff; padding: 10px 16px; text-decoration: none; }
+.nav-top > ul > li:hover > a { background: #555; }
+.nav-top .crumb-current > a { color: #ffeb3b; font-weight: bold; }
+.nav-top .nav-spacer { flex: 1; }
+.nav-top .nav-github { padding: 10px 16px; color: #fff; text-decoration: none; opacity: 0.85; }
+.explanation { background: #fff3e0; padding: 15px; border-left: 4px solid #ff9800; margin: 20px 0; line-height: 1.5; }
+.formula { font-family: monospace; background: #e0e0e0; padding: 2px 5px; border-radius: 3px; font-size: 14px; }
+/* Modal CSS */
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
+.modal-content { background-color: #fefefe; margin: 5% auto; padding: 20px; border: 1px solid #888; width: 90%; max-width: 1200px; border-radius: 5px; position: relative; }
+.close-modal { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; position: absolute; right: 20px; top: 10px; }
+.close-modal:hover, .close-modal:focus { color: black; text-decoration: none; cursor: pointer; }
+.tsv-table { font-size: 12px; margin-top: 20px; width: 100%; overflow-x: auto; display: block; }
+.tsv-table th, .tsv-table td { padding: 4px 6px; }
+</style>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+<script>
+var sortDirections = {};
+function sortTable(tableId, colIndex, type) {
+    const table = document.getElementById(tableId);
+    if (!table) return;
+    const tbody = table.tBodies[0];
+    const rows = Array.from(tbody.rows);
+    const k = tableId + '_' + colIndex;
+    sortDirections[k] = !sortDirections[k];
+    const asc = sortDirections[k];
+    
+    rows.sort((a, b) => {
+        let av = a.cells[colIndex].textContent.trim();
+        let bv = b.cells[colIndex].textContent.trim();
+        
+        if (type === 'number') {
+            let an = parseFloat(av);
+            let bn = parseFloat(bv);
+            if (isNaN(an)) an = -Infinity;
+            if (isNaN(bn)) bn = -Infinity;
+            return asc ? an - bn : bn - an;
+        } else {
+            return asc ? av.localeCompare(bv) : bv.localeCompare(av);
+        }
+    });
+    rows.forEach(r => tbody.appendChild(r));
+}
+</script>
+
+
+<script>
+function openModal(id) {
+    document.getElementById(id).style.display = "block";
+}
+function closeModal(id) {
+    document.getElementById(id).style.display = "none";
+}
+window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+        event.target.style.display = "none";
+    }
+}
+</script>
+
+<script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script>
+</head>
+<body>
+
+<nav class="nav-top"><ul><li><a href="index.html">Home</a></li><li><a href="sbl_laws_explained.html">The Sy Laws</a></li><li class="crumb-current"><a href="sbl_laws_compliance.html">Laws Compliance Table</a></li><li><a href="sbl_validation.html">Validation & Diagnostics</a></li><li><a href="sbl_explorer.html">Interactive Explorer</a></li><li><a href="sbl_significance.html">Significance Analysis</a></li><li><a href="sbl_laws_visualizations.html">Visualizations</a></li><li><a href="sbl_typology.html">Typological Maps</a></li><li><a href="sbl_summary.html">Global Summary</a></li><li class="nav-spacer"></li></ul></nav>
+<h1>SBL Laws Compliance</h1>
+<p>This table displays the computed compliance for the Horizontal, Vertical, and Diagonal laws up to $n=4$ across all languages (using Standard Helix configurations).</p>
+<div class='explanation'>
+<p><strong>Left Side Compliance:</strong> For the Left side of the verb, "Short-Before-Long" implies that dependents further from the verb (which occur earlier in the sentence) should be shorter than those closer to the verb. Because distance is measured outward from the verb, a perfectly compliant Short-Before-Long language will show decreasing size as distance increases, resulting in a <strong>negative slope</strong> ($\beta$). Thus, left slopes are naturally negative when compliant, so Green means compliant.</p>
+<p><strong>Significance (OLS P-value):</strong> SbL $\beta$ values are marked with <code>***</code> ($p<0.001$), <code>**</code> ($p<0.01$), or <code>*</code> ($p<0.05$).</p>
+</div>
+<p>Click on any column header to sort the table.</p>
+<table id='complianceTable'>
+<thead><tr>
+<th onclick="sortTable('complianceTable', 0, 'string')">Language Name</th>
+<th onclick="sortTable('complianceTable', 1, 'string')">Language Code</th>
+<th onclick="sortTable('complianceTable', 2, 'string')">Examples</th>
+<th onclick="sortTable('complianceTable', 3, 'number')" title='Right Horizontal Score out of 6 pairs'>Right H-Score (/6)</th>
+<th onclick="sortTable('complianceTable', 4, 'number')" title='Right Vertical Score out of 6 pairs'>Right V-Score (/6)</th>
+<th onclick="sortTable('complianceTable', 5, 'number')" title='Right Diagonal Score out of 6 pairs'>Right D-Score (/6)</th>
+<th onclick="sortTable('complianceTable', 6, 'number')" title='Right SbL Slope Beta. Positive means Compliant.'>Right SbL $\beta$</th>
+<th onclick="sortTable('complianceTable', 7, 'number')" title='Left Horizontal Score out of 6 pairs'>Left H-Score (/6)</th>
+<th onclick="sortTable('complianceTable', 8, 'number')" title='Left Vertical Score out of 6 pairs'>Left V-Score (/6)</th>
+<th onclick="sortTable('complianceTable', 9, 'number')" title='Left Diagonal Score out of 6 pairs'>Left D-Score (/6)</th>
+<th onclick="sortTable('complianceTable', 10, 'number')" title='Left SbL Slope Beta. Negative means Compliant.'>Left SbL $\beta$</th>
+</tr></thead><tbody>
+<tr>
+<td class='lang-name'>Abaza</td>
+<td>abq</td>
+<td><a href='examples/abq/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.1160'><strong>0.887<sup></sup></strong></td>
+<td>5.0</td>
+<td>4.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.4160'><strong>-0.169<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Abkhaz</td>
+<td>ab</td>
+<td><a href='examples/ab/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.0298'><strong>0.647<sup>*</sup></strong></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0112'><strong>-0.228<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Afrikaans</td>
+<td>af</td>
+<td><a href='examples/af/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0002'><strong>0.922<sup>***</sup></strong></td>
+<td>0.0</td>
+<td>2.0</td>
+<td>1.0</td>
+<td class='score-negative' title='p=0.2110'><strong>0.202<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Akkadian</td>
+<td>akk</td>
+<td><a href='examples/akk/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.6162'><strong>0.343<sup></sup></strong></td>
+<td>5.0</td>
+<td>3.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0638'><strong>-0.221<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Akuntsu</td>
+<td>aqz</td>
+<td><a href='examples/aqz/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.4580'><strong>-0.138<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Albanian</td>
+<td>sq</td>
+<td><a href='examples/sq/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>4.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0442'><strong>0.954<sup>*</sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.3981'><strong>-0.131<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Amharic</td>
+<td>am</td>
+<td><a href='examples/am/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>3.0</td>
+<td>2.0</td>
+<td>3.0</td>
+<td class='score-neutral' title='p=0.7479'><strong>0.081<sup></sup></strong></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0047'><strong>-0.734<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>AncientGreek</td>
+<td>grc</td>
+<td><a href='examples/grc/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0003'><strong>0.678<sup>***</sup></strong></td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td class='score-negative' title='p=0.0146'><strong>0.151<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>AncientHebrew</td>
+<td>hbo</td>
+<td><a href='examples/hbo/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0019'><strong>0.654<sup>**</sup></strong></td>
+<td>4.0</td>
+<td>3.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.2438'><strong>-0.290<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Apurinã</td>
+<td>apu</td>
+<td><a href='examples/apu/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.1425'><strong>0.711<sup></sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.3155'><strong>-0.171<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Arabic</td>
+<td>ar</td>
+<td><a href='examples/ar/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0002'><strong>1.127<sup>***</sup></strong></td>
+<td>2.0</td>
+<td>4.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.1055'><strong>-0.541<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Arhuaco</td>
+<td>arh</td>
+<td><a href='examples/arh/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.2836'><strong>0.284<sup></sup></strong></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0091'><strong>-0.450<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Armenian</td>
+<td>hy</td>
+<td><a href='examples/hy/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>3.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.6884'><strong>0.204<sup></sup></strong></td>
+<td>6.0</td>
+<td>4.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0132'><strong>-0.178<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Assyrian</td>
+<td>aii</td>
+<td><a href='examples/aii/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.2812'><strong>0.470<sup></sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-negative' title='p=0.3893'><strong>0.356<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Azerbaijani</td>
+<td>az</td>
+<td><a href='examples/az/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>4.0</td>
+<td>2.0</td>
+<td class='score-neutral' title='p=0.6237'><strong>-0.039<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Bambara</td>
+<td>bm</td>
+<td><a href='examples/bm/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.1209'><strong>0.905<sup></sup></strong></td>
+<td>5.0</td>
+<td>4.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.1762'><strong>-0.414<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Basque</td>
+<td>eu</td>
+<td><a href='examples/eu/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>3.0</td>
+<td>4.0</td>
+<td>2.0</td>
+<td class='score-positive' title='p=0.0369'><strong>0.484<sup>*</sup></strong></td>
+<td>4.0</td>
+<td>6.0</td>
+<td>2.0</td>
+<td class='score-positive' title='p=0.0117'><strong>-0.119<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Bavarian</td>
+<td>bar</td>
+<td><a href='examples/bar/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0000'><strong>0.754<sup>***</sup></strong></td>
+<td>2.0</td>
+<td>2.0</td>
+<td>2.0</td>
+<td class='score-negative' title='p=0.1055'><strong>0.176<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Beja</td>
+<td>bej</td>
+<td><a href='examples/bej/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-negative' title='p=0.6667'><strong>-0.306<sup></sup></strong></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0000'><strong>-0.648<sup>***</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Belarusian</td>
+<td>be</td>
+<td><a href='examples/be/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0001'><strong>0.576<sup>***</sup></strong></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0019'><strong>-0.235<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Bengali</td>
+<td>bn</td>
+<td><a href='examples/bn/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.3335'><strong>0.750<sup></sup></strong></td>
+<td>1.0</td>
+<td>3.0</td>
+<td>1.0</td>
+<td class='score-neutral' title='p=0.6888'><strong>-0.041<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Bhojpuri</td>
+<td>bho</td>
+<td><a href='examples/bho/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.1534'><strong>2.940<sup></sup></strong></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>2.0</td>
+<td class='score-positive' title='p=0.0007'><strong>-0.316<sup>***</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Borôro</td>
+<td>bor</td>
+<td><a href='examples/bor/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>4.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0016'><strong>0.190<sup>**</sup></strong></td>
+<td>3.0</td>
+<td>5.0</td>
+<td>1.0</td>
+<td class='score-positive' title='p=0.0386'><strong>-0.159<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Breton</td>
+<td>br</td>
+<td><a href='examples/br/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0029'><strong>0.566<sup>**</sup></strong></td>
+<td>4.0</td>
+<td>3.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0027'><strong>-0.630<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Buglere</td>
+<td>sab</td>
+<td><a href='examples/sab/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.1014'><strong>0.700<sup></sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.1900'><strong>-0.266<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Bulgarian</td>
+<td>bg</td>
+<td><a href='examples/bg/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0001'><strong>0.879<sup>***</sup></strong></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0028'><strong>-0.387<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Buryat</td>
+<td>bxr</td>
+<td><a href='examples/bxr/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>4.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0029'><strong>-0.161<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Cantonese</td>
+<td>yue</td>
+<td><a href='examples/yue/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>2.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.6218'><strong>0.173<sup></sup></strong></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0193'><strong>-0.206<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>CappadocianGreek</td>
+<td>cpg</td>
+<td><a href='examples/cpg/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.0032'><strong>0.606<sup>**</sup></strong></td>
+<td>4.0</td>
+<td>3.0</td>
+<td>4.0</td>
+<td class='score-neutral' title='p=0.6608'><strong>-0.047<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Catalan</td>
+<td>ca</td>
+<td><a href='examples/ca/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0001'><strong>0.910<sup>***</sup></strong></td>
+<td>6.0</td>
+<td>4.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0084'><strong>-0.431<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Cebuano</td>
+<td>ceb</td>
+<td><a href='examples/ceb/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0001'><strong>0.574<sup>***</sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-neutral' title='p=0.8578'><strong>-0.035<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>CentralKurdish</td>
+<td>ckb</td>
+<td><a href='examples/ckb/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-negative' title='p=0.6667'><strong>-0.167<sup></sup></strong></td>
+<td>1.0</td>
+<td>3.0</td>
+<td>2.0</td>
+<td class='score-positive' title='p=0.5752'><strong>-0.105<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Chhintange</td>
+<td>ctn</td>
+<td><a href='examples/ctn/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-neutral' title='p=0.6667'><strong>0.030<sup></sup></strong></td>
+<td>5.0</td>
+<td>6.0</td>
+<td>1.0</td>
+<td class='score-positive' title='p=0.0032'><strong>-0.291<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Chinese</td>
+<td>zh</td>
+<td><a href='examples/zh/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.0577'><strong>0.543<sup></sup></strong></td>
+<td>5.0</td>
+<td>2.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.2424'><strong>-0.102<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Chukot</td>
+<td>ckt</td>
+<td><a href='examples/ckt/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>4.0</td>
+<td>3.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.2858'><strong>0.507<sup></sup></strong></td>
+<td>2.0</td>
+<td>2.0</td>
+<td>4.0</td>
+<td class='score-negative' title='p=0.0445'><strong>0.155<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>ClassArmenian</td>
+<td>xcl</td>
+<td><a href='examples/xcl/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0004'><strong>0.807<sup>***</sup></strong></td>
+<td>5.0</td>
+<td>4.0</td>
+<td>4.0</td>
+<td class='score-neutral' title='p=0.1067'><strong>-0.072<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>ClassChinese</td>
+<td>lzh</td>
+<td><a href='examples/lzh/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.0313'><strong>0.722<sup>*</sup></strong></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0012'><strong>-0.232<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Coptic</td>
+<td>cop</td>
+<td><a href='examples/cop/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0011'><strong>1.121<sup>**</sup></strong></td>
+<td>4.0</td>
+<td>5.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.4051'><strong>-0.259<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Croatian</td>
+<td>hr</td>
+<td><a href='examples/hr/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0001'><strong>0.988<sup>***</sup></strong></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0944'><strong>-0.136<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Czech</td>
+<td>cs</td>
+<td><a href='examples/cs/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0000'><strong>0.906<sup>***</sup></strong></td>
+<td>4.0</td>
+<td>4.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0928'><strong>-0.112<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Danish</td>
+<td>da</td>
+<td><a href='examples/da/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0001'><strong>0.861<sup>***</sup></strong></td>
+<td>6.0</td>
+<td>4.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0081'><strong>-0.211<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Dutch</td>
+<td>nl</td>
+<td><a href='examples/nl/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0000'><strong>0.800<sup>***</sup></strong></td>
+<td>1.0</td>
+<td>3.0</td>
+<td>2.0</td>
+<td class='score-negative' title='p=0.0738'><strong>0.135<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Egyptian</td>
+<td>egy</td>
+<td><a href='examples/egy/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0077'><strong>0.747<sup>**</sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.5905'><strong>-1.460<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>English</td>
+<td>en</td>
+<td><a href='examples/en/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0016'><strong>0.646<sup>**</sup></strong></td>
+<td>6.0</td>
+<td>3.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.1300'><strong>-0.234<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Erzya</td>
+<td>myv</td>
+<td><a href='examples/myv/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>4.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0988'><strong>0.425<sup></sup></strong></td>
+<td>4.0</td>
+<td>5.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0240'><strong>-0.125<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Esperanto</td>
+<td>eo</td>
+<td><a href='examples/eo/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.2379'><strong>0.536<sup></sup></strong></td>
+<td>1.0</td>
+<td>3.0</td>
+<td>2.0</td>
+<td class='score-neutral' title='p=0.8225'><strong>0.043<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Estonian</td>
+<td>et</td>
+<td><a href='examples/et/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0000'><strong>0.695<sup>***</sup></strong></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>4.0</td>
+<td class='score-neutral' title='p=0.0008'><strong>-0.086<sup>***</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Faroese</td>
+<td>fo</td>
+<td><a href='examples/fo/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0010'><strong>0.947<sup>**</sup></strong></td>
+<td>3.0</td>
+<td>6.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0236'><strong>-0.573<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Finnish</td>
+<td>fi</td>
+<td><a href='examples/fi/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0000'><strong>0.605<sup>***</sup></strong></td>
+<td>5.0</td>
+<td>6.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0001'><strong>-0.170<sup>***</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>French</td>
+<td>fr</td>
+<td><a href='examples/fr/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0003'><strong>0.646<sup>***</sup></strong></td>
+<td>5.0</td>
+<td>3.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0509'><strong>-0.266<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>FrisianDutch</td>
+<td>qfn</td>
+<td><a href='examples/qfn/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>2.0</td>
+<td class='score-positive' title='p=0.0004'><strong>0.753<sup>***</sup></strong></td>
+<td>2.0</td>
+<td>4.0</td>
+<td>1.0</td>
+<td class='score-neutral' title='p=0.4563'><strong>0.069<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Gaelic</td>
+<td>gd</td>
+<td><a href='examples/gd/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0013'><strong>0.831<sup>**</sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Galician</td>
+<td>gl</td>
+<td><a href='examples/gl/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0000'><strong>1.129<sup>***</sup></strong></td>
+<td>6.0</td>
+<td>3.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.1195'><strong>-0.444<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Gbaya</td>
+<td>gya</td>
+<td><a href='examples/gya/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>3.0</td>
+<td>4.0</td>
+<td>3.0</td>
+<td class='score-negative' title='p=0.5707'><strong>-0.160<sup></sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-neutral' title='p=0.9664'><strong>-0.022<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Georgian</td>
+<td>ka</td>
+<td><a href='examples/ka/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0017'><strong>0.516<sup>**</sup></strong></td>
+<td>3.0</td>
+<td>2.0</td>
+<td>4.0</td>
+<td class='score-neutral' title='p=0.9068'><strong>0.007<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>German</td>
+<td>de</td>
+<td><a href='examples/de/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0000'><strong>0.692<sup>***</sup></strong></td>
+<td>1.0</td>
+<td>3.0</td>
+<td>2.0</td>
+<td class='score-negative' title='p=0.4063'><strong>0.115<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Gheg</td>
+<td>aln</td>
+<td><a href='examples/aln/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0612'><strong>0.847<sup></sup></strong></td>
+<td>4.0</td>
+<td>4.0</td>
+<td>5.0</td>
+<td class='score-neutral' title='p=0.6357'><strong>-0.045<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Gothic</td>
+<td>got</td>
+<td><a href='examples/got/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0033'><strong>0.596<sup>**</sup></strong></td>
+<td>5.0</td>
+<td>4.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0156'><strong>-0.117<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Greek</td>
+<td>el</td>
+<td><a href='examples/el/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0001'><strong>1.000<sup>***</sup></strong></td>
+<td>5.0</td>
+<td>4.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.1183'><strong>-0.272<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Guajajára</td>
+<td>gub</td>
+<td><a href='examples/gub/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>4.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0021'><strong>0.246<sup>**</sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-negative' title='p=0.6283'><strong>0.201<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Guarani</td>
+<td>gn</td>
+<td><a href='examples/gn/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.1553'><strong>0.350<sup></sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.3382'><strong>-0.111<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Gujarati</td>
+<td>gu</td>
+<td><a href='examples/gu/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>4.0</td>
+<td>2.0</td>
+<td class='score-neutral' title='p=0.5260'><strong>-0.065<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Gwichʼin</td>
+<td>gwi</td>
+<td><a href='examples/gwi/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>1.0</td>
+<td>5.0</td>
+<td class='score-negative' title='p=0.5348'><strong>0.186<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Haitian</td>
+<td>ht</td>
+<td><a href='examples/ht/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>4.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0005'><strong>0.951<sup>***</sup></strong></td>
+<td>4.0</td>
+<td>5.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.1536'><strong>-0.627<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Hausa</td>
+<td>ha</td>
+<td><a href='examples/ha/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>4.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0272'><strong>0.724<sup>*</sup></strong></td>
+<td>6.0</td>
+<td>4.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0340'><strong>-0.627<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Hebrew</td>
+<td>he</td>
+<td><a href='examples/he/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0002'><strong>0.766<sup>***</sup></strong></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0004'><strong>-0.479<sup>***</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>HighlandNahuatl</td>
+<td>azz</td>
+<td><a href='examples/azz/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.0146'><strong>0.507<sup>*</sup></strong></td>
+<td>4.0</td>
+<td>3.0</td>
+<td>3.0</td>
+<td class='score-neutral' title='p=0.9436'><strong>-0.005<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Hindi</td>
+<td>hi</td>
+<td><a href='examples/hi/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.2458'><strong>2.364<sup></sup></strong></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0124'><strong>-0.157<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Hittite</td>
+<td>hit</td>
+<td><a href='examples/hit/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.0000'><strong>0.862<sup>***</sup></strong></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0008'><strong>-0.332<sup>***</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Hungarian</td>
+<td>hu</td>
+<td><a href='examples/hu/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>4.0</td>
+<td>5.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0003'><strong>1.122<sup>***</sup></strong></td>
+<td>3.0</td>
+<td>4.0</td>
+<td>2.0</td>
+<td class='score-neutral' title='p=0.3998'><strong>-0.058<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Icelandic</td>
+<td>is</td>
+<td><a href='examples/is/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0000'><strong>0.959<sup>***</sup></strong></td>
+<td>2.0</td>
+<td>2.0</td>
+<td>3.0</td>
+<td class='score-neutral' title='p=0.9535'><strong>-0.004<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Indonesian</td>
+<td>id</td>
+<td><a href='examples/id/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>4.0</td>
+<td>3.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.1208'><strong>0.294<sup></sup></strong></td>
+<td>6.0</td>
+<td>4.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0297'><strong>-0.411<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Irish</td>
+<td>ga</td>
+<td><a href='examples/ga/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0008'><strong>0.683<sup>***</sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.3599'><strong>-0.156<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Italian</td>
+<td>it</td>
+<td><a href='examples/it/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0001'><strong>1.015<sup>***</sup></strong></td>
+<td>5.0</td>
+<td>4.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0694'><strong>-0.195<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Japanese</td>
+<td>ja</td>
+<td><a href='examples/ja/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-neutral' title='p=0.4007'><strong>0.008<sup></sup></strong></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0005'><strong>-0.419<sup>***</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Javanese</td>
+<td>jv</td>
+<td><a href='examples/jv/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0008'><strong>0.606<sup>***</sup></strong></td>
+<td>5.0</td>
+<td>6.0</td>
+<td>2.0</td>
+<td class='score-positive' title='p=0.0011'><strong>-0.307<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Kaapor</td>
+<td>urb</td>
+<td><a href='examples/urb/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-neutral' title='p=nan'><strong>0.000<sup></sup></strong></td>
+<td>3.0</td>
+<td>3.0</td>
+<td>4.0</td>
+<td class='score-neutral' title='p=0.9769'><strong>0.002<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Kangri</td>
+<td>xnr</td>
+<td><a href='examples/xnr/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.6667'><strong>0.151<sup></sup></strong></td>
+<td>3.0</td>
+<td>5.0</td>
+<td>4.0</td>
+<td class='score-neutral' title='p=0.5710'><strong>-0.027<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Karelian</td>
+<td>krl</td>
+<td><a href='examples/krl/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>4.0</td>
+<td>5.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0008'><strong>0.632<sup>***</sup></strong></td>
+<td>2.0</td>
+<td>3.0</td>
+<td>2.0</td>
+<td class='score-positive' title='p=0.1233'><strong>-0.153<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Karo</td>
+<td>arr</td>
+<td><a href='examples/arr/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-neutral' title='p=0.7525'><strong>0.035<sup></sup></strong></td>
+<td>1.0</td>
+<td>5.0</td>
+<td>1.0</td>
+<td class='score-neutral' title='p=0.4984'><strong>-0.046<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Kazakh</td>
+<td>kk</td>
+<td><a href='examples/kk/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>5.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0887'><strong>-0.118<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Khoekhoe</td>
+<td>naq</td>
+<td><a href='examples/naq/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.1080'><strong>0.926<sup></sup></strong></td>
+<td>3.0</td>
+<td>4.0</td>
+<td>2.0</td>
+<td class='score-neutral' title='p=0.3761'><strong>-0.088<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Khunsari</td>
+<td>kfm</td>
+<td><a href='examples/kfm/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.7012'><strong>-0.600<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Kiche</td>
+<td>quc</td>
+<td><a href='examples/quc/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>3.0</td>
+<td>4.0</td>
+<td>4.0</td>
+<td class='score-neutral' title='p=0.6887'><strong>0.075<sup></sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.3166'><strong>-0.524<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Komi-Permyak</td>
+<td>koi</td>
+<td><a href='examples/koi/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.0399'><strong>0.666<sup>*</sup></strong></td>
+<td>3.0</td>
+<td>4.0</td>
+<td>2.0</td>
+<td class='score-negative' title='p=0.1386'><strong>0.246<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Komi</td>
+<td>kpv</td>
+<td><a href='examples/kpv/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>6.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0822'><strong>0.451<sup></sup></strong></td>
+<td>5.0</td>
+<td>4.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0588'><strong>-0.152<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Korean</td>
+<td>ko</td>
+<td><a href='examples/ko/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-neutral' title='p=0.9928'><strong>0.003<sup></sup></strong></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0001'><strong>-0.210<sup>***</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Kurmanji</td>
+<td>kmr</td>
+<td><a href='examples/kmr/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.6090'><strong>0.290<sup></sup></strong></td>
+<td>3.0</td>
+<td>3.0</td>
+<td>3.0</td>
+<td class='score-neutral' title='p=0.6578'><strong>-0.019<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Kyrgyz</td>
+<td>ky</td>
+<td><a href='examples/ky/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>3.0</td>
+<td>1.0</td>
+<td class='score-neutral' title='p=0.6806'><strong>0.060<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Latgalian</td>
+<td>ltg</td>
+<td><a href='examples/ltg/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.6667'><strong>0.499<sup></sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.1471'><strong>-0.609<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Latin</td>
+<td>la</td>
+<td><a href='examples/la/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>4.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0171'><strong>0.581<sup>*</sup></strong></td>
+<td>2.0</td>
+<td>3.0</td>
+<td>2.0</td>
+<td class='score-neutral' title='p=0.2783'><strong>0.046<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Latvian</td>
+<td>lv</td>
+<td><a href='examples/lv/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0001'><strong>0.711<sup>***</sup></strong></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0087'><strong>-0.169<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Ligurian</td>
+<td>lij</td>
+<td><a href='examples/lij/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>4.0</td>
+<td>4.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0418'><strong>0.659<sup>*</sup></strong></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0372'><strong>-0.426<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Lithuanian</td>
+<td>lt</td>
+<td><a href='examples/lt/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>6.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0001'><strong>0.858<sup>***</sup></strong></td>
+<td>5.0</td>
+<td>3.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0995'><strong>-0.163<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Livvi</td>
+<td>olo</td>
+<td><a href='examples/olo/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.2306'><strong>0.464<sup></sup></strong></td>
+<td>1.0</td>
+<td>2.0</td>
+<td>2.0</td>
+<td class='score-negative' title='p=0.1432'><strong>0.235<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>LowSaxon</td>
+<td>nds</td>
+<td><a href='examples/nds/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>6.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0002'><strong>0.686<sup>***</sup></strong></td>
+<td>0.0</td>
+<td>2.0</td>
+<td>1.0</td>
+<td class='score-negative' title='p=0.0681'><strong>0.150<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Luxembourgish</td>
+<td>lb</td>
+<td><a href='examples/lb/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.6667'><strong>0.750<sup></sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-neutral' title='p=0.9388'><strong>-0.012<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Macedonian</td>
+<td>mk</td>
+<td><a href='examples/mk/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.0831'><strong>0.502<sup></sup></strong></td>
+<td>2.0</td>
+<td>2.0</td>
+<td>2.0</td>
+<td class='score-neutral' title='p=0.8237'><strong>-0.054<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Madi</td>
+<td>jaa</td>
+<td><a href='examples/jaa/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-neutral' title='p=0.4007'><strong>-0.072<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Maghrebi</td>
+<td>qaf</td>
+<td><a href='examples/qaf/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0011'><strong>0.676<sup>**</sup></strong></td>
+<td>5.0</td>
+<td>4.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.2170'><strong>-0.532<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Makuráp</td>
+<td>mpu</td>
+<td><a href='examples/mpu/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-negative' title='p=0.7961'><strong>0.152<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Malayalam</td>
+<td>ml</td>
+<td><a href='examples/ml/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>4.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0018'><strong>-0.392<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Maltese</td>
+<td>mt</td>
+<td><a href='examples/mt/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>4.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0004'><strong>0.891<sup>***</sup></strong></td>
+<td>5.0</td>
+<td>2.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.1464'><strong>-0.253<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Manx</td>
+<td>gv</td>
+<td><a href='examples/gv/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0007'><strong>0.652<sup>***</sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Marathi</td>
+<td>mr</td>
+<td><a href='examples/mr/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.0995'><strong>0.697<sup></sup></strong></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0082'><strong>-0.197<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>MbyáGuaraní</td>
+<td>gun</td>
+<td><a href='examples/gun/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>4.0</td>
+<td>4.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.1733'><strong>0.630<sup></sup></strong></td>
+<td>4.0</td>
+<td>4.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.1142'><strong>-0.268<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>MiddleFrench</td>
+<td>frm</td>
+<td><a href='examples/frm/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0011'><strong>0.806<sup>**</sup></strong></td>
+<td>6.0</td>
+<td>4.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0281'><strong>-0.245<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Moksha</td>
+<td>mdf</td>
+<td><a href='examples/mdf/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.1059'><strong>0.389<sup></sup></strong></td>
+<td>4.0</td>
+<td>3.0</td>
+<td>3.0</td>
+<td class='score-neutral' title='p=0.6469'><strong>-0.057<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Mundurukú</td>
+<td>myu</td>
+<td><a href='examples/myu/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.2974'><strong>0.594<sup></sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.1025'><strong>-0.204<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Naija</td>
+<td>pcm</td>
+<td><a href='examples/pcm/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>4.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0332'><strong>0.496<sup>*</sup></strong></td>
+<td>5.0</td>
+<td>3.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.2372'><strong>-0.386<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Nayini</td>
+<td>nyq</td>
+<td><a href='examples/nyq/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.5207'><strong>-0.277<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Neapolitan</td>
+<td>nap</td>
+<td><a href='examples/nap/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.8288'><strong>0.323<sup></sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.6667'><strong>-0.396<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Nenets</td>
+<td>yrk</td>
+<td><a href='examples/yrk/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>2.0</td>
+<td>5.0</td>
+<td class='score-neutral' title='p=0.6941'><strong>-0.050<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Nhengatu</td>
+<td>yrl</td>
+<td><a href='examples/yrl/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0002'><strong>0.580<sup>***</sup></strong></td>
+<td>4.0</td>
+<td>4.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0337'><strong>-0.218<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>NorthSami</td>
+<td>sme</td>
+<td><a href='examples/sme/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0001'><strong>0.387<sup>***</sup></strong></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>2.0</td>
+<td class='score-positive' title='p=0.0148'><strong>-0.128<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Norwegian</td>
+<td>no</td>
+<td><a href='examples/no/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0000'><strong>0.917<sup>***</sup></strong></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0396'><strong>-0.252<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Occitan</td>
+<td>oc</td>
+<td><a href='examples/oc/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>6.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0000'><strong>1.002<sup>***</sup></strong></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0181'><strong>-0.505<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>OldChurchSlavonic</td>
+<td>cu</td>
+<td><a href='examples/cu/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0055'><strong>0.597<sup>**</sup></strong></td>
+<td>3.0</td>
+<td>2.0</td>
+<td>5.0</td>
+<td class='score-neutral' title='p=0.3406'><strong>0.018<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>OldEastSlavic</td>
+<td>orv</td>
+<td><a href='examples/orv/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0038'><strong>0.591<sup>**</sup></strong></td>
+<td>6.0</td>
+<td>3.0</td>
+<td>6.0</td>
+<td class='score-neutral' title='p=0.2776'><strong>-0.070<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>OldEnglish</td>
+<td>ang</td>
+<td><a href='examples/ang/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.4546'><strong>-0.216<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>OldFrench</td>
+<td>fro</td>
+<td><a href='examples/fro/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0006'><strong>0.716<sup>***</sup></strong></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0011'><strong>-0.217<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>OldIrish</td>
+<td>sga</td>
+<td><a href='examples/sga/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.0964'><strong>1.015<sup></sup></strong></td>
+<td>2.0</td>
+<td>0.0</td>
+<td>3.0</td>
+<td class='score-negative' title='p=0.0035'><strong>0.869<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>OldProvençal</td>
+<td>pro</td>
+<td><a href='examples/pro/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0017'><strong>0.778<sup>**</sup></strong></td>
+<td>3.0</td>
+<td>2.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.3435'><strong>-0.202<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>OldTurkish</td>
+<td>otk</td>
+<td><a href='examples/otk/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.4695'><strong>-0.571<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Oriya</td>
+<td>or</td>
+<td><a href='examples/or/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>5.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0100'><strong>-0.349<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>OttomanTurkish</td>
+<td>ota</td>
+<td><a href='examples/ota/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>3.0</td>
+<td>4.0</td>
+<td>4.0</td>
+<td class='score-neutral' title='p=0.9830'><strong>0.005<sup></sup></strong></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0027'><strong>-0.232<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Pashto</td>
+<td>ps</td>
+<td><a href='examples/ps/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>5.0</td>
+<td>1.0</td>
+<td class='score-positive' title='p=0.1067'><strong>-0.182<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Paumarí</td>
+<td>pad</td>
+<td><a href='examples/pad/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-negative' title='p=0.6832'><strong>-0.388<sup></sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.0419'><strong>-0.332<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Persian</td>
+<td>fa</td>
+<td><a href='examples/fa/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>4.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0346'><strong>0.477<sup>*</sup></strong></td>
+<td>2.0</td>
+<td>2.0</td>
+<td>4.0</td>
+<td class='score-neutral' title='p=0.2052'><strong>0.051<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Pesh</td>
+<td>pay</td>
+<td><a href='examples/pay/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.0987'><strong>0.785<sup></sup></strong></td>
+<td>4.0</td>
+<td>5.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0435'><strong>-0.346<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Phrygian</td>
+<td>xpg</td>
+<td><a href='examples/xpg/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.0000'><strong>0.500<sup>***</sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.0737'><strong>-0.756<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Polish</td>
+<td>pl</td>
+<td><a href='examples/pl/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0002'><strong>0.915<sup>***</sup></strong></td>
+<td>6.0</td>
+<td>3.0</td>
+<td>6.0</td>
+<td class='score-neutral' title='p=0.0750'><strong>-0.069<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Pomak</td>
+<td>qpm</td>
+<td><a href='examples/qpm/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0001'><strong>0.842<sup>***</sup></strong></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0226'><strong>-0.253<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Portuguese</td>
+<td>pt</td>
+<td><a href='examples/pt/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0001'><strong>0.902<sup>***</sup></strong></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0005'><strong>-0.494<sup>***</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Romanian</td>
+<td>ro</td>
+<td><a href='examples/ro/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0002'><strong>0.890<sup>***</sup></strong></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0305'><strong>-0.311<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Russian</td>
+<td>ru</td>
+<td><a href='examples/ru/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0000'><strong>0.785<sup>***</sup></strong></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0106'><strong>-0.209<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Sanskrit</td>
+<td>sa</td>
+<td><a href='examples/sa/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0054'><strong>0.421<sup>**</sup></strong></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0011'><strong>-0.260<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Serbian</td>
+<td>sr</td>
+<td><a href='examples/sr/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0012'><strong>0.900<sup>**</sup></strong></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0936'><strong>-0.185<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Sicilian</td>
+<td>scn</td>
+<td><a href='examples/scn/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>4.0</td>
+<td>5.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0105'><strong>0.638<sup>*</sup></strong></td>
+<td>5.0</td>
+<td>6.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0054'><strong>-0.370<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Sindhi</td>
+<td>sd</td>
+<td><a href='examples/sd/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.0024'><strong>1.546<sup>**</sup></strong></td>
+<td>4.0</td>
+<td>5.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0419'><strong>-0.132<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Sinhalese</td>
+<td>si</td>
+<td><a href='examples/si/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>4.0</td>
+<td>2.0</td>
+<td class='score-positive' title='p=0.5672'><strong>-0.119<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>SkoltSami</td>
+<td>sms</td>
+<td><a href='examples/sms/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>3.0</td>
+<td>4.0</td>
+<td>2.0</td>
+<td class='score-positive' title='p=0.0016'><strong>0.649<sup>**</sup></strong></td>
+<td>3.0</td>
+<td>5.0</td>
+<td>3.0</td>
+<td class='score-neutral' title='p=0.1755'><strong>-0.099<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Slovak</td>
+<td>sk</td>
+<td><a href='examples/sk/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0001'><strong>0.747<sup>***</sup></strong></td>
+<td>4.0</td>
+<td>3.0</td>
+<td>2.0</td>
+<td class='score-neutral' title='p=0.1742'><strong>-0.089<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Slovenian</td>
+<td>sl</td>
+<td><a href='examples/sl/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0000'><strong>0.906<sup>***</sup></strong></td>
+<td>4.0</td>
+<td>4.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0588'><strong>-0.103<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Soi</td>
+<td>soj</td>
+<td><a href='examples/soj/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.5123'><strong>-0.323<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>SouthLevantineArabic</td>
+<td>ajp</td>
+<td><a href='examples/ajp/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.0186'><strong>0.500<sup>*</sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-negative' title='p=0.6667'><strong>0.250<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>SouthernKurdish</td>
+<td>sdh</td>
+<td><a href='examples/sdh/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.2259'><strong>0.653<sup></sup></strong></td>
+<td>2.0</td>
+<td>2.0</td>
+<td>2.0</td>
+<td class='score-neutral' title='p=0.5875'><strong>-0.072<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>SpanishSign</td>
+<td>ssp</td>
+<td><a href='examples/ssp/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-neutral' title='p=0.5235'><strong>0.077<sup></sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-neutral' title='p=0.5373'><strong>-0.065<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Spanish</td>
+<td>es</td>
+<td><a href='examples/es/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0000'><strong>0.949<sup>***</sup></strong></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0024'><strong>-0.478<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>SwedishSign</td>
+<td>swl</td>
+<td><a href='examples/swl/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.0574'><strong>0.273<sup></sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.3164'><strong>-0.230<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Swedish</td>
+<td>sv</td>
+<td><a href='examples/sv/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0001'><strong>0.858<sup>***</sup></strong></td>
+<td>4.0</td>
+<td>5.0</td>
+<td>2.0</td>
+<td class='score-positive' title='p=0.0036'><strong>-0.253<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>SwissGerman</td>
+<td>gsw</td>
+<td><a href='examples/gsw/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>3.0</td>
+<td>6.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0237'><strong>0.754<sup>*</sup></strong></td>
+<td>1.0</td>
+<td>3.0</td>
+<td>1.0</td>
+<td class='score-neutral' title='p=0.5036'><strong>0.078<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Tagalog</td>
+<td>tl</td>
+<td><a href='examples/tl/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>4.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0178'><strong>0.392<sup>*</sup></strong></td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td class='score-neutral' title='p=nan'><strong>0.000<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Tamil</td>
+<td>ta</td>
+<td><a href='examples/ta/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>4.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0128'><strong>-0.310<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Tangkhul</td>
+<td>nmf</td>
+<td><a href='examples/nmf/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.6667'><strong>0.224<sup></sup></strong></td>
+<td>2.0</td>
+<td>5.0</td>
+<td>2.0</td>
+<td class='score-neutral' title='p=0.6093'><strong>-0.054<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Tatar</td>
+<td>tt</td>
+<td><a href='examples/tt/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.3303'><strong>0.788<sup></sup></strong></td>
+<td>3.0</td>
+<td>2.0</td>
+<td>2.0</td>
+<td class='score-neutral' title='p=0.6366'><strong>0.040<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Teko</td>
+<td>eme</td>
+<td><a href='examples/eme/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.1906'><strong>0.136<sup></sup></strong></td>
+<td>3.0</td>
+<td>5.0</td>
+<td>2.0</td>
+<td class='score-positive' title='p=0.1007'><strong>-0.125<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>TeluguEnglish</td>
+<td>qte</td>
+<td><a href='examples/qte/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-neutral' title='p=1.0000'><strong>0.000<sup></sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-neutral' title='p=0.8480'><strong>0.021<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Telugu</td>
+<td>te</td>
+<td><a href='examples/te/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>4.0</td>
+<td>4.0</td>
+<td class='score-neutral' title='p=0.0861'><strong>-0.086<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Thai</td>
+<td>th</td>
+<td><a href='examples/th/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0000'><strong>0.753<sup>***</sup></strong></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0575'><strong>-0.526<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Tswana</td>
+<td>tn</td>
+<td><a href='examples/tn/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.3102'><strong>-0.585<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Tupinambá</td>
+<td>tpn</td>
+<td><a href='examples/tpn/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>4.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0115'><strong>0.364<sup>*</sup></strong></td>
+<td>3.0</td>
+<td>4.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0209'><strong>-0.342<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>TurkishEnglish</td>
+<td>qti</td>
+<td><a href='examples/qti/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.3221'><strong>1.442<sup></sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-negative' title='p=0.6234'><strong>0.138<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>TurkishGerman</td>
+<td>qtd</td>
+<td><a href='examples/qtd/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>4.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0008'><strong>0.697<sup>***</sup></strong></td>
+<td>3.0</td>
+<td>5.0</td>
+<td>1.0</td>
+<td class='score-neutral' title='p=0.6230'><strong>-0.028<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Turkish</td>
+<td>tr</td>
+<td><a href='examples/tr/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>4.0</td>
+<td>5.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0062'><strong>0.398<sup>**</sup></strong></td>
+<td>4.0</td>
+<td>4.0</td>
+<td>2.0</td>
+<td class='score-neutral' title='p=0.0626'><strong>-0.060<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Ukrainian</td>
+<td>uk</td>
+<td><a href='examples/uk/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0007'><strong>0.781<sup>***</sup></strong></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0596'><strong>-0.145<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Umbrian</td>
+<td>xum</td>
+<td><a href='examples/xum/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.3898'><strong>1.333<sup></sup></strong></td>
+<td>3.0</td>
+<td>2.0</td>
+<td>5.0</td>
+<td class='score-neutral' title='p=0.2921'><strong>0.049<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>UpperSorbian</td>
+<td>hsb</td>
+<td><a href='examples/hsb/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>4.0</td>
+<td>6.0</td>
+<td>2.0</td>
+<td class='score-positive' title='p=0.0014'><strong>0.877<sup>**</sup></strong></td>
+<td>2.0</td>
+<td>3.0</td>
+<td>2.0</td>
+<td class='score-neutral' title='p=0.6104'><strong>0.096<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Urdu</td>
+<td>ur</td>
+<td><a href='examples/ur/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.3318'><strong>0.794<sup></sup></strong></td>
+<td>5.0</td>
+<td>6.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0063'><strong>-0.234<sup>**</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Uyghur</td>
+<td>ug</td>
+<td><a href='examples/ug/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.5727'><strong>0.202<sup></sup></strong></td>
+<td>4.0</td>
+<td>5.0</td>
+<td>3.0</td>
+<td class='score-positive' title='p=0.0137'><strong>-0.110<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Uzbek</td>
+<td>uz</td>
+<td><a href='examples/uz/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.8140'><strong>0.272<sup></sup></strong></td>
+<td>4.0</td>
+<td>4.0</td>
+<td>3.0</td>
+<td class='score-neutral' title='p=0.0825'><strong>-0.085<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Veps</td>
+<td>vep</td>
+<td><a href='examples/vep/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.0052'><strong>0.978<sup>**</sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.1871'><strong>-0.189<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Vietnamese</td>
+<td>vi</td>
+<td><a href='examples/vi/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0001'><strong>0.729<sup>***</sup></strong></td>
+<td>6.0</td>
+<td>6.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0105'><strong>-0.635<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Warlpiri</td>
+<td>wbp</td>
+<td><a href='examples/wbp/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-negative' title='p=0.4495'><strong>-0.226<sup></sup></strong></td>
+<td>1.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td class='score-neutral' title='p=0.2893'><strong>-0.016<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Welsh</td>
+<td>cy</td>
+<td><a href='examples/cy/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0000'><strong>1.078<sup>***</sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.0291'><strong>-0.487<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>WestArmenian</td>
+<td>hyw</td>
+<td><a href='examples/hyw/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>5.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0023'><strong>0.891<sup>**</sup></strong></td>
+<td>5.0</td>
+<td>3.0</td>
+<td>6.0</td>
+<td class='score-neutral' title='p=0.2714'><strong>-0.050<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>WestNahuatl</td>
+<td>nhi</td>
+<td><a href='examples/nhi/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>4.0</td>
+<td>4.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0208'><strong>0.663<sup>*</sup></strong></td>
+<td>4.0</td>
+<td>4.0</td>
+<td>3.0</td>
+<td class='score-neutral' title='p=0.2835'><strong>-0.089<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Wolof</td>
+<td>wo</td>
+<td><a href='examples/wo/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>5.0</td>
+<td class='score-positive' title='p=0.0005'><strong>0.947<sup>***</sup></strong></td>
+<td>6.0</td>
+<td>4.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.1020'><strong>-0.325<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Wu</td>
+<td>wuu</td>
+<td><a href='examples/wuu/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.2821'><strong>0.357<sup></sup></strong></td>
+<td>3.0</td>
+<td>2.0</td>
+<td>2.0</td>
+<td class='score-neutral' title='p=0.3199'><strong>0.066<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Xavánte</td>
+<td>xav</td>
+<td><a href='examples/xav/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.7734'><strong>0.207<sup></sup></strong></td>
+<td>3.0</td>
+<td>5.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0327'><strong>-0.311<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Xibe</td>
+<td>sjo</td>
+<td><a href='examples/sjo/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>6.0</td>
+<td>4.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0326'><strong>-0.297<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Yakut</td>
+<td>sah</td>
+<td><a href='examples/sah/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>5.0</td>
+<td>2.0</td>
+<td class='score-neutral' title='p=0.1802'><strong>-0.074<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Yiddish</td>
+<td>yi</td>
+<td><a href='examples/yi/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>4.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0067'><strong>0.528<sup>**</sup></strong></td>
+<td>4.0</td>
+<td>4.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0853'><strong>-0.273<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Yoruba</td>
+<td>yo</td>
+<td><a href='examples/yo/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.2720'><strong>0.419<sup></sup></strong></td>
+<td>6.0</td>
+<td>5.0</td>
+<td>6.0</td>
+<td class='score-positive' title='p=0.0328'><strong>-0.543<sup>*</sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Yupik</td>
+<td>ess</td>
+<td><a href='examples/ess/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.2228'><strong>0.633<sup></sup></strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive' title='p=0.4500'><strong>-0.161<sup></sup></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Zaar</td>
+<td>say</td>
+<td><a href='examples/say/index.html' target='_blank' style='text-decoration:none' title='View Sample Sentences'>📄</a></td>
+<td>5.0</td>
+<td>6.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.0001'><strong>0.331<sup>***</sup></strong></td>
+<td>4.0</td>
+<td>3.0</td>
+<td>4.0</td>
+<td class='score-positive' title='p=0.6250'><strong>-0.142<sup></sup></strong></td>
+</tr>
+</tbody></table>
+
+</body>
+</html>

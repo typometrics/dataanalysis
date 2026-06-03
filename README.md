@@ -67,6 +67,11 @@ This pipeline processes Universal Dependencies treebanks to compute linguistic m
    - Creates zip archives of plots and data
    - Prepares results for publication/sharing
 
+**8. `sbl_site.py` (Script)** - SBL Static Site Generation
+   - Generates a standalone static site in `html_sbl_analyses/` presenting the Short-Before-Long principle
+   - Creates interactive explorer tables, visualizations, maps, and diagnostic views
+   - Symmetrically documents Right and Left side compliance to the Sy Laws
+
 ## Core Python Modules
 
 ### Data Processing
@@ -148,6 +153,11 @@ This pipeline processes Universal Dependencies treebanks to compute linguistic m
 - Optimizes text label placement to avoid overlaps in scatter plots
 
 ### Standalone Analysis Scripts
+
+**`sbl_site.py`** - SBL / Sy Laws Site Generator
+- Orchestrates the creation of the standalone SBL analysis HTML site (`html_sbl_analyses/`)
+- Relies on module-specific generators (`sbl_page_compliance.py`, `sbl_page_validation.py`, etc.)
+- Builds color-coded validation matrices, typological maps, and interactive explorer dashboards
 
 **`compute_vo_vs_hi.py`** - VO/Head-Initiality Computation
 - Standalone script to compute word order metrics from CoNLL files

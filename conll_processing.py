@@ -22,7 +22,7 @@ relation_split = re.compile(r'\W')
 from corpus_prep import make_shorter_conll_files, read_shorter_conll_files
 
 
-def process_kids(tree, kids, direction, other_kids, position2num, position2sizes, sizes2freq, use_direct_span=False, position2charsizes=None):
+def process_kids(tree, kids, direction, other_kids, position2num, position2sizes, sizes2freq, use_direct_span=False, position2charsizes=None, position2logsizes=None, position2logsqsizes=None):
     """
     Process the dependents of a head in a given direction (left or right).
     
@@ -69,6 +69,12 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
         # Update position2sizes: accumulate sizes (ARITHMETIC MEAN: accumulate actual sizes)
         if size > 0:
             position2sizes[key_base] = position2sizes.get(key_base, 0) + size
+            
+            log_s = np.log(size)
+            if position2logsizes is not None:
+                position2logsizes[key_base] = position2logsizes.get(key_base, 0) + log_s
+            if position2logsqsizes is not None:
+                position2logsqsizes[key_base] = position2logsqsizes.get(key_base, 0) + log_s**2
         
         if position2charsizes is not None and char_size > 0:
             position2charsizes[key_base] = position2charsizes.get(key_base, 0) + np.log(char_size)
@@ -80,6 +86,11 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
             position2num[key_tot] = position2num.get(key_tot, 0) + 1
             if size > 0:
                 position2sizes[key_tot] = position2sizes.get(key_tot, 0) + size
+                log_s = np.log(size)
+                if position2logsizes is not None:
+                    position2logsizes[key_tot] = position2logsizes.get(key_tot, 0) + log_s
+                if position2logsqsizes is not None:
+                    position2logsqsizes[key_tot] = position2logsqsizes.get(key_tot, 0) + log_s**2
             
             if position2charsizes is not None and char_size > 0:
                 position2charsizes[key_tot] = position2charsizes.get(key_tot, 0) + np.log(char_size)
@@ -89,6 +100,11 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
         position2num[key_anyother] = position2num.get(key_anyother, 0) + 1
         if size > 0:
             position2sizes[key_anyother] = position2sizes.get(key_anyother, 0) + size
+            log_s = np.log(size)
+            if position2logsizes is not None:
+                position2logsizes[key_anyother] = position2logsizes.get(key_anyother, 0) + log_s
+            if position2logsqsizes is not None:
+                position2logsqsizes[key_anyother] = position2logsqsizes.get(key_anyother, 0) + log_s**2
         
         if position2charsizes is not None and char_size > 0:
             position2charsizes[key_anyother] = position2charsizes.get(key_anyother, 0) + np.log(char_size)
@@ -98,6 +114,11 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
         position2num[key_anyother_tot] = position2num.get(key_anyother_tot, 0) + 1
         if size > 0:
             position2sizes[key_anyother_tot] = position2sizes.get(key_anyother_tot, 0) + size
+            log_s = np.log(size)
+            if position2logsizes is not None:
+                position2logsizes[key_anyother_tot] = position2logsizes.get(key_anyother_tot, 0) + log_s
+            if position2logsqsizes is not None:
+                position2logsqsizes[key_anyother_tot] = position2logsqsizes.get(key_anyother_tot, 0) + log_s**2
         
         if position2charsizes is not None and char_size > 0:
             position2charsizes[key_anyother_tot] = position2charsizes.get(key_anyother_tot, 0) + np.log(char_size)
@@ -108,6 +129,11 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
         position2num[key_all] = position2num.get(key_all, 0) + 1
         if size > 0:
             position2sizes[key_all] = position2sizes.get(key_all, 0) + size
+            log_s = np.log(size)
+            if position2logsizes is not None:
+                position2logsizes[key_all] = position2logsizes.get(key_all, 0) + log_s
+            if position2logsqsizes is not None:
+                position2logsqsizes[key_all] = position2logsqsizes.get(key_all, 0) + log_s**2
         if position2charsizes is not None and char_size > 0:
             position2charsizes[key_all] = position2charsizes.get(key_all, 0) + np.log(char_size)
         
@@ -123,6 +149,11 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
         position2num[key_bilateral] = position2num.get(key_bilateral, 0) + 1
         if size > 0:
             position2sizes[key_bilateral] = position2sizes.get(key_bilateral, 0) + size
+            log_s = np.log(size)
+            if position2logsizes is not None:
+                position2logsizes[key_bilateral] = position2logsizes.get(key_bilateral, 0) + log_s
+            if position2logsqsizes is not None:
+                position2logsqsizes[key_bilateral] = position2logsqsizes.get(key_bilateral, 0) + log_s**2
         if position2charsizes is not None and char_size > 0:
             position2charsizes[key_bilateral] = position2charsizes.get(key_bilateral, 0) + np.log(char_size)
         
@@ -163,14 +194,22 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
     
     if log_avg_size is not None:
         position2sizes[avg_key] = position2sizes.get(avg_key, 0) + log_avg_size
-        
+        if position2logsizes is not None:
+            position2logsizes[avg_key] = position2logsizes.get(avg_key, 0) + log_avg_size
+        if position2logsqsizes is not None:
+            position2logsqsizes[avg_key] = position2logsqsizes.get(avg_key, 0) + log_avg_size**2
+            
         # Track size distributions for AnyOtherSide
         sizes2freq[avg_key] = sizes2freq.get(avg_key, {})
         sizes2freq[avg_key][str(kids_sizes)] = sizes2freq[avg_key].get(str(kids_sizes), 0) + 1
         
     if log_global_avg_size is not None:
         position2sizes[avg_global_key] = position2sizes.get(avg_global_key, 0) + log_global_avg_size
-        
+        if position2logsizes is not None:
+            position2logsizes[avg_global_key] = position2logsizes.get(avg_global_key, 0) + log_global_avg_size
+        if position2logsqsizes is not None:
+            position2logsqsizes[avg_global_key] = position2logsqsizes.get(avg_global_key, 0) + log_global_avg_size**2
+            
     # Zero-Other-Side Average Key
     if len(other_kids) == 0:
         avg_key_zero = f'average_tot{direction}_{len(kids)}_zerootherside'
@@ -181,13 +220,21 @@ def process_kids(tree, kids, direction, other_kids, position2num, position2sizes
         
         if log_avg_size is not None:
             position2sizes[avg_key_zero] = position2sizes.get(avg_key_zero, 0) + log_avg_size
-            
+            if position2logsizes is not None:
+                position2logsizes[avg_key_zero] = position2logsizes.get(avg_key_zero, 0) + log_avg_size
+            if position2logsqsizes is not None:
+                position2logsqsizes[avg_key_zero] = position2logsqsizes.get(avg_key_zero, 0) + log_avg_size**2
+                
             # Track size distributions for ZeroOtherSide
             sizes2freq[avg_key_zero] = sizes2freq.get(avg_key_zero, {})
             sizes2freq[avg_key_zero][str(kids_sizes)] = sizes2freq[avg_key_zero].get(str(kids_sizes), 0) + 1
             
         if log_global_avg_size is not None:
             position2sizes[avg_global_key_zero] = position2sizes.get(avg_global_key_zero, 0) + log_global_avg_size
+            if position2logsizes is not None:
+                position2logsizes[avg_global_key_zero] = position2logsizes.get(avg_global_key_zero, 0) + log_global_avg_size
+            if position2logsqsizes is not None:
+                position2logsqsizes[avg_global_key_zero] = position2logsqsizes.get(avg_global_key_zero, 0) + log_global_avg_size**2
 
 
 def get_ordering_stats(tree, include_bastards=False, head_type='verb'):
@@ -392,7 +439,7 @@ def get_ordering_stats(tree, include_bastards=False, head_type='verb'):
     return ordering_stats
 
 
-def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None, include_bastards=False, position2charsizes=None, head_type='verb'):
+def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None, include_bastards=False, position2charsizes=None, head_type='verb', position2logsizes=None, position2logsqsizes=None):
     """
     Get the sizes of dependents in a dependency tree.
     
@@ -516,10 +563,10 @@ def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None,
         ])
         
         if left_kids:
-            process_kids(tree, left_kids, 'left', right_kids, position2num, position2sizes, sizes2freq, use_direct_span=include_bastards, position2charsizes=position2charsizes)
+            process_kids(tree, left_kids, 'left', right_kids, position2num, position2sizes, sizes2freq, use_direct_span=include_bastards, position2charsizes=position2charsizes, position2logsizes=position2logsizes, position2logsqsizes=position2logsqsizes)
         
         if right_kids:
-            process_kids(tree, right_kids, 'right', left_kids, position2num, position2sizes, sizes2freq, use_direct_span=include_bastards, position2charsizes=position2charsizes)
+            process_kids(tree, right_kids, 'right', left_kids, position2num, position2sizes, sizes2freq, use_direct_span=include_bastards, position2charsizes=position2charsizes, position2logsizes=position2logsizes, position2logsqsizes=position2logsqsizes)
 
         # XVX Logic (L=1, R=1)
         if len(left_kids) == 1 and len(right_kids) == 1:
@@ -549,6 +596,11 @@ def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None,
             position2num[kl] = position2num.get(kl, 0) + 1
             if l_size > 0:
                 position2sizes[kl] = position2sizes.get(kl, 0) + l_size
+                log_s = np.log(l_size)
+                if position2logsizes is not None:
+                    position2logsizes[kl] = position2logsizes.get(kl, 0) + log_s
+                if position2logsqsizes is not None:
+                    position2logsqsizes[kl] = position2logsqsizes.get(kl, 0) + log_s**2
             if position2charsizes is not None and l_char_size > 0:
                 position2charsizes[kl] = position2charsizes.get(kl, 0) + np.log(l_char_size)
             
@@ -557,6 +609,11 @@ def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None,
             position2num[kl_anyother] = position2num.get(kl_anyother, 0) + 1
             if l_size > 0:
                 position2sizes[kl_anyother] = position2sizes.get(kl_anyother, 0) + l_size
+                log_s = np.log(l_size)
+                if position2logsizes is not None:
+                    position2logsizes[kl_anyother] = position2logsizes.get(kl_anyother, 0) + log_s
+                if position2logsqsizes is not None:
+                    position2logsqsizes[kl_anyother] = position2logsqsizes.get(kl_anyother, 0) + log_s**2
             if position2charsizes is not None and l_char_size > 0:
                 position2charsizes[kl_anyother] = position2charsizes.get(kl_anyother, 0) + np.log(l_char_size)
             
@@ -565,6 +622,11 @@ def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None,
             position2num[kr] = position2num.get(kr, 0) + 1
             if r_size > 0:
                 position2sizes[kr] = position2sizes.get(kr, 0) + r_size
+                log_s = np.log(r_size)
+                if position2logsizes is not None:
+                    position2logsizes[kr] = position2logsizes.get(kr, 0) + log_s
+                if position2logsqsizes is not None:
+                    position2logsqsizes[kr] = position2logsqsizes.get(kr, 0) + log_s**2
             if position2charsizes is not None and r_char_size > 0:
                 position2charsizes[kr] = position2charsizes.get(kr, 0) + np.log(r_char_size)
             
@@ -573,6 +635,11 @@ def get_dep_sizes(tree, position2num=None, position2sizes=None, sizes2freq=None,
             position2num[kr_anyother] = position2num.get(kr_anyother, 0) + 1
             if r_size > 0:
                 position2sizes[kr_anyother] = position2sizes.get(kr_anyother, 0) + r_size
+                log_s = np.log(r_size)
+                if position2logsizes is not None:
+                    position2logsizes[kr_anyother] = position2logsizes.get(kr_anyother, 0) + log_s
+                if position2logsqsizes is not None:
+                    position2logsqsizes[kr_anyother] = position2logsqsizes.get(kr_anyother, 0) + log_s**2
             if position2charsizes is not None and r_char_size > 0:
                 position2charsizes[kr_anyother] = position2charsizes.get(kr_anyother, 0) + np.log(r_char_size)
 
@@ -614,11 +681,12 @@ def get_dep_sizes_file(conll_filename, include_bastards=False, compute_sentence_
     """
     lang = os.path.basename(conll_filename).split('_')[0]
     position2num, position2sizes, sizes2freq, position2charsizes = {}, {}, {}, {}
+    position2logsizes, position2logsqsizes = {}, {}
     sentence_disorder_stats = {} if compute_sentence_disorder else None
     
     for tree in conllFile2trees(conll_filename):
         tree.addspan(exclude=['punct'], compute_bastards=include_bastards)
-        get_dep_sizes(tree, position2num, position2sizes, sizes2freq, include_bastards=include_bastards, position2charsizes=position2charsizes, head_type=head_type)
+        get_dep_sizes(tree, position2num, position2sizes, sizes2freq, include_bastards=include_bastards, position2charsizes=position2charsizes, head_type=head_type, position2logsizes=position2logsizes, position2logsqsizes=position2logsqsizes)
         
         if compute_sentence_disorder:
             # Get disorder stats for this sentence
@@ -631,9 +699,9 @@ def get_dep_sizes_file(conll_filename, include_bastards=False, compute_sentence_
                 sentence_disorder_stats[key].extend(disorder_flags)
     
     if compute_sentence_disorder:
-        return (lang, position2num, position2sizes, sizes2freq, position2charsizes, sentence_disorder_stats)
+        return (lang, position2num, position2sizes, sizes2freq, position2charsizes, sentence_disorder_stats, position2logsizes, position2logsqsizes)
     else:
-        return (lang, position2num, position2sizes, sizes2freq, position2charsizes)
+        return (lang, position2num, position2sizes, sizes2freq, position2charsizes, position2logsizes, position2logsqsizes)
 
 
 def get_type_freq_all_files_parallel(allshortconll, include_bastards=False, compute_sentence_disorder=False):
@@ -664,6 +732,8 @@ def get_type_freq_all_files_parallel(allshortconll, include_bastards=False, comp
     all_langs_average_sizes = {}
     all_langs_position2num = {}
     all_langs_position2sizes = {}
+    all_langs_position2logsizes = {}
+    all_langs_position2logsqsizes = {}
     all_langs_position2charsizes = {} # AGENT ADDED
     all_langs_sentence_disorder = {} if compute_sentence_disorder else None
     
@@ -685,17 +755,25 @@ def get_type_freq_all_files_parallel(allshortconll, include_bastards=False, comp
         
         for result in results:
             if compute_sentence_disorder:
-                lang, position2num, position2sizes, sizes2freq, position2charsizes, sentence_disorder_stats = result
+                lang, position2num, position2sizes, sizes2freq, position2charsizes, sentence_disorder_stats, position2logsizes, position2logsqsizes = result
             else:
-                lang, position2num, position2sizes, sizes2freq, position2charsizes = result
+                lang, position2num, position2sizes, sizes2freq, position2charsizes, position2logsizes, position2logsqsizes = result
                 sentence_disorder_stats = None
             
             all_langs_position2sizes[lang] = all_langs_position2sizes.get(lang, {})
+            all_langs_position2logsizes[lang] = all_langs_position2logsizes.get(lang, {})
+            all_langs_position2logsqsizes[lang] = all_langs_position2logsqsizes.get(lang, {})
             all_langs_position2num[lang] = all_langs_position2num.get(lang, {})
             
             for ty, size in position2sizes.items():
                 all_langs_position2sizes[lang][ty] = all_langs_position2sizes[lang].get(ty, 0) + size
                 all_langs_position2num[lang][ty] = all_langs_position2num[lang].get(ty, 0) + position2num[ty]
+                
+            for ty, log_size in position2logsizes.items():
+                all_langs_position2logsizes[lang][ty] = all_langs_position2logsizes[lang].get(ty, 0) + log_size
+                
+            for ty, logsq_size in position2logsqsizes.items():
+                all_langs_position2logsqsizes[lang][ty] = all_langs_position2logsqsizes[lang].get(ty, 0) + logsq_size
             
             if compute_sentence_disorder and sentence_disorder_stats:
                 if lang not in all_langs_sentence_disorder:
@@ -743,9 +821,9 @@ def get_type_freq_all_files_parallel(allshortconll, include_bastards=False, comp
                     'percentage': pct
                 }
         
-        return all_langs_position2num, all_langs_position2sizes, all_langs_average_sizes, all_langs_average_charsizes, sentence_disorder_percentages
+        return all_langs_position2num, all_langs_position2sizes, all_langs_average_sizes, all_langs_average_charsizes, sentence_disorder_percentages, all_langs_position2logsizes, all_langs_position2logsqsizes
     else:
-        return all_langs_position2num, all_langs_position2sizes, all_langs_average_sizes, all_langs_average_charsizes
+        return all_langs_position2num, all_langs_position2sizes, all_langs_average_sizes, all_langs_average_charsizes, all_langs_position2logsizes, all_langs_position2logsqsizes
 
 
 def get_bastard_stats(tree):
@@ -1169,6 +1247,7 @@ def process_file_complete(conll_filename, include_bastards=True, compute_sentenc
     
     # 1. Dep sizes containers
     position2num, position2sizes, sizes2freq, position2charsizes = {}, {}, {}, {}
+    position2logsizes, position2logsqsizes = {}, {}
     
     # 2. Bastard stats containers
     total_verbs = 0
@@ -1194,7 +1273,7 @@ def process_file_complete(conll_filename, include_bastards=True, compute_sentenc
         tree.addspan(exclude=['punct'], compute_bastards=include_bastards)
         
         # 1. Dep Sizes
-        get_dep_sizes(tree, position2num, position2sizes, sizes2freq, include_bastards=include_bastards, position2charsizes=position2charsizes, head_type=head_type)
+        get_dep_sizes(tree, position2num, position2sizes, sizes2freq, include_bastards=include_bastards, position2charsizes=position2charsizes, head_type=head_type, position2logsizes=position2logsizes, position2logsqsizes=position2logsqsizes)
         
         # 2. Bastard Stats
         v, b, r, ex = get_bastard_stats(tree)
@@ -1270,6 +1349,7 @@ def process_file_complete(conll_filename, include_bastards=True, compute_sentenc
                 
     return (lang, 
             position2num, position2sizes, sizes2freq, position2charsizes,
+            position2logsizes, position2logsqsizes,
             total_verbs, total_bastards, total_bastard_relations, total_bastard_examples,
             vo_hi_total,
             ordering_stats,
@@ -1314,6 +1394,8 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
     all_langs_position2sizes = {}
     all_langs_position2charsizes = {} # AGENT ADDED
     all_langs_average_charsizes = {} # AGENT ADDED
+    all_langs_position2logsizes = {}
+    all_langs_position2logsqsizes = {}
     
     lang_bastard_stats = {}
     all_bastard_relations = {}
@@ -1346,6 +1428,7 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
             if collect_config_examples:
                 (lang, 
                  position2num, position2sizes, sizes2freq, position2charsizes,
+                 position2logsizes, position2logsqsizes,
                  verbs, bastards, bastard_relations, bastard_examples,
                  vo_hi_file_stats,
                  file_ordering_stats,
@@ -1353,6 +1436,7 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
             else:
                 (lang, 
                  position2num, position2sizes, sizes2freq, position2charsizes,
+                 position2logsizes, position2logsqsizes,
                  verbs, bastards, bastard_relations, bastard_examples,
                  vo_hi_file_stats,
                  file_ordering_stats,
@@ -1362,10 +1446,18 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
             # --- 1. Dep Sizes Aggregation ---
             all_langs_position2sizes[lang] = all_langs_position2sizes.get(lang, {})
             all_langs_position2num[lang] = all_langs_position2num.get(lang, {})
+            all_langs_position2logsizes[lang] = all_langs_position2logsizes.get(lang, {})
+            all_langs_position2logsqsizes[lang] = all_langs_position2logsqsizes.get(lang, {})
             
             for ty, size in position2sizes.items():
                 all_langs_position2sizes[lang][ty] = all_langs_position2sizes[lang].get(ty, 0) + size
                 all_langs_position2num[lang][ty] = all_langs_position2num[lang].get(ty, 0) + position2num[ty]
+                
+            for ty, log_size in position2logsizes.items():
+                all_langs_position2logsizes[lang][ty] = all_langs_position2logsizes[lang].get(ty, 0) + log_size
+                
+            for ty, logsq_size in position2logsqsizes.items():
+                all_langs_position2logsqsizes[lang][ty] = all_langs_position2logsqsizes[lang].get(ty, 0) + logsq_size
 
             # Aggregate char sizes
             all_langs_position2charsizes[lang] = all_langs_position2charsizes.get(lang, {})
@@ -1507,12 +1599,14 @@ def get_all_stats_parallel(allshortconll, include_bastards=True, compute_sentenc
     
     if collect_config_examples:
         return (all_langs_position2num, all_langs_position2sizes, all_langs_average_sizes, all_langs_average_charsizes,
+                all_langs_position2logsizes, all_langs_position2logsqsizes,
                 lang_bastard_stats, all_bastard_relations, 
                 lang_vo_hi_scores, 
                 all_langs_ordering_stats,
                 all_config_examples)
     else:
         return (all_langs_position2num, all_langs_position2sizes, all_langs_average_sizes, all_langs_average_charsizes,
+                all_langs_position2logsizes, all_langs_position2logsqsizes,
                 lang_bastard_stats, all_bastard_relations, 
                 lang_vo_hi_scores, 
                 all_langs_ordering_stats)

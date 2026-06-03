@@ -1,0 +1,5750 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SBL Significance Analysis</title>
+<style>
+:root { color-scheme: light; }
+html, body { background: #fff; }
+body { font-family: Arial, sans-serif; max-width: 1500px; margin: 0 auto; padding: 20px; color: #222; }
+h1 { color: #333; scroll-margin-top: 60px; }
+h2 { color: #555; margin-top: 30px; scroll-margin-top: 60px; }
+h3 { color: #666; margin-top: 20px; scroll-margin-top: 60px; }
+a { color: #1976d2; }
+table { border-collapse: collapse; width: 100%; margin-bottom: 30px; scroll-margin-top: 60px; }
+th, td { border: 1px solid #ddd; padding: 6px 8px; text-align: center; font-size: 13px; }
+th { background-color: #4CAF50; color: white; position: sticky; top: 38px; z-index: 5; cursor: pointer; }
+th:hover { background-color: #45a049; }
+.lang-name { text-align: left; font-weight: bold; white-space: nowrap; }
+.score-positive { background-color: #c8e6c9; }
+.score-negative { background-color: #ffcdd2; }
+.score-neutral  { background-color: #fff9c4; }
+.na-cell { color: #999; }
+tr:nth-child(even) { background-color: #f9f9f9; }
+tr:hover { background-color: #f1f1f1; }
+.info-box { background: #f0f0f0; padding: 15px; border-radius: 5px; margin: 10px 0 20px 0; }
+.nav-top { background: #333; color: white; padding: 0; margin: -20px -20px 20px -20px;
+           border-radius: 0 0 6px 6px; position: sticky; top: 0; z-index: 100; }
+.nav-top > ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; }
+.nav-top > ul > li > a { display: block; color: #fff; padding: 10px 16px; text-decoration: none; }
+.nav-top > ul > li:hover > a { background: #555; }
+.nav-top .crumb-current > a { color: #ffeb3b; font-weight: bold; }
+.nav-top .nav-spacer { flex: 1; }
+.nav-top .nav-github { padding: 10px 16px; color: #fff; text-decoration: none; opacity: 0.85; }
+.explanation { background: #fff3e0; padding: 15px; border-left: 4px solid #ff9800; margin: 20px 0; line-height: 1.5; }
+.formula { font-family: monospace; background: #e0e0e0; padding: 2px 5px; border-radius: 3px; font-size: 14px; }
+/* Modal CSS */
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
+.modal-content { background-color: #fefefe; margin: 5% auto; padding: 20px; border: 1px solid #888; width: 90%; max-width: 1200px; border-radius: 5px; position: relative; }
+.close-modal { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; position: absolute; right: 20px; top: 10px; }
+.close-modal:hover, .close-modal:focus { color: black; text-decoration: none; cursor: pointer; }
+.tsv-table { font-size: 12px; margin-top: 20px; width: 100%; overflow-x: auto; display: block; }
+.tsv-table th, .tsv-table td { padding: 4px 6px; }
+</style>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+<script>
+var sortDirections = {};
+function sortTable(tableId, colIndex, type) {
+    const table = document.getElementById(tableId);
+    if (!table) return;
+    const tbody = table.tBodies[0];
+    const rows = Array.from(tbody.rows);
+    const k = tableId + '_' + colIndex;
+    sortDirections[k] = !sortDirections[k];
+    const asc = sortDirections[k];
+    
+    rows.sort((a, b) => {
+        let av = a.cells[colIndex].textContent.trim();
+        let bv = b.cells[colIndex].textContent.trim();
+        
+        if (type === 'number') {
+            let an = parseFloat(av);
+            let bn = parseFloat(bv);
+            if (isNaN(an)) an = -Infinity;
+            if (isNaN(bn)) bn = -Infinity;
+            return asc ? an - bn : bn - an;
+        } else {
+            return asc ? av.localeCompare(bv) : bv.localeCompare(av);
+        }
+    });
+    rows.forEach(r => tbody.appendChild(r));
+}
+</script>
+
+
+<script>
+function openModal(id) {
+    document.getElementById(id).style.display = "block";
+}
+function closeModal(id) {
+    document.getElementById(id).style.display = "none";
+}
+window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+        event.target.style.display = "none";
+    }
+}
+</script>
+
+<script src="https://unpkg.com/reactive-dep-tree/dist/reactive-dep-tree.umd.js" async deferred></script>
+</head>
+<body>
+
+<nav class="nav-top"><ul><li><a href="index.html">Home</a></li><li><a href="sbl_laws_explained.html">The Sy Laws</a></li><li><a href="sbl_laws_compliance.html">Laws Compliance Table</a></li><li><a href="sbl_validation.html">Validation & Diagnostics</a></li><li><a href="sbl_explorer.html">Interactive Explorer</a></li><li class="crumb-current"><a href="sbl_significance.html">Significance Analysis</a></li><li><a href="sbl_laws_visualizations.html">Visualizations</a></li><li><a href="sbl_typology.html">Typological Maps</a></li><li><a href="sbl_summary.html">Global Summary</a></li><li class="nav-spacer"></li></ul></nav>
+<h1>Significance Analysis of SBL Results</h1>
+<p>This page presents statistical significance tests for the different SBL compliance metrics, demonstrating that the observed trends are not merely artifacts of sample size.</p>
+<h2>1. OLS Regression of the Complex SbL $\beta$</h2>
+<div class='explanation'>
+<p><strong>What is measured:</strong> We perform an Ordinary Least Squares (OLS) linear regression of the log-constituent size against the log-distance from the verb (the SbL $\beta$ slope).</p>
+<p><strong>Why it matters:</strong> A slope $\beta$ might appear compliant, but if the sample size is too small or the variance too high, it might just be noise. The $p$-value tests the null hypothesis that $\beta = 0$ (distance has no effect on size). A significant $p$-value confirms a robust Short-Before-Long (or Long-Before-Short) effect.</p>
+<p><strong>Significance Levels:</strong> <code>***</code> $p<0.001$, <code>**</code> $p<0.01$, <code>*</code> $p<0.05$, <code>ns</code> Not Significant.</p>
+</div>
+<table id='sigTableBeta'>
+<thead><tr>
+<th onclick="sortTable('sigTableBeta', 0, 'string')">Language</th>
+<th onclick="sortTable('sigTableBeta', 1, 'number')">Right SbL $\beta$</th>
+<th onclick="sortTable('sigTableBeta', 2, 'number')">Right $p$-value</th>
+<th onclick="sortTable('sigTableBeta', 3, 'string')">Right Sig.</th>
+<th onclick="sortTable('sigTableBeta', 4, 'number')">Left SbL $\beta$</th>
+<th onclick="sortTable('sigTableBeta', 5, 'number')">Left $p$-value</th>
+<th onclick="sortTable('sigTableBeta', 6, 'string')">Left Sig.</th>
+</tr></thead><tbody>
+<tr>
+<td class='lang-name'>Abaza</td>
+<td class='score-positive'>0.887</td>
+<td>1.16e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.169</td>
+<td>4.16e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Abkhaz</td>
+<td class='score-positive'>0.647</td>
+<td>2.98e-02</td>
+<td><strong>*</strong></td>
+<td class='score-positive'>-0.228</td>
+<td>1.12e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Afrikaans</td>
+<td class='score-positive'>0.922</td>
+<td>2.05e-04</td>
+<td><strong>***</strong></td>
+<td class='score-negative'>0.202</td>
+<td>2.11e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Akkadian</td>
+<td class='score-positive'>0.343</td>
+<td>6.16e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.221</td>
+<td>6.38e-02</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Akuntsu</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive'>-0.138</td>
+<td>4.58e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Albanian</td>
+<td class='score-positive'>0.954</td>
+<td>4.42e-02</td>
+<td><strong>*</strong></td>
+<td class='score-positive'>-0.131</td>
+<td>3.98e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Amharic</td>
+<td class='score-positive'>0.081</td>
+<td>7.48e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.734</td>
+<td>4.70e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>AncientGreek</td>
+<td class='score-positive'>0.678</td>
+<td>2.76e-04</td>
+<td><strong>***</strong></td>
+<td class='score-negative'>0.151</td>
+<td>1.46e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>AncientHebrew</td>
+<td class='score-positive'>0.654</td>
+<td>1.92e-03</td>
+<td><strong>**</strong></td>
+<td class='score-positive'>-0.290</td>
+<td>2.44e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Apurinã</td>
+<td class='score-positive'>0.711</td>
+<td>1.42e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.171</td>
+<td>3.15e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Arabic</td>
+<td class='score-positive'>1.127</td>
+<td>1.67e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.541</td>
+<td>1.06e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Arhuaco</td>
+<td class='score-positive'>0.284</td>
+<td>2.84e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.450</td>
+<td>9.07e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Armenian</td>
+<td class='score-positive'>0.204</td>
+<td>6.88e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.178</td>
+<td>1.32e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Assyrian</td>
+<td class='score-positive'>0.470</td>
+<td>2.81e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-negative'>0.356</td>
+<td>3.89e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Azerbaijani</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive'>-0.039</td>
+<td>6.24e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Bambara</td>
+<td class='score-positive'>0.905</td>
+<td>1.21e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.414</td>
+<td>1.76e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Basque</td>
+<td class='score-positive'>0.484</td>
+<td>3.69e-02</td>
+<td><strong>*</strong></td>
+<td class='score-positive'>-0.119</td>
+<td>1.17e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Bavarian</td>
+<td class='score-positive'>0.754</td>
+<td>8.28e-06</td>
+<td><strong>***</strong></td>
+<td class='score-negative'>0.176</td>
+<td>1.06e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Beja</td>
+<td class='score-negative'>-0.306</td>
+<td>6.67e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.648</td>
+<td>1.34e-06</td>
+<td><strong>***</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Belarusian</td>
+<td class='score-positive'>0.576</td>
+<td>1.14e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.235</td>
+<td>1.93e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Bengali</td>
+<td class='score-positive'>0.750</td>
+<td>3.33e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.041</td>
+<td>6.89e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Bhojpuri</td>
+<td class='score-positive'>2.940</td>
+<td>1.53e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.316</td>
+<td>7.33e-04</td>
+<td><strong>***</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Borôro</td>
+<td class='score-positive'>0.190</td>
+<td>1.57e-03</td>
+<td><strong>**</strong></td>
+<td class='score-positive'>-0.159</td>
+<td>3.86e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Breton</td>
+<td class='score-positive'>0.566</td>
+<td>2.90e-03</td>
+<td><strong>**</strong></td>
+<td class='score-positive'>-0.630</td>
+<td>2.71e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Buglere</td>
+<td class='score-positive'>0.700</td>
+<td>1.01e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.266</td>
+<td>1.90e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Bulgarian</td>
+<td class='score-positive'>0.879</td>
+<td>5.99e-05</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.387</td>
+<td>2.85e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Buryat</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive'>-0.161</td>
+<td>2.86e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Cantonese</td>
+<td class='score-positive'>0.173</td>
+<td>6.22e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.206</td>
+<td>1.93e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>CappadocianGreek</td>
+<td class='score-positive'>0.606</td>
+<td>3.17e-03</td>
+<td><strong>**</strong></td>
+<td class='score-positive'>-0.047</td>
+<td>6.61e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Catalan</td>
+<td class='score-positive'>0.910</td>
+<td>5.71e-05</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.431</td>
+<td>8.36e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Cebuano</td>
+<td class='score-positive'>0.574</td>
+<td>1.39e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.035</td>
+<td>8.58e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>CentralKurdish</td>
+<td class='score-negative'>-0.167</td>
+<td>6.67e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.105</td>
+<td>5.75e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Chhintange</td>
+<td class='score-positive'>0.030</td>
+<td>6.67e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.291</td>
+<td>3.19e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Chinese</td>
+<td class='score-positive'>0.543</td>
+<td>5.77e-02</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.102</td>
+<td>2.42e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Chukot</td>
+<td class='score-positive'>0.507</td>
+<td>2.86e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-negative'>0.155</td>
+<td>4.45e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>ClassArmenian</td>
+<td class='score-positive'>0.807</td>
+<td>3.75e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.072</td>
+<td>1.07e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>ClassChinese</td>
+<td class='score-positive'>0.722</td>
+<td>3.13e-02</td>
+<td><strong>*</strong></td>
+<td class='score-positive'>-0.232</td>
+<td>1.22e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Coptic</td>
+<td class='score-positive'>1.121</td>
+<td>1.10e-03</td>
+<td><strong>**</strong></td>
+<td class='score-positive'>-0.259</td>
+<td>4.05e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Croatian</td>
+<td class='score-positive'>0.988</td>
+<td>1.43e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.136</td>
+<td>9.44e-02</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Czech</td>
+<td class='score-positive'>0.906</td>
+<td>4.41e-06</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.112</td>
+<td>9.28e-02</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Danish</td>
+<td class='score-positive'>0.861</td>
+<td>1.37e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.211</td>
+<td>8.13e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Dutch</td>
+<td class='score-positive'>0.800</td>
+<td>2.80e-06</td>
+<td><strong>***</strong></td>
+<td class='score-negative'>0.135</td>
+<td>7.38e-02</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Egyptian</td>
+<td class='score-positive'>0.747</td>
+<td>7.67e-03</td>
+<td><strong>**</strong></td>
+<td class='score-positive'>-1.460</td>
+<td>5.90e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>English</td>
+<td class='score-positive'>0.646</td>
+<td>1.62e-03</td>
+<td><strong>**</strong></td>
+<td class='score-positive'>-0.234</td>
+<td>1.30e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Erzya</td>
+<td class='score-positive'>0.425</td>
+<td>9.88e-02</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.125</td>
+<td>2.40e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Esperanto</td>
+<td class='score-positive'>0.536</td>
+<td>2.38e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-negative'>0.043</td>
+<td>8.22e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Estonian</td>
+<td class='score-positive'>0.695</td>
+<td>2.54e-05</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.086</td>
+<td>7.87e-04</td>
+<td><strong>***</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Faroese</td>
+<td class='score-positive'>0.947</td>
+<td>1.01e-03</td>
+<td><strong>**</strong></td>
+<td class='score-positive'>-0.573</td>
+<td>2.36e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Finnish</td>
+<td class='score-positive'>0.605</td>
+<td>2.58e-05</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.170</td>
+<td>9.30e-05</td>
+<td><strong>***</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>French</td>
+<td class='score-positive'>0.646</td>
+<td>3.30e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.266</td>
+<td>5.09e-02</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>FrisianDutch</td>
+<td class='score-positive'>0.753</td>
+<td>3.74e-04</td>
+<td><strong>***</strong></td>
+<td class='score-negative'>0.069</td>
+<td>4.56e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Gaelic</td>
+<td class='score-positive'>0.831</td>
+<td>1.29e-03</td>
+<td><strong>**</strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Galician</td>
+<td class='score-positive'>1.129</td>
+<td>4.30e-06</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.444</td>
+<td>1.20e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Gbaya</td>
+<td class='score-negative'>-0.160</td>
+<td>5.71e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.022</td>
+<td>9.66e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Georgian</td>
+<td class='score-positive'>0.516</td>
+<td>1.74e-03</td>
+<td><strong>**</strong></td>
+<td class='score-negative'>0.007</td>
+<td>9.07e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>German</td>
+<td class='score-positive'>0.692</td>
+<td>3.42e-05</td>
+<td><strong>***</strong></td>
+<td class='score-negative'>0.115</td>
+<td>4.06e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Gheg</td>
+<td class='score-positive'>0.847</td>
+<td>6.12e-02</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.045</td>
+<td>6.36e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Gothic</td>
+<td class='score-positive'>0.596</td>
+<td>3.34e-03</td>
+<td><strong>**</strong></td>
+<td class='score-positive'>-0.117</td>
+<td>1.56e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Greek</td>
+<td class='score-positive'>1.000</td>
+<td>1.36e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.272</td>
+<td>1.18e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Guajajára</td>
+<td class='score-positive'>0.246</td>
+<td>2.14e-03</td>
+<td><strong>**</strong></td>
+<td class='score-negative'>0.201</td>
+<td>6.28e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Guarani</td>
+<td class='score-positive'>0.350</td>
+<td>1.55e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.111</td>
+<td>3.38e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Gujarati</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive'>-0.065</td>
+<td>5.26e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Gwichʼin</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-negative'>0.186</td>
+<td>5.35e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Haitian</td>
+<td class='score-positive'>0.951</td>
+<td>4.95e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.627</td>
+<td>1.54e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Hausa</td>
+<td class='score-positive'>0.724</td>
+<td>2.72e-02</td>
+<td><strong>*</strong></td>
+<td class='score-positive'>-0.627</td>
+<td>3.40e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Hebrew</td>
+<td class='score-positive'>0.766</td>
+<td>2.36e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.479</td>
+<td>4.14e-04</td>
+<td><strong>***</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>HighlandNahuatl</td>
+<td class='score-positive'>0.507</td>
+<td>1.46e-02</td>
+<td><strong>*</strong></td>
+<td class='score-positive'>-0.005</td>
+<td>9.44e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Hindi</td>
+<td class='score-positive'>2.364</td>
+<td>2.46e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.157</td>
+<td>1.24e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Hittite</td>
+<td class='score-positive'>0.862</td>
+<td>0.00e+00</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.332</td>
+<td>7.62e-04</td>
+<td><strong>***</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Hungarian</td>
+<td class='score-positive'>1.122</td>
+<td>3.11e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.058</td>
+<td>4.00e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Icelandic</td>
+<td class='score-positive'>0.959</td>
+<td>3.67e-05</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.004</td>
+<td>9.54e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Indonesian</td>
+<td class='score-positive'>0.294</td>
+<td>1.21e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.411</td>
+<td>2.97e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Irish</td>
+<td class='score-positive'>0.683</td>
+<td>7.93e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.156</td>
+<td>3.60e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Italian</td>
+<td class='score-positive'>1.015</td>
+<td>1.31e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.195</td>
+<td>6.94e-02</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Japanese</td>
+<td class='score-positive'>0.008</td>
+<td>4.01e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.419</td>
+<td>5.17e-04</td>
+<td><strong>***</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Javanese</td>
+<td class='score-positive'>0.606</td>
+<td>7.74e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.307</td>
+<td>1.14e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Kaapor</td>
+<td class='score-negative'>0.000</td>
+<td>nan</td>
+<td><strong></strong></td>
+<td class='score-negative'>0.002</td>
+<td>9.77e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Kangri</td>
+<td class='score-positive'>0.151</td>
+<td>6.67e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.027</td>
+<td>5.71e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Karelian</td>
+<td class='score-positive'>0.632</td>
+<td>8.19e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.153</td>
+<td>1.23e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Karo</td>
+<td class='score-positive'>0.035</td>
+<td>7.53e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.046</td>
+<td>4.98e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Kazakh</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive'>-0.118</td>
+<td>8.87e-02</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Khoekhoe</td>
+<td class='score-positive'>0.926</td>
+<td>1.08e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.088</td>
+<td>3.76e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Khunsari</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive'>-0.600</td>
+<td>7.01e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Kiche</td>
+<td class='score-positive'>0.075</td>
+<td>6.89e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.524</td>
+<td>3.17e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Komi-Permyak</td>
+<td class='score-positive'>0.666</td>
+<td>3.99e-02</td>
+<td><strong>*</strong></td>
+<td class='score-negative'>0.246</td>
+<td>1.39e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Komi</td>
+<td class='score-positive'>0.451</td>
+<td>8.22e-02</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.152</td>
+<td>5.88e-02</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Korean</td>
+<td class='score-positive'>0.003</td>
+<td>9.93e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.210</td>
+<td>1.36e-04</td>
+<td><strong>***</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Kurmanji</td>
+<td class='score-positive'>0.290</td>
+<td>6.09e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.019</td>
+<td>6.58e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Kyrgyz</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-negative'>0.060</td>
+<td>6.81e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Latgalian</td>
+<td class='score-positive'>0.499</td>
+<td>6.67e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.609</td>
+<td>1.47e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Latin</td>
+<td class='score-positive'>0.581</td>
+<td>1.71e-02</td>
+<td><strong>*</strong></td>
+<td class='score-negative'>0.046</td>
+<td>2.78e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Latvian</td>
+<td class='score-positive'>0.711</td>
+<td>9.81e-05</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.169</td>
+<td>8.69e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Ligurian</td>
+<td class='score-positive'>0.659</td>
+<td>4.18e-02</td>
+<td><strong>*</strong></td>
+<td class='score-positive'>-0.426</td>
+<td>3.72e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Lithuanian</td>
+<td class='score-positive'>0.858</td>
+<td>1.36e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.163</td>
+<td>9.95e-02</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Livvi</td>
+<td class='score-positive'>0.464</td>
+<td>2.31e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-negative'>0.235</td>
+<td>1.43e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>LowSaxon</td>
+<td class='score-positive'>0.686</td>
+<td>1.54e-04</td>
+<td><strong>***</strong></td>
+<td class='score-negative'>0.150</td>
+<td>6.81e-02</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Luxembourgish</td>
+<td class='score-positive'>0.750</td>
+<td>6.67e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.012</td>
+<td>9.39e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Macedonian</td>
+<td class='score-positive'>0.502</td>
+<td>8.31e-02</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.054</td>
+<td>8.24e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Madi</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive'>-0.072</td>
+<td>4.01e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Maghrebi</td>
+<td class='score-positive'>0.676</td>
+<td>1.06e-03</td>
+<td><strong>**</strong></td>
+<td class='score-positive'>-0.532</td>
+<td>2.17e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Makuráp</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-negative'>0.152</td>
+<td>7.96e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Malayalam</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive'>-0.392</td>
+<td>1.80e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Maltese</td>
+<td class='score-positive'>0.891</td>
+<td>3.60e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.253</td>
+<td>1.46e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Manx</td>
+<td class='score-positive'>0.652</td>
+<td>7.44e-04</td>
+<td><strong>***</strong></td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Marathi</td>
+<td class='score-positive'>0.697</td>
+<td>9.95e-02</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.197</td>
+<td>8.15e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>MbyáGuaraní</td>
+<td class='score-positive'>0.630</td>
+<td>1.73e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.268</td>
+<td>1.14e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>MiddleFrench</td>
+<td class='score-positive'>0.806</td>
+<td>1.12e-03</td>
+<td><strong>**</strong></td>
+<td class='score-positive'>-0.245</td>
+<td>2.81e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Moksha</td>
+<td class='score-positive'>0.389</td>
+<td>1.06e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.057</td>
+<td>6.47e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Mundurukú</td>
+<td class='score-positive'>0.594</td>
+<td>2.97e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.204</td>
+<td>1.02e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Naija</td>
+<td class='score-positive'>0.496</td>
+<td>3.32e-02</td>
+<td><strong>*</strong></td>
+<td class='score-positive'>-0.386</td>
+<td>2.37e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Nayini</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive'>-0.277</td>
+<td>5.21e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Neapolitan</td>
+<td class='score-positive'>0.323</td>
+<td>8.29e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.396</td>
+<td>6.67e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Nenets</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive'>-0.050</td>
+<td>6.94e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Nhengatu</td>
+<td class='score-positive'>0.580</td>
+<td>1.62e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.218</td>
+<td>3.37e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>NorthSami</td>
+<td class='score-positive'>0.387</td>
+<td>1.29e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.128</td>
+<td>1.48e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Norwegian</td>
+<td class='score-positive'>0.917</td>
+<td>6.77e-06</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.252</td>
+<td>3.96e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Occitan</td>
+<td class='score-positive'>1.002</td>
+<td>2.32e-05</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.505</td>
+<td>1.81e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>OldChurchSlavonic</td>
+<td class='score-positive'>0.597</td>
+<td>5.50e-03</td>
+<td><strong>**</strong></td>
+<td class='score-negative'>0.018</td>
+<td>3.41e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>OldEastSlavic</td>
+<td class='score-positive'>0.591</td>
+<td>3.76e-03</td>
+<td><strong>**</strong></td>
+<td class='score-positive'>-0.070</td>
+<td>2.78e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>OldEnglish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive'>-0.216</td>
+<td>4.55e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>OldFrench</td>
+<td class='score-positive'>0.716</td>
+<td>5.68e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.217</td>
+<td>1.11e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>OldIrish</td>
+<td class='score-positive'>1.015</td>
+<td>9.64e-02</td>
+<td><strong>ns</strong></td>
+<td class='score-negative'>0.869</td>
+<td>3.45e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>OldProvençal</td>
+<td class='score-positive'>0.778</td>
+<td>1.71e-03</td>
+<td><strong>**</strong></td>
+<td class='score-positive'>-0.202</td>
+<td>3.44e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>OldTurkish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive'>-0.571</td>
+<td>4.70e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Oriya</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive'>-0.349</td>
+<td>9.95e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>OttomanTurkish</td>
+<td class='score-positive'>0.005</td>
+<td>9.83e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.232</td>
+<td>2.71e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Pashto</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive'>-0.182</td>
+<td>1.07e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Paumarí</td>
+<td class='score-negative'>-0.388</td>
+<td>6.83e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.332</td>
+<td>4.19e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Persian</td>
+<td class='score-positive'>0.477</td>
+<td>3.46e-02</td>
+<td><strong>*</strong></td>
+<td class='score-negative'>0.051</td>
+<td>2.05e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Pesh</td>
+<td class='score-positive'>0.785</td>
+<td>9.87e-02</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.346</td>
+<td>4.35e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Phrygian</td>
+<td class='score-positive'>0.500</td>
+<td>9.49e-09</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.756</td>
+<td>7.37e-02</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Polish</td>
+<td class='score-positive'>0.915</td>
+<td>2.05e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.069</td>
+<td>7.50e-02</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Pomak</td>
+<td class='score-positive'>0.842</td>
+<td>6.02e-05</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.253</td>
+<td>2.26e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Portuguese</td>
+<td class='score-positive'>0.902</td>
+<td>1.13e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.494</td>
+<td>4.74e-04</td>
+<td><strong>***</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Romanian</td>
+<td class='score-positive'>0.890</td>
+<td>1.50e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.311</td>
+<td>3.05e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Russian</td>
+<td class='score-positive'>0.785</td>
+<td>4.39e-05</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.209</td>
+<td>1.06e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Sanskrit</td>
+<td class='score-positive'>0.421</td>
+<td>5.38e-03</td>
+<td><strong>**</strong></td>
+<td class='score-positive'>-0.260</td>
+<td>1.12e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Serbian</td>
+<td class='score-positive'>0.900</td>
+<td>1.25e-03</td>
+<td><strong>**</strong></td>
+<td class='score-positive'>-0.185</td>
+<td>9.36e-02</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Sicilian</td>
+<td class='score-positive'>0.638</td>
+<td>1.05e-02</td>
+<td><strong>*</strong></td>
+<td class='score-positive'>-0.370</td>
+<td>5.40e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Sindhi</td>
+<td class='score-positive'>1.546</td>
+<td>2.39e-03</td>
+<td><strong>**</strong></td>
+<td class='score-positive'>-0.132</td>
+<td>4.19e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Sinhalese</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive'>-0.119</td>
+<td>5.67e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>SkoltSami</td>
+<td class='score-positive'>0.649</td>
+<td>1.59e-03</td>
+<td><strong>**</strong></td>
+<td class='score-positive'>-0.099</td>
+<td>1.75e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Slovak</td>
+<td class='score-positive'>0.747</td>
+<td>6.89e-05</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.089</td>
+<td>1.74e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Slovenian</td>
+<td class='score-positive'>0.906</td>
+<td>4.49e-05</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.103</td>
+<td>5.88e-02</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Soi</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive'>-0.323</td>
+<td>5.12e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>SouthLevantineArabic</td>
+<td class='score-positive'>0.500</td>
+<td>1.86e-02</td>
+<td><strong>*</strong></td>
+<td class='score-negative'>0.250</td>
+<td>6.67e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>SouthernKurdish</td>
+<td class='score-positive'>0.653</td>
+<td>2.26e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.072</td>
+<td>5.87e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>SpanishSign</td>
+<td class='score-positive'>0.077</td>
+<td>5.23e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.065</td>
+<td>5.37e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Spanish</td>
+<td class='score-positive'>0.949</td>
+<td>3.61e-05</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.478</td>
+<td>2.42e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>SwedishSign</td>
+<td class='score-positive'>0.273</td>
+<td>5.74e-02</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.230</td>
+<td>3.16e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Swedish</td>
+<td class='score-positive'>0.858</td>
+<td>1.31e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.253</td>
+<td>3.62e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>SwissGerman</td>
+<td class='score-positive'>0.754</td>
+<td>2.37e-02</td>
+<td><strong>*</strong></td>
+<td class='score-negative'>0.078</td>
+<td>5.04e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Tagalog</td>
+<td class='score-positive'>0.392</td>
+<td>1.78e-02</td>
+<td><strong>*</strong></td>
+<td class='score-negative'>0.000</td>
+<td>nan</td>
+<td><strong></strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Tamil</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive'>-0.310</td>
+<td>1.28e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Tangkhul</td>
+<td class='score-positive'>0.224</td>
+<td>6.67e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.054</td>
+<td>6.09e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Tatar</td>
+<td class='score-positive'>0.788</td>
+<td>3.30e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-negative'>0.040</td>
+<td>6.37e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Teko</td>
+<td class='score-positive'>0.136</td>
+<td>1.91e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.125</td>
+<td>1.01e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>TeluguEnglish</td>
+<td class='score-negative'>0.000</td>
+<td>1.00e+00</td>
+<td><strong>ns</strong></td>
+<td class='score-negative'>0.021</td>
+<td>8.48e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Telugu</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive'>-0.086</td>
+<td>8.61e-02</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Thai</td>
+<td class='score-positive'>0.753</td>
+<td>2.48e-05</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.526</td>
+<td>5.75e-02</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Tswana</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive'>-0.585</td>
+<td>3.10e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Tupinambá</td>
+<td class='score-positive'>0.364</td>
+<td>1.15e-02</td>
+<td><strong>*</strong></td>
+<td class='score-positive'>-0.342</td>
+<td>2.09e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>TurkishEnglish</td>
+<td class='score-positive'>1.442</td>
+<td>3.22e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-negative'>0.138</td>
+<td>6.23e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>TurkishGerman</td>
+<td class='score-positive'>0.697</td>
+<td>7.89e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.028</td>
+<td>6.23e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Turkish</td>
+<td class='score-positive'>0.398</td>
+<td>6.23e-03</td>
+<td><strong>**</strong></td>
+<td class='score-positive'>-0.060</td>
+<td>6.26e-02</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Ukrainian</td>
+<td class='score-positive'>0.781</td>
+<td>6.65e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.145</td>
+<td>5.96e-02</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Umbrian</td>
+<td class='score-positive'>1.333</td>
+<td>3.90e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-negative'>0.049</td>
+<td>2.92e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>UpperSorbian</td>
+<td class='score-positive'>0.877</td>
+<td>1.41e-03</td>
+<td><strong>**</strong></td>
+<td class='score-negative'>0.096</td>
+<td>6.10e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Urdu</td>
+<td class='score-positive'>0.794</td>
+<td>3.32e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.234</td>
+<td>6.27e-03</td>
+<td><strong>**</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Uyghur</td>
+<td class='score-positive'>0.202</td>
+<td>5.73e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.110</td>
+<td>1.37e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Uzbek</td>
+<td class='score-positive'>0.272</td>
+<td>8.14e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.085</td>
+<td>8.25e-02</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Veps</td>
+<td class='score-positive'>0.978</td>
+<td>5.17e-03</td>
+<td><strong>**</strong></td>
+<td class='score-positive'>-0.189</td>
+<td>1.87e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Vietnamese</td>
+<td class='score-positive'>0.729</td>
+<td>1.03e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.635</td>
+<td>1.05e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Warlpiri</td>
+<td class='score-negative'>-0.226</td>
+<td>4.49e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.016</td>
+<td>2.89e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Welsh</td>
+<td class='score-positive'>1.078</td>
+<td>4.62e-05</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.487</td>
+<td>2.91e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>WestArmenian</td>
+<td class='score-positive'>0.891</td>
+<td>2.29e-03</td>
+<td><strong>**</strong></td>
+<td class='score-positive'>-0.050</td>
+<td>2.71e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>WestNahuatl</td>
+<td class='score-positive'>0.663</td>
+<td>2.08e-02</td>
+<td><strong>*</strong></td>
+<td class='score-positive'>-0.089</td>
+<td>2.84e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Wolof</td>
+<td class='score-positive'>0.947</td>
+<td>5.05e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.325</td>
+<td>1.02e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Wu</td>
+<td class='score-positive'>0.357</td>
+<td>2.82e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-negative'>0.066</td>
+<td>3.20e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Xavánte</td>
+<td class='score-positive'>0.207</td>
+<td>7.73e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.311</td>
+<td>3.27e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Xibe</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive'>-0.297</td>
+<td>3.26e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Yakut</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='score-positive'>-0.074</td>
+<td>1.80e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Yiddish</td>
+<td class='score-positive'>0.528</td>
+<td>6.70e-03</td>
+<td><strong>**</strong></td>
+<td class='score-positive'>-0.273</td>
+<td>8.53e-02</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Yoruba</td>
+<td class='score-positive'>0.419</td>
+<td>2.72e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.543</td>
+<td>3.28e-02</td>
+<td><strong>*</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Yupik</td>
+<td class='score-positive'>0.633</td>
+<td>2.23e-01</td>
+<td><strong>ns</strong></td>
+<td class='score-positive'>-0.161</td>
+<td>4.50e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+<tr>
+<td class='lang-name'>Zaar</td>
+<td class='score-positive'>0.331</td>
+<td>1.01e-04</td>
+<td><strong>***</strong></td>
+<td class='score-positive'>-0.142</td>
+<td>6.25e-01</td>
+<td><strong>ns</strong></td>
+</tr>
+</tbody></table>
+<h2>2. Binomial Test for Intra-Sentence Ordering (Horizontal Law)</h2>
+<div class='explanation'>
+<p><strong>What is measured:</strong> We perform a two-sided Binomial test (Sign Test) on the raw sentence-level counts. For adjacent dependents in the same sentence, we count how often the inner dependent is shorter than the outer dependent (successes) out of all sentences where their lengths differ (trials).</p>
+<p><strong>Why it matters:</strong> The Horizontal Law states that dependents closer to the verb are shorter. By testing the paired intra-sentence occurrences directly, we prove that this effect is highly significant and not just a product of aggregate averages.</p>
+<p><strong>Significance Levels:</strong> <code>***</code> $p<0.001$, <code>**</code> $p<0.01$, <code>*</code> $p<0.05$, <code>ns</code> Not Significant.</p>
+</div>
+<table id='sigTableHoriz'>
+<thead><tr>
+<th onclick="sortTable('sigTableHoriz', 0, 'string')">Language</th>
+<th onclick="sortTable('sigTableHoriz', 1, 'number')">Right H-Score (/6)</th>
+<th onclick="sortTable('sigTableHoriz', 2, 'number')">Right % Significant Pairs</th>
+<th onclick="sortTable('sigTableHoriz', 3, 'number')">Left H-Score (/6)</th>
+<th onclick="sortTable('sigTableHoriz', 4, 'number')">Left % Significant Pairs</th>
+</tr></thead><tbody>
+<tr>
+<td class='lang-name'>Abaza</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Abkhaz</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>6.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Afrikaans</td>
+<td>5.0</td>
+<td>33.3%</td>
+<td>0.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Akkadian</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Akuntsu</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Albanian</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Amharic</td>
+<td>3.0</td>
+<td>0.0%</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>AncientGreek</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>0.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>AncientHebrew</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>4.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Apurinã</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Arabic</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>2.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Arhuaco</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Armenian</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>6.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Assyrian</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Azerbaijani</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Bambara</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Basque</td>
+<td>3.0</td>
+<td>50.0%</td>
+<td>4.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Bavarian</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td>2.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Beja</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>6.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Belarusian</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Bengali</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>1.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Bhojpuri</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Borôro</td>
+<td>5.0</td>
+<td>33.3%</td>
+<td>3.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Breton</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>4.0</td>
+<td>20.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Buglere</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Bulgarian</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td>6.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Buryat</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Cantonese</td>
+<td>5.0</td>
+<td>16.7%</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>CappadocianGreek</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Catalan</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Cebuano</td>
+<td>5.0</td>
+<td>40.0%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>CentralKurdish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>1.0</td>
+<td>20.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Chhintange</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Chinese</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Chukot</td>
+<td>4.0</td>
+<td>20.0%</td>
+<td>2.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>ClassArmenian</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>5.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>ClassChinese</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Coptic</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>4.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Croatian</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>5.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Czech</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>4.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Danish</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Dutch</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>1.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Egyptian</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>English</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Erzya</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Esperanto</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>1.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Estonian</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Faroese</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>3.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Finnish</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>5.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>French</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>5.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>FrisianDutch</td>
+<td>5.0</td>
+<td>33.3%</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Gaelic</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Galician</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Gbaya</td>
+<td>3.0</td>
+<td>0.0%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Georgian</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>3.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>German</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>1.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Gheg</td>
+<td>5.0</td>
+<td>33.3%</td>
+<td>4.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Gothic</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Greek</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>5.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Guajajára</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Guarani</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Gujarati</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Gwichʼin</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Haitian</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>4.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Hausa</td>
+<td>6.0</td>
+<td>50.0%</td>
+<td>6.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Hebrew</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>HighlandNahuatl</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Hindi</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Hittite</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Hungarian</td>
+<td>4.0</td>
+<td>83.3%</td>
+<td>3.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Icelandic</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>2.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Indonesian</td>
+<td>4.0</td>
+<td>83.3%</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Irish</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Italian</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>5.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Japanese</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>6.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Javanese</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>5.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Kaapor</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Kangri</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Karelian</td>
+<td>4.0</td>
+<td>33.3%</td>
+<td>2.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Karo</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>1.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Kazakh</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Khoekhoe</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Khunsari</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Kiche</td>
+<td>3.0</td>
+<td>50.0%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Komi-Permyak</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Komi</td>
+<td>5.0</td>
+<td>33.3%</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Korean</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>6.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Kurmanji</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Kyrgyz</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Latgalian</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Latin</td>
+<td>5.0</td>
+<td>83.3%</td>
+<td>2.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Latvian</td>
+<td>5.0</td>
+<td>83.3%</td>
+<td>5.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Ligurian</td>
+<td>4.0</td>
+<td>50.0%</td>
+<td>5.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Lithuanian</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>5.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Livvi</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>1.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>LowSaxon</td>
+<td>5.0</td>
+<td>100.0%</td>
+<td>0.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Luxembourgish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Macedonian</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Madi</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Maghrebi</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>5.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Makuráp</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Malayalam</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Maltese</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Manx</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Marathi</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>MbyáGuaraní</td>
+<td>4.0</td>
+<td>16.7%</td>
+<td>4.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>MiddleFrench</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Moksha</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Mundurukú</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Naija</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td>5.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Nayini</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Neapolitan</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Nenets</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Nhengatu</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>4.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>NorthSami</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Norwegian</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>5.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Occitan</td>
+<td>5.0</td>
+<td>83.3%</td>
+<td>6.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>OldChurchSlavonic</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>3.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>OldEastSlavic</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>OldEnglish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>OldFrench</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td>6.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>OldIrish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>OldProvençal</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td>3.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>OldTurkish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Oriya</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>OttomanTurkish</td>
+<td>3.0</td>
+<td>0.0%</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Pashto</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Paumarí</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Persian</td>
+<td>5.0</td>
+<td>33.3%</td>
+<td>2.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Pesh</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Phrygian</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Polish</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Pomak</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td>6.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Portuguese</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Romanian</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Russian</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Sanskrit</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td>6.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Serbian</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Sicilian</td>
+<td>4.0</td>
+<td>50.0%</td>
+<td>5.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Sindhi</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Sinhalese</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>SkoltSami</td>
+<td>3.0</td>
+<td>33.3%</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Slovak</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>4.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Slovenian</td>
+<td>5.0</td>
+<td>83.3%</td>
+<td>4.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Soi</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>SouthLevantineArabic</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>SouthernKurdish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>SpanishSign</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Spanish</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>SwedishSign</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Swedish</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>4.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>SwissGerman</td>
+<td>3.0</td>
+<td>66.7%</td>
+<td>1.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Tagalog</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>0.0</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Tamil</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Tangkhul</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Tatar</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Teko</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>TeluguEnglish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Telugu</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Thai</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>5.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Tswana</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Tupinambá</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>TurkishEnglish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>TurkishGerman</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>3.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Turkish</td>
+<td>4.0</td>
+<td>33.3%</td>
+<td>4.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Ukrainian</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Umbrian</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>UpperSorbian</td>
+<td>4.0</td>
+<td>50.0%</td>
+<td>2.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Urdu</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Uyghur</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Uzbek</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Veps</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Vietnamese</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Warlpiri</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>1.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Welsh</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>WestArmenian</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>5.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>WestNahuatl</td>
+<td>4.0</td>
+<td>16.7%</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Wolof</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Wu</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Xavánte</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Xibe</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Yakut</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Yiddish</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>4.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Yoruba</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>6.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Yupik</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Zaar</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>4.0</td>
+<td>33.3%</td>
+</tr>
+</tbody></table>
+<h2>3. Welch's t-test for Vertical Law</h2>
+<div class='explanation'>
+<p><strong>What is measured:</strong> We perform Welch's t-test to compare the log-transformed sizes of constituents at the same syntactic depth but belonging to different total lengths. For instance, comparing the size of $R^2$ in a 3-dependent sequence ($R_3^2$) against $R^2$ in a 2-dependent sequence ($R_2^2$).</p>
+<p><strong>Why it matters:</strong> The Vertical Law states that as the total number of dependents grows, the size of a dependent at a fixed position shrinks ($R_{n+1}^k < R_n^k$). The Welch's t-test assesses whether the mean log-sizes of these populations are significantly different, accounting for unequal variances and sample sizes.</p>
+<p><strong>Significance Levels:</strong> <code>***</code> $p<0.001$, <code>**</code> $p<0.01$, <code>*</code> $p<0.05$, <code>ns</code> Not Significant.</p>
+</div>
+<table id='sigTableVert'>
+<thead><tr>
+<th onclick="sortTable('sigTableVert', 0, 'string')">Language</th>
+<th onclick="sortTable('sigTableVert', 1, 'number')">Right V-Score (/6)</th>
+<th onclick="sortTable('sigTableVert', 2, 'number')">Right % Significant Pairs</th>
+<th onclick="sortTable('sigTableVert', 3, 'number')">Left V-Score (/6)</th>
+<th onclick="sortTable('sigTableVert', 4, 'number')">Left % Significant Pairs</th>
+</tr></thead><tbody>
+<tr>
+<td class='lang-name'>Abaza</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Abkhaz</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>6.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Afrikaans</td>
+<td>5.0</td>
+<td>66.7%</td>
+<td>2.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Akkadian</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Akuntsu</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Albanian</td>
+<td>4.0</td>
+<td>33.3%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Amharic</td>
+<td>2.0</td>
+<td>0.0%</td>
+<td>5.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>AncientGreek</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>0.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>AncientHebrew</td>
+<td>5.0</td>
+<td>66.7%</td>
+<td>3.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Apurinã</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Arabic</td>
+<td>5.0</td>
+<td>100.0%</td>
+<td>4.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Arhuaco</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Armenian</td>
+<td>3.0</td>
+<td>33.3%</td>
+<td>4.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Assyrian</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Azerbaijani</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Bambara</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Basque</td>
+<td>4.0</td>
+<td>33.3%</td>
+<td>6.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Bavarian</td>
+<td>6.0</td>
+<td>50.0%</td>
+<td>2.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Beja</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>6.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Belarusian</td>
+<td>6.0</td>
+<td>50.0%</td>
+<td>6.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Bengali</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Bhojpuri</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Borôro</td>
+<td>4.0</td>
+<td>50.0%</td>
+<td>5.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Breton</td>
+<td>5.0</td>
+<td>33.3%</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Buglere</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Bulgarian</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>6.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Buryat</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Cantonese</td>
+<td>2.0</td>
+<td>33.3%</td>
+<td>5.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>CappadocianGreek</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Catalan</td>
+<td>5.0</td>
+<td>83.3%</td>
+<td>4.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Cebuano</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>CentralKurdish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Chhintange</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Chinese</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Chukot</td>
+<td>3.0</td>
+<td>33.3%</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>ClassArmenian</td>
+<td>5.0</td>
+<td>66.7%</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>ClassChinese</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Coptic</td>
+<td>5.0</td>
+<td>83.3%</td>
+<td>5.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Croatian</td>
+<td>5.0</td>
+<td>83.3%</td>
+<td>5.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Czech</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>4.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Danish</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>4.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Dutch</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>3.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Egyptian</td>
+<td>5.0</td>
+<td>66.7%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>English</td>
+<td>5.0</td>
+<td>66.7%</td>
+<td>3.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Erzya</td>
+<td>4.0</td>
+<td>33.3%</td>
+<td>5.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Esperanto</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Estonian</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>5.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Faroese</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>6.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Finnish</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>6.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>French</td>
+<td>5.0</td>
+<td>66.7%</td>
+<td>3.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>FrisianDutch</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>4.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Gaelic</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Galician</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td>3.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Gbaya</td>
+<td>4.0</td>
+<td>0.0%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Georgian</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>2.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>German</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>3.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Gheg</td>
+<td>5.0</td>
+<td>66.7%</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Gothic</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Greek</td>
+<td>5.0</td>
+<td>83.3%</td>
+<td>4.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Guajajára</td>
+<td>4.0</td>
+<td>50.0%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Guarani</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Gujarati</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Gwichʼin</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>1.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Haitian</td>
+<td>4.0</td>
+<td>50.0%</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Hausa</td>
+<td>4.0</td>
+<td>50.0%</td>
+<td>4.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Hebrew</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>6.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>HighlandNahuatl</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Hindi</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Hittite</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Hungarian</td>
+<td>5.0</td>
+<td>33.3%</td>
+<td>4.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Icelandic</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>2.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Indonesian</td>
+<td>3.0</td>
+<td>33.3%</td>
+<td>4.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Irish</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Italian</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>4.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Japanese</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>6.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Javanese</td>
+<td>5.0</td>
+<td>16.7%</td>
+<td>6.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Kaapor</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Kangri</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Karelian</td>
+<td>5.0</td>
+<td>66.7%</td>
+<td>3.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Karo</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Kazakh</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Khoekhoe</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Khunsari</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Kiche</td>
+<td>4.0</td>
+<td>50.0%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Komi-Permyak</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Komi</td>
+<td>6.0</td>
+<td>16.7%</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Korean</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>6.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Kurmanji</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Kyrgyz</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Latgalian</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Latin</td>
+<td>4.0</td>
+<td>83.3%</td>
+<td>3.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Latvian</td>
+<td>5.0</td>
+<td>83.3%</td>
+<td>5.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Ligurian</td>
+<td>4.0</td>
+<td>100.0%</td>
+<td>5.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Lithuanian</td>
+<td>6.0</td>
+<td>33.3%</td>
+<td>3.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Livvi</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>LowSaxon</td>
+<td>6.0</td>
+<td>50.0%</td>
+<td>2.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Luxembourgish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Macedonian</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Madi</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Maghrebi</td>
+<td>5.0</td>
+<td>66.7%</td>
+<td>4.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Makuráp</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Malayalam</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Maltese</td>
+<td>4.0</td>
+<td>66.7%</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Manx</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Marathi</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>MbyáGuaraní</td>
+<td>4.0</td>
+<td>33.3%</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>MiddleFrench</td>
+<td>6.0</td>
+<td>50.0%</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Moksha</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Mundurukú</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Naija</td>
+<td>4.0</td>
+<td>33.3%</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Nayini</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Neapolitan</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Nenets</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Nhengatu</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>4.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>NorthSami</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>5.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Norwegian</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Occitan</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td>6.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>OldChurchSlavonic</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>OldEastSlavic</td>
+<td>5.0</td>
+<td>66.7%</td>
+<td>3.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>OldEnglish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>OldFrench</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>OldIrish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>0.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>OldProvençal</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>2.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>OldTurkish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Oriya</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>OttomanTurkish</td>
+<td>4.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Pashto</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Paumarí</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Persian</td>
+<td>4.0</td>
+<td>33.3%</td>
+<td>2.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Pesh</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Phrygian</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Polish</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>3.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Pomak</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Portuguese</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Romanian</td>
+<td>5.0</td>
+<td>83.3%</td>
+<td>5.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Russian</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Sanskrit</td>
+<td>5.0</td>
+<td>33.3%</td>
+<td>5.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Serbian</td>
+<td>6.0</td>
+<td>33.3%</td>
+<td>5.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Sicilian</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>6.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Sindhi</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Sinhalese</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>SkoltSami</td>
+<td>4.0</td>
+<td>33.3%</td>
+<td>5.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Slovak</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>3.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Slovenian</td>
+<td>5.0</td>
+<td>83.3%</td>
+<td>4.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Soi</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>SouthLevantineArabic</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>SouthernKurdish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>SpanishSign</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Spanish</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td>5.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>SwedishSign</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Swedish</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td>5.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>SwissGerman</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>3.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Tagalog</td>
+<td>4.0</td>
+<td>50.0%</td>
+<td>0.0</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Tamil</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Tangkhul</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Tatar</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Teko</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>TeluguEnglish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Telugu</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Thai</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>5.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Tswana</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Tupinambá</td>
+<td>4.0</td>
+<td>50.0%</td>
+<td>4.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>TurkishEnglish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>TurkishGerman</td>
+<td>4.0</td>
+<td>80.0%</td>
+<td>5.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Turkish</td>
+<td>5.0</td>
+<td>0.0%</td>
+<td>4.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Ukrainian</td>
+<td>5.0</td>
+<td>66.7%</td>
+<td>5.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Umbrian</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>UpperSorbian</td>
+<td>6.0</td>
+<td>50.0%</td>
+<td>3.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Urdu</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>6.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Uyghur</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Uzbek</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Veps</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Vietnamese</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td>6.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Warlpiri</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>1.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Welsh</td>
+<td>5.0</td>
+<td>66.7%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>WestArmenian</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>WestNahuatl</td>
+<td>4.0</td>
+<td>16.7%</td>
+<td>4.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Wolof</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>4.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Wu</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Xavánte</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Xibe</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Yakut</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Yiddish</td>
+<td>4.0</td>
+<td>33.3%</td>
+<td>4.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Yoruba</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>20.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Yupik</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Zaar</td>
+<td>6.0</td>
+<td>50.0%</td>
+<td>3.0</td>
+<td>50.0%</td>
+</tr>
+</tbody></table>
+<h2>4. Welch's t-test for Diagonal Law</h2>
+<div class='explanation'>
+<p><strong>What is measured:</strong> We perform Welch's t-test to compare the log-transformed sizes along the diagonal ($R_n^k$ vs $R_{n+1}^{k+1}$). For instance, comparing the size of $R_2^1$ against $R_3^2$.</p>
+<p><strong>Why it matters:</strong> The Diagonal Law dictates $R_n^k < R_{n+1}^{k+1}$. This test validates whether the observed growth along this diagonal dimension is statistically robust across sentences of different lengths.</p>
+<p><strong>Significance Levels:</strong> <code>***</code> $p<0.001$, <code>**</code> $p<0.01$, <code>*</code> $p<0.05$, <code>ns</code> Not Significant.</p>
+</div>
+<table id='sigTableDiag'>
+<thead><tr>
+<th onclick="sortTable('sigTableDiag', 0, 'string')">Language</th>
+<th onclick="sortTable('sigTableDiag', 1, 'number')">Right D-Score (/6)</th>
+<th onclick="sortTable('sigTableDiag', 2, 'number')">Right % Significant Pairs</th>
+<th onclick="sortTable('sigTableDiag', 3, 'number')">Left D-Score (/6)</th>
+<th onclick="sortTable('sigTableDiag', 4, 'number')">Left % Significant Pairs</th>
+</tr></thead><tbody>
+<tr>
+<td class='lang-name'>Abaza</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Abkhaz</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>6.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Afrikaans</td>
+<td>4.0</td>
+<td>16.7%</td>
+<td>1.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Akkadian</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Akuntsu</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Albanian</td>
+<td>6.0</td>
+<td>0.0%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Amharic</td>
+<td>3.0</td>
+<td>0.0%</td>
+<td>6.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>AncientGreek</td>
+<td>5.0</td>
+<td>66.7%</td>
+<td>0.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>AncientHebrew</td>
+<td>5.0</td>
+<td>83.3%</td>
+<td>5.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Apurinã</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Arabic</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Arhuaco</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Armenian</td>
+<td>6.0</td>
+<td>16.7%</td>
+<td>6.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Assyrian</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Azerbaijani</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Bambara</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Basque</td>
+<td>2.0</td>
+<td>50.0%</td>
+<td>2.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Bavarian</td>
+<td>4.0</td>
+<td>16.7%</td>
+<td>2.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Beja</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Belarusian</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>6.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Bengali</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>1.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Bhojpuri</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Borôro</td>
+<td>3.0</td>
+<td>33.3%</td>
+<td>1.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Breton</td>
+<td>5.0</td>
+<td>16.7%</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Buglere</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Bulgarian</td>
+<td>5.0</td>
+<td>66.7%</td>
+<td>5.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Buryat</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Cantonese</td>
+<td>6.0</td>
+<td>0.0%</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>CappadocianGreek</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Catalan</td>
+<td>5.0</td>
+<td>66.7%</td>
+<td>5.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Cebuano</td>
+<td>4.0</td>
+<td>16.7%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>CentralKurdish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Chhintange</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>1.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Chinese</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Chukot</td>
+<td>6.0</td>
+<td>0.0%</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>ClassArmenian</td>
+<td>5.0</td>
+<td>66.7%</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>ClassChinese</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Coptic</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td>4.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Croatian</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Czech</td>
+<td>4.0</td>
+<td>100.0%</td>
+<td>3.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Danish</td>
+<td>4.0</td>
+<td>33.3%</td>
+<td>4.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Dutch</td>
+<td>4.0</td>
+<td>0.0%</td>
+<td>2.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Egyptian</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>English</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Erzya</td>
+<td>6.0</td>
+<td>16.7%</td>
+<td>4.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Esperanto</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Estonian</td>
+<td>5.0</td>
+<td>33.3%</td>
+<td>4.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Faroese</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td>3.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Finnish</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>3.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>French</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>FrisianDutch</td>
+<td>2.0</td>
+<td>0.0%</td>
+<td>1.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Gaelic</td>
+<td>5.0</td>
+<td>66.7%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Galician</td>
+<td>6.0</td>
+<td>50.0%</td>
+<td>6.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Gbaya</td>
+<td>3.0</td>
+<td>33.3%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Georgian</td>
+<td>3.0</td>
+<td>0.0%</td>
+<td>4.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>German</td>
+<td>3.0</td>
+<td>50.0%</td>
+<td>2.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Gheg</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Gothic</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Greek</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>4.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Guajajára</td>
+<td>4.0</td>
+<td>0.0%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Guarani</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Gujarati</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Gwichʼin</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Haitian</td>
+<td>6.0</td>
+<td>33.3%</td>
+<td>4.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Hausa</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>6.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Hebrew</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>HighlandNahuatl</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Hindi</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Hittite</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Hungarian</td>
+<td>4.0</td>
+<td>0.0%</td>
+<td>2.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Icelandic</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>3.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Indonesian</td>
+<td>3.0</td>
+<td>66.7%</td>
+<td>6.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Irish</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Italian</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Japanese</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>6.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Javanese</td>
+<td>4.0</td>
+<td>16.7%</td>
+<td>2.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Kaapor</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Kangri</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Karelian</td>
+<td>3.0</td>
+<td>33.3%</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Karo</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>1.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Kazakh</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Khoekhoe</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Khunsari</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Kiche</td>
+<td>4.0</td>
+<td>16.7%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Komi-Permyak</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Komi</td>
+<td>5.0</td>
+<td>16.7%</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Korean</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Kurmanji</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Kyrgyz</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>1.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Latgalian</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Latin</td>
+<td>5.0</td>
+<td>83.3%</td>
+<td>2.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Latvian</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Ligurian</td>
+<td>5.0</td>
+<td>66.7%</td>
+<td>5.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Lithuanian</td>
+<td>3.0</td>
+<td>16.7%</td>
+<td>5.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Livvi</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>LowSaxon</td>
+<td>4.0</td>
+<td>16.7%</td>
+<td>1.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Luxembourgish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Macedonian</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Madi</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Maghrebi</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>4.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Makuráp</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Malayalam</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Maltese</td>
+<td>4.0</td>
+<td>33.3%</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Manx</td>
+<td>5.0</td>
+<td>100.0%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Marathi</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>MbyáGuaraní</td>
+<td>4.0</td>
+<td>33.3%</td>
+<td>5.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>MiddleFrench</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td>6.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Moksha</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Mundurukú</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Naija</td>
+<td>6.0</td>
+<td>50.0%</td>
+<td>5.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Nayini</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Neapolitan</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Nenets</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Nhengatu</td>
+<td>5.0</td>
+<td>33.3%</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>NorthSami</td>
+<td>3.0</td>
+<td>0.0%</td>
+<td>2.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Norwegian</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>3.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Occitan</td>
+<td>3.0</td>
+<td>50.0%</td>
+<td>6.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>OldChurchSlavonic</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>OldEastSlavic</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>OldEnglish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>OldFrench</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>5.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>OldIrish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>OldProvençal</td>
+<td>6.0</td>
+<td>50.0%</td>
+<td>6.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>OldTurkish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Oriya</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>OttomanTurkish</td>
+<td>4.0</td>
+<td>0.0%</td>
+<td>6.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Pashto</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>1.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Paumarí</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Persian</td>
+<td>3.0</td>
+<td>16.7%</td>
+<td>4.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Pesh</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Phrygian</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Polish</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Pomak</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>6.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Portuguese</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Romanian</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Russian</td>
+<td>6.0</td>
+<td>100.0%</td>
+<td>6.0</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Sanskrit</td>
+<td>6.0</td>
+<td>50.0%</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Serbian</td>
+<td>6.0</td>
+<td>50.0%</td>
+<td>6.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Sicilian</td>
+<td>4.0</td>
+<td>16.7%</td>
+<td>4.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Sindhi</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Sinhalese</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>SkoltSami</td>
+<td>2.0</td>
+<td>0.0%</td>
+<td>3.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Slovak</td>
+<td>5.0</td>
+<td>66.7%</td>
+<td>2.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Slovenian</td>
+<td>5.0</td>
+<td>33.3%</td>
+<td>6.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Soi</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>SouthLevantineArabic</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>SouthernKurdish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>SpanishSign</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Spanish</td>
+<td>6.0</td>
+<td>83.3%</td>
+<td>5.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>SwedishSign</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Swedish</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>2.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>SwissGerman</td>
+<td>3.0</td>
+<td>33.3%</td>
+<td>1.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Tagalog</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>0.0</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Tamil</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Tangkhul</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Tatar</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Teko</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>TeluguEnglish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Telugu</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Thai</td>
+<td>4.0</td>
+<td>66.7%</td>
+<td>5.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Tswana</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Tupinambá</td>
+<td>4.0</td>
+<td>16.7%</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>TurkishEnglish</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>TurkishGerman</td>
+<td>4.0</td>
+<td>33.3%</td>
+<td>1.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Turkish</td>
+<td>5.0</td>
+<td>33.3%</td>
+<td>2.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Ukrainian</td>
+<td>6.0</td>
+<td>66.7%</td>
+<td>6.0</td>
+<td>83.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Umbrian</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>5.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>UpperSorbian</td>
+<td>2.0</td>
+<td>16.7%</td>
+<td>2.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Urdu</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Uyghur</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Uzbek</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>3.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Veps</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Vietnamese</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>6.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Warlpiri</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>1.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Welsh</td>
+<td>4.0</td>
+<td>50.0%</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>WestArmenian</td>
+<td>6.0</td>
+<td>33.3%</td>
+<td>6.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>WestNahuatl</td>
+<td>4.0</td>
+<td>16.7%</td>
+<td>3.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Wolof</td>
+<td>5.0</td>
+<td>50.0%</td>
+<td>6.0</td>
+<td>50.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Wu</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Xavánte</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>4.0</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td class='lang-name'>Xibe</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>6.0</td>
+<td>66.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Yakut</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>2.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Yiddish</td>
+<td>4.0</td>
+<td>33.3%</td>
+<td>6.0</td>
+<td>33.3%</td>
+</tr>
+<tr>
+<td class='lang-name'>Yoruba</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td>6.0</td>
+<td>16.7%</td>
+</tr>
+<tr>
+<td class='lang-name'>Yupik</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+<td class='na-cell'>-</td>
+</tr>
+<tr>
+<td class='lang-name'>Zaar</td>
+<td>4.0</td>
+<td>16.7%</td>
+<td>4.0</td>
+<td>66.7%</td>
+</tr>
+</tbody></table>
+
+</body>
+</html>
