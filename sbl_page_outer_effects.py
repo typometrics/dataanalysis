@@ -9,14 +9,15 @@ def get_curve_data(avg_sizes, lang_code, side='right', n=2):
     """
     Get average constituent sizes for n total dependents on one side.
     Returns (x, y) where x is position k (1..n) and y is the size value.
+    Uses 'anyother' keys to match the unconstrained matrix.
     """
     x = []
     y = []
     for k in range(1, n + 1):
         if side == 'right':
-            key = f"right_{k}_totright_{n}"
+            key = f"right_{k}_anyother_totright_{n}"
         else:
-            key = f"left_{k}_totleft_{n}"
+            key = f"left_{k}_anyother_totleft_{n}"
             
         val = avg_sizes.get(lang_code, {}).get(key)
         if val is not None and not np.isnan(val):
@@ -135,7 +136,7 @@ def generate(out_dir):
         return
         
     df = pd.read_csv(csv_path)
-    df_std = df[df['Table_Type'] == 'Standard']
+    df_std = df[df['Table_Type'] == 'AnyOtherSide']
     
     with open(avg_sizes_path, 'rb') as f:
         avg_sizes = pickle.load(f)
