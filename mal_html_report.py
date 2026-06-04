@@ -1310,8 +1310,9 @@ def _generate_svg_world_map(geo_data):
     # Convert geo_data to JSON for JavaScript
     geo_data_json = json.dumps(geo_data)
     
+    import uuid
     # Generate unique ID to avoid conflicts if multiple maps on page
-    map_id = "worldMap"
+    map_id = f"worldMap_{uuid.uuid4().hex[:8]}"
     
     return f'''
 <div id="{map_id}" style="width: 100%; max-width: 1000px; margin: 0 auto;"></div>

@@ -169,7 +169,7 @@ class VerbCenteredTableBuilder:
         
         # Comment header
         if self.config.show_row_averages:
-            row[self.layout.comment_col_idx] = CellData(text="[GM | N | Slope]", cell_type='comment')
+            row[self.layout.comment_col_idx] = CellData(text="[GM | N]", cell_type='comment')
         
         return row
     
@@ -359,7 +359,7 @@ class VerbCenteredTableBuilder:
                 factor = self.factors.get_vertical_factor('right', pos, tot)
                 if factor:
                     val_idx = self.layout.get_right_column_index(pos)
-                    arrow = self.config.get_arrow_symbol('right', 'vertical')
+                    arrow = '↓'
                     txt = f"×{factor.value:.2f}{arrow}"
                     color = COLOR_RED if factor.value < 1.0 else COLOR_GREY
                     row[val_idx] = CellData(
@@ -566,9 +566,10 @@ class VerbCenteredTableBuilder:
                 factor = self.factors.get_vertical_factor('left', pos - 1, tot)
                 if factor:
                     val_idx = self.layout.get_left_column_index(pos - 1)
-                    arrow = self.config.get_arrow_symbol('left', 'vertical')
-                    txt = f"×{factor.value:.2f}{arrow}"
-                    color = COLOR_RED if factor.value < 1.0 else COLOR_GREY
+                    arrow = '↑'
+                    inv_value = 1.0 / factor.value if (factor.value and factor.value != 0) else 0.0
+                    txt = f"×{inv_value:.2f}{arrow}"
+                    color = COLOR_RED if inv_value < 1.0 else COLOR_GREY
                     row[val_idx] = CellData(
                         text=txt,
                         cell_type='factor',
@@ -685,7 +686,7 @@ class VerbCenteredTableBuilder:
         )
     
     def _create_comment_cell(self, side: str, tot: int) -> CellData:
-        """Create a comment cell with GM, N, and Slope."""
+        """Create a comment cell with GM and N."""
         parts = []
         
         # Average GM
@@ -698,12 +699,6 @@ class VerbCenteredTableBuilder:
         avg_global_key = f'average_global_tot{side}_{tot}'
         row_avg_global = self.position_averages.get(avg_global_key)
         if row_avg_global is not None:
-            # Only show if different from GM (or maybe always show for consistency? User said "these... would be the same")
-            # If standard table, they are same. If anyotherside, different.
-            # Showing both verifies consistency for standard tables.
-            # But let's check floating point equality just in case to avoid visual clutter?
-            # User request: "these two numbers would then be the same... is it possible to have both information"
-            # Implies they want to see it.
             parts.append(f"Global: {row_avg_global:.3f}")
         
         # N count
@@ -711,28 +706,6 @@ class VerbCenteredTableBuilder:
             n_count = self.ordering.get_row_total(side, tot)
             if n_count is not None:
                 parts.append(f"N={n_count}")
-        
-        # Slope (for tot >= 2)
-        if tot >= 2:
-            y_vals = []
-            for pos in range(1, tot + 1):
-                k = f'{side}_{pos}_tot{side}_{tot}'
-                v = self.position_averages.get(k)
-                if v is not None:
-                    y_vals.append(v)
-            
-            if len(y_vals) == tot:
-                try:
-                    # For left side, reverse to get slope from L1→L2→L3→L4 (left to right)
-                    # For right side, keep as is for R1→R2→R3→R4 (left to right)
-                    if side == 'left':
-                        y_vals_ordered = list(reversed(y_vals))
-                    else:
-                        y_vals_ordered = y_vals
-                    slope, _ = np.polyfit(np.arange(tot), y_vals_ordered, 1)
-                    parts.append(f"Slope: {slope:+.2f}")
-                except:
-                    pass
         
         comment_str = " | ".join(parts) if parts else ""
         return CellData(text=f"[{comment_str}]", cell_type='comment')

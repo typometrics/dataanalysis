@@ -16,7 +16,7 @@ def generate(out_dir):
         return
 
     df = pd.read_csv(csv_path)
-    df_std = df[df['Table_Type'] == 'Standard']
+    df_std = df[df['Table_Type'] == 'AnyOtherSide']
     
     lang2MAL = {}
     langNames = {}
@@ -36,8 +36,11 @@ def generate(out_dir):
     else:
         geo_raw = _load_geographic_data(wals_path, lang2MAL, {}, langNames)
 
-    name2beta_r = {row['Language']: row['R_Complex_Beta'] for _, row in df_std.iterrows() if pd.notna(row['R_Complex_Beta'])}
-    name2beta_l = {row['Language']: -row['L_Complex_Beta'] for _, row in df_std.iterrows() if pd.notna(row['L_Complex_Beta'])} # Negated so positive=compliant
+    import numpy as np
+    name2_r_outer = {row['Language']: np.log(row['R_Outer_Effect']) for _, row in df_std.iterrows() if pd.notna(row['R_Outer_Effect']) and row['R_Outer_Effect'] > 0}
+    name2_l_outer = {row['Language']: np.log(row['L_Outer_Effect']) for _, row in df_std.iterrows() if pd.notna(row['L_Outer_Effect']) and row['L_Outer_Effect'] > 0}
+    name2_horiz = {row['Language']: np.log(row['Horizontal_Right_Left_Effect']) for _, row in df_std.iterrows() if pd.notna(row['Horizontal_Right_Left_Effect']) and row['Horizontal_Right_Left_Effect'] > 0}
+    
 
     def create_chart(name2beta, title, xlabel, out_svg):
         family_buckets = defaultdict(list)
@@ -63,7 +66,7 @@ def generate(out_dir):
         values = [x[1] for x in avg_fam]
         
         plt.figure(figsize=(8, max(4, len(labels) * 0.35)))
-        colors = ['#4CAF50' if v > 0.1 else ('#f39c12' if v >= 0 else '#e74c3c') for v in values]
+        colors = ['#4CAF50' if v > 0.05 else ('#f39c12' if v >= -0.05 else '#e74c3c') for v in values]
         
         plt.barh(labels, values, color=colors, edgecolor='black')
         plt.axvline(0, color='black', lw=1, ls='-')
@@ -77,28 +80,32 @@ def generate(out_dir):
         plt.close()
         return out_svg
 
-    svg_r = create_chart(name2beta_r, 'Average Right SbL $\\beta$ by Language Family', 'Average Right SbL $\\beta$', 'summary_family_r.svg')
-    svg_l = create_chart(name2beta_l, 'Average Left SbL Effect by Language Family', 'Average Left Effect (-$\\beta$)', 'summary_family_l.svg')
+    svg_r = create_chart(name2_r_outer, "Right Outer Constituent Ratio Effect", "Log(Effect Ratio) [>0 is compliant]", "summary_family_r_outer.svg")
+    svg_l = create_chart(name2_l_outer, "Left Outer Constituent Ratio Effect", "Log(Effect Ratio) [>0 is compliant]", "summary_family_l_outer.svg")
+    svg_h = create_chart(name2_horiz, "Horizontal Right-Left Effect", "Log(Effect Ratio) [>0 means Right > Left]", "summary_family_horiz.svg")
 
     html = [
         get_header("Global Summary"),
         get_nav("sbl_summary.html"),
-        "<h1>Global Summary by Language Family</h1>",
+        "<h1 title='Global aggregates and language family breakdowns of SBL metrics.'>Global Summary by Language Family</h1>",
         "<div class='explanation'>",
-        "<p>This chart aggregates the Short-Before-Long principle across WALS language families. ",
-        "For the Left side, slopes are negated so that a positive value consistently means compliance with the SbL principle. ",
-        "Only families with at least 3 languages are shown.</p>",
+        "<p>These charts aggregate the new Short-Before-Long metrics across WALS language families. ",
+        "Because these metrics are geometric mean ratios, we plot their Natural Logarithm ($\\ln$). This centers neutral effects at 0, making compliant effects positive (Green) and anti-compliant effects negative (Red). ",
+        "Families with at least 3 analyzed languages are included.</p>",
         "</div>",
-        "<div style='display:flex; gap:20px; flex-wrap:wrap;'>"
+        "<div style='display:flex; flex-direction:column; gap:20px; align-items:center;'>"
     ]
     
     if svg_r:
-        html.append(f"<div style='flex:1; min-width:400px;'><img src='{svg_r}' alt='Right Family averages chart' style='max-width:100%; border:1px solid #ddd;'></div>")
+        html.append(f"<div style='width:100%; max-width:800px;'><h3>Right Outer Constituent Ratio Effect</h3><img src='{svg_r}' alt='Right Outer Summary' style='width:100%; border:1px solid #ddd;'></div>")
     
     if svg_l:
-        html.append(f"<div style='flex:1; min-width:400px;'><img src='{svg_l}' alt='Left Family averages chart' style='max-width:100%; border:1px solid #ddd;'></div>")
-        
-    if not svg_r and not svg_l:
+        html.append(f"<div style='width:100%; max-width:800px;'><h3>Left Outer Constituent Ratio Effect</h3><img src='{svg_l}' alt='Left Outer Summary' style='width:100%; border:1px solid #ddd;'></div>")
+
+    if svg_h:
+        html.append(f"<div style='width:100%; max-width:800px;'><h3>Horizontal Right-Left Effect</h3><img src='{svg_h}' alt='Horizontal Effect Summary' style='width:100%; border:1px solid #ddd;'></div>")
+
+    if not svg_r and not svg_l and not svg_h:
         html.append("<p>Insufficient data to generate family charts.</p>")
         
     html.append("</div>")

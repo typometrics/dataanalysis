@@ -1,11 +1,31 @@
 import os
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from scipy import stats
 from sbl_html_utils import get_header, get_nav, get_footer
+
+try:
+    from adjustText import adjust_text
+except ImportError:
+    adjust_text = None
+    print("Warning: adjustText not found. Labels may overlap.")
+
+def _add_labels(df, x_col, y_col, ax, label_col='Language'):
+    """Add language labels to scatter points using adjustText."""
+    texts = []
+    for _, row in df.iterrows():
+        if pd.notna(row[x_col]) and pd.notna(row[y_col]):
+            # Extract language name from 'Name_code' format
+            lang = str(row[label_col])
+            name = lang.rsplit('_', 1)[0] if '_' in lang else lang
+            texts.append(ax.text(row[x_col], row[y_col], name, fontsize=7, alpha=0.8))
+    if texts and adjust_text is not None:
+        adjust_text(texts, ax=ax, arrowprops=dict(arrowstyle='-', color='gray', alpha=0.5, lw=0.5), lim=30)
 
 def generate_visualizations(csv_path, out_dir):
     df = pd.read_csv(csv_path)
-    df_std = df[df['Table_Type'] == 'Standard'].copy()
+    df_std = df[df['Table_Type'] == 'AnyOtherSide'].copy()
     
     # 1. Histogram of Right Complex Beta
     plt.figure(figsize=(8, 4))
@@ -40,28 +60,30 @@ def generate_visualizations(csv_path, out_dir):
     plt.close()
     
     # 3. Left vs Right Asymmetry Scatter Plot
-    plt.figure(figsize=(6, 6))
+    fig, ax = plt.subplots(figsize=(8, 8))
     df_plot = df_std.dropna(subset=['L_Complex_Beta', 'R_Complex_Beta']).copy()
     # Invert left beta so positive means SBL compliance for both
     df_plot['Left_Effect'] = -df_plot['L_Complex_Beta']
     df_plot['Right_Effect'] = df_plot['R_Complex_Beta']
-    plt.scatter(df_plot['Left_Effect'], df_plot['Right_Effect'], alpha=0.6, color='#9C27B0', edgecolor='white')
+    ax.scatter(df_plot['Left_Effect'], df_plot['Right_Effect'], alpha=0.6, color='#9C27B0', edgecolor='white')
     
     # Draw quadrant lines at 0
-    plt.axhline(0, color='black', lw=1, ls='--')
-    plt.axvline(0, color='black', lw=1, ls='--')
+    ax.axhline(0, color='black', lw=1, ls='--')
+    ax.axvline(0, color='black', lw=1, ls='--')
     
     # Plot diagonal x=y line for reference
     min_val = min(df_plot['Left_Effect'].min(), df_plot['Right_Effect'].min()) - 0.1
     max_val = max(df_plot['Left_Effect'].max(), df_plot['Right_Effect'].max()) + 0.1
-    plt.plot([min_val, max_val], [min_val, max_val], color='gray', linestyle=':', lw=1.5)
+    ax.plot([min_val, max_val], [min_val, max_val], color='gray', linestyle=':', lw=1.5)
     
-    plt.title('Left vs. Right SbL Effect Strength')
-    plt.xlabel('Left Effect (-$\\beta_{Left}$)')
-    plt.ylabel('Right Effect ($\\beta_{Right}$)')
-    plt.grid(True, alpha=0.3)
+    ax.set_title('Left vs. Right SbL Effect Strength')
+    ax.set_xlabel('Left Effect (-$\\beta_{Left}$)')
+    ax.set_ylabel('Right Effect ($\\beta_{Right}$)')
+    ax.grid(True, alpha=0.3)
+    _add_labels(df_plot, 'Left_Effect', 'Right_Effect', ax)
+    plt.tight_layout()
     scatter_path = os.path.join(out_dir, 'scatter_asymmetry.svg')
-    plt.savefig(scatter_path, format='svg')
+    plt.savefig(scatter_path, format='svg', bbox_inches='tight')
     plt.close()
 
 def generate(out_dir):
@@ -70,11 +92,12 @@ def generate(out_dir):
         generate_visualizations(csv_path, out_dir)
         
     generate_outer_effect_scatters(out_dir)
+    generate_ov_vs_hi_scatter(out_dir)
     
     html = [
         get_header("Visualizations"),
         get_nav("sbl_laws_visualizations.html"),
-        "<h1>Sy Laws Visualizations</h1>",
+        "<h1 title='Visual exploration of structural symmetries and language typologies.'>SBL Visualizations</h1>",
         "<div class='explanation'>",
         "<p>This page visualizes the global compliance across the 180 languages for the Standard Helix tables.</p>",
         "</div>",
@@ -96,18 +119,21 @@ def generate(out_dir):
         "<h2>3. Left vs. Right Asymmetry</h2>",
         "<p>This scatter plot visualizes whether the Short-Before-Long principle is applied symmetrically. The Left SbL slope is negated so that for both axes, a <strong>positive value means compliance</strong> with the SbL principle. The diagonal dotted line represents perfect symmetry.</p>",
         "<img src='scatter_asymmetry.svg' alt='Scatter plot of Left vs Right asymmetry' style='max-width:100%; border:1px solid #ddd;'>",
-        "<h2>4. VO-OV Score vs. Outer Constituent Effect</h2>",
-        "<p>These scatter plots show the relationship between the VO-OV score (0 = strongly OV, 1 = strongly VO) and the Outer Constituent Effect (ratio of outer constituent geometric mean to the rest). A ratio &gt; 1 means the outer constituents are longer on average.</p>",
+        "<h2>4. Head-Initiality vs. Outer Constituent Effect</h2>",
+        "<p>These scatter plots show the relationship between the Head-Initiality score and the Outer Constituent Effect (ratio of outer constituent geometric mean to the remaining horizontal ratios). A ratio &gt; 1 means the outer constituents represent a stronger factor than the internal constituents.</p>",
         "<div style='display:flex; gap:20px; flex-wrap:wrap;'>",
         "  <div style='flex:1; min-width:400px;'>",
         "    <h3>Right Side</h3>",
-        "    <img src='scatter_vo_vs_right_outer.svg' alt='Scatter plot of VO vs Right Outer Effect' style='max-width:100%; border:1px solid #ddd;'>",
+        "    <img src='scatter_hi_vs_right_outer.svg' alt='Scatter plot of Head-Initiality vs Right Outer Effect' style='max-width:100%; border:1px solid #ddd;'>",
         "  </div>",
         "  <div style='flex:1; min-width:400px;'>",
         "    <h3>Left Side</h3>",
-        "    <img src='scatter_vo_vs_left_outer.svg' alt='Scatter plot of VO vs Left Outer Effect' style='max-width:100%; border:1px solid #ddd;'>",
+        "    <img src='scatter_hi_vs_left_outer.svg' alt='Scatter plot of Head-Initiality vs Left Outer Effect' style='max-width:100%; border:1px solid #ddd;'>",
         "  </div>",
         "</div>",
+        "<h2>5. OV Score vs. Head-Initiality</h2>",
+        "<p>This scatter plot shows the relationship between the OV Score (1 = fully OV, 0 = fully VO) and the Head-Initiality score. A strong negative correlation is expected since OV languages tend to be head-final.</p>",
+        "<img src='scatter_ov_vs_hi.svg' alt='Scatter plot of OV Score vs Head-Initiality' style='max-width:100%; border:1px solid #ddd;'>",
         get_footer()
     ]
     
@@ -115,65 +141,76 @@ def generate(out_dir):
         f.write("\n".join(html))
 
 def generate_outer_effect_scatters(out_dir):
-    import pickle
-    import numpy as np
+    csv_path = "data/sbl_laws_summary.csv"
+    if not os.path.exists(csv_path): return
+    df = pd.read_csv(csv_path)
+    df_std = df[df['Table_Type'] == 'AnyOtherSide'].copy()
     
-    def compute_outer_effect(pos2num, pos2logsizes, lang, side='right'):
-        if side == 'right':
-            diag_keys = ['right_2_totright_2', 'right_3_totright_3', 'right_4_totright_4']
-            rest_keys = ['right_1_totright_2', 'right_1_totright_3', 'right_2_totright_3']
-        else:
-            diag_keys = ['left_2_totleft_2', 'left_3_totleft_3', 'left_4_totleft_4']
-            rest_keys = ['left_1_totleft_2', 'left_1_totleft_3', 'left_2_totleft_3']
-            
-        diag_vals = [np.exp(pos2logsizes[lang][k] / pos2num[lang][k]) for k in diag_keys if k in pos2logsizes.get(lang, {}) and k in pos2num.get(lang, {}) and pos2num[lang][k] > 0]
-        rest_vals = [np.exp(pos2logsizes[lang][k] / pos2num[lang][k]) for k in rest_keys if k in pos2logsizes.get(lang, {}) and k in pos2num.get(lang, {}) and pos2num[lang][k] > 0]
-        
-        if diag_vals and rest_vals:
-            diag_gm = np.exp(np.mean(np.log(diag_vals)))
-            rest_gm = np.exp(np.mean(np.log(rest_vals)))
-            return diag_gm / rest_gm
-        return np.nan
+    # Right side scatter
+    df_plot_r = df_std.dropna(subset=['head_initiality', 'R_Outer_Effect']).copy()
+    fig, ax = plt.subplots(figsize=(8, 8))
+    ax.scatter(df_plot_r['head_initiality'], df_plot_r['R_Outer_Effect'], alpha=0.6, color='#2196F3', edgecolor='white')
+    ax.axvline(0.5, color='black', lw=1, ls='--')
+    ax.axhline(1.0, color='black', lw=1, ls='--')
+    ax.set_title('Head-Initiality vs Right Outer Constituent Effect')
+    ax.set_xlabel('Head-Initiality Score')
+    ax.set_ylabel('Right Outer Constituent Effect (Ratio)')
+    ax.grid(True, alpha=0.3)
+    _add_labels(df_plot_r, 'head_initiality', 'R_Outer_Effect', ax)
+    plt.tight_layout()
+    plt.savefig(os.path.join(out_dir, 'scatter_hi_vs_right_outer.svg'), format='svg', bbox_inches='tight')
+    plt.close()
+    
+    # Left side scatter
+    df_plot_l = df_std.dropna(subset=['head_initiality', 'L_Outer_Effect']).copy()
+    fig, ax = plt.subplots(figsize=(8, 8))
+    ax.scatter(df_plot_l['head_initiality'], df_plot_l['L_Outer_Effect'], alpha=0.6, color='#FF9800', edgecolor='white')
+    ax.axvline(0.5, color='black', lw=1, ls='--')
+    ax.axhline(1.0, color='black', lw=1, ls='--')
+    ax.set_title('Head-Initiality vs Left Outer Constituent Effect')
+    ax.set_xlabel('Head-Initiality Score')
+    ax.set_ylabel('Left Outer Constituent Effect (Ratio)')
+    ax.grid(True, alpha=0.3)
+    _add_labels(df_plot_l, 'head_initiality', 'L_Outer_Effect', ax)
+    plt.tight_layout()
+    plt.savefig(os.path.join(out_dir, 'scatter_hi_vs_left_outer.svg'), format='svg', bbox_inches='tight')
+    plt.close()
 
-    try:
-        with open('data/all_langs_position2num.pkl', 'rb') as f:
-            pos2num = pickle.load(f)
-        with open('data/all_langs_position2logsizes.pkl', 'rb') as f:
-            pos2logsizes = pickle.load(f)
-        df_vo = pd.read_csv('data/vo_vs_hi_scores.csv')
-    except Exception as e:
-        print(f"Could not load data for scatter plots: {e}")
+def generate_ov_vs_hi_scatter(out_dir):
+    """Generate scatter plot of OV Score vs Head-Initiality."""
+    csv_path = "data/sbl_laws_summary.csv"
+    if not os.path.exists(csv_path): return
+    df = pd.read_csv(csv_path)
+    df_std = df[df['Table_Type'] == 'AnyOtherSide'].copy()
+    
+    df_plot = df_std.dropna(subset=['ov_value', 'head_initiality']).copy()
+    if len(df_plot) < 3:
         return
-
-    right_effects = []
-    left_effects = []
-    for code in df_vo['language_code']:
-        right_effects.append(compute_outer_effect(pos2num, pos2logsizes, code, 'right'))
-        left_effects.append(compute_outer_effect(pos2num, pos2logsizes, code, 'left'))
-
-    df_vo['Right_Outer_Effect'] = right_effects
-    df_vo['Left_Outer_Effect'] = left_effects
     
-    df_plot_r = df_vo.dropna(subset=['vo_score', 'Right_Outer_Effect']).copy()
-    plt.figure(figsize=(6, 6))
-    plt.scatter(df_plot_r['vo_score'], df_plot_r['Right_Outer_Effect'], alpha=0.6, color='#2196F3', edgecolor='white')
-    plt.axvline(0.5, color='black', lw=1, ls='--')
-    plt.axhline(1.0, color='black', lw=1, ls='--')
-    plt.title('VO-OV Score vs Right Outer Constituent Effect')
-    plt.xlabel('VO Score (0 = OV, 1 = VO)')
-    plt.ylabel('Right Outer Constituent Effect (Ratio)')
-    plt.grid(True, alpha=0.3)
-    plt.savefig(os.path.join(out_dir, 'scatter_vo_vs_right_outer.svg'), format='svg')
-    plt.close()
+    fig, ax = plt.subplots(figsize=(8, 8))
+    ax.scatter(df_plot['ov_value'], df_plot['head_initiality'], alpha=0.6, color='#4CAF50', edgecolor='white', s=50)
     
-    df_plot_l = df_vo.dropna(subset=['vo_score', 'Left_Outer_Effect']).copy()
-    plt.figure(figsize=(6, 6))
-    plt.scatter(df_plot_l['vo_score'], df_plot_l['Left_Outer_Effect'], alpha=0.6, color='#FF9800', edgecolor='white')
-    plt.axvline(0.5, color='black', lw=1, ls='--')
-    plt.axhline(1.0, color='black', lw=1, ls='--')
-    plt.title('VO-OV Score vs Left Outer Constituent Effect')
-    plt.xlabel('VO Score (0 = OV, 1 = VO)')
-    plt.ylabel('Left Outer Constituent Effect (Ratio)')
-    plt.grid(True, alpha=0.3)
-    plt.savefig(os.path.join(out_dir, 'scatter_vo_vs_left_outer.svg'), format='svg')
+    # Regression line
+    slope, intercept, r, p, se = stats.linregress(df_plot['ov_value'], df_plot['head_initiality'])
+    x_line = np.linspace(df_plot['ov_value'].min(), df_plot['ov_value'].max(), 100)
+    ax.plot(x_line, slope * x_line + intercept, 'r-', linewidth=2, alpha=0.7,
+            label=f'Regression: r={r:.3f}, p={p:.1e}')
+    
+    # Correlation info
+    from scipy.stats import spearmanr
+    r_s, p_s = spearmanr(df_plot['ov_value'], df_plot['head_initiality'])
+    ax.text(0.02, 0.98, f'Pearson r={r:.3f} (p={p:.1e})\nSpearman ρ={r_s:.3f} (p={p_s:.1e})\nN={len(df_plot)}',
+            transform=ax.transAxes, fontsize=10, verticalalignment='top',
+            bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
+    
+    ax.set_title('OV Score vs Head-Initiality')
+    ax.set_xlabel('OV Score (1 = fully OV, 0 = fully VO)')
+    ax.set_ylabel('Head-Initiality Score')
+    ax.grid(True, alpha=0.3)
+    ax.legend(loc='lower right')
+    
+    _add_labels(df_plot, 'ov_value', 'head_initiality', ax)
+    plt.tight_layout()
+    plt.savefig(os.path.join(out_dir, 'scatter_ov_vs_hi.svg'), format='svg', bbox_inches='tight')
     plt.close()
+

@@ -35,12 +35,12 @@ def generate(out_dir):
         return
         
     df = pd.read_csv(csv_path)
-    df_std = df[df['Table_Type'] == 'Standard']
+    df_std = df[df['Table_Type'] == 'AnyOtherSide']
     
     html = [
         get_header("Validation & Diagnostics"),
         get_nav("sbl_validation.html"),
-        "<h1>Validation & Diagnostics</h1>",
+        "<h1 title='Diagnostics on N-sizes, empty fields, and statistical validity across languages.'>Validation & Diagnostics</h1>",
         "<div class='explanation'>",
         "<p>This table provides a transparent, step-by-step trace of how the Sy Laws are scored for all languages (Right Side, Standard Table). Each column represents one of the specific pair comparisons required by the laws.</p>",
         "</div>",

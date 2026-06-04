@@ -15,7 +15,7 @@ def generate(out_dir):
         return
 
     df = pd.read_csv(csv_path)
-    df_std = df[df['Table_Type'] == 'Standard']
+    df_std = df[df['Table_Type'] == 'AnyOtherSide']
     
     # Create fake dicts to pass to _load_geographic_data to get the geo framework
     lang2MAL = {}
@@ -45,7 +45,7 @@ def generate(out_dir):
     html = [
         get_header("Typological Maps"),
         get_nav("sbl_typology.html"),
-        "<h1>Geographic Distribution of the Short-Before-Long Principle</h1>",
+        "<h1 title='Geographic distribution maps tracking cross-linguistic compliance with structural symmetry laws.'>Geographic Distribution of the Short-Before-Long Principle</h1>",
         "<div class='explanation'>",
         "<p>These maps visualize various Short-Before-Long measures across the globe. ",
         "The standard color scale indicates compliance with the Short-Before-Long principle:",
@@ -57,26 +57,28 @@ def generate(out_dir):
         "</div>"
     ]
 
+    import numpy as np
+    
     map_configs = [
         {
-            "title": "1. Right SbL &beta; Slope",
-            "desc": "Compliance with Short-Before-Long on the Right side.",
-            "score_func": lambda row: row['R_Complex_Beta']
+            "title": "1. Right Outer Constituent Ratio Effect",
+            "desc": "Compliance with Short-Before-Long on the absolute outer edge of the Right side. Mapped logarithmically so Green indicates ratio > 1.",
+            "score_func": lambda row: np.log(row['R_Outer_Effect']) if pd.notna(row['R_Outer_Effect']) and row['R_Outer_Effect'] > 0 else np.nan
         },
         {
-            "title": "2. Left SbL &beta; Slope (Inverted)",
-            "desc": "Compliance with Short-Before-Long on the Left side. Left slopes are negated so Green means compliant.",
-            "score_func": lambda row: -row['L_Complex_Beta']
+            "title": "2. Left Outer Constituent Ratio Effect",
+            "desc": "Compliance with Short-Before-Long on the absolute outer edge of the Left side. Mapped logarithmically so Green indicates ratio > 1.",
+            "score_func": lambda row: np.log(row['L_Outer_Effect']) if pd.notna(row['L_Outer_Effect']) and row['L_Outer_Effect'] > 0 else np.nan
         },
         {
-            "title": "3. Joint Average SbL &beta;",
-            "desc": "The average of the Right and (inverted) Left SbL &beta; slopes. Green indicates overall bilateral compliance.",
-            "score_func": lambda row: (row['R_Complex_Beta'] - row['L_Complex_Beta']) / 2
+            "title": "3. Horizontal Right-Left Effect",
+            "desc": "Structural asymmetry indicating whether Short-Before-Long structural growth is stronger post-verbally (Right) or pre-verbally (Left). Green means Right > Left.",
+            "score_func": lambda row: np.log(row['Horizontal_Right_Left_Effect']) if pd.notna(row['Horizontal_Right_Left_Effect']) and row['Horizontal_Right_Left_Effect'] > 0 else np.nan
         },
         {
             "title": "4. Right Horizontal Law Strict Compliance",
             "desc": "Percentage of verb dependencies that strictly obey the Right Horizontal Law. Mapped to the color scale such that &gt;60% is Green, and &lt;50% is Red.",
-            "score_func": lambda row: (row['R_Horiz_Pct_Lt'] - 50) / 100
+            "score_func": lambda row: (row['R_Horiz_Pct_Lt'] - 50) / 100 if pd.notna(row['R_Horiz_Pct_Lt']) else np.nan
         }
     ]
 

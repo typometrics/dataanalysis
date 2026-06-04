@@ -29,12 +29,12 @@ def generate(out_dir):
         
     df = pd.read_csv(csv_path)
     # Filter to Standard table for default view
-    df = df[df['Table_Type'] == 'Standard']
+    df = df[df['Table_Type'] == 'AnyOtherSide']
     
     html = [
         get_header("SBL Laws Compliance Master Table"),
         get_nav("sbl_laws_compliance.html"),
-        "<h1>SBL Laws Compliance</h1>",
+        "<h1 title='Master table tracking the compliance of languages with Short-Before-Long structural predictions.'>SBL Laws Compliance Master Table</h1>",
         "<p>This table displays the computed compliance for the Horizontal, Vertical, and Diagonal laws up to $n=4$ across all languages (using Standard Helix configurations).</p>",
         "<div class='explanation'>",
         "<p><strong>Left Side Compliance:</strong> For the Left side of the verb, \"Short-Before-Long\" implies that dependents further from the verb (which occur earlier in the sentence) should be shorter than those closer to the verb. Because distance is measured outward from the verb, a perfectly compliant Short-Before-Long language will show decreasing size as distance increases, resulting in a <strong>negative slope</strong> ($\\beta$). Thus, left slopes are naturally negative when compliant, so Green means compliant.</p>",

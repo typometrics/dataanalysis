@@ -86,6 +86,11 @@ def compute_metrics(data, side='R', table_type='Standard', p2n=None, p2ls=None, 
     horiz_cmp = {'<': 0, '=': 0, '>': 0}
     horiz_pvals = []
     
+    sum_N = 0
+    sum_lt = 0
+    sum_eq = 0
+    sum_gt = 0
+    
     for n in range(2, 5):
         for k in range(1, n):
             if n in d and k in d[n]['sizes'] and (k+1) in d[n]['sizes']:
@@ -99,6 +104,11 @@ def compute_metrics(data, side='R', table_type='Standard', p2n=None, p2ls=None, 
                 if k in d[n]['stats'] and d[n]['N'] > 0:
                     lt_pct, eq_pct, gt_pct = d[n]['stats'][k]
                     total_N = d[n]['N']
+                    sum_N += total_N
+                    sum_lt += lt_pct * total_N
+                    sum_eq += eq_pct * total_N
+                    sum_gt += gt_pct * total_N
+                    
                     # We are testing Short-Before-Long (lt) vs Long-Before-Short (gt)
                     # For Left side, k is counted from the verb, so k=1 is closest to verb, k=2 is further.
                     # R_n^k < R_n^{k+1} means inner is shorter than outer. This corresponds to 'lt'.
@@ -115,11 +125,30 @@ def compute_metrics(data, side='R', table_type='Standard', p2n=None, p2ls=None, 
     horiz_score = horiz_cmp['<']
     horiz_valid = len(horiz_ratios)
     
-    # Outer ratio mean
-    outer_ratios = []
+    # Outer ratio mean and effect calculation
+    valid_outer = []
+    valid_remaining = []
+    
     for n in range(2, 5):
-        if n in d and n in d[n]['sizes'] and (n-1) in d[n]['sizes']:
-            outer_ratios.append(d[n]['sizes'][n] / d[n]['sizes'][n-1])
+        # Relaxed threshold: Only use configurations with at least N=10 to avoid noise,
+        # but allow using n=2 or n=3 even if n=4 is absent or sparse.
+        if n in d and d[n].get('N', 0) >= 10:
+            for k in range(1, n):
+                if k in d[n]['sizes'] and (k+1) in d[n]['sizes']:
+                    v1, v2 = d[n]['sizes'][k], d[n]['sizes'][k+1]
+                    ratio = v2 / v1
+                    if k+1 == n:
+                        valid_outer.append(ratio)
+                    else:
+                        valid_remaining.append(ratio)
+                        
+    outer_effect = np.nan
+    all_horiz_gm = np.nan
+    # Good threshold: We need at least 1 outer ratio and 1 remaining ratio 
+    # (which implies having at least n=3 with N>=10)
+    if len(valid_outer) >= 1 and len(valid_remaining) >= 1:
+        outer_effect = geometric_mean(valid_outer) / geometric_mean(valid_remaining)
+        all_horiz_gm = geometric_mean(valid_outer + valid_remaining)
             
     # 2. Vertical (R_{n+1}^k < R_n^k)
     vert_ratios = []
@@ -196,7 +225,7 @@ def compute_metrics(data, side='R', table_type='Standard', p2n=None, p2ls=None, 
         f'{side}_Horiz_Min': min(horiz_ratios) if horiz_ratios else np.nan,
         f'{side}_Horiz_Max': max(horiz_ratios) if horiz_ratios else np.nan,
         f'{side}_Horiz_Pct_Lt': horiz_cmp['<'] / horiz_valid * 100 if horiz_valid > 0 else np.nan,
-        f'{side}_Horiz_Outer_GM': geometric_mean(outer_ratios),
+        f'{side}_Horiz_Outer_GM': geometric_mean(valid_outer),
         f'{side}_Horiz_Pvals': '|'.join(f"{p:.4e}" if pd.notna(p) else "" for p in horiz_pvals),
         
         f'{side}_Vert_Score': vert_score if vert_valid == 6 else np.nan,
@@ -213,6 +242,13 @@ def compute_metrics(data, side='R', table_type='Standard', p2n=None, p2ls=None, 
         f'{side}_Diag_Max': max(diag_ratios) if diag_ratios else np.nan,
         f'{side}_Diag_Pvals': '|'.join(f"{p:.4e}" if pd.notna(p) else "" for p in diag_pvals),
         
+        f'{side}_Outer_Effect': outer_effect,
+        f'{side}_Horiz_All_GM': all_horiz_gm,
+        
+        f'{side}_Weighted_Lt': sum_lt / sum_N if sum_N > 0 else np.nan,
+        f'{side}_Weighted_Eq': sum_eq / sum_N if sum_N > 0 else np.nan,
+        f'{side}_Weighted_Gt': sum_gt / sum_N if sum_N > 0 else np.nan,
+        
         f'{side}_Complex_Beta': slope,
         f'{side}_Complex_Pval': p_value
     }
@@ -220,6 +256,13 @@ def compute_metrics(data, side='R', table_type='Standard', p2n=None, p2ls=None, 
 import pickle
 def process_all_languages(input_dir, output_csv):
     results = []
+    
+    # Load typological scores
+    base = os.path.dirname(input_dir)
+    typo_df = pd.DataFrame()
+    typo_path = os.path.join(base, 'vo_vs_hi_scores.csv')
+    if os.path.exists(typo_path):
+        typo_df = pd.read_csv(typo_path)
     
     # Load raw sums for Welch's t-test
     base = os.path.dirname(input_dir)
@@ -272,8 +315,17 @@ def process_all_languages(input_dir, output_csv):
                     p2ls = {k: sum(all_langs_position2logsizes[mk].get(k, 0) for mk in matching_keys) for k in set().union(*(all_langs_position2logsizes[mk].keys() for mk in matching_keys))}
                     p2lsq = {k: sum(all_langs_position2logsqsizes[mk].get(k, 0) for mk in matching_keys) for k in set().union(*(all_langs_position2logsqsizes[mk].keys() for mk in matching_keys))}
 
-                metrics.update(compute_metrics(data, 'R', 'Standard', p2n, p2ls, p2lsq))
-                metrics.update(compute_metrics(data, 'L', 'Standard', p2n, p2ls, p2lsq))
+                r_metrics = compute_metrics(data, 'R', 'Standard', p2n, p2ls, p2lsq)
+                l_metrics = compute_metrics(data, 'L', 'Standard', p2n, p2ls, p2lsq)
+                metrics.update(r_metrics)
+                metrics.update(l_metrics)
+                
+                # Horizontal Right-Left Effect
+                if not np.isnan(r_metrics.get('R_Horiz_All_GM', np.nan)) and not np.isnan(l_metrics.get('L_Horiz_All_GM', np.nan)):
+                    metrics['Horizontal_Right_Left_Effect'] = r_metrics['R_Horiz_All_GM'] / l_metrics['L_Horiz_All_GM']
+                else:
+                    metrics['Horizontal_Right_Left_Effect'] = np.nan
+                    
                 results.append(metrics)
                 
         # Process AnyOtherSide table
@@ -297,11 +349,33 @@ def process_all_languages(input_dir, output_csv):
                     p2ls = {k: sum(all_langs_position2logsizes[mk].get(k, 0) for mk in matching_keys) for k in set().union(*(all_langs_position2logsizes[mk].keys() for mk in matching_keys))}
                     p2lsq = {k: sum(all_langs_position2logsqsizes[mk].get(k, 0) for mk in matching_keys) for k in set().union(*(all_langs_position2logsqsizes[mk].keys() for mk in matching_keys))}
 
-                metrics.update(compute_metrics(data, 'R', 'AnyOtherSide', p2n, p2ls, p2lsq))
-                metrics.update(compute_metrics(data, 'L', 'AnyOtherSide', p2n, p2ls, p2lsq))
+                r_metrics = compute_metrics(data, 'R', 'AnyOtherSide', p2n, p2ls, p2lsq)
+                l_metrics = compute_metrics(data, 'L', 'AnyOtherSide', p2n, p2ls, p2lsq)
+                metrics.update(r_metrics)
+                metrics.update(l_metrics)
+                
+                # Horizontal Right-Left Effect
+                if not np.isnan(r_metrics.get('R_Horiz_All_GM', np.nan)) and not np.isnan(l_metrics.get('L_Horiz_All_GM', np.nan)):
+                    metrics['Horizontal_Right_Left_Effect'] = r_metrics['R_Horiz_All_GM'] / l_metrics['L_Horiz_All_GM']
+                else:
+                    metrics['Horizontal_Right_Left_Effect'] = np.nan
+                    
                 results.append(metrics)
                 
     df = pd.DataFrame(results)
+    
+    # Merge typological scores
+    if not typo_df.empty:
+        # Extract lang code from 'Language' column (e.g., 'Afrikaans_af' -> 'af')
+        df['lang_code_temp'] = df['Language'].apply(lambda x: x.split('_')[-1] if '_' in x else x)
+        typo_df = typo_df[['language_code', 'vo_score', 'head_initiality_score']]
+        df = df.merge(typo_df, how='left', left_on='lang_code_temp', right_on='language_code')
+        df.rename(columns={'vo_score': 'ov_value', 'head_initiality_score': 'head_initiality'}, inplace=True)
+        # Invert vo_score to get true OV score: 1 = fully OV, 0 = fully VO
+        df['ov_value'] = (1 - df['ov_value']).round(3)
+        df['head_initiality'] = df['head_initiality'].round(3)
+        df.drop(columns=['lang_code_temp', 'language_code'], inplace=True)
+        
     df.to_csv(output_csv, index=False)
     print(f"Processed {len(results)} tables. Output saved to {output_csv}")
 

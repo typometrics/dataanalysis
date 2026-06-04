@@ -83,22 +83,22 @@ MathJax = {
 
 def get_nav(current_page):
     menu = [
-        ('index.html', 'Home'),
-        ('sbl_laws_explained.html', 'The Sy Laws'),
-        ('sbl_laws_compliance.html', 'Laws Compliance Table'),
-        ('sbl_validation.html', 'Validation & Diagnostics'),
-        ('sbl_explorer.html', 'Interactive Explorer'),
-        ('sbl_significance.html', 'Significance Analysis'),
-        ('sbl_laws_visualizations.html', 'Visualizations'),
-        ('sbl_outer_effects.html', 'Outer Effect Curves'),
-        ('sbl_typology.html', 'Typological Maps'),
-        ('sbl_summary.html', 'Global Summary')
+        ('index.html', 'Home', 'Return to the main dashboard'),
+        ('sbl_laws_explained.html', 'The Laws', 'Detailed explanations of the Short-Before-Long (Sy) laws and metrics'),
+        ('sbl_laws_compliance.html', 'Compliance', 'Master table of how well each language complies with the SBL laws'),
+        ('sbl_validation.html', 'Validation', 'Diagnostics on N-sizes, empty fields, and statistical validity'),
+        ('sbl_explorer.html', 'Explorer', 'Interactive tool to drill down into raw Helix tables per language'),
+        ('sbl_significance.html', 'Significance', 'Statistical significance (p-values) across laws and metrics'),
+        ('sbl_laws_visualizations.html', 'Visualizations', 'Scatter plots and histograms of SBL effects vs linguistic typology'),
+        ('sbl_outer_effects.html', 'Outer Effects', 'Detailed plots of Outer Constituent size curves for n=1,2,3,4'),
+        ('sbl_typology.html', 'Maps', 'Geographic distribution maps of compliance scores'),
+        ('sbl_summary.html', 'Summary', 'Global summary statistics across language families and overall')
     ]
     
     parts = ['<nav class="nav-top"><ul>']
-    for href, label in menu:
+    for href, label, tooltip in menu:
         cls = ' class="crumb-current"' if href == current_page else ''
-        parts.append(f'<li{cls}><a href="{href}">{label}</a></li>')
+        parts.append(f'<li{cls}><a href="{href}" title="{tooltip}">{label}</a></li>')
     parts.append('<li class="nav-spacer"></li>')
     parts.append('</ul></nav>')
     return ''.join(parts)

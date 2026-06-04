@@ -16,12 +16,12 @@ def generate(out_dir):
         return
         
     df = pd.read_csv(csv_path)
-    df_std = df[df['Table_Type'] == 'Standard']
+    df_std = df[df['Table_Type'] == 'AnyOtherSide']
     
     html = [
         get_header("SBL Significance Analysis"),
         get_nav("sbl_significance.html"),
-        "<h1>Significance Analysis of SBL Results</h1>",
+        "<h1 title='Statistical significance testing of structural asymmetries and outer effects.'>Significance Analysis of SBL Results</h1>",
         "<p>This page presents statistical significance tests for the different SBL compliance metrics, demonstrating that the observed trends are not merely artifacts of sample size.</p>",
         
         "<h2>1. OLS Regression of the Complex SbL $\\beta$</h2>",

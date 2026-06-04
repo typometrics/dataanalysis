@@ -102,12 +102,12 @@ We propose creating a new generator script (e.g., `sbl_site.py`) that builds a s
 - [x] **Helix Table Renaming:** Rename Standard Helix Table to "strict - nothing on opposite side" and AnyOtherSide Helix Table to "unconstrained on opposite side".
 - [x] **Vertical Growth Factors:** Include vertical growth factors between adjacent rows in the helix tables (down-to-up on the right side, up-to-down on the left side).
 - [x] **Count/Filtering Fixes:** Fix the discrepancy in neighbor pair statistics (e.g., French `R tot=4` between R3 and R4 showing identical counts in strict and unconstrained tables).
-- [ ] **Correct Vertical Growth Factors & Directions:**
-  - **Right Side:** Currently, the vertical factor (comparing `R tot=n` to `R tot=n-1`) uses an up-right pointing arrow (`↗`). Since this goes from `n` to `n-1` (which is visually downward in the table layout), update it to use a **down-pointing arrow** (e.g., `↓` or `↘`).
-  - **Left Side:** Currently, the vertical factor is computed from `L tot=n-1` to `L tot=n` (visually downward). Change it to compute from more to less constituents (from `L tot=n` to `L tot=n-1`, which is visually upward in the table layout). This requires inverting the value ($1/x$) and displaying it with an **up-pointing arrow** (., `↑`) to match the upward comparison direction.
+- [x] **Correct Vertical Growth Factors & Directions:**
+  - **Right Side (Top Triangle):** The vertical factor comparing row `R tot=n` to the row below it `R tot=n-1` should use a **down-pointing arrow** (`↓`), reflecting that we are moving from a larger context to a smaller one (visually downwards).
+  - **Left Side (Bottom Triangle):** The vertical factor should also compare from the larger context to the smaller one. Since `L tot=n` is visually below `L tot=n-1` in the table, we must compute the factor going upwards (from `n` to `n-1`). This requires calculating the inverse ($1/x$) of the old factor and displaying it with an **up-pointing arrow** (`↑`) to match the visual direction of the comparison.
 
 
-### Phase 7: Outer Constituent Effect Metrics & Plots
+### Phase 7: Outer Constituent Size Effect Metrics & Plots
 - [x] **Diagonal vs. Rest Geometric Means:**
   - Compute the unweighted geometric mean of the three outer constituent cells:
     - Right side: $R_2^2$, $R_3^3$, $R_4^4$ (diagonal cases)
@@ -146,8 +146,35 @@ We propose creating a new generator script (e.g., `sbl_site.py`) that builds a s
   - Add navigation link to `sbl_html_utils.py` and call generation in `sbl_site.py`.
 - [x] **Modal Dialog Graph Integration**:
   - Embed the generated Left and Right graphs directly into the corresponding language's modal popup on the Interactive Explorer (`sbl_explorer.html`).
-- [x] add dot for n=1 to the outer effect graphs.
-- [x] instead of showing the outer effect graphs in the helix popup, show them directly in a small version in the language table. 
+- [x] Add dot for n=1 to the outer effect graphs.
+
+### Phase 9: Outer Constituent Ratio Effects & UI Polish
+- [x] **Plot Transparency**: Add slight transparency (`alpha=0.7`) to the curves and dots in the Outer Effect graphs.
+- [x] **Table SVG Integration**:
+  - [x] Display small versions of the outer effect SVG graphs directly in the language table instead of just the helix popup.
+  - [x] Retain the SVG graphs in the table as clickable elements.
+  - [x] Remove the "View Raw TSVs" buttons; clicking the small SVG graph now serves to open the helix/graph modal dialog.
+- [x] **Modal Dialog UX**:
+  - [x] Ensure the helix modal dialog closes when the `ESC` key is pressed.
+  - [x] Ensure the helix dialog displays the SVG graphs at the very top of the popup.
+- [x] **New Metric Definitions (`compute_sbl_laws.py`)**:
+  - [x] Define Right Outer Constituent Ratio Effect: Geometric mean of outer ratios ($(R_n^n)/(R_n^{n-1})$ for $n \in \{2,3,4\}$) divided by the geometric mean of the three remaining right horizontal ratios.
+  - [x] Define Left Outer Constituent Ratio Effect: Geometric mean of outer ratios ($(L_n^n)/(L_n^{n-1})$ for $n \in \{2,3,4\}$) divided by the geometric mean of the three remaining left horizontal ratios.
+  - [x] Define Geometric mean of horizontal ratios on the right: Mean of $(R_n^k)/(R_n^{k-1})$ for $n \in \{2,3,4\}$, $k \in \{2..n\}$.
+  - [x] Define Geometric mean of horizontal ratios on the left: Mean of $(L_n^k)/(L_n^{k-1})$ for $n \in \{2,3,4\}$, $k \in \{2..n\}$.
+  - [x] Define Horizontal Right-Left effect: Geometric mean of right horizontal ratios divided by geometric mean of left horizontal ratios.
+  - [x] **Data Threshold**: Compute these values and graphs only for configurations containing at least $N=10$ samples for $n=4$ independently for both left and right sides.
+- [x] **Interactive Explorer Columns**: 
+  - [x] Remove the two $\beta$ value columns from the table.
+  - [x] Add the following columns in order: Horizontal Right-Left effect, Right Outer Constituent Ratio Effect, Left Outer Constituent Ratio Effect, OV Value, and Head-Initiality.
+- [x] **Typological Scatter Plots**: Generate scatter plots comparing the Outer Constituent Effect against Head-Initiality.
 
 
--- add plot outer constituent effect vs head-initiality (look for the term in the existing code)
+### Phase 10: Horizontal Ratios & Exception Counters in Explorer
+- [x] Add the Geometric mean of horizontal ratios on the right and left to the interactive explorer table.
+- [x] Compute the weighted mean of the exception percentage counters (`<`, `=`, `>`) on the right side.
+- [x] Compute the weighted mean of the exception percentage counters (`<`, `=`, `>`) on the left side.
+- [x] Add these 6 exception values to the interactive explorer table.
+
+
+the OV score has been inverted: high ov: languages such as japanese. only keep 3 digits after the point.

@@ -79,7 +79,7 @@ def generate_language_plots(avg_sizes, lang_code, lang_name, out_dir):
             lx, ly = left_data[n]
             if lx:
                 ax1.plot(lx, ly, styles[n]['marker'] + '-', color=styles[n]['color'], 
-                         label=styles[n]['label'], linewidth=2, markersize=6)
+                         label=styles[n]['label'], linewidth=2, markersize=6, alpha=0.7)
         
         # Invert Left side x-axis: ticks from 4 to 1
         ax1.set_xlim(4.5, 0.5)
@@ -90,7 +90,7 @@ def generate_language_plots(avg_sizes, lang_code, lang_name, out_dir):
             rx, ry = right_data[n]
             if rx:
                 ax2.plot(rx, ry, styles[n]['marker'] + '-', color=styles[n]['color'], 
-                         label=styles[n]['label'], linewidth=2, markersize=6)
+                         label=styles[n]['label'], linewidth=2, markersize=6, alpha=0.7)
         
         ax2.set_xlim(0.5, 4.5)
         ax2.set_xticks([1, 2, 3, 4])
@@ -155,7 +155,7 @@ def generate(out_dir):
     html = [
         get_header("Outer Effect Curves"),
         get_nav("sbl_outer_effects.html"),
-        "<h1>Language-Specific Outer Effect Curves</h1>",
+        "<h1 title='Detailed visualizations of outer constituent sizes shrinking or growing at the periphery of sentences.'>Language-Specific Outer Effect Curves</h1>",
         "<div class='explanation'>",
         "<p>This page visualizes the <strong>Outer Effect Curves</strong> for each language. For a fixed total dependent count $n \\in \\{2, 3, 4\\}$, we plot the average constituent size of the dependent at visual distance $k \\in \\{1..n\\}$ from the verb.</p>",
         "<ul>",
@@ -180,19 +180,27 @@ def generate(out_dir):
         else:
             name, code = lang, lang
             
-        beta_r = row['R_Complex_Beta']
-        beta_l = row['L_Complex_Beta']
+        hrl_effect = row.get('Horizontal_Right_Left_Effect', np.nan)
+        r_outer = row.get('R_Outer_Effect', np.nan)
+        l_outer = row.get('L_Outer_Effect', np.nan)
+        ov_val = row.get('ov_value', '-')
+        head_init = row.get('head_initiality', np.nan)
         
-        beta_r_str = f"{beta_r:.3f}" if pd.notna(beta_r) else "-"
-        beta_l_str = f"{beta_l:.3f}" if pd.notna(beta_l) else "-"
+        hrl_str = f"{hrl_effect:.3f}" if pd.notna(hrl_effect) else "-"
+        r_outer_str = f"{r_outer:.3f}" if pd.notna(r_outer) else "-"
+        l_outer_str = f"{l_outer:.3f}" if pd.notna(l_outer) else "-"
+        head_init_str = f"{head_init:.3f}" if pd.notna(head_init) else "-"
         
         html.append(f"""
         <div class='lang-card' data-name='{name.lower()}' data-code='{code.lower()}' style='background: #fbfbfb; border: 1px solid #e0e0e0; border-radius: 6px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);'>
             <div style='display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;'>
                 <h2 style='margin: 0; color: #2c3e50;'>{name} <small style='color: #888; font-weight: normal;'>({code})</small></h2>
                 <div style='font-size: 13px; color: #555;'>
-                    <span style='margin-right: 15px;'><strong>Right SbL &beta;:</strong> {beta_r_str}</span>
-                    <span><strong>Left SbL &beta;:</strong> {beta_l_str}</span>
+                    <span style='margin-right: 15px;'><strong>Horiz R-L Effect:</strong> {hrl_str}</span>
+                    <span style='margin-right: 15px;'><strong>Right Outer Effect:</strong> {r_outer_str}</span>
+                    <span style='margin-right: 15px;'><strong>Left Outer Effect:</strong> {l_outer_str}</span>
+                    <span style='margin-right: 15px;'><strong>OV:</strong> {ov_val}</span>
+                    <span><strong>Head-Init:</strong> {head_init_str}</span>
                 </div>
             </div>
             <div style='display: flex; justify-content: center;'>
